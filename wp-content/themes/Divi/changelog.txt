@@ -1,6 +1,893 @@
+version 3.17.6 ( updated 11-02-2018 )
+- Fixed JavaScript error when trying to edit non-existing Global Module in BB.
+- Fixed a issue where module styles cannot be pasted.
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/scripts/builder.js
+
+version 3.17.5 ( updated 11-02-2018 )
+- Fixed JavaScript error when trying to edit non-existing Global Module in BB.
+- Fixed a issue where module styles cannot be pasted.
+- Prevent Custom CSS code from being removed when hover options is used.
+- Fixed modules with hover styles applied not getting proper z-index in VB preview.
+- Fixed bar counter item titles inadvertently displaying html tags.
+- Fixed a bug in Email Optin module where Redirect URL had Question Mark at end of the URL.
+- Fixed a issue where Contact Form module incorrectly set Reply-To email header when no Email field has been set for the module.
+- Fixed Backend Builder not being able to import premade layouts.
+- Removed HTML escaping recently added to Filterable Portfolio module post titles.
+- Fixes a PHP warning when importing layouts.
+- Fixed some aspects of modules being editable even if the relevant capability has been disabled in the Role Editor.
+- Fixed CSS for VB Wireframe View when Vertical Navigation is enabled.
+- Removed Design and Advanced settings for Pin Settings of Map module.
+- Improved timer separator display in Countdown Timer modules.
+- Fixed issue affecting border field's generated styles.
+- Added label for reset button in Page Settings.
+- Fixed issue where modules with partial support were not visible in VB.
+- Fixed a bug where Site Header gets hidden when Vertical Navigation is enabled.
+- Fixed a JavaScript error for CSS ID on Tabs module when Alternative scroll-to-anchor method is enabled.
+	* includes/builder/class-et-builder-settings.php
+	* includes/builder/core.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/functions.php
+	* includes/builder/module/BarCountersItem.php
+	* includes/builder/module/ContactForm.php
+	* includes/builder/module/CountdownTimer.php
+	* includes/builder/module/FilterablePortfolio.php
+	* includes/builder/module/MapItem.php
+	* includes/builder/module/field/Border.php
+	* includes/builder/module/settings/migration/DiscontinueHtmlEncoding.php
+	* includes/builder/scripts/builder.js
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/frontend-builder-style.less
+	* js/custom.js
+
+version 3.17.4 ( updated 10-31-2018 )
+- Fixed the internal server error that occurred when the Yoast SEO plugin was activated.
+- Fixed paragraphs encoding issue when multiple Code Module were added in the same page.
+- Fixed a PHP Warning caused by the Post Slider Module.
+- Fixed broken shortcode rendering on code and fullwidth module caused by late line break stripping.
+	* includes/builder/functions.php
+	* includes/builder/core.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/module/PostSlider.php
+	* includes/builder/module/Code.php
+	* includes/builder/module/FullwidthCode.php
+
+version 3.17.3 ( updated 10-30-2018 )
+- Important Security Update. Following an internal code audit, various security improvements were made and several minor security vulnerabilities were patched. For more information, please refer to the disclosure here: https://us7.campaign-archive.com/?u=9ae7aa91c578052b052b864d6&id=a9763c15f2
+- Fixed Right-click controls missing in empty fullwidth sections.
+- Added missing extend options to border styles and background tabs.
+- Fixed languages using quote characters different from the ones in English causing Dynamic Content to not render properly in the front-end.
+
+version 3.17.2 ( updated 10-17-2018 )
+- Fixed issue with rendering dynamic content in Global Modules in some cases.
+- Fixed the issue where Button Text option can't be copied between Button modules.
+- Fixed VB select control to only fire onChange event when necessary.
+- Fixed output of inner box shadow in VB.
+- Fixed Blurb module title link not being applied to the title.
+- Fixed HTML being incorrectly filtered in Dynamic Content's Before and After settings.
+- Fixed Autoptimize incompatibility with the Visual Builder, causing the rich text control to crash.
+- Fixed JS error which breaks some modules in BB while checking for dynamic content.
+- Fixed Bar Counter amount not changing on hover for small % amounts.
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/feature/dynamic-content.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/module/BarCountersItem.php
+	* includes/builder/module/Blurb.php
+	* includes/builder/module/Image.php
+	* includes/builder/scripts/builder.js
+	* includes/builder/scripts/frontend-builder-global-functions.js
+	* includes/builder/styles/frontend-builder-style.less
+
+version 3.17.1 ( updated 10-12-2018 )
+- Fixed error occurring in Team Member module.
+- Fixed circle counter not showing up in the front end when there was an animation set for it.
+- Fixed the Divider height value being picked from Desktop height, when the tablet or/and phone values are set to the default 100px.
+- Fixed Dynamic Content background image preview in Extend Styles.
+- Fixed support for PHP 5.2 and 5.3 in Dynamic Content.
+- Fixed responsive tabs for row column padding settings not showing up in BB.
+- Fixed Social Media Follow module link text duplication when read through assistive technologies.
+- Added i18n support for visual builder toggle buttons.
+	* core/ui/components/controls/toggle/toggle.jsx
+	* core/ui/components/controls/toggle/toggle.scss
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/feature/dynamic-content.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/module/Blurb.php
+	* includes/builder/module/Button.php
+	* includes/builder/module/Cta.php
+	* includes/builder/module/FullwidthHeader.php
+	* includes/builder/module/PricingTablesItem.php
+	* includes/builder/module/SliderItem.php
+	* includes/builder/module/SocialMediaFollowItem.php
+	* includes/builder/module/Testimonial.php
+	* includes/builder/scripts/frontend-builder-scripts.js
+
+version 3.17 ( updated 10-11-2018 )
+- Added Dynamic Content to Divi.
+- Fixed Style Type, Position and Indent Option for Lists (OL/UL) in Text module for Post.
+- Removed certain instances of hover icon that should not be present.
+- Fixed a bug where Shop modules failed to display products sorted by price or date (ascending).
+- Prevent adding max-width: 100% to modules when the sizing is not changed.
+- Fixed incorrect history state for bulk editing hover options.
+- Fixed alignment issue in Firefox for the first field in Email Optin module.
+- Fixed the bug where Play Icon color option in VIdeo module were not working only in Visual Builder for a Post.
+- Fixed Custom CSS removing CSS when hover is enabled.
+- Fixed testimonial portrait margin on 1/5 and 1/6 columns.
+- Fixed CSS for Grid columns For Smartphone.
+- Fixed specialty column styles for 1/6 columns inside a 1/2 column.
+- Fixed the issue where Favicon from old Theme Option setting were printed on page, even if Site Icon has been uploaded from WordPress Customizer.
+- Fixed post_max_size megabytes conversion.
+- Fixed a issue where Your Save Has Failed Modal Hides Wordfence's Blocked Request Notification.
+	* core/admin/css/core.css
+	* core/components/Portability.php
+	* epanel/custom_functions.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/class-et-builder-value.php
+	* includes/builder/core.php
+	* includes/builder/feature/dynamic-content.php
+	* includes/builder/feature/post-content.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/assets/css/responsive-preview-wrapped.css
+	* includes/builder/frontend-builder/assets/css/responsive-preview.css
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/functions.php
+	* includes/builder/module/AccordionItem.php
+	* includes/builder/module/Audio.php
+	* includes/builder/module/BarCountersItem.php
+	* includes/builder/module/Blog.php
+	* includes/builder/module/Blurb.php
+	* includes/builder/module/Button.php
+	* includes/builder/module/CircleCounter.php
+	* includes/builder/module/ContactForm.php
+	* includes/builder/module/CountdownTimer.php
+	* includes/builder/module/Cta.php
+	* includes/builder/module/FullwidthHeader.php
+	* includes/builder/module/FullwidthImage.php
+	* includes/builder/module/FullwidthPortfolio.php
+	* includes/builder/module/FullwidthPostSlider.php
+	* includes/builder/module/Image.php
+	* includes/builder/module/Login.php
+	* includes/builder/module/MapItem.php
+	* includes/builder/module/NumberCounter.php
+	* includes/builder/module/PostSlider.php
+	* includes/builder/module/PricingTablesItem.php
+	* includes/builder/module/Search.php
+	* includes/builder/module/Shop.php
+	* includes/builder/module/Signup.php
+	* includes/builder/module/SliderItem.php
+	* includes/builder/module/SocialMediaFollowItem.php
+	* includes/builder/module/TabsItem.php
+	* includes/builder/module/TeamMember.php
+	* includes/builder/module/Testimonial.php
+	* includes/builder/module/Text.php
+	* includes/builder/module/Toggle.php
+	* includes/builder/module/Video.php
+	* includes/builder/module/VideoSliderItem.php
+	* includes/builder/module/type/PostBased.php
+	* includes/builder/plugin-compat/advanced-custom-fields.php
+	* includes/builder/plugin-compat/woocommerce.php
+	* includes/builder/scripts/builder.js
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/frontend-builder-global-style.css
+	* includes/builder/styles/style.css
+	* includes/builder/template-preview.php
+
+version 3.16.1 ( updated 10-05-2018 )
+- Fixed Responsive Tabs, Hover Tabs and reset button support for multiselect.
+- Added missing blurb icon transitions.
+- Fixed Login Module issue where form field background color and text color was not applied to Password Field.
+- Fixed circle counter behavior when custom padding on hover exists.
+- Fixed Hover tabs rendering in combination with responsive tabs for Section Dividers.
+- Fixed an issue with background controls in the Visual Builder that incorrectly only allowed background color to be edited in certain situations.
+- Fixed heading 2 text size in VB that rendered differently than previous version (3.14 compared to 3.15).
+- Fixed Fullwidth Post-Title module issue where background disappeared when section background set as parallax.
+- The Divi Builder meta box will now take priority over other meta boxes on the post edit screen.
+- Fixed inconsistent mobile display of embedded videos in Blog module blocks.
+- Fixed a Visual Builder bug that prevented editing in Internet Explorer 11.
+- Fixed a Visual Builder bug where non-Latin characters were ignored when determining whether a block of text was empty.
+- Fixed double click issue when opening modal settings for selected items.
+- Fixed 1/6 column wrap on certain viewports.
+- Fixed global element children so that they stay colored as a global when moved outside their global containers.
+- Fixed issue with dragging specialty columns.
+- Fixed font field group visibility when options filter is active.
+- Fixed the missing padding on the Section when the Nav has a transparent background.
+	* includes/builder/frontend-builder/assets/css/responsive-preview.css
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/functions.php
+	* includes/builder/module/Blurb.php
+	* includes/builder/module/CircleCounter.php
+	* includes/builder/module/Login.php
+	* includes/builder/scripts/builder.js
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/frontend-builder-grid.less
+	* includes/builder/styles/frontend-builder-style.less
+	* js/custom.js
+
+version 3.16 ( updated 10-4-2018 )
+- Added Hover Options to the Divi Builder.
+	* core/components/data/Utils.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/assets.php
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/functions.php
+	* includes/builder/main-structure-elements.php
+	* includes/builder/module/Accordion.php
+	* includes/builder/module/AccordionItem.php
+	* includes/builder/module/Audio.php
+	* includes/builder/module/BarCounters.php
+	* includes/builder/module/BarCountersItem.php
+	* includes/builder/module/Blog.php
+	* includes/builder/module/Blurb.php
+	* includes/builder/module/Button.php
+	* includes/builder/module/CircleCounter.php
+	* includes/builder/module/Comments.php
+	* includes/builder/module/ContactForm.php
+	* includes/builder/module/ContactFormItem.php
+	* includes/builder/module/CountdownTimer.php
+	* includes/builder/module/Cta.php
+	* includes/builder/module/Divider.php
+	* includes/builder/module/FilterablePortfolio.php
+	* includes/builder/module/FullwidthHeader.php
+	* includes/builder/module/FullwidthImage.php
+	* includes/builder/module/FullwidthMap.php
+	* includes/builder/module/FullwidthMenu.php
+	* includes/builder/module/FullwidthPortfolio.php
+	* includes/builder/module/FullwidthPostSlider.php
+	* includes/builder/module/FullwidthPostTitle.php
+	* includes/builder/module/FullwidthSlider.php
+	* includes/builder/module/Gallery.php
+	* includes/builder/module/Image.php
+	* includes/builder/module/Login.php
+	* includes/builder/module/Map.php
+	* includes/builder/module/MapItem.php
+	* includes/builder/module/NumberCounter.php
+	* includes/builder/module/Portfolio.php
+	* includes/builder/module/PostSlider.php
+	* includes/builder/module/PostTitle.php
+	* includes/builder/module/PostsNavigation.php
+	* includes/builder/module/PricingTables.php
+	* includes/builder/module/PricingTablesItem.php
+	* includes/builder/module/Search.php
+	* includes/builder/module/Shop.php
+	* includes/builder/module/Sidebar.php
+	* includes/builder/module/Signup.php
+	* includes/builder/module/Slider.php
+	* includes/builder/module/SliderItem.php
+	* includes/builder/module/SocialMediaFollow.php
+	* includes/builder/module/SocialMediaFollowItem.php
+	* includes/builder/module/Tabs.php
+	* includes/builder/module/TeamMember.php
+	* includes/builder/module/Testimonial.php
+	* includes/builder/module/Text.php
+	* includes/builder/module/Toggle.php
+	* includes/builder/module/Video.php
+	* includes/builder/module/VideoSlider.php
+	* includes/builder/module/VideoSliderItem.php
+	* includes/builder/module/field/Border.php
+	* includes/builder/module/field/BoxShadow.php
+	* includes/builder/module/field/Divider.php
+	* includes/builder/module/field/TextShadow.php
+	* includes/builder/module/field/template/Tabbed.php
+	* includes/builder/module/helpers/HoverOptions.php
+	* includes/builder/module/helpers/TransitionOptions.php
+	* includes/builder/module/settings/Migration.php
+	* includes/builder/module/settings/migration/HoverOptions.php
+	* includes/builder/module/settings/migration/TeamMemberIconHover.php
+	* includes/builder/scripts/builder.js
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/frontend-builder-style.less
+	* includes/builder/styles/style.css
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/class-et-global-settings.php
+
+version 3.15 ( updated 09-13-2018 )
+- Added Multiselect and Bulk Editing to the Visual Builder.
+- Fixed missing "Reply To" in Contact Form module email when the email field is not set to required.
+- Fixed Grid Mode UI being shown from hovered section/rows/modules even after it is turned off.
+- Fixed a bug where the wrong information was given in a debug message.
+- Included the missing screen-reader-text class style in Divi.
+- Fixed contact form not accepting 0 (zero) as a valid field value for required fields.
+- Added shift key support for the range control.
+- Fixed a bug where the Drag & Drop File Upload system was rejecting some files that should have been accepted due to file extension not being all lowercase.
+- Fixed issue with inability to set tablet and phone responsive options to their default values.
+- Fixed the font dropdown overlap with the options underneath in VB.
+- Fixed Tooltip Modals animation when opening new modal from Page Settings Bar while another modal is not closed and vice versa.
+- Fixed the inverted view on the Row Builder button group in the VB.
+- Updated custom fields retrieval and processing functions for Mailchimp to make it work with custom field names.
+	* core/components/api/email/MailChimp.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/module/ContactForm.php
+	* includes/builder/styles/frontend-builder-style.less
+
+version 3.14 ( updated 09-06-2018 )
+- Added "Extend Styles" right click option to menus for Modules, Option Groups and Individual Options.
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/functions.php
+	* includes/builder/main-structure-elements.php
+	* includes/builder/module/Accordion.php
+	* includes/builder/module/AccordionItem.php
+	* includes/builder/module/Audio.php
+	* includes/builder/module/BarCounters.php
+	* includes/builder/module/BarCountersItem.php
+	* includes/builder/module/Blog.php
+	* includes/builder/module/Blurb.php
+	* includes/builder/module/Button.php
+	* includes/builder/module/CircleCounter.php
+	* includes/builder/module/Code.php
+	* includes/builder/module/Comments.php
+	* includes/builder/module/ContactForm.php
+	* includes/builder/module/ContactFormItem.php
+	* includes/builder/module/CountdownTimer.php
+	* includes/builder/module/Cta.php
+	* includes/builder/module/Divider.php
+	* includes/builder/module/FilterablePortfolio.php
+	* includes/builder/module/FullwidthCode.php
+	* includes/builder/module/FullwidthHeader.php
+	* includes/builder/module/FullwidthImage.php
+	* includes/builder/module/FullwidthMap.php
+	* includes/builder/module/FullwidthMenu.php
+	* includes/builder/module/FullwidthPortfolio.php
+	* includes/builder/module/FullwidthPostSlider.php
+	* includes/builder/module/FullwidthPostTitle.php
+	* includes/builder/module/FullwidthSlider.php
+	* includes/builder/module/Gallery.php
+	* includes/builder/module/Image.php
+	* includes/builder/module/Login.php
+	* includes/builder/module/Map.php
+	* includes/builder/module/MapItem.php
+	* includes/builder/module/NumberCounter.php
+	* includes/builder/module/Portfolio.php
+	* includes/builder/module/PostSlider.php
+	* includes/builder/module/PostTitle.php
+	* includes/builder/module/PostsNavigation.php
+	* includes/builder/module/PricingTables.php
+	* includes/builder/module/PricingTablesItem.php
+	* includes/builder/module/Search.php
+	* includes/builder/module/Shop.php
+	* includes/builder/module/Sidebar.php
+	* includes/builder/module/Signup.php
+	* includes/builder/module/SignupItem.php
+	* includes/builder/module/Slider.php
+	* includes/builder/module/SliderItem.php
+	* includes/builder/module/SocialMediaFollow.php
+	* includes/builder/module/SocialMediaFollowItem.php
+	* includes/builder/module/Tabs.php
+	* includes/builder/module/TabsItem.php
+	* includes/builder/module/TeamMember.php
+	* includes/builder/module/Testimonial.php
+	* includes/builder/module/Text.php
+	* includes/builder/module/Toggle.php
+	* includes/builder/module/Video.php
+	* includes/builder/module/VideoSlider.php
+	* includes/builder/module/VideoSliderItem.php
+
+version 3.13.1 ( updated 09-1-2018 )
+- Fixed broken font uploader modal.
+- Fixed unwanted padding in font uploader modal.
+	* includes/builder/frontend-builder/bundle.js
+
+version 3.13 ( updated 08-30-2018 )
+- Added new column structures to the Divi Builder.
+- Added new footer column layouts.
+- Improved the Visual Builder tooltip modal automatic sizing and positioning.
+- Fixed a bug that prevented loading premade layouts on some servers.
+- Removed extra space that appeared in the Visual Builder when there was an empty TinyMCE area on the page.
+- Fixed an error that occurred when subscribing to a MailPoet list due to malformed custom fields.
+- Fixed broken accordion module animation in Safari.
+- Removed dashes from contact form field titles in the Visual Builder.
+- Fixed a bug that caused the portability tooltip to open in the wrong location when triggered by drag and drop file upload.
+	* css/theme-customizer-controls-styles.css
+	* functions.php
+	* images/footer-layouts.png
+	* includes/functions/choices.php
+	* includes/functions/sidebars.php
+	* sidebar-footer.php
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/functions.php
+	* includes/builder/main-structure-elements.php
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/frontend-builder-global-style.css
+	* includes/builder/styles/frontend-builder-grid.less
+	* includes/builder/styles/frontend-builder-shared-conditional-style.css
+	* includes/builder/styles/frontend-builder-shared-conditional-style.less
+	* includes/builder/styles/frontend-builder-style.css
+	* includes/builder/styles/frontend-builder-style.less
+	* includes/builder/styles/style.css
+	* includes/builder/frontend-builder/assets/css/responsive-preview-wrapped.css
+	* includes/builder/frontend-builder/assets/css/responsive-preview.css
+	* includes/builder/feature/Library.php
+	* core/components/api/email/_MailPoet3.php
+
+version 3.12.2 ( updated 08-16-2018 )
+- Fixed a bug that caused animations to remove module design styles such as background colors.
+	* includes/builder/scripts/frontend-builder-scripts.js
+
+version 3.12.1 ( updated 08-13-2018 )
+- Updated translation files.
+- Fixed issue with partial support for modules with child modules.
+- Fixed playback issues of Facebook videos in the Video module.
+- Fixed display issue with Video Module, with animation applied, in when playing the video in fullscreen, in Chrome.
+- Fixed fullwidth mobile menu not working in Visual Builder.
+- Updated Testimonial module so that it doesn't show the "," when Job Title is empty.
+- Fixed ability to find and replace Gutter Width setting.
+- Fixed Visual Builder tooltips and modals from appearing behind the floating navbar on custom post types in certain cases.
+- Fixed the Tabs module from malfunctioning when triple clicked on the Tab module content as soon as it was added on the page using VB.
+- Fixed a bug where the Drag & Dropload interface would process files already being processed by the WP Media Library upload system.
+- Fixed a PHP warning related to Post / Project tag/category.
+- Fixed BB not loading when Gutenberg and Classic Editor plugins were both active.
+- Fixed inconsistency between the front-end and visual builder's button module when using an icon and the margins didn't match.
+- Fixed the issue when Visual Builder was not correctly initiated on WordPress sample pages.
+- Fixed unwanted horizontal scroll when specialty section options are fullwidth and gutter 1 and height equalized.
+- Fixed the background image being covered up when Parallax is enabled when using Fullwidth Slider Module.
+- Corrected German translation of button text in WP Admin.
+- Fixed issue with Google API key not working properly if an extra space was accidentally added the to key.
+	* core/languages/de_DE.mo
+	* core/languages/de_DE.po
+	* epanel/core_functions.php
+	* includes/builder/class-et-builder-settings.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/functions.php
+	* includes/builder/languages/ar.mo
+	* includes/builder/languages/ar.po
+	* includes/builder/languages/bg_BG.mo
+	* includes/builder/languages/bg_BG.po
+	* includes/builder/languages/cs_CZ.mo
+	* includes/builder/languages/cs_CZ.po
+	* includes/builder/languages/da_DK.mo
+	* includes/builder/languages/da_DK.po
+	* includes/builder/languages/de_DE.mo
+	* includes/builder/languages/de_DE.po
+	* includes/builder/languages/el.mo
+	* includes/builder/languages/el.po
+	* includes/builder/languages/en_US.pot
+	* includes/builder/languages/es_ES.mo
+	* includes/builder/languages/es_ES.po
+	* includes/builder/languages/fi.mo
+	* includes/builder/languages/fi.po
+	* includes/builder/languages/fr_FR.mo
+	* includes/builder/languages/fr_FR.po
+	* includes/builder/languages/he_IL.mo
+	* includes/builder/languages/he_IL.po
+	* includes/builder/languages/hu_HU.mo
+	* includes/builder/languages/hu_HU.po
+	* includes/builder/languages/id_ID.mo
+	* includes/builder/languages/id_ID.po
+	* includes/builder/languages/it_IT.mo
+	* includes/builder/languages/it_IT.po
+	* includes/builder/languages/ja.mo
+	* includes/builder/languages/ja.po
+	* includes/builder/languages/ko_KR.mo
+	* includes/builder/languages/ko_KR.po
+	* includes/builder/languages/ms_MY.mo
+	* includes/builder/languages/ms_MY.po
+	* includes/builder/languages/nb_NO.mo
+	* includes/builder/languages/nb_NO.po
+	* includes/builder/languages/nl_NL.mo
+	* includes/builder/languages/nl_NL.po
+	* includes/builder/languages/pl_PL.mo
+	* includes/builder/languages/pl_PL.po
+	* includes/builder/languages/pt_BR.mo
+	* includes/builder/languages/pt_BR.po
+	* includes/builder/languages/ro_RO.mo
+	* includes/builder/languages/ro_RO.po
+	* includes/builder/languages/ru_RU.mo
+	* includes/builder/languages/ru_RU.po
+	* includes/builder/languages/sk_SK.mo
+	* includes/builder/languages/sk_SK.po
+	* includes/builder/languages/sr_RS.mo
+	* includes/builder/languages/sr_RS.po
+	* includes/builder/languages/sv_SE.mo
+	* includes/builder/languages/sv_SE.po
+	* includes/builder/languages/th.mo
+	* includes/builder/languages/th.po
+	* includes/builder/languages/tl.mo
+	* includes/builder/languages/tl.po
+	* includes/builder/languages/tr_TR.mo
+	* includes/builder/languages/tr_TR.po
+	* includes/builder/languages/uk.mo
+	* includes/builder/languages/uk.po
+	* includes/builder/languages/vi.mo
+	* includes/builder/languages/vi.po
+	* includes/builder/languages/zh_CN.mo
+	* includes/builder/languages/zh_CN.po
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/frontend-builder-style.css
+	* options_divi.php
+
+version 3.12 ( updated 8-9-2018 )
+- Added new Drag & Drop File Upload system to the Divi Builder.
+	* includes/builder/core.php
+	* includes/builder/frontend-builder/helpers.php
+
+version 3.11.1 ( updated 07-30-2018 )
+- Added support for using the Divi Builder when Gutenberg is enabled.
+- Fixed JavaScript Error: "TypeError: E.AllHtmlEntities is not a constructor".
+	* css/meta-box-styles.css
+	* functions.php
+	* includes/builder/class-et-builder-settings.php
+	* includes/builder/frontend-builder/assets.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/functions.php
+	* includes/builder/plugin-compat/gutenberg.php
+	* includes/builder/scripts/ext/media-library.js
+	* includes/builder/styles/frontend-builder-shared-conditional-style.css
+	* includes/builder/styles/frontend-builder-style.css
+
+version 3.11 ( updated 07-26-2018 )
+- Added a new option, Find & Replace, to right click menus on individual options.
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/functions.php
+
+version 3.10.2 ( updated 07-23-2018 )
+- Fixed a jQuery error that occurred in the VB when various third party plugins were installed.
+- Fixed 1/4 column rows with gutter widths of 1 having unwanted margin bottom on mobile.
+- Fixed the issue where padding was not removed when Use Background Color option was disabled in Login Module.
+- Fixed PHP notice that was occurring since introduction of rollback feature.
+- Fixed custom code color picker not appearing in the Visual Builder settings.
+- Fixed gutter width issues on mobile that occurred due to CSS priority changes in the previous Divi feature release.
+- Fixed website content width option in Customizer not taking effect when boxed layout is enabled.
+    * core/components/VersionRollback.php
+    * includes/builder/frontend-builder/bundle.js
+    * functions.php
+	* style.css
+
+version 3.10.1 ( updated 07-16-2018 )
+- Fixed Visual Builder responsive preview in the TwentySeventeen theme.
+- Fixed TinyMCE dropdowns not being visible in Visual Builder modals.
+- Fixed section padding not taking effect on custom post types.
+- Fixed column margin regression for pages in Visual Builder.
+- Fixed button hover interaction in Visual Builder.
+- Added in the ability to copy, paste and reset individual Text module heading levels.
+	* includes/builder/frontend-builder/assets/css/responsive-preview.css
+	* includes/builder/frontend-builder/bundle.js
+
+version 3.10 ( updated 07-12-2018 )
+- Created a system for enabling the Divi Builder on custom post types.
+- Automatically enabled the Divi Builder on popular post types that we have tested.
+- Updated MailChimp API wrapper to properly handle resubscribing a previously unsubscribed and/or deleted subscriber.
+- Fixed the issue where "Use Custom Styles for Button" option was disabled after pasting any button custom style options.
+- Fixed the issue where "Use Custom Styles for Button" option was disabled after resetting any button custom style options.
+- Fixed incorrect ability to add new row/module even when the parent module is locked in VB Click View.
+- Fixed issues with some styles are not working in Divi Builder Plugin because of error in minification function.
+- Removed favicon option from epanel.
+- Added checkerboard pattern to palette and currently selected color swatches in to Divi Color Manager.
+- Reverted back the visual appearance of color picker launcher when no color/default is selected.
+	* core/components/PageResource.php
+	* core/components/api/email/MailChimp.php
+	* core/components/data/Utils.php
+	* core/functions.php
+	* core/ui/components/controls/sortable-list/sortable-list.scss
+	* css/main-styles.css
+	* css/style-header.css
+	* epanel/core_functions.php
+	* epanel/css/panel.css
+	* epanel/js/functions-init.js
+	* functions.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/class-et-builder-settings.php
+	* includes/builder/core.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/webpack.config.js
+	* includes/builder/frontend-builder/webpack.production.config.js
+	* includes/builder/functions.php
+	* includes/builder/module/Toggle.php
+	* includes/builder/plugin-compat/easy-digital-downloads.php
+	* includes/builder/plugin-compat/eventon.php
+	* includes/builder/plugin-compat/events-manager.php
+	* includes/builder/plugin-compat/the-events-calendar.php
+	* includes/builder/plugin-compat/woocommerce.php
+	* includes/builder/scripts/builder.js
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/frontend-builder-global-style.css
+	* includes/builder/styles/frontend-builder-shared-conditional-style.css
+	* includes/builder/styles/frontend-builder-shared-style.css
+	* includes/builder/styles/frontend-builder-style.css
+	* includes/builder/styles/preview.css
+	* includes/builder/template-preview.php
+	* js/custom.js
+	* js/theme-customizer.js
+	* options_divi.php
+	* sidebar.php
+	* single-project.php
+	* single.php
+
+version 3.9 ( updated 06-28-2018 )
+- Added new color manager to the Visual Builder, including new recent colors and suggested colors systems.
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/images/no-color.png
+
+version 3.8.1 ( updated 06-26-2018 )
+- Fixed "$ is not a function" error that occurred when editing some layouts in the Visual Builder.
+- Fixed alignment of custom fields when using the half width option inside of the Email optin module.
+- Fixed react warning on contact form module that occurred only in dev environment.
+- Fixed an issue where responsive tabs would get updated randomly when editing a row's column spacing.
+- Fixed an inconsistency where a contact form with an empty field ID would be output on the VB but not on the front end.
+- Fixed no results notice for filtered search still being visible after undoing changes.
+- Fixed Divi shortcuts conflicts with Yoast Snippet Editor.
+- Fixed a compatibility issue where WooCommerce taxonomy pages would not have a sidebar area.
+- Fixed a compatibility issue with GD bbPresss Tools and GD bbPress Toolbox where the forum quote was not using the correct markup.
+- Fixed display issue with Facebook videos when using an overlay.
+- Fixed bug that caused search filters to be cleared on all keyboard keystrokes.
+- Fixed a bug that allowed keyboard shortcuts to fire while using the modal search bar.
+- Fixed a dispatch error that occurred when closing a settings modal using the ESC key while a quick access outline was being rendered on the page.
+	* core/languages/ar.po
+	* core/languages/bg_BG.po
+	* core/languages/cs_CZ.po
+	* core/languages/da_DK.po
+	* core/languages/de_DE.po
+	* core/languages/el.po
+	* core/languages/en_US.po
+	* core/languages/en_US.pot
+	* core/languages/es_ES.po
+	* core/languages/fi.po
+	* core/languages/fr_FR.po
+	* core/languages/he_IL.po
+	* core/languages/hu_HU.po
+	* core/languages/id_ID.po
+	* core/languages/it_IT.po
+	* core/languages/ja.po
+	* core/languages/ko_KR.po
+	* core/languages/ms_MY.po
+	* core/languages/nb_NO.po
+	* core/languages/nl_NL.po
+	* core/languages/pl_PL.po
+	* core/languages/pt_BR.po
+	* core/languages/ro_RO.po
+	* core/languages/ru_RU.po
+	* core/languages/sk_SK.po
+	* core/languages/sr_RS.po
+	* core/languages/sv_SE.po
+	* core/languages/th.po
+	* core/languages/tl.po
+	* core/languages/tr_TR.po
+	* core/languages/uk.po
+	* core/languages/vi.po
+	* core/languages/zh_CN.po
+	* epanel/shortcodes/shortcodes.php
+	* functions.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/module/ContactFormItem.php
+	* includes/builder/scripts/builder.js
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/frontend-builder-style.css
+
+version 3.8 ( updated 06-21-2018 )
+- Added new Quick Access design system to the Visual Builder.
+	* includes/builder/frontend-builder/bundle.js
+
+version 3.7.1 ( updated 06-20-2018 )
+- Security Update: Added permission checks on all heartbeat callbacks. For more information, please read: https://us7.campaign-archive.com/?u=9ae7aa91c578052b052b864d6&id=3b5811b076
+- Separated page fetching into a separate ajax call to reduce peek memory usage during post.php loading.
+- Fixed a bug that caused Theme Customizer button padding to overwrite custom button module padding added in the Divi Builder.
+- Exclude current post/page from Existing Pages in Divi Library.
+- Fixed an error that could sometime happen in Divi Library when loading a layout.
+- Fixed a bug that could cause the 'Add Module' modal to show no content.
+- Added in page creation UI animation dependency on builder settings.
+- Decreased PHP memory usage to avoid possible server errors.
+- Updated styling for contact module's checkbox field.
+- Fixed never-before-published draft pages not showing up in Existing Pages in Library.
+- Fixed an issue where dragging a section to the very top while in wireframe mode was not easy.
+- Fixed a Javascript error that occurred when changing a value in a numeric input field and clicking out of the field quickly.
+- Fixed tooltip still visible after the module buttons clicked.
+	* includes/builder/core.php
+	* includes/builder/feature/Library.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/functions.php
+	* includes/builder/module/Button.php
+	* includes/builder/scripts/builder.js
+	* includes/builder/styles/frontend-builder-style.css
+
+version 3.7 ( updated 06-14-2018 )
+- Added new page creation workflow for the Visual Builder
+- Any page can now be duplicated/imported into the builder.
+- Added in ability to copy individual font options across different type of modules.
+- Fixed selector used for custom CSS styles targeting form fields in the Email Optin module.
+- Fixed an issue where the tooltip modal would not align correctly while in wireframe mode on the VB.
+- Fixed an issue when zooming would cause a 1 pixel line when using section dividers.
+- Fixed js error occurring in Blog and Portfolio modules when using pagination in Divi Builder Plugin.
+- Fixed bug CSS selectors syntax when Divi Builder plugin is active.
+- Updated the styling of the error message within the optin module.
+- Fixed a PHP compatibility issue for version 5.2 where a function did not exist.
+- Fixed Mailchimp newsletter subscribe option resulting in double optin even when single optin was chosen.
+- Fixed an issue in the Constant Contact API Wrapper that made it impossible to subscribe an existing subscriber to any additional lists.
+- Fixed a PHP error that was triggered on some AJAX calls when ET_DEBUG constant was set to true.
+	* core/components/Logger.php
+	* core/components/api/email/ConstantContact.php
+	* core/components/api/email/MailChimp.php
+	* core/components/init.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/core.php
+	* includes/builder/feature/Library.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/i18n/library.php
+	* includes/builder/frontend-builder/webpack.config.js
+	* includes/builder/frontend-builder/webpack.production.config.js
+	* includes/builder/functions.php
+	* includes/builder/images/clone.gif
+	* includes/builder/images/clone.png
+	* includes/builder/images/existing.gif
+	* includes/builder/images/existing.png
+	* includes/builder/images/premade.gif
+	* includes/builder/images/premade.png
+	* includes/builder/images/scratch.gif
+	* includes/builder/images/scratch.png
+	* includes/builder/module/Signup.php
+	* includes/builder/module/settings/migration/ContactFormItemOptionsSerialization.php
+	* includes/builder/scripts/builder.js
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/frontend-builder-style.css
+	* includes/builder/styles/style.css
+
+version 3.6 ( updated 06-07-2018 )
+- Added rollback feature which allows users to rollback to the version of Divi that they previously had installed before updating.
+- Fixed Javascript error when configuring Global Modules selective sync in Visual Builder.
+- Updated behavior of numeric controls so that they increment by the appropriate interval for the control.
+- Fixed an issue where the bottom modal position option wouldn't display the correct setting.
+- Fixed an issue with CSS style generation for Divi Builder modules that use another module's render method.
+- Adjusted the settings modal's border radii to prevent rough edges displaying on the corners against dark backgrounds.
+- Fixed fullwidth header responsive preview for desktop when setting a center layout design.
+- Fixed ability to delete a module while the module settings modal is open when in wireframe mode in Visual Builder.
+- Fix issue in the Email Optin module where description and footer content that included links would be lost upon saving the page in the classic Divi Builder.
+- Fixed an error caused by contact form checkbox, radio and select fields with quotes in their options' labels.
+- Fixed display issue with custom date and number inputs with CampaignMonitor provider for Email Optin Module.
+- Enabled conditional parent options If child styles are copied & pasted.
+- Fixed email optin migration bug where description disappears after being saved on VB without any modification.
+- Fixed migration inconsistencies when the migrated value is being migrated to the same attribute name.
+	* core/admin/css/core.css
+	* core/admin/css/version-rollback.css
+	* core/admin/js/core.js
+	* core/admin/js/version-rollback.js
+	* core/components/README.md
+	* core/components/VersionRollback.php
+	* core/components/api/ElegantThemes.php
+	* core/components/api/email/CampaignMonitor.php
+	* core/components/lib/SilentThemeUpgraderSkin.php
+	* core/functions.php
+	* core/languages/ar.mo
+	* core/languages/ar.po
+	* core/languages/bg_BG.mo
+	* core/languages/bg_BG.po
+	* core/languages/cs_CZ.mo
+	* core/languages/cs_CZ.po
+	* core/languages/da_DK.mo
+	* core/languages/da_DK.po
+	* core/languages/de_DE.mo
+	* core/languages/de_DE.po
+	* core/languages/el.mo
+	* core/languages/el.po
+	* core/languages/en_US.mo
+	* core/languages/en_US.po
+	* core/languages/en_US.pot
+	* core/languages/es_ES.mo
+	* core/languages/es_ES.po
+	* core/languages/fi.mo
+	* core/languages/fi.po
+	* core/languages/fr_FR.mo
+	* core/languages/fr_FR.po
+	* core/languages/he_IL.mo
+	* core/languages/he_IL.po
+	* core/languages/hu_HU.mo
+	* core/languages/hu_HU.po
+	* core/languages/id_ID.mo
+	* core/languages/id_ID.po
+	* core/languages/it_IT.mo
+	* core/languages/it_IT.po
+	* core/languages/ja.mo
+	* core/languages/ja.po
+	* core/languages/ko_KR.mo
+	* core/languages/ko_KR.po
+	* core/languages/ms_MY.mo
+	* core/languages/ms_MY.po
+	* core/languages/nb_NO.mo
+	* core/languages/nb_NO.po
+	* core/languages/nl_NL.mo
+	* core/languages/nl_NL.po
+	* core/languages/pl_PL.mo
+	* core/languages/pl_PL.po
+	* core/languages/pt_BR.mo
+	* core/languages/pt_BR.po
+	* core/languages/ro_RO.mo
+	* core/languages/ro_RO.po
+	* core/languages/ru_RU.mo
+	* core/languages/ru_RU.po
+	* core/languages/sk_SK.mo
+	* core/languages/sk_SK.po
+	* core/languages/sr_RS.mo
+	* core/languages/sr_RS.po
+	* core/languages/sv_SE.mo
+	* core/languages/sv_SE.po
+	* core/languages/th.mo
+	* core/languages/th.po
+	* core/languages/tl.mo
+	* core/languages/tl.po
+	* core/languages/tr_TR.mo
+	* core/languages/tr_TR.po
+	* core/languages/uk.mo
+	* core/languages/uk.po
+	* core/languages/vi.mo
+	* core/languages/vi.po
+	* core/languages/zh_CN.mo
+	* core/languages/zh_CN.po
+	* epanel/css/panel.css
+	* functions.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/functions.php
+	* includes/builder/module/Signup.php
+	* includes/builder/module/settings/Migration.php
+	* includes/builder/module/settings/migration/Animation.php
+	* includes/builder/module/settings/migration/BackgroundUI.php
+	* includes/builder/module/settings/migration/BorderOptions.php
+	* includes/builder/module/settings/migration/ContactFormItemOptionsSerialization.php
+	* includes/builder/module/settings/migration/DropShadowToBoxShadow.php
+	* includes/builder/module/settings/migration/EmailOptinContent.php
+	* includes/builder/module/settings/migration/FilterOptions.php
+	* includes/builder/module/settings/migration/FullwidthHeader.php
+	* includes/builder/module/settings/migration/FullwidthHeader2.php
+	* includes/builder/module/settings/migration/InnerShadowToBoxShadow.php
+	* includes/builder/module/settings/migration/OptionsHarmony.php
+	* includes/builder/module/settings/migration/ShopModuleSlugs.php
+	* includes/builder/module/settings/migration/UIImprovements.php
+	* includes/builder/plugin-compat/sitepress-multilingual-cms.php
+	* includes/builder/scripts/builder.js
+	* options_divi.php
+
+version 3.5.1 ( updated 06-01-2018 )
+- Fixed an issue with copying styles of an Accordion Module Item not working correctly.
+- Fixed js error when opening Module Settings while "Add To Library" modal is opened.
+- Fixed an issue where you could no longer close module settings modal with ESC keyboard shortcut.
+- Fixed rendering issue with global Code Module in Visual Builder.
+- Fixed an error that occurred when editing the Social Follow module in the Visual Builder.
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/frontend-builder/bundle.js
+
+version 3.5 ( updated 05-31-2018 )
+- Added feature that enables users to filter the settings modal options in addition to searching.
+- Added new element right click menu option "View Modified Styles".
+- Added new Go To Option item to settings modal right click menu.
+- Fixed the issue where native browser context menu wouldn't display within textarea in settings modal.
+- Fixed an issue where the context menu of the settings modal header displayed wrong menu items.
+- Fixed PHP error occurring when using the module preview in the Classic Divi Builder.
+- Fixed the issue where background colors of Social Media Follow items were not reset correctly during resetting styles.
+- Fixed a bug where column background settings wouldn't reset while resetting entire section or row styles.
+- Fixed the issue where some style options of "Tab Text" options group, within Tabs Module, were not copied correctly.
+- Fixed Image Align Bottom option not working on mobile for Fullwidth Header module.
+- Fixed certain Visual Builder UI elements not working properly when disabling various things in the role editor.
+- Fixed locked specialty sections having wrong color for the Lock and Collapse button.
+- Fixed issue with duplicating checkboxes where link wouldn't properly get duplicated as well.
+- Fixed a compatibility with Easy Forms for MailChimp that prevented section background colors from being changed.
+- Added keyboard shortcut hint into builder helper for reset module styles.
+- Fixed issue with custom margin value working incorrectly for the blog module.
+- Fixed logo preloading failing on Safari 11.
+- Added extra security hardening to the OAuth2 authorization callback.
+	* core/components/api/OAuthHelper.php
+	* core/components/api/Service.php
+	* core/components/api/email/Providers.php
+	* core/ui/components/controls/sortable-list/sortable-list.jsx
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/functions.php
+	* includes/builder/module/Blog.php
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/style.css
+	* includes/builder/template-preview.php
+	* js/custom.js
+
 version 3.4.1 ( updated 05-26-2018 )
 - Fixed a bug that caused unwanted line breaks to be added to the email optin module when saving in the classic Divi Builder.
-- Fixed a bug that caused line breaks to be mistakenly stripped from the email optin module's description field after a successful settings migration occurred. 
+- Fixed a bug that caused line breaks to be mistakenly stripped from the email optin module's description field after a successful settings migration occurred.
 - Fixed a bug that broke content migration when the migrated module existed inside of a specialty section and the migration occurred when using the classic Divi Builder.
 	* includes/builder/scripts/builder.js
 	* includes/builder/class-et-builder-element.php

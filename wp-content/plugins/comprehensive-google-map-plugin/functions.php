@@ -656,7 +656,7 @@ function cgmp_google_map_deregister_scripts() {
 	if (isset($wp_scripts->registered) && is_array($wp_scripts->registered)) {
 		foreach ( $wp_scripts->registered as $script) {
 
-			if (strpos($script->src, 'https://maps.googleapis.com/maps/api/js') !== false && $script->handle != 'cgmp-google-map-api') {
+			if (strpos($script->src, 'http://maps.googleapis.com/maps/api/js') !== false && $script->handle != 'cgmp-google-map-api') {
 
 				if (!isset($script->handle) || $script->handle == '') {
 					$script->handle = 'remove-google-map-duplicate';

@@ -21,7 +21,7 @@
         var head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
         var script = document.createElement('script');
         script.type = 'text/javascript';
-        script.src = "https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js";
+        script.src = "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js";
 
         script.onload = script.onreadystatechange = function () {
             if (!done && (!this.readyState || /loaded|complete/.test(script.readyState))) {
@@ -77,7 +77,7 @@
                         mapTypeIds.push(mapType);
                         googleMap.mapTypes.set(mapType, new google.maps.ImageMapType({
                             getTileUrl: function (coord, zoom) {
-                                return "https://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
+                                return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
                             },
                             tileSize: new google.maps.Size(256, 256),
                             name: "OpenStreet",
@@ -309,7 +309,7 @@
                             var head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
                             var script = document.createElement('script');
                             script.type = 'text/javascript';
-                            script.src = "https://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer_compiled.js";
+                            script.src = "http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer_compiled.js";
                             script.onload = script.onreadystatechange = function () {
                                 if (!doneClustering && (!this.readyState || /loaded|complete/.test(script.readyState))) {
                                     doneClustering = true;
@@ -886,7 +886,7 @@
                             dirflag = "w";
                         }
 
-                        var url = "https://maps.google.com/?saddr=" + old_a_addr + "&daddr=" + old_b_addr + "&dirflg=" + dirflag + "&pw=2";
+                        var url = "http://maps.google.com/?saddr=" + old_a_addr + "&daddr=" + old_b_addr + "&dirflg=" + dirflag + "&pw=2";
 
                         var is_miles = $('input#' + mapDivId + '_radio_miles').is(":checked");
                         if (is_miles) {

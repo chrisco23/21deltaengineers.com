@@ -442,6 +442,25 @@ h1#epanel-title {
 	width: 225px;
 }
 
+#epanel-content .et-box-content--list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+#epanel-content .et-box-content .et-box-content--list > * {
+	padding-left: 0;
+	flex-grow: 0;
+	flex-shrink: 0;
+	margin-bottom: 20px;
+}
+
+#epanel-content .et-panel-box__checkbox-list-label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
 #epanel-content .et-epanel-box .et-box-content input,
 #epanel-content .et-epanel-box .et-box-content .et-upload-buttons {
 	vertical-align: top;
@@ -940,7 +959,7 @@ input.et-checkbox.yes_no_button {
 
 #epanel-content .et-epanel-box .et-upload-image-button,
 #epanel-content .et-epanel-box .et-upload-image-reset,
-#epanel-content .et-epanel-box .et-button{
+#epanel-content .et-epanel-box .et-button {
 	float: left;
 	box-sizing: border-box;
 	color: #FFF;
@@ -966,6 +985,10 @@ input.et-checkbox.yes_no_button {
 	-webkit-transition: background .5s;
 	-moz-transition: background .5s;
 	transition: background .5s;
+}
+
+#epanel-content .et-epanel-box .et-button--simple:first-child {
+	margin-left: 0;
 }
 
 .rtl #epanel-content .et-panel-box .et-upload-image-button,

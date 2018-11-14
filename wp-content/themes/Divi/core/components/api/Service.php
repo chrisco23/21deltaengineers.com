@@ -357,6 +357,8 @@ abstract class ET_Core_API_Service {
 	 * @return array|bool
 	 */
 	public function authenticate() {
+		et_core_nonce_verified_previously();
+
 		if ( '1.0a' === $this->oauth_version || ( '2.0' === $this->oauth_version && ! empty( $_GET['code'] ) ) ) {
 			$authenticated = $this->_do_oauth_access_token_request();
 
@@ -365,10 +367,11 @@ abstract class ET_Core_API_Service {
 				return true;
 			}
 		} else if ( '2.0' === $this->oauth_version ) {
-			$args = array(
+			$nonce = wp_create_nonce( 'et_core_api_service_oauth2' );
+			$args  = array(
 				'client_id'     => $this->data['api_key'],
 				'response_type' => 'code',
-				'state'         => rawurlencode( "ET_Core|{$this->name}|{$this->account_name}" ),
+				'state'         => rawurlencode( "ET_Core|{$this->name}|{$this->account_name}|{$nonce}" ),
 				'redirect_uri'  => $this->REDIRECT_URL,
 			);
 

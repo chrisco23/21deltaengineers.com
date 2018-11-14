@@ -48,7 +48,7 @@ if (file_exists($lmm_pro_readme)) {
 	$install_title = '"Maps Marker Pro" has already been installed';
 } else {
 	$install_active = '';
-	$install_title = 'install "Maps Marker Pro" plugin';
+	$install_title = 'install "Maps Marker Pro" plugin v3.1.1';
 }	
 
 if ( $action == NULL ) {
@@ -59,9 +59,10 @@ if ( $action == NULL ) {
 	if (file_exists($lmm_pro_readme)) {
 		$admin_url = get_admin_url();
 		if (!is_plugin_active('leaflet-maps-marker-pro/leaflet-maps-marker.php') ) {
-			echo '<div class="error" style="padding:10px;"><strong>You already downloaded "Maps Marker Pro" but did not activate the plugin yet!</strong>';
+			echo '<div class="error" style="padding:10px;"><strong>You already downloaded "Maps Marker Pro" v3.1.1 but did not activate the plugin yet!</strong>';
 			if ( current_user_can( 'install_plugins' ) ) {
 				echo sprintf(__('<br/>Please navigate to <a style="text-decoration:underline;" href="%1$s">Plugins / Installed Plugins</a> and activate the plugin "Maps Marker Pro".'), $admin_url . 'plugins.php');
+				echo '<strong>Important: do not update to Maps Marker Pro v4+ unless you finished the migration from Comprehensive Google Maps Plugin to Maps Marker Pro v3.1.1 - the migration tool is not compatible with Maps Marker Pro v4.0+!</strong>';
 			} else {
 				echo sprintf(__('Please contact your administrator (%1s) to activate the plugin "Maps Marker Pro".'), '<a style="text-decoration:underline;" href="mailto:' . get_bloginfo('admin_email') . '?subject=Please activate the plugin Maps Marker Pro">' . get_bloginfo('admin_email') . '</a>' );
 			}
@@ -70,7 +71,8 @@ if ( $action == NULL ) {
 			if (get_option('leafletmapsmarkerpro_license_key') == NULL) {
 				echo '<div class="error" style="padding:10px;">Please <a style="text-decoration:underline;" href="' . $admin_url . 'admin.php?page=leafletmapsmarker_license">activate a valid "Maps Marker Pro" license</a> to be able to start the transfer!</div><br/>';
 			} else {
-				echo '<div class="updated" style="padding:10px;">"Maps Marker Pro" has been successully installed.<br/>You can now <a style="text-decoration:underline;" href="' . $admin_url . 'admin.php?page=cgmp_export">start transfering your maps</a>.</div><br/>';
+				echo '<div class="updated" style="padding:10px;">"Maps Marker Pro" v3.1.1 has been successully installed.<br/>You can now <a style="text-decoration:underline;" href="' . $admin_url . 'admin.php?page=cgmp_export">start transfering your maps</a>.</div><br/>';
+				echo '<strong>Important: do not update to Maps Marker Pro v4+ unless you finished the migration from Comprehensive Google Maps Plugin to Maps Marker Pro v3.1.1 - the migration tool is not compatible with Maps Marker Pro v4.0+!</strong>';
 			}
 		}
 	}
@@ -89,21 +91,22 @@ if ( $action == NULL ) {
 	In addition Maps Marker Pro also offers 
 	<ul style="list-style:disc;margin-left:15px;">
 	<li><a href="https://www.mapsmarker.com/v1.9p" target="_blank">geolocation support</a> (show and follow your location when viewing maps),</li>
-	<li><a href="https://www.mapsmarker.com/pro-feature-import" target="_blank">support for CSV/XLS/XLSX/ODS imports and exports</a> (for bulk additions and bulk updates),</li>
+	<li><a href="https://www.mapsmarker.com/pro-feature-import" target="_blank">support for GeoJSON imports and exports</a> (for bulk additions and bulk updates),</li>
 	<li><a href="https://www.mapsmarker.com/pro-feature-webapp" target="_blank">mobile web app support</a> (for <a href="https://demo.mapsmarker.com/wp-content/plugins/leaflet-maps-marker-pro/leaflet-fullscreen.php?layer=1" target="_blank">fullscreen maps with optimized mobile viewport</a>),</li>
-	<li><a href="https://www.mapsmarker.com/pro-feature-qrcode" target="_blank">support for QR codes with custom backgrounds</a>,</li>
-	<li><a href="https://www.mapsmarker.com/pro-feature-adsense" target="_blank">Google Adsense for maps integration</a>,</li>
+	<li><a href="https://www.mapsmarker.com/pro-feature-qrcode" target="_blank">support for QR codes</a>,</li>
 	<li><a href="https://www.mapsmarker.com/pro-feature-whitelabel" target="_blank">an option to whitelabel the plugin,</a></li>
 	<li><a href="https://www.mapsmarker.com/pro-feature-minimaps" target="_blank">collapsible minimaps</a>,</li>
 	<li><a href="https://www.mapsmarker.com/pro-feature-advanced-widget" target="_blank">advanced recent marker widgets</a>,</li>
 	<li><a href="https://www.mapsmarker.com/mapsmarker-api" target="_blank" title="view API docs on mapsmarker.com">a fully-featured API</a>,</li>
-	<li><a href="https://www.mapsmarker.com/docs/misc/translations/" target="_blank">translations for 34 languages</a>,</li>
+	<li><a href="https://www.mapsmarker.com/docs/misc/translations/" target="_blank">translations for 42 languages</a>,</li>
 	</ul>
 	and <a href="https://www.mapsmarker.com/features" target="_blank" title="view features on mapsmarker.com">lots of other features</a>.
 	<br/><br/>
-	If you are interested, you can either test drive the plugin at <a href="https://demo.mapsmarker.com" target="_blank" title="test drive Maps Marker Pro on demo site">https://demo.mapsmarker.com</a>, <a href="https://www.mapsmarker.com/download-pro" target="_blank">download the current plugin-package</a> or start a free 30-day trial for ' . get_bloginfo('url') . ' by clicking the following button:
+	If you are interested, you can either test drive the plugin at <a href="https://demo.mapsmarker.com" target="_blank" title="test drive Maps Marker Pro on demo site">https://demo.mapsmarker.com</a>, <a href="https://www.mapsmarker.com/upgrade-pro" target="_blank">download the plugin-package v3.1.1</a> or start a free 30-day trial for ' . get_bloginfo('url') . ' by clicking the following button:
 	<br/><br/>
 	<a style="clear:both;" class="button button-primary" href="admin.php?page=cgmp_info&action=install_maps_marker_pro" ' . $install_active . '>' . $install_title . '</a>
+	<br/><br/>
+	<strong>Important: do not update to Maps Marker Pro v4+ unless you finished the migration from Comprehensive Google Maps Plugin to Maps Marker Pro v3.1.1 - the migration tool is not compatible with Maps Marker Pro v4.0+!</strong>
 	<br/><br/>
 	The current "Comprehensive Google Map Plugin"-release also includes a new <a href="admin.php?page=cgmp_export">transfer feature</a> contributed by Robert from Mapsmarker.com, which allows you to automatically convert your current "Comprehensive Google Map Plugin" maps to "Maps Marker Pro" maps. If you have any questions about that feature or Maps Marker Pro in general, I am sure Robert <a href="https://www.mapsmarker.com/contact" target="_blank" title="open contact form on mapsmarker.com">will be glad to to answer them</a>.
 	<br/><br/>
@@ -132,14 +135,14 @@ if ( $action == NULL ) {
 			}
 		} else {
 			$upgrader = new Plugin_Upgrader( new Plugin_Upgrader_Skin() );
-			$upgrader->install( 'https://www.mapsmarker.com/download-pro' );
 			//info: check if download was successful
+			$upgrader->install( 'https://www.mapsmarker.com/upgrade-pro' );
 			$lmm_pro_readme = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'leaflet-maps-marker-pro' . DIRECTORY_SEPARATOR . 'readme.txt';
 			if (file_exists($lmm_pro_readme)) {
 				echo '<p>' . 'Please activate the plugin Maps Marker Pro by clicking the link "Activate Plugin" above' . '</p>';
 			} else {
-				$dl_l = 'https://www.mapsmarker.com/download-pro';
-				$dl_lt = 'www.mapsmarker.com/download-pro';
+				$dl_l = 'https://www.mapsmarker.com/upgrade-pro';
+				$dl_lt = 'www.mapsmarker.com/upgrade-pro';
 				echo '<p>' . sprintf('The pro plugin package could not be downloaded automatically. Please download the plugin from <a href="%1s">%2s</a> and upload it to the directory /wp-content/plugins on your server manually', $dl_l, $dl_lt) . '</p>';
 			}
 		}

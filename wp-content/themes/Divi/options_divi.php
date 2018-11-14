@@ -83,14 +83,6 @@ $options = array (
 				   "desc" => esc_html__( "If you would like to use your own custom logo image click the Upload Image button.", $themename )
 			),
 
-			array( "name" => esc_html__( "Favicon", $themename ),
-				   "id" => $shortname . "_favicon",
-				   "type" => "upload",
-				   "button_text" => esc_html__( "Set As Favicon", $themename ),
-				   "std" => "",
-				   "desc" => esc_html__( "If you would like to use your own custom favicon image click the Upload Image button.", $themename )
-			),
-
 			array( "name" => esc_html__( "Fixed Navigation Bar", $themename ),
 				   "id" => $shortname . "_fixed_nav",
 				   "type" => "checkbox",
@@ -152,7 +144,7 @@ $options = array (
 				"id"                => "et_google_api_settings_api_key",
 				"std"               => "",
 				"type"              => "text",
-				"validation_type"   => "nohtml",
+				"validation_type"   => "apikey",
 				'is_global'         => true,
 				'main_setting_name' => 'et_google_api_settings',
 				'sub_setting_name'  => 'api_key',
@@ -935,6 +927,8 @@ $options = array (
 				'main_setting_name' => 'et_automatic_updates_options',
 				'sub_setting_name'  => 'api_key',
 			),
+
+			et_divi_version_rollback()->get_epanel_option(),
 
 		array( "name" => "updates-1",
 			   "type" => "subcontent-end",),

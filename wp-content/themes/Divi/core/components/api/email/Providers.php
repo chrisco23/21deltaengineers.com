@@ -34,7 +34,7 @@ class ET_Core_API_Email_Providers {
 		self::$_metadata       = et_core_get_components_metadata();
 		$third_party_providers = et_core_get_third_party_components( 'api/email' );
 
-		$load_fields = is_admin() || et_core_is_fb_enabled() || isset( $_GET['et_fb'] );
+		$load_fields = is_admin() || et_core_is_fb_enabled() || isset( $_GET['et_fb'] ); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
 		$all_names   = array(
 			'official'    => self::$_metadata['groups']['api/email']['members'],
 			'third-party' => array_keys( $third_party_providers ),
@@ -174,6 +174,10 @@ class ET_Core_API_Email_Providers {
 		$is_official  = isset( self::$_metadata[ $name_or_slug ] );
 
 		if ( ! $is_official && ! $this->is_third_party( $name_or_slug ) ) {
+			return false;
+		}
+
+		if ( ! in_array( $name_or_slug, array_merge( self::names(), self::slugs() ) ) ) {
 			return false;
 		}
 

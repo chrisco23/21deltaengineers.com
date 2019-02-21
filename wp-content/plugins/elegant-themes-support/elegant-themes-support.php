@@ -3,7 +3,7 @@
  * Plugin Name: Elegant Themes Support
  * Plugin URI: http://elegantthemes.com
  * Description: Creates a temporary account to use for support queries
- * Version: 1.3
+ * Version: 1.4
  * Author: Elegant Themes
  * Author URI: http://elegantthemes.com
  * License: GPLv2 or later
@@ -26,7 +26,7 @@ class ET_Support_Account {
 	 *
 	 * @var string
 	 */
-	var $version = '1.3';
+	var $version = '1.4';
 
 	/**
 	 * Plugin options
@@ -197,10 +197,6 @@ class ET_Support_Account {
 
 		$request = wp_remote_post( 'https://www.elegantthemes.com/api/token.php', $settings );
 
-		if ( is_wp_error( $request ) ) {
-			$request = wp_remote_post( 'https://cdn.elegantthemes.com/api/token.php', $settings );
-		}
-
 		if ( ! is_wp_error( $request ) && wp_remote_retrieve_response_code( $request ) == 200 ){
 			$response = unserialize( wp_remote_retrieve_body( $request ) );
 
@@ -294,7 +290,7 @@ class ET_Support_Account {
 			</div>',
 			esc_html__( 'Elegant Themes Support Account', 'et_support' ),
 			get_submit_button( ( 'regenerate' === $token_action ? esc_html__( 'Regenerate Token', 'et_support' ) : esc_html__( 'Generate New Token', 'et_support' ) ), 'primary', 'submit', false ),
-			__( 'This plugin is used to securely create an admin account that our support team can use to log in to your WordPress Dashboard. The purpose of this plugin is to be able to create an account without sharing the password. Instead, a secret token is created that can be shared with our team that will allow them access for a limited time. After we have finished assisting you, you can disable the plugin to automatically remove the new account. Tokens created using this plugin will expire after 4 days, after which a new token will need to be generated to grant access once more. <br><br> Please click the button below to generate a new token, and then send it to the moderator who has requested access using a Private Message on our support forums.', 'et_support' ),
+			__( 'This plugin is used to securely create an admin account that our support team can use to log in to your WordPress Dashboard. The purpose of this plugin is to be able to create an account without sharing the password. Instead, a secret token is created that can be shared with our team that will allow them access for a limited time. After we have finished assisting you, you can disable the plugin to automatically remove the new account. Tokens created using this plugin will expire after 4 days, after which a new token will need to be generated to grant access once more. <br><br> Please click the button below to generate a new token, and then copy and paste the token to the Support Team Member that has requested access to your website.', 'et_support' ),
 			esc_attr( $token_action ),
 			( $account_exists ? get_submit_button( esc_html__( 'Delete Token', 'et_support' ), 'delete', 'token_delete', false ) : '' ),
 			$this->get_token_info(),
@@ -345,14 +341,15 @@ class ET_Support_Account {
 
 		$request = wp_remote_post( 'https://www.elegantthemes.com/api/token.php', $options );
 
-		if ( is_wp_error( $request ) ) {
-			$request = wp_remote_post( 'https://cdn.elegantthemes.com/api/token.php', $options );
-		}
-
 		if ( ! is_wp_error( $request ) && wp_remote_retrieve_response_code( $request ) == 200 ){
 			$response = unserialize( wp_remote_retrieve_body( $request ) );
 
-			if ( ! empty( $response['salt'] ) ) {
+			if ( ! empty( $response['incorrect_token'] ) && $response['incorrect_token'] ) {
+				// Delete Site ID from database, if API returns the incorrect_token error
+				delete_option( 'et_support_site_id' );
+
+				return new WP_Error( 'incorrect_token', esc_html__( 'Please, try again.', 'et_support' ) );
+			} else if ( ! empty( $response['salt'] ) ) {
 				$salt = sanitize_text_field( $response['salt'] );
 			}
 		}
@@ -431,8 +428,14 @@ class ET_Support_Account {
 
 		$password = $this->generate_password( $token );
 
-		if ( ! $password ) {
-			$message = esc_html__( 'Token generation failed. Please try again or contact Elegant Themes support for assistance.', 'et_support' );
+		if ( ! $password || is_wp_error( $password ) ) {
+			$message = esc_html__( 'Token generation failed.', 'et_support' ) . ' ';
+
+			if ( is_wp_error( $password ) ) {
+				$message .= $password->get_error_message();
+			} else {
+				$message .= esc_html__( 'Please try again or contact Elegant Themes support for assistance.', 'et_support' );
+			}
 
 			return $message;
 		}
@@ -500,7 +503,10 @@ class ET_Support_Account {
 		if ( $support_account_data ) {
 			$support_account_id = $support_account_data->ID;
 
-			if ( ! wp_delete_user( $support_account_id ) ) {
+			if (
+				( is_multisite() && ! wpmu_delete_user( $support_account_id ) )
+				|| ( ! is_multisite() && ! wp_delete_user( $support_account_id ) )
+			) {
 				return new WP_Error( 'delete_user', esc_html__( 'Support account hasn\'t been removed. Try to regenerate token again.' ) );
 			}
 
@@ -537,10 +543,6 @@ class ET_Support_Account {
 		);
 
 		$request = wp_remote_post( 'https://www.elegantthemes.com/api/token.php', $settings );
-
-		if ( is_wp_error( $request ) ) {
-			$request = wp_remote_post( 'https://cdn.elegantthemes.com/api/token.php', $settings );
-		}
 	}
 
 	/**

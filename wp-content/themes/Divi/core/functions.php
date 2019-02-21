@@ -79,9 +79,9 @@ endif;
 
 if ( ! function_exists( 'et_core_clear_transients' ) ):
 function et_core_clear_transients() {
-	delete_site_transient( 'et_core_path' );
-	delete_site_transient( 'et_core_version' );
-	delete_site_transient( 'et_core_needs_old_theme_patch' );
+	delete_transient( 'et_core_path' );
+	delete_transient( 'et_core_version' );
+	delete_transient( 'et_core_needs_old_theme_patch' );
 }
 add_action( 'upgrader_process_complete', 'et_core_clear_transients', 10, 0 );
 add_action( 'switch_theme', 'et_core_clear_transients' );
@@ -357,6 +357,49 @@ function et_core_is_fb_enabled() {
 endif;
 
 
+/**
+ * Is Gutenberg active?
+ *
+ * @since 3.19.2 Renamed from {@see et_is_gutenberg_active()} and moved to core.
+ * @since 3.18
+ *
+ * @return bool  True - if the plugin is active
+ */
+if ( ! function_exists( 'et_core_is_gutenberg_active' ) ):
+function et_core_is_gutenberg_active() {
+	global $wp_version;
+
+	static $has_wp5_plus = null;
+
+	if ( is_null( $has_wp5_plus ) ) {
+		$has_wp5_plus = version_compare( $wp_version, '5.0-alpha1', '>=' );
+	}
+
+	return $has_wp5_plus || function_exists( 'is_gutenberg_page' );
+}
+endif;
+
+
+/**
+ * Is Gutenberg active and enabled for the current post
+ * WP 5.0 WARNING - don't use before global post has been set
+ *
+ * @since 3.19.2 Renamed from {@see et_is_gutenberg_enabled()} and moved to core.
+ * @since 3.18
+ *
+ * @return bool  True - if the plugin is active and enabled.
+ */
+if ( ! function_exists( 'et_core_is_gutenberg_enabled' ) ):
+function et_core_is_gutenberg_enabled() {
+	if ( function_exists( 'is_gutenberg_page' ) ) {
+		return et_core_is_gutenberg_active() && is_gutenberg_page() && has_filter( 'replace_editor', 'gutenberg_init' );
+	}
+
+	return et_core_is_gutenberg_active() && function_exists( 'use_block_editor_for_post' ) && use_block_editor_for_post( null );
+}
+endif;
+
+
 if ( ! function_exists( 'et_core_load_main_fonts' ) ) :
 function et_core_load_main_fonts() {
 	$fonts_url = et_core_get_main_fonts();
@@ -402,7 +445,7 @@ function et_core_maybe_patch_old_theme() {
 		return;
 	}
 
-	if ( get_site_transient( 'et_core_needs_old_theme_patch' ) ) {
+	if ( get_transient( 'et_core_needs_old_theme_patch' ) ) {
 		add_action( 'after_setup_theme', 'ET_Core_Logger::disable_php_notices', 9 );
 		add_action( 'after_setup_theme', 'ET_Core_Logger::enable_php_notices', 11 );
 		return;
@@ -420,7 +463,7 @@ function et_core_maybe_patch_old_theme() {
 	if ( version_compare( $theme_version, $themes[ $current_theme ], '<' ) ) {
 		add_action( 'after_setup_theme', 'ET_Core_Logger::disable_php_notices', 9 );
 		add_action( 'after_setup_theme', 'ET_Core_Logger::enable_php_notices', 11 );
-		set_site_transient( 'et_core_needs_old_theme_patch', true, DAY_IN_SECONDS );
+		set_transient( 'et_core_needs_old_theme_patch', true, DAY_IN_SECONDS );
 	}
 }
 endif;
@@ -542,7 +585,7 @@ function et_core_security_check( $user_can = 'manage_options', $nonce_action = '
 		$passed = false;
 	} else if ( '' !== $user_can && ! current_user_can( $user_can ) ) {
 		$passed = false;
-	} else if ( '' !== $nonce_action && ! wp_verify_nonce( $nonce_location[ $nonce_key ], $nonce_action ) ) {
+	} else if ( '' !== $nonce_action && ! empty( $nonce_location[ $nonce_key ] ) && ! wp_verify_nonce( $nonce_location[ $nonce_key ], $nonce_action ) ) {
 		$passed = false;
 	}
 

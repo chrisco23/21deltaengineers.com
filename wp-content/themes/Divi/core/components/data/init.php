@@ -5,6 +5,19 @@ function et_core_data_init() {}
 endif;
 
 
+if ( ! function_exists( 'et_' ) ):
+function et_() {
+	global $et_;
+
+	if ( ! $et_ ) {
+		$et_ = ET_Core_Data_Utils::instance();
+	}
+
+	return $et_;
+}
+endif;
+
+
 if ( ! function_exists( 'et_html_attr' ) ):
 /**
  * Generates a properly escaped attribute string.
@@ -185,5 +198,51 @@ function et_core_intentionally_unsanitized( $passthru, $excuse ) {
 	}
 
 	return $passthru;
+}
+endif;
+
+/**
+ * Fixes unclosed HTML tags
+ *
+ * @since 3.18.4
+ *
+ * @param string $content source HTML
+ *
+ * @return string
+ */
+if ( ! function_exists( 'et_core_fix_unclosed_html_tags' ) ):
+function et_core_fix_unclosed_html_tags( $content ) {
+	// Exit if source has no HTML tags or we miss what we need to fix them anyway.
+	if ( false === strpos( $content, '<' ) || ! class_exists( 'DOMDocument' ) ) {
+		return $content;
+	}
+
+	$scripts = false;
+
+	if ( false !== strpos( $content, '<script' ) ) {
+		// Replace scripts with placeholders so we don't mess with HTML included in JS strings.
+		$scripts = new ET_Core_Data_ScriptReplacer();
+		$content = preg_replace_callback( '|<script.*?>[\s\S]+?</script>|', array( $scripts, 'replace' ), $content );
+	}
+
+	$doc = new DOMDocument();
+	@$doc->loadHTML( sprintf(
+		'<html><head>%s</head><body>%s</body></html>',
+		// Use WP charset
+		sprintf( '<meta http-equiv="content-type" content="text/html; charset=%s" />', get_bloginfo( 'charset' ) ),
+		$content
+	) );
+
+	if ( preg_match( '|<body>([\s\S]+)</body>|', $doc->saveHTML(), $matches ) ) {
+		// Extract the fixed content.
+		$content = $matches[1];
+	}
+
+	if ( $scripts ) {
+		// Replace placeholders with scripts.
+		$content = strtr( $content, $scripts->map() );
+	}
+
+	return $content;
 }
 endif;

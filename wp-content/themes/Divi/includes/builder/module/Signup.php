@@ -114,7 +114,7 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 					'label'      => esc_html__( 'Button', 'et_builder' ),
 					'css'        => array(
 						'main' => "{$this->main_css_element} .et_pb_newsletter_button.et_pb_button",
-						'plugin_main' => "{$this->main_css_element} .et_pb_newsletter_button.et_pb_button",
+						'limited_main' => "{$this->main_css_element} .et_pb_newsletter_button.et_pb_button",
 					),
 					'box_shadow' => array(
 						'css' => array(
@@ -280,7 +280,10 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 		et_core_nonce_verified_previously();
 
 		$fields  = self::providers()->account_fields( $provider_slug );
-		$is_VB   = isset( $_REQUEST['action'] ) && 'et_fb_retrieve_builder_data' === $_REQUEST['action'];
+		$is_VB   = ( et_core_is_fb_enabled() && ! et_fb_dynamic_asset_exists( 'definitions' ) ) || ( isset( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array(
+			'et_fb_update_builder_assets',
+			'et_fb_retrieve_builder_data'
+		) ) );
 		$show_if = $is_VB ? 'add_new_account' : 'manage|add_new_account';
 
 		$account_name_key = $provider_slug . '_account_name';
@@ -328,15 +331,21 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 		foreach ( $fields as $field_id => $field_info ) {
 			$field_id = "{$provider_slug}_{$field_id}";
 
+			$show_if_conditions = array(
+				$list_key => $show_if,
+			);
+
+			if ( isset( $field_info['show_if'] ) ) {
+				$show_if_conditions = array_merge( $show_if_conditions, $field_info['show_if']);
+			}
+
 			$account_fields[ $field_id ] = array(
 				'name'            => $field_id,
 				'label'           => et_core_esc_previously( $field_info['label'] ),
 				'type'            => 'text',
 				'option_category' => 'basic_option',
 				'description'     => sprintf( '<a target="_blank" href="https://www.elegantthemes.com/documentation/bloom/accounts#%1$s">%2$s</a>', $provider_slug, $description_text ),
-				'show_if'         => array(
-					$list_key => $show_if,
-				),
+				'show_if'         => $show_if_conditions,
 				'class'           => 'et_pb_email_' . $field_id,
 				'toggle_slug'     => 'provider',
 			);
@@ -406,7 +415,7 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 				),
 			);
 
-			$account_fields = is_admin() ? self::_get_account_fields( $provider_slug ) : array();
+			$account_fields = is_admin() || ( et_core_is_fb_enabled() && ! et_fb_dynamic_asset_exists( 'definitions' ) ) ? self::_get_account_fields( $provider_slug ) : array();
 			$fields         = array_merge( $fields, $account_fields );
 		}
 
@@ -666,11 +675,11 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 					'type'            => 'multiple_checkboxes',
 					'option_category' => 'configuration',
 					'options'         => array(
-						'name'       => esc_html__( 'Name' ),
-						'last_name'  => esc_html__( 'Last Name' ),
-						'email'      => esc_html__( 'Email' ),
-						'ip_address' => esc_html__( 'IP Address' ),
-						'css_id'     => esc_html__( 'CSS ID' ),
+						'name'       => esc_html__( 'Name', 'et_builder' ),
+						'last_name'  => esc_html__( 'Last Name', 'et_builder' ),
+						'email'      => esc_html__( 'Email', 'et_builder' ),
+						'ip_address' => esc_html__( 'IP Address', 'et_builder' ),
+						'css_id'     => esc_html__( 'CSS ID', 'et_builder' ),
 					),
 					'show_if'         => array(
 						'success_action' => 'redirect',
@@ -991,7 +1000,7 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 				'declaration' => sprintf(
 					'background-color: %1$s%2$s;',
 					esc_html( $focus_background_color ),
-					et_is_builder_plugin_active() ? ' !important' : ''
+					et_builder_has_limitation( 'force_use_global_important' ) ? ' !important' : ''
 				),
 			) );
 		}
@@ -1038,7 +1047,7 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 				'declaration' => sprintf(
 					'background-color: %1$s%2$s;',
 					esc_html( $form_field_background_color ),
-					et_is_builder_plugin_active() ? ' !important' : ''
+					et_builder_has_limitation( 'force_use_global_important' ) ? ' !important' : ''
 				),
 			) );
 		}

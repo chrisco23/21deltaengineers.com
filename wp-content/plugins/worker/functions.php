@@ -741,11 +741,11 @@ function mwp_accept_potential_key($keyToAccept = '')
 
 function mwp_get_potential_key()
 {
-    $potentialKey     = mwp_context()->optionGet('mwp_potential_key');
-    $potentialKeyTime = mwp_context()->optionGet('mwp_potential_key_time');
+    $potentialKey     = mwp_context()->optionGet('mwp_potential_key', null);
+    $potentialKeyTime = mwp_context()->optionGet('mwp_potential_key_time', 0);
     $now              = time();
 
-    if (empty($potentialKey) || empty($potentialKeyTime) || ($now - $potentialKeyTime) > 86400) {
+    if (empty($potentialKey) || empty($potentialKeyTime) || !is_numeric($potentialKeyTime) || ($now - $potentialKeyTime) > 86400) {
         $potentialKey     = mwp_generate_uuid4();
         $potentialKeyTime = $now;
         mwp_context()->optionSet('mwp_potential_key', $potentialKey, true);
@@ -885,6 +885,6 @@ EOL;
 function site_in_mwp_maintenance_mode()
 {
     $class   = 'notice notice-warning is-dismissible';
-    $message = __('The site is currently in maintenance mode.', 'worker');
+    $message = esc_html__('The site is currently in maintenance mode.', 'worker');
     printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
 }

@@ -1799,6 +1799,12 @@ function et_pb_autosave_builder_settings( $post_id, $builder_settings ) {
 	// Builder settings autosave
 	if ( !empty( $builder_settings ) ) {
 
+		// Data is coming from `wp_ajax_heartbeat` which ran `wp_unslash` on it,
+		// `update_post_meta` will do the same, resulting in legit slashes being removed
+		// from page settings.
+		// The solution is to add those slashes back before updating metas.
+		$builder_settings = wp_slash( $builder_settings );
+
 		// Pseudo activate AB Testing for VB draft/builder-sync interface
 		if ( isset( $builder_settings['et_pb_use_ab_testing'] ) ) {
 			// Save autosave/draft AB Testing status

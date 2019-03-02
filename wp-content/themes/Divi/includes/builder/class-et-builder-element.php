@@ -1823,7 +1823,7 @@ class ET_Builder_Element {
 			}
 
 			// Try to apply old method for plugins without vb support
-			if ( 'on' !== $this->vb_support ) {
+			if ( ! $et_fb_processing_shortcode_object && 'on' !== $this->vb_support ) {
 				add_filter( "{$render_slug}_shortcode_output", array( $this, 'add_et_animated_class' ), 10, 2 );
 			}
 
@@ -1965,7 +1965,7 @@ class ET_Builder_Element {
 	 * @return string
 	 */
 	function add_et_animated_class( $output, $module_slug ) {
-		if ( in_array( $module_slug,  ET_Builder_Element::$uses_module_classname ) ) {
+		if ( ! is_string( $output ) || in_array( $module_slug,  ET_Builder_Element::$uses_module_classname ) ) {
 			return $output;
 		}
 
@@ -2162,7 +2162,7 @@ class ET_Builder_Element {
 				$fields = array_merge( $fields, $this->process_fields( $rendering_module->fields_unprocessed ) );
 			}
 		}
-		
+
 		$output_render_slug = $render_slug;
 
 		// When rendering specialty columns we should make sure correct tags are used for inner content
@@ -2222,7 +2222,7 @@ class ET_Builder_Element {
 						$global_content = et_pb_get_global_module_content( $global_module_data, 'et_pb_row', true );
 					}
 				}
-				
+
 				// remove the shortcode content to avoid conflicts of parent attributes with similar attrs from child modules
 				if ( false !== $global_content ) {
 					$global_content_processed = str_replace( $global_content, '', $global_module_data );

@@ -3,7 +3,7 @@
  * Plugin Name: Elegant Themes Support
  * Plugin URI: http://elegantthemes.com
  * Description: Creates a temporary account to use for support queries
- * Version: 1.4
+ * Version: 1.5
  * Author: Elegant Themes
  * Author URI: http://elegantthemes.com
  * License: GPLv2 or later
@@ -26,7 +26,7 @@ class ET_Support_Account {
 	 *
 	 * @var string
 	 */
-	var $version = '1.4';
+	var $version = '1.5';
 
 	/**
 	 * Plugin options
@@ -305,7 +305,7 @@ class ET_Support_Account {
 	 * @return string  $token           Token
 	 */
 	function generate_token( $length = 17 ) {
-		$symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^*()-=+";
+		$symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$^*()-=+";
 		$token = substr( str_shuffle( $symbols ), 0, $length );
 
 		return $token;

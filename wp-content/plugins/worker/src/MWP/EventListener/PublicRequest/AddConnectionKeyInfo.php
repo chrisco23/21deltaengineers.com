@@ -182,20 +182,18 @@ class MWP_EventListener_PublicRequest_AddConnectionKeyInfo implements Symfony_Ev
             <?php } ?>
 
             jQuery(document).ready(function ($) {
-                var $connectionKeyDialog = $('#mwp_connection_key_dialog');
-
-                $('#mwp-view-connection-key').click(function (e) {
+                $(document).on('click', '#mwp-view-connection-key', function (e) {
                     e.preventDefault();
                     $(document).trigger('mwp-connection-dialog');
                 });
 
-                $('button.copy-key-button').click(function () {
+                $(document).on('click', 'button.copy-key-button', function () {
                     $('#connection-key').select();
                     document.execCommand('copy');
                 });
 
                 $(document).on('mwp-connection-dialog', function () {
-                    $connectionKeyDialog.dialog({
+                    $('#mwp_connection_key_dialog').dialog({
                         dialogClass: "mwp-dialog",
                         draggable: false,
                         resizable: false,
@@ -306,7 +304,7 @@ class MWP_EventListener_PublicRequest_AddConnectionKeyInfo implements Symfony_Ev
                 ?>
                 <p style="margin-top: 0"><?php
                     /** @handled function */
-                    echo esc_html__('Here is the list of currently active connections to this Worker plugin:', 'worker'); ?>
+                    echo esc_html__('Here is the list of currently active connections to this plugin:', 'worker'); ?>
                 </p>
 
                 <table style="width: 100%;">

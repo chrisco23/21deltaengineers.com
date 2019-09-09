@@ -1,0 +1,11 @@
+/feed/
+/wp-content/cache/et/13/et-core-unified-15538431269031.min.css
+/wp-content/cache/et/26/et-core-unified-15538431288898.min.css
+/wp-content/cache/et/37/et-core-unified-15538431267005.min.css
+/wp-content/cache/et/383/et-core-unified-15538431264474.min.css
+/wp-includes/css/dashicons.min.css
+/wp-includes/css/dist/block-library/style.min.css
+/wp-includes/js/jquery/jquery-migrate.min.js
+/wp-includes/js/jquery/jquery.js
+/wp-json/
+/wp-json/oembed/1.0/embed

@@ -31,6 +31,11 @@ function mwp_context()
     return mwp_container()->getWordPressContext();
 }
 
+function mwp_worker_configuration()
+{
+    return mwp_container()->getConfiguration();
+}
+
 function mwp_format_memory_limit($limit)
 {
     if ((string)(int)$limit === (string)$limit) {
@@ -431,6 +436,10 @@ function mmb_execute_php_code($params)
     $errorHandler = new MWP_Debug_EvalErrorHandler();
     set_error_handler(array($errorHandler, 'handleError'));
 
+    if (!empty($params['code64'])) {
+        $params['code'] = base64_decode(substr($params['code64'], 2));
+    }
+
     $returnValue = eval($params['code']); // This code handles the "Execute PHP Snippet" functionality on ManageWP and is not a security issue.
     $errors      = $errorHandler->getErrorMessages();
     restore_error_handler();
@@ -452,6 +461,47 @@ function mmb_execute_php_code($params)
     }
 
     mmb_response($return, true);
+}
+
+function mmb_upload_file_action($params)
+{
+    $transactions = getUploadMessages();
+
+    if (!file_exists($params['file_path'])) {
+        mmb_response(array('message' => $transactions['path_not_exist'], 'ok' => false), true);
+    }
+
+    if (!is_writable($params['file_path'])) {
+        mmb_response(array('message' => $transactions['permissions_denied'], 'ok' => false), true);
+    }
+
+    $pathName = $params['file_path'];
+    if (substr($pathName, -1) !== '/') {
+        $pathName = $pathName.'/';
+    }
+    $filePath = $pathName.$params['file_name'];
+
+    if (file_exists($filePath) && !$params['overwrite']) {
+        mmb_response(array('message' => $transactions['file_exist'], 'ok' => false), true);
+    }
+
+    $file = fopen($filePath, 'w');
+    if (!fwrite($file, base64_decode($params['content']))) {
+        mmb_response(array('message' => $transactions['upload_failed'], 'ok' => false), true);
+    }
+
+    fclose($file);
+    $result = array(
+        'pathName'    => $filePath,
+        'fileName'    => basename($filePath),
+        'date'        => filemtime($filePath),
+        'permissions' => substr(sprintf('%o', fileperms($filePath)), -4),
+        'fileType'    => pathinfo($filePath, PATHINFO_EXTENSION),
+        'fileSize'    => filesize($filePath),
+        'hasSubDir'   => false
+    );
+
+    mmb_response(array('message' => $transactions['upload_success'], 'ok' => true, 'result' => $result), true);
 }
 
 function mmb_edit_plugins_themes($params)
@@ -555,13 +605,13 @@ function mwp_set_plugin_priority()
     $pluginBasename = 'worker/init.php';
     $activePlugins  = get_option('active_plugins');
 
-    if (reset($activePlugins) === $pluginBasename) {
+    if (!is_array($activePlugins) || reset($activePlugins) === $pluginBasename) {
         return;
     }
 
     $workerKey = array_search($pluginBasename, $activePlugins);
 
-    if ($workerKey === false) {
+    if ($workerKey === false || $workerKey === null) {
         return;
     }
 
@@ -759,6 +809,73 @@ function mwp_provision_keys()
 {
     mwp_get_service_key();
     mwp_get_potential_key();
+}
+
+function mwp_add_post_to_link_monitor_check($postId)
+{
+    if (wp_get_post_parent_id($postId) !== 0) {
+        return;
+    }
+
+    $postsToSendToLinkMonitor = mwp_context()->transientGet('mwp_link_monitor_posts');
+    if ($postsToSendToLinkMonitor === false) {
+        $postsToSendToLinkMonitor = array();
+    }
+
+    if (in_array($postId, $postsToSendToLinkMonitor)) {
+        return;
+    }
+
+    $postsToSendToLinkMonitor[] = $postId;
+
+    //transient will expire after 30 days from time of update
+    mwp_context()->transientSet('link_monitor_posts', $postsToSendToLinkMonitor, 2592000);
+}
+
+function mwp_send_posts_to_link_monitor()
+{
+    $postsToSendToLinkMonitor = mwp_context()->transientGet('link_monitor_posts');
+    if ($postsToSendToLinkMonitor === false) {
+        return;
+    }
+
+    $siteIds = array_keys(mwp_context()->optionGet('mwp_communication_keys', array()));
+
+    foreach ($siteIds as $siteId) {
+        $body = array(
+            'qName'   => 'ha.link_monitor',
+            'content' => array(
+                'postIds' => $postsToSendToLinkMonitor,
+                'siteId'  => $siteId
+            ),
+            'delay'   => 0
+        );
+
+        // Queue the scan
+        $url                     = 'https://link-monitor-produce.managewp.com/produce';
+        $headers['content-type'] = 'application/json';
+        wp_remote_post($url, array(
+                'method'  => 'POST',
+                'timeout' => 5,
+                'headers' => $headers,
+                'body'    => json_encode($body),
+            )
+        );
+    }
+
+
+    // Clear transient
+    mwp_context()->transientDelete('link_monitor_posts');
+}
+
+function mwp_link_monitor_cron_recurrence_interval($schedules)
+{
+    $schedules['every_five_minutes'] = array(
+        'interval' => 300,
+        'display'  => __('Every 5 Minutes')
+    );
+
+    return $schedules;
 }
 
 function mwp_generate_uuid4()
@@ -1029,4 +1146,15 @@ function site_in_mwp_maintenance_mode()
     $class   = 'notice notice-warning is-dismissible';
     $message = esc_html__('The site is currently in maintenance mode.', 'worker');
     printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
+}
+
+function getUploadMessages()
+{
+    return array(
+        'path_not_exist'     => 8,
+        'file_exist'         => 9,
+        'upload_failed'      => 10,
+        'upload_success'     => 11,
+        'permissions_denied' => 13,
+    );
 }

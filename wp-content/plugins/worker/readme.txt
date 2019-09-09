@@ -2,7 +2,7 @@
 Contributors: managewp,freediver
 Tags: manage multiple sites, backup, security, migrate, performance, analytics, Manage WordPress, Managed WordPress, WordPress management, WordPress manager, WordPress management, site management, control multiple sites, WordPress management dashboard, administration, automate, automatic, comments, clone, dashboard, duplicate, google analytics, login, manage, managewp, multiple, multisite, remote, seo, spam
 Requires at least: 3.1
-Tested up to: 5.1
+Tested up to: 5.2
 Stable tag: trunk
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/quick-guide-gplv3.html
@@ -55,6 +55,31 @@ Check out the [ManageWP promo video](https://vimeo.com/220647227).
 https://vimeo.com/220647227
 
 == Changelog ==
+
+= 4.9.1 =
+
+- Fix: Handle updates on WP Engine hosted websites properly.
+
+= 4.9.0 =
+
+- New: Support for a future release of file management.
+- We will stop supporting PHP 5.2 in the next version.
+
+= 4.8.1 =
+
+- Fix: Edge case where a backup might fail due to API call payload.
+
+= 4.8.0 =
+
+- New: Support for automatic detection of post content changes for Link Monitoring.
+
+= 4.7.8 =
+
+- Fix: Edge case when there are no plugins active, the plugin would cause a fatal error.
+
+= 4.7.7 =
+
+- Fix: Edge cases where one click login might fail due to the Host header changing.
 
 = 4.7.5 =
 

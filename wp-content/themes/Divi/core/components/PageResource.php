@@ -338,6 +338,10 @@ class ET_Core_PageResource {
 				@self::$wpfs->delete( $temp_directory, true );
 			}
 		}
+
+		// Reset $_resources property; Mostly useful for unit test big request which needs to make
+		// each test*() method act like it is different page request
+		self::$_resources = null;
 	}
 
 	protected static function _assign_output_location( $location, $resource ) {
@@ -801,6 +805,11 @@ class ET_Core_PageResource {
 			return $tag;
 		}
 
+		/** @see ET_Core_Support_Center::toggle_safe_mode */
+		if ( et_core_is_safe_mode_active() ) {
+			return $tag;
+		}
+
 		$existing_onerror = "/(?<=onerror=')(.*?)(;?')/";
 		$existing_onload  = "/(?<=onload=')(.*?)(;?')/"; // Internet Explorer :face_with_rolling_eyes:
 
@@ -913,6 +922,7 @@ class ET_Core_PageResource {
 		self::$data_utils->remove_empty_directories( $cache_dir );
 
 		// Clear cache managed by 3rd-party cache plugins
+		$post_id = ! empty( $post_id ) && absint( $post_id ) > 0 ? $post_id : '';
 		et_core_clear_wp_cache( $post_id );
 
 		// Set our DONOTCACHEPAGE file for the next request.

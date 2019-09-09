@@ -8,7 +8,13 @@
  *
  * @return array<string, array>
  */
-function et_builder_get_built_in_dynamic_content_fields( $post_id = 0 ) {
+function et_builder_get_built_in_dynamic_content_fields( $post_id ) {
+	$cache_key = 'et_builder_get_built_in_dynamic_content_fields';
+
+	if ( et_core_cache_has( $cache_key ) ) {
+		return et_core_cache_get( $cache_key );
+	}
+
 	$post_type           = get_post_type( $post_id );
 	$post_type           = $post_type ? $post_type : 'post';
 	$post_type_object    = get_post_type_object( $post_type );
@@ -224,28 +230,29 @@ function et_builder_get_built_in_dynamic_content_fields( $post_id = 0 ) {
 		),
 		'post_link_url'               => array(
 			// Translators: %1$s: Post type name
-			'label' => esc_html( sprintf( __( '%1$s Link', 'et_builder' ), $post_type_label ) ),
-			'type'  => 'url',
+			'label'  => esc_html( sprintf( __( 'Current %1$s Link', 'et_builder' ), $post_type_label ) ),
+			'type'   => 'url',
 		),
 		'home_url'                    => array(
-			'label' => esc_html__( 'Homepage Link', 'et_builder' ),
-			'type'  => 'url',
+			'label'  => esc_html__( 'Homepage Link', 'et_builder' ),
+			'type'   => 'url',
 		),
 		'post_featured_image'         => array(
-			'label' => esc_html__( 'Featured Image', 'et_builder' ),
-			'type'  => 'image',
+			'label'  => esc_html__( 'Featured Image', 'et_builder' ),
+			'type'   => 'image',
 		),
 		'post_author_profile_picture' => array(
 			// Translators: %1$s: Post type name
-			'label' => esc_html( sprintf( __( '%1$s Author Profile Picture', 'et_builder' ), $post_type_label ) ),
-			'type'  => 'image',
+			'label'  => esc_html( sprintf( __( '%1$s Author Profile Picture', 'et_builder' ), $post_type_label ) ),
+			'type'   => 'image',
 		),
 		'site_logo'                   => array(
-			'label' => esc_html__( 'Site Logo', 'et_builder' ),
-			'type'  => 'image',
+			'label'  => esc_html__( 'Site Logo', 'et_builder' ),
+			'type'   => 'image',
 		),
 	);
 
+	// Fill in tag taxonomies.
 	if ( isset( $post_taxonomy_types["${post_type}_tag"] ) ) {
 		$fields['post_tags'] = array(
 			// Translators: %1$s: Post type name
@@ -278,6 +285,27 @@ function et_builder_get_built_in_dynamic_content_fields( $post_id = 0 ) {
 		unset( $fields['post_tags'] );
 	}
 
+	// Fill in post type URL options.
+	$post_types = et_builder_get_public_post_types();
+	foreach ( $post_types as $public_post_type ) {
+		$public_post_type_label = $public_post_type->labels->singular_name;
+		$key = 'post_link_url_' . $public_post_type->name;
+
+		$fields[ $key ] = array(
+			// Translators: %1$s: Post type name
+			'label'  => esc_html( sprintf( __( '%1$s Link', 'et_builder' ), $public_post_type_label ) ),
+			'type'   => 'url',
+			'fields' => array(
+				'post_id'            => array(
+					'label'     => $public_post_type_label,
+					'type'      => 'select_post',
+					'post_type' => $public_post_type->name,
+					'default'   => '',
+				),
+			),
+		);
+	}
+
 	// Fill in boilerplate.
 	foreach ( $fields as $key => $field ) {
 		$fields[ $key ]['custom'] = false;
@@ -301,8 +329,22 @@ function et_builder_get_built_in_dynamic_content_fields( $post_id = 0 ) {
 		}
 	}
 
+	et_core_cache_add( $cache_key, $fields );
+
 	return $fields;
 }
+
+/**
+ * Clear dynamic content fields cache whenever a custom post type is registered.
+ *
+ * @since 3.26.7
+ *
+ * @return void
+ */
+function et_builder_clear_get_built_in_dynamic_content_fields_cache() {
+	et_core_cache_delete( 'et_builder_get_built_in_dynamic_content_fields' );
+}
+add_action( 'registered_post_type', 'et_builder_clear_get_built_in_dynamic_content_fields_cache' );
 
 /**
  * Get all public taxonomies associated with a given post type.
@@ -762,6 +804,11 @@ function et_builder_filter_resolve_default_dynamic_content( $content, $name, $se
 			$content = esc_url( home_url( '/' ) );
 			break;
 
+		case 'any_post_link_url':
+			$selected_post_id  = $_->array_get( $settings, 'post_id', $def( $post_id, $name, 'post_id' ) );
+			$content           = esc_url( get_permalink( $selected_post_id ) );
+			break;
+
 		case 'post_featured_image':
 			if ( isset( $overrides[ $name ] ) ) {
 				$id      = (int) $overrides[ $name ];
@@ -786,6 +833,20 @@ function et_builder_filter_resolve_default_dynamic_content( $content, $name, $se
 			}
 
 			break;
+	}
+
+	// Handle in post type URL options.
+	$post_types = et_builder_get_public_post_types();
+	foreach ( $post_types as $public_post_type ) {
+		$key = 'post_link_url_' . $public_post_type->name;
+
+		if ( $key !== $name ) {
+			continue;
+		}
+
+		$selected_post_id  = $_->array_get( $settings, 'post_id', $def( $post_id, $name, 'post_id' ) );
+		$content           = esc_url( get_permalink( $selected_post_id ) );
+		break;
 	}
 
 	if ( ! $wrapped ) {
@@ -877,50 +938,37 @@ function et_builder_filter_resolve_dynamic_post_content_field( $field, $settings
 add_action( 'et_builder_resolve_dynamic_post_content_field', 'et_builder_filter_resolve_dynamic_post_content_field', 10, 5 );
 
 /**
- * Convert a value to an ET_Builder_Value representation.
+ * Clean potential dynamic content from filter artifacts.
  *
- * @since 3.17.2
+ * @since 3.20.2
  *
- * @param string $content
+ * @param string $value
  *
- * @return ET_Builder_Value
+ * @return string
  */
-function et_builder_parse_dynamic_content( $content ) {
-	// Replace encoded quotes.
-	$json               = str_replace( array( '&#8220;', '&#8221;', '&#8243;', "%22" ), '"', $content );
-
-	// Strip <p></p> artifacts from wpautop in before/after settings. Example:
-	// {"dynamic":true,"content":"post_title","settings":{"before":"</p>
-	// <h1>","after":"</h1>
-	// <p>"}}
-	// This is a rough solution implemented due to time constraints.
-	$json               = preg_replace( '~
-	    ("(?:before|after)":")    # $1 = Anchor to the before/after settings.
-	    (?:                       # Match cases where the value starts with the offending tag.
-	        <\/?p>                # The root of all evil.
-	        [\r\n]+               # Whitespace follows the tag.
-	    )*
-	    (?:                       # Match cases where the value ends with the offending tag.
-	        ([^"]*)               # $2 = The preceeding value.
-	        [\r\n]+               # Whitespace preceedes the tag.
-	        <\/?p>                # The root of all evil.
-	    )*
-	~xi', '$1$2', $json );
-
-	// Remove line-breaks which break the json strings.
-	$json               = preg_replace( '/\r|\n/', '', $json );
-
+function et_builder_clean_dynamic_content( $value ) {
 	// Strip wrapping <p></p> tag as it appears in shortcode content in certain cases (e.g. BB preview).
-	$json               = preg_replace( '/^<p>(.*)<\/p>$/i', '$1', trim( $json ) );
+	$value = preg_replace( '/^<p>(.*)<\/p>$/i', '$1', trim( $value ) );
+	return $value;
+}
 
-	// Parse and validate dynamic content schema.
+/**
+ * Parse a JSON-encoded string into an ET_Builder_Value instance or null on failure.
+ *
+ * @since 3.20.2
+ *
+ * @param string $json
+ *
+ * @return ET_Builder_Value|null
+ */
+function et_builder_parse_dynamic_content_json( $json ) {
 	$dynamic_content    = json_decode( $json, true );
 	$is_dynamic_content = is_array( $dynamic_content ) && isset( $dynamic_content['dynamic'] ) && (bool) $dynamic_content['dynamic'];
 	$has_content        = is_array( $dynamic_content ) && isset( $dynamic_content['content'] ) && is_string( $dynamic_content['content'] );
 	$has_settings       = is_array( $dynamic_content ) && isset( $dynamic_content['settings'] ) && is_array( $dynamic_content['settings'] );
 
 	if ( ! $is_dynamic_content || ! $has_content || ! $has_settings ) {
-		return new ET_Builder_Value( false, wp_kses_post( $content ), array() );
+		return null;
 	}
 
 	return new ET_Builder_Value(
@@ -931,17 +979,96 @@ function et_builder_parse_dynamic_content( $content ) {
 }
 
 /**
- * Callback to resolve dynamic content for preg_replace_callback.
+ * Convert a value to an ET_Builder_Value representation.
  *
  * @since 3.17.2
+ *
+ * @param string $content
+ *
+ * @return ET_Builder_Value
+ */
+function et_builder_parse_dynamic_content( $content ) {
+	$json            = et_builder_clean_dynamic_content( $content );
+	$json            = preg_replace( '/^@ET-DC@(.*?)@$/', '$1', $json );
+	$dynamic_content = et_builder_parse_dynamic_content_json( $json );
+
+	if ( null === $dynamic_content ) {
+		$json            = base64_decode( $json );
+		$dynamic_content = et_builder_parse_dynamic_content_json( $json );
+	}
+
+	if ( null === $dynamic_content ) {
+		return new ET_Builder_Value( false, wp_kses_post( $content ), array() );
+	}
+
+	return $dynamic_content;
+}
+
+/**
+ * Serialize dynamic content.
+ *
+ * @since 3.20.2
+ *
+ * @param boolean $dynamic
+ * @param string $content
+ * @param array<string, mixed> $settings
+ *
+ * @return string
+ */
+function et_builder_serialize_dynamic_content( $dynamic, $content, $settings ) {
+	// JSON_UNESCAPED_SLASHES is only supported from 5.4.
+	$options = defined( 'JSON_UNESCAPED_SLASHES' ) ? JSON_UNESCAPED_SLASHES : 0;
+	$result  = wp_json_encode( array(
+		'dynamic' => $dynamic,
+		'content' => $content,
+		// Force object type for keyed arrays as empty arrays will be encoded to
+		// javascript arrays instead of empty objects.
+		'settings' => (object) $settings,
+	), $options );
+
+	// Use fallback if needed
+	$result = 0 === $options ? str_replace( '\/', '/', $result ) : $result;
+
+	return '@ET-DC@' . base64_encode( $result ) . '@';
+}
+
+/**
+ * Reencode legacy dynamic content in post excerpts.
+ *
+ * @since 3.20.2
+ *
+ * @param string $post_excerpt
+ * @param integer $post_id
+ *
+ * @return string
+ */
+function et_builder_reencode_legacy_dynamic_content_in_excerpt( $post_excerpt, $post_id ) {
+	$json = '/
+		\{              # { character
+			(?:         # non-capturing group
+				[^{}]   # anything that is not a { or }
+				|       # OR
+				(?R)    # recurse the entire pattern
+			)*          # previous group zero or more times
+		\}              # } character
+	/x';
+
+	return preg_replace_callback( $json, 'et_builder_reencode_legacy_dynamic_content_in_excerpt_callback', $post_excerpt );
+}
+add_filter( 'et_truncate_post', 'et_builder_reencode_legacy_dynamic_content_in_excerpt', 10, 2 );
+
+/**
+ * Callback to reencode legacy dynamic content for preg_replace_callback.
+ *
+ * @since 3.20.2
  *
  * @param array $matches
  *
  * @return string
  */
-function et_builder_resolve_dynamic_content_in_excerpt_callback( $matches ) {
-	global $_et_brdcie_post_id;
-	return et_builder_parse_dynamic_content( $matches[0] )->resolve( $_et_brdcie_post_id );
+function et_builder_reencode_legacy_dynamic_content_in_excerpt_callback( $matches ) {
+	$value = et_builder_parse_dynamic_content_json( $matches[0] );
+	return null === $value ? $matches[0] : $value->serialize();
 }
 
 /**
@@ -959,20 +1086,24 @@ function et_builder_resolve_dynamic_content_in_excerpt( $post_excerpt, $post_id 
 	// targeting PHP 5.2.
 	global $_et_brdcie_post_id;
 
-	$json = '/
-		\{              # { character
-			(?:         # non-capturing group
-				[^{}]   # anything that is not a { or }
-				|       # OR
-				(?R)    # recurse the entire pattern
-			)*          # previous group zero or more times
-		\}              # } character
-	/x';
-
 	$_et_brdcie_post_id = $post_id;
-	$post_excerpt = preg_replace_callback( $json, 'et_builder_resolve_dynamic_content_in_excerpt_callback', $post_excerpt );
+	$post_excerpt = preg_replace_callback( '/@ET-DC@.*?@/', 'et_builder_resolve_dynamic_content_in_excerpt_callback', $post_excerpt );
 	$_et_brdcie_post_id = 0;
 
 	return $post_excerpt;
 }
 add_filter( 'et_truncate_post', 'et_builder_resolve_dynamic_content_in_excerpt', 10, 2 );
+
+/**
+ * Callback to resolve dynamic content for preg_replace_callback.
+ *
+ * @since 3.17.2
+ *
+ * @param array $matches
+ *
+ * @return string
+ */
+function et_builder_resolve_dynamic_content_in_excerpt_callback( $matches ) {
+	global $_et_brdcie_post_id;
+	return et_builder_parse_dynamic_content( $matches[0] )->resolve( $_et_brdcie_post_id );
+}

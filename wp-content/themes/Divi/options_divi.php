@@ -191,6 +191,12 @@ $options = array (
                    "std" => "on",
                    "desc" =>esc_html__( "Here you can choose to display the Google+ Icon on your homepage. ", $themename ) ),
 
+			array( 'name' => esc_html__( 'Show Instagram Icon', $themename ),
+                   'id' => $shortname . '_show_instagram_icon',
+                   'type' => 'checkbox',
+                   'std' => ( true === et_divi_is_fresh_install() ) ? 'on' : 'false',
+                   'desc' => esc_html__( 'Here you can choose to display the Instagram Icon on your homepage. ', $themename ) ),
+
 			array( "name" =>esc_html__( "Show RSS Icon", $themename ),
                    "id" => $shortname . "_show_rss_icon",
                    "type" => "checkbox2",
@@ -217,6 +223,13 @@ $options = array (
                    "type" => "text",
                    "validation_type" => "url",
 				   "desc" =>esc_html__( "Enter the URL of your Google+ Profile. ", $themename ) ),
+
+			array( 'name' => esc_html__( 'Instagram Profile Url', $themename ),
+                   'id' => $shortname . '_instagram_url',
+                   'std' => '#',
+                   'type' => 'text',
+                   'validation_type' => 'url',
+				   'desc' => esc_html__( 'Enter the URL of your Instagram Profile. ', $themename ) ),
 
 			array( "name" =>esc_html__( "RSS Icon Url", $themename ),
                    "id" => $shortname . "_rss_url",
@@ -313,6 +326,14 @@ $options = array (
 				   "type" => "checkbox2",
 				   "std" => "false",
 				   "desc" => esc_html__( "Disable translations if you don't want to display translated theme strings on your site.", $themename )
+			),
+
+			array(
+				"name" => esc_html__( "Enable Responsive Images", $themename ),
+				"id"   => $shortname . "_enable_responsive_images",
+				"type" => "checkbox",
+				"std"  => "on",
+				"desc" => esc_html__( "Enable this option to get responsive images size generated when uploading images and adding srcset attribute for images element.", $themename )
 			),
 
 			array( 'name'               => esc_html__( 'Minify And Combine Javascript Files', $themename ),

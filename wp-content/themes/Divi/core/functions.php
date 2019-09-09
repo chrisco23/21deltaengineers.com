@@ -114,7 +114,7 @@ function et_core_die( $message = '' ) {
 		wp_send_json_error( array( 'error' => $message ) );
 	}
 
-	die(-1);
+	wp_die();
 }
 endif;
 
@@ -356,6 +356,13 @@ function et_core_is_fb_enabled() {
 }
 endif;
 
+if ( ! function_exists( 'et_core_is_saving_builder_modules_cache' ) ):
+function et_core_is_saving_builder_modules_cache() {
+	// This filter is set when Modules Cache is being saved.
+	return apply_filters( 'et_builder_modules_is_saving_cache', false );
+}
+endif;
+
 
 /**
  * Is Gutenberg active?
@@ -536,6 +543,43 @@ endif;
 // common.js needs to be loaded after waypoint, fitvid, & magnific js to avoid broken javascript on Facebook in-app browser, hence the 15 priority
 add_action( 'wp_enqueue_scripts', 'et_core_register_common_assets', 15 );
 
+if ( ! function_exists( 'et_core_noconflict_styles_gform' ) ) :
+/**
+ * Register Core styles with Gravity Forms so that they're enqueued when running on no-conflict mode
+ *
+ * @since 3.21.2
+ *
+ * @param $styles
+ *
+ * @return array
+ */
+function et_core_noconflict_styles_gform( $styles ) {
+	$styles[] = 'et-core-admin';
+
+	return $styles;
+}
+endif;
+add_filter( 'gform_noconflict_styles', 'et_core_noconflict_scripts_gform' );
+
+if ( ! function_exists( 'et_core_noconflict_scripts_gform' ) ) :
+/**
+ * Register Core scripts with Gravity Forms so that they're enqueued when running on no-conflict mode
+ *
+ * @since 3.21.2
+ *
+ * @param $scripts
+ *
+ * @return array
+ */
+function et_core_noconflict_scripts_gform( $scripts ) {
+	$scripts[] = 'et-core-admin';
+	$scripts[] = 'et-core-common';
+
+	return $scripts;
+}
+endif;
+add_filter( 'gform_noconflict_scripts', 'et_core_noconflict_scripts_gform' );
+
 if ( ! function_exists( 'et_core_security_check' ) ):
 /**
  * Check if current user can perform an action and/or verify a nonce value. die() if not authorized.
@@ -555,6 +599,10 @@ if ( ! function_exists( 'et_core_security_check' ) ):
  * @return bool|null Whether or not the checked passed if `$die` is `false`.
  */
 function et_core_security_check( $user_can = 'manage_options', $nonce_action = '', $nonce_key = '', $nonce_location = '_POST', $die = true ) {
+	$user_can     = (string) $user_can;
+	$nonce_action = (string) $nonce_action;
+	$nonce_key    = (string) $nonce_key;
+
 	if ( empty( $nonce_key ) && false === strpos( $nonce_action, '_nonce' ) ) {
 		$nonce_key = $nonce_action . '_nonce';
 	} else if ( empty( $nonce_key ) ) {
@@ -579,13 +627,24 @@ function et_core_security_check( $user_can = 'manage_options', $nonce_action = '
 
 	$passed = true;
 
-	if ( '' !== $nonce_action && ! isset( $nonce_location[ $nonce_key ] ) ) {
+	if ( is_numeric( $user_can ) ) {
+		// Numeric values are deprecated in current_user_can(). We do not accept them here.
 		$passed = false;
+
+	} else if ( '' !== $nonce_action && empty( $nonce_location[ $nonce_key ] ) ) {
+		// A nonce value is required when a nonce action is provided.
+		$passed = false;
+
 	} else if ( '' === $user_can && '' === $nonce_action ) {
+		// At least one of a capability OR a nonce action is required.
 		$passed = false;
+
 	} else if ( '' !== $user_can && ! current_user_can( $user_can ) ) {
+		// Capability check failed.
 		$passed = false;
-	} else if ( '' !== $nonce_action && ! empty( $nonce_location[ $nonce_key ] ) && ! wp_verify_nonce( $nonce_location[ $nonce_key ], $nonce_action ) ) {
+
+	} else if ( '' !== $nonce_action && ! wp_verify_nonce( $nonce_location[ $nonce_key ], $nonce_action ) ) {
+		// Nonce verification failed.
 		$passed = false;
 	}
 
@@ -686,6 +745,7 @@ function et_get_allowed_localization_html_elements() {
 		'span'   => array(),
 		'div'    => array(),
 		'strong' => array(),
+		'code'   => array(),
 	);
 
 	$elements = apply_filters( 'et_allowed_localization_html_elements', $elements );
@@ -814,6 +874,25 @@ function et_core_replace_enqueued_style( $old_src, $new_src, $regex = false ) {
 }
 endif;
 
+if ( ! function_exists( 'et_core_is_safe_mode_active' ) ):
+/**
+ * Check whether the Support Center's Safe Mode is active
+ *
+ * @since ?.?
+ *
+ * @see ET_Core_Support_Center::toggle_safe_mode
+ *
+ * @return bool
+ */
+function et_core_is_safe_mode_active() {
+	$is_safe_mode_active = false;
+	if ( 'on' === get_user_meta( get_current_user_id(), '_et_support_center_safe_mode', true ) ) {
+		$is_safe_mode_active = true;
+	};
+	return $is_safe_mode_active;
+}
+endif;
+
 if ( ! function_exists( 'et_core_load_component' ) ) :
 /**
  * =============================
@@ -850,5 +929,309 @@ function et_core_load_component( $components ) {
 	}
 
 	return $portability_loaded = true;
+}
+endif;
+
+if ( ! function_exists( 'et_core_add_allowed_protocols' ) ) :
+/**
+ * Extend the whitelist of allowed URL protocols
+ *
+ * @param array $protocols List of URL protocols allowed by WordPress.
+ *
+ * @since 3.27.2
+ *
+ * @return array Our extended list of URL protocols.
+ */
+function et_core_add_allowed_protocols( $protocols = array() ) {
+	$additional = array(
+		'sms', // Add SMS text messaging protocol
+	);
+	$protocols  = array_unique( array_merge( $protocols, $additional ) );
+
+	return $protocols;
+}
+add_filter( 'kses_allowed_protocols', 'et_core_add_allowed_protocols' );
+endif;
+
+if ( ! function_exists( 'et_is_responsive_images_enabled' ) ):
+/**
+ * Get the responsive images setting whether is enabled or not
+ *
+ * @since 3.27.1
+ *
+ * @return bool
+ */
+function et_is_responsive_images_enabled() {
+	global $shortname;
+	static $enable_responsive_images;
+
+	// Fetch the option once
+	if ( null === $enable_responsive_images ) {
+		$enable_responsive_images = et_get_option( "{$shortname}_enable_responsive_images", 'on' );
+	}
+
+	return 'on' === $enable_responsive_images;
+}
+endif;
+
+if ( ! function_exists( 'et_screen_sizes' ) ) :
+/**
+ * Get screen sizes list.
+ *
+ * @since 3.27.1
+ *
+ * @return array
+ */
+function et_screen_sizes() {
+	return array(
+		'desktop' => 1280,
+		'tablet'  => 980,
+		'phone'   => 480,
+	);
+}
+endif;
+
+if ( ! function_exists( 'et_image_get_responsive_size' ) ) :
+/**
+ * Get images responsive sizes.
+ *
+ * @since 3.27.1
+ *
+ * @param int    $orig_width Original image's width.
+ * @param int    $orig_height Original image's height.
+ * @param string $breakpoint Screen breakpont. See et_screen_sizes().
+ *
+ * @return array|boolean Image responsive width & height. False on failure.
+ */
+function et_image_get_responsive_size( $orig_width, $orig_height, $breakpoint ) {
+	$et_screen_sizes = et_screen_sizes();
+
+	if ( ! isset( $et_screen_sizes[ $breakpoint ] ) ) {
+		return false;
+	}
+
+	$new_width = $et_screen_sizes[ $breakpoint ];
+
+	if ( $new_width >= $orig_width ) {
+		return false;
+	}
+
+	$ratio = ( $orig_width * 1.0 ) / $orig_height;
+
+	$new_height = round( ( $new_width / $ratio ) );
+
+	return array(
+		'width'  => $new_width,
+		'height' => $new_height,
+	);
+}
+endif;
+
+if ( ! function_exists( 'et_image_add_srcset_and_sizes' ) ) :
+/**
+ * Add ‘srcset’ and ‘sizes’ attributes to an existing ‘img’ element.
+ *
+ * @param string  $image Image HTML markup.
+ * @param boolean $echo  Is print the output?
+ *
+ * @return string
+ */
+function et_image_add_srcset_and_sizes( $image, $echo = false ) {
+	static $srcset_and_sizes_cached = array();
+
+	// Check if option is enabled.
+	if ( ! et_is_responsive_images_enabled() ) {
+		if ( $echo ) {
+			echo et_core_intentionally_unescaped( $image, 'html' );
+		}
+
+		return $image;
+	}
+
+	$src = et_get_src_from_img_tag( $image );
+
+	$cache_key = $src ? $src : 'empty-src';
+
+	if ( isset( $srcset_and_sizes_cached[ $cache_key ] ) ) {
+		$image = $srcset_and_sizes_cached[ $cache_key ];
+	} else {
+		// Only process if src attribute is not empty.
+		if ( $src ) {
+			$attachment_id = et_get_attachment_id_by_url( $src );
+			$image_meta    = false;
+
+			if ( $attachment_id ) {
+				$image_meta = wp_get_attachment_metadata( $attachment_id );
+			}
+
+			if ( $image_meta ) {
+				$image = wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id );
+			}
+		}
+
+		$srcset_and_sizes_cached[ $cache_key ] = $image;
+	}
+
+	if ( $echo ) {
+		echo et_core_intentionally_unescaped( $image, 'html' );
+	}
+
+	return $image;
+}
+endif;
+
+if ( ! function_exists( 'et_get_attachment_id_by_url' ) ) :
+/**
+ * Tries to get attachment ID by URL.
+ *
+ * @since 3.27.1
+ *
+ * @param string $url The URL being looked up.
+ *
+ * @return int The attachment ID found, or 0 on failure.
+ */
+function et_get_attachment_id_by_url( $url ) {
+	global $wpdb;
+	$cache = ET_Core_Cache_File::get( 'attachment_id_by_url' );
+
+	$attachment_id = 0;
+
+	// Normalize image URL.
+	$url = et_attachment_normalize_url( $url );
+
+	$cache_key = $url ? $url : 'empty-url';
+
+	if ( isset( $cache[ $cache_key ] ) ) {
+		return $cache[ $cache_key ];
+	}
+
+	// Bail early if URL is invalid.
+	if ( ! $url ) {
+		return $attachment_id;
+	}
+
+	// Remove any thumbnail size suffix from the filename and use that as a fallback.
+	$fallback_url = preg_replace( '/-(\d+)x(\d+)\.(jpg|jpeg|gif|png)$/', '.$3', $url );
+
+	// Scenario: Trying to find the attachment for a file called x-150x150.jpg.
+	// 1. Since WordPress adds the -150x150 suffix for thumbnail sizes we cannot be
+	// sure if this is an attachment or an attachment's generated thumbnail.
+	// 2. Since both x.jpg and x-150x150.jpg can be uploaded as separate attachments
+	// we must decide which is a better match.
+	// 3. The above is why we order by guid length and use the first result.
+	$attachments_query = $wpdb->prepare(
+		"SELECT id
+		FROM $wpdb->posts
+		WHERE `post_type` = %s
+			AND `guid` IN ( %s, %s )
+		ORDER BY CHAR_LENGTH( `guid` ) DESC",
+		'attachment',
+		esc_url_raw( $url ),
+		esc_url_raw( $fallback_url )
+	);
+
+	$attachment_id = (int) $wpdb->get_var( $attachments_query );
+
+	$cache[ $cache_key ] = $attachment_id;
+	ET_Core_Cache_File::set( 'attachment_id_by_url', $cache );
+
+	return $attachment_id;
+}
+endif;
+
+if ( ! function_exists( 'et_get_attachment_size_by_url' ) ) :
+/**
+ * Tries to get attachment size by URL.
+ *
+ * @since 3.27.1
+ *
+ * @param string $url The URL being looked up.
+ * @param string $default_size Default size name on failure.
+ *
+ * @return array|string Detected image size width and height or 'full' on failure.
+ */
+function et_get_attachment_size_by_url( $url, $default_size = 'full' ) {
+	// Normalize image URL.
+	$url = et_attachment_normalize_url( $url );
+
+	// Bail eraly if URL is invalid.
+	if ( ! $url ) {
+		return $default_size;
+	}
+
+	// Get the image width and height.
+	// Example: https://regex101.com/r/7JwGz7/1.
+	if ( preg_match( '/-(\d+)x(\d+)\.(jpg|jpeg|gif|png)$/', $url, $match ) ) {
+		return array( $match[1], $match[2] );
+	}
+
+	return $default_size;
+}
+endif;
+
+if ( ! function_exists( 'et_attachment_normalize_url' ) ) :
+/**
+ * Tries to normalize attachment URL
+ *
+ * @since 3.27.1
+ *
+ * @param string $url The URL being looked up.
+ *
+ * @return string|bool Normalized image URL or false on failure.
+ */
+function et_attachment_normalize_url( $url ) {
+	// Remove URL query and string after
+	list( $url ) = explode( '?', $url );
+
+	// Fixes the issue with x symbol between width and height values in the filename.
+	$url = str_replace( '%26%23215%3B', 'x', rawurlencode( $url ) );
+
+	// Decode the URL.
+	$url = rawurldecode( $url );
+
+	// Set as full path URL.
+	if ( 0 !== strpos( $url, 'http' ) ) {
+		$url = site_url( $url );
+	}
+
+	// Validate URL format and file extension.
+	// Example: https://regex101.com/r/dXcpto/1.
+	if ( ! preg_match( '/^(http(s?)\:\/\/)(.+)\.(jpg|jpeg|gif|png)$/', $url ) ) {
+		return false;
+	}
+
+	return esc_url( $url );
+}
+endif;
+
+if ( ! function_exists( 'et_get_src_from_img_tag' ) ) :
+/**
+ * Get src attribute value from image tag
+ *
+ * @since 3.27.1
+ *
+ * @param string $image The HTML image tag to look up.
+ *
+ * @return string|bool Src attribute value. False on failure.
+ */
+function et_get_src_from_img_tag( $image ) {
+	// Parse src attributes using regex.
+	// Example: https://regex101.com/r/kY6Gdd/1.
+	if ( preg_match( '/^<img.+src=[\'"](?P<src>.+?)[\'"].*>/', $image, $match ) ) {
+		if ( isset( $match['src'] ) ) {
+			return $match['src'];
+		}
+	}
+
+	// Parse src attributes using DOMDocument when regex is failed.
+	if ( class_exists( 'DOMDocument' ) && class_exists( 'DOMXPath' ) ) {
+		$doc = new DOMDocument();
+		$doc->loadHTML( $image );
+
+		$xpath = new DOMXPath( $doc );
+		return $xpath->evaluate( 'string(//img/@src)' );
+	}
+
+	return false;
 }
 endif;

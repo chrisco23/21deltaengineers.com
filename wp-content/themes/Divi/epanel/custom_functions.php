@@ -140,6 +140,11 @@ if ( ! function_exists( 'et_epanel_handle_custom_css_output' ) ):
 function et_epanel_handle_custom_css_output( $css, $stylesheet ) {
 	global $wp_current_filter, $shortname;
 
+	/** @see ET_Core_Support_Center::toggle_safe_mode */
+	if ( et_core_is_safe_mode_active() ) {
+		return $css;
+	}
+
 	if ( ! $css || ! in_array( 'wp_head', $wp_current_filter ) || is_admin() && ! is_customize_preview() ) {
 		return $css;
 	}
@@ -151,7 +156,7 @@ function et_epanel_handle_custom_css_output( $css, $stylesheet ) {
 	$disabled_global = 'off' === et_get_option( 'et_pb_static_css_file', 'on' );
 	$disabled_post   = $disabled_global || ( $is_singular && 'off' === get_post_meta( $post_id, '_et_pb_static_css_file', true ) );
 
-	$forced_inline     = $is_preview || $disabled_global || $disabled_post;
+	$forced_inline     = $is_preview || $disabled_global || $disabled_post || post_password_required();
 	$builder_in_footer = 'on' === et_get_option( 'et_pb_css_in_footer', 'off' );
 
 	$unified_styles = $is_singular && ! $forced_inline && ! $builder_in_footer && et_core_is_builder_used_on_current_request();
@@ -343,8 +348,10 @@ if ( ! function_exists( 'truncate_post' ) ) {
 			if ( $strip_shortcodes ) {
 				$truncate = et_strip_shortcodes( $truncate );
 			} else {
+				// Check if content should be overridden with a custom value.
+				$custom = apply_filters( 'et_truncate_post_use_custom_content', false, $truncate, $post );
 				// apply content filters
-				$truncate = apply_filters( 'the_content', $truncate );
+				$truncate = false === $custom ? apply_filters( 'the_content', $truncate ) : $custom;
 			}
 
 			/**
@@ -457,8 +464,10 @@ if ( ! function_exists( 'et_first_image' ) ) {
 			$unprocessed_content = et_strip_shortcodes( $post->post_content, true );
 		}
 
+		// Check if content should be overridden with a custom value.
+		$custom = apply_filters( 'et_first_image_use_custom_content', false, $unprocessed_content, $post );
 		// apply the_content filter to execute all shortcodes and get the correct image from the processed content
-		$processed_content = apply_filters( 'the_content', $unprocessed_content );
+		$processed_content = false === $custom ? apply_filters( 'the_content', $unprocessed_content ) : $custom;
 
 		$output = preg_match_all( '/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $processed_content, $matches );
 		if ( isset( $matches[1][0] ) ) $img = $matches[1][0];
@@ -590,16 +599,16 @@ if ( ! function_exists( 'print_thumbnail' ) ) {
 			$thumbnail = $new_method_thumb;
 		}
 
-		if ( false === $forstyle ) {
-			$output = '<img src="' . ( $raw ? $thumbnail : esc_url( $thumbnail ) ) . '"';
+		if ( false === $forstyle && $resize ) {
+			$output = sprintf(
+				'<img src="%1$s" alt="%2$s" class="%3$s"%4$s />',
+				$raw ? $thumbnail : esc_url( $thumbnail ),
+				esc_attr( strip_tags( $alttext ) ),
+				empty( $class ) ? '' : esc_attr( $class ),
+				apply_filters( 'et_print_thumbnail_dimensions', " width='" . esc_attr( $width ) . "' height='" .esc_attr( $height ) . "'" )
+			);
 
-			if ( ! empty( $class ) ) $output .= " class='" . esc_attr( $class ) . "' ";
-
-			$dimensions = apply_filters( 'et_print_thumbnail_dimensions', " width='" . esc_attr( $width ) . "' height='" .esc_attr( $height ) . "'" );
-
-			$output .= " alt='" . esc_attr( strip_tags( $alttext ) ) . "'{$dimensions} />";
-
-			if ( ! $resize ) $output = $thumbnail;
+			$output = et_image_add_srcset_and_sizes( $output );
 		} else {
 			$output = $thumbnail;
 		}
@@ -629,9 +638,20 @@ if ( ! function_exists( 'et_new_thumb_resize' ) ) {
 
 		$thumb = esc_attr( $new_method_thumb );
 
-		$output = '<img src="' . esc_url( $thumb ) . '" alt="' . esc_attr( $alt ) . '" width =' . esc_attr( $width ) . ' height=' . esc_attr( $height ) . ' />';
+		// Bail early when $forstyle argument is true.
+		if ( $forstyle ) {
+			return $thumb;
+		}
 
-		return ( !$forstyle ) ? $output : $thumb;
+		$output = sprintf(
+			'<img src="%1$s" alt="%2$s" width="%3$s" height="%4$s" />',
+			esc_url( $thumb ),
+			esc_attr( $alt ),
+			esc_attr( $width ),
+			esc_attr( $height )
+		);
+
+		return et_image_add_srcset_and_sizes( $output );
 	}
 
 }
@@ -816,6 +836,12 @@ add_action( 'wp_head', 'head_addons', 7 );
 
 function integration_head(){
 	global $shortname;
+
+	/** @see ET_Core_Support_Center::toggle_safe_mode */
+	if ( et_core_is_safe_mode_active() ) {
+		return;
+	}
+
 	$integration_head = et_get_option( $shortname . '_integration_head' );
 	if ( ! empty( $integration_head ) && et_get_option( $shortname . '_integrate_header_enable' ) === 'on' ) {
 
@@ -828,6 +854,12 @@ add_action( 'wp_head', 'integration_head', 12 );
 
 function integration_body(){
 	global $shortname;
+
+	/** @see ET_Core_Support_Center::toggle_safe_mode */
+	if ( et_core_is_safe_mode_active() ) {
+		return;
+	}
+
 	$integration_body = et_get_option( $shortname . '_integration_body' );
 	if ( ! empty( $integration_body ) && et_get_option( $shortname . '_integrate_body_enable' ) === 'on' ) {
 
@@ -840,6 +872,12 @@ add_action( 'wp_footer', 'integration_body', 12 );
 
 function integration_single_top(){
 	global $shortname;
+
+	/** @see ET_Core_Support_Center::toggle_safe_mode */
+	if ( et_core_is_safe_mode_active() ) {
+		return;
+	}
+
 	$integration_single_top = et_get_option( $shortname . '_integration_single_top' );
 	if ( ! empty( $integration_single_top ) && et_get_option( $shortname . '_integrate_body_enable' ) === 'on' ) {
 
@@ -852,6 +890,12 @@ add_action( 'et_before_post', 'integration_single_top', 12 );
 
 function integration_single_bottom(){
 	global $shortname;
+
+	/** @see ET_Core_Support_Center::toggle_safe_mode */
+	if ( et_core_is_safe_mode_active() ) {
+		return;
+	}
+
 	$integration_single_bottom = et_get_option( $shortname . '_integration_single_bottom' );
 	if ( ! empty( $integration_single_bottom ) && et_get_option( $shortname . '_integrate_body_enable' ) === 'on' ) {
 

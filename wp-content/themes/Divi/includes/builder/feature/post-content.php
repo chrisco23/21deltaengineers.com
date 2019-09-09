@@ -13,7 +13,7 @@ function et_builder_ajax_resolve_post_content() {
 	$post_id   = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
 	$groups    = isset( $_POST['groups'] ) && is_array( $_POST['groups'] ) ? $_POST['groups'] : array();
 	$overrides = isset( $_POST['overrides'] ) && is_array( $_POST['overrides'] ) ? $_POST['overrides'] : array();
-	$overrides = array_map( 'wp_kses_post', $overrides );
+	$overrides = array_map( 'wp_kses_post', wp_unslash( $overrides ) );
 	$post      = get_post( $post_id );
 
 	$invalid_nonce       = ! wp_verify_nonce( $nonce, 'et_fb_resolve_post_content' );

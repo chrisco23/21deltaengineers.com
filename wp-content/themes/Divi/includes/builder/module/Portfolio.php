@@ -219,6 +219,10 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 			'include_categories' => array(
 				'label'            => esc_html__( 'Included Categories', 'et_builder' ),
 				'type'             => 'categories',
+				'meta_categories'  => array(
+					'all'     => esc_html__( 'All Categories', 'et_builder' ),
+					'current' => esc_html__( 'Current Category', 'et_builder' ),
+				),
 				'option_category'  => 'basic_option',
 				'description'      => esc_html__( 'Select the categories that you would like to include in the feed.', 'et_builder' ),
 				'toggle_slug'      => 'main_content',
@@ -340,7 +344,7 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 	 * @return mixed portfolio item data
 	 */
 	static function get_portfolio_item( $args = array(), $conditional_tags = array(), $current_page = array() ) {
-		global $et_fb_processing_shortcode_object;
+		global $et_fb_processing_shortcode_object, $post;
 
 		$global_processing_original_value = $et_fb_processing_shortcode_object;
 
@@ -385,7 +389,7 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 		}
 
 		// Passed categories parameter
-		$include_categories = self::filter_invalid_term_ids( explode( ',', $args['include_categories'] ), 'project_category' );
+		$include_categories = self::filter_include_categories( $args['include_categories'], 0, 'project_category' );
 
 		if ( ! empty( $include_categories ) ) {
 			$query_args['tax_query'] = array(
@@ -414,6 +418,7 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 			$post_index = 0;
 			while( $query->have_posts() ) {
 				$query->the_post();
+				ET_Post_Stack::replace( $post );
 
 				$categories = array();
 
@@ -438,13 +443,16 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 				$et_fb_processing_shortcode_object = $global_processing_original_value;
 
 				// Append value to query post
-				$query->posts[ $post_index ]->post_permalink 	= get_permalink();
-				$query->posts[ $post_index ]->post_thumbnail 	= print_thumbnail( $thumbnail['thumb'], $thumbnail['use_timthumb'], $titletext, $width, $height, '', false, true );
-				$query->posts[ $post_index ]->post_categories 	= $categories;
-				$query->posts[ $post_index ]->post_class_name 	= get_post_class( '', get_the_ID() );
+				$query->posts[ $post_index ]->post_permalink  = get_permalink();
+				$query->posts[ $post_index ]->featured_image  = isset( $thumbnail['fullpath'] ) ? $thumbnail['fullpath'] : null;
+				$query->posts[ $post_index ]->post_thumbnail  = print_thumbnail( $thumbnail['thumb'], $thumbnail['use_timthumb'], $titletext, $width, $height, '', false, true );
+				$query->posts[ $post_index ]->post_categories = $categories;
+				$query->posts[ $post_index ]->post_class_name = get_post_class( '', get_the_ID() );
 
 				$post_index++;
+				ET_Post_Stack::pop();
 			}
+			ET_Post_Stack::reset();
 
 			$query->posts_next = array(
 				'label' => esc_html__( '&laquo; Older Entries', 'et_builder' ),
@@ -466,12 +474,12 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 			$query = array( 'posts' => self::get_no_results_template() );
 		}
 
-		wp_reset_postdata();
-
 		return $query;
 	}
 
 	function render( $attrs, $content = null, $render_slug ) {
+		global $post;
+
 		$multi_view                      = et_pb_multi_view_options( $this );
 		$fullwidth                       = $this->props['fullwidth'];
 		$posts_number                    = $this->props['posts_number'];
@@ -536,6 +544,7 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 		if ( $portfolio->have_posts() ) {
 			while( $portfolio->have_posts() ) {
 				$portfolio->the_post();
+				ET_Post_Stack::replace( $post );
 
 				// Get $post data of current loop
 				global $post;
@@ -564,11 +573,18 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 						<?php } else { ?>
 							<span class="et_portfolio_image">
 								<?php
-								$this->render_image( $post->post_thumbnail, array(
-									'alt' => get_the_title(),
-									'width' => '400',
+								$image_attrs = array(
+									'alt'    => get_the_title(),
+									'width'  => '400',
 									'height' => '284',
-								) );
+								);
+
+								if ( ! empty( $post->featured_image ) ) {
+									$image_attrs['srcset'] = $post->featured_image . ' 479w, ' . $post->post_thumbnail . ' 480w';
+									$image_attrs['sizes']  = '(max-width:479px) 479w, 100vw';
+								}
+
+								$this->render_image( $post->post_thumbnail, $image_attrs );
 								?>
 								<?php echo et_core_esc_previously( $overlay ); ?>
 							</span>
@@ -619,11 +635,13 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 
 				</div><!-- .et_pb_portfolio_item -->
 				<?php
+				ET_Post_Stack::pop();
 			}
+			ET_Post_Stack::reset();
 
 			if ( $multi_view->has_value( 'show_pagination', 'on' ) && ! is_search() ) {
 				if ( function_exists( 'wp_pagenavi' ) ) {
-					$pagination = $multi_view->render_attrs( array(
+					$pagination = $multi_view->render_element( array(
 						'tag'     => 'div',
 						'content' => wp_pagenavi( array( 'query' => $portfolio, 'echo' => false ) ),
 						'visibility' => array(
@@ -675,9 +693,6 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 				}
 			}
 		}
-
-		// Reset post data
-		wp_reset_postdata();
 
 		if ( ! $posts = ob_get_clean() ) {
 			$posts = self::get_no_results_template();

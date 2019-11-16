@@ -311,13 +311,7 @@ class ET_Builder_Module_Fullwidth_Post_Title extends ET_Builder_Module {
 
 	function render( $attrs, $content = null, $render_slug ) {
 		$multi_view         = et_pb_multi_view_options( $this );
-		$title              = $this->props['title'];
-		$meta               = $this->props['meta'];
-		$author             = $this->props['author'];
-		$date               = $this->props['date'];
 		$date_format        = $this->props['date_format'];
-		$categories         = $this->props['categories'];
-		$comments           = $this->props['comments'];
 		$featured_image     = $this->props['featured_image'];
 		$featured_placement = $this->props['featured_placement'];
 		$text_color         = $this->props['text_color'];
@@ -325,22 +319,23 @@ class ET_Builder_Module_Fullwidth_Post_Title extends ET_Builder_Module {
 		$text_background    = $this->props['text_background'];
 		$header_level       = $this->props['title_level'];
 		$text_bg_colors     = et_pb_responsive_options()->get_property_values( $this->props, 'text_bg_color' );
+		$post_id            = get_the_ID();
 
 		// display the shortcode only on singlular pages
 		if ( ! is_singular() ) {
-			return;
+			$post_id = 0;
 		}
 
 		$output = '';
 		$featured_image_output = '';
 		$parallax_image_background = $this->get_parallax_image_background();
 
-		if ( $multi_view->has_value( 'featured_image', 'on' ) && ( 'above' === $featured_placement || 'below' === $featured_placement ) ) {
+		if ( $post_id && $multi_view->has_value( 'featured_image', 'on' ) && ( 'above' === $featured_placement || 'below' === $featured_placement ) ) {
 			// Largest featured image size is needed when featured image is used in "post" post type and full width layout
 			$featured_image_size = 'post' === get_post_type() && 'et_full_width_page' === get_post_meta( get_the_ID(), '_et_pb_page_layout', true ) ? 'et-pb-post-main-image-fullwidth-large' : 'large';
 			$featured_image_output = $multi_view->render_element( array(
 				'tag'     => 'div',
-				'content' => get_the_post_thumbnail( get_the_ID(), $featured_image_size ),
+				'content' => get_the_post_thumbnail( $post_id, $featured_image_size ),
 				'attrs'   => array(
 					'class' => 'et_pb_title_featured_container',
 				),
@@ -357,7 +352,7 @@ class ET_Builder_Module_Fullwidth_Post_Title extends ET_Builder_Module {
 			if ( is_et_pb_preview() && isset( $_POST['post_title'] ) && wp_verify_nonce( $_POST['et_pb_preview_nonce'], 'et_pb_preview_nonce' ) ) {
 				$post_title = esc_html( sanitize_text_field( wp_unslash( $_POST['post_title'] ) ) );
 			} else {
-				$post_title = get_the_title();
+				$post_title = esc_html( et_builder_get_current_title() );
 			}
 
 			$output .= $multi_view->render_element( array(
@@ -372,14 +367,14 @@ class ET_Builder_Module_Fullwidth_Post_Title extends ET_Builder_Module {
 			) );
 		}
 
-		if ( $multi_view->has_value( 'meta', 'on' ) ) {
+		if ( $post_id && $multi_view->has_value( 'meta', 'on' ) ) {
 			$meta_array = array();
 
 			foreach( array( 'author', 'date', 'categories', 'comments' ) as $single_meta ) {
 				if ( 'categories' === $single_meta && ! is_singular( 'post' ) ) {
 					continue;
 				}
-				
+
 				$meta_array[] = $multi_view->render_element( array(
 					'content' => et_pb_postinfo_meta( array( $single_meta ), $date_format, esc_html__( '0 comments', 'et_builder' ), esc_html__( '1 comment', 'et_builder' ), '% ' . esc_html__( 'comments', 'et_builder' ) ),
 					'classes' => array(
@@ -460,8 +455,17 @@ class ET_Builder_Module_Fullwidth_Post_Title extends ET_Builder_Module {
 			'et_pb_fullwidth_post_title',
 		) );
 
+		$muti_view_data_attr = $multi_view->render_attrs( array(
+			'classes' => array(
+				'et_pb_featured_bg' => array(
+					'featured_image' => 'on',
+					'featured_placement' => 'background',
+				),
+			),
+		) );
+
 		$output = sprintf(
-			'<div%3$s class="%2$s" %8$s %9$s>
+			'<div%3$s class="%2$s" %8$s %9$s %10$s>
 				%4$s
 				%7$s
 				%5$s
@@ -474,11 +478,12 @@ class ET_Builder_Module_Fullwidth_Post_Title extends ET_Builder_Module {
 			$this->module_classname( $render_slug ),
 			$this->module_id(),
 			$parallax_image_background,
-			'on' === $featured_image && 'above' === $featured_placement ? $featured_image_output : '',
+			'on' === $featured_image && 'above' === $featured_placement ? $featured_image_output : '', // #5
 			'on' === $featured_image && 'below' === $featured_placement ? $featured_image_output : '',
 			$video_background,
 			$data_background_layout,
-			$data_background_layout_hover
+			$data_background_layout_hover,
+			et_core_esc_previously( $muti_view_data_attr ) // #10
 		);
 
 		return $output;

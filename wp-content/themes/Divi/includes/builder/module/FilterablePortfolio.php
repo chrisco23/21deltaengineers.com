@@ -341,7 +341,7 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 	}
 
 	static function get_portfolio_item( $args = array(), $conditional_tags = array(), $current_page = array() ) {
-		global $et_fb_processing_shortcode_object;
+		global $et_fb_processing_shortcode_object, $post;
 
 		$global_processing_original_value = $et_fb_processing_shortcode_object;
 
@@ -393,6 +393,7 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 			$post_index = 0;
 			while ( $query->have_posts() ) {
 				$query->the_post();
+				ET_Post_Stack::replace( $post );
 
 				$categories = array();
 
@@ -436,13 +437,13 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 				$category_classes = implode( ' ', $category_classes );
 
 				$post_index++;
+				ET_Post_Stack::pop();
 			}
+			ET_Post_Stack::reset();
 		} else if ( self::is_processing_computed_prop() ) {
 			// This is for the VB
 			$query = array( 'posts' => self::get_no_results_template() );
 		}
-
-		wp_reset_postdata();
 
 		return $query;
 	}
@@ -466,6 +467,8 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 	}
 
 	function render( $attrs, $content = null, $render_slug ) {
+		global $post;
+
 		$multi_view                      = et_pb_multi_view_options( $this );
 		$fullwidth                       = $this->props['fullwidth'];
 		$posts_number                    = $this->props['posts_number'];
@@ -521,6 +524,7 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 		if( $projects->post_count > 0 ) {
 			while ( $projects->have_posts() ) {
 				$projects->the_post();
+				ET_Post_Stack::replace( $post );
 
 				$category_classes = array();
 				$categories = get_the_terms( get_the_ID(), 'project_category' );
@@ -612,10 +616,10 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 				?>
 				</div><!-- .et_pb_portfolio_item -->
 				<?php
+				ET_Post_Stack::pop();
 			}
+			ET_Post_Stack::reset();
 		}
-
-		wp_reset_postdata();
 
 		if ( ! $posts = ob_get_clean() ) {
 			$posts            = self::get_no_results_template();

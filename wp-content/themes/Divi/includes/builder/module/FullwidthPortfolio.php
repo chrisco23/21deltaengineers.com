@@ -219,6 +219,10 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 			'include_categories' => array(
 				'label'            => esc_html__( 'Included Categories', 'et_builder' ),
 				'type'             => 'categories',
+				'meta_categories'  => array(
+					'all'     => esc_html__( 'All Categories', 'et_builder' ),
+					'current' => esc_html__( 'Current Category', 'et_builder' ),
+				),
 				'option_category'  => 'basic_option',
 				'description'      => esc_html__( 'Select the categories that you would like to include in the feed.', 'et_builder' ),
 				'computed_affects' => array(
@@ -314,6 +318,8 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 	 * @return array portfolio item data
 	 */
 	static function get_portfolio_item( $args = array(), $conditional_tags = array(), $current_page = array() ) {
+		global $post;
+
 		$defaults = array(
 			'posts_number'       => '',
 			'include_categories' => '',
@@ -332,7 +338,7 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 			$query_args['nopaging'] = true;
 		}
 
-		$include_categories = self::filter_invalid_term_ids( explode( ',', $args['include_categories'] ), 'project_category' );
+		$include_categories = self::filter_include_categories( $args['include_categories'], 0, 'project_category' );
 
 		if ( ! empty( $include_categories ) ) {
 			$query_args['tax_query'] = array(
@@ -356,6 +362,7 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 			$post_index = 0;
 			while ( $query->have_posts() ) {
 				$query->the_post();
+				ET_Post_Stack::replace( $post );
 
 				// Get thumbnail
 				$thumbnail   = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), array( $width, $height ) );
@@ -374,7 +381,9 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 				$query->posts[ $post_index ]->post_class_name            = get_post_class( 'et_pb_portfolio_item et_pb_grid_item ' );
 
 				$post_index++;
+				ET_Post_Stack::pop();
 			}
+			ET_Post_Stack::reset();
 		} else if ( self::is_processing_computed_prop() ) {
 			// This is for the VB
 			$posts  = '<div class="et_pb_row et_pb_no_results">';
@@ -383,12 +392,12 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 			$query  = array( 'posts' => $posts );
 		}
 
-		wp_reset_postdata();
-
 		return $query;
 	}
 
 	function render( $attrs, $content = null, $render_slug ) {
+		global $post;
+
 		$multi_view                      = et_pb_multi_view_options( $this );
 		$title                           = $multi_view->render_element( array(
 			'tag'     => et_pb_process_header_level( $this->props['portfolio_header_level'], 'h2' ),
@@ -427,24 +436,6 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 		// Hover Overlay color.
 		et_pb_responsive_options()->generate_responsive_css( $hover_overlay_color_values, "{$zoom_and_hover_selector} .et_overlay", array( 'background-color', 'border-color' ), $render_slug, '', 'color' );
 
-		$args = array();
-		if ( is_numeric( $posts_number ) && $posts_number > 0 ) {
-			$args['posts_per_page'] = $posts_number;
-		} else {
-			$args['nopaging'] = true;
-		}
-
-		if ( '' !== $include_categories ) {
-			$args['tax_query'] = array(
-				array(
-					'taxonomy' => 'project_category',
-					'field' => 'id',
-					'terms' => explode( ',', $include_categories ),
-					'operator' => 'IN'
-				)
-			);
-		}
-
 		$projects = self::get_portfolio_item( array(
 			'posts_number'       => $posts_number,
 			'include_categories' => $include_categories,
@@ -454,6 +445,7 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 		if( $projects->post_count > 0 ) {
 			while ( $projects->have_posts() ) {
 				$projects->the_post();
+				ET_Post_Stack::replace( $post );
 				?>
 				<div id="post-<?php the_ID(); ?>" <?php post_class( 'et_pb_portfolio_item et_pb_grid_item ' ); ?>>
 				<?php
@@ -472,9 +464,18 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 					if ( '' !== $thumb_src ) : ?>
 						<div class="et_pb_portfolio_image <?php echo esc_attr( $orientation ); ?>">
 							<?php
-							$this->render_image( $thumb_src, array(
+							$image_attrs = array(
 								'alt' => get_the_title(),
-							) );
+							);
+
+							$full_src = get_the_post_thumbnail_url();
+
+							if ( $full_src ) {
+								$image_attrs['srcset'] = $full_src . ' 479w, ' . $thumb_src . ' 480w';
+								$image_attrs['sizes']  = '(max-width:479px) 479w, 100vw';
+							}
+
+							$this->render_image( $thumb_src, $image_attrs );
 							?>
 							<div class="meta">
 							<a href="<?php esc_url( the_permalink() ); ?>">
@@ -519,10 +520,10 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 				<?php endif; ?>
 				</div>
 				<?php
+				ET_Post_Stack::pop();
 			}
+			ET_Post_Stack::reset();
 		}
-
-		wp_reset_postdata();
 
 		if ( ! $posts = ob_get_clean() ) {
 			$posts  = '<div class="et_pb_row et_pb_no_results">';
@@ -603,7 +604,7 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 	 * Filter multi view value.
 	 *
 	 * @since 3.27.1
-	 * 
+	 *
 	 * @see ET_Builder_Module_Helper_MultiViewOptions::filter_value
 	 *
 	 * @param mixed $raw_value Props raw value.

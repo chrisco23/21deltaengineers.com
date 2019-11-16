@@ -60,25 +60,7 @@ $post = get_post( $post_id );
 								$content = do_shortcode( wp_unslash( $_POST['shortcode'] ) );
 								$content = str_replace( ']]>', ']]&gt;', $content );
 
-								$outer_class   = apply_filters( 'et_builder_outer_content_class', array( 'et-boc' ) );
-								$outer_classes = implode( ' ', $outer_class );
-
-								$outer_id      = apply_filters( 'et_builder_outer_content_id', 'et-boc' );
-
-								$inner_class   = apply_filters( 'et_builder_inner_content_class', array( 'et_builder_inner_content' ) );
-								$inner_classes = implode( ' ', $inner_class );
-
-								$content = sprintf(
-									'<div class="%2$s" id="%4$s">
-										<div class="%3$s">
-											%1$s
-										</div>
-									</div>',
-									$content,
-									esc_attr( $outer_classes ),
-									esc_attr( $inner_classes ),
-									esc_attr( $outer_id )
-								);
+								$content = et_builder_get_builder_content_opening_wrapper() . et_builder_get_layout_opening_wrapper() . $content . et_builder_get_layout_closing_wrapper() . et_builder_get_builder_content_closing_wrapper();
 							} else {
 								$content = apply_filters( 'the_content', wp_unslash( $_POST['shortcode'] ) );
 								$content = str_replace( ']]>', ']]&gt;', $content );

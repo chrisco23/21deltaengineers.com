@@ -1,14 +1,49 @@
 <?php
 
+if ( ! defined( 'ET_BUILDER_DIVI_LIBRARY_URL' ) ) {
+	define( 'ET_BUILDER_DIVI_LIBRARY_URL', 'https://www.elegantthemes.com/layouts' );
+}
+
+if ( ! defined( 'ET_BUILDER_CSS_WRAPPER_PREFIX' ) ) {
+	define( 'ET_BUILDER_CSS_WRAPPER_PREFIX', '.et-db' );
+}
+
+if ( ! defined( 'ET_BUILDER_CSS_CONTAINER_PREFIX' ) ) {
+	define( 'ET_BUILDER_CSS_CONTAINER_PREFIX', '#et-boc' );
+}
+
+if ( ! defined( 'ET_BUILDER_CSS_LAYOUT_PREFIX' ) ) {
+	define( 'ET_BUILDER_CSS_LAYOUT_PREFIX', ET_BUILDER_CSS_CONTAINER_PREFIX . ' .et-l' );
+}
+
+if ( ! defined( 'ET_BUILDER_CSS_PREFIX' ) ) {
+	define( 'ET_BUILDER_CSS_PREFIX', ET_BUILDER_CSS_WRAPPER_PREFIX . ' ' . ET_BUILDER_CSS_LAYOUT_PREFIX );
+}
+
+if ( ! defined( 'ET_BUILDER_PLACEHOLDER_LANDSCAPE_IMAGE_DATA' ) ) {
+	define( 'ET_BUILDER_PLACEHOLDER_LANDSCAPE_IMAGE_DATA', 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA4MCIgaGVpZ2h0PSI1NDAiIHZpZXdCb3g9IjAgMCAxMDgwIDU0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZmlsbD0iI0VCRUJFQiIgZD0iTTAgMGgxMDgwdjU0MEgweiIvPgogICAgICAgIDxwYXRoIGQ9Ik00NDUuNjQ5IDU0MGgtOTguOTk1TDE0NC42NDkgMzM3Ljk5NSAwIDQ4Mi42NDR2LTk4Ljk5NWwxMTYuMzY1LTExNi4zNjVjMTUuNjItMTUuNjIgNDAuOTQ3LTE1LjYyIDU2LjU2OCAwTDQ0NS42NSA1NDB6IiBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz4KICAgICAgICA8Y2lyY2xlIGZpbGwtb3BhY2l0eT0iLjA1IiBmaWxsPSIjMDAwIiBjeD0iMzMxIiBjeT0iMTQ4IiByPSI3MCIvPgogICAgICAgIDxwYXRoIGQ9Ik0xMDgwIDM3OXYxMTMuMTM3TDcyOC4xNjIgMTQwLjMgMzI4LjQ2MiA1NDBIMjE1LjMyNEw2OTkuODc4IDU1LjQ0NmMxNS42Mi0xNS42MiA0MC45NDgtMTUuNjIgNTYuNTY4IDBMMTA4MCAzNzl6IiBmaWxsLW9wYWNpdHk9Ii4yIiBmaWxsPSIjMDAwIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz4KICAgIDwvZz4KPC9zdmc+Cg==' );
+}
+
+if ( ! defined( 'ET_BUILDER_PLACEHOLDER_PORTRAIT_IMAGE_DATA' ) ) {
+	define( 'ET_BUILDER_PLACEHOLDER_PORTRAIT_IMAGE_DATA', 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxwYXRoIGZpbGw9IiNFQkVCRUIiIGQ9Ik0wIDBoNTAwdjUwMEgweiIvPgogICAgICAgIDxyZWN0IGZpbGwtb3BhY2l0eT0iLjEiIGZpbGw9IiMwMDAiIHg9IjY4IiB5PSIzMDUiIHdpZHRoPSIzNjQiIGhlaWdodD0iNTY4IiByeD0iMTgyIi8+CiAgICAgICAgPGNpcmNsZSBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIiBjeD0iMjQ5IiBjeT0iMTcyIiByPSIxMDAiLz4KICAgIDwvZz4KPC9zdmc+Cg==' );
+}
+
 require_once ET_BUILDER_DIR . 'core.php';
+require_once ET_BUILDER_DIR . 'post/PostStack.php';
 require_once ET_BUILDER_DIR . 'feature/ClassicEditor.php';
 require_once ET_BUILDER_DIR . 'feature/post-content.php';
 require_once ET_BUILDER_DIR . 'feature/dynamic-content.php';
 require_once ET_BUILDER_DIR . 'feature/search-posts.php';
 require_once ET_BUILDER_DIR . 'feature/ErrorReport.php';
 require_once ET_BUILDER_DIR . 'api/DiviExtensions.php';
+require_once ET_BUILDER_DIR . 'frontend-builder/theme-builder/theme-builder.php';
 require_once ET_BUILDER_DIR . 'feature/custom-defaults/Settings.php';
 require_once ET_BUILDER_DIR . 'feature/custom-defaults/History.php';
+
+// Conditional Includes.
+if ( et_is_woocommerce_plugin_active() ) {
+	require_once ET_BUILDER_DIR . 'feature/woocommerce-modules.php';
+}
 
 if ( wp_doing_ajax() && ! is_customize_preview() ) {
 	define( 'WPE_HEARTBEAT_INTERVAL', et_builder_heartbeat_interval() );
@@ -54,11 +89,13 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'et_core_portability_import',
 			'et_core_version_rollback',
 			'update-theme',
+			'et_safe_mode_update',
 			'et_core_portability_export',
 			'et_core_portability_import',
 			'et_builder_migrate_module_customizer_phase_two',
 			'et_builder_save_custom_defaults_history',
 			'et_builder_retrieve_custom_defaults_history',
+			'et_theme_builder_api_import_theme_builder_step',
 		),
 	);
 
@@ -135,8 +172,9 @@ add_action( 'wp_enqueue_scripts', 'et_builder_load_global_functions_script', 7 )
 
 function et_builder_load_modules_styles() {
 	$current_page_id = apply_filters( 'et_is_ab_testing_active_post_id', get_the_ID() );
-	$is_fb_enabled = function_exists( 'et_fb_enabled' ) ? et_fb_enabled() : false;
-	$is_ab_testing = function_exists( 'et_is_ab_testing_active' ) ? et_is_ab_testing_active() : false;
+	$is_fb_enabled   = et_core_is_fb_enabled();
+	$ab_tests        = function_exists( 'et_builder_ab_get_current_tests' ) ? et_builder_ab_get_current_tests() : array();
+	$is_ab_testing   = ! empty( $ab_tests );
 
 	wp_register_script( 'google-maps-api', esc_url_raw( add_query_arg( array( 'v' => 3, 'key' => et_pb_get_google_api_key() ), is_ssl() ? 'https://maps.googleapis.com/maps/api/js' : 'http://maps.googleapis.com/maps/api/js' ) ), array(), ET_BUILDER_VERSION, true );
 	wp_register_script( 'hashchange', ET_BUILDER_URI . '/scripts/jquery.hashchange.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
@@ -150,9 +188,20 @@ function et_builder_load_modules_styles() {
 	wp_enqueue_script( 'et-builder-modules-script', ET_BUILDER_URI . '/scripts/frontend-builder-scripts.js', apply_filters( 'et_pb_frontend_builder_scripts_dependencies', array( 'jquery', 'et-jquery-touch-mobile' ) ), ET_BUILDER_VERSION, true );
 	wp_enqueue_style( 'magnific-popup', ET_BUILDER_URI . '/styles/magnific_popup.css', array(), ET_BUILDER_VERSION );
 
-	// Load modules wrapper on CPT
-	if ( et_builder_post_is_of_custom_post_type() ) {
+	wp_localize_script( 'et-builder-modules-script', 'et_frontend_scripts', array(
+		'builderCssContainerPrefix' => ET_BUILDER_CSS_CONTAINER_PREFIX,
+		'builderCssLayoutPrefix'    => ET_BUILDER_CSS_LAYOUT_PREFIX,
+	) );
+
+	// Load modules wrapper on CPT.
+	// Use get_the_ID() explicitly so we decide based on the first post of an archive page.
+	if ( et_builder_post_is_of_custom_post_type( get_the_ID() ) ) {
 		wp_enqueue_script( 'et-builder-cpt-modules-wrapper', ET_BUILDER_URI . '/scripts/cpt-modules-wrapper.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
+
+		wp_localize_script( 'et-builder-cpt-modules-wrapper', 'et_modules_wrapper', array(
+			'builderCssContainerPrefix' => ET_BUILDER_CSS_CONTAINER_PREFIX,
+			'builderCssLayoutPrefix'    => ET_BUILDER_CSS_LAYOUT_PREFIX,
+		) );
 	}
 
 	if ( et_builder_has_limitation( 'register_fittext_script') ) {
@@ -197,6 +246,7 @@ function et_builder_load_modules_styles() {
 		'ignore_waypoints'       => et_is_ignore_waypoints() ? 'yes' : 'no',
 		'is_divi_theme_used'     => function_exists( 'et_divi_fonts_url' ),
 		'widget_search_selector' => apply_filters( 'et_pb_widget_search_selector', '.widget_search' ),
+		'ab_tests'               => $ab_tests,
 		'is_ab_testing_active'   => $is_ab_testing,
 		'page_id'                => $current_page_id,
 		'unique_test_id'         => get_post_meta( $current_page_id, '_et_pb_ab_testing_id', true ),
@@ -254,6 +304,11 @@ function et_builder_get_modules_js_data() {
 
 	$link_options_data      = et_core_is_fb_enabled() ? array() : et_builder_handle_link_options_data();
 	$link_options_data_json = json_encode( $link_options_data );
+
+	if ( empty( $animation_data ) && empty( $link_options_data ) ) {
+		return;
+	}
+
 	?>
 	<script type="text/javascript">
 		<?php if ( $animation_data ): ?>
@@ -838,4 +893,116 @@ function et_pb_add_non_builder_comment_class( $classes, $class, $comment_ID, $co
 	return $classes;
 }
 
+/**
+ * Enqueue Open Sans for the builder UI.
+ *
+ * @since 4.0
+ *
+ * @return void
+ */
+function et_builder_enqueue_open_sans() {
+	$protocol   = is_ssl() ? 'https' : 'http';
+	$query_args = array(
+		'family' => 'Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800',
+		'subset' => 'latin,latin-ext',
+	);
+
+	wp_enqueue_style( 'et-fb-fonts', esc_url_raw( add_query_arg( $query_args, "{$protocol}://fonts.googleapis.com/css" ) ), array(), null );
+}
+
 et_builder_load_framework();
+
+// Register assets that need to be fired at head
+function et_builder_enqueue_assets_head() {
+	// Setup WP media.
+	// Around 5.2-alpha, `wp_enqueue_media` started using a function defined in a file
+	// which is only included in admin. Unfortunately there's no safe/reliable way to conditionally
+	// load this other than checking the WP version.
+	if ( version_compare( $GLOBALS['wp_version'], '5.2-alpha-44947', '>=' ) ) {
+		require_once( ABSPATH . 'wp-admin/includes/post.php' );
+	}
+
+	wp_enqueue_media();
+
+	// Setup Builder Media Library
+	wp_enqueue_script( 'et_pb_media_library', ET_BUILDER_URI . '/scripts/ext/media-library.js', array( 'media-editor' ), ET_BUILDER_PRODUCT_VERSION, true );
+}
+
+// TODO, make this fire late enough, so that the_content has fired and ET_Builder_Element::get_computed_vars() is ready
+// currently its being called in temporary_app_boot() in view.php
+function et_builder_enqueue_assets_main() {
+	$ver    = ET_BUILDER_VERSION;
+	$root   = ET_BUILDER_URI;
+	$assets = ET_BUILDER_URI . '/frontend-builder/assets';
+
+	wp_register_script( 'wp-color-picker-alpha', ET_BUILDER_URI . '/scripts/ext/wp-color-picker-alpha.min.js', array( 'jquery', 'wp-color-picker' ) );
+	wp_localize_script( 'wp-color-picker-alpha', 'et_pb_color_picker_strings', apply_filters( 'et_pb_color_picker_strings_builder', array(
+		'legacy_pick'    => esc_html__( 'Select', 'et_builder' ),
+		'legacy_current' => esc_html__( 'Current Color', 'et_builder' ),
+	) ) );
+
+	wp_enqueue_script( 'wp-color-picker-alpha' );
+	wp_enqueue_style( 'wp-color-picker' );
+
+	wp_enqueue_style( 'et-core-admin', ET_CORE_URL . 'admin/css/core.css', array(), ET_CORE_VERSION );
+	wp_enqueue_style( 'et-core-portability', ET_CORE_URL . 'admin/css/portability.css', array(), ET_CORE_VERSION );
+
+	wp_register_style( 'et_pb_admin_date_css', "{$root}/styles/jquery-ui-1.10.4.custom.css", array(), $ver );
+	wp_register_style( 'et-fb-top-window', "{$assets}/css/fb-top-window.css", array(), $ver );
+
+	$conditional_deps = array();
+
+	if ( ! et_builder_bfb_enabled() && ! et_builder_tb_enabled() ) {
+		$conditional_deps[] = 'et-fb-top-window';
+	}
+
+	// Enqueue the appropriate bundle CSS (hot/start/build)
+	et_fb_enqueue_bundle( 'et-frontend-builder', 'bundle.css', array_merge( array(
+		'et_pb_admin_date_css',
+		'wp-mediaelement',
+		'wp-color-picker',
+		'et-core-admin',
+	), $conditional_deps ) );
+
+	// Load Divi Builder style.css file with hardcore CSS resets and Full Open Sans font if the Divi Builder plugin is active
+	if ( et_is_builder_plugin_active() ) {
+		// `bundle.css` was removed from `divi-builder-style.css` and is now enqueued separately for the DBP as well.
+		wp_enqueue_style(
+			'et-builder-divi-builder-styles',
+			"{$assets}/css/divi-builder-style.css",
+			array_merge( array( 'et-core-admin', 'wp-color-picker' ), $conditional_deps ),
+			$ver
+		);
+	}
+
+	wp_enqueue_script( 'mce-view' );
+
+	if ( ! et_core_use_google_fonts() || et_is_builder_plugin_active() ) {
+		et_builder_enqueue_open_sans();
+	}
+
+	wp_enqueue_style( 'et-frontend-builder-failure-modal', "{$assets}/css/failure_modal.css", array(), $ver );
+	wp_enqueue_style( 'et-frontend-builder-notification-modal', "{$root}/styles/notification_popup_styles.css", array(), $ver );
+}
+
+if ( ! function_exists( 'et_fb_enqueue_react' ) ):
+function et_fb_enqueue_react() {
+    $DEBUG         = defined( 'ET_DEBUG' ) && ET_DEBUG;
+    $core_scripts  = ET_CORE_URL . 'admin/js';
+    $react_version = '16.7.0';
+
+    wp_dequeue_script( 'react' );
+    wp_dequeue_script( 'react-dom' );
+    wp_deregister_script( 'react' );
+    wp_deregister_script( 'react-dom' );
+
+    if ( $DEBUG || DiviExtensions::is_debugging_extension() ) {
+        wp_enqueue_script( 'react', "https://cdn.jsdelivr.net/npm/react@{$react_version}/umd/react.development.js", array(), $react_version, true );
+        wp_enqueue_script( 'react-dom', "https://cdn.jsdelivr.net/npm/react-dom@{$react_version}/umd/react-dom.development.js", array( 'react' ), $react_version, true );
+        add_filter( 'script_loader_tag', 'et_core_add_crossorigin_attribute', 10, 3 );
+    } else {
+        wp_enqueue_script( 'react', "{$core_scripts}/react.production.min.js", array(), $react_version, true );
+        wp_enqueue_script( 'react-dom', "{$core_scripts}/react-dom.production.min.js", array( 'react' ), $react_version, true );
+    }
+}
+endif;

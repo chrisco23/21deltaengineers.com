@@ -32,7 +32,7 @@ class ET_Builder_Module_Circle_Counter extends ET_Builder_Module {
 				'title' => array(
 					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
-						'main'      => "{$this->main_css_element} h3, {$this->main_css_element} h1.et_pb_module_header, {$this->main_css_element} h2.et_pb_module_header, {$this->main_css_element} h4.et_pb_module_header, {$this->main_css_element} h5.et_pb_module_header, {$this->main_css_element} h6.et_pb_module_header",
+						'main'      => "{$this->main_css_element} h3, {$this->main_css_element} h1.et_pb_module_header, {$this->main_css_element} h2.et_pb_module_header, {$this->main_css_element} h4.et_pb_module_header, {$this->main_css_element} h5.et_pb_module_header, {$this->main_css_element} h6.et_pb_module_header, {$this->main_css_element} h3 a, {$this->main_css_element} h1.et_pb_module_header a, {$this->main_css_element} h2.et_pb_module_header a, {$this->main_css_element} h4.et_pb_module_header a, {$this->main_css_element} h5.et_pb_module_header a, {$this->main_css_element} h6.et_pb_module_header a",
 						'important' => 'plugin_only',
 					),
 					'header_level' => array(
@@ -304,6 +304,11 @@ class ET_Builder_Module_Circle_Counter extends ET_Builder_Module {
 			'attrs' => array(
 				'data-number-value' => '{{number}}',
 				'data-percent-sign' => '{{percent_sign}}',
+			),
+			'classes' => array(
+				'et_pb_with_title' => array(
+					'title' => '__not_empty',
+				),
 			),
 		) );
 

@@ -90,8 +90,8 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 				'image' => array(
 					'css' => array(
 						'main' => array(
-							'border_radii'  => "{$this->main_css_element} .et_pb_gallery_image",
-							'border_styles' => "{$this->main_css_element} .et_pb_gallery_image",
+							'border_radii'  => "{$this->main_css_element} .et_pb_gallery_image img",
+							'border_styles' => "{$this->main_css_element} .et_pb_gallery_image img",
 						)
 					),
 					'label_prefix'    => esc_html__( 'Image', 'et_builder' ),
@@ -116,7 +116,7 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 						'fullwidth' => 'off',
 					),
 					'css' => array(
-						'main'         => '%%order_class%% .et_pb_gallery_image',
+						'main'         => '%%order_class%% .et_pb_gallery_image img',
 						'overlay' => 'inset',
 					),
 					'default_on_fronts'  => array(
@@ -164,7 +164,7 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 			),
 			'image'                 => array(
 				'css' => array(
-					'main' => '%%order_class%% .et_pb_gallery_image',
+					'main'    => '%%order_class%% .et_pb_gallery_image img',
 				),
 			),
 			'button' => false,
@@ -426,6 +426,13 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 			'orderby'        => 'post__in',
 		);
 
+		// Woo Gallery module shouldn't display placeholder image when no Gallery image is
+		// available.
+		// @see https://github.com/elegantthemes/submodule-builder/pull/6706#issuecomment-542275647
+		if ( isset( $args['attachment_id'] ) ) {
+			$attachments_args['attachment_id'] = $args['attachment_id'];
+		}
+
 		if ( 'rand' === $args['gallery_orderby'] ) {
 			$attachments_args['orderby'] = 'rand';
 		}
@@ -450,6 +457,27 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 		}
 
 		return $attachments;
+	}
+
+	/**
+	 * Wrapper for ET_Builder_Module_Gallery::get_gallery() which is intended to be extended by
+	 * module which uses gallery module renderer so relevant argument for other module can be added
+	 *
+	 * @since 3.29
+	 * @see ET_Builder_Module_Gallery::get_gallery()
+	 * @param array $args {
+	 *     Gallery Options
+	 *
+	 *     @type array  $gallery_ids     Attachment Ids of images to be included in gallery.
+	 *     @type string $gallery_orderby `orderby` arg for query. Optional.
+	 *     @type string $fullwidth       on|off to determine grid / slider layout
+	 *     @type string $orientation     Orientation of thumbnails (landscape|portrait).
+	 * }
+	 *
+	 * @return array
+	 */
+	public function get_attachments( $args = array() ) {
+		return self::get_gallery( $args );
 	}
 
 	public function get_pagination_alignment() {
@@ -494,7 +522,7 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 		et_pb_responsive_options()->generate_responsive_css( $hover_overlay_color_values, '%%order_class%% .et_overlay', 'border-color', $render_slug, '', 'color' );
 
 		// Get gallery item data
-		$attachments = self::get_gallery( array(
+		$attachments = $this->get_attachments( array(
 			'gallery_ids'     => $gallery_ids,
 			'gallery_orderby' => $gallery_orderby,
 			'fullwidth'       => $fullwidth,
@@ -600,6 +628,15 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 				)
 				: '';
 
+			$image_attrs = array(
+				'alt' => $attachment->post_title,
+			);
+
+			if ( 'on' !== $fullwidth ) {
+				$image_attrs['srcset'] = $attachment->image_src_full[0] . ' 479w, ' . $attachment->image_src_thumb[0] . ' 480w';
+				$image_attrs['sizes']  = '(max-width:479px) 479w, 100vw';
+			}
+
 			$image_output = sprintf(
 				'<a href="%1$s" title="%2$s">
 					%3$s
@@ -607,9 +644,7 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 				</a>',
 				esc_url( $attachment->image_src_full[0] ),
 				esc_attr( $attachment->post_title ),
-				$this->render_image( $attachment->image_src_thumb[0], array(
-					'alt' => $attachment->post_title,
-				), false ),
+				$this->render_image( $attachment->image_src_thumb[0], $image_attrs, false ),
 				( '' !== $hover_icon ? ' et_pb_inline_icon' : '' ),
 				$data_icon,
 				( '' !== $hover_icon_tablet ? ' et_pb_inline_icon_tablet' : '' ),

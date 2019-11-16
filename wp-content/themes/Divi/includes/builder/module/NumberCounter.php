@@ -227,6 +227,11 @@ class ET_Builder_Module_Number_Counter extends ET_Builder_Module {
 				'data-number-separator' => '{{number}}',
 				'data-percent-sign'     => '{{percent_sign}}',
 			),
+			'classes' => array(
+				'et_pb_with_title' => array(
+					'title' => '__not_empty',
+				),
+			)
 		) ) ;
 
 		$output = sprintf(

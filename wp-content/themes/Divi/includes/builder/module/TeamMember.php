@@ -513,8 +513,16 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 			'content' => '{{content}}',
 		) );
 
+		$muti_view_data_attr = $multi_view->render_attrs( array(
+			'classes' => array(
+				'et_pb_team_member_no_image' => array(
+					'image' => '__empty',
+				),
+			)
+		) );
+
 		$output = sprintf(
-			'<div%3$s class="%4$s"%10$s%11$s>
+			'<div%3$s class="%4$s"%10$s%11$s%12$s>
 				%9$s
 				%8$s
 				%2$s
@@ -535,7 +543,8 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 			$video_background,
 			$parallax_image_background,
 			et_core_esc_previously( $data_background_layout ), // #10
-			et_core_esc_previously( $data_background_layout_hover )
+			et_core_esc_previously( $data_background_layout_hover ),
+			et_core_esc_previously( $muti_view_data_attr )
 		);
 
 		return $output;

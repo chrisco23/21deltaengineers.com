@@ -17,10 +17,13 @@ class ET_Builder_Module_Field_TextShadow extends ET_Builder_Module_Field_Base {
 	 */
 	public $properties;
 
+	protected $template;
+
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
+		$this->template         = et_pb_option_template();
 		$this->is_plugin_active = et_is_builder_plugin_active();
 		$this->properties       = array(
 			'horizontal_length',
@@ -28,6 +31,7 @@ class ET_Builder_Module_Field_TextShadow extends ET_Builder_Module_Field_Base {
 			'blur_strength',
 			'color',
 		);
+		$this->set_template();
 	}//end __construct()
 
 	/**
@@ -157,6 +161,34 @@ class ET_Builder_Module_Field_TextShadow extends ET_Builder_Module_Field_Base {
 	}//end get_defaults()
 
 	/**
+	 * Set option template for Text Shadow
+	 *
+	 * @since 3.28
+	 *
+	 * @return void
+	 */
+	public function set_template() {
+		$template = $this->template;
+		if ( $template->is_enabled() && ! $template->has( 'text_shadow' ) ) {
+			$template->add(
+				'text_shadow',
+				$this->get_fields( $template->placeholders( array(
+					'label'               => null,
+					'prefix'              => null,
+					'tab_slug'            => null,
+					'toggle_slug'         => null,
+					'sub_toggle'          => null,
+					'option_category'     => null,
+					'depends_show_if'     => null,
+					'depends_show_if_not' => null,
+					'show_if'             => null,
+					'show_if_not'         => null,
+				) ) )
+			);
+		}
+	}
+
+	/**
 	 * Returns fields definition.
 	 *
 	 * @since 3.23 Add mobile_options attributes for all fields to support responsive settings, except
@@ -178,9 +210,15 @@ class ET_Builder_Module_Field_TextShadow extends ET_Builder_Module_Field_Base {
 				'option_category'     => 'configuration',
 				'depends_show_if'     => '',
 				'depends_show_if_not' => '',
+				'show_if'             => '',
+				'show_if_not'         => '',
 			),
 			$args
 		);
+
+		if ( $this->template->is_enabled() && $this->template->has( 'text_shadow' ) ) {
+			return $this->template->create( 'text_shadow', $config );
+		}
 
 		$prefix             = $config['prefix'];
 
@@ -347,6 +385,14 @@ class ET_Builder_Module_Field_TextShadow extends ET_Builder_Module_Field_Base {
 		}
 
 		// add conditional settings if defined
+		if ( '' !== $config['show_if'] ) {
+			$fields[ $text_shadow_style ]['show_if'] = $config['show_if'];
+		}
+
+		if ( '' !== $config['show_if_not'] ) {
+			$fields[ $text_shadow_style ]['show_if_not'] = $config['show_if_not'];
+		}
+
 		if ( '' !== $config['depends_show_if'] ) {
 			$fields[ $text_shadow_style ]['depends_show_if'] = $config['depends_show_if'];
 		}
@@ -420,8 +466,8 @@ class ET_Builder_Module_Field_TextShadow extends ET_Builder_Module_Field_Base {
 				"{$prefix}text_shadow_blur_strength",
 				"{$prefix}text_shadow_color",
 			) );
-			
-			// Bail early 
+
+			// Bail early
 			if ( ! $is_any_shadow_responsive ) {
 				return '';
 			}
@@ -434,7 +480,7 @@ class ET_Builder_Module_Field_TextShadow extends ET_Builder_Module_Field_Base {
 			// As default, we will return desktop value.
 			$prop  = "{$prefix}text_shadow_{$property}";
 			$value = $utils->array_get( $all_values, $prop, '' );
-			
+
 			if ( $is_any_shadow_responsive ) {
 				// If current device is mobile (responsive settings is enabled already checked above),
 				// return any value exist.
@@ -455,7 +501,7 @@ class ET_Builder_Module_Field_TextShadow extends ET_Builder_Module_Field_Base {
 
 	/**
 	 * Adds CSS rule.
-	 * 
+	 *
 	 * @since 3.23 Add responsive settings support to render tablet and phone styles.
 	 *
 	 * @param ET_Builder_Element $module Module object.

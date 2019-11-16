@@ -743,7 +743,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 				$gutter_width = '0' === $gutter_width ? '1' : $gutter_width; // set the gutter to 1 if 0 entered by user
 				$gutter_class .= ' et_pb_gutters' . $gutter_width;
 
-				if ( et_builder_is_hover_enabled( 'gutter_width', $this->props ) ) {
+				if ( et_builder_is_hover_enabled( 'gutter_width', $this->props ) && ! empty( $gutter_width_hover ) && $gutter_width !== $gutter_width_hover ) {
 					$gutter_class .= ' et_pb_gutter_hover';
 
 					$gutter_hover_data = sprintf(
@@ -1568,7 +1568,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 			$gutter_width = '0' === $gutter_width ? '1' : $gutter_width; // set the gutter width to 1 if 0 entered by user
 			$this->add_classname( 'et_pb_gutters' . $gutter_width );
 
-			if ( et_builder_is_hover_enabled( 'gutter_width', $this->props ) ) {
+			if ( et_builder_is_hover_enabled( 'gutter_width', $this->props ) && ! empty( $gutter_width_hover ) && $gutter_width !== $gutter_width_hover ) {
 				$this->add_classname( 'et_pb_gutter_hover' );
 
 				$gutter_hover_data = sprintf(
@@ -2069,7 +2069,7 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 			$gutter_width = '0' === $gutter_width ? '1' : $gutter_width; // set the gutter to 1 if 0 entered by user
 			$this->add_classname( 'et_pb_gutters' . $gutter_width );
 
-			if ( et_builder_is_hover_enabled( 'gutter_width', $this->props ) ) {
+			if ( et_builder_is_hover_enabled( 'gutter_width', $this->props ) && ! empty( $gutter_width_hover ) && $gutter_width !== $gutter_width_hover ) {
 				$this->add_classname( 'et_pb_gutter_hover' );
 
 				$gutter_hover_data = sprintf(

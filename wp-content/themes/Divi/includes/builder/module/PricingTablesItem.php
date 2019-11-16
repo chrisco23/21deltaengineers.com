@@ -459,13 +459,13 @@ class ET_Builder_Module_Pricing_Tables_Item extends ET_Builder_Module {
 		// Header Background Color. In the parent item, header BG color doesn't has higher selector
 		// because it uses .et_pb_pricing_table as hover location. So, we should append the same
 		// parent class here because there is no class can be used to make current selector higher.
-		et_pb_responsive_options()->generate_responsive_css( $header_background_color_values, '%%order_class%%.et_pb_pricing_table .et_pb_pricing_heading', 'background-color', $render_slug, '', 'color' );
+		et_pb_responsive_options()->generate_responsive_css( $header_background_color_values, '.et_pb_pricing %%order_class%%.et_pb_pricing_table .et_pb_pricing_heading', 'background-color', $render_slug, ' !important;', 'color' );
 
 		if ( et_builder_is_hover_enabled( 'header_background_color', $this->props ) ) {
 			ET_Builder_Element::set_style( $render_slug, array(
 				'selector'    => '.et_pb_pricing %%order_class%%.et_pb_pricing_table:hover .et_pb_pricing_heading',
 				'declaration' => sprintf(
-					'background-color: %1$s;',
+					'background-color: %1$s !important;',
 					esc_html( $header_background_color_hover )
 				),
 			) );
@@ -519,8 +519,12 @@ class ET_Builder_Module_Pricing_Tables_Item extends ET_Builder_Module {
 			'custom_icon_phone'   => $custom_table_icon_phone,
 			'url_new_window'      => $url_new_window,
 			'display_button'      => ( '' !== $button_url && $multi_view->has_value( 'button_text' ) ),
-			'multi_view_data'  => $multi_view->render_attrs( array(
-				'content' => '{{button_text}}',
+			'multi_view_data'     => $multi_view->render_attrs( array(
+				'content'    => '{{button_text}}',
+				'visibility' => array(
+					'button_text' => '__not_empty',
+					'button_url'  => '__not_empty',
+				),
 			) ),
 		) );
 
@@ -619,7 +623,7 @@ class ET_Builder_Module_Pricing_Tables_Item extends ET_Builder_Module {
 	 * Filter multi view value.
 	 *
 	 * @since 3.27.1
-	 * 
+	 *
 	 * @see ET_Builder_Module_Helper_MultiViewOptions::filter_value
 	 *
 	 * @param mixed $raw_value Props raw value.
@@ -637,10 +641,11 @@ class ET_Builder_Module_Pricing_Tables_Item extends ET_Builder_Module {
 	 * @return mixed
 	 */
 	public function multi_view_filter_value( $raw_value, $args, $multi_view ) {
-		$name = isset( $args['name'] ) ? $args['name'] : '';
-		$mode = isset( $args['mode'] ) ? $args['mode'] : '';
+		$name    = isset( $args['name'] ) ? $args['name'] : '';
+		$mode    = isset( $args['mode'] ) ? $args['mode'] : '';
+		$context = isset( $args['context'] ) ? $args['context'] : '';
 
-		if ( $raw_value && 'content' === $name ) {
+		if ( $raw_value && 'content' === $name && 'content' === $context ) {
 			return do_shortcode( et_pb_fix_shortcodes( et_pb_extract_items( $raw_value ) ) );
 		}
 
@@ -653,7 +658,7 @@ class ET_Builder_Module_Pricing_Tables_Item extends ET_Builder_Module {
 			'button_text',
 		);
 
-		if ( $raw_value && in_array( $name, $fields_need_escape, true ) ) {
+		if ( $raw_value && 'content' === $context && in_array( $name, $fields_need_escape, true ) ) {
 			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
 		}
 

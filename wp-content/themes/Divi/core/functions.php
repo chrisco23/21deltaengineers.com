@@ -511,7 +511,11 @@ if ( ! function_exists( 'et_core_register_admin_assets' ) ) :
  */
 function et_core_register_admin_assets() {
 	wp_register_style( 'et-core-admin', ET_CORE_URL . 'admin/css/core.css', array(), ET_CORE_VERSION );
-	wp_register_script( 'et-core-admin', ET_CORE_URL . 'admin/js/core.js', array(), ET_CORE_VERSION );
+	wp_register_script( 'et-core-admin', ET_CORE_URL . 'admin/js/core.js', array(
+			'jquery',
+			'jquery-ui-tabs',
+			'jquery-form'
+	), ET_CORE_VERSION );
 	wp_localize_script( 'et-core-admin', 'etCore', array(
 		'ajaxurl' => is_ssl() ? admin_url( 'admin-ajax.php' ) : admin_url( 'admin-ajax.php', 'http' ),
 		'text'    => array(
@@ -686,7 +690,7 @@ function et_core_setup( $deprecated = '' ) {
 	}
 
 	$core_path = _et_core_normalize_path( trailingslashit( dirname( __FILE__ ) ) );
-	$theme_dir = _et_core_normalize_path( realpath( get_template_directory() ) );
+	$theme_dir = _et_core_normalize_path( trailingslashit( realpath( get_template_directory() ) ) );
 
 	if ( 0 === strpos( $core_path, $theme_dir ) ) {
 		$url = get_template_directory_uri() . '/core/';
@@ -785,6 +789,7 @@ function et_new_core_setup() {
 
 	require_once ET_CORE_PATH . 'components/Updates.php';
 	require_once ET_CORE_PATH . 'components/init.php';
+	require_once ET_CORE_PATH . 'php_functions.php';
 	require_once ET_CORE_PATH . 'wp_functions.php';
 
 	if ( $has_php_52x ) {
@@ -878,18 +883,28 @@ if ( ! function_exists( 'et_core_is_safe_mode_active' ) ):
 /**
  * Check whether the Support Center's Safe Mode is active
  *
+ * @param false|string $product The ET theme or plugin checking for Safe Mode status.
+ *
  * @since ?.?
  *
- * @see ET_Core_Support_Center::toggle_safe_mode
+ * @see ET_Core_SupportCenter::toggle_safe_mode
  *
  * @return bool
  */
-function et_core_is_safe_mode_active() {
-	$is_safe_mode_active = false;
-	if ( 'on' === get_user_meta( get_current_user_id(), '_et_support_center_safe_mode', true ) ) {
-		$is_safe_mode_active = true;
+function et_core_is_safe_mode_active($product=false) {
+	// If we're checking against a particular product, return false if the product-specific usermeta doesn't match
+	if ( $product ) {
+		$product = esc_attr( $product );
+		if ( $product === get_user_meta( get_current_user_id(), '_et_support_center_safe_mode_product', true ) ) {
+			return true;
+		}
+		return false;
 	};
-	return $is_safe_mode_active;
+
+	if ( 'on' === get_user_meta( get_current_user_id(), '_et_support_center_safe_mode', true ) ) {
+		return true;
+	};
+	return false;
 }
 endif;
 
@@ -932,6 +947,32 @@ function et_core_load_component( $components ) {
 }
 endif;
 
+
+/**
+ * Is WooCommerce plugin active?
+ *
+ * @return bool  True - if the plugin is active
+ */
+if ( ! function_exists( 'et_is_woocommerce_plugin_active' ) ):
+function et_is_woocommerce_plugin_active() {
+	return class_exists( 'WooCommerce' );
+}
+endif;
+
+if ( ! function_exists( 'et_is_product_taxonomy' ) ):
+/**
+ * Wraps {@see is_product_taxonomy()} to check for its existence before calling.
+ *
+ * @since 4.0
+ *
+ * @return bool
+ */
+function et_is_product_taxonomy() {
+	return function_exists( 'is_product_taxonomy' ) && is_product_taxonomy();
+}
+endif;
+
+
 if ( ! function_exists( 'et_core_add_allowed_protocols' ) ) :
 /**
  * Extend the whitelist of allowed URL protocols
@@ -952,6 +993,7 @@ function et_core_add_allowed_protocols( $protocols = array() ) {
 }
 add_filter( 'kses_allowed_protocols', 'et_core_add_allowed_protocols' );
 endif;
+
 
 if ( ! function_exists( 'et_is_responsive_images_enabled' ) ):
 /**
@@ -1151,21 +1193,89 @@ if ( ! function_exists( 'et_get_attachment_size_by_url' ) ) :
  * @return array|string Detected image size width and height or 'full' on failure.
  */
 function et_get_attachment_size_by_url( $url, $default_size = 'full' ) {
+	$cache = ET_Core_Cache_File::get( 'attachment_size_by_url' );
+
 	// Normalize image URL.
 	$url = et_attachment_normalize_url( $url );
+
+	$cache_key = $url ? $url : 'empty-url';
+
+	if ( isset( $cache[ $cache_key ] ) ) {
+		return $cache[ $cache_key ];
+	}
 
 	// Bail eraly if URL is invalid.
 	if ( ! $url ) {
 		return $default_size;
 	}
 
-	// Get the image width and height.
-	// Example: https://regex101.com/r/7JwGz7/1.
-	if ( preg_match( '/-(\d+)x(\d+)\.(jpg|jpeg|gif|png)$/', $url, $match ) ) {
-		return array( $match[1], $match[2] );
+	$attachment_id = et_get_attachment_id_by_url( $url );
+
+	if ( ! $attachment_id ) {
+		return $default_size;
 	}
 
-	return $default_size;
+	$metadata = wp_get_attachment_metadata( $attachment_id );
+
+	if ( ! $metadata ) {
+		return $default_size;
+	}
+
+	$size = $default_size;
+
+	if ( strpos( $url, $metadata['file'] ) === ( strlen( $url ) - strlen( $metadata['file'] ) ) ) {
+		$size = array( $metadata['width'], $metadata['height'] );
+	} else if ( preg_match( '/-(\d+)x(\d+)\.(jpg|jpeg|gif|png)$/', $url, $match ) ) {
+		// Get the image width and height.
+		// Example: https://regex101.com/r/7JwGz7/1.
+		$size = array( $match[1], $match[2] );
+	}
+
+	$cache[ $cache_key ] = $attachment_id;
+	ET_Core_Cache_File::set( 'attachment_size_by_url', $cache );
+
+	return $size;
+}
+endif;
+
+if ( ! function_exists( 'et_get_image_srcset_sizes' ) ) :
+/**
+ * Get image srcset & sizes attributes.
+ *
+ * @since 3.29.3
+ *
+ * @param string $img_src Image source attribute value.
+ *
+ * @return (array|bool) Associative array of srcset & sizes attributes. False on failure.
+ */
+function et_get_image_srcset_sizes( $img_src ) {
+	$cache = ET_Core_Cache_File::get( 'image_srcset_sizes' );
+
+	$cache_key = $img_src ? $img_src : 'empty-src';
+
+	if ( isset( $cache[ $cache_key ] ) ) {
+		return $cache[ $cache_key ];
+	}
+
+	$attachment_id = et_get_attachment_id_by_url( $img_src );
+	if ( ! $attachment_id ) {
+		return false;
+	}
+
+	$image_size = et_get_attachment_size_by_url( $img_src );
+	if ( ! $image_size ) {
+		return false;
+	}
+
+	$data = array(
+		'srcset' => wp_get_attachment_image_srcset( $attachment_id, $image_size ),
+		'sizes'  => wp_get_attachment_image_sizes( $attachment_id, $image_size ),
+	);
+
+	$cache[ $cache_key ] = $data;
+	ET_Core_Cache_File::set( 'image_srcset_sizes', $cache );
+
+	return $data;
 }
 endif;
 
@@ -1235,3 +1345,74 @@ function et_get_src_from_img_tag( $image ) {
 	return false;
 }
 endif;
+
+if ( ! function_exists( 'et_core_enqueue_js_admin' ) ) :
+function et_core_enqueue_js_admin() {
+	global $themename;
+
+	$epanel_jsfolder = ET_CORE_URL . 'admin/js';
+
+	et_core_load_main_fonts();
+
+	wp_register_script( 'epanel_colorpicker', $epanel_jsfolder . '/colorpicker.js', array(), et_get_theme_version() );
+	wp_register_script( 'epanel_eye', $epanel_jsfolder . '/eye.js', array(), et_get_theme_version() );
+	wp_register_script( 'epanel_checkbox', $epanel_jsfolder . '/checkbox.js', array(), et_get_theme_version() );
+	wp_enqueue_script( 'wp-color-picker' );
+	wp_enqueue_style( 'wp-color-picker' );
+
+	$wp_color_picker_alpha_uri = defined( 'ET_BUILDER_URI' ) ? ET_BUILDER_URI . '/scripts/ext/wp-color-picker-alpha.min.js' : $epanel_jsfolder . '/wp-color-picker-alpha.min.js';
+
+	wp_enqueue_script( 'wp-color-picker-alpha', $wp_color_picker_alpha_uri, array(
+		'jquery',
+		'wp-color-picker',
+	), et_get_theme_version(), true );
+
+	if ( ! wp_script_is( 'epanel_functions_init', 'enqueued' ) ) {
+		wp_enqueue_script( 'epanel_functions_init', $epanel_jsfolder . '/functions-init.js', array(
+			'jquery',
+			'jquery-ui-tabs',
+			'jquery-form',
+			'epanel_colorpicker',
+			'epanel_eye',
+			'epanel_checkbox',
+			'wp-color-picker-alpha',
+		), et_get_theme_version() );
+		wp_localize_script( 'epanel_functions_init', 'ePanelishSettings', array(
+			'clearpath'       => get_template_directory_uri() . '/epanel/images/empty.png',
+			'epanelish_nonce' => wp_create_nonce( 'epanelish_nonce' ),
+			'help_label'      => esc_html__( 'Help', $themename ),
+			'et_core_nonces'  => et_core_get_nonces(),
+		) );
+	}
+
+	// Use WP 4.9 CodeMirror Editor for some fields
+	if ( function_exists( 'wp_enqueue_code_editor' ) ) {
+		wp_enqueue_code_editor(
+			array(
+				'type' => 'text/css',
+			)
+		);
+		// Required for Javascript mode
+		wp_enqueue_script( 'jshint' );
+		wp_enqueue_script( 'htmlhint' );
+	}
+}
+endif;
+
+/**
+ * Get ET account information.
+ *
+ * @since 4.0
+ *
+ * @return array
+ */
+function et_core_get_et_account() {
+	$utils           = ET_Core_Data_Utils::instance();
+	$updates_options = get_site_option( 'et_automatic_updates_options', array() );
+
+	return array(
+		'et_username' => $utils->array_get( $updates_options, 'username', '' ),
+		'et_api_key'  => $utils->array_get( $updates_options, 'api_key', '' ),
+		'status'      => get_site_option( 'et_account_status', 'not_active' ),
+	);
+}

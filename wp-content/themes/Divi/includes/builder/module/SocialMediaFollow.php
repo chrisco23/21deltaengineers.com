@@ -320,7 +320,7 @@ class ET_Builder_Module_Social_Media_Follow extends ET_Builder_Module {
 			}
 
 			// Icon hover styles.
-			if ( et_builder_is_hover_enabled( 'icon_font_size', $this->props ) && '' !== $icon_font_size_hover ) {
+			if ( et_builder_is_hover_enabled( 'icon_font_size', $this->props ) && ! empty( $icon_font_size_hover ) ) {
 				$icon_font_size_hover_int    = (int) $icon_font_size_hover;
 				$icon_font_size_hover_unit   = str_replace( $icon_font_size_hover_int, '', $icon_font_size_hover );
 				$icon_font_size_hover_double = 0 < $icon_font_size_hover_int ? $icon_font_size_hover_int * 2 : 0;
@@ -382,8 +382,16 @@ class ET_Builder_Module_Social_Media_Follow extends ET_Builder_Module {
 			);
 		}
 
+		$muti_view_data_attr = $multi_view->render_attrs( array(
+			'classes' => array(
+				'has_follow_button' => array(
+					'follow_button' => 'on',
+				),
+			)
+		) );
+
 		$output = sprintf(
-			'<ul%3$s class="%2$s"%6$s%7$s>
+			'<ul%3$s class="%2$s"%6$s%7$s%8$s>
 				%5$s
 				%4$s
 				%1$s
@@ -394,7 +402,8 @@ class ET_Builder_Module_Social_Media_Follow extends ET_Builder_Module {
 			$video_background,
 			$parallax_image_background, // #5
 			et_core_esc_previously( $data_background_layout ),
-			et_core_esc_previously( $data_background_layout_hover )
+			et_core_esc_previously( $data_background_layout_hover ),
+			et_core_esc_previously( $muti_view_data_attr )
 		);
 
 		return $output;

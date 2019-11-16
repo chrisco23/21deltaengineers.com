@@ -2,14 +2,14 @@
 /**
  * Migration process to migrate Text Text Alignment into Text Orientation of Text module.
  *
- * @since ??
+ * @since 3.27.4
  */
 class ET_Builder_Module_Settings_Migration_TextAlignment extends ET_Builder_Module_Settings_Migration {
 
 	/**
 	 * Migration Version
 	 *
-	 * @since ??
+	 * @since 3.27.4
 	 *
 	 * @var string
 	 */
@@ -22,7 +22,7 @@ class ET_Builder_Module_Settings_Migration_TextAlignment extends ET_Builder_Modu
 	 * - key as new field
 	 * - value consists affected fields as old field and module location
 	 *
-	 * @since ??
+	 * @since 3.27.4
 	 *
 	 * @return array New and old fields need to be migrated.
 	 */
@@ -40,7 +40,7 @@ class ET_Builder_Module_Settings_Migration_TextAlignment extends ET_Builder_Modu
 	/**
 	 * Get all modules affected.
 	 *
-	 * @since ??
+	 * @since 3.27.4
 	 *
 	 * @return array
 	 */

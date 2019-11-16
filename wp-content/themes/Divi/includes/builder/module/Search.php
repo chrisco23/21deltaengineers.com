@@ -52,7 +52,7 @@ class ET_Builder_Module_Search extends ET_Builder_Module {
 			),
 			'margin_padding' => array(
 				'css'            => array(
-					'main'      => "{$this->main_css_element} input.et_pb_s",
+					'padding'   => "{$this->main_css_element} input.et_pb_s",
 					'important' => 'all',
 				),
 				'custom_padding' => array(
@@ -349,34 +349,6 @@ class ET_Builder_Module_Search extends ET_Builder_Module {
 			) );
 		}
 
-		$custom_margin = explode('|', $this->props['custom_margin']);
-		$has_custom_margin = isset( $custom_margin[0], $custom_margin[1], $custom_margin[2],  $custom_margin[3] );
-		$custom_margin_units = array();
-
-		if ( $has_custom_margin ) {
-			$button_top    = $custom_margin[0];
-			$button_bottom = $custom_margin[2];
-			$custom_margin_left_unit = et_pb_get_value_unit( $custom_margin[3] );
-			$button_right  = ( 0 - floatval( $custom_margin[3] ) ) . $custom_margin_left_unit;
-
-			$custom_margin_units = array(
-				et_pb_get_value_unit( $custom_margin[0] ),
-				et_pb_get_value_unit( $custom_margin[1] ),
-				et_pb_get_value_unit( $custom_margin[2] ),
-				$custom_margin_left_unit,
-			);
-
-			ET_Builder_Element::set_style( $render_slug, array(
-				'selector'    => '%%order_class%%.et_pb_search input.et_pb_searchsubmit',
-				'declaration' => sprintf(
-					'min-height: 0 !important; top: %1$s; right: %2$s; bottom: %3$s;',
-					esc_html( $button_top ),
-					esc_html( $button_right ),
-					esc_html( $button_bottom )
-				),
-			) );
-		}
-
 		// Module classnames
 		$this->add_classname( array(
 			"et_pb_bg_layout_{$background_layout}",
@@ -393,10 +365,6 @@ class ET_Builder_Module_Search extends ET_Builder_Module {
 
 		if ( 'on' !== $show_button ) {
 			$this->add_classname( 'et_pb_hide_search_button' );
-		}
-
-		if ( ! empty( $custom_margin_units ) && in_array( '%', $custom_margin_units ) ) {
-			$this->add_classname( 'et_pb_search_percentage_custom_margin' );
 		}
 
 		$data_background_layout       = '';

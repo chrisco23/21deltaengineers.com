@@ -226,7 +226,7 @@ class ET_Builder_Module_Helper_ResponsiveOptions {
 	/**
 	 * Returns the field responsive name by adding the `_tablet` or `_phone` suffix if it exists.
 	 *
-	 * @since ??
+	 * @since 3.27.4
 	 *
 	 * @param  string $name   Setting name.
 	 * @param  string $device Device name.
@@ -452,7 +452,7 @@ class ET_Builder_Module_Helper_ResponsiveOptions {
 	 * This function is added to summarize how we fetch desktop/hover/tablet/phone value. This
 	 * function still uses get_any_value to get current device values.
 	 *
-	 * @since ??
+	 * @since 3.27.4
 	 *
 	 * @param array   $attrs          List of all attributes and values.
 	 * @param string  $composite_name Composite property name.
@@ -488,7 +488,7 @@ class ET_Builder_Module_Helper_ResponsiveOptions {
 	 * This function is added to summarize how we fetch desktop/hover, tablet, and phone values. This
 	 * function still use get_any_value to get current device values.
 	 *
-	 * @since ??
+	 * @since 3.27.4
 	 *
 	 * @param array   $attrs          List of all attributes and values.
 	 * @param string  $composite_name Composite property name.
@@ -689,7 +689,7 @@ class ET_Builder_Module_Helper_ResponsiveOptions {
 	 * @return bool
 	 */
 	public function is_enabled( $setting, $props ) {
-		$value = et_builder_module_prop( $this->get_last_edited_field( $setting ), $props, '' );
+		$value = et_builder_module_prop( $this->get_last_edited_field( $this->get_field_base_name( $setting ) ), $props, '' );
 
 		return et_pb_get_responsive_status( $value );
 	}
@@ -772,6 +772,32 @@ class ET_Builder_Module_Helper_ResponsiveOptions {
 		$mode  = et_()->array_get( explode( '|', $value ), '[1]' );
 
 		return $this->validate_mode( $mode ) ? $mode : $this->get_default_mode();
+	}
+
+	/**
+	 * Get breakpoint based on device name.
+	 *
+	 * @since 4.0
+	 *
+	 * @param  string $device
+	 *
+	 * @return string
+	 */
+	public function get_breakpoint_by_device( $device = 'desktop' ) {
+		switch ( $device ) {
+			case 'desktop_only' :
+				return 'min_width_981';
+			case 'tablet' :
+				return 'max_width_980';
+			case 'tablet_only' :
+				return '768_980';
+			case 'desktop_tablet_only' :
+				return 'min_width_768';
+			case 'phone' :
+				return 'max_width_767';
+			default :
+				return 'general';
+		}
 	}
 
 	/**
@@ -1286,6 +1312,144 @@ class ET_Builder_Module_Helper_ResponsiveOptions {
 
 		return $new_value;
 	}
+
+	public function create( $additional_options ) {
+		// Add hover field indication
+		$additional_options['hover_enabled'] = array(
+			'type'    => 'skip',
+			'default' => 0,
+		);
+
+		// Generate responsive fields for additional options (Design).
+		// There are 4 types where the mobile_options exist on the options.
+		// 1. Exist on the option definition.
+		// 2. Exist on the computed field type, just like point 1 but we threat it differently
+		//    because there are some properties need to be updated and added.
+		// 3. Exist on the background-field.
+		// 4. Exist on the composite field.
+		foreach ( $additional_options as $field_name => $field ) {
+			$is_mobile_options = isset( $field['mobile_options'] ) && $field['mobile_options'];
+			$is_hover          = isset( $field['hover'] ) && 'tabs' === $field['hover'];
+			$field_type        = isset( $field['type'] ) ? $field['type'] : '';
+			$field_context     = isset( $field['context'] ) ? $field['context'] : '';
+			$field_last_edited = isset( $field['last_edited'] ) ? $field['last_edited'] : '';
+
+			// Mobile options property maybe exist on the field.
+			if ( $is_mobile_options ) {
+				// Get tab and toggle slugs value.
+				$tab_slug    = isset( $field['tab_slug'] ) ? $field['tab_slug'] : '';
+				$toggle_slug = isset( $field['toggle_slug'] ) ? $field['toggle_slug'] : '';
+
+				// 2. Mobile options property for computed fields.
+				if ( 'computed' === $field_type ) {
+					// Computed depends on. Add suffix after depends on info.
+					if ( ! empty( $field['computed_depends_on'] ) ) {
+						$computed_depends_on = $field['computed_depends_on'];
+						foreach ( $computed_depends_on as $depends_value ) {
+							if ( $is_hover ) {
+								array_push( $field['computed_depends_on'], "{$depends_value}_tablet", "{$depends_value}_phone", "{$depends_value}__hover" );
+							} else {
+								array_push( $field['computed_depends_on'], "{$depends_value}_tablet", "{$depends_value}_phone" );
+							}
+						}
+					}
+
+					// Computed minimum. Add suffix after minimum info.
+					if ( ! empty( $field['computed_minimum'] ) ) {
+						$computed_minimum = $field['computed_minimum'];
+						foreach ( $computed_minimum as $minimum_value ) {
+							if ( $is_hover ) {
+								array_push( $field['computed_minimum'], "{$minimum_value}_tablet", "{$minimum_value}_phone", "{$minimum_value}__hover" );
+							} else {
+								array_push( $field['computed_minimum'], "{$minimum_value}_tablet", "{$minimum_value}_phone" );
+							}
+						}
+					}
+
+					$additional_options["{$field_name}"] = $field;
+
+					continue;
+				}
+
+				// 3. Mobile options property maybe exist under background field.
+				if ( 'background-field' === $field_type ) {
+					// Just in case current field is background-field and the mobile_options
+					// attributes are located in the fields. Ensure background fields is exist.
+					if ( ! empty( $field['background_fields'] ) ) {
+						// Fetch the fields and check for mobile_options.
+						foreach ( $field['background_fields'] as $background_name => $background_field ) {
+							if ( isset( $background_field['mobile_options'] ) && $background_field['mobile_options'] ) {
+								// Get tab and toggle slugs value.
+								$tab_slug    = isset( $background_field['tab_slug'] ) ? $background_field['tab_slug'] : '';
+								$toggle_slug = isset( $background_field['toggle_slug'] ) ? $background_field['toggle_slug'] : '';
+
+								// Add fields with responsive suffix for each devices.
+								$additional_options = array_merge(
+									$additional_options,
+									et_pb_responsive_options()->generate_responsive_fields( $background_name, $toggle_slug, $tab_slug )
+								);
+							}
+						}
+					}
+
+					continue;
+				}
+
+				// 1. Mobile options property added directly on options definition. Add fields
+				//    with responsive suffix for each devices.
+				$additional_options = array_merge(
+					$additional_options,
+					et_pb_responsive_options()->generate_responsive_fields( $field_name, $toggle_slug, $tab_slug, $field )
+				);
+
+				// Additional last edited field just in case we need more last edited field.
+				if ( ! empty( $field_last_edited ) ) {
+					$additional_options["{$field_last_edited}_last_edited"] = array(
+						'type'        => 'skip',
+						'tab_slug'    => $tab_slug,
+						'toggle_slug' => $toggle_slug,
+					);
+				}
+
+				continue;
+			}
+
+			// 4. Mobile options property maybe exist under composite field.
+			if ( 'composite' === $field_type ) {
+				// Just in case current field is composite and the mobile_options attributes
+				// are located in the controls. Ensure composite structure is exist.
+				$composite_structure = isset( $field['composite_structure'] ) ? $field['composite_structure'] : array();
+				if ( empty( $composite_structure ) ) {
+					continue;
+				}
+
+				foreach ( $composite_structure as $composite_field ) {
+					// Ensure composite field controls is exist and not empty.
+					$composite_field_controls = isset( $composite_field['controls'] ) ? $composite_field['controls'] : array();
+					if ( empty( $composite_field_controls ) ) {
+						continue;
+					}
+
+					// Fetch the controls and check for mobile_options.
+					foreach ( $composite_field_controls as $control_name => $control ) {
+						if ( isset( $control['mobile_options'] ) && $control['mobile_options'] ) {
+							// Get tab and toggle slugs value.
+							$tab_slug    = isset( $control['tab_slug'] ) ? $control['tab_slug'] : '';
+							$toggle_slug = isset( $control['toggle_slug'] ) ? $control['toggle_slug'] : '';
+
+							// Add fields with responsive suffix for each devices.
+							$additional_options = array_merge(
+								$additional_options,
+								et_pb_responsive_options()->generate_responsive_fields( $control_name, $toggle_slug, $tab_slug )
+							);
+						}
+					}
+				}
+			}
+		}
+		return $additional_options;
+	}
+
 }
 
 /**

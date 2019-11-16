@@ -57,8 +57,79 @@ function et_fb_comments_submit_button( $submit_button ) {
 		);
 }
 
+/**
+ * Generate custom comments number for Comments Module preview in Theme Builder.
+ * 
+ * @return string
+ */
+function et_builder_set_comments_number() {
+	return '12';
+}
+
+/**
+ * Generate Dummy comment for Comments Module preview in Theme Builder.
+ * 
+ * @return WP_Comment[]
+ */
+function et_builder_add_fake_comments() {
+	return array( new WP_Comment( (object) array(
+		'comment_author'       => 'Jane Doe',
+		'comment_date'         => '2019-01-01 12:00:00',
+		'comment_content'      => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pulvinar nulla eu purus pharetra mollis. Nullam fringilla, ligula sit amet placerat rhoncus, arcu dui hendrerit ligula, ac rutrum mi neque quis orci. Morbi at tortor non eros feugiat commodo.',
+		'comment_approved'     => '1',
+	) ) );
+}
+
+/**
+ * Append all default comment fields such as Author, Email, Website to Comment field for Comments Module preview in Theme Builder.
+ * @see comment_form() in /wp-includes/comment-template.php
+ * 
+ * @return string
+ */
+function et_builder_set_comment_fields( $field ) {
+	$req        = get_option( 'require_name_email' );
+	$commenter  = wp_get_current_commenter();
+	$html_req   = $req ? " required='required'" : '';
+
+	$author = sprintf(
+		'<p class="comment-form-author"><label for="author">%1$s%2$s</label><input id="author" name="author" type="text" value="%3$s" size="30" maxlength="245"%4$s /></p>',
+		esc_html__( 'Name', 'et_builder' ),
+		$req ? ' <span class="required">*</span>' : '',
+		esc_attr( $commenter['comment_author'] ),
+		et_core_intentionally_unescaped( $html_req, 'fixed_string' )
+	);
+
+	$email = sprintf(
+		'<p class="comment-form-email"><label for="email">%1$s%2$s</label><input id="email" name="email" type="email" value="%3$s" size="30" maxlength="100" aria-describedby="email-notes"%4$s /></p>',
+		esc_html__( 'Email', 'et_builder' ),
+		$req ? ' <span class="required">*</span>' : '',
+		esc_attr( $commenter['comment_author_email'] ),
+		et_core_intentionally_unescaped( $html_req, 'fixed_string' )
+	);
+	
+	$url = sprintf(
+		'<p class="comment-form-url"><label for="url">%1$s</label><input id="url" name="url" type="url" value="%2$s" size="30" maxlength="200" /></p>',
+		esc_html__( 'Website', 'et_builder' ),
+		esc_attr( $commenter['comment_author_url'] )
+	);
+
+	return $field . $author . $email . $url;
+}
+
 // comments template cannot be generated via AJAX so prepare it beforehand
 function et_fb_get_comments_markup() {
+	global $post;
+	
+	$post_type = isset( $post->post_type ) ? $post->post_type : false;
+
+	// Modify the Comments content for the Comment Module preview in TB.
+	if ( et_theme_builder_is_layout_post_type( $post_type ) ) {
+		add_filter( 'comments_open', '__return_true' );
+		add_filter( 'comment_form_field_comment', 'et_builder_set_comment_fields' );
+		add_filter( 'get_comments_number', 'et_builder_set_comments_number' );
+		add_filter( 'comments_array', 'et_builder_add_fake_comments' );
+	}
+
 	// Modify the comments request to make sure it's unique.
 	// Otherwise WP generates SQL error and doesn't allow multiple comments sections on single page
 	add_action( 'pre_get_comments', 'et_fb_modify_comments_request', 1 );
@@ -115,7 +186,6 @@ add_filter( 'heartbeat_settings', 'et_fb_heartbeat_settings', 11 );
 function et_fb_get_dynamic_backend_helpers() {
 	global $post;
 
-	$utils       = ET_Core_Data_Utils::instance();
 	$layout_type = '';
 	$layout_scope = '';
 	$layout_built_for = '';
@@ -139,16 +209,28 @@ function et_fb_get_dynamic_backend_helpers() {
 		et_fb_disable_product_tour();
 	}
 
-	$updates_options = get_site_option( 'et_automatic_updates_options', array() );
-	$et_account      = array(
-		'et_username' => $utils->array_get( $updates_options, 'username', '' ),
-		'et_api_key'  => $utils->array_get( $updates_options, 'api_key', '' ),
-		'status'      => get_site_option( 'et_account_status', 'not_active' ),
-	);
+	$theme_builder_layouts = et_theme_builder_get_template_layouts();
 
 	// In some cases when page created using Polylang
 	// it may have predefined content, so inital content is not empty.
 	$has_predefined_content = isset( $_GET['from_post'] ) && 'empty' !== $_GET['from_post'] ? 'yes' : 'no';
+
+	// Validate the Theme Builder body layout and its post content module, if any.
+	$has_tb_layouts           = ! empty( $theme_builder_layouts );
+	$is_tb_layout             = et_theme_builder_is_layout_post_type( $post_type );
+	$tb_body_layout           = et_()->array_get( $theme_builder_layouts, ET_THEME_BUILDER_BODY_LAYOUT_POST_TYPE, array() );
+	$tb_body_has_post_content = $tb_body_layout && et_theme_builder_layout_has_post_content( $tb_body_layout );
+	$has_valid_body_layout    = ! $has_tb_layouts || $is_tb_layout || $tb_body_has_post_content;
+
+	// Prepare a Post Content module failure notification if there are any
+	// Theme Builder layouts active for the current request.
+	$post_content_failure_notification = '';
+	if ( ! empty( $theme_builder_layouts ) ) {
+		$post_content_failure_notification = et_theme_builder_get_failure_notification_modal(
+			get_the_title( $theme_builder_layouts[ ET_THEME_BUILDER_TEMPLATE_POST_TYPE ] ),
+			$theme_builder_layouts[ ET_THEME_BUILDER_BODY_LAYOUT_POST_TYPE ]['enabled']
+		);
+	}
 
 	$helpers = array(
 		'site_url'                        => get_site_url(),
@@ -158,13 +240,14 @@ function et_fb_get_dynamic_backend_helpers() {
 		'postTitle'                       => $post_title,
 		'postStatus'                      => $post_status,
 		'postType'                        => $post_type,
+		'isCustomPostType'                => et_builder_is_post_type_custom( $post_type ) ? 'yes' : 'no',
 		'layoutType'                      => $layout_type,
 		'layoutScope'                     => $layout_scope,
 		'layoutBuiltFor'                  => $layout_built_for,
 		'hasPredefinedContent'            => $has_predefined_content,
 		'publishCapability'               => ( is_page() && ! current_user_can( 'publish_pages' ) ) || ( ! is_page() && ! current_user_can( 'publish_posts' ) ) ? 'no_publish' : 'publish',
 		'ajaxUrl'                         => is_ssl() ? admin_url( 'admin-ajax.php' ) : admin_url( 'admin-ajax.php', 'http' ),
-		'et_account'                      => $et_account,
+		'et_account'                      => et_core_get_et_account(),
 		'productTourStatus'               => et_builder_is_product_tour_enabled() ? 'on' : 'off',
 		'gutterWidth'                     => (string) et_get_option( 'gutter_width', '3' ),
 		'sectionPadding'                  => et_get_option( 'section_padding', 4 ),
@@ -199,6 +282,7 @@ function et_fb_get_dynamic_backend_helpers() {
 		'conditionalTags'                 => et_fb_conditional_tag_params(),
 		'commentsModuleMarkup'            => et_fb_get_comments_markup(),
 		'failureNotification'             => et_builder_get_failure_notification_modal(),
+		'noBrowserSupportNotification'    => et_builder_get_no_browser_notification_modal(),
 		/**
 		 * Filters taxonomies array.
 		 *
@@ -232,20 +316,64 @@ function et_fb_get_dynamic_backend_helpers() {
 				'date_time' => gmdate( 'Y-m-d H:i', current_time( 'timestamp' ) + ( 30 * 86400 ) ), // next 30 days from current day
 			),
 		),
+		'themeBuilder'                    => array(
+			'isLayout'                         => et_theme_builder_is_layout_post_type( $post_type ),
+			'layoutPostTypes'                  => et_theme_builder_get_layout_post_types(),
+			'bodyLayoutPostType'               => ET_THEME_BUILDER_BODY_LAYOUT_POST_TYPE,
+			'postContentModules'               => et_theme_builder_get_post_content_modules(),
+			'hasValidBodyLayout'               => $has_valid_body_layout,
+			'noPostContentFailureNotification' => $post_content_failure_notification,
+		),
 		'i18n'                            => array(
 			'modules' => array(
 				'login' => array(
 					'loginAs' => sprintf( esc_html__( 'Login as %s', 'et_builder' ), $current_user->display_name ),
 				),
+				'postContent' => array(
+					'placeholder' =>
+						'<div class="et_pb_section"><div class="et_pb_row"><div class="et_pb_column et_pb_column_4_4">
+						<h1>Post Content Heading 1</h1>
+						<p>Post Content Paragraph Text. Lorem ipsum dolor sit amet, <a href="#">consectetur adipiscing elit</a>. Ut vitae congue libero, nec finibus purus. Vestibulum egestas orci vel ornare venenatis. Sed et ultricies turpis. Donec sit amet rhoncus erat. Phasellus volutpat vitae mi eu aliquam.</p>
+						<h2>Post Content Heading 2</h2>
+						<p>Curabitur a commodo sapien, at pellentesque velit. Vestibulum ornare vulputate. Mauris tempus massa orci, vitae lacinia tortor maximus sit amet. In hac habitasse platea dictumst. Praesent id tincidunt dolor. Morbi gravida sapien convallis sapien tempus consequat. </p>
+						<h3>Post Content Heading 3</h3>
+						<blockquote>
+						<p>Post Content Block Quote. Vehicula velit ut felis semper, non convallis dolor fermentum. Sed sapien nisl, tempus ut semper sed, congue quis leo. Integer nec suscipit lacus. Duis luctus eros dui, nec finibus lectus tempor nec. Pellentesque at tincidunt turpis.</p>
+						</blockquote>
+						<img src="' . ET_BUILDER_PLACEHOLDER_LANDSCAPE_IMAGE_DATA . '" alt="" />
+						<h4>Post Content Heading 4</h4>
+						<ul>
+						<li>Vestibulum posuere</li>
+						<li>Mi interdum nunc dignissim auctor</li>
+						<li>Cras non dignissim quam, at volutpat massa</li>
+						</ul>
+						<h5>Post Content Heading 5</h5>
+						<ol>
+						<li>Ut mattis orci in scelerisque tempus</li>
+						<li>Velit urna sagittis arcu</li>
+						<li>Mon ultrices risus lectus non nisl</li>
+						</ol>
+						<h6>Post Content Heading 6</h6>
+						<p>posuere nec lectus sit amet, pulvinar dapibus sapien. Donec placerat erat ac fermentum accumsan. Nunc in scelerisque dui. Etiam vitae purus velit. Proin dictum auctor mi, eu congue odio tempus et. Curabitur ac semper ligula. Praesent purus ligula, ultricies vel porta ac, elementum et lacus. Nullam vitae augue aliquet, condimentum est ut, vehicula sapien. Donec euismod, sem et elementum finibus, lacus mauris pulvinar enim, nec faucibus sapien neque quis sem. Vivamus suscipit tortor eget felis porttitor volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
+						</div></div></div>',
+				),
 			),
 			'modals'  => array(
 				'pageSettings' => array(
-					'title' => ET_Builder_Settings::get_title(),
+					'title'   => ET_Builder_Settings::get_title(),
+					'toggles' => ET_Builder_Settings::get_toggles(),
 				),
 			),
 		),
 		'customDefaults'                  => ET_Builder_Element::get_custom_defaults(),
+		'module_cache_filename_id'        => ET_Builder_Element::get_cache_filename_id( $post_type ),
+	);
 
+	$helpers['css'] = array(
+		'wrapperPrefix'   => ET_BUILDER_CSS_WRAPPER_PREFIX,
+		'containerPrefix' => ET_BUILDER_CSS_CONTAINER_PREFIX,
+		'layoutPrefix'    => ET_BUILDER_CSS_LAYOUT_PREFIX,
+		'prefix'          => ET_BUILDER_CSS_PREFIX,
 	);
 
 	$custom_defaults_unmigrated = et_get_option( ET_Builder_Custom_Defaults_Settings::CUSTOM_DEFAULTS_UNMIGRATED_OPTION, false );
@@ -297,10 +425,14 @@ function et_fb_get_static_backend_helpers($post_type) {
 		'number'   => 50,
 		'button'   => _x( 'Click Here', 'Modules dummy content', 'et_builder' ),
 		'image'    => array(
-			'landscape' => 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA4MCIgaGVpZ2h0PSI1NDAiIHZpZXdCb3g9IjAgMCAxMDgwIDU0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZmlsbD0iI0VCRUJFQiIgZD0iTTAgMGgxMDgwdjU0MEgweiIvPgogICAgICAgIDxwYXRoIGQ9Ik00NDUuNjQ5IDU0MGgtOTguOTk1TDE0NC42NDkgMzM3Ljk5NSAwIDQ4Mi42NDR2LTk4Ljk5NWwxMTYuMzY1LTExNi4zNjVjMTUuNjItMTUuNjIgNDAuOTQ3LTE1LjYyIDU2LjU2OCAwTDQ0NS42NSA1NDB6IiBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz4KICAgICAgICA8Y2lyY2xlIGZpbGwtb3BhY2l0eT0iLjA1IiBmaWxsPSIjMDAwIiBjeD0iMzMxIiBjeT0iMTQ4IiByPSI3MCIvPgogICAgICAgIDxwYXRoIGQ9Ik0xMDgwIDM3OXYxMTMuMTM3TDcyOC4xNjIgMTQwLjMgMzI4LjQ2MiA1NDBIMjE1LjMyNEw2OTkuODc4IDU1LjQ0NmMxNS42Mi0xNS42MiA0MC45NDgtMTUuNjIgNTYuNTY4IDBMMTA4MCAzNzl6IiBmaWxsLW9wYWNpdHk9Ii4yIiBmaWxsPSIjMDAwIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz4KICAgIDwvZz4KPC9zdmc+Cg==',
-			'portrait'  => 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxwYXRoIGZpbGw9IiNFQkVCRUIiIGQ9Ik0wIDBoNTAwdjUwMEgweiIvPgogICAgICAgIDxyZWN0IGZpbGwtb3BhY2l0eT0iLjEiIGZpbGw9IiMwMDAiIHg9IjY4IiB5PSIzMDUiIHdpZHRoPSIzNjQiIGhlaWdodD0iNTY4IiByeD0iMTgyIi8+CiAgICAgICAgPGNpcmNsZSBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIiBjeD0iMjQ5IiBjeT0iMTcyIiByPSIxMDAiLz4KICAgIDwvZz4KPC9zdmc+Cg==',
+			'landscape' => ET_BUILDER_PLACEHOLDER_LANDSCAPE_IMAGE_DATA,
+			'portrait'  => ET_BUILDER_PLACEHOLDER_PORTRAIT_IMAGE_DATA,
 		),
 		'video'    => 'https://www.youtube.com/watch?v=FkQuawiGWUw',
+	);
+
+	$woocommerce_modules_defaults = array(
+		'price' => '',
 	);
 
 	/**
@@ -314,13 +446,18 @@ function et_fb_get_static_backend_helpers($post_type) {
 	 */
 	$helpers = array(
 		'blog_id'                      => get_current_blog_id(),
+		'diviLibraryUrl'               => ET_BUILDER_DIVI_LIBRARY_URL,
 		'autosaveInterval'             => et_builder_autosave_interval(),
-		'isCustomPostType'             => et_builder_is_post_type_custom( $post_type ) ? 'yes' : 'no',
 		'shortcodeObject'              => array(),
 		'autosaveShortcodeObject'      => array(),
 		'tinymceSkinUrl'               => ET_FB_ASSETS_URI . '/vendors/tinymce-skin',
 		'tinymceCSSFiles'              => esc_url( includes_url( 'js/tinymce' ) . '/skins/wordpress/wp-content.css' ),
 		'images_uri'                   => ET_BUILDER_URI .'/images',
+		'optionTemplate'               => array(
+			'fieldNamePrefix' => et_pb_option_template()->template_prefix,
+			'templates'       => et_pb_option_template()->templates(),
+			'data'            => et_pb_option_template()->all(),
+		),
 		'componentDefinitions'         => array(
 			'generalFields'                => array(),
 			'advancedFields'               => array(),
@@ -435,11 +572,14 @@ function et_fb_get_static_backend_helpers($post_type) {
 		'builderOptions'               => et_builder_options(),
 		'builderVersion'               => ET_BUILDER_PRODUCT_VERSION,
 		'noBuilderSupportNotification' => et_builder_get_no_builder_notification_modal(),
-		'noBrowserSupportNotification' => et_builder_get_no_browser_notification_modal(),
 		'exitNotification'             => et_builder_get_exit_notification_modal(),
 		'browserAutosaveNotification'  => et_builder_get_browser_autosave_notification_modal(),
 		'serverAutosaveNotification'   => et_builder_get_server_autosave_notification_modal(),
-		'unsavedNotification'          => et_builder_get_unsaved_notification_modal(),
+		'coreModalTemplate'            => et_builder_get_core_modal_template(),
+		'coreModalButtonsTemplate'     => et_builder_get_core_modal_buttons_template(),
+		'unsavedNotification'          => et_builder_get_unsaved_notification_texts(),
+		'customDefaultsSaveFailure'    => et_builder_get_custom_defaults_save_failure_texts(),
+		'customDefaultsLoadFailure'    => et_builder_get_custom_defaults_load_failure_texts(),
 		'backupLabel'                  => __( 'Backup of %s', 'et_builder' ),
 
 		'googleAPIKey'                 => et_pb_is_allowed( 'theme_options' ) ? get_option( 'et_google_api_settings' ) : '',
@@ -1489,11 +1629,12 @@ function et_fb_get_static_backend_helpers($post_type) {
 			'customDefaults'        => array(
 				'title'            => esc_html__( 'Are You Sure?', 'et_builder' ),
 				'text'             => array(
-					'madeChanges'   => esc_html__( 'You\'ve made changes to the %1$s default settings.', 'et_builder' ),
-					'wishToProceed' => array(
+					'madeChanges'    => esc_html__( 'You\'ve made changes to the %1$s default settings.', 'et_builder' ),
+					'wishToProceed'  => array(
 						'saveDefaults'      => esc_html__( 'This will affect all %1$s across your entire site. Do you wish to proceed?', 'et_builder' ),
 						'makeStylesDefault' => esc_html__( 'This will affect all %1$s of %2$s across your entire site. Do you wish to proceed?', 'et_builder' ),
 					),
+					'applyOnImport' => esc_html__( 'You are about to import the layout\'s defaults.', 'et_builder' ),
 				),
 				'module'           => esc_html__( 'Module', 'et_builder' ),
 				'modules'          => esc_html__( 'Modules', 'et_builder' ),
@@ -1544,7 +1685,6 @@ function et_fb_get_static_backend_helpers($post_type) {
 			),
 			'pageSettings'   => array(
 				'tabs'    => ET_Builder_Settings::get_tabs(),
-				'toggles' => ET_Builder_Settings::get_toggles(),
 			),
 			'searchOptions'         => esc_html__( 'Search Options', 'et_builder' ),
 			'filter'                => esc_html__( 'Filter', 'et_builder' ),
@@ -2020,14 +2160,10 @@ function et_fb_get_static_backend_helpers($post_type) {
 		),
 	);
 
-	// Add strings from i18n directory. Note: We don't handle subdirectories, but we should in the future.
-	$i18n_files = glob( ET_BUILDER_DIR . 'frontend-builder/i18n/*.php' );
-
-	foreach ( $i18n_files as $file ) {
-		$key = basename( $file, '.php' );
-
-		$helpers['i18n'][ et_fb_camel_case( $key ) ] = require $file;
-	}
+	$helpers['i18n'] = array_merge(
+		$helpers['i18n'],
+		require ET_BUILDER_DIR . 'frontend-builder/i18n.php'
+	);
 
 	return $helpers;
 }
@@ -2065,6 +2201,14 @@ function et_fb_backend_helpers() {
 
 		$helpers['cachedAssets'] = true;
 
+		/**
+		 * Filters backend data passed to the Visual Builder.
+		 *
+		 * @since 3.28
+		 *
+		 * @param array $helpers
+		 */
+		$helpers = apply_filters( 'et_fb_backend_helpers', $helpers );
 		// Pass dynamic helpers via localization.
 		wp_localize_script( 'et-dynamic-asset-helpers', 'ETBuilderBackendDynamic', $helpers );
 	} else {
@@ -2092,30 +2236,6 @@ function et_fb_fix_plugin_conflicts() {
 		define( 'DONOTCACHEPAGE', true );
 	}
 }
-endif;
-
-/**
- * Convert string to camel case format.
- *
- * @param string $string Original string data.
- * @param array  $noStrip Additional regex pattern exclusion.
- *
- * @return string
- */
-if ( ! function_exists( 'et_fb_camel_case' ) ) :
-	function et_fb_camel_case( $string, $noStrip = array() ) {
-		$words = preg_split( '/[^a-zA-Z0-9' . implode( '', $noStrip ) . ']+/i', strtolower( $string ) );
-
-		if ( count( $words ) === 1 ) {
-			return $words[0];
-		}
-
-		$camel_cased = implode( '', array_map( 'ucwords', $words ) );
-
-		$camel_cased[0] = strtolower( $camel_cased[0] );
-
-		return $camel_cased;
-	}
 endif;
 
 /**

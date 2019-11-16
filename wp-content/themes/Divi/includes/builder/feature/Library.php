@@ -628,7 +628,14 @@ class ET_Builder_Library {
 		$thumbnail_small = self::_get_image_size_name( 'thumbnail_small' );
 		$screenshot      = self::_get_image_size_name( 'screenshot' );
 
-		$post_types = et_builder_get_builder_post_types();
+		/**
+		 * Array of post types that should be listed as categories under "Existing Pages".
+		 *
+		 * @since 4.0
+		 *
+		 * @param string[] $post_types
+		 */
+		$post_types = apply_filters( 'et_library_builder_post_types', et_builder_get_builder_post_types() );
 
 		if ( wp_doing_ajax() ) {
 			// VB case
@@ -665,7 +672,11 @@ class ET_Builder_Library {
 
 				$query = new ET_Core_Post_Query( $post_type );
 
-				$posts = $query->run();
+				$posts = $query
+					// Do not include unused Theme Builder layouts. For more information
+					// see et_theme_builder_trash_draft_and_unused_posts().
+					->not()->with_meta( '_et_theme_builder_marked_as_unused' )
+					->run();
 
 				$posts = self::$_->array_sort_by( is_array( $posts ) ? $posts : array( $posts ), 'post_name' );
 
@@ -711,6 +722,10 @@ class ET_Builder_Library {
 							continue;
 						}
 
+						$type_label = et_theme_builder_is_layout_post_type( $post_type )
+							? $post_type_obj->labels->singular_name
+							: $post_type;
+
 						$seen[ $slug ]              = true;
 						$layout                     = new stdClass();
 						$layout->index              = $index;
@@ -718,7 +733,7 @@ class ET_Builder_Library {
 						$layout->date               = $post->post_date;
 						$layout->status             = $post->post_status;
 						$layout->icon               = 'layout';
-						$layout->type               = $post_type;
+						$layout->type               = $type_label;
 						$layout->name               = et_core_intentionally_unescaped( $title, 'react_jsx' );
 						$layout->short_name         = et_core_intentionally_unescaped( $title, 'react_jsx' );
 						$layout->slug               = $slug;
@@ -994,7 +1009,7 @@ class ET_Builder_Library {
 
 		$tmp_file = tempnam( $tmp_dir, 'et' );
 
-		@file_put_contents( $tmp_file, $response );
+		et_()->WPFS()->put_contents( $tmp_file, $response );
 
 		// Remove any previous buffered content since we're setting `Content-Length` header
 		// based on $response value only.

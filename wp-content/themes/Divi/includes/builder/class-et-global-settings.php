@@ -363,6 +363,11 @@ class ET_Global_Settings {
 			'et_pb_login-background_position'                        => $background_image_defaults['position'],
 			'et_pb_login-background_repeat'                          => $background_image_defaults['repeat'],
 			'et_pb_login-background_blend'                           => $background_image_defaults['blend'],
+			// Module: Menu
+			'et_pb_menu-background_size'                             => $background_image_defaults['size'],
+			'et_pb_menu-background_position'                         => $background_image_defaults['position'],
+			'et_pb_menu-background_repeat'                           => $background_image_defaults['repeat'],
+			'et_pb_menu-background_blend'                            => $background_image_defaults['blend'],
 			// Module: Number Counter
 			'et_pb_number_counter-title_font_size'                   => '16',
 			'et_pb_number_counter-title_line_height'                 => '1em',
@@ -605,6 +610,10 @@ class ET_Global_Settings {
 			'et_pb_toggle-background_position'                       => $background_image_defaults['position'],
 			'et_pb_toggle-background_repeat'                         => $background_image_defaults['repeat'],
 			'et_pb_toggle-background_blend'                          => $background_image_defaults['blend'],
+			// Module: Woo Title.
+			'et_pb_wc_title-header_font_size'                        => $font_defaults_h1['size'],
+			'et_pb_wc_title-header_line_height'                      => '1em',
+			'et_pb_wc_stock-in_stock_text_color'                     => '#77a464',
 			// Global: Field Input
 			'all_field_font_size'                                    => '16',
 			'all_field_border_width'                                 => '0',

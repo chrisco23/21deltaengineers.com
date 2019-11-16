@@ -306,8 +306,8 @@ class ET_Builder_Module_Video extends ET_Builder_Module {
 
 		foreach ( $multi_view->get_modes() as $mode ) {
 			$video_srcs[ $mode ] = self::get_video( array(
-				'src'      => $multi_view->get_value( 'src', $mode ),
-				'src_webm' => $multi_view->get_value( 'src_webm', $mode ),
+				'src'      => $multi_view->get_inherit_value( 'src', $mode ),
+				'src_webm' => $multi_view->get_inherit_value( 'src_webm', $mode ),
 			) );
 		}
 

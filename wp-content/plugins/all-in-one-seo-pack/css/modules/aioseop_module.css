@@ -125,8 +125,9 @@
 .aioseop input[type="text"], 
 .aioseop input[type="url"]  {
 	color: #515151;
-	min-height: 35px;
-	padding: 10px;
+	min-height: 40px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	font-size: 14px;
 	width: 95%;
 	max-width: 600px;
@@ -1105,7 +1106,13 @@ table.aioseop_table th {
 }
 
 .aioseop_input input[type="checkbox"]:before {
+	float: left;
+	display: inline-block;
+	vertical-align: middle;
+	width: 16px;
+	content: "\f147";
     margin: -3px 0 0 -5px;
+	font: normal 21px/1 dashicons;
     color: white;
 }
 
@@ -1531,16 +1538,15 @@ div#aioseop_snippet > div > span {
 	border: 0;
 }
 
-/* the good, the bad and the ugly character counts */
-.aioseop_count_good {
+.aioseop_count_chars_below_treshold {
 	color: #515151 !important;
 	background-color: #eee !important;
 }
-.aioseop_count_bad {
+.aioseop_count_chars_near_treshold {
 	color: #515151 !important;
 	background-color: #ff0 !important;
 }
-.aioseop_count_ugly {
+.aioseop_count_chars_past_treshold {
 	color: #fff !important;
 	background-color: #f00 !important;
 }
@@ -1607,4 +1613,68 @@ div#aiosp_sitemap_status_metabox .toggle-indicator {
 .aioseop_options .aioseop-exclude-terms.selectize-control.multi .selectize-input [data-value] {
 	background-color: #0E7BBE;
 	background-image: none;
+}
+
+/**
+* Styling for jQuery UI Datepicker in Safari
+*
+*/
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div {
+	background-color: #fff;
+	padding: 15px;
+	border: 1px solid #8d96a0;
+	border-radius: 4px;
+}
+
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div .ui-datepicker-prev {
+	float: left;
+	text-align: left;
+}
+
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div .ui-datepicker-prev:before {
+	content: '\2190 ';
+	padding-right: 2px;
+}
+
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div .ui-datepicker-next {
+	float: right;
+	text-align: right;
+}
+
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div .ui-datepicker-next:after {
+	content: '\2192 ';
+	padding-left: 2px;
+}
+
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div .ui-datepicker-title {
+	clear: both;
+	text-align: center;
+	font-weight: bold;
+	padding: 10px 0;
+}
+
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div table.ui-datepicker-calendar {
+	border: 1px solid #007cba;
+	border-collapse: collapse;
+}
+
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div table.ui-datepicker-calendar thead {
+	background-color: #f1f1f1;
+	border-bottom: 1px solid #8d96a0;
+}
+
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div table.ui-datepicker-calendar thead th,
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div table.ui-datepicker-calendar td {
+	width: 2rem;
+	height: 2rem;
+	text-align: center;
+}
+
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div table.ui-datepicker-calendar td a {
+	text-decoration: none;
+}
+
+body[class*="all-in-one-seo_page_all-in-one-seo-pack"] #ui-datepicker-div table.ui-datepicker-calendar td a:hover {
+	border: 1px solid #8d96a0;
+	padding: 5px 7px;
 }

@@ -66,9 +66,9 @@ class ET_Builder_Plugin_Compat_Eventon extends ET_Builder_Plugin_Compat_Base {
 	 *
 	 * @since 3.10
 	 *
-	 * @param array<string> $post_types
+	 * @param string[] $post_types
 	 *
-	 * @return array<string>
+	 * @return string[]
 	 */
 	public function maybe_filter_post_type_blacklist( $post_types ) {
 		if ( ! $this->uses_default_filter() ) {
@@ -83,9 +83,9 @@ class ET_Builder_Plugin_Compat_Eventon extends ET_Builder_Plugin_Compat_Base {
 	 *
 	 * @since 3.10
 	 *
-	 * @param array<string> $post_types
+	 * @param string[] $post_types
 	 *
-	 * @return array<string>
+	 * @return string[]
 	 */
 	public function maybe_filter_third_party_post_types( $post_types ) {
 		if ( $this->uses_default_filter() ) {
@@ -101,9 +101,9 @@ class ET_Builder_Plugin_Compat_Eventon extends ET_Builder_Plugin_Compat_Base {
 	 *
 	 * @since 3.10
 	 *
-	 * @param array<string> $post_types
+	 * @param string[] $post_types
 	 *
-	 * @return array<string>
+	 * @return string[]
 	 */
 	public function maybe_filter_builder_post_types( $post_types ) {
 		if ( ! $this->uses_default_filter() ) {

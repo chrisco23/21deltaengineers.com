@@ -11,6 +11,44 @@ class ET_Builder_Module_Field_BoxShadow extends ET_Builder_Module_Field_Base {
 	public static $responsive = null;
 
 	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		$this->template = et_pb_option_template();
+		$this->set_template();
+	}
+
+	/**
+	 * Set option template for Box Shadow
+	 *
+	 * @since 3.28
+	 *
+	 * @return void
+	 */
+	public function set_template() {
+		$template = $this->template;
+		if ( $template->is_enabled() && ! $template->has( 'box_shadow' ) ) {
+			$template->add(
+				'box_shadow',
+				$this->get_fields( $template->placeholders( array(
+					'suffix'              => null,
+					'label'               => null,
+					'option_category'     => null,
+					'tab_slug'            => null,
+					'toggle_slug'         => null,
+					'sub_toggle_slug'     => null,
+					'depends_show_if_not' => null,
+					'depends_show_if'     => null,
+					'depends_on'          => null,
+					'default_on_fronts'   => null,
+					'show_if'             => null,
+					'show_if_not'         => null,
+				) ) )
+			);
+		}
+	}
+
+	/**
 	 * Get box shadow fields.
 	 *
 	 * @since 3.23 Add support for responsive settings. Add allowed units for range fields.
@@ -33,6 +71,10 @@ class ET_Builder_Module_Field_BoxShadow extends ET_Builder_Module_Field_Base {
 			'show_if'             => null,
 			'show_if_not'         => null,
 		), $args );
+
+		if ( $this->template->is_enabled() && $this->template->has( 'box_shadow' ) ) {
+			return $this->template->create( 'box_shadow', $arguments );
+		}
 
 		$prefix     = 'box_shadow_';
 		$style      = $prefix . 'style' . $arguments['suffix'];
@@ -388,14 +430,14 @@ class ET_Builder_Module_Field_BoxShadow extends ET_Builder_Module_Field_Base {
 	}
 
 	public function get_overlay_selector( $selector ) {
-		$selectors = array_map( 'trim', explode( ',', $selector ) );
-		$new_selector   = '';
+		$selectors    = array_map( 'trim', explode( ',', $selector ) );
+		$new_selector = array();
 
 		foreach ( $selectors as $selector ) {
-			$new_selector .= $selector . '>.box-shadow-overlay, ' . $selector . '.et-box-shadow-no-overlay';
+			$new_selector[] = $selector . '>.box-shadow-overlay, ' . $selector . '.et-box-shadow-no-overlay';
 		}
 
-		return $new_selector;
+		return implode( ',', $new_selector );
 	}
 
 	public function get_overlay_style( $function_name,  $selector, $atts, array $args = array() ) {

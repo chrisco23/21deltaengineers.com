@@ -309,7 +309,7 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 						</p>
 						<p class="et_pb_forgot_password"><a href="%2$s">%1$s</a></p>
 						<p>
-							<button type="submit" class="et_pb_newsletter_button et_pb_button%11$s"%10$s%13$s%14$s>%8$s</button>
+							<button type="submit" name="et_builder_submit_button" class="et_pb_newsletter_button et_pb_button%11$s"%10$s%13$s%14$s>%8$s</button>
 							%9$s
 						</p>
 					</form>
@@ -411,7 +411,7 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 	 * Filter multi view value.
 	 *
 	 * @since 3.27.1
-	 * 
+	 *
 	 * @see ET_Builder_Module_Helper_MultiViewOptions::filter_value
 	 *
 	 * @param mixed $raw_value Props raw value.

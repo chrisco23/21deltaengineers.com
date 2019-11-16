@@ -702,16 +702,19 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 			'button_classname'    => $button_classname,
 			'button_custom'       => '' !== $custom_slide_icon || '' !== $custom_slide_icon_tablet || '' !== $custom_slide_icon_phone ? 'on' : 'off',
 			'button_rel'          => $button_rel,
-			'button_text'         => $multi_view->get_value( 'button_text' ),
-			'button_text_escaped' => $button_text,
+			'button_text'         => $button_text,
+			'button_text_escaped' => true,
 			'button_url'          => $button_link,
 			'url_new_window'      => $url_new_window,
 			'custom_icon'         => $custom_slide_icon,
 			'custom_icon_tablet'  => $custom_slide_icon_tablet,
 			'custom_icon_phone'   => $custom_slide_icon_phone,
 			'display_button'      => true,
-			'multi_view_data'  => $multi_view->render_attrs( array(
-				'content' => '{{button_text}}',
+			'multi_view_data'     => $multi_view->render_attrs( array(
+				'content'    => '{{button_text}}',
+				'visibility' => array(
+					'button_text' => '__not_empty',
+				),
 			) ),
 		) );
 
@@ -966,7 +969,7 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 
 		if ( 'heading' === $name ) {
 			$raw_value = $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'full' );
-		} else if ( 'button_text' === $name ) {
+		} else if ( 'button_text' === $name && 'content' === $context  ) {
 			$raw_value = $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'limited' );
 		} else if ( 'image' === $name && 'classes' === $context ) {
 			$raw_value = $raw_value ? $raw_value : $multi_view->get_inherit_value( 'video_url', $mode );

@@ -928,10 +928,15 @@ function et_pb_ab_get_modules_have_conversions() {
 /**
  * Check whether AB Testing active on current page
  *
+ * @since 4.0 Added the $post_id parameter.
+ *
+ * @param integer $post_id
+ *
  * @return bool
  */
-function et_is_ab_testing_active() {
-	$post_id = apply_filters( 'et_is_ab_testing_active_post_id', get_the_ID() );
+function et_is_ab_testing_active( $post_id = 0 ) {
+	$post_id = $post_id > 0 ? $post_id : get_the_ID();
+	$post_id = apply_filters( 'et_is_ab_testing_active_post_id', $post_id );
 
 	$ab_testing_status = 'on' === get_post_meta( $post_id, '_et_pb_use_ab_testing', true );
 
@@ -1332,6 +1337,41 @@ function et_pb_split_track( $atts ) {
 add_shortcode( 'et_pb_split_track', 'et_pb_split_track' );
 
 /**
+ * Get all posts loaded for the current request that have AB testing enabled.
+ * This includes TB layouts and the current post, if any.
+ *
+ * @since 4.0
+ *
+ * @return integer[]
+ */
+function et_builder_ab_get_current_tests() {
+	$layouts = et_theme_builder_get_template_layouts();
+	$posts   = array();
+	$tests   = array();
+
+	foreach ( $layouts as $layout ) {
+		if ( $layout['override'] ) {
+			$posts[] = $layout['id'];
+		}
+	}
+
+	if ( is_singular() ) {
+		$posts[] = get_the_ID();
+	}
+
+	foreach ( $posts as $post_id ) {
+		if ( et_pb_is_pagebuilder_used( $post_id ) && et_is_ab_testing_active( $post_id ) ) {
+			$tests[] = array(
+				'post_id' => $post_id,
+				'test_id' => get_post_meta( $post_id, '_et_pb_ab_testing_id', true ),
+			);
+		}
+	}
+
+	return $tests;
+}
+
+/**
  * Initialize AB Testing. Check whether the user has visited the page or not by checking its cookie
  *
  * @since
@@ -1339,64 +1379,79 @@ add_shortcode( 'et_pb_split_track', 'et_pb_split_track' );
  * @return void
  */
 function et_pb_ab_init() {
-	global $et_pb_ab_subject;
+	$tests = et_builder_ab_get_current_tests();
 
-	// Get post ID
-	$post_id = get_the_ID();
-
-	// Initialize AB Testing if builder and AB Testing is active
-	if ( is_singular() && et_pb_is_pagebuilder_used( $post_id ) && et_is_ab_testing_active() ) {
-		$ab_subjects        = et_pb_ab_get_subjects( $post_id );
-		$ab_hash_key        = defined( 'NONCE_SALT' ) ? NONCE_SALT : 'default-divi-hash-key';
-		$hashed_subject_id  = et_pb_ab_get_visitor_cookie( $post_id, 'view_page' );
-
-		if ( $hashed_subject_id ) {
-			// Compare subjects against hashed subject id found on cookie to verify whether cookie value is valid or not
-			foreach ( $ab_subjects as $ab_subject ) {
-				// Valid subject_id is found
-				if ( hash_hmac( 'md5', $ab_subject, $ab_hash_key ) === $hashed_subject_id ) {
-					$et_pb_ab_subject = $ab_subject;
-
-					// no need to continue
-					break;
-				}
-			}
-
-			// If no valid subject found, get the first one
-			if ( ! $et_pb_ab_subject && isset( $ab_subjects[0] ) ) {
-				$et_pb_ab_subject = $ab_subjects[0];
-			}
-		} else {
-			// First visit. Get next subject on queue
-			$next_subject_index  = get_post_meta( $post_id, '_et_pb_ab_next_subject' , true );
-
-			// Get current subject index based on `_et_pb_ab_next_subject` post meta value
-			$subject_index = false !== $next_subject_index && isset( $ab_subjects[ $next_subject_index ] ) ? (int) $next_subject_index : 0;
-
-			// Get current subject index
-			$et_pb_ab_subject = $ab_subjects[ $subject_index ];
-
-			// Hash the subject
-			$hashed_subject_id = hash_hmac( 'md5', $et_pb_ab_subject, $ab_hash_key );
-
-			// Set cookie for returning visit
-			et_pb_ab_set_visitor_cookie( $post_id, 'view_page', $hashed_subject_id );
-
-			// Bump subject index and save on post meta for next visitor
-			et_pb_ab_increment_current_ab_module_id( $post_id );
-
-			// log the view_page event right away
-			$is_et_fb_enabled = function_exists( 'et_fb_enabled' ) && et_fb_enabled();
-
-			if ( ! is_admin() && ! $is_et_fb_enabled ) {
-				et_pb_add_stats_record( array(
-						'test_id'     => $post_id,
-						'subject_id'  => $et_pb_ab_subject,
-						'record_type' => 'view_page',
-					)
-				);
-			}
-		}
+	foreach ( $tests as $test ) {
+		et_builder_ab_initialize_for_post( $test['post_id'] );
 	}
 }
 add_action( 'wp', 'et_pb_ab_init' );
+
+/**
+ * Initialize AB testing for the specified post.
+ *
+ * @since 4.0
+ *
+ * @param integer $post_id
+ *
+ * @return void
+ */
+function et_builder_ab_initialize_for_post( $post_id ) {
+	global $et_pb_ab_subject;
+
+	if ( ! is_array( $et_pb_ab_subject ) ) {
+		$et_pb_ab_subject = array();
+	}
+
+	$ab_subjects        = et_pb_ab_get_subjects( $post_id );
+	$ab_hash_key        = defined( 'NONCE_SALT' ) ? NONCE_SALT : 'default-divi-hash-key';
+	$hashed_subject_id  = et_pb_ab_get_visitor_cookie( $post_id, 'view_page' );
+
+	if ( $hashed_subject_id ) {
+		// Compare subjects against hashed subject id found on cookie to verify whether cookie value is valid or not
+		foreach ( $ab_subjects as $ab_subject ) {
+			// Valid subject_id is found
+			if ( hash_hmac( 'md5', $ab_subject, $ab_hash_key ) === $hashed_subject_id ) {
+				$et_pb_ab_subject[ $post_id ] = $ab_subject;
+
+				// no need to continue
+				break;
+			}
+		}
+
+		// If no valid subject found, get the first one
+		if ( isset( $ab_subjects[0] ) && ! et_()->array_get( $et_pb_ab_subject, $post_id, '' ) ) {
+			$et_pb_ab_subject[ $post_id ] = $ab_subjects[0];
+		}
+	} else {
+		// First visit. Get next subject on queue
+		$next_subject_index  = get_post_meta( $post_id, '_et_pb_ab_next_subject' , true );
+
+		// Get current subject index based on `_et_pb_ab_next_subject` post meta value
+		$subject_index = false !== $next_subject_index && isset( $ab_subjects[ $next_subject_index ] ) ? (int) $next_subject_index : 0;
+
+		// Get current subject index
+		$et_pb_ab_subject[ $post_id ] = $ab_subjects[ $subject_index ];
+
+		// Hash the subject
+		$hashed_subject_id = hash_hmac( 'md5', $et_pb_ab_subject[ $post_id ], $ab_hash_key );
+
+		// Set cookie for returning visit
+		et_pb_ab_set_visitor_cookie( $post_id, 'view_page', $hashed_subject_id );
+
+		// Bump subject index and save on post meta for next visitor
+		et_pb_ab_increment_current_ab_module_id( $post_id );
+
+		// log the view_page event right away
+		$is_et_fb_enabled = function_exists( 'et_fb_enabled' ) && et_fb_enabled();
+
+		if ( ! is_admin() && ! $is_et_fb_enabled ) {
+			et_pb_add_stats_record( array(
+					'test_id'     => $post_id,
+					'subject_id'  => $et_pb_ab_subject[ $post_id ],
+					'record_type' => 'view_page',
+				)
+			);
+		}
+	}
+}

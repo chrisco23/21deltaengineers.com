@@ -57,7 +57,7 @@ abstract class ET_Builder_Module_Type_PostBased extends ET_Builder_Module {
 	 * @param integer $post_id Optional post id to resolve "current" categories.
 	 * @param string $taxonomy
 	 *
-	 * @return array<integer>
+	 * @return integer[]
 	 */
 	protected static function filter_meta_categories( $categories, $post_id = 0, $taxonomy = 'category' ) {
 		$raw_term_ids = is_array( $categories ) ? $categories : explode( ',', $categories );
@@ -80,6 +80,14 @@ abstract class ET_Builder_Module_Type_PostBased extends ET_Builder_Module {
 					}
 
 					$term_ids = array_merge( $term_ids, wp_list_pluck( $post_terms, 'term_id' ) );
+				} else {
+					$is_category = 'category' === $taxonomy && is_category();
+					$is_tag      = ! $is_category && 'post_tag' === $taxonomy && is_tag();
+					$is_tax      = ! $is_category && ! $is_tag && is_tax( $taxonomy );
+
+					if ( $is_category || $is_tag || $is_tax ) {
+						$term_ids[] = get_queried_object()->term_id;
+					}
 				}
 
 				continue;
@@ -90,6 +98,33 @@ abstract class ET_Builder_Module_Type_PostBased extends ET_Builder_Module {
 		$term_ids = self::filter_invalid_term_ids( array_unique( array_filter( $term_ids ) ), $taxonomy );
 
 		return $term_ids;
+	}
+
+	/**
+	 * Handle common filtering of included categories, including handling meta categories.
+	 *
+	 * @since 4.0
+	 *
+	 * @param string|array $include_categories Comma-separated list of term ids and special keywords.
+	 * @param integer $post_id
+	 * @param string $taxonomy
+	 *
+	 * @return array
+	 */
+	protected static function filter_include_categories( $include_categories, $post_id = 0, $taxonomy = 'category' ) {
+		$categories = array();
+
+		if ( ! empty( $include_categories ) ) {
+			// wp_doing_ajax() covers VB usage when fetching computed values where we always have a post.
+			if ( is_singular() || wp_doing_ajax() ) {
+				$post_id    = $post_id > 0 ? $post_id : self::get_current_post_id_reverse();
+				$categories = self::filter_meta_categories( $include_categories, $post_id, $taxonomy );
+			} else {
+				$categories = self::filter_meta_categories( $include_categories, 0, $taxonomy );
+			}
+		}
+
+		return $categories;
 	}
 
 	public static function is_processing_computed_prop() {

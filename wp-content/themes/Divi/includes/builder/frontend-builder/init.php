@@ -22,6 +22,8 @@ add_filter( 'redirect_post_location', 'et_fb_redirect_post_location' );
 /**
  * @internal NOTE: Don't use this from outside builder code! {@see et_core_is_fb_enabled()}.
  *
+ * @deprecated Use et_core_is_fb_enabled() instead.
+ *
  * @return bool
  */
 function et_fb_enabled() {

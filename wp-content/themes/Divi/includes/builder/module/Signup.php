@@ -1168,14 +1168,17 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 			'content' => '{{description}}',
 		) );
 
+		// We'll hide the entire Title & Description block if there's no content in either of them
+		$show_description_block = $title || $description;
+
 		$output = sprintf(
 			'<div%6$s class="%4$s"%5$s%9$s%10$s%11$s%12$s>
 				%8$s
 				%7$s
-				<div class="et_pb_newsletter_description">
+				%13$s
 					%1$s
 					%2$s
-				</div>
+				%14$s
 				%3$s
 			</div>',
 			et_core_esc_previously( $title ),
@@ -1189,7 +1192,9 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 			$success_redirect_url,
 			$success_redirect_query, // #10
 			et_core_esc_previously( $data_background_layout ),
-			et_core_esc_previously( $data_background_layout_hover )
+			et_core_esc_previously( $data_background_layout_hover ),
+			$show_description_block ? '<div class="et_pb_newsletter_description">' : '',
+			$show_description_block ? '</div>' : ''
 		);
 
 		return $output;

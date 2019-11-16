@@ -17,6 +17,10 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 			),
 			'advanced' => array(
 				'toggles' => array(
+					'image' => array(
+						'title'    => esc_html__( 'Image', 'et_builder' ),
+						'priority' => 30,
+					),
 					'text' => array(
 						'title'    => esc_html__( 'Text', 'et_builder' ),
 						'priority' => 49,
@@ -26,6 +30,18 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 		);
 
 		$this->advanced_fields = array(
+			'box_shadow'            => array(
+				'default' => array(),
+				'image'   => array(
+					'label'           => esc_html__( 'Image Box Shadow', 'et_builder' ),
+					'option_category' => 'layout',
+					'tab_slug'        => 'advanced',
+					'toggle_slug'     => 'image',
+					'css'             => array(
+						'main' => "{$this->main_css_element} .commentlist img.avatar",
+					),
+				),
+			),
 			'borders'               => array(
 				'default' => array(
 					'css' => array(
@@ -35,6 +51,17 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 						),
 						'important' => 'all',
 					),
+				),
+				'image'   => array(
+					'css'          => array(
+						'main' => array(
+							'border_radii'  => '%%order_class%%.et_pb_comments_module .commentlist li img.avatar',
+							'border_styles' => '%%order_class%%.et_pb_comments_module .commentlist li img.avatar',
+						),
+					),
+					'label_prefix' => esc_html__( 'Image', 'et_builder' ),
+					'tab_slug'     => 'advanced',
+					'toggle_slug'  => 'image',
 				),
 			),
 			'margin_padding' => array(
@@ -175,6 +202,17 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 							'default' => '0px',
 						),
 					),
+				),
+			),
+			'filters'               => array(
+				'child_filters_target' => array(
+					'tab_slug'    => 'advanced',
+					'toggle_slug' => 'image',
+				),
+			),
+			'image'                  => array(
+				'css' => array(
+					'main' => "{$this->main_css_element} .commentlist img.avatar",
 				),
 			),
 		);
@@ -325,6 +363,46 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 		return $comments_content;
 	}
 
+	/**
+	 * Action and filter hooks that are called before comment content rendering. These are
+	 * abstracted into method so module which extends comment module can modify these
+	 *
+	 * @since 3.29
+	 */
+	function before_comments_content() {
+		// Modify the comments request to make sure it's unique.
+		// Otherwise WP generates SQL error and doesn't allow multiple comments sections on single page
+		add_action( 'pre_get_comments', array( $this, 'et_pb_modify_comments_request' ), 1 );
+
+		// include custom comments_template to display the comment section with Divi style
+		add_filter( 'comments_template', array( $this, 'et_pb_comments_template' ) );
+
+		// Modify submit button to be advanced button style ready
+		add_filter( 'comment_form_submit_button', array( $this, 'et_pb_comments_submit_button' ) );
+	}
+
+	/**
+	 * Comment content rendering. These are abstracted into method so module which extends comment
+	 * module can modify these
+	 *
+	 * @since 3.29
+	 */
+	function get_comments_content() {
+		$header_level = $this->props['header_level'];
+
+		return self::get_comments( et_pb_process_header_level( $header_level, 'h1' ) );
+	}
+
+	/**
+	 * Action and filter hooks that are called after comment content rendering. These are
+	 * abstracted into method so module which extends comment module can modify these
+	 */
+	function after_comments_content() {
+		// remove all the actions and filters to not break the default comments section from theme
+		remove_filter( 'comments_template', array( $this, 'et_pb_comments_template' ) );
+		remove_action( 'pre_get_comments', array( $this, 'et_pb_modify_comments_request' ), 1 );
+	}
+
 	function et_pb_comments_template() {
 		return realpath( dirname(__FILE__) . '/..' ) . '/comments_template.php';
 	}
@@ -369,21 +447,23 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 
 		$this->et_pb_unique_comments_module_class = ET_Builder_Element::get_module_order_class( $render_slug ); // use this variable to make the comments request unique for each module instance
 
-		// Modify the comments request to make sure it's unique.
-		// Otherwise WP generates SQL error and doesn't allow multiple comments sections on single page
-		add_action( 'pre_get_comments', array( $this, 'et_pb_modify_comments_request' ), 1 );
+		// Action & filter hooks before comment content rendering
+		$this->before_comments_content();
 
-		// include custom comments_template to display the comment section with Divi style
-		add_filter( 'comments_template', array( $this, 'et_pb_comments_template' ) );
+		// Comment content rendering
+		$comments_content = $this->get_comments_content();
 
-		// Modify submit button to be advanced button style ready
-		add_filter( 'comment_form_submit_button', array( $this, 'et_pb_comments_submit_button' ) );
+		// Action & filter hooks after comment content rendering
+		$this->after_comments_content();
 
-		$comments_content = self::get_comments( et_pb_process_header_level( $header_level, 'h1' ) );
-
-		// remove all the actions and filters to not break the default comments section from theme
-		remove_filter( 'comments_template', array( $this, 'et_pb_comments_template' ) );
-		remove_action( 'pre_get_comments', array( $this, 'et_pb_modify_comments_request' ), 1 );
+		// Image - CSS Filters.
+		if ( et_()->array_get( $this->advanced_fields, 'image.css', false ) ) {
+			$this->add_classname( $this->generate_css_filters(
+				$this->slug,
+				'child_',
+				et_()->array_get( $this->advanced_fields['image']['css'], 'main', '%%order_class%%' )
+			) );
+		}
 
 		$comments_custom_icon        = 'on' === $button_custom ? $custom_icon : '';
 		$comments_custom_icon_tablet = 'on' === $button_custom ? $custom_icon_tablet : '';
@@ -470,3 +550,8 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 }
 
 new ET_Builder_Module_Comments;
+
+if ( et_is_woocommerce_plugin_active() && defined( 'ET_BUILDER_DIR' ) ) {
+	// Use separate files for better organization.
+	require_once ( ET_BUILDER_DIR . 'module/woocommerce/Reviews.php' );
+}

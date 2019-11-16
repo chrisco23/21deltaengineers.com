@@ -331,11 +331,13 @@ class ET_Builder_Module_Audio extends ET_Builder_Module {
 		$album_name                      = $this->_esc_attr( 'album_name' );
 		$image_url                       = $multi_view->render_element( array(
 			'tag'      => 'div',
-			'attrs'    => array(
-				'class' => 'et_pb_audio_cover_art',
-			),
 			'styles'   => array(
 				'background-image' => 'url({{image_url}})',
+			),
+			'classes'  => array(
+				'et_pb_audio_cover_art' => array(
+					'image_url' => '__not_empty',
+				),
 			),
 			'required' => 'image_url',
 		) );
@@ -445,8 +447,16 @@ class ET_Builder_Module_Audio extends ET_Builder_Module {
 			$this->add_classname( 'et_pb_audio_legacy' );
 		}
 
+		$muti_view_data_attr = $multi_view->render_attrs( array(
+			'classes' => array(
+				'et_pb_audio_no_image' => array(
+					'image_url' => '__empty',
+				),
+			)
+		) );
+
 		$output = sprintf(
-			'<div%6$s class="%4$s"%9$s%10$s>
+			'<div%6$s class="%4$s"%9$s%10$s%11$s>
 				%8$s
 				%7$s
 				%5$s
@@ -467,7 +477,8 @@ class ET_Builder_Module_Audio extends ET_Builder_Module {
 			$video_background, // #7
 			$parallax_image_background, // #8
 			et_core_esc_previously( $data_background_layout ), // #9
-			et_core_esc_previously( $data_background_layout_hover ) // #10
+			et_core_esc_previously( $data_background_layout_hover ), // #10
+			et_core_esc_previously( $muti_view_data_attr )
 		);
 
 		return $output;

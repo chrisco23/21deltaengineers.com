@@ -296,9 +296,13 @@ class ET_Builder_Module_CTA extends ET_Builder_Module {
 			'custom_icon_phone'   => $custom_icon_phone,
 			'url_new_window'      => $url_new_window,
 			'display_button'      => ( '' !== $button_url && $multi_view->has_value( 'button_text' ) ),
-			'multi_view_data'  => $multi_view->render_attrs( array(
-				'content' => '{{button_text}}',
-			) )
+			'multi_view_data'     => $multi_view->render_attrs( array(
+				'content'    => '{{button_text}}',
+				'visibility' => array(
+					'button_text' => '__not_empty',
+					'button_url'  => '__not_empty',
+				),
+			) ),
 		) );
 
 		$data_background_layout       = '';

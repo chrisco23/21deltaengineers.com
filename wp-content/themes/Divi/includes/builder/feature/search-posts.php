@@ -12,14 +12,16 @@ function et_builder_ajax_search_posts() {
 	$current_page     = isset( $_GET['page'] ) ? (int) $_GET['page'] : 0;
 	$current_page     = max( $current_page, 1 );
 	$post_type        = isset( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : '';
-	$value            = isset( $_GET['value'] ) ? (int) $_GET['value'] : '';
+	$value            = isset( $_GET['value'] ) ? sanitize_text_field( $_GET['value'] ) : '';
 	$search           = isset( $_GET['search'] ) ? sanitize_text_field( $_GET['search'] ) : '';
-	$prepend_value    = $value > 0;
+	$prepend_value    = (int)$value > 0;
 	$results_per_page = 20;
 	$results          = array(
 		'results' => array(),
 		'meta'    => array(),
 	);
+	$include_current_post = '1' === (string) et_()->array_get( $_GET, 'include_current_post', '0' );
+	$include_latest_post = '1' === (string) et_()->array_get( $_GET, 'include_latest_post', '0' );
 
 	$public_post_types = et_builder_get_public_post_types();
 
@@ -68,6 +70,38 @@ function et_builder_ajax_search_posts() {
 	if ( 'attachment' === $post_type ) {
 		remove_filter( 'posts_join' , 'et_builder_ajax_search_posts_query_join' );
 		remove_filter( 'posts_where' , 'et_builder_ajax_search_posts_query_where' );
+	}
+
+	if ( $include_current_post && ! empty( $posts->posts ) ) {
+		$current_post_type        = sanitize_text_field( et_()->array_get( $_GET, 'current_post_type', 'post' ) );
+		$current_post_type        = isset( $public_post_types[ $current_post_type ] ) ? $current_post_type : 'post';
+		$current_post_type_object = get_post_type_object( $current_post_type );
+		$current_post_type_label  = $current_post_type_object ? $current_post_type_object->labels->singular_name : '';
+
+		$results['results'][] = array(
+			'value' => 'current',
+			// Translators: %1$s: Post type singular name.
+			'label' => et_core_intentionally_unescaped( sprintf( __( 'This %1$s', 'et_builder' ), $current_post_type_label ), 'react_jsx' ),
+			'meta'  => array(
+				'post_type' => et_core_intentionally_unescaped( $current_post_type_label, 'react_jsx' ),
+			),
+		);
+
+		$query['posts_per_page'] -= 1;
+	}
+
+	if ( $include_latest_post && ! empty( $posts->posts ) ) {
+		$results['results'][] = array(
+			'value' => 'latest',
+			// Translators: %1$s: Post type singular name.
+			'label' => et_core_intentionally_unescaped( sprintf( __( 'Latest %1$s', 'et_builder' ),
+				$post_type_label ), 'react_jsx' ),
+			'meta'  => array(
+				'post_type' => et_core_intentionally_unescaped( $post_type_label, 'react_jsx' ),
+			),
+		);
+
+		$query['posts_per_page'] -= 1;
 	}
 
 	foreach ( $posts->posts as $post ) {

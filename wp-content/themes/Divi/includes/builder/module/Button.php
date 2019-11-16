@@ -134,7 +134,7 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 
 	/**
 	 * Get button alignment.
-	 * 
+	 *
 	 * @since 3.23 Add responsive support by adding device parameter.
 	 *
 	 * @param  string $device Current device name.
@@ -240,17 +240,20 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 			'multi_view_data'     => $multi_view->render_attrs( array(
 				'content'        => '{{button_text}}',
 				'hover_selector' => '%%order_class%%.et_pb_button',
+				'visibility'     => array(
+					'button_text' => '__not_empty',
+				),
 			) ),
 		) );
 
 		// Render module output
 		$output = sprintf(
-			'<div class="et_pb_button_module_wrapper et_pb_button_%3$s_wrapper %2$s et_pb_module "%4$s%5$s>
+			'<div class="et_pb_button_module_wrapper %3$s_wrapper %2$s et_pb_module "%4$s%5$s>
 				%1$s
 			</div>',
 			et_core_esc_previously( $button ),
 			esc_attr( $button_alignment_classes ),
-			esc_attr( $this->render_count() ),
+			esc_attr( ET_Builder_Element::get_module_order_class( $this->slug ) ),
 			et_core_esc_previously( $data_background_layout ),
 			et_core_esc_previously( $data_background_layout_hover )
 		);
@@ -264,7 +267,7 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 		// Tablet.
 		$transition_style_tablet = $this->get_transition_style( array( 'all' ), 'tablet' );
 		if ( $transition_style_tablet !== $transition_style ) {
-			self::set_style( $function_name, array(
+			self::set_style( $render_slug, array(
 				'selector'    => '%%order_class%%, %%order_class%%:after',
 				'declaration' => esc_html( $transition_style_tablet ),
 				'media_query' => ET_Builder_Element::get_media_query( 'max_width_980' ),
@@ -274,7 +277,7 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 		// Phone.
 		$transition_style_phone = $this->get_transition_style( array( 'all' ), 'phone' );
 		if ( $transition_style_phone !== $transition_style || $transition_style_phone !== $transition_style_tablet ) {
-			self::set_style( $function_name, array(
+			self::set_style( $render_slug, array(
 				'selector'    => '%%order_class%%, %%order_class%%:after',
 				'declaration' => esc_html( $transition_style_phone ),
 				'media_query' => ET_Builder_Element::get_media_query( 'max_width_767' ),
@@ -288,7 +291,7 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 	 * Filter multi view value.
 	 *
 	 * @since 3.27.1
-	 * 
+	 *
 	 * @see ET_Builder_Module_Helper_MultiViewOptions::filter_value
 	 *
 	 * @param mixed $raw_value Props raw value.
@@ -306,14 +309,15 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 	 * @return mixed
 	 */
 	public function multi_view_filter_value( $raw_value, $args, $multi_view ) {
-		$name = isset( $args['name'] ) ? $args['name'] : '';
-		$mode = isset( $args['mode'] ) ? $args['mode'] : '';
+		$name    = isset( $args['name'] ) ? $args['name'] : '';
+		$mode    = isset( $args['mode'] ) ? $args['mode'] : '';
+		$context = isset( $args['context'] ) ? $args['context'] : '';
 
 		$fields_need_escape = array(
 			'title',
 		);
 
-		if ( $raw_value && in_array( $name, $fields_need_escape, true ) ) {
+		if ( $raw_value && 'content' === $context && in_array( $name, $fields_need_escape, true ) ) {
 			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
 		}
 

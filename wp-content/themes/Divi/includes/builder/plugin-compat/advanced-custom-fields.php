@@ -69,7 +69,22 @@ class ET_Builder_Plugin_Compat_Advanced_Custom_Fields extends ET_Builder_Plugin_
 	 * @return string
 	 */
 	public function maybe_filter_dynamic_content_meta_value( $meta_value, $meta_key, $post_id ) {
-		$acf_value = get_field( $meta_key, $post_id );
+		$post_type  = get_post_type( $post_id );
+		$identifier = $post_id;
+
+		if ( et_theme_builder_is_layout_post_type( $post_type ) ) {
+			return $this->format_placeholder_value( $meta_key, $post_id );
+		}
+
+		if ( is_category() || is_tag() || is_tax() ) {
+			$term = get_queried_object();
+			$identifier = "{$term->taxonomy}_{$term->term_id}";
+		} else if ( is_author() ) {
+			$user = get_queried_object();
+			$identifier = "user_{$user->ID}";
+		}
+
+		$acf_value = get_field( $meta_key, $identifier );
 
 		if ( false === $acf_value ) {
 			return $meta_value;
@@ -91,14 +106,20 @@ class ET_Builder_Plugin_Compat_Advanced_Custom_Fields extends ET_Builder_Plugin_
 	 *
 	 * @since 3.17.2
 	 *
-	 * @param array<string, array> $custom_fields
-	 * @param int   $post_id
-	 * @param array<string, mixed> $raw_custom_fields
+	 * @param array[] $custom_fields
+	 * @param int     $post_id
+	 * @param mixed[] $raw_custom_fields
 	 *
-	 * @return array<string, array> modified $custom_fields
+	 * @return array[] modified $custom_fields
 	 */
 	public function maybe_filter_dynamic_content_fields( $custom_fields, $post_id, $raw_custom_fields ) {
 		$_          = ET_Core_Data_Utils::instance();
+		$post_type  = get_post_type( $post_id );
+
+		if ( ! $post_id || et_theme_builder_is_layout_post_type( $post_type ) ) {
+			return $this->maybe_filter_dynamic_content_fields_in_tb( $custom_fields, $post_id, $raw_custom_fields );
+		}
+
 		$acf_values = get_fields( $post_id );
 
 		// If exist, loop ACF fields values and modify its field definition.
@@ -117,6 +138,66 @@ class ET_Builder_Plugin_Compat_Advanced_Custom_Fields extends ET_Builder_Plugin_
 
 						break;
 				}
+			}
+		}
+
+		return $custom_fields;
+	}
+
+	/**
+	 * Format ACF dynamic content fields for TB layouts.
+	 *
+	 * @since 4.0
+	 *
+	 * @param array[] $custom_fields
+	 * @param int     $post_id
+	 * @param mixed[] $raw_custom_fields
+	 *
+	 * @return array[] modified $custom_fields
+	 */
+	public function maybe_filter_dynamic_content_fields_in_tb( $custom_fields, $post_id, $raw_custom_fields ) {
+		$groups = acf_get_field_groups();
+
+		foreach ( $groups as $group ) {
+			$fields = acf_get_fields( $group['ID'] );
+
+			foreach ( $fields as $field ) {
+				$settings = array(
+					'label'  => esc_html( $field['label'] ),
+					'type'   => 'any',
+					'fields' => array(
+						'before' => array(
+							'label'   => esc_html__( 'Before', 'et_builder' ),
+							'type'    => 'text',
+							'default' => '',
+							'show_on' => 'text',
+						),
+						'after'  => array(
+							'label'   => esc_html__( 'After', 'et_builder' ),
+							'type'    => 'text',
+							'default' => '',
+							'show_on' => 'text',
+						),
+					),
+					'meta_key' => $field['name'],
+					'custom'   => true,
+					'group'    => "ACF: {$group['title']}",
+				);
+
+				if ( current_user_can( 'unfiltered_html' ) ) {
+					$settings['fields']['enable_html'] = array(
+						'label'   => esc_html__( 'Enable raw HTML', 'et_builder' ),
+						'type'    => 'yes_no_button',
+						'options' => array(
+							'on'  => esc_html__( 'Yes', 'et_builder' ),
+							'off' => esc_html__( 'No', 'et_builder' ),
+						),
+						'default' => 'off',
+						'show_on' => 'text',
+					);
+				}
+
+				$custom_fields["custom_meta_{$field['name']}"] = $settings;
 			}
 		}
 
@@ -191,6 +272,48 @@ class ET_Builder_Plugin_Compat_Advanced_Custom_Fields extends ET_Builder_Plugin_
 
 		// Value escaping left to the user to decide since some fields hold rich content.
 		$value = et_core_esc_previously( $value );
+
+		return $value;
+	}
+
+	/**
+	 * Format a placeholder value based on the field type.
+	 *
+	 * @param string $meta_key
+	 * @param integer $post_id
+	 *
+	 * @return mixed
+	 */
+	protected function format_placeholder_value( $meta_key, $post_id ) {
+		if ( function_exists( 'acf_get_field' ) ) {
+			$field = acf_get_field( $meta_key );
+		} else {
+			$field = get_field_object( $meta_key, false, array( 'load_value' => false ) );
+		}
+
+		if ( ! is_array( $field ) || empty( $field['type'] ) ) {
+			return esc_html__( 'Your ACF Field Value Will Display Here', 'et_builder' );
+		}
+
+		$value = esc_html( sprintf(
+			// Translators: %1$s: ACF Field name
+			__( 'Your "%1$s" ACF Field Value Will Display Here', 'et_builder' ),
+			$field['label']
+		) );
+
+		switch ( $field['type'] ) {
+			case 'image':
+				$value = ET_BUILDER_PLACEHOLDER_LANDSCAPE_IMAGE_DATA;
+				break;
+
+			case 'taxonomy':
+				$value = esc_html( implode( ', ', array(
+					__( 'Category 1', 'et_builder' ),
+					__( 'Category 2', 'et_builder' ),
+					__( 'Category 3', 'et_builder' ),
+				) ) );
+				break;
+		}
 
 		return $value;
 	}

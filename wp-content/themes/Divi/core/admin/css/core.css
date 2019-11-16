@@ -558,6 +558,68 @@ body.rtl.et-db:not(.et-fb-no-rtl) .et-core-modal-two-buttons .et-core-modal-acti
 	background: #00bba3;
 }
 
+.et-core-confirmation-dialog-overlay {
+	background: rgba(255,255,255,0.7);
+	position: absolute;
+	top: 0;
+	right: auto;
+	bottom: 0;
+	left: -9999px;
+	transition: opacity .5s .2s;
+	opacity: 0;
+	z-index: 10000000;
+}
+
+.et-core-confirmation-dialog-overlay.et-core-active {
+	opacity: 1;
+	left: 0;
+	right: 0;
+}
+
+.et-core-confirmation-dialog-overlay.et-core-closing {
+	opacity: 0;
+}
+
+.et-core-confirmation-dialog {
+	display: none;
+	background: #FFF;
+	box-shadow: 0 5px 30px 0 rgba(43, 135, 218, 0.2);
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 85%;
+	animation: et-core-fade-in-scale .5s 1 cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.et-core-confirmation-dialog-overlay.et-core-active .et-core-confirmation-dialog {
+	display: block;
+}
+
+.et-core-confirmation-dialog-header {
+	margin: 0;
+	padding: 21px 40px 20px 26px;
+}
+
+.et-core-confirmation-dialog-header h3.et-core-modal-title {
+	color: #333;
+}
+
+.et-core-confirmation-dialog-header .et-core-modal-close:before {
+	color: rgb(76, 88, 102);
+}
+
+.et-core-confirmation-dialog-content {
+	color: #5c6978;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.4em;
+	padding: 0 24px 24px;
+}
+
+.et-core-confirmation-dialog .et-core-modal-action {
+	position: static;
+}
+
 /*-----------------------------------------------------------------------------
   5.0 - Tabs
 ------------------------------------------------------------------------------*/

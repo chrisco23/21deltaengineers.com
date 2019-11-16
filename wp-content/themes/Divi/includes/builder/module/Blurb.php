@@ -78,9 +78,11 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 				'image'   => array(
 					'css'             => array(
 						'main' => array(
-							'border_radii' => "%%order_class%% .et_pb_main_blurb_image .et_pb_image_wrap",
-							'border_styles' => "%%order_class%% .et_pb_main_blurb_image .et_pb_image_wrap",
-						)
+							'border_radii'        => '%%order_class%% .et_pb_main_blurb_image .et_pb_image_wrap',
+							'border_radii_hover'  => '%%order_class%%:hover .et_pb_main_blurb_image .et_pb_image_wrap',
+							'border_styles'       => '%%order_class%% .et_pb_main_blurb_image .et_pb_image_wrap',
+							'border_styles_hover' => '%%order_class%%:hover .et_pb_main_blurb_image .et_pb_image_wrap',
+						),
 					),
 					'label_prefix'    => esc_html__( 'Image', 'et_builder' ),
 					'tab_slug'        => 'advanced',
@@ -100,11 +102,12 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 						'use_icon' => 'off',
 					),
 					'css'                 => array(
-						'main' => '%%order_class%% .et_pb_main_blurb_image .et_pb_image_wrap',
+						'main'        => '%%order_class%% .et_pb_main_blurb_image .et_pb_image_wrap',
+						'hover'       => '%%order_class%%:hover .et_pb_main_blurb_image .et_pb_image_wrap',
 						'show_if_not' => array(
 							'use_icon' => 'on',
 						),
-						'overlay' => 'inset',
+						'overlay'     => 'inset',
 					),
 					'default_on_fronts'  => array(
 						'color'    => '',
@@ -144,7 +147,8 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 					'toggle_slug' => 'icon_settings',
 					'depends_show_if' => 'off',
 					'css'                 => array(
-						'main' => '%%order_class%% .et_pb_main_blurb_image',
+						'main'  => '%%order_class%% .et_pb_main_blurb_image',
+						'hover' => '%%order_class%%:hover .et_pb_main_blurb_image',
 					),
 				),
 			),

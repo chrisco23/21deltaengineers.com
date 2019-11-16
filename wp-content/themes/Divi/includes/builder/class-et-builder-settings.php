@@ -27,9 +27,9 @@ class ET_Builder_Settings {
 	protected static $_PAGE_SETTINGS_FIELDS_META_KEY_MAP = array();
 
 	/**
-	 * @var array
+	 * @var array[]
 	 */
-	protected static $_PAGE_SETTINGS_IS_DEFAULT;
+	protected static $_PAGE_SETTINGS_IS_DEFAULT = array();
 
 	/**
 	 * @var array
@@ -300,7 +300,7 @@ class ET_Builder_Settings {
 		);
 	}
 
-	protected static function _get_page_settings_fields() {
+	protected static function _get_page_settings_fields( $post_type = 'post' ) {
 		$fields = array();
 		$overflow = ET_Builder_Module_Fields_Factory::get( 'Overflow' );
 
@@ -387,7 +387,7 @@ class ET_Builder_Settings {
 				'id'          => 'et_pb_post_settings_excerpt',
 				'show_in_bb'  => false,
 				'post_field'  => 'post_excerpt',
-				'label'       => esc_html__( 'Excerpt', 'et_builder' ),
+				'label'       => 'product' === $post_type ? esc_html__( 'Short Description', 'et_builder' ) : esc_html__( 'Excerpt', 'et_builder' ),
 				'default'     => '',
 				'tab_slug'    => 'content',
 				'toggle_slug' => 'main_content',
@@ -400,7 +400,7 @@ class ET_Builder_Settings {
 				// This meta must not be updated during save_post or it will overwrite
 				// the value set in the WP edit page....
 				'save_post'          => false,
-				'label'              => esc_html__( 'Featured Image', 'et_builder' ),
+				'label'              => 'product' === $post_type ? esc_html__( 'Product Image', 'et_builder' ) : esc_html__( 'Featured Image', 'et_builder' ),
 				'embed'              => false,
 				'attachment_id'      => true,
 				'upload_button_text' => esc_attr__( 'Select', 'et_builder' ),
@@ -586,7 +586,7 @@ class ET_Builder_Settings {
 		$et_pb_static_css_file = '' !== $static_css_file ? $static_css_file : $default;
 		$is_default[]          = $et_pb_static_css_file === $default ? 'et_pb_static_css_file' : '';
 
-		self::$_PAGE_SETTINGS_IS_DEFAULT = $is_default;
+		self::$_PAGE_SETTINGS_IS_DEFAULT[ $post_id ] = $is_default;
 
 		$post = get_post( $post_id );
 		$values = array(
@@ -731,12 +731,20 @@ class ET_Builder_Settings {
 		 */
 		self::$_BUILDER_SETTINGS_VALUES = apply_filters( 'et_builder_settings_values', self::_get_builder_settings_values() );
 
+		if ( function_exists( 'is_product' ) && is_product() ) {
+			self::$_PAGE_SETTINGS_FIELDS = self::_get_page_settings_fields( 'product' );
+		} else {
+			self::$_PAGE_SETTINGS_FIELDS = self::_get_page_settings_fields();
+		}
+
 		/**
 		 * Filters Divi Builder page settings field definitions.
 		 *
+		 * @since 3.29     Customize Page Settings Fields for Product CPT.
 		 * @since 3.0.45
 		 */
-		self::$_PAGE_SETTINGS_FIELDS = apply_filters( 'et_builder_page_settings_definitions', self::_get_page_settings_fields() );
+		self::$_PAGE_SETTINGS_FIELDS = apply_filters( 'et_builder_page_settings_definitions',
+			self::$_PAGE_SETTINGS_FIELDS );
 
 		/**
 		 * Filters Divi Builder page settings field definitions.
@@ -954,14 +962,14 @@ class ET_Builder_Settings {
 	 * @return string[] {
 	 *     Localized Tab Names.
 	 *
-	 *     @type string $tab_slug Tab name
+	 * @type string $tab_slug Tab name
 	 *     ...
 	 * }
 	 */
 	public static function get_tabs( $scope = 'page' ) {
-		$result   = array();
-		$advanced = esc_html_x( 'Advanced', 'Design Settings', 'et_builder' );
-		$post_type_integration = esc_html_x( 'Post Type Integration', 'Builder Settings', 'et_builder' );
+		$result                  = array();
+		$advanced                = esc_html_x( 'Advanced', 'Design Settings', 'et_builder' );
+		$post_type_integration   = esc_html_x( 'Post Type Integration', 'Builder Settings', 'et_builder' );
 
 		if ( 'page' === $scope ) {
 			$result = array(
@@ -971,8 +979,8 @@ class ET_Builder_Settings {
 			);
 		} else if ( 'builder' === $scope ) {
 			$result = array(
-				'post_type_integration' => $post_type_integration,
-				'advanced' => $advanced,
+				'post_type_integration'   => $post_type_integration,
+				'advanced'                => $advanced,
 			);
 		}
 
@@ -984,10 +992,11 @@ class ET_Builder_Settings {
 		 * @param string[] $tabs {
 		 *     Localized Tab Names.
 		 *
-		 *     @type string $tab_slug Tab name
+		 * @type string $tab_slug Tab name
 		 *     ...
 		 * }
-		 * @param string   $scope Accepts 'page', 'builder'.
+		 *
+		 * @param string $scope Accepts 'page', 'builder'.
 		 */
 		return apply_filters( 'et_builder_settings_tabs', $result, $scope );
 	}
@@ -1075,6 +1084,7 @@ class ET_Builder_Settings {
 	 * }
 	 */
 	public static function get_values( $scope = 'page', $post_id = null, $exclude_defaults = false ) {
+		$post_id = $post_id ? $post_id : get_the_ID();
 		$result = array();
 
 		if ( 'builder' === $scope ) {
@@ -1092,7 +1102,7 @@ class ET_Builder_Settings {
 			'all' === $scope || $result = array( $result );
 
 			foreach ( $result as $key => $settings ) {
-				$result[ $key ] = array_diff_key( $result[ $key ], array_flip( self::$_PAGE_SETTINGS_IS_DEFAULT ) );
+				$result[ $key ] = array_diff_key( $result[ $key ], array_flip( self::$_PAGE_SETTINGS_IS_DEFAULT[ $post_id ] ) );
 			}
 
 			'all' === $scope || $result = $result[0];

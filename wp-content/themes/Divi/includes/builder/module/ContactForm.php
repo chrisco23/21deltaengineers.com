@@ -377,7 +377,6 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 		) );
 		$form_field_text_color       = $this->props['form_field_text_color'];
 		$button_custom               = $this->props['custom_button'];
-		$submit_button_text          = $this->props['submit_button_text'];
 		$custom_message              = $this->props['custom_message'];
 		$use_redirect                = $this->props['use_redirect'];
 		$redirect_url                = $this->props['redirect_url'];
@@ -615,7 +614,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 		$et_pb_captcha = sprintf( '
 			<div class="et_pb_contact_right">
 				<p class="clearfix">
-					<span class="et_pb_contact_captcha_question">%1$s</span> = <input type="text" size="2" class="input et_pb_contact_captcha" data-first_digit="%3$s" data-second_digit="%4$s" value="" name="et_pb_contact_captcha_%2$s" data-required_mark="required">
+					<span class="et_pb_contact_captcha_question">%1$s</span> = <input type="text" size="2" class="input et_pb_contact_captcha" data-first_digit="%3$s" data-second_digit="%4$s" value="" name="et_pb_contact_captcha_%2$s" data-required_mark="required" autocomplete="disabled">
 				</p>
 			</div> <!-- .et_pb_contact_right -->',
 			sprintf( '%1$s + %2$s', esc_html( $et_pb_first_digit ), esc_html( $et_pb_second_digit ) ),
@@ -629,16 +628,6 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 		}
 
 		if ( $et_contact_error ) {
-			// Make sure submit button text is not just a space
-			$submit_button_text = trim( $submit_button_text );
-
-			// We can't use `empty( trim() )` because that throws
-			// an error on old(er) PHP versions
-			if ( empty( $submit_button_text ) ) {
-				$submit_button_text = __( 'Submit', 'et_builder' );
-				$multi_view->set_default_value( 'submit_button_text', $submit_button_text );
-			}
-
 			$multi_view_data_attr = $multi_view->render_attrs( array(
 				'content' => '{{submit_button_text}}',
 			) );
@@ -649,19 +638,19 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 						%8$s
 						<p class="et_pb_contact_field et_pb_contact_field_%11$s et_pb_contact_field_half" data-id="et_number" data-type="input">
 							<label for="et_pb_contact_et_number_%7$s" class="et_pb_contact_form_label">Number</label>
-							<input type="text" id="et_pb_contact_et_number_%7$s" class="input" value="" name="et_pb_contact_et_number_%7$s" data-required_mark="required" data-field_type="input" data-original_id="et_number" placeholder="Number" tabindex="-1">
+							<input type="text" id="et_pb_contact_et_number_%7$s" class="input" value="" name="et_pb_contact_et_number_%7$s" data-required_mark="required" data-field_type="input" data-original_id="et_number" placeholder="Number" tabindex="-1" autocomplete="disabled">
 						</p>
 						<input type="hidden" value="et_contact_proccess" name="et_pb_contactform_submit_%7$s"/>
 						<div class="et_contact_bottom_container">
 							%2$s
-							<button type="submit" class="et_pb_contact_submit et_pb_button%6$s"%5$s%9$s%10$s%11$s%12$s>%3$s</button>
+							<button type="submit" name="et_builder_submit_button" class="et_pb_contact_submit et_pb_button%6$s"%5$s%9$s%10$s%11$s%12$s>%3$s</button>
 						</div>
 						%4$s
 					</form>
 				</div> <!-- .et_pb_contact -->',
 				esc_url( get_permalink( get_the_ID() ) ),
 				(  'on' === $captcha ? $et_pb_captcha : '' ),
-				esc_html( $submit_button_text ),
+				esc_html( $multi_view->get_value( 'submit_button_text' ) ),
 				wp_nonce_field( 'et-pb-contact-form-submit', '_wpnonce-et-pb-contact-form-submitted-' . $et_pb_contact_form_num, true, false ),
 				'' !== $custom_icon && 'on' === $button_custom ? sprintf(
 					' data-icon="%1$s"',
@@ -717,7 +706,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 	 * Filter multi view value.
 	 *
 	 * @since 3.27.1
-	 * 
+	 *
 	 * @see ET_Builder_Module_Helper_MultiViewOptions::filter_value
 	 *
 	 * @param mixed $raw_value Props raw value.
@@ -744,6 +733,12 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 
 		if ( $raw_value && in_array( $name, $fields_need_escape, true ) ) {
 			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
+		} else if ( 'submit_button_text' === $name ) {
+			if ( '' === trim( $raw_value ) ) {
+				$raw_value = __( 'Submit', 'et_builder' );
+			}
+
+			return esc_html( $raw_value );
 		}
 
 		return $raw_value;

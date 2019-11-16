@@ -240,7 +240,7 @@ class ET_Builder_Module_Bar_Counters_Item extends ET_Builder_Module {
 	 * This method is introduced to inherit background colors values. There are some situations where not
 	 * all inheritance process done here.
 	 *
-	 * @since ??
+	 * @since 3.27.4
 	 */
 	function maybe_inherit_values() {
 		global $et_pb_counters_settings;

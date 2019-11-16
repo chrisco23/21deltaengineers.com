@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * temporarily push the parent theme as active (similar to how WP lets the user preview a theme before activation).
  *
  * @since 3.20
- * @since 3.23 Moved from `ET_Support_Center::maybe_disable_child_theme()` for an improved Safe Mode experience.
+ * @since 3.23 Moved from `ET_Core_SupportCenter::maybe_disable_child_theme()` for an improved Safe Mode experience.
  *
  * @param $current_theme
  *

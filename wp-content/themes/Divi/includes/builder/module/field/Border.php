@@ -36,18 +36,56 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 	 * ET_Builder_Module_Field_Border constructor.
 	 */
 	public function __construct() {
-		self::$_ = ET_Core_Data_Utils::instance();
+		$this->template = et_pb_option_template();
+		self::$_        = ET_Core_Data_Utils::instance();
+		$this->set_template();
+	}
+
+	/**
+	 * Set option template for borders
+	 *
+	 * @since 3.28
+	 *
+	 * @return void
+	 */
+	public function set_template() {
+		$template = $this->template;
+		if ( $template->is_enabled() && ! $template->has( 'border' ) ) {
+			$template->add(
+				'border',
+				$this->get_fields( $template->placeholders( array(
+					'suffix'          => null,
+					'label_prefix'    => null,
+					'tab_slug'        => null,
+					'toggle_slug'     => null,
+					'color_type'      => null,
+					'depends_on'      => null,
+					'depends_show_if' => null,
+					'defaults'        => array(
+						'border_radii'  => null,
+						'border_styles' => array(
+							'width' => null,
+							'color' => null,
+							'style' => null,
+						),
+					),
+				) ) )
+			);
+		}
 	}
 
 	/**
 	 * Get border fields.
 	 *
+	 * @since 3.28 Add option template support
 	 * @since 3.23 Add support for responsive settings. Add allowed units for some range fields.
 	 *
-	 * @param  array $args Border settings arguments.
-	 * @return array       Border fields.
+	 * @param array $args               Border settings arguments.
+	 * @param bool  $return_template_id return template id
+	 *
+	 * @return array Border fields.
 	 */
-	public function get_fields( array $args = array() ) {
+	public function get_fields( array $args = array(), $return_template_id = false ) {
 		$settings = shortcode_atts( array(
 			'suffix'          => '',
 			'label_prefix'    => '',
@@ -56,6 +94,7 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 			'color_type'      => 'color-alpha',
 			'depends_on'      => null,
 			'depends_show_if' => null,
+			'use_radius'      => true,
 			'defaults'        => array(
 				'border_radii'  => 'on||||',
 				'border_styles' => array(
@@ -66,26 +105,34 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 			),
 		), $args );
 
+		if ( $this->template->is_enabled() && $this->template->has( 'border' ) ) {
+			return $this->template->create( 'border', $settings, $return_template_id );
+		}
+
 		$additional_options = array();
 		$suffix             = $settings['suffix'];
 		$defaults           = $settings['defaults']['border_styles'];
 		$defaultUnit        = 'px';
-
-		$additional_options["border_radii{$suffix}"] = array(
-			'label'           => sprintf( '%1$s%2$s', '' !== $settings['label_prefix'] ? sprintf( '%1$s ', $settings['label_prefix'] ) : '', esc_html__( 'Rounded Corners', 'et_builder' ) ),
-			'type'            => 'border-radius',
-			'hover'           => 'tabs',
-			'validate_input'  => true,
-			'default'         => $settings['defaults']['border_radii'],
-			'tab_slug'        => $settings['tab_slug'],
-			'toggle_slug'     => $settings['toggle_slug'],
-			'attr_suffix'     => $suffix,
-			'option_category' => 'border',
-			'description'     => esc_html__( 'Here you can control the corner radius of this element. Enable the link icon to control all four corners at once, or disable to define custom values for each.', 'et_builder' ),
-			'tooltip'         => esc_html__( 'Sync values', 'et_builder' ),
-			'mobile_options'  => true,
-			'allowed_units'   => array( '%', 'em', 'rem', 'px', 'cm', 'mm', 'in', 'pt', 'pc', 'ex', 'vh', 'vw' ),
-		);
+		
+		if ( $settings['use_radius'] ) {
+			$additional_options["border_radii{$suffix}"] = array(
+				'label'           => sprintf( '%1$s%2$s', '' !== $settings['label_prefix'] ? sprintf( '%1$s ', $settings['label_prefix'] ) : '', esc_html__( 'Rounded Corners', 'et_builder' ) ),
+				'type'            => 'border-radius',
+				'hover'           => 'tabs',
+				'validate_input'  => true,
+				'default'         => $settings['defaults']['border_radii'],
+				'tab_slug'        => $settings['tab_slug'],
+				'toggle_slug'     => $settings['toggle_slug'],
+				'attr_suffix'     => $suffix,
+				'option_category' => 'border',
+				'description'     => esc_html__( 'Here you can control the corner radius of this element. Enable the link icon to control all four corners at once, or disable to define custom values for each.', 'et_builder' ),
+				'tooltip'         => esc_html__( 'Sync values', 'et_builder' ),
+				'mobile_options'  => true,
+				'allowed_units'   => array( '%', 'em', 'rem', 'px', 'cm', 'mm', 'in', 'pt', 'pc', 'ex', 'vh', 'vw' ),
+			);
+		} else {
+			$additional_options["border_radii{$suffix}"] = array();
+		}
 
 		$additional_options["border_styles{$suffix}"] = array(
 			'label'               => sprintf( '%1$s%2$s', '' !== $settings['label_prefix'] ? sprintf( '%1$s ', $settings['label_prefix'] ) : '', esc_html__( 'Border Styles', 'et_builder' ) ),
@@ -380,7 +427,17 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 		$is_desktop   = 'desktop' === $device;
 		$value_suffix = true === $is_hover ? et_pb_hover_options()->get_suffix() : '';
 		$value_suffix = ! $is_hover && ! $is_desktop ? "_{$device}" : $value_suffix;
-		$settings     = self::$_->array_get( $advanced_fields, "border{$suffix}.border_radii{$suffix}", array() );
+
+		// Get border settings based on main border_radii field on option template.
+		// This used to refer to module's advanced_fields property but for performance reason
+		// it is now fetched from option template field's instead.
+		// Rebuilt field on option template is cached on property so it is safe to get it on demand.
+		$border_advanced_setting = self::$_->array_get( $advanced_fields, "border{$suffix}", array() );
+		$border_template_id      = ET_Builder_Module_Fields_Factory::get( 'Border' )->get_fields( $border_advanced_setting, true );
+		$border_fields           = $this->template->is_enabled() ? $this->template->rebuild_field_template( $border_template_id ) : array();
+
+		// Border radii settings
+		$settings     = self::$_->array_get( $border_fields, "border_radii{$suffix}", array() );
 		$radii        = isset( $atts["border_radii{$suffix}{$value_suffix}"] ) ? $atts["border_radii{$suffix}{$value_suffix}"] : false;
 
 		// Bail early if current device value doesn't exist.
@@ -444,16 +501,26 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 
 		self::$_is_default = array();
 
-		if ( isset( $advanced_fields['border']['css']['important'] ) ) {
-			if ( 'plugin_only' === $advanced_fields['border']['css']['important'] ) {
+
+
+		if ( self::$_->array_get( $advanced_fields, "border{$suffix}.css.important", false ) ) {
+			if ( 'plugin_only' === self::$_->array_get( $advanced_fields, "border{$suffix}.css.important", '' ) ) {
 				$important = et_builder_has_limitation( 'force_use_global_important' ) ? '!important' : '';
 			} else {
 				$important = '!important';
 			}
 		}
 
-		// Border Style CSS
-		$settings = self::$_->array_get( $advanced_fields, "border{$suffix}.border_styles{$suffix}", array() );
+		// Get border settings based on main border_style field on option template.
+		// This used to refer to module's advanced_fields property but for performance reason
+		// it is now fetched from option template field's instead.
+		// Rebuilt field on option template is cached on property so it is safe to get it on demand.
+		$border_advanced_setting = self::$_->array_get( $advanced_fields, "border{$suffix}", array() );
+		$border_template_id      = ET_Builder_Module_Fields_Factory::get( 'Border' )->get_fields( $border_advanced_setting, true );
+		$border_fields           = $this->template->is_enabled() ? $this->template->rebuild_field_template( $border_template_id ) : array();
+
+		// Border Style settings
+		$settings = self::$_->array_get( $border_fields, "border_styles{$suffix}", array() );
 
 		if ( ! isset( $settings['composite_structure'] ) || ! is_array( $settings['composite_structure'] ) ) {
 			return $style;
@@ -477,7 +544,7 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 				$all_edges_key_device = "border_{$property}_all{$suffix}{$device_suffix}";
 				$edge_key             = "border_{$property}_{$edge}{$suffix}";
 				$edge_key_device      = "border_{$property}_{$edge}{$suffix}{$device_suffix}";
-				
+
 				$is_all_edges_responsive = et_pb_responsive_options()->is_responsive_enabled( $attrs, $all_edges_key );
 				$is_edge_responsive      = et_pb_responsive_options()->is_responsive_enabled( $attrs, $edge_key );
 				$all_edges_desktop_value = et_pb_responsive_options()->get_any_value( $attrs, $all_edges_key );
@@ -504,7 +571,7 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 					} else if ( $is_desktop || ( ! $is_desktop && $is_all_edges_responsive ) ) {
 						$value = et_pb_responsive_options()->get_any_value( $attrs, $all_edges_key_device );
 					}
-	
+
 					if ( ! $value ) {
 						self::$_is_default[] = "{$edge_key}{$value_suffix}";
 						self::$_is_default[] = "{$all_edges_key}{$value_suffix}";

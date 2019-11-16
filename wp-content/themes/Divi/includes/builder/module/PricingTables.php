@@ -616,13 +616,13 @@ class ET_Builder_Module_Pricing_Tables extends ET_Builder_Module {
 		}
 
 		// Featured Table Header Background Color.
-		et_pb_responsive_options()->generate_responsive_css( $featured_table_header_background_color_values, '%%order_class%% .et_pb_featured_table .et_pb_pricing_heading', 'background-color', $render_slug, '', 'color' );
+		et_pb_responsive_options()->generate_responsive_css( $featured_table_header_background_color_values, '%%order_class%% .et_pb_featured_table .et_pb_pricing_heading', 'background-color', $render_slug, ' !important;', 'color' );
 
 		if ( et_builder_is_hover_enabled( 'featured_table_header_background_color', $this->props ) ) {
 			ET_Builder_Element::set_style( $render_slug, array(
-				'selector'    => '%%order_class%% .et_pb_pricing_table.et_pb_featured_table:hover .et_pb_pricing_heading' ,
+				'selector'    => '%%order_class%% .et_pb_featured_table:hover .et_pb_pricing_heading' ,
 				'declaration' => sprintf(
-					'background-color: %1$s;',
+					'background-color: %1$s !important;',
 					esc_html( $featured_table_header_background_color_hover )
 				),
 			) );

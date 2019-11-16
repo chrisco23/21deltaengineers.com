@@ -147,6 +147,56 @@ class ET_Builder_Module_Tabs extends ET_Builder_Module {
 		return $fields;
 	}
 
+	/**
+	 * Outputs tabs module nav markup
+	 * The nav output is abstracted into method so tabs module can be extended
+	 *
+	 * @since 3.29
+	 *
+	 * @return string
+	 */
+	public function get_tabs_nav() {
+		global $et_pb_tab_titles;
+		global $et_pb_tab_classes;
+
+		$tabs = '';
+
+		$i = 0;
+		if ( ! empty( $et_pb_tab_titles ) ) {
+			foreach ( $et_pb_tab_titles as $tab_title ){
+				++$i;
+				$tabs .= sprintf( '<li class="%3$s%1$s">%2$s</li>',
+					( 1 === $i ? ' et_pb_tab_active' : '' ),
+					et_pb_multi_view_options( $this )->render_element( array(
+						'tag'     => 'a',
+						'content' => '{{tab_title}}',
+						'attrs'   => array(
+							'href' => '#',
+						),
+						'custom_props' => array(
+							'tab_title' => $tab_title,
+						)
+					) ),
+					esc_attr( ltrim( $et_pb_tab_classes[ $i-1 ] ) )
+				);
+			}
+		}
+
+		return $tabs;
+	}
+
+	/**
+	 * Outputs tabs content markup
+	 * The tabs content is abstracted into method so tabs module can be extended
+	 *
+	 * @since 3.29
+	 *
+	 * @return string
+	 */
+	public function get_tabs_content() {
+		return $this->content;
+	}
+
 	function render( $attrs, $content = null, $render_slug ) {
 		$active_tab_background_color_hover    = $this->get_hover_value( 'active_tab_background_color' );
 		$active_tab_background_color_values   = et_pb_responsive_options()->get_property_values( $this->props, 'active_tab_background_color' );
@@ -155,7 +205,7 @@ class ET_Builder_Module_Tabs extends ET_Builder_Module {
 		$active_tab_text_color_hover          = $this->get_hover_value( 'active_tab_text_color' );
 		$active_tab_text_color_values         = et_pb_responsive_options()->get_property_values( $this->props, 'active_tab_text_color' );
 
-		$all_tabs_content = $this->content;
+		$all_tabs_content = $this->get_tabs_content();
 
 		global $et_pb_tab_titles;
 		global $et_pb_tab_classes;
@@ -199,28 +249,7 @@ class ET_Builder_Module_Tabs extends ET_Builder_Module {
 			) );
 		}
 
-		$tabs = '';
-
-		$i = 0;
-		if ( ! empty( $et_pb_tab_titles ) ) {
-			foreach ( $et_pb_tab_titles as $tab_title ){
-				++$i;
-				$tabs .= sprintf( '<li class="%3$s%1$s">%2$s</li>',
-					( 1 === $i ? ' et_pb_tab_active' : '' ),
-					et_pb_multi_view_options( $this )->render_element( array(
-						'tag'     => 'a',
-						'content' => '{{tab_title}}',
-						'attrs'   => array(
-							'href' => '#',
-						),
-						'custom_props' => array(
-							'tab_title' => $tab_title,
-						)
-					) ),
-					esc_attr( ltrim( $et_pb_tab_classes[ $i-1 ] ) )
-				);
-			}
-		}
+		$tabs = $this->get_tabs_nav();
 
 		$video_background = $this->video_background();
 		$parallax_image_background = $this->get_parallax_image_background();
@@ -233,7 +262,7 @@ class ET_Builder_Module_Tabs extends ET_Builder_Module {
 		) );
 
 		$output = sprintf(
-			'<div%3$s class="%4$s">
+			'<div%3$s class="%4$s" %7$s>
 				%6$s
 				%5$s
 				<ul class="et_pb_tabs_controls clearfix">
@@ -248,7 +277,8 @@ class ET_Builder_Module_Tabs extends ET_Builder_Module {
 			$this->module_id(),
 			$this->module_classname( $render_slug ),
 			$video_background,
-			$parallax_image_background
+			$parallax_image_background,
+			/* 7$s */ 'et_pb_wc_tabs' === $render_slug ? $this->get_multi_view_attrs() : ''
  		);
 
 		return $output;

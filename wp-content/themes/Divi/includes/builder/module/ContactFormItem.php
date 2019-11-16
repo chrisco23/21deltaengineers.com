@@ -613,6 +613,7 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 					$drag_id      = isset( $option->dragID ) ? $option->dragID : '';
 					$option_id    = isset( $option->id ) ? $option->id : $drag_id;
 					$option_id    = sprintf( ' data-id="%1$s"', esc_attr( $option_id ) );
+					$option_label = wp_strip_all_tags( $option->value );
 					$option_link  = '';
 
 					if ( ! empty( $option->link_url ) ) {
@@ -620,10 +621,15 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 						$option_link = sprintf( ' <a href="%1$s" target="_blank">%2$s</a>', esc_url( $option->link_url ), esc_html( $link_text ) );
 					}
 
+					// The required field needs a value, use link information if the option value is empty
+					if ( 'off' !== $required_mark && empty( $option_value ) && ! empty( $option_link ) ){
+						$option_value = isset( $option->link_text ) && ! empty( $option->link_text ) ? esc_html( $option->link_text ) : esc_url( $option->link_url );
+					}
+
 					$input_field .= sprintf(
 						'<span class="et_pb_contact_field_checkbox">
 							<input type="checkbox" id="et_pb_contact_%1$s_%5$s_%3$s" class="input" value="%2$s"%4$s%6$s>
-							<label for="et_pb_contact_%1$s_%5$s_%3$s"><i></i>%2$s%7$s</label>
+							<label for="et_pb_contact_%1$s_%5$s_%3$s"><i></i>%7$s%8$s</label>
 						</span>',
 						esc_attr( $field_id ),
 						esc_attr( $option_value ),
@@ -631,7 +637,8 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 						$is_checked ? ' checked="checked"' : '',
 						esc_attr( $render_count ), // #5
 						$option_id,
-						$option_link // #7
+						$option_label,
+						$option_link // #8
 					);
 				}
 

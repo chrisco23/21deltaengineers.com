@@ -303,7 +303,7 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 		$hover_icon              = $this->props['hover_icon'];
 		$use_overlay             = $this->props['use_overlay'];
 		$animation_style         = $this->props['animation_style'];
-		$box_shadow_style        = $this->props['box_shadow_style'];
+		$box_shadow_style        = self::$_->array_get( $this->props, 'box_shadow_style', '' );
 
 		$video_background          = $this->video_background();
 		$parallax_image_background = $this->get_parallax_image_background();

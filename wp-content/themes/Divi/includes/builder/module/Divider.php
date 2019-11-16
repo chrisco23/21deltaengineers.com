@@ -295,7 +295,7 @@ class ET_Builder_Module_Divider extends ET_Builder_Module {
 			);
 		}
 
-		if ( '' !== $divider_weight_hover && $divider_weight !== $divider_weight_hover ) {
+		if ( et_builder_is_hover_enabled( 'divider_weight', $this->props ) && '' !== $divider_weight_hover && $divider_weight !== $divider_weight_hover ) {
 			$divider_weight_hover_processed = false === strpos( $divider_weight_hover, 'px' ) ? $divider_weight_hover . 'px' : $divider_weight_hover;
 
 			$hover_style .= sprintf( ' border-top-width: %1$s;',

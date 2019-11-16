@@ -29,7 +29,7 @@ if ( is_array( $et_theme_image_sizes ) ){
 	}
 }
 
-if ( et_is_responsive_images_enabled() ) {
+if ( function_exists( 'et_screen_sizes' ) && function_exists( 'et_is_responsive_images_enabled' ) && et_is_responsive_images_enabled() ) {
 	// Register responsive image sizes.
 	$et_screen_sizes = et_screen_sizes();
 	if ( $et_screen_sizes && is_array( $et_screen_sizes ) ) {

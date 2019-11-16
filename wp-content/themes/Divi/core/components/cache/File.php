@@ -35,9 +35,9 @@ class ET_Core_Cache_File {
 	 *
 	 * @since 3.27.3
 	 *
-	 * @var bool
+	 * @var array
 	 */
-	protected static $_dirty = false;
+	protected static $_dirty = array();
 
 	/**
 	 * Sets the data contents into the cache.
@@ -51,7 +51,7 @@ class ET_Core_Cache_File {
 	 */
 	public static function set( $cache_name, $data ) {
 		self::$_cache[ $cache_name ] = $data;
-		self::$_dirty                = true;
+		self::$_dirty[ $cache_name ] = $cache_name;
 	}
 
 	/**
@@ -67,8 +67,8 @@ class ET_Core_Cache_File {
 		if ( ! isset( self::$_cache_loaded[ $cache_name ] ) ) {
 			$file = self::get_cache_file_name( $cache_name );
 
-			if ( is_readable( $file ) ) {
-				self::$_cache[ $cache_name ] = unserialize( file_get_contents( $file ) );
+			if ( et_()->WPFS()->is_readable( $file ) ) {
+				self::$_cache[ $cache_name ] = unserialize( et_()->WPFS()->get_contents( $file ) );
 			} else {
 				self::$_cache[ $cache_name ] = array();
 			}
@@ -84,35 +84,33 @@ class ET_Core_Cache_File {
 	 *
 	 * @since 3.27.3
 	 *
-	 * @param bool $force_save Force to save the data.
-	 *
 	 * @return void
 	 */
-	public static function save_cache( $force_save = false ) {
-		if ( ! self::$_dirty && ! $force_save ) {
+	public static function save_cache() {
+		if ( ! self::$_dirty || ! self::$_cache ) {
 			return;
 		}
 
-		if ( ! self::$_cache ) {
-			return;
-		}
-
-		foreach ( self::$_cache as $cache_name => $_cache_data ) {
-			$file = self::get_cache_file_name( $cache_name );
-
-			if ( ! is_writable( dirname( $file ) ) ) {
+		foreach ( self::$_dirty as $cache_name ) {
+			if ( ! isset( self::$_cache[ $cache_name ] ) ) {
 				continue;
 			}
 
-			file_put_contents( $file, serialize( $_cache_data ) );
+			$data = self::$_cache[ $cache_name ];
+			$file = self::get_cache_file_name( $cache_name );
+
+			if ( ! wp_is_writable( dirname( $file ) ) ) {
+				continue;
+			}
+
+			et_()->WPFS()->put_contents( $file, serialize( $data ) );
 		}
 	}
 
 	/**
 	 * Get full path of cache file name.
 	 *
-	 * The file name will be prefixed with: et-file--
-	 * and preficed with .data
+	 * The file name will be suffixed with .data
 	 *
 	 * @since 3.27.3
 	 *
@@ -121,7 +119,7 @@ class ET_Core_Cache_File {
 	 * @return string
 	 */
 	public static function get_cache_file_name( $cache_name ) {
-		return sprintf( '%s/et-file--%s.data', ET_Core_PageResource::get_cache_directory(), $cache_name );
+		return sprintf( '%1$s/%2$s.data', ET_Core_PageResource::get_cache_directory(), $cache_name );
 	}
 }
 

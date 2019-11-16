@@ -725,8 +725,11 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 			'custom_icon_tablet'  => $custom_icon_1_tablet,
 			'custom_icon_phone'   => $custom_icon_1_phone,
 			'has_wrapper'         => false,
-			'multi_view_data'  => $multi_view->render_attrs( array(
-				'content' => '{{button_one_text}}',
+			'multi_view_data'     => $multi_view->render_attrs( array(
+				'content'    => '{{button_one_text}}',
+				'visibility' => array(
+					'button_one_text' => '__not_empty',
+				),
 			) ),
 		) );
 
@@ -741,8 +744,11 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 			'custom_icon_tablet'  => $custom_icon_2_tablet,
 			'custom_icon_phone'   => $custom_icon_2_phone,
 			'has_wrapper'         => false,
-			'multi_view_data'  => $multi_view->render_attrs( array(
-				'content' => '{{button_two_text}}',
+			'multi_view_data'     => $multi_view->render_attrs( array(
+				'content'    => '{{button_two_text}}',
+				'visibility' => array(
+					'button_two_text' => '__not_empty',
+				),
 			) ),
 		) );
 
@@ -792,6 +798,7 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 				'attrs'   => array(
 					'class' => 'et_pb_header_content_wrapper',
 				),
+				'required' => false,
 			) );
 
 			$header_content = sprintf(
@@ -904,8 +911,16 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 			$this->add_classname( 'et_pb_fullscreen' );
 		}
 
+		$muti_view_data_attr = $multi_view->render_attrs( array(
+			'classes' => array(
+				'et_pb_header_with_image' => array(
+					'header_image_url' => '__not_empty',
+				),
+			)
+		) );
+
 		$output = sprintf(
-			'<section%7$s class="%1$s"%9$s%10$s>
+			'<section%7$s class="%1$s"%9$s%10$s%11$s>
 				%6$s
 				%8$s
 				<div class="et_pb_fullwidth_header_container%5$s">
@@ -924,7 +939,8 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 			$this->module_id(),
 			$video_background,
 			et_core_esc_previously( $data_background_layout ),
-			et_core_esc_previously( $data_background_layout_hover ) // #10
+			et_core_esc_previously( $data_background_layout_hover ), // #10
+			et_core_esc_previously( $muti_view_data_attr )
 		);
 
 		return $output;
@@ -952,22 +968,25 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 	 * @return mixed
 	 */
 	public function multi_view_filter_value( $raw_value, $args, $multi_view ) {
-		$name = isset( $args['name'] ) ? $args['name'] : '';
-		$mode = isset( $args['mode'] ) ? $args['mode'] : '';
+		$name    = isset( $args['name'] ) ? $args['name'] : '';
+		$mode    = isset( $args['mode'] ) ? $args['mode'] : '';
+		$context = isset( $args['context'] ) ? $args['context'] : '';
+
 		$fields_need_escape_full = array(
 			'title',
 			'subhead',
 		);
+
+		if ( $raw_value && 'content' === $context && in_array( $name, $fields_need_escape_full, true ) ) {
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'full');
+		}
+
 		$fields_need_escape_limited = array(
 			'button_one_text',
 			'button_two_text',
 		);
 
-		if ( $raw_value && in_array( $name, $fields_need_escape_full, true ) ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'full');
-		}
-
-		if ( $raw_value && in_array( $name, $fields_need_escape_limited, true ) ) {
+		if ( $raw_value && 'content' === $context && in_array( $name, $fields_need_escape_limited, true ) ) {
 			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'limited');
 		}
 

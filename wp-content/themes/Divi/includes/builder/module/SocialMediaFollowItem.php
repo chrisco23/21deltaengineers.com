@@ -441,7 +441,7 @@ class ET_Builder_Module_Social_Media_Follow_Item extends ET_Builder_Module {
 			}
 
 			// Icon hover styles.
-			if ( et_builder_is_hover_enabled( 'icon_font_size', $this->props ) && '' !== $icon_font_size_hover ) {
+			if ( et_builder_is_hover_enabled( 'icon_font_size', $this->props ) && ! empty( $icon_font_size_hover ) ) {
 				$icon_font_size_hover_int    = (int) $icon_font_size_hover;
 				$icon_font_size_hover_unit   = str_replace( $icon_font_size_hover_int, '', $icon_font_size_hover );
 				$icon_font_size_hover_double = 0 < $icon_font_size_hover_int ? $icon_font_size_hover_int * 2 : 0;

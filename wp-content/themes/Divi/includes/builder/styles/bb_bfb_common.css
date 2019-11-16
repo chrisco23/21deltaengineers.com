@@ -309,6 +309,11 @@ body.rtl .et-bfb-optin-cta__button {
   -webkit-font-smoothing: antialiased;
 }
 
+body.rtl #et_pb_layout .hndle:before {
+  left: auto;
+  right: 26px;
+}
+
 body.post-type-view-template #et_pb_layout {
   margin-top: 50px !important;
 }

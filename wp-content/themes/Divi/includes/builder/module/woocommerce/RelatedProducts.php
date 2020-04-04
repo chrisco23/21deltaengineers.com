@@ -28,6 +28,9 @@ class ET_Builder_Module_Woocommerce_Related_Products extends ET_Builder_Module {
 
 	/**
 	 * Initialize.
+	 *
+	 * @since 4.0.7 Introduced Product title toggle slug to allow Copy/Paste
+	 *           @see   {https://github.com/elegantthemes/Divi/issues/17436}
 	 */
 	public function init() {
 		$this->name   = esc_html__( 'Woo Related Product', 'et_builder' );
@@ -47,10 +50,10 @@ class ET_Builder_Module_Woocommerce_Related_Products extends ET_Builder_Module {
 			),
 			'advanced' => array(
 				'toggles' => array(
-					'overlay' => esc_html__( 'Overlay', 'et_builder' ),
-					'image'   => esc_html__( 'Image', 'et_builder' ),
+					'overlay'       => esc_html__( 'Overlay', 'et_builder' ),
+					'image'         => esc_html__( 'Image', 'et_builder' ),
 					// Avoid Text suffix by manually defining the `star` toggle slug.
-					'star'    => esc_html__( 'Star Rating', 'et_builder' ),
+					'star'          => esc_html__( 'Star Rating', 'et_builder' ),
 				),
 			),
 		);

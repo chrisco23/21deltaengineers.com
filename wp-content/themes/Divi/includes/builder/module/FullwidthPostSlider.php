@@ -69,8 +69,8 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 						'bb_icons_support'  => true,
 						'css'               => array(
 							'link'  => "{$this->main_css_element} .et_pb_slide_content a",
-							'ul'    => "{$this->main_css_element} .et_pb_slide_content ul",
-							'ol'    => "{$this->main_css_element} .et_pb_slide_content ol",
+							'ul'    => "{$this->main_css_element} .et_pb_slide_content ul li",
+							'ol'    => "{$this->main_css_element} .et_pb_slide_content ol li",
 							'quote' => "{$this->main_css_element} .et_pb_slide_content blockquote",
 						),
 					),
@@ -940,13 +940,6 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 		$text_overlay_color_values       = et_pb_responsive_options()->get_property_values( $this->props, 'text_overlay_color' );
 		$text_border_radius_values       = et_pb_responsive_options()->get_property_values( $this->props, 'text_border_radius' );
 
-		$background_layout               = $this->props['background_layout'];
-		$background_layout_hover         = et_pb_hover_options()->get_value( 'background_layout', $this->props, 'light' );
-		$background_layout_hover_enabled = et_pb_hover_options()->is_enabled( 'background_layout', $this->props );
-		$background_layout_values        = et_pb_responsive_options()->get_property_values( $this->props, 'background_layout' );
-		$background_layout_tablet        = isset( $background_layout_values['tablet'] ) ? $background_layout_values['tablet'] : '';
-		$background_layout_phone         = isset( $background_layout_values['phone'] ) ? $background_layout_values['phone'] : '';
-
 		$custom_icon_values              = et_pb_responsive_options()->get_property_values( $this->props, 'button_icon' );
 		$custom_icon                     = isset( $custom_icon_values['desktop'] ) ? $custom_icon_values['desktop'] : '';
 		$custom_icon_tablet              = isset( $custom_icon_values['tablet'] ) ? $custom_icon_values['tablet'] : '';
@@ -1065,6 +1058,9 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 			),
 		) );
 
+		// Background layout class names.
+		$background_layout_class_names = et_pb_background_layout_options()->get_background_layout_class( $this->props );
+
 		ob_start();
 
 		$show_no_results_template = true;
@@ -1144,15 +1140,7 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 
 				$slide_class = 'off' !== $show_image && in_array( $image_placement, array( 'left', 'right' ) ) && $has_post_thumbnail ? ' et_pb_slide_with_image' : '';
 				$slide_class .= 'off' !== $show_image && ! $has_post_thumbnail ? ' et_pb_slide_with_no_image' : '';
-				$slide_class .= " et_pb_bg_layout_{$background_layout}";
-
-				if ( ! empty( $background_layout_tablet ) ) {
-					$slide_class .= " et_pb_bg_layout_{$background_layout_tablet}_tablet";
-				}
-
-				if ( ! empty( $background_layout_phone ) ) {
-					$slide_class .= " et_pb_bg_layout_{$background_layout_tablet}_phone";
-				}
+				$slide_class .= ' ' . implode( ' ', $background_layout_class_names );
 			?>
 			<div class="et_pb_slide et_pb_media_alignment_center<?php echo esc_attr( $slide_class ); ?>" <?php if ( 'on' !== $parallax && $is_show_image && 'background' === $image_placement ) { printf( 'style="background-image:url(%1$s)"', esc_url( $query->posts[ $post_index ]->post_featured_image ) );  } ?><?php echo et_core_esc_previously( $multi_view_attrs_wrapper ); ?>>
 				<?php if ( 'on' === $parallax && $is_show_image && 'background' === $image_placement ) { ?>
@@ -1243,18 +1231,8 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 			$content .= '</div>';
 		}
 
-		$data_background_layout       = '';
-		$data_background_layout_hover = '';
-		if ( $background_layout_hover_enabled ) {
-			$data_background_layout = sprintf(
-				' data-background-layout="%1$s"',
-				esc_attr( $background_layout )
-			);
-			$data_background_layout_hover = sprintf(
-				' data-background-layout-hover="%1$s"',
-				esc_attr( $background_layout_hover )
-			);
-		}
+		// Background layout data attributes.
+		$data_background_layout = et_pb_background_layout_options()->get_background_layout_attrs( $this->props );
 
 		// Module classnames
 		$this->add_classname( array(
@@ -1325,7 +1303,7 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 		) );
 
 		$output = sprintf(
-			'<div%3$s class="%1$s"%7$s%8$s%9$s>
+			'<div%3$s class="%1$s"%7$s%8$s>
 				%5$s
 				%4$s
 				<div class="et_pb_slides">
@@ -1341,7 +1319,6 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 			$parallax_image_background, // #5
 			$this->inner_shadow_back_compatibility( $render_slug ),
 			et_core_esc_previously( $data_background_layout ),
-			et_core_esc_previously( $data_background_layout_hover ),
 			$muti_view_data_attr
 		);
 

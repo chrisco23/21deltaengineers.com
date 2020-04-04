@@ -155,7 +155,7 @@ class ET_Builder_Module_Woocommerce_Images extends ET_Builder_Module {
 					'__images',
 				),
 			),
-			'show_sale_badge' => array(
+			'show_sale_badge'      => array(
 				'label'            => esc_html__( 'Show Sale Badge', 'et_builder' ),
 				'type'             => 'yes_no_button',
 				'option_category'  => 'configuration',
@@ -170,15 +170,15 @@ class ET_Builder_Module_Woocommerce_Images extends ET_Builder_Module {
 					'__images',
 				),
 			),
-			'sale_badge_color' => array(
-				'label'             => esc_html__( 'Sale Badge Color', 'et_builder' ),
-				'description'       => esc_html__( 'Pick a color to use for the sales bade that appears on products that are on sale.', 'et_builder' ),
-				'type'              => 'color-alpha',
-				'custom_color'      => true,
-				'tab_slug'          => 'advanced',
-				'toggle_slug'       => 'sale_badge',
-				'hover'             => 'tabs',
-				'mobile_options'    => true,
+			'sale_badge_color'     => array(
+				'label'          => esc_html__( 'Sale Badge Color', 'et_builder' ),
+				'description'    => esc_html__( 'Pick a color to use for the sales bade that appears on products that are on sale.', 'et_builder' ),
+				'type'           => 'color-alpha',
+				'custom_color'   => true,
+				'tab_slug'       => 'advanced',
+				'toggle_slug'    => 'sale_badge',
+				'hover'          => 'tabs',
+				'mobile_options' => true,
 			),
 			'__images'             => array(
 				'type'                => 'computed',
@@ -195,6 +195,23 @@ class ET_Builder_Module_Woocommerce_Images extends ET_Builder_Module {
 				),
 				'computed_minimum'    => array(
 					'product',
+				),
+			),
+			'force_fullwidth'      => array(
+				'label'           => esc_html__( 'Force Fullwidth', 'et_builder' ),
+				'description'     => esc_html__( "When enabled, this will force your image to extend 100% of the width of the column it's in.", 'et_builder' ),
+				'type'            => 'yes_no_button',
+				'option_category' => 'layout',
+				'options'         => array(
+					'off' => esc_html__( 'No', 'et_builder' ),
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+				),
+				'default'         => 'off',
+				'tab_slug'        => 'advanced',
+				'toggle_slug'     => 'image',
+				'affects'         => array(
+					'max_width',
+					'width',
 				),
 			),
 		);
@@ -242,6 +259,7 @@ class ET_Builder_Module_Woocommerce_Images extends ET_Builder_Module {
 
 		$sale_badge_color_hover  = $this->get_hover_value( 'sale_badge_color' );
 		$sale_badge_color_values = et_pb_responsive_options()->get_property_values( $this->props, 'sale_badge_color' );
+		$force_fullwidth         = et_()->array_get( $this->props, 'force_fullwidth', 'off' );
 
 		// Sale Badge Color.
 		et_pb_responsive_options()->generate_responsive_css( $sale_badge_color_values, '%%order_class%% span.onsale', 'background-color', $render_slug, ' !important;', 'color' );
@@ -257,6 +275,14 @@ class ET_Builder_Module_Woocommerce_Images extends ET_Builder_Module {
 					),
 				)
 			);
+		}
+
+		// Image force fullwidth.
+		if ( 'on' === $force_fullwidth ) {
+			ET_Builder_Element::set_style( $render_slug, array(
+				'selector'    => '%%order_class%% .woocommerce-product-gallery__image img',
+				'declaration' => 'width: 100%;',
+			) );
 		}
 
 		$output = self::get_images( $this->props );

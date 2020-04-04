@@ -1,6 +1,6 @@
 <?php
 
-class ET_Builder_Module_Signup extends ET_Builder_Module {
+class ET_Builder_Module_Signup extends ET_Builder_Module_Type_WithSpamProtection {
 
 	protected static $_providers;
 
@@ -21,6 +21,8 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 	);
 
 	function init() {
+		parent::init();
+
 		$this->name       = esc_html__( 'Email Optin', 'et_builder' );
 		$this->plural     = esc_html__( 'Email Optins', 'et_builder' );
 		$this->slug       = 'et_pb_signup';
@@ -44,6 +46,7 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 					'provider'       => esc_html__( 'Email Account', 'et_builder' ),
 					'fields'         => esc_html__( 'Fields', 'et_builder' ),
 					'success_action' => esc_html__( 'Success Action', 'et_builder' ),
+					'spam'           => esc_html__( 'Spam Protection', 'et_builder' ),
 				),
 			),
 			'advanced'   => array(
@@ -85,8 +88,8 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 						'bb_icons_support'  => true,
 						'css'               => array(
 							'link'  => "{$this->main_css_element} .et_pb_newsletter_description a, {$this->main_css_element} .et_pb_newsletter_form a",
-							'ul'    => "{$this->main_css_element} .et_pb_newsletter_description ul, {$this->main_css_element} .et_pb_newsletter_form ul",
-							'ol'    => "{$this->main_css_element} .et_pb_newsletter_description ol, {$this->main_css_element} .et_pb_newsletter_form ol",
+							'ul'    => "{$this->main_css_element} .et_pb_newsletter_description ul li, {$this->main_css_element} .et_pb_newsletter_form ul li",
+							'ol'    => "{$this->main_css_element} .et_pb_newsletter_description ol li, {$this->main_css_element} .et_pb_newsletter_form ol li",
 							'quote' => "{$this->main_css_element} .et_pb_newsletter_description blockquote, {$this->main_css_element} .et_pb_newsletter_form blockquote",
 						),
 					),
@@ -725,7 +728,9 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 					'mobile_options'  => true,
 					'hover'           => 'tabs',
 				),
-			)
+			),
+
+			self::_get_spam_provider_fields()
 		);
 	}
 
@@ -974,6 +979,8 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 	}
 
 	function render( $attrs, $content = null, $render_slug ) {
+		parent::render( $attrs, $content, $render_slug );
+
 		global $et_pb_half_width_counter;
 
 		$et_pb_half_width_counter    = 0;
@@ -997,14 +1004,6 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 		$success_redirect_query          = $this->props['success_redirect_query'];
 		$use_focus_border_color          = $this->props['use_focus_border_color'];
 		$use_custom_fields               = $this->props['use_custom_fields'];
-
-		// Background Layout.
-		$background_layout               = $this->props['background_layout'];
-		$background_layout_hover         = et_pb_hover_options()->get_value( 'background_layout', $this->props, 'light' );
-		$background_layout_hover_enabled = et_pb_hover_options()->is_enabled( 'background_layout', $this->props );
-		$background_layout_values        = et_pb_responsive_options()->get_property_values( $this->props, 'background_layout' );
-		$background_layout_tablet        = isset( $background_layout_values['tablet'] ) ? $background_layout_values['tablet'] : '';
-		$background_layout_phone         = isset( $background_layout_values['phone'] ) ? $background_layout_values['phone'] : '';
 
 		if ( 'feedburner' !== $provider ) {
 			$_provider   = self::providers()->get( $provider, '', 'builder' );
@@ -1119,36 +1118,20 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 			);
 		}
 
-
-		$data_background_layout       = '';
-		$data_background_layout_hover = '';
-		if ( $background_layout_hover_enabled ) {
-			$data_background_layout = sprintf(
-				' data-background-layout="%1$s"',
-				esc_attr( $background_layout )
-			);
-			$data_background_layout_hover = sprintf(
-				' data-background-layout-hover="%1$s"',
-				esc_attr( $background_layout_hover )
-			);
-		}
+		// Background layout data attributes.
+		$data_background_layout = et_pb_background_layout_options()->get_background_layout_attrs( $this->props );
 
 		// Module classnames
 		$this->add_classname( array(
 			'et_pb_newsletter',
 			'et_pb_subscribe',
 			'clearfix',
-			"et_pb_bg_layout_{$background_layout}",
 			$this->get_text_orientation_classname(),
 		) );
 
-		if ( ! empty( $background_layout_tablet ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_tablet}_tablet" );
-		}
-
-		if ( ! empty( $background_layout_phone ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_phone}_phone" );
-		}
+		// Background layout class names.
+		$background_layout_class_names = et_pb_background_layout_options()->get_background_layout_class( $this->props );
+		$this->add_classname( $background_layout_class_names );
 
 		if ( 'on' !== $use_background_color ) {
 			$this->add_classname( 'et_pb_no_bg' );
@@ -1172,13 +1155,13 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 		$show_description_block = $title || $description;
 
 		$output = sprintf(
-			'<div%6$s class="%4$s"%5$s%9$s%10$s%11$s%12$s>
+			'<div%6$s class="%4$s"%5$s%9$s%10$s%11$s>
 				%8$s
 				%7$s
-				%13$s
+				%12$s
 					%1$s
 					%2$s
-				%14$s
+				%13$s
 				%3$s
 			</div>',
 			et_core_esc_previously( $title ),
@@ -1192,7 +1175,6 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 			$success_redirect_url,
 			$success_redirect_query, // #10
 			et_core_esc_previously( $data_background_layout ),
-			et_core_esc_previously( $data_background_layout_hover ),
 			$show_description_block ? '<div class="et_pb_newsletter_description">' : '',
 			$show_description_block ? '</div>' : ''
 		);
@@ -1204,7 +1186,7 @@ class ET_Builder_Module_Signup extends ET_Builder_Module {
 	 * Filter multi view value.
 	 *
 	 * @since 3.27.1
-	 * 
+	 *
 	 * @see ET_Builder_Module_Helper_MultiViewOptions::filter_value
 	 *
 	 * @param mixed $raw_value Props raw value.

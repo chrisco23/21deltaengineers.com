@@ -33,7 +33,7 @@ class ET_Builder_Module_Helper_Slider {
 	 * @return string
 	 */
 	public function get_dots_selector($prefix = '%%order_class%%') {
-		return "$prefix .et-pb-controllers a";
+		return "$prefix .et-pb-controllers a, $prefix .et-pb-controllers .et-pb-active-control";
 	}
 }
 

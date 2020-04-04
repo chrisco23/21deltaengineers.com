@@ -242,7 +242,7 @@ class ET_Builder_Module_Woocommerce_Add_To_Cart extends ET_Builder_Module {
 					),
 					'margin_padding'  => array(
 						'css' => array(
-							'main'      => '%%order_class%% input',
+							'main'      => '%%order_class%% input, %%order_class%% select',
 							'padding'   => '%%order_class%% input, %%order_class%% select',
 							'important' => array( 'custom_padding' ),
 						),
@@ -287,6 +287,7 @@ class ET_Builder_Module_Woocommerce_Add_To_Cart extends ET_Builder_Module {
 							'css'          => array(
 								'main'      => array(
 									'border_styles' => '%%order_class%%.et_pb_module .et_pb_module_inner form.cart .variations td select',
+									'border_radii'  => '%%order_class%%.et_pb_module .et_pb_module_inner form.cart .variations td select',
 								),
 								'important' => 'all',
 							),

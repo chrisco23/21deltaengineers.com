@@ -174,15 +174,50 @@ if ( ! function_exists( 'et_core_get_ip_address' ) ):
  * @return string
  */
 function et_core_get_ip_address() {
-	if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
-		$ip = $_SERVER['HTTP_CLIENT_IP'];
-	} else if ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-	} else {
-		$ip = $_SERVER['REMOTE_ADDR'];
+	static $ip;
+
+	if ( null !== $ip ) {
+		return $ip;
 	}
 
-	return sanitize_text_field( $ip );
+	// Array of headers that could contain a valid IP address.
+	$headers = array(
+		'HTTP_TRUE_CLIENT_IP',
+		'HTTP_CF_CONNECTING_IP',
+		'HTTP_X_SUCURI_CLIENTIP',
+		'HTTP_X_FORWARDED_FOR',
+		'HTTP_X_FORWARDED',
+		'HTTP_X_CLUSTER_CLIENT_IP',
+		'HTTP_FORWARDED_FOR',
+		'HTTP_FORWARDED',
+		'HTTP_CLIENT_IP',
+		'REMOTE_ADDR',
+	);
+
+	$ip = '';
+
+	foreach ( $headers as $header ) {
+		// Skip if the header is not set.
+		if ( empty( $_SERVER[ $header ] ) ) {
+			continue;
+		}
+
+		$header = $_SERVER[ $header ];
+
+		if ( et_()->includes( $header, ',' ) ) {
+			$header = explode( ',', $header );
+			$header = $header[0];
+		}
+
+		// Break if valid IP address is found.
+		if ( filter_var( $header, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE ) ) {
+			$ip = sanitize_text_field( $header );
+
+			break;
+		}
+	}
+
+	return $ip;
 }
 endif;
 
@@ -352,7 +387,11 @@ endif;
 
 if ( ! function_exists( 'et_core_is_fb_enabled' ) ):
 function et_core_is_fb_enabled() {
-	return function_exists( 'et_fb_is_enabled' ) && et_fb_is_enabled();
+	if ( function_exists( 'et_fb_is_enabled' ) ) {
+		return et_fb_is_enabled();
+	}
+
+	return isset( $_GET['et_fb'] ) && current_user_can( 'edit-posts' );
 }
 endif;
 
@@ -1134,48 +1173,63 @@ if ( ! function_exists( 'et_get_attachment_id_by_url' ) ) :
  */
 function et_get_attachment_id_by_url( $url ) {
 	global $wpdb;
+
+	// Load cached data for attachment_id_by_url.
 	$cache = ET_Core_Cache_File::get( 'attachment_id_by_url' );
 
-	$attachment_id = 0;
+	// Normalize image URL to remove the HTTP/S protocol.
+	$normalized_url = et_attachment_normalize_url( $url );
 
-	// Normalize image URL.
-	$url = et_attachment_normalize_url( $url );
-
-	$cache_key = $url ? $url : 'empty-url';
-
-	if ( isset( $cache[ $cache_key ] ) ) {
-		return $cache[ $cache_key ];
+	// Bail early if the url is invalid.
+	if ( ! $normalized_url ) {
+		return 0;
 	}
 
-	// Bail early if URL is invalid.
-	if ( ! $url ) {
-		return $attachment_id;
+	if ( isset( $cache[ $normalized_url ] ) ) {
+		return $cache[ $normalized_url ];
 	}
 
 	// Remove any thumbnail size suffix from the filename and use that as a fallback.
-	$fallback_url = preg_replace( '/-(\d+)x(\d+)\.(jpg|jpeg|gif|png)$/', '.$3', $url );
+	$fallback_url = preg_replace( '/-(\d+)x(\d+)\.(jpg|jpeg|gif|png)$/', '.$3', $normalized_url );
 
-	// Scenario: Trying to find the attachment for a file called x-150x150.jpg.
-	// 1. Since WordPress adds the -150x150 suffix for thumbnail sizes we cannot be
-	// sure if this is an attachment or an attachment's generated thumbnail.
-	// 2. Since both x.jpg and x-150x150.jpg can be uploaded as separate attachments
-	// we must decide which is a better match.
-	// 3. The above is why we order by guid length and use the first result.
-	$attachments_query = $wpdb->prepare(
-		"SELECT id
-		FROM $wpdb->posts
-		WHERE `post_type` = %s
-			AND `guid` IN ( %s, %s )
-		ORDER BY CHAR_LENGTH( `guid` ) DESC",
-		'attachment',
-		esc_url_raw( $url ),
-		esc_url_raw( $fallback_url )
-	);
+	if ( $normalized_url === $fallback_url ) {
+		$attachments_query = $wpdb->prepare(
+			"SELECT id
+			FROM $wpdb->posts
+			WHERE `post_type` = %s
+				AND `guid` IN ( %s, %s )",
+			'attachment',
+			esc_url_raw( "https:{$normalized_url}" ),
+			esc_url_raw( "http:{$normalized_url}" )
+		);
+	} else {
+		// Scenario: Trying to find the attachment for a file called x-150x150.jpg.
+		// 1. Since WordPress adds the -150x150 suffix for thumbnail sizes we cannot be
+		// sure if this is an attachment or an attachment's generated thumbnail.
+		// 2. Since both x.jpg and x-150x150.jpg can be uploaded as separate attachments
+		// we must decide which is a better match.
+		// 3. The above is why we order by guid length and use the first result.
+		$attachments_query = $wpdb->prepare(
+			"SELECT id
+			FROM $wpdb->posts
+			WHERE `post_type` = %s
+				AND `guid` IN ( %s, %s, %s, %s )
+			ORDER BY CHAR_LENGTH( `guid` ) DESC",
+			'attachment',
+			esc_url_raw( "https:{$normalized_url}" ),
+			esc_url_raw( "https:{$fallback_url}" ),
+			esc_url_raw( "http:{$normalized_url}" ),
+			esc_url_raw( "http:{$fallback_url}" )
+		);
+	}
 
 	$attachment_id = (int) $wpdb->get_var( $attachments_query );
 
-	$cache[ $cache_key ] = $attachment_id;
-	ET_Core_Cache_File::set( 'attachment_id_by_url', $cache );
+	// Cache data only if attachment ID is found.
+	if ( $attachment_id ) {
+		$cache[ $normalized_url ] = $attachment_id;
+		ET_Core_Cache_File::set( 'attachment_id_by_url', $cache );
+	}
 
 	return $attachment_id;
 }
@@ -1195,18 +1249,16 @@ if ( ! function_exists( 'et_get_attachment_size_by_url' ) ) :
 function et_get_attachment_size_by_url( $url, $default_size = 'full' ) {
 	$cache = ET_Core_Cache_File::get( 'attachment_size_by_url' );
 
-	// Normalize image URL.
-	$url = et_attachment_normalize_url( $url );
+	// Normalize image URL to remove the HTTP/S protocol.
+	$normalized_url = et_attachment_normalize_url( $url );
 
-	$cache_key = $url ? $url : 'empty-url';
-
-	if ( isset( $cache[ $cache_key ] ) ) {
-		return $cache[ $cache_key ];
+	// Bail early if URL is invalid.
+	if ( ! $normalized_url ) {
+		return $default_size;
 	}
 
-	// Bail eraly if URL is invalid.
-	if ( ! $url ) {
-		return $default_size;
+	if ( isset( $cache[ $normalized_url ] ) ) {
+		return $cache[ $normalized_url ];
 	}
 
 	$attachment_id = et_get_attachment_id_by_url( $url );
@@ -1231,8 +1283,11 @@ function et_get_attachment_size_by_url( $url, $default_size = 'full' ) {
 		$size = array( $match[1], $match[2] );
 	}
 
-	$cache[ $cache_key ] = $attachment_id;
-	ET_Core_Cache_File::set( 'attachment_size_by_url', $cache );
+	// Cache data only if size is found.
+	if ( $size !== $default_size ) {
+		$cache[ $normalized_url ] = $size;
+		ET_Core_Cache_File::set( 'attachment_size_by_url', $cache );
+	}
 
 	return $size;
 }
@@ -1244,35 +1299,43 @@ if ( ! function_exists( 'et_get_image_srcset_sizes' ) ) :
  *
  * @since 3.29.3
  *
- * @param string $img_src Image source attribute value.
+ * @param string $url Image source attribute value.
  *
  * @return (array|bool) Associative array of srcset & sizes attributes. False on failure.
  */
-function et_get_image_srcset_sizes( $img_src ) {
+function et_get_image_srcset_sizes( $url ) {
 	$cache = ET_Core_Cache_File::get( 'image_srcset_sizes' );
 
-	$cache_key = $img_src ? $img_src : 'empty-src';
+	// Normalize image URL to remove the HTTP/S protocol.
+	$normalized_url = et_attachment_normalize_url( $url );
 
-	if ( isset( $cache[ $cache_key ] ) ) {
-		return $cache[ $cache_key ];
+	if ( isset( $cache[ $normalized_url ] ) ) {
+		return $cache[ $normalized_url ];
 	}
 
-	$attachment_id = et_get_attachment_id_by_url( $img_src );
+	$attachment_id = et_get_attachment_id_by_url( $url );
 	if ( ! $attachment_id ) {
-		return false;
+		return array();
 	}
 
-	$image_size = et_get_attachment_size_by_url( $img_src );
+	$image_size = et_get_attachment_size_by_url( $url );
 	if ( ! $image_size ) {
-		return false;
+		return array();
+	}
+
+	$srcset = wp_get_attachment_image_srcset( $attachment_id, $image_size );
+	$sizes  = wp_get_attachment_image_sizes( $attachment_id, $image_size );
+
+	if ( ! $srcset || ! $sizes ) {
+		return array();
 	}
 
 	$data = array(
-		'srcset' => wp_get_attachment_image_srcset( $attachment_id, $image_size ),
-		'sizes'  => wp_get_attachment_image_sizes( $attachment_id, $image_size ),
+		'srcset' => $srcset,
+		'sizes'  => $sizes,
 	);
 
-	$cache[ $cache_key ] = $data;
+	$cache[ $normalized_url ] = $data;
 	ET_Core_Cache_File::set( 'image_srcset_sizes', $cache );
 
 	return $data;
@@ -1306,9 +1369,12 @@ function et_attachment_normalize_url( $url ) {
 
 	// Validate URL format and file extension.
 	// Example: https://regex101.com/r/dXcpto/1.
-	if ( ! preg_match( '/^(http(s?)\:\/\/)(.+)\.(jpg|jpeg|gif|png)$/', $url ) ) {
+	if ( ! filter_var( $url, FILTER_VALIDATE_URL ) || ! preg_match( '/^(.+)\.(jpg|jpeg|gif|png)$/', $url ) ) {
 		return false;
 	}
+
+	// Strip HTTP & HTTPS protocol.
+	$url = preg_replace( '/^https?:/i', '', $url );
 
 	return esc_url( $url );
 }

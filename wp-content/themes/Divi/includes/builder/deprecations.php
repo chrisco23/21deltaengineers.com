@@ -49,6 +49,8 @@ return array(
 				'_shortcode_passthru_callback'   => 'render_as_builder_data',
 				'additional_shortcode_callback'  => 'additional_render',
 				'get_shortcode_fields'           => 'get_default_props',
+				'is_loading_bb_data'             => 'et_builder_is_loading_data',
+				'is_loading_vb_data'             => 'et_builder_is_loading_data',
 				'pre_shortcode_content'          => 'before_render',
 				'shortcode_atts'                 => '',
 				'shortcode_atts_to_data_atts'    => 'props_to_html_data_attrs',

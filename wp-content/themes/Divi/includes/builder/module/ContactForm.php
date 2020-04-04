@@ -1,7 +1,10 @@
 <?php
 
-class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
+class ET_Builder_Module_Contact_Form extends ET_Builder_Module_Type_WithSpamProtection {
+
 	function init() {
+		parent::init();
+
 		$this->name            = esc_html__( 'Contact Form', 'et_builder' );
 		$this->plural          = esc_html__( 'Contact Forms', 'et_builder' );
 		$this->slug            = 'et_pb_contact_form';
@@ -18,6 +21,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 					'email'        => esc_html__( 'Email', 'et_builder' ),
 					'elements'     => esc_html__( 'Elements', 'et_builder' ),
 					'redirect'     => esc_html__( 'Redirect', 'et_builder' ),
+					'spam'         => esc_html__( 'Spam Protection', 'et_builder' ),
 				),
 			),
 		);
@@ -48,7 +52,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 				'captcha' => array(
 					'label'           => esc_html__( 'Captcha', 'et_builder' ),
 					'css'             => array(
-						'main' => "{$this->main_css_element} .et_pb_contact_captcha_question",
+						'main' => "{$this->main_css_element} .et_pb_contact_right p",
 					),
 					'hide_text_align' => true,
 					'line_height'     => array(
@@ -246,91 +250,98 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 	}
 
 	function get_fields() {
-		$fields = array(
-			'captcha' => array(
-				'label'           => esc_html__( 'Show Captcha', 'et_builder' ),
-				'type'            => 'yes_no_button',
-				'option_category' => 'configuration',
-				'options'         => array(
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
-					'off' => esc_html__( 'No', 'et_builder' ),
-				),
-				'toggle_slug'     => 'elements',
-				'description'     => esc_html__( 'Turn the captcha on or off using this option.', 'et_builder' ),
-				'default_on_front' => 'on',
-			),
-			'email' => array(
-				'label'           => esc_html__( 'Email Address', 'et_builder' ),
-				'type'            => 'text',
-				'option_category' => 'basic_option',
-				'description'     => et_get_safe_localization( sprintf(
-					__( 'Input the email address where messages should be sent.<br /><br /> Note: email delivery and spam prevention are complex processes. We recommend using a delivery service such as <a href="%1$s">Mandrill</a>, <a href="%2$s">SendGrid</a>, or other similar service to ensure the deliverability of messages that are submitted through this form', 'et_builder' ),
-					'http://mandrill.com/',
-					'https://sendgrid.com/'
-				) ),
-				'toggle_slug'     => 'email',
-			),
-			'title' => array(
-				'label'           => esc_html__( 'Title', 'et_builder' ),
-				'type'            => 'text',
-				'option_category' => 'basic_option',
-				'description'     => esc_html__( 'Define a title for your contact form.', 'et_builder' ),
-				'toggle_slug'     => 'main_content',
-				'dynamic_content' => 'text',
-				'mobile_options'  => true,
-				'hover'           => 'tabs',
-			),
-			'custom_message' => array(
-				'label'           => esc_html__( 'Message Pattern', 'et_builder' ),
-				'type'            => 'textarea',
-				'option_category' => 'configuration',
-				'description'     => et_get_safe_localization( __( 'Here you can define the custom pattern for the email Message. Fields should be included in following format - <strong>%%field_id%%</strong>. For example if you want to include the field with id = <strong>phone</strong> and field with id = <strong>message</strong>, then you can use the following pattern: <strong>My message is %%message%% and phone number is %%phone%%</strong>. Leave blank for default.', 'et_builder' ) ),
-				'toggle_slug'     => 'email',
-			),
-			'use_redirect' => array(
-				'label'           => esc_html__( 'Enable Redirect URL', 'et_builder' ),
-				'type'            => 'yes_no_button',
-				'option_category' => 'configuration',
-				'options'         => array(
-					'off' => esc_html__( 'No', 'et_builder' ),
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
-				),
-				'affects' => array(
-					'redirect_url',
-				),
-				'toggle_slug'     => 'redirect',
-				'description'     => esc_html__( 'Redirect users after successful form submission.', 'et_builder' ),
-				'default_on_front' => 'off',
-			),
-			'redirect_url' => array(
-				'label'           => esc_html__( 'Redirect URL', 'et_builder' ),
-				'type'            => 'text',
-				'option_category' => 'configuration',
-				'depends_show_if' => 'on',
-				'toggle_slug'     => 'redirect',
-				'description'     => esc_html__( 'Type the Redirect URL', 'et_builder' ),
-			),
-			'success_message' => array(
-				'label'           => esc_html__( 'Success Message', 'et_builder' ),
-				'type'            => 'text',
-				'option_category' => 'configuration',
-				'description'     => esc_html__( 'Type the message you want to display after successful form submission. Leave blank for default', 'et_builder' ),
-				'toggle_slug'     => 'main_content',
-				'dynamic_content' => 'text',
-			),
-			'submit_button_text' => array(
-				'label'           => esc_html__( 'Submit Button', 'et_builder' ),
-				'type'            => 'text',
-				'option_category' => 'basic_option',
-				'description'     => esc_html__( 'Define the text of the form submit button.', 'et_builder' ),
-				'toggle_slug'     => 'main_content',
-				'dynamic_content' => 'text',
-				'mobile_options'  => true,
-				'hover'           => 'tabs',
-			),
-		);
+		return array_merge(
+			self::_get_spam_provider_fields(),
 
-		return $fields;
+			array(
+				'captcha'            => array(
+					'label'            => esc_html__( 'Use Basic Captcha', 'et_builder' ),
+					'type'             => 'yes_no_button',
+					'option_category'  => 'configuration',
+					'options'          => array(
+						'on'  => esc_html__( 'Yes', 'et_builder' ),
+						'off' => esc_html__( 'No', 'et_builder' ),
+					),
+					'toggle_slug'      => 'spam',
+					'description'      => esc_html__( 'Turn the captcha on or off using this option.', 'et_builder' ),
+					'default_on_front' => 'on',
+					'show_if'          => array(
+						'use_spam_service' => 'off',
+					),
+				),
+				'email'              => array(
+					'label'           => esc_html__( 'Email Address', 'et_builder' ),
+					'type'            => 'text',
+					'option_category' => 'basic_option',
+					'description'     => et_get_safe_localization(
+						sprintf(
+							__( 'Input the email address where messages should be sent.<br /><br /> Note: email delivery and spam prevention are complex processes. We recommend using a delivery service such as <a href="%1$s">Mandrill</a>, <a href="%2$s">SendGrid</a>, or other similar service to ensure the deliverability of messages that are submitted through this form', 'et_builder' ),
+							'http://mandrill.com/',
+							'https://sendgrid.com/'
+						)
+					),
+					'toggle_slug'     => 'email',
+				),
+				'title'              => array(
+					'label'           => esc_html__( 'Title', 'et_builder' ),
+					'type'            => 'text',
+					'option_category' => 'basic_option',
+					'description'     => esc_html__( 'Define a title for your contact form.', 'et_builder' ),
+					'toggle_slug'     => 'main_content',
+					'dynamic_content' => 'text',
+					'mobile_options'  => true,
+					'hover'           => 'tabs',
+				),
+				'custom_message'     => array(
+					'label'           => esc_html__( 'Message Pattern', 'et_builder' ),
+					'type'            => 'textarea',
+					'option_category' => 'configuration',
+					'description'     => et_get_safe_localization( __( 'Here you can define the custom pattern for the email Message. Fields should be included in following format - <strong>%%field_id%%</strong>. For example if you want to include the field with id = <strong>phone</strong> and field with id = <strong>message</strong>, then you can use the following pattern: <strong>My message is %%message%% and phone number is %%phone%%</strong>. Leave blank for default.', 'et_builder' ) ),
+					'toggle_slug'     => 'email',
+				),
+				'use_redirect'       => array(
+					'label'            => esc_html__( 'Enable Redirect URL', 'et_builder' ),
+					'type'             => 'yes_no_button',
+					'option_category'  => 'configuration',
+					'options'          => array(
+						'off' => esc_html__( 'No', 'et_builder' ),
+						'on'  => esc_html__( 'Yes', 'et_builder' ),
+					),
+					'affects'          => array(
+						'redirect_url',
+					),
+					'toggle_slug'      => 'redirect',
+					'description'      => esc_html__( 'Redirect users after successful form submission.', 'et_builder' ),
+					'default_on_front' => 'off',
+				),
+				'redirect_url'       => array(
+					'label'           => esc_html__( 'Redirect URL', 'et_builder' ),
+					'type'            => 'text',
+					'option_category' => 'configuration',
+					'depends_show_if' => 'on',
+					'toggle_slug'     => 'redirect',
+					'description'     => esc_html__( 'Type the Redirect URL', 'et_builder' ),
+				),
+				'success_message'    => array(
+					'label'           => esc_html__( 'Success Message', 'et_builder' ),
+					'type'            => 'text',
+					'option_category' => 'configuration',
+					'description'     => esc_html__( 'Type the message you want to display after successful form submission. Leave blank for default', 'et_builder' ),
+					'toggle_slug'     => 'main_content',
+					'dynamic_content' => 'text',
+				),
+				'submit_button_text' => array(
+					'label'           => esc_html__( 'Submit Button', 'et_builder' ),
+					'type'            => 'text',
+					'option_category' => 'basic_option',
+					'description'     => esc_html__( 'Define the text of the form submit button.', 'et_builder' ),
+					'toggle_slug'     => 'main_content',
+					'dynamic_content' => 'text',
+					'mobile_options'  => true,
+					'hover'           => 'tabs',
+				),
+			)
+		);
 	}
 
 	public function get_transition_fields_css_props() {
@@ -359,6 +370,8 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 	}
 
 	function render( $attrs, $content = null, $render_slug ) {
+		parent::render( $attrs, $content, $render_slug );
+
 		global $et_pb_half_width_counter, $et_pb_contact_form_num;
 
 		$et_pb_half_width_counter = 0;
@@ -382,6 +395,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 		$redirect_url                = $this->props['redirect_url'];
 		$success_message             = $this->_esc_attr( 'success_message' );
 		$header_level                = $this->props['title_level'];
+		$use_spam_service            = $this->prop('use_spam_service', 'off' );
 
 		$field_text_color_hover        = $this->get_hover_value( 'form_field_text_color' );
 		$field_text_color_values       = et_pb_responsive_options()->get_property_values( $this->props, 'form_field_text_color' );
@@ -427,11 +441,10 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 
 		$success_message = '' !== $success_message ? $success_message : esc_html__( 'Thanks for contacting us', 'et_builder' );
 
-		$et_pb_contact_form_num      = $this->render_count();
-		$et_pb_contact_form_item_num = self::get_module($this->child_slug, $this->get_post_type())->render_count();
-		$hidden_form_fields_key      = "et_pb_contact_email_hidden_fields_{$et_pb_contact_form_num}";
-		$hidden_form_fields          = self::$_->array_get( $_POST, $hidden_form_fields_key, array() );
-		$shortcode_content           = $content;
+		$et_pb_contact_form_num  = $this->render_count();
+		$hidden_form_fields_key  = "et_pb_contact_email_hidden_fields_{$et_pb_contact_form_num}";
+		$hidden_form_fields      = self::$_->array_get( $_POST, $hidden_form_fields_key, array() );
+		$shortcode_content       = $content;
 
 		if ( ! empty( $hidden_form_fields ) ) {
 			$hidden_form_fields = str_replace( '\\', '', $hidden_form_fields );
@@ -455,8 +468,12 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 				$fields_data_array = json_decode( $fields_data_json, true );
 
 				// check whether captcha field is not empty
-				if ( 'on' === $captcha && ( ! isset( $_POST['et_pb_contact_captcha_' . $et_pb_contact_form_num] ) || empty( $_POST['et_pb_contact_captcha_' . $et_pb_contact_form_num] ) ) ) {
+				if ( 'on' === $captcha && 'off' === $use_spam_service && ( ! isset( $_POST['et_pb_contact_captcha_' . $et_pb_contact_form_num] ) || empty( $_POST['et_pb_contact_captcha_' . $et_pb_contact_form_num] ) ) ) {
 					$et_error_message .= sprintf( '<p class="et_pb_contact_error_text">%1$s</p>', esc_html__( 'Make sure you entered the captcha.', 'et_builder' ) );
+					$et_contact_error = true;
+
+				} else if ( 'on' === $use_spam_service && $this->is_spam_submission() ) {
+					$et_error_message .= sprintf( '<p class="et_pb_contact_error_text">%1$s</p>', esc_html__( 'You must be a human to submit this form.', 'et_builder' ) );
 					$et_contact_error = true;
 				}
 
@@ -636,20 +653,16 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 				<div class="et_pb_contact">
 					<form class="et_pb_contact_form clearfix" method="post" action="%1$s">
 						%8$s
-						<p class="et_pb_contact_field et_pb_contact_field_%11$s et_pb_contact_field_half" data-id="et_number" data-type="input">
-							<label for="et_pb_contact_et_number_%7$s" class="et_pb_contact_form_label">Number</label>
-							<input type="text" id="et_pb_contact_et_number_%7$s" class="input" value="" name="et_pb_contact_et_number_%7$s" data-required_mark="required" data-field_type="input" data-original_id="et_number" placeholder="Number" tabindex="-1" autocomplete="disabled">
-						</p>
 						<input type="hidden" value="et_contact_proccess" name="et_pb_contactform_submit_%7$s"/>
 						<div class="et_contact_bottom_container">
 							%2$s
-							<button type="submit" name="et_builder_submit_button" class="et_pb_contact_submit et_pb_button%6$s"%5$s%9$s%10$s%11$s%12$s>%3$s</button>
+							<button type="submit" name="et_builder_submit_button" class="et_pb_contact_submit et_pb_button%6$s"%5$s%9$s%10$s%11$s>%3$s</button>
 						</div>
 						%4$s
 					</form>
 				</div> <!-- .et_pb_contact -->',
 				esc_url( get_permalink( get_the_ID() ) ),
-				(  'on' === $captcha ? $et_pb_captcha : '' ),
+				(  'on' === $captcha && 'off' === $use_spam_service ? $et_pb_captcha : '' ),
 				esc_html( $multi_view->get_value( 'submit_button_text' ) ),
 				wp_nonce_field( 'et-pb-contact-form-submit', '_wpnonce-et-pb-contact-form-submitted-' . $et_pb_contact_form_num, true, false ),
 				'' !== $custom_icon && 'on' === $button_custom ? sprintf(
@@ -661,7 +674,6 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 				$content,
 				'' !== $custom_icon_tablet && 'on' === $button_custom ? sprintf( ' data-icon-tablet="%1$s"', esc_attr( et_pb_process_font_icon( $custom_icon_tablet ) ) ) : '',
 				'' !== $custom_icon_phone && 'on' === $button_custom ? sprintf( ' data-icon-phone="%1$s"', esc_attr( et_pb_process_font_icon( $custom_icon_phone ) ) ) : '', // #10
-				esc_attr( $et_pb_contact_form_item_num ),
 				$multi_view_data_attr
 			);
 		}

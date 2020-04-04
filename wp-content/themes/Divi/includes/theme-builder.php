@@ -5,18 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Output to the template builder head.
- *
- * @since ??
- *
- * @return void
- */
-function et_divi_action_theme_builder_template_head() {
-    get_template_part( 'theme-head' );
-}
-add_action( 'et_theme_builder_template_head', 'et_divi_action_theme_builder_template_head' );
-
-/**
  * Output the opening page container div.
  *
  * @since ??

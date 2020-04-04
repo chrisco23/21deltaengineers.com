@@ -45,12 +45,12 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 				'header' => array(
 					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
-						'main' => "{$this->main_css_element} .entry-title",
-						'font' => "{$this->main_css_element} .entry-title a",
-						'color' => "{$this->main_css_element} .entry-title a",
-						'limited_main' => "{$this->main_css_element} .entry-title, {$this->main_css_element} .entry-title a",
-						'hover'        => "{$this->main_css_element} .entry-title:hover, {$this->main_css_element} .entry-title:hover a",
-						'color_hover'  => "{$this->main_css_element} .entry-title:hover a",
+						'main' => "{$this->main_css_element} .entry-title, %%order_class%% .not-found-title",
+						'font' => "{$this->main_css_element} .entry-title a, %%order_class%% .not-found-title",
+						'color' => "{$this->main_css_element} .entry-title a, %%order_class%% .not-found-title",
+						'limited_main' => "{$this->main_css_element} .entry-title, {$this->main_css_element} .entry-title a, %%order_class%% .not-found-title",
+						'hover'        => "{$this->main_css_element} .entry-title:hover, {$this->main_css_element} .entry-title:hover a, %%order_class%% .not-found-title:hover",
+						'color_hover'  => "{$this->main_css_element} .entry-title:hover a, %%order_class%% .not-found-title:hover",
 						'important' => 'all',
 					),
 					'header_level' => array(
@@ -73,8 +73,8 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 						'bb_icons_support'  => true,
 						'css'               => array(
 							'link'  => "{$this->main_css_element} .post-content a, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content a, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content a",
-							'ul'    => "{$this->main_css_element} .post-content ul, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ul, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ul",
-							'ol'    => "{$this->main_css_element} .post-content ol, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ol, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ol",
+							'ul'    => "{$this->main_css_element} .post-content ul li, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ul li, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ul li",
+							'ol'    => "{$this->main_css_element} .post-content ol li, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ol li, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ol li",
 							'quote' => "{$this->main_css_element} .post-content blockquote, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content blockquote, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content blockquote",
 						),
 					),
@@ -138,8 +138,8 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 				'fullwidth' => array(
 					'css' => array(
 						'main' => array(
-							'border_radii'  => "%%order_class%%:not(.et_pb_blog_grid) .et_pb_post",
-							'border_styles' => "%%order_class%%:not(.et_pb_blog_grid) .et_pb_post",
+							'border_radii'  => "%%order_class%%:not(.et_pb_blog_grid_wrapper) .et_pb_post",
+							'border_styles' => "%%order_class%%:not(.et_pb_blog_grid_wrapper) .et_pb_post",
 						),
 					),
 					'depends_on'      => array( 'fullwidth' ),
@@ -179,6 +179,11 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 						'color'    => '',
 						'position' => '',
 					),
+				),
+			),
+			'height' => array(
+				'css'           => array(
+					'main' => '%%order_class%%',
 				),
 			),
 			'margin_padding' => array(
@@ -308,7 +313,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 				'label'             => esc_html__( 'Post Type', 'et_builder' ),
 				'type'              => 'select',
 				'option_category'   => 'configuration',
-				'options'           => et_get_registered_post_type_options(),
+				'options'           => et_get_registered_post_type_options( false, false ),
 				'description'       => esc_html__( 'Choose posts of which post type you would like to display.', 'et_builder' ),
 				'computed_affects'   => array(
 					'__posts',
@@ -1062,7 +1067,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 		$wp_query = $wp_query_page; // phpcs:ignore WordPress.Variables.GlobalVariables.OverrideProhibited
 
 		if ( ! $posts = ob_get_clean() ) {
-			$posts = self::get_no_results_template();
+			$posts = self::get_no_results_template( et_core_esc_previously( $processed_header_level ) );
 		}
 
 		self::$rendering = false;
@@ -1539,11 +1544,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 			   $container_is_closed = true;
 		   }
 		} elseif ( $show_no_results_template ) {
-			if ( et_is_builder_plugin_active() ) {
-				include( ET_BUILDER_PLUGIN_DIR . 'includes/no-results.php' );
-			} else {
-				get_template_part( 'includes/no-results', 'index' );
-			}
+			echo self::get_no_results_template( et_core_intentionally_unescaped( $processed_header_level, 'fixed_string' ) );
 		}
 
 		wp_reset_query();
@@ -1564,19 +1565,13 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 			$render_slug,
 		) );
 
-		$data_background_layout       = '';
-		$data_background_layout_hover = '';
-
-		if ( $background_layout_hover_enabled ) {
-			$data_background_layout = sprintf(
-				' data-background-layout="%1$s"',
-				esc_attr( $background_layout )
-			);
-			$data_background_layout_hover = sprintf(
-				' data-background-layout-hover="%1$s"',
-				esc_attr( $background_layout_hover )
-			);
-		}
+		// Background layout data attributes.
+		$background_layout_props = array_merge( $this->props, array(
+			'background_layout'        => $background_layout,
+			'background_layout_tablet' => $background_layout_tablet,
+			'background_layout_phone'  => $background_layout_phone,
+		) );
+		$data_background_layout  = et_pb_background_layout_options()->get_background_layout_attrs( $background_layout_props );
 
 		if ( 'on' !== $fullwidth ) {
 			// Module classname
@@ -1596,17 +1591,12 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 			$inner_wrap_classname = array(
 				'et_pb_blog_grid',
 				'clearfix',
-				"et_pb_bg_layout_{$background_layout}",
 				$this->get_text_orientation_classname(),
 			);
 
-			if ( ! empty( $background_layout_tablet ) ) {
-				array_push( $inner_wrap_classname, "et_pb_bg_layout_{$background_layout_tablet}_tablet" );
-			}
-
-			if ( ! empty( $background_layout_phone ) ) {
-				array_push( $inner_wrap_classname, "et_pb_bg_layout_{$background_layout_phone}_phone" );
-			}
+			// Background layout class names.
+			$background_layout_class_names = et_pb_background_layout_options()->get_background_layout_class( $background_layout_props, false, true );
+			array_merge( $inner_wrap_classname, $background_layout_class_names );
 
 			if ( '' !== $video_background ) {
 				$inner_wrap_classname[] = 'et_pb_section_video';
@@ -1626,11 +1616,11 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 			) ) ;
 
 			$output = sprintf(
-				'<div%4$s class="%5$s"%9$s%10$s>
+				'<div%4$s class="%5$s"%9$s>
 					<div class="%1$s">
 					%7$s
 					%6$s
-					<div class="et_pb_ajax_pagination_container"%11$s>
+					<div class="et_pb_ajax_pagination_container"%10$s>
 						%2$s
 					</div>
 					%3$s %8$s
@@ -1644,8 +1634,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 				$parallax_image_background,
 				$this->drop_shadow_back_compatibility( $render_slug ),
 				et_core_esc_previously( $data_background_layout ),
-				et_core_esc_previously( $data_background_layout_hover ), // #10
-				et_core_esc_previously( $multi_view_data_attr )
+				et_core_esc_previously( $multi_view_data_attr ) // #10
 			);
 		} else {
 			// Module classname
@@ -1672,10 +1661,10 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 			) ) ;
 
 			$output = sprintf(
-				'<div%4$s class="%1$s"%8$s%9$s>
+				'<div%4$s class="%1$s"%8$s>
 				%6$s
 				%5$s
-				<div class="et_pb_ajax_pagination_container"%10$s>
+				<div class="et_pb_ajax_pagination_container"%9$s>
 					%2$s
 				</div>
 				%3$s %7$s',
@@ -1687,8 +1676,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 				$parallax_image_background,
 				$this->drop_shadow_back_compatibility( $render_slug ),
 				et_core_esc_previously( $data_background_layout ),
-				et_core_esc_previously( $data_background_layout_hover ),
-				et_core_esc_previously( $multi_view_data_attr ) #10
+				et_core_esc_previously( $multi_view_data_attr )
 			);
 		}
 
@@ -1710,6 +1698,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 			$this->advanced_fields['box_shadow']['default'] = array(
 				'css' => array(
 					'main'    => '%%order_class%% article.et_pb_post',
+					'hover'   => '%%order_class%% article.et_pb_post:hover',
 					'overlay' => 'inset',
 				),
 			);

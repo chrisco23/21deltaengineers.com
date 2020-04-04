@@ -18,6 +18,19 @@ class ET_Core_Data_Utils {
 	private $_sort_by;
 
 	/**
+	 * Sort arguments being passed through to callbacks.
+	 * See self::_user_sort()
+	 *
+	 * @var array
+	 */
+	protected $sort_arguments = array(
+		'array'      => array(),
+		'array_map'  => array(),
+		'sort'       => '__return_false',
+		'comparison' => '__return_false',
+	);
+
+	/**
 	 * Generate an XML-RPC array.
 	 *
 	 * @param array $values
@@ -245,6 +258,26 @@ class ET_Core_Data_Utils {
 	}
 
 	/**
+	 * Wrapper for {@see self::array_get()} that sanitizes the value before returning it.
+	 *
+	 * @since 4.0.7
+	 *
+	 * @param array  $array     An array which contains value located at `$address`.
+	 * @param string $address   The location of the value within `$array` (dot notation).
+	 * @param mixed  $default   Value to return if not found. Default is an empty string.
+	 * @param string $sanitizer Sanitize function to use. Default is 'sanitize_text_field'.
+	 *
+	 * @return mixed The sanitized value if found, otherwise $default.
+	 */
+	public function array_get_sanitized( $array, $address, $default = '', $sanitizer = 'sanitize_text_field' ) {
+		if ( $value = $this->array_get( $array, $address, $default ) ) {
+			$value = $sanitizer( $value );
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Creates a new array containing only the items that have a key or property or only the items that
 	 * have a key or property that is equal to a certain value.
 	 *
@@ -311,8 +344,36 @@ class ET_Core_Data_Utils {
 		return $array;
 	}
 
+	/**
+	 * Update a nested array value found at the provided path using {@see array_merge()}.
+	 *
+	 * @since 4.0.7
+	 *
+	 * @param array $array
+	 * @param $path
+	 * @param $value
+	 */
+	public function array_update( &$array, $path, $value ) {
+		$current_value = $this->array_get( $array, $path, array() );
+
+		$this->array_set( $array, $path, array_merge( $current_value, $value ) );
+	}
+
 	public function ensure_directory_exists( $path ) {
-		return file_exists( $path ) ? true : @mkdir( $path, 0755, true );
+		if ( file_exists( $path ) ) {
+			return is_dir( $path );
+		}
+
+		// Try to create the directory
+		$path = $this->normalize_path( $path );
+
+		if ( ! $this->WPFS()->mkdir( $path ) ) {
+			// Walk up the tree and create any missing parent directories
+			$this->ensure_directory_exists( dirname( $path ) );
+			$this->WPFS()->mkdir( $path );
+		}
+
+		return is_dir( $path );
 	}
 
 	public static function instance() {
@@ -350,12 +411,22 @@ class ET_Core_Data_Utils {
 	 * Windows actually supports both styles, even mixed together. However, its better not
 	 * to mix them (especially when doing string comparisons on paths).
 	 *
+	 * @since 4.0.8     Use {@see wp_normalize_path()} if it exists. Remove all occurrences of '..' from paths.
+	 * @since 3.0.52
+	 *
 	 * @param string $path
 	 *
 	 * @return string
 	 */
-	public function normalize_path( $path ) {
-		return $path ? str_replace( '\\', '/', $path ) : '';
+	public function normalize_path( $path = '' ) {
+		$path = (string) $path;
+		$path = str_replace( '..', '', $path );
+
+		if ( function_exists( 'wp_normalize_path' ) ) {
+			return wp_normalize_path( $path );
+		}
+
+		return str_replace( '\\', '/', $path );
 	}
 
 	/**
@@ -424,7 +495,7 @@ class ET_Core_Data_Utils {
 	 *      // Returns '/this/is/a/path/to/file.php'
 	 *     ```
 	 *
-	 * @since ??
+	 * @since 4.0.6
 	 *
 	 * @param string|string[] ...$parts
 	 *
@@ -750,12 +821,127 @@ class ET_Core_Data_Utils {
 	/**
 	 * Returns the WP Filesystem instance.
 	 *
-	 * @since ??
+	 * @since 4.0.6
 	 *
 	 * @return WP_Filesystem_Base {@see ET_Core_PageResource::wpfs()}
 	 */
 	public function WPFS() {
 		return ET_Core_PageResource::wpfs();
+	}
+
+	/**
+	 * Equivalent of usort but preserves relative order of equally weighted values.
+	 *
+	 * @since 4.0.9
+	 *
+	 * @param array &$array
+	 * @param callable $comparison_function
+	 *
+	 * @return array
+	 */
+	public function usort( &$array, $comparison_function ) {
+		return $this->_user_sort( $array, 'usort', $comparison_function );
+	}
+
+	/**
+	 * Equivalent of uasort but preserves relative order of equally weighted values.
+	 *
+	 * @since 4.0.9
+	 *
+	 * @param array &$array
+	 * @param callable $comparison_function
+	 *
+	 * @return array
+	 */
+	public function uasort( &$array, $comparison_function ) {
+		return $this->_user_sort( $array, 'uasort', $comparison_function );
+	}
+
+	/**
+	 * Equivalent of uksort but preserves relative order of equally weighted values.
+	 *
+	 * @since 4.0.9
+	 *
+	 * @param array &$array
+	 * @param callable $comparison_function
+	 *
+	 * @return array
+	 */
+	public function uksort( &$array, $comparison_function ) {
+		return $this->_user_sort( $array, 'uksort', $comparison_function );
+	}
+
+	/**
+	 * Sort using a custom function accounting for the common undefined order
+	 * pitfall due to a return value of 0.
+	 *
+	 * @since 4.0.9
+	 *
+	 * @param array &$array Array to sort
+	 * @param callable $sort_function "usort", "uasort" or "uksort"
+	 * @param callable $comparison_function Custom comparison function
+	 *
+	 * @return array
+	 */
+	protected function _user_sort( &$array, $sort_function, $comparison_function ) {
+		$allowed_sort_functions = array( 'usort', 'uasort', 'uksort' );
+
+		if ( ! $this->includes( $allowed_sort_functions, $sort_function ) ) {
+			_doing_it_wrong( __FUNCTION__, esc_html__( 'Only custom sorting functions can be used.', 'et_core' ), esc_html( et_get_theme_version() ) );
+		}
+
+		// Use properties temporarily to pass values in order to preserve PHP 5.2 support.
+		$this->sort_arguments['array']      = $array;
+		$this->sort_arguments['sort']       = $sort_function;
+		$this->sort_arguments['comparison'] = $comparison_function;
+		$this->sort_arguments['array_map']  = 'uksort' === $sort_function
+			? array_flip( array_keys( $array ) )
+			: array_values( $array );
+
+		$sort_function( $array, array( $this, '_user_sort_callback' ) );
+
+		$this->sort_arguments['array']      = array();
+		$this->sort_arguments['array_map']  = array();
+		$this->sort_arguments['sort']       = '__return_false';
+		$this->sort_arguments['comparison'] = '__return_false';
+
+		return $array;
+	}
+
+	/**
+	 * Sort callback only meant to acompany self::sort().
+	 * Do not use outside of self::_user_sort().
+	 *
+	 * @since 4.0.9
+	 *
+	 * @param mixed $a
+	 * @param mixed $b
+	 *
+	 * @return integer
+	 */
+	protected function _user_sort_callback( $a, $b ) {
+		$result = (int) call_user_func( $this->sort_arguments['comparison'], $a, $b );
+
+		if ( 0 !== $result ) {
+			return $result;
+		}
+
+		if ( 'uksort' === $this->sort_arguments['sort'] ) {
+			// Intentional isset() use for performance reasons.
+			$a_order = isset( $this->sort_arguments['array_map'][ $a ] ) ? $this->sort_arguments['array_map'][ $a ] : false;
+			$b_order = isset( $this->sort_arguments['array_map'][ $b ] ) ? $this->sort_arguments['array_map'][ $b ] : false;
+		} else {
+			$a_order = array_search( $a, $this->sort_arguments['array_map'] );
+			$b_order = array_search( $b, $this->sort_arguments['array_map'] );
+		}
+
+		if ( false === $a_order || false === $b_order ) {
+			// This should not be possible so we fallback to the undefined
+			// sorting behavior by returning 0.
+			return 0;
+		}
+
+		return $a_order - $b_order;
 	}
 }
 

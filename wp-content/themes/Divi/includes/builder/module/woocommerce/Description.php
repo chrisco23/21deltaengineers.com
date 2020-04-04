@@ -17,7 +17,7 @@ class ET_Builder_Module_Woocommerce_Description extends ET_Builder_Module {
 	/**
 	 * Initialize.
 	 *
-	 * @since ?? Updated `toggle_slug` to avoid empty Tabs in Text OG.
+	 * @since 4.0.6 Updated `toggle_slug` to avoid empty Tabs in Text OG.
 	 */
 	public function init() {
 		$this->name       = esc_html__( 'Woo Description', 'et_builder' );

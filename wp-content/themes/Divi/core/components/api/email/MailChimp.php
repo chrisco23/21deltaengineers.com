@@ -151,7 +151,7 @@ class ET_Core_API_Email_MailChimp extends ET_Core_API_Email_Provider {
 		$fields = $args['custom_fields'];
 		$list_id = self::$_->array_get( $args, 'list_id', '' );
 
-		unset( $args['custom_fields'] );		
+		unset( $args['custom_fields'] );
 		unset( $args['list_id'] );
 
 		$custom_fields_data = self::$_->array_get( $this->data, "lists.{$list_id}.custom_fields", array() );
@@ -165,8 +165,9 @@ class ET_Core_API_Email_MailChimp extends ET_Core_API_Email_Provider {
 				// In previous version of Mailchimp implementation we only supported default field tag, but it can be customized and our code fails.
 				// Added `field_tag` attribute which is actual field tag. Fallback to default field tag if `field_tag` doesn't exist for backward compatibility.
 				$custom_field_tag = self::$_->array_get( $custom_fields_data, "{$field_id}.field_tag", "MMERGE{$field_id}" );
-				
-				self::$_->array_set( $args, "merge_fields.{$custom_field_tag}", $value );
+
+				// Need to strips existing slash chars.
+				self::$_->array_set( $args, "merge_fields.{$custom_field_tag}", stripslashes( $value ) );
 			}
 		}
 

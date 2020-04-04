@@ -68,6 +68,23 @@ function et_theme_builder_api_duplicate_layout() {
 		) );
 	}
 
+	$meta = get_post_meta( $layout_id );
+
+	foreach ( $meta as $key => $values ) {
+		if ( strpos( $key, '_et_pb_' ) !== 0 && strpos( $key, '_et_builder_' ) !== 0 ) {
+			continue;
+		}
+
+		if ( strpos( $key, '_et_pb_ab_' ) === 0 ) {
+			// Do not copy A/B meta as it is post-specific.
+			continue;
+		}
+
+		foreach ( $values as $value ) {
+			add_post_meta( $post_id, $key, $value );
+		}
+	}
+
 	wp_send_json_success( array(
 		'id' => $post_id,
 	) );
@@ -430,11 +447,6 @@ function et_theme_builder_api_import_theme_builder() {
 	$layout_keys   = array( 'header', 'body', 'footer' );
 
 	foreach ( $export['templates'] as $index => $template ) {
-		if ( ! $override_default_website_template && $template['default'] ) {
-			// Do not import the DWT at all when we don't want to override the current one.
-			continue;
-		}
-
 		foreach ( $layout_keys as $key ) {
 			$layout_id = (int) $_->array_get( $template, array( 'layouts', $key, 'id' ), 0 );
 
@@ -451,7 +463,7 @@ function et_theme_builder_api_import_theme_builder() {
 			// Use a temporary string id to avoid numerical keys being reset by various array functions.
 			$template_id = 'template_' . $index;
 			$is_global   = (bool) $_->array_get( $layout, 'theme_builder.is_global', false );
-			$create_new  = $template['default'] || ! $is_global || $incoming_layout_duplicate;
+			$create_new  = ($template['default'] && $override_default_website_template) || ! $is_global || $incoming_layout_duplicate;
 
 			if ( $create_new ) {
 				$steps[] = array(
@@ -557,11 +569,6 @@ function et_theme_builder_api_import_theme_builder_step() {
 		$conditions = array();
 
 		foreach ( $export['templates'] as $index => $template ) {
-			if ( ! $export['override_default_website_template'] && $template['default'] ) {
-				// Do not import the DWT at all when we don't want to override the current one.
-				continue;
-			}
-
 			$sanitized = et_theme_builder_sanitize_template( $template );
 
 			foreach ( $layout_keys as $key ) {

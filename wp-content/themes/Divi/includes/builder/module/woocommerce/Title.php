@@ -90,7 +90,7 @@ class ET_Builder_Module_Woocommerce_Title extends ET_Builder_Module {
 		$this->custom_css_fields = array(
 			'title_text' => array(
 				'label'    => esc_html__( 'Title Text', 'et_builder' ),
-				'selector' => 'h1, h2, h3, h4, h5, h6',
+				'selector' => '%%order_class%% h1, %%order_class%% h2, %%order_class%% h3, %%order_class%% h4, %%order_class%% h5, %%order_class%% h6',
 			),
 		);
 

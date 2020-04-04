@@ -149,7 +149,6 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 				'affects'           => array(
 					'url',
 					'url_new_window',
-					'use_overlay',
 				),
 				'toggle_slug'       => 'link',
 				'description'       => esc_html__( 'Here you can choose whether or not the image should open in Lightbox. Note: if you select to open the image in Lightbox, url options below will be ignored.', 'et_builder' ),
@@ -159,9 +158,6 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 				'type'            => 'text',
 				'option_category' => 'basic_option',
 				'depends_show_if' => 'off',
-				'affects'         => array(
-					'use_overlay',
-				),
 				'description'     => esc_html__( 'If you would like your image to be a link, input your destination URL here. No link will be created if this field is left blank.', 'et_builder' ),
 				'toggle_slug'     => 'link',
 				'dynamic_content' => 'url',
@@ -193,7 +189,9 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 					'hover_overlay_color',
 					'hover_icon',
 				),
-				'depends_show_if'   => 'on',
+				'show_if'           => array(
+					"function.showImageUseOverlayField" => 'on'
+				),
 				'tab_slug'          => 'advanced',
 				'toggle_slug'       => 'overlay',
 				'description'       => esc_html__( 'If enabled, an overlay color and icon will be displayed when a visitors hovers over the image', 'et_builder' ),

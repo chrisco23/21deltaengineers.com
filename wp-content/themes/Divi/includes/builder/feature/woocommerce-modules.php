@@ -925,6 +925,55 @@ function et_builder_wc_add_inner_content_class( $classes ) {
 }
 
 /**
+ * Add WooCommerce class names on Divi Shop Page (not WooCommerce Shop).
+ *
+ * @since 4.0.7
+ *
+ * @param array $classes Array of Classes.
+ *
+ * @return array
+ */
+function et_builder_wc_add_outer_content_class( $classes ) {
+	$body_classes = get_body_class();
+
+	// Add Class only to WooCommerce Shop page if built using Divi (i.e. Divi Shop page).
+	if ( ! ( function_exists( 'is_shop' ) && is_shop() ) ) {
+		return $classes;
+	}
+
+	// Add Class only when the WooCommerce Shop page is built using Divi.
+	if ( ! et_builder_wc_is_non_product_post_type() ) {
+		return $classes;
+	}
+
+	// Precautionary check: $body_classes should always be an array.
+	if ( ! is_array( $body_classes ) ) {
+		return $classes;
+	}
+
+	// Add Class only when the <body> tag does not contain them.
+	$woocommerce_classes = array( 'woocommerce', 'woocommerce-page' );
+	$common_classes      = array_intersect( $body_classes, array(
+		'woocommerce',
+		'woocommerce-page',
+	) );
+	if ( is_array( $common_classes )
+		 && count( $woocommerce_classes ) === count( $common_classes ) ) {
+		return $classes;
+	}
+
+	// Precautionary check: $classes should always be an array.
+	if ( ! is_array( $classes ) ) {
+		return $classes;
+	}
+
+	$classes[] = 'woocommerce';
+	$classes[] = 'woocommerce-page';
+
+	return $classes;
+}
+
+/**
  * Sets the Product page layout post meta on two occurrences.
  *
  * They are 1) On WP Admin Publish/Update post 2) On VB Save.
@@ -994,6 +1043,26 @@ function et_builder_set_product_content_status( $post_id ) {
 }
 
 /**
+ * Returns alternative hook to make Woo Extra Product Options display fields in FE when TB is
+ * enabled.
+ *
+ * - The Woo Extra Product Options addon does not display the extra fields on the FE.
+ * - This is because the original hook i.e. `woocommerce_before_single_product` in the plugin
+ * is not triggered when TB is enabled.
+ * - Hence return a suitable hook that is fired for all types of Products i.e. Simple, Variable,
+ * etc.
+ *
+ * @see WEPOF_Product_Options_Frontend::define_public_hooks()
+ *
+ * @since 4.0.9
+ *
+ * @return string WooCommerce Hook that is being fired on TB enabled Product pages.
+ */
+function et_builder_trigger_extra_product_options( $hook ) {
+	return 'woocommerce_before_add_to_cart_form';
+}
+
+/**
  * Entry point for the woocommerce-modules.php file.
  *
  * @since 3.29
@@ -1005,6 +1074,8 @@ function et_builder_wc_init() {
 	// Add WooCommerce class names on non-`product` CPT which uses builder
 	add_filter( 'body_class', 'et_builder_wc_add_body_class' );
 	add_filter( 'et_builder_inner_content_class', 'et_builder_wc_add_inner_content_class' );
+	add_filter( 'et_builder_outer_content_class', 'et_builder_wc_add_outer_content_class' );
+
 
 	// Load WooCommerce related scripts
 	add_action( 'wp_enqueue_scripts', 'et_builder_wc_load_scripts', 15 );
@@ -1056,6 +1127,12 @@ function et_builder_wc_init() {
 	 * @see https://github.com/elegantthemes/Divi/issues/16420
 	 */
 	add_action( 'et_update_post', 'et_builder_set_product_content_status' );
+
+	/*
+	 * Fix Woo Extra Product Options addon compatibility.
+	 * @see https://github.com/elegantthemes/Divi/issues/17909
+	 */
+	add_filter( 'thwepof_hook_name_before_single_product', 'et_builder_trigger_extra_product_options' );
 }
 
 et_builder_wc_init();

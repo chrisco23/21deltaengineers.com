@@ -7,6 +7,7 @@
 
 return array(
 	'All Changes Saved'            => esc_html__( 'All Changes Saved', 'et_builder' ),
+	'Body'                         => esc_html__( 'Body', 'et_builder' ),
 	'Cancel'                       => esc_html__( 'Cancel', 'et_builder' ),
 	'Choose File'                  => esc_html__( 'Choose File', 'et_builder' ),
 	'Close'                        => esc_html__( 'Close', 'et_builder' ),
@@ -16,6 +17,8 @@ return array(
 	'Duplicate'                    => esc_html__( 'Duplicate', 'et_builder' ),
 	'Edit'                         => esc_html__( 'Edit', 'et_builder' ),
 	'Error'                        => esc_html__( 'Error', 'et_builder' ),
+	'Footer'                       => esc_html__( 'Footer', 'et_builder' ),
+	'Header'                       => esc_html__( 'Header', 'et_builder' ),
 	'History'                      => esc_html__( 'History', 'et_builder' ),
 	'More Settings'                => esc_html__( 'More Settings', 'et_builder' ),
 	'No file selected'             => esc_html__( 'No File Selected', 'et_builder' ),

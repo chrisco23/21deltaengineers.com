@@ -396,6 +396,9 @@ class ET_Builder_Module_Video extends ET_Builder_Module {
 			'styles' => array(
 				'background-image' => 'url({{image_src}})',
 			),
+			'visibility' => array(
+				'image_src' => '__not_empty'
+			),
 			'required' => 'image_src',
 		) );
 

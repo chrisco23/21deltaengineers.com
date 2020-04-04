@@ -4,6 +4,8 @@ $layouts = et_theme_builder_get_template_layouts();
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
+	<?php echo $tb_theme_head; ?>
+
 	<?php do_action( 'et_theme_builder_template_head' ); ?>
 
 	<?php wp_head(); ?>

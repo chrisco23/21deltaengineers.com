@@ -71,12 +71,30 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 			),
 			'fonts'                 => array(
 				'header' => array(
-					'label'          => esc_html__( 'Title', 'et_builder' ),
+					'label'          => esc_html__( 'Comment Count', 'et_builder' ),
 					'css'            => array(
 						'main' => "{$this->main_css_element} h1.page_title, {$this->main_css_element} h2.page_title, {$this->main_css_element} h3.page_title, {$this->main_css_element} h4.page_title, {$this->main_css_element} h5.page_title, {$this->main_css_element} h6.page_title",
 					),
 					'header_level' => array(
 						'default' => 'h1',
+					),
+				),
+				'title'  => array(
+					'label'          => esc_html__( 'Form Title', 'et_builder' ),
+					'css'            => array(
+						'main' => "{$this->main_css_element} .comment-reply-title",
+					),
+					'line_height'    => array(
+						'default' => '1em',
+					),
+					'font_size'      => array(
+						'default' => '22px',
+					),
+					'letter_spacing' => array(
+						'default' => '0px',
+					),
+					'header_level' => array(
+						'default' => 'h3',
 					),
 				),
 				'meta' => array(
@@ -329,16 +347,22 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 	/**
 	 * Get comments markup for comments module
 	 *
+	 * @since 4.0.9 Add custom form title heading level.
+	 *
+	 * @param {string} $header_level
+	 * @param {string} $form_title_level
+	 *
 	 * @return string of comment section markup
 	 */
-	static function get_comments( $header_level ) {
-		global $et_pb_comments_print, $et_comments_header_level;
+	static function get_comments( $header_level, $form_title_level ) {
+		global $et_pb_comments_print, $et_comments_header_level, $et_comments_form_title_level;
 
 		// Globally flag that comment module is being printed
 		$et_pb_comments_print = true;
 
 		// set custom header level for comments form
-		$et_comments_header_level = $header_level;
+		$et_comments_header_level     = $header_level;
+		$et_comments_form_title_level = $form_title_level;
 
 		// remove filters to make sure comments module rendered correctly if the below filters were applied earlier.
 		remove_filter( 'get_comments_number', '__return_zero' );
@@ -386,11 +410,15 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 	 * module can modify these
 	 *
 	 * @since 3.29
+	 * @since 4.0.9 Add form title heading level.
 	 */
 	function get_comments_content() {
-		$header_level = $this->props['header_level'];
+		$header_level               = et_()->array_get( $this->props, 'header_level' );
+		$form_title_level           = et_()->array_get( $this->props, 'title_level' );
+		$header_level_processed     = et_pb_process_header_level( $header_level, 'h1' );
+		$form_title_level_processed = et_pb_process_header_level( $form_title_level, 'h3' );
 
-		return self::get_comments( et_pb_process_header_level( $header_level, 'h1' ) );
+		return self::get_comments( $header_level_processed, $form_title_level_processed );
 	}
 
 	/**
@@ -432,13 +460,6 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 		$video_background                = $this->video_background();
 		$parallax_image_background       = $this->get_parallax_image_background();
 
-		$background_layout               = $this->props['background_layout'];
-		$background_layout_hover         = et_pb_hover_options()->get_value( 'background_layout', $this->props, 'light' );
-		$background_layout_hover_enabled = et_pb_hover_options()->is_enabled( 'background_layout', $this->props );
-		$background_layout_values        = et_pb_responsive_options()->get_property_values( $this->props, 'background_layout' );
-		$background_layout_tablet        = isset( $background_layout_values['tablet'] ) ? $background_layout_values['tablet'] : '';
-		$background_layout_phone         = isset( $background_layout_values['phone'] ) ? $background_layout_values['phone'] : '';
-
 		$custom_icon_values              = et_pb_responsive_options()->get_property_values( $this->props, 'button_icon' );
 		$custom_icon                     = isset( $custom_icon_values['desktop'] ) ? $custom_icon_values['desktop'] : '';
 		$custom_icon_tablet              = isset( $custom_icon_values['tablet'] ) ? $custom_icon_values['tablet'] : '';
@@ -469,33 +490,18 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 		$comments_custom_icon_tablet = 'on' === $button_custom ? $custom_icon_tablet : '';
 		$comments_custom_icon_phone  = 'on' === $button_custom ? $custom_icon_phone : '';
 
-		$data_background_layout       = '';
-		$data_background_layout_hover = '';
-		if ( $background_layout_hover_enabled ) {
-			$data_background_layout = sprintf(
-				' data-background-layout="%1$s"',
-				esc_attr( $background_layout )
-			);
-			$data_background_layout_hover = sprintf(
-				' data-background-layout-hover="%1$s"',
-				esc_attr( $background_layout_hover )
-			);
-		}
+		// Background layout data attributes.
+		$data_background_layout = et_pb_background_layout_options()->get_background_layout_attrs( $this->props );
 
 		// Module classname
 		$this->add_classname( array(
 			'et_pb_comments_module',
 			$this->get_text_orientation_classname(),
-			"et_pb_bg_layout_{$background_layout}",
 		) );
 
-		if ( ! empty( $background_layout_tablet ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_tablet}_tablet" );
-		}
-
-		if ( ! empty( $background_layout_phone ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_phone}_phone" );
-		}
+		// Background layout class names.
+		$background_layout_class_names = et_pb_background_layout_options()->get_background_layout_class( $this->props );
+		$this->add_classname( $background_layout_class_names );
 
 		if ( 'off' === $show_avatar ) {
 			$this->add_classname( 'et_pb_no_avatar' );
@@ -527,7 +533,7 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 		) );
 
 		$output = sprintf(
-			'<div%3$s class="%2$s"%4$s%7$s%8$s%9$s%10$s%11$s>
+			'<div%3$s class="%2$s"%4$s%7$s%8$s%9$s%10$s>
 				%5$s
 				%6$s
 				%1$s
@@ -539,10 +545,9 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 			$video_background, // #5
 			$parallax_image_background,
 			et_core_esc_previously( $data_background_layout ),
-			et_core_esc_previously( $data_background_layout_hover ),
 			'' !== $comments_custom_icon_tablet ? sprintf( ' data-icon-tablet="%1$s"', esc_attr( et_pb_process_font_icon( $comments_custom_icon_tablet ) ) ) : '',
-			'' !== $comments_custom_icon_phone ? sprintf( ' data-icon-phone="%1$s"', esc_attr( et_pb_process_font_icon( $comments_custom_icon_phone ) ) ) : '', // #10
-			$multi_view_data_attr
+			'' !== $comments_custom_icon_phone ? sprintf( ' data-icon-phone="%1$s"', esc_attr( et_pb_process_font_icon( $comments_custom_icon_phone ) ) ) : '',
+			$multi_view_data_attr // #10
 		);
 
 		return $output;

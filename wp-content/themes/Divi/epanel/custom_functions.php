@@ -347,6 +347,7 @@ if ( ! function_exists( 'truncate_post' ) ) {
 
 			if ( $strip_shortcodes ) {
 				$truncate = et_strip_shortcodes( $truncate );
+				$truncate = et_builder_strip_dynamic_content( $truncate );
 			} else {
 				// Check if content should be overridden with a custom value.
 				$custom = apply_filters( 'et_truncate_post_use_custom_content', false, $truncate, $post );

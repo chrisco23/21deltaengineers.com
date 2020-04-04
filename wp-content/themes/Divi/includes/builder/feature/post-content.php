@@ -86,7 +86,7 @@ function et_builder_get_current_title( $post_id = 0 ) {
 
 	$post_id = (int) $post_id;
 
-	if ( is_singular() ) {
+	if ( ! ET_Builder_Element::is_theme_builder_layout() || is_singular() ) {
 		return get_the_title( $post_id );
 	}
 

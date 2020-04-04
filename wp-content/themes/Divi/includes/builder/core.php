@@ -1,5 +1,35 @@
 <?php
 
+/**
+ * Render a builder layout to string.
+ *
+ * @since 4.0.8
+ *
+ * @param string $content
+ *
+ * @return string
+ */
+function et_builder_render_layout( $content ) {
+	/**
+	 * Filters layout content when it's being rendered.
+	 *
+	 * @since 4.0.8
+	 *
+	 * @param string $content
+	 */
+	return apply_filters( 'et_builder_render_layout', $content );
+}
+
+// Add all core filters that are applied to the_content() without do_blocks().
+add_filter( 'et_builder_render_layout', 'capital_P_dangit', 11 );
+add_filter( 'et_builder_render_layout', 'wptexturize' );
+add_filter( 'et_builder_render_layout', 'convert_smilies', 20 );
+add_filter( 'et_builder_render_layout', 'wpautop' );
+add_filter( 'et_builder_render_layout', 'shortcode_unautop' );
+add_filter( 'et_builder_render_layout', 'prepend_attachment' );
+add_filter( 'et_builder_render_layout', 'wp_make_content_images_responsive' );
+add_filter( 'et_builder_render_layout', 'do_shortcode', 11 ); // AFTER wpautop()
+
 if ( ! function_exists( 'et_builder_add_filters' ) ):
 /**
  * Add common filters depending on what builder is being used.
@@ -324,13 +354,16 @@ function et_builder_get_third_party_unqueryable_post_types() {
  * Get the list of registered Post Types options.
  *
  * @since 3.18
+ * @since 4.0.7 Added the $require_editor parameter.
+ *
+ * @param boolean|callable $usort
+ * @param boolean $require_editor
  *
  * @return array
  */
-function et_get_registered_post_type_options( $usort = false ) {
-
-	// Cache key
-	$key = 'et_get_registered_post_type_options';
+function et_get_registered_post_type_options( $usort = false, $require_editor = true ) {
+	$require_editor_key = $require_editor ? '1' : '0';
+	$key                = "et_get_registered_post_type_options:{$require_editor_key}";
 
 	if ( ET_Core_Cache::has( $key ) ) {
 		return ET_Core_Cache::get( $key );
@@ -359,7 +392,7 @@ function et_get_registered_post_type_options( $usort = false ) {
 	foreach ( $raw_post_types as $post_type ) {
 		$is_whitelisted  = in_array( $post_type->name, $whitelist );
 		$is_blacklisted  = in_array( $post_type->name, $blacklist );
-		$supports_editor = post_type_supports( $post_type->name, 'editor' );
+		$supports_editor = $require_editor ? post_type_supports( $post_type->name, 'editor' ) : true;
 		$is_public       = et_builder_is_post_type_public( $post_type->name );
 
 		if ( ! $is_whitelisted && ( $is_blacklisted || ! $supports_editor || ! $is_public ) ) {
@@ -2223,7 +2256,15 @@ function et_builder_email_add_account() {
 	$provider_slug = isset( $_POST['et_provider'] ) ? sanitize_text_field( $_POST['et_provider'] ) : '';
 	$name_key      = "et_{$provider_slug}_account_name";
 	$account_name  = isset( $_POST[ $name_key ] ) ? sanitize_text_field( $_POST[ $name_key ] ) : '';
-	$is_BB         = isset( $_POST['et_bb'] );
+
+	if ( isset( $_POST['module_class'] ) && in_array( $_POST['module_class'], array( 'Signup', 'Contact_Form' ) ) ) {
+		$module_class = sanitize_text_field( $_POST['module_class'] );
+	} else {
+		$module_class = 'Signup';
+	}
+
+	$is_BB           = isset( $_POST['et_bb'] );
+	$is_spam_account = isset( $_POST['is_spam_account'] );
 
 	if ( empty( $provider_slug ) || empty( $account_name ) ) {
 		et_core_die();
@@ -2231,17 +2272,23 @@ function et_builder_email_add_account() {
 
 	unset( $_POST[ $name_key ] );
 
-	$fields = et_builder_email_get_fields_from_post_data( $provider_slug );
+	$fields = et_builder_email_get_fields_from_post_data( $provider_slug, $is_spam_account );
 
 	if ( false === $fields  ) {
 		et_core_die();
 	}
 
-	$result = et_core_api_email_fetch_lists( $provider_slug, $account_name, $fields );
-	$_      = ET_Core_Data_Utils::instance();
+	if ( $is_spam_account ) {
+		$result = et_core_api_spam_add_account( $provider_slug, $account_name, $fields );
+
+	} else {
+		$result = et_core_api_email_fetch_lists( $provider_slug, $account_name, $fields );
+	}
+
+	$_ = ET_Core_Data_Utils::instance();
 
 	// Get data in builder format
-	$list_data = et_builder_email_get_lists_field_data( $provider_slug, $is_BB );
+	$list_data = et_builder_email_get_lists_field_data( $provider_slug, $is_BB, $module_class );
 
 	if ( 'success' === $result ) {
 		$result = array(
@@ -2267,10 +2314,15 @@ endif;
 
 
 if ( ! function_exists( 'et_builder_email_get_fields_from_post_data' ) ):
-function et_builder_email_get_fields_from_post_data( $provider_slug ) {
+function et_builder_email_get_fields_from_post_data( $provider_slug, $is_spam_account = false ) {
 	et_core_security_check( 'manage_options', 'et_builder_email_add_account_nonce' );
 
-	$fields = ET_Core_API_Email_Providers::instance()->account_fields( $provider_slug );
+	if ( $is_spam_account ) {
+		$fields = ET_Core_API_Spam_Providers::instance()->account_fields( $provider_slug );
+	} else {
+		$fields = ET_Core_API_Email_Providers::instance()->account_fields( $provider_slug );
+	}
+
 	$result = array();
 	$protocol = is_ssl() ? 'https' : 'http';
 
@@ -2312,30 +2364,36 @@ if ( ! function_exists( 'et_builder_email_get_lists_field_data' ) ):
  *
  * @return array|string The data in the BB's format if `$is_BB` is `true`, the FB's format otherwise.
  */
-function et_builder_email_get_lists_field_data( $provider_slug, $is_BB = false ) {
-	$signup     = new ET_Builder_Module_Signup();
-	$fields     = $signup->get_fields();
+function et_builder_email_get_lists_field_data( $provider_slug, $is_BB = false, $module_class = 'Signup' ) {
+	$module     = 'ET_Builder_Module_' . $module_class;
+	$module     = new $module;
+	$fields     = $module->get_fields();
 	$field_name = $provider_slug . '_list';
 	$field      = $fields[ $field_name ];
 
 	if ( $is_BB ) {
 		$field['only_options'] = true;
 		$field['name']         = $field_name;
-		$field_data            = $signup->render_field( $field );
+		$field_data            = $module->render_field( $field );
 	} else {
-		$signup_field  = new ET_Builder_Module_Signup_Item;
-		$field_data    = array(
+		$field_data = array(
 			'accounts_list' => $field['options'],
-			'custom_fields' => $signup_field->get_fields(),
 		);
+
+		if ( 'Signup' === $module_class ) {
+			$signup_field                 = new ET_Builder_Module_Signup_Item;
+			$fields_data['custom_fields'] = $signup_field->get_fields();
+		}
 	}
 
-	// Make sure the BB updates its cached templates
 	et_pb_force_regenerate_templates();
+	et_fb_delete_builder_assets();
 
 	return $field_data;
 }
 endif;
+
+
 
 
 if ( ! function_exists( 'et_builder_email_get_lists' ) ):
@@ -2469,18 +2527,31 @@ function et_builder_email_remove_account() {
 
 	$provider_slug = sanitize_text_field( $_POST['et_provider'] );
 	$account_name  = sanitize_text_field( $_POST['et_account'] );
-	$is_BB         = isset( $_POST['et_bb'] );
+
+	if ( isset( $_POST['module_class'] ) && in_array( $_POST['module_class'], array( 'Signup', 'Contact_Form' ) ) ) {
+		$module_class = sanitize_text_field( $_POST['module_class'] );
+	} else {
+		$module_class = 'Signup';
+	}
+
+	$is_BB           = isset( $_POST['et_bb'] );
+	$is_spam_account = isset( $_POST['is_spam_account'] );
 
 	if ( empty( $provider_slug ) || empty( $account_name ) ) {
 		et_core_die();
 	}
 
-	et_core_api_email_remove_account( $provider_slug, $account_name );
+	if ( $is_spam_account ) {
+		et_core_api_spam_remove_account( $provider_slug, $account_name );
+
+	} else {
+		et_core_api_email_remove_account( $provider_slug, $account_name );
+	}
 
 	$_ = ET_Core_Data_Utils::instance();
 
 	// Get data in builder format
-	$list_data = et_builder_email_get_lists_field_data( $provider_slug, $is_BB );
+	$list_data = et_builder_email_get_lists_field_data( $provider_slug, $is_BB, $module_class );
 
 	$result = array(
 		'error'                    => false,
@@ -2505,8 +2576,8 @@ function et_pb_submit_subscribe_form() {
 	$providers = ET_Core_API_Email_Providers::instance();
 	$utils     = ET_Core_Data_Utils::instance();
 
-	$provider_slug = sanitize_text_field( $utils->array_get( $_POST, 'et_provider' ) );
-	$account_name  = sanitize_text_field( $utils->array_get( $_POST, 'et_account' ) );
+	$provider_slug = $utils->array_get_sanitized( $_POST, 'et_provider' );
+	$account_name  = $utils->array_get_sanitized( $_POST, 'et_account' );
 	$custom_fields = $utils->array_get( $_POST, 'et_custom_fields', array() );
 
 	if ( ! $provider = $providers->get( $provider_slug, $account_name, 'builder' ) ) {
@@ -2514,11 +2585,11 @@ function et_pb_submit_subscribe_form() {
 	}
 
 	$args = array(
-		'list_id'       => sanitize_text_field( $utils->array_get( $_POST, 'et_list_id' ) ),
-		'email'         => sanitize_text_field( $utils->array_get( $_POST, 'et_email' ) ),
-		'name'          => sanitize_text_field( $utils->array_get( $_POST, 'et_firstname' ) ),
-		'last_name'     => sanitize_text_field( $utils->array_get( $_POST, 'et_lastname' ) ),
-		'ip_address'    => sanitize_text_field( $utils->array_get( $_POST, 'et_ip_address' ) ),
+		'list_id'       => $utils->array_get_sanitized( $_POST, 'et_list_id' ),
+		'email'         => $utils->array_get_sanitized( $_POST, 'et_email' ),
+		'name'          => $utils->array_get_sanitized( $_POST, 'et_firstname' ),
+		'last_name'     => $utils->array_get_sanitized( $_POST, 'et_lastname' ),
+		'ip_address'    => $utils->array_get_sanitized( $_POST, 'et_ip_address' ),
 		'custom_fields' => $utils->sanitize_text_fields( $custom_fields ),
 	);
 
@@ -2528,6 +2599,12 @@ function et_pb_submit_subscribe_form() {
 
 	if ( '' === (string) $args['list_id'] ) {
 		et_core_die( esc_html__( 'Configuration Error: No list has been selected for this form.', 'et_builder' ) );
+	}
+
+	$signup = ET_Builder_Element::get_module( 'et_pb_signup' );
+
+	if ( $signup && $signup->is_spam_submission() ) {
+		et_core_die( esc_html__( 'You must be a human to submit this form.', 'et_builder' ) );
 	}
 
 	et_builder_email_maybe_migrate_accounts();
@@ -5279,9 +5356,32 @@ if ( ! function_exists( 'et_builder_show_bfb_welcome_modal' ) ) :
 function et_builder_show_bfb_welcome_modal() {
 	global $pagenow;
 
-	if ( ! et_builder_bfb_enabled() || ! in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) || ! et_pb_is_pagebuilder_used() || ! get_transient( 'et_builder_show_bfb_welcome_modal' ) ) {
+	// Cancel if BFB is not enabled yet
+	if ( ! et_builder_bfb_enabled() ) {
 		return;
 	}
+
+	// Cancel if current request is not editing screen
+	if ( ! in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) {
+		return;
+	}
+
+	// Cancel if current edit screen use Gutenberg. `use_block_editor_for_post_type()` was added
+	// after v5.0 so check for its existance first in case current WP version is below 5.0
+	if ( function_exists( 'use_block_editor_for_post_type' ) && use_block_editor_for_post_type( get_post_type() ) ) {
+		return;
+	}
+
+	// Cancel if current edit screen doesn't use builder
+	if ( ! et_pb_is_pagebuilder_used() ) {
+		return;
+	}
+
+	// Cancel if assigned transient doesn't exist
+	if ( ! get_transient( 'et_builder_show_bfb_welcome_modal' ) ) {
+		return;
+	}
+
 	// Clear Builder assets cache to avoid double reloading of BFB after theme update.
 	et_fb_delete_builder_assets();
 
@@ -5543,6 +5643,7 @@ function et_builder_add_builder_content_wrapper( $content ) {
 	return $content;
 }
 add_filter( 'the_content', 'et_builder_add_builder_content_wrapper' );
+add_filter( 'et_builder_render_layout', 'et_builder_add_builder_content_wrapper' );
 
 /**
  * Wraps a copy of a css selector and then returns both selectors.
@@ -5563,7 +5664,7 @@ function et_builder_maybe_wrap_css_selector( $selector, $suffix = '', $clone = t
 	$post_id = ET_Builder_Element::get_theme_builder_layout_id();
 
 	if ( ! isset( $should_wrap_selectors[ $post_id ] ) ) {
-		$should_wrap_selectors[ $post_id ] = et_builder_is_custom_post_type_archive() || ( et_pb_is_pagebuilder_used( $post_id ) && ( et_is_builder_plugin_active() || et_builder_post_is_of_custom_post_type( $post_id ) || et_theme_builder_is_layout_post_type( get_post_type( $post_id ) ) ) );
+		$should_wrap_selectors[ $post_id ] = et_is_builder_plugin_active() || et_builder_is_custom_post_type_archive() || ( et_pb_is_pagebuilder_used( $post_id ) && ( et_builder_post_is_of_custom_post_type( $post_id ) || et_theme_builder_is_layout_post_type( get_post_type( $post_id ) ) ) );
 	}
 
 	if ( is_bool( $suffix ) ) {
@@ -5640,7 +5741,7 @@ function et_builder_maybe_wrap_css_selectors( $selector, $clone = true ) {
 			}
 		}
 
-		$should_wrap_selectors[ $post_id ] = et_builder_is_custom_post_type_archive() || ( et_pb_is_pagebuilder_used( $wrap_post_id ) && ( et_is_builder_plugin_active() || et_builder_post_is_of_custom_post_type( $wrap_post_id ) ) );
+		$should_wrap_selectors[ $post_id ] = et_is_builder_plugin_active() || et_builder_is_custom_post_type_archive() || ( et_pb_is_pagebuilder_used( $wrap_post_id ) && et_builder_post_is_of_custom_post_type( $wrap_post_id ) );
 	}
 
 	if ( ! $should_wrap_selectors[ $post_id ] ) {
@@ -5922,70 +6023,57 @@ function et_action_sync_attachment_data_cache( $attachment_id, $metadata = null 
 		return;
 	}
 
-	$cache_keys = array(
-		'image_srcset_sizes',
-		'image_responsive_metadata',
-		'attachment_id_by_url',
-		'attachment_size_by_url',
+	$url_full = wp_get_attachment_url( $attachment_id );
+
+	if ( ! $url_full ) {
+		return;
+	}
+
+	// Normalize image URL to remove the HTTP/S protocol.
+	$normalized_url_full = et_attachment_normalize_url( $url_full );
+
+	if ( ! $normalized_url_full ) {
+		return;
+	}
+
+	$normalized_urls = array(
+		$normalized_url_full => $normalized_url_full,
 	);
-
-	$cache_saves = array();
-	$cache_datas = array();
-
-	foreach ( $cache_keys as $cache_key ) {
-		$cache = ET_Core_Cache_File::get( $cache_key );
-
-		if ( $cache ) {
-			$cache_datas[ $cache_key ] = $cache;
-		}
-	}
-
-	if ( ! $cache_datas ) {
-		return;
-	}
-
-	$attachment_url = wp_get_attachment_url( $attachment_id );
-
-	if ( ! $attachment_url ) {
-		return;
-	}
-
-	foreach ( $cache_keys as $cache_key ) {
-		if ( isset( $cache_datas[ $cache_key ][ $attachment_url ] ) ) {
-			unset( $cache_datas[ $cache_key ][ $attachment_url ] );
-
-			if ( ! isset( $cache_saves[ $cache_key ] ) ) {
-				$cache_saves[ $cache_key ] = $cache_key;
-			}
-		}
-	}
 
 	if ( is_null( $metadata ) ) {
 		$metadata = wp_get_attachment_metadata( $attachment_id );
 	}
 
-	if ( isset( $metadata['sizes'] ) ) {
-		$attachment_url_basename = basename( $attachment_url );
+	if ( ! empty( $metadata ) ) {
+		foreach( $metadata['sizes'] as $image_size ) {
+			$normalized_url = str_replace( basename( $normalized_url_full ), $image_size['file'], $normalized_url_full );
 
-		foreach ( $metadata['sizes'] as $image_size ) {
-			$image_size_url = str_replace( $attachment_url_basename, $image_size['file'], $attachment_url );
-
-			foreach ( $cache_keys as $cache_key ) {
-				if ( isset( $cache_datas[ $cache_key ][ $image_size_url ] ) ) {
-					unset( $cache_datas[ $cache_key ][ $image_size_url ] );
-
-					if ( ! isset( $cache_saves[ $cache_key ] ) ) {
-						$cache_saves[ $cache_key ] = $cache_key;
-					}
-				}
+			if ( ! isset( $normalized_urls[ $normalized_url ] ) ) {
+				$normalized_urls[ $normalized_url ] = $normalized_url;
 			}
 		}
 	}
 
-	if ( $cache_saves ) {
-		foreach ( $cache_saves as $cache_save_key ) {
-			ET_Core_Cache_File::set( $cache_save_key, $cache_datas[ $cache_save_key ] );
+	$cache_keys = array(
+		'attachment_id_by_url',
+		'attachment_size_by_url',
+		'image_responsive_metadata',
+		'image_srcset_sizes',
+	);
+
+	foreach ( $cache_keys as $cache_key ) {
+		$cache = ET_Core_Cache_File::get( $cache_key );
+
+		// Skip if the cache data is empty.
+		if ( ! $cache ) {
+			continue;
 		}
+
+		foreach ( $normalized_urls as $normalized_url ) {
+			unset( $cache[ $normalized_url ] );
+		}
+
+		ET_Core_Cache_File::set( $cache_key, $cache );
 	}
 }
 endif;

@@ -44,6 +44,7 @@ class ET_Builder_Module_Woocommerce_Reviews extends ET_Builder_Module_Comments {
 		);
 
 		// Modify advanced field settings.
+		$this->advanced_fields['fonts']['header']['label']                            = esc_html__( 'Review Count', 'et_builder' );
 		$this->advanced_fields['fonts']['header']['header_level']['default']          = 'h2';
 		$this->advanced_fields['fonts']['header']['header_level']['computed_affects'] = array(
 			'__reviews',
@@ -53,6 +54,12 @@ class ET_Builder_Module_Woocommerce_Reviews extends ET_Builder_Module_Comments {
 		);
 		$this->advanced_fields['fonts']['header']['line_height']                      = array(
 			'default' => '1em',
+		);
+		$this->advanced_fields['fonts']['title']['font_size']                         = array(
+			'default' => '14px',
+		);
+		$this->advanced_fields['fonts']['title']['line_height']                       = array(
+			'default' => '1.7em',
 		);
 		$this->advanced_fields['fonts']['header']['css']['main']                      = "{$this->main_css_element} h1.woocommerce-Reviews-title, {$this->main_css_element} h2.woocommerce-Reviews-title, {$this->main_css_element} h3.woocommerce-Reviews-title, {$this->main_css_element} h4.woocommerce-Reviews-title, {$this->main_css_element} h5.woocommerce-Reviews-title, {$this->main_css_element} h6.woocommerce-Reviews-title";
 		$this->advanced_fields['fonts']['meta']['css']['main']                        = "{$this->main_css_element} #reviews #comments ol.commentlist li .comment-text p.meta, %%order_class%% .comment-form-rating label";
@@ -85,6 +92,9 @@ class ET_Builder_Module_Woocommerce_Reviews extends ET_Builder_Module_Comments {
 		$this->advanced_fields['form_field']['form_field']['font_field']['font_size'] = array(
 			'default' => '18px',
 		);
+
+		// Disable form title heading level because it uses span tag.
+		unset( $this->advanced_fields['fonts']['title']['header_level'] );
 
 		$this->custom_css_fields = array(
 			'main_header' => array(

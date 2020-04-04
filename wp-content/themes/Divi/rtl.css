@@ -86,7 +86,7 @@ li.product.last { clear: left; }
 span.et_close_search_field,
 .et-search-form { right: auto; left: 0; }
 
-.et_mobile_menu li li { padding-right: 5%; padding-left: 0; }
+.et_header_style_slide .et_mobile_menu li li { padding-right: 5%; padding-left: 0; }
 #main-header #mobile_menu { text-align: right; }
 #main-header .et_mobile_menu li ul,
 .et_pb_menu .et_mobile_menu li ul,
@@ -97,6 +97,12 @@ span.et_close_search_field,
 	.et_vertical_nav.et_header_style_centered #et_search_icon:before { left: auto; }
 	.et_vertical_nav.et_header_style_split #et_top_search { margin-right: 0; }
 	.et_vertical_nav.et_header_style_split #et_search_icon:before { left: auto; }
+	.et_fixed_nav.et_header_style_slide #main-header { 
+		right: 0; 
+		-moz-transition: right 0.8s cubic-bezier(0.770, 0.000, 0.175, 1.000), background 0.4s cubic-bezier(0.770, 0.000, 0.175, 1.000), opacity 0.4s cubic-bezier(0.770, 0.000, 0.175, 1.000), transform 0.4s ease-in-out;
+		-webkit-transition: right 0.8s cubic-bezier(0.770, 0.000, 0.175, 1.000), background 0.4s ease-in-out, opacity 0.4s cubic-bezier(0.770, 0.000, 0.175, 1.000), transform 0.4s ease-in-out;
+		transition: right 0.8s cubic-bezier(0.770, 0.000, 0.175, 1.000), background 0.4s cubic-bezier(0.770, 0.000, 0.175, 1.000), opacity 0.4s cubic-bezier(0.770, 0.000, 0.175, 1.000), transform 0.4s ease-in-out; 
+	}
 }
 
 @media all and (max-width: 980px) {
@@ -104,6 +110,7 @@ span.et_close_search_field,
 
 	.et_header_style_centered .et_menu_container .mobile_menu_bar, .et_header_style_split .et_menu_container .mobile_menu_bar { left: 5px; right: auto; }
 	.et_header_style_centered #main-header .mobile_nav, .et_header_style_split #main-header .mobile_nav { text-align: right; }
+	.rtl.et_fixed_nav.et_header_style_slide #main-header { right: 0 !important; }
 }
 
 @media all and (max-width: 980px) and (min-width: 768px) {
@@ -135,3 +142,85 @@ span.et_close_search_field,
 #et-secondary-menu { float: left; }
 
 #et-info { float: right; }
+
+.rtl.et_header_style_left #top-menu, 
+.rtl.et_header_style_left .fullwidth-menu, 
+.rtl.et_header_style_left nav#top-menu-nav, 
+.rtl.et_header_style_left nav.fullwidth-menu-nav {
+	float: right;
+}
+
+.rtl #et-secondary-nav > .menu-item-has-children>a:first-child, 
+.rtl #top-menu > .menu-item-has-children>a:first-child {
+    padding-right: 0;
+    padding-left: 20px;
+}
+
+.rtl #et-secondary-nav > .menu-item-has-children>a:first-child:after, 
+.rtl #top-menu > .menu-item-has-children>a:first-child:after {
+    right: unset;
+    left: 0;
+}
+
+.rtl.et_header_style_left #et-top-navigation .et-cart-info,
+.rtl.et_header_style_split #et-top-navigation .et-cart-info {
+	float: right;
+}
+.rtl.et_header_style_left #et_top_search,
+.rtl.et_header_style_left #et_mobile_nav_menu {
+	float: right;
+}
+
+.rtl.et_header_style_left #et-top-navigation .et-cart-info,
+.rtl.et_header_style_split #et-top-navigation .et-cart-info,
+.rtl.et_header_style_centered #et-top-navigation .et-cart-info {
+    margin: -2px 22px 0 0;
+}
+.rtl.et_header_style_left .et-cart-info span:before {
+    margin-right: 0;
+    margin-left: 10px;
+}
+
+.rtl.et_header_style_left #et_top_search {
+    margin: 3px 22px 0 0;
+}
+.rtl.et_header_style_centered #et_search_icon:before { 
+	left: 0;
+	right: 3px;
+}
+.rtl.et_header_style_slide .et_slide_in_menu_container {
+	left: -100%;
+	right: unset;
+	-moz-transition: left 0.8s cubic-bezier(0.770, 0.000, 0.175, 1.000);
+	-webkit-transition: left 0.8s cubic-bezier(0.770, 0.000, 0.175, 1.000);
+	transition: left 0.8s cubic-bezier(0.770, 0.000, 0.175, 1.000);
+}
+.rtl.et_header_style_slide #page-container {
+	right: 0;
+	-webkit-transition: right .8s cubic-bezier(.77,0,.175,1),margin-top .4s ease-in-out!important;
+    -moz-transition: right .8s cubic-bezier(.77,0,.175,1),margin-top .4s ease-in-out!important;
+    transition: right .8s cubic-bezier(.77,0,.175,1),margin-top .4s ease-in-out!important;
+}
+.rtl.et_header_style_slide .et_slide_in_menu_container span.et_mobile_menu_arrow {
+	left: 0;
+    right: unset;
+}
+.rtl .et_slide_menu_top a.et-cart-info {
+	float: left;
+}
+
+@media all and (max-width: 980px) {
+	.rtl.et_header_style_left #et-top-navigation .et-cart-info, 
+	.rtl.et_header_style_left #et_top_search, 
+	.rtl.et_header_style_left #et_mobile_nav_menu{
+		float: left;
+	}
+	.rtl.et_header_style_left #et-top-navigation .et-cart-info {
+		margin-top: 5px;
+		float: right;
+	}
+	.rtl.et_header_style_left #et_top_search {
+		margin: 0 0 0 35px;
+		float: right;
+	}
+}

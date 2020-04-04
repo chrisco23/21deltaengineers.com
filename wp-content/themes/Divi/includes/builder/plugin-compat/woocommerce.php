@@ -196,24 +196,28 @@ class ET_Builder_Plugin_Compat_WooCommerce extends ET_Builder_Plugin_Compat_Base
 					array(
 						'id'       => 'woocommerce:shop',
 						'label'    => esc_html__( 'Shop', 'et_builder' ),
+						'title'    => trim( str_replace( home_url(), '', get_post_type_archive_link( 'product' ) ), '/' ),
 						'priority' => 120,
 						'validate' => array( $this, 'theme_builder_validate_woocommerce_shop' ),
 					),
 					array(
 						'id'       => 'woocommerce:cart',
 						'label'    => esc_html__( 'Cart', 'et_builder' ),
+						'title'    => get_post_field( 'post_name', wc_get_page_id( 'cart' ) ),
 						'priority' => 120,
 						'validate' => array( $this, 'theme_builder_validate_woocommerce_cart' ),
 					),
 					array(
 						'id'       => 'woocommerce:checkout',
 						'label'    => esc_html__( 'Checkout', 'et_builder' ),
+						'title'    => get_post_field( 'post_name', wc_get_page_id( 'checkout' ) ),
 						'priority' => 120,
 						'validate' => array( $this, 'theme_builder_validate_woocommerce_checkout' ),
 					),
 					array(
 						'id'       => 'woocommerce:my_account',
 						'label'    => esc_html__( 'My Account', 'et_builder' ),
+						'title'    => get_post_field( 'post_name', wc_get_page_id( 'myaccount' ) ),
 						'priority' => 130,
 						'validate' => array( $this, 'theme_builder_validate_woocommerce_my_account' ),
 					),

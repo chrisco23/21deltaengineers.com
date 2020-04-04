@@ -269,6 +269,8 @@ class ET_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs {
 	/**
 	 * Get tabs data
 	 *
+	 * @since 4.0.9 Avoid fetching Tabs content using `the_content` when editing TB layout.
+	 *
 	 * @param array $args Additional args.
 	 *
 	 * @return array
@@ -322,7 +324,7 @@ class ET_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs {
 			}
 
 			if ( 'description' === $name ) {
-				if ( ! et_pb_is_pagebuilder_used( $product_id ) ) {
+				if ( ! et_builder_tb_enabled() && ! et_pb_is_pagebuilder_used( $product_id ) ) {
 					// If selected product doesn't use builder, retrieve post content.
 					$tab_content = apply_filters( 'the_content', $post->post_content );
 				} else {

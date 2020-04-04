@@ -693,7 +693,7 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 							esc_attr( $field_title ), // #5
 							'off' === $required_mark ? 'not_required' : 'required',
 							esc_attr( $index ),
-							wp_strip_all_tags( $option->value ),
+							esc_attr( wp_strip_all_tags( $option->value ) ),
 							checked( $is_checked, true, false ),
 							esc_attr( $render_count ), // #10
 							$option_id,

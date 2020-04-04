@@ -160,7 +160,7 @@ function et_theme_builder_frontend_enqueue_styles( $layouts ) {
 function et_theme_builder_frontend_override_partial( $partial, $name, $action = '' ) {
 	global $wp_filter;
 
-	require_once ET_THEME_BUILDER_DIR . "frontend-{$partial}-template.php";
+	$tb_theme_head = '';
 
 	/**
 	 * Slightly adjusted version of WordPress core code in order to mimic behavior.
@@ -186,13 +186,41 @@ function et_theme_builder_frontend_override_partial( $partial, $name, $action = 
 		}
 
 		locate_template( $templates, true, true );
-		ob_end_clean();
+		$html = ob_get_clean();
+
+		if ( 'wp_head' === $action ) {
+			$tb_theme_head = et_theme_builder_extract_head( $html );
+		}
 
 		if ( ! empty( $action ) ) {
 			// Restore skipped actions.
 			$wp_filter[ $action ] = $actions;
 		}
 	}
+
+	require_once ET_THEME_BUILDER_DIR . "frontend-{$partial}-template.php";
+}
+
+/**
+ * Extract <head> tag contents.
+ *
+ * @since 4.0.8
+ *
+ * @param string $html
+ *
+ * @return string
+ */
+function et_theme_builder_extract_head( $html ) {
+	// We could use DOMDocument here to guarantee proper parsing but we need
+	// the most performant solution since we cannot reliably cache the result.
+	$matches = array();
+	$matched = preg_match( '/^[\s\S]*?<head[\s\S]*?>([\s\S]*?)<\/head>[\s\S]*$/i', $html, $matches );
+
+	if ( $matched && ! isset( $matches[1] ) ) {
+		return '';
+	}
+
+	return trim( $matches[1] );
 }
 
 /**
@@ -220,27 +248,6 @@ function et_theme_builder_frontend_override_header( $name ) {
 function et_theme_builder_frontend_override_footer( $name ) {
 	et_theme_builder_frontend_override_partial( 'footer', $name, 'wp_footer' );
 }
-
-/**
- * Output to the template builder head.
- *
- * @since 4.0
- *
- * @return void
- */
-function et_theme_builder_frontend_add_head() {
-	?>
-	<meta charset="<?php bloginfo( 'charset' ); ?>" />
-	<?php
-	/**
-	 * Fires in the head, before {@see wp_head()} is called. This action can be used to
-	 * insert elements into the beginning of the head before any styles or scripts.
-	 *
-	 * @since 1.0
-	 */
-	do_action( 'et_head_meta' );
-}
-add_action( 'et_theme_builder_template_head', 'et_theme_builder_frontend_add_head' );
 
 /**
  * Filter builder content wrapping as Theme Builder Layouts are wrapped collectively instead of individually.
@@ -305,7 +312,7 @@ function et_theme_builder_frontend_render_layout( $layout_type, $layout_id ) {
 
 	ET_Post_Stack::replace( $layout );
 
-	the_content();
+	echo et_builder_render_layout( get_the_content() );
 
 	// Handle style output.
 	if ( is_singular() && ! et_core_is_fb_enabled() ) {
@@ -317,7 +324,7 @@ function et_theme_builder_frontend_render_layout( $layout_type, $layout_id ) {
 	$manager = $result['manager'];
 
 	if ( ! $manager->has_file() ) {
-		$styles = ET_Builder_Element::get_style( false, $layout->ID ) . ET_Builder_Element::get_style( true, $layout->ID ) . et_pb_get_page_custom_css( $layout->ID );
+		$styles = et_pb_get_page_custom_css( $layout->ID ) . ET_Builder_Element::get_style( false, $layout->ID ) . ET_Builder_Element::get_style( true, $layout->ID );
 
 		if ( $styles ) {
 			$manager->set_data( $styles, 40 );

@@ -341,23 +341,9 @@ class ET_Builder_Module_Audio extends ET_Builder_Module {
 			),
 			'required' => 'image_url',
 		) );
-		$background_layout               = $this->props['background_layout'];
-		$background_layout_hover         = et_pb_hover_options()->get_value( 'background_layout', $this->props, 'light' );
-		$background_layout_values        = et_pb_responsive_options()->get_property_values( $this->props, 'background_layout' );
 
-		$data_background_layout       = '';
-		$data_background_layout_hover = '';
-
-		if ( et_pb_hover_options()->is_enabled( 'background_layout', $this->props ) ) {
-			$data_background_layout = sprintf(
-				' data-background-layout="%1$s"',
-				esc_attr( $background_layout )
-			);
-			$data_background_layout_hover = sprintf(
-				' data-background-layout-hover="%1$s"',
-				esc_attr( $background_layout_hover )
-			);
-		}
+		// Background layout data attributes.
+		$data_background_layout = et_pb_background_layout_options()->get_background_layout_attrs( $this->props );
 
 		$meta  = '';
 		$metas = array();
@@ -403,28 +389,11 @@ class ET_Builder_Module_Audio extends ET_Builder_Module {
 		$this->add_classname( array(
 			'et_pb_audio_module',
 			'clearfix',
-			"et_pb_bg_layout_{$background_layout}",
 		) );
 
-		if ( 'light' === $background_layout ) {
-			$this->add_classname( 'et_pb_text_color_dark' );
-		}
-
-		$background_layout_tablet = isset( $background_layout_values['tablet'] ) ? $background_layout_values['tablet'] : '';
-		if ( ! empty( $background_layout_tablet ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_tablet}_tablet" );
-			if ( 'light' === $background_layout_tablet ) {
-				$this->add_classname( 'et_pb_text_color_dark_tablet' );
-			}
-		}
-
-		$background_layout_phone = isset( $background_layout_values['phone'] ) ? $background_layout_values['phone'] : '';
-		if ( ! empty( $background_layout_phone ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_phone}_phone" );
-			if ( 'light' === $background_layout_phone ) {
-				$this->add_classname( 'et_pb_text_color_dark_phone' );
-			}
-		}
+		// Background layout class names.
+		$background_layout_class_names = et_pb_background_layout_options()->get_background_layout_class( $this->props, false, true );
+		$this->add_classname( $background_layout_class_names );
 
 		if ( '' === $image_url ) {
 			$this->add_classname( 'et_pb_audio_no_image' );
@@ -456,7 +425,7 @@ class ET_Builder_Module_Audio extends ET_Builder_Module {
 		) );
 
 		$output = sprintf(
-			'<div%6$s class="%4$s"%9$s%10$s%11$s>
+			'<div%6$s class="%4$s"%9$s%10$s>
 				%8$s
 				%7$s
 				%5$s
@@ -477,8 +446,7 @@ class ET_Builder_Module_Audio extends ET_Builder_Module {
 			$video_background, // #7
 			$parallax_image_background, // #8
 			et_core_esc_previously( $data_background_layout ), // #9
-			et_core_esc_previously( $data_background_layout_hover ), // #10
-			et_core_esc_previously( $muti_view_data_attr )
+			et_core_esc_previously( $muti_view_data_attr ) // #10
 		);
 
 		return $output;
@@ -488,7 +456,7 @@ class ET_Builder_Module_Audio extends ET_Builder_Module {
 	 * Filter multi view value.
 	 *
 	 * @since 3.27.1
-	 * 
+	 *
 	 * @see ET_Builder_Module_Helper_MultiViewOptions::filter_value
 	 *
 	 * @param mixed $raw_value Props raw value.

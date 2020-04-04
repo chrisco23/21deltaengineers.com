@@ -1,3 +1,298 @@
+version 4.0.9 ( updated 12-10-2019 )
+- Fixed empty p tags appearing around builder elements in certain cases.
+- Fixed Social Media Follow padding setting not working on post.
+- Allowed an exported Default Website Template to be imported when "Override the Default Website Template" is disabled.
+- Added ACF Group field support for Dynamic Content.
+- Added table button in New Builder Experience's tinyMCE field.
+- Fixed custom module styles of equal CSS specificity sometimes being out of order.
+- Fixed page styles taking over page module styles in certain cases.
+- Fixed new items not being displayed immediately once bulk copy & paste items done.
+- Fixed TB to display Woo Tabs data when Product option is set to "This Product".
+- Fixed compatibility w/ Woo Extra Product Options addon to display the fields in FE.
+- Fixed menu dropdowns in Theme Builder being cut off vertically in certain cases.
+- Fixed the Request a Quote form not being visible in certain cases when using the Request a Quote for WooCommerce plugin.
+- Renamed Title Text options group into Comment/Review Count Text and introduced new options group called Form Title Text to customize title above comment/review form on Comments & Woo Reviews modules.
+- Fixed outdated post excerpts showing up in archive listings and Blog modules when global modules and Dynamic Content are involved.
+- Prevent Email Optin to override subscriber info if the email is already registered for ActiveCampaign.
+	* core/components/api/email/ActiveCampaign.php
+	* core/components/data/Utils.php
+	* epanel/custom_functions.php
+	* functions.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/comments_template.php
+	* includes/builder/core.php
+	* includes/builder/feature/dynamic-content.php
+	* includes/builder/feature/woocommerce-modules.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/theme-builder/api.php
+	* includes/builder/frontend-builder/theme-builder/frontend.php
+	* includes/builder/functions.php
+	* includes/builder/module/Comments.php
+	* includes/builder/module/SocialMediaFollow.php
+	* includes/builder/module/woocommerce/Reviews.php
+	* includes/builder/module/woocommerce/Tabs.php
+	* includes/builder/plugin-compat/advanced-custom-fields.php
+	* includes/builder/styles/frontend-builder-global-style.css
+
+version 4.0.8 ( updated 12-09-2019 )
+- Fixed "No Results Found" text not using styles from the respective blog module.
+- Removed irrelevant Divider Module's visual builder-specific z-index.
+- Fixed Blurb title hover styles not taking effect when hovering over the module.
+- Fixed the Library Modal not being visible in certain cases in the Theme Builder.
+- Fixed color palette compatibility with the NextGEN Gallery plugin.
+- Fixed Fullwidth Menu module's search field overlapping the logo.
+- Fixed Post Excerpt Dynamic Content placeholder value in Theme Builder not respecting settings like number of words or read more text.
+- Fixed Visual Builder for Projects being offset when an RTL language is being used.
+- Clicking the "Save Changes" button in the Theme Builder while you have template settings open will now save the template settings changes.
+- Fixed Disappearing split test button in wireframe mode if wireframe mode is used on initial load (eg. New Builder Experience).
+- Fixed padding settings not working properly with module alignment in the Visual Builder.
+- Fixed broken Shop module layout when used in TB for Product category pages.
+- Shop module's Use Current Page setting will now cause the module to take WooCommerce widget filters into account as well.
+- Fixed a PHP notice that appeared when there were no custom widget areas defined.
+- Fixed incorrect padding value being printed to reset button padding for button icon options.
+- Fixed image srcset and sizes attributes not generated when site URL moved from HTTP to HTTPS or vice versa.
+- Fixed custom css for Fullwidth Slider Title not working for title tags other than h2.
+- Fixed layout settings such as custom CSS and color palette not being carried over when you duplicate a Theme Builder layout.
+- Fixed display of the AJAX loading animation on the front end when Safe Mode is active.
+- Fixed issue where the image Box Shadow would disappear when Image Overlay was enabled.
+- Fixed rendering of Global Code modules with unsynced content on Front End.
+- Author Bio Dynamic Content will now allow the usage of HTML.
+- Fixed Broken grid layout in TB when using Related Products w/ 4 Column layout.
+- Fixed find & replace not working properly for Font Style subfield.
+- Fixed a javascript error that occurred when hovering over modules in the builder in some cases.
+- Fixed meta, link and script tags added to the theme's header.php file missing when a Theme Builder header is used.
+- Fixed certain meta tags being duplicated when a Theme Builder header is used.
+- Fixed Email Optin module's Name Fullwidth option not working with Use Single Name Field option enabled.
+- Fixed the map info window is not displayed when the map pin title or body is empty.
+- Fixed CMD key not working to activate multi select feature on Firefox.
+- Fixed issue where selected items are being removed while switching preview mode via settings bar.
+- Fixed responsive content for hover mode not getting inherited properly when the value is undefined.
+- Prevented Welcome to New Builder popup being rendered in Block Editor.
+- Fixed Fullwidth Header module's scroll down link not working when there is a module link added.
+- Fixed Blog module's box shadow hover effects not working properly in Grid mode.
+- Fixed the Fields custom margin/padding to be applied to Add to Cart Dropdowns.
+- Fixed Woo Add To Cart module's Dropdown menu border-radius selector.
+- Fixed quick actions to enable inserting new and saved module on top of the selected item.
+- Fixed quick actions issue where inserting a module into a column takes some time.
+- Fixed issue where you can't add a new row after hiding the row if "Show Disabled Modules at 50% Opacity" is enabled.
+- Fixed document.onreadystatechange compatibility with other scripts that use it.
+- Fixed video overlay play icon still being displayed even when the image overlay is empty.
+- Fixed shortcut to fullwidth row (R + F) not working.
+- Fixed et_fix_slider_height is not defined error.
+- Fixed failure saving visual builder / new builder experience when a module contains emoji while the post_content column of wp_posts table uses utf8 charset and non utf8mb4_* collation.
+- Fixed responsive content not working properly inside the theme builder layout when in builder mode.
+- Fixed issue where customizing captcha text styles didn't affect the equal symbol of Contact Form module.
+- Fixed error report where VB cannot read property 'toLowerCase' of undefined in Contact Form.
+- Fixed plugins which hook into the_content from running multiple times when Theme Builder layouts are used.
+- Fixed Dynamic Content URLs for specific posts not resolving on non-singular pages.
+- Updated jQuery UI style to v1.12.1.
+- Fix Divi Builder load failures caused by filesystem permissions on the server.
+- Allow the path and url for ET's cache directory to be customized using PHP constants: ET_CORE_CACHE_DIR, ET_CORE_CACHE_DIR_URL.
+- Improved client IP address detection and validation.
+- Fixed "No Results Found" text not use styles from the respective blog module.
+- Fixed row widths being set to 80% regardless of width settings on project pages without a sidebar.
+- Fixed arrow icons menu on RTL websites.
+	* core/components/PageResource.php
+	* core/components/SupportCenter.php
+	* core/components/cache/Directory.php
+	* core/components/cache/File.php
+	* core/components/cache/init.php
+	* core/components/data/Utils.php
+	* core/components/init.php
+	* core/functions.php
+	* core/ui/utils/property-resolver.js
+	* css/main-styles.css
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/core.php
+	* includes/builder/feature/dynamic-content.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/assets.php
+	* includes/builder/frontend-builder/assets/css/fb-top-window.css
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/theme-builder/api.php
+	* includes/builder/frontend-builder/theme-builder/dynamic-content.php
+	* includes/builder/frontend-builder/theme-builder/frontend-header-template.php
+	* includes/builder/frontend-builder/theme-builder/frontend.php
+	* includes/builder/frontend-builder/view.php
+	* includes/builder/functions.php
+	* includes/builder/module/Blog.php
+	* includes/builder/module/Blurb.php
+	* includes/builder/module/ContactForm.php
+	* includes/builder/module/MapItem.php
+	* includes/builder/module/Shop.php
+	* includes/builder/module/SliderItem.php
+	* includes/builder/module/Video.php
+	* includes/builder/module/helpers/MultiViewOptions.php
+	* includes/builder/module/type/PostBased.php
+	* includes/builder/module/woocommerce/AddToCart.php
+	* includes/builder/plugin-compat/cartflows.php
+	* includes/builder/scripts/builder.js
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/frontend-builder-global-style.css
+	* includes/builder/styles/images/ui-icons_444444_256x240.png
+	* includes/builder/styles/images/ui-icons_555555_256x240.png
+	* includes/builder/styles/images/ui-icons_777620_256x240.png
+	* includes/builder/styles/images/ui-icons_777777_256x240.png
+	* includes/builder/styles/images/ui-icons_cc0000_256x240.png
+	* includes/builder/styles/images/ui-icons_ffffff_256x240.png
+	* includes/builder/styles/jquery-ui-1.10.4.custom.css
+	* includes/builder/styles/jquery-ui-1.12.1.custom.css
+	* includes/no-results.php
+	* includes/theme-builder.php
+	* js/custom.js
+	* rtl.css
+	* theme-head.php
+
+version 4.0.7 ( updated 11-26-2019 )
+- Custom post types that do not have 'editor' support enabled will now be included in the Post Type selection in the Blog module settings.
+- Toggling off a top-level setting in Theme Builder template settings will now toggle off all descendant settings.
+- Fixed Image Overlay option of Image module not working properly with Image Link URL.
+- Fixed inconsistent default values in Woo Breadcrumb module's settings.
+- Allowed selecting non-published posts as template settings in Theme Builder.
+- Fixed unwanted You Have Unsaved Changes popup that appears when layout created before v3.25 is opened then immediately exited without changing anything.
+- Improved template settings options' tooltip design.
+- Fixed incorrect buttons group being displayed after releasing all selected items with ESC key.
+- Fixed product tag archive support for the "Use Current Page" option in the Shop module when used in Theme Builder.
+- Fixed recent selected modules not being selected anymore after module's settings modal closed.
+- Fixed Theme Builder compatibility with the Cartflows plugin's header/footer-less templates.
+- Added maximum length parameter for  the builder settings value.
+- Fixed hover link text color applying when the parent module is hovered instead of the link.
+- Fixed an empty srcset image attribute is rendered for small images.
+- Fixed incorrect alignment on text module after being migrated to the old text alignment option.
+- Fixed Post Title module showing the current category title in the excerpt of posts that use it.
+- Fixed extend styles not working when extending full width module styles to descendant modules.
+- Fixed extend styles not working when extending section styles to rows.
+- Fixed Woo Image module breaking the layout when used in Divi Shop page.
+- Fixed the custom CSS title selector in the Woo Title module.
+- Improved spam protection for the Contact Form and Email Optin modules with Google reCAPTCHA v3.
+- Fixed font color option not working on mobile when text color option is active at the same module.
+- Fixed Shop module's Overlay and Box shadow to comply with Images when rounded corners are set.
+- Fixed Quick Access not showing up when clicking on the outside editable area after doing inline editing.
+- Disable Quick Access when user open Extend Styles or Find & Replace modal.
+- Fixed the issue when border styles of the Fullwidth mode were applied to the border styles of the Grid mode in Blog module.
+- Improved Visual Builder Title when editing layouts from Theme Builder to make it more informative.
+- Fixed contact form error when trying to submit with a non-required field that is hidden via custom CSS.
+- Allowed Copy/Paste between Shop module's Title option group & Related Products's Product title option group.
+- Allowed unassigned templates to have custom titles.
+- Fixed filtered search not working for fields under tabbed sub-toggle.
+- Fixed issue where desktop box-shadow appears when hovering module in phone view.
+- Fixed Contact Form causing an error on the frontend when used in a Theme Builder layout on an Extra listing page.
+- Fixed Gallery Module box shadow for images not working properly.
+- Fixed Post Categories Dynamic Content used in versions <= 4.0.3 outputting empty values on the front-end since version 4.0.4.
+- Fixed fatal error when importing Shop module from pre-made layouts.
+- Improve Divi Helper rendering performance by selectively update the component only when related props and state are changed.
+- Added slight delay before Quick Access deactivation.
+- Fixed the issue when the animation styles were not pasted correctly in some cases.
+- Added Force fullwidth option in Woo Images module.
+- Changes the way how default values are displayed within the Custom CSS options, now default values are displayed as placeholders.
+- Fixed color inconsistency for global module modal header when filtered search active.
+- Fixed Theme Builder style selectors not always being wrapped when the Divi Builder Plugin is used.
+- Fixed Blog Module CSS selector for height in front-end targeting wrong element(s).
+- Fixed wireframe mode not showing in Visual Builder for Product.
+- Fixed multi select stops working after call right click actions via keyboard shortcut.
+- Enable multi select on Grid mode by switching the preview to Click mode when user hold CMD/SHIFT/CTRL key.
+- Fixed mobile menu displaying below the content of the next section in certain cases.
+- Fixed unnecessary WP_oEmbed request in the Slider module when there was no video defined.
+- Fixed responsive animation direction not working properly when set to center.
+- Fixed hover filters removing filters without hover option set.
+- Fixed the logout link in the login module not being visible when the Body text is empty.
+- Fixed unable to reset entire module and button background fields via right click menu.
+- Fixed specialty sections column order in the wireframe layout with RTL mode.
+- Fixed author Dynamic Content on author post archive pages.
+- Fixed module alignment preview not working in VB if custom left/right margin is set.
+- Added React Motion animations to Template Settings Icons.
+- Fixed square brackets in Module Link URL being improperly transformed.
+- Fixed module styles missing when a Theme Builder template is enabled or disabled before a cached stylesheet is generated for a modified page which is affected by the same template.
+- Fixed admin label becoming empty in wireframe mode in certain cases.
+- Fixed the issue when frequent changes of an animation options in Global Defaults mode were not displayed for all modules.
+- Theme Builder exports will now include individual layout titles.
+- Fixed issue where Email Optin couldn't save radio button value if it contained single or double quotes characters on Mailchimp provider.
+- Fixed delay in GetResponse autoresponders.
+- Added overlay onto default WooCommerce Product & Shop pages.
+- Fixed dot navigation not working on Theme Builder templates.
+- Fixed a typo in the post info section option description.
+- Fixed Centered Inline Logo Maximum Height Customizer option not taking effect.
+	* core/admin/js/recaptcha.js
+	* core/components/Portability.php
+	* core/components/api/Service.php
+	* core/components/api/email/GetResponse.php
+	* core/components/api/email/MailChimp.php
+	* core/components/api/spam/Provider.php
+	* core/components/api/spam/Providers.php
+	* core/components/api/spam/ReCaptcha.php
+	* core/components/api/spam/init.php
+	* core/components/data/Utils.php
+	* core/components/init.php
+	* core/functions.php
+	* core/ui/utils/property-resolver.js
+	* functions.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/conditions.php
+	* includes/builder/core.php
+	* includes/builder/deprecations.php
+	* includes/builder/feature/dynamic-content.php
+	* includes/builder/feature/post-content.php
+	* includes/builder/feature/woocommerce-modules.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/i18n/generic.php
+	* includes/builder/frontend-builder/i18n/theme-builder.php
+	* includes/builder/frontend-builder/theme-builder/theme-builder.php
+	* includes/builder/functions.php
+	* includes/builder/module/Audio.php
+	* includes/builder/module/BarCounters.php
+	* includes/builder/module/Blog.php
+	* includes/builder/module/Blurb.php
+	* includes/builder/module/Button.php
+	* includes/builder/module/CircleCounter.php
+	* includes/builder/module/Comments.php
+	* includes/builder/module/ContactForm.php
+	* includes/builder/module/ContactFormItem.php
+	* includes/builder/module/CountdownTimer.php
+	* includes/builder/module/Cta.php
+	* includes/builder/module/FilterablePortfolio.php
+	* includes/builder/module/FullwidthHeader.php
+	* includes/builder/module/FullwidthMenu.php
+	* includes/builder/module/FullwidthPortfolio.php
+	* includes/builder/module/FullwidthPostSlider.php
+	* includes/builder/module/Gallery.php
+	* includes/builder/module/Image.php
+	* includes/builder/module/Login.php
+	* includes/builder/module/Menu.php
+	* includes/builder/module/NumberCounter.php
+	* includes/builder/module/Portfolio.php
+	* includes/builder/module/PostSlider.php
+	* includes/builder/module/Search.php
+	* includes/builder/module/Shop.php
+	* includes/builder/module/Sidebar.php
+	* includes/builder/module/Signup.php
+	* includes/builder/module/SliderItem.php
+	* includes/builder/module/SocialMediaFollow.php
+	* includes/builder/module/TeamMember.php
+	* includes/builder/module/Testimonial.php
+	* includes/builder/module/Text.php
+	* includes/builder/module/field/TextShadow.php
+	* includes/builder/module/helpers/BackgroundLayout.php
+	* includes/builder/module/helpers/MultiViewOptions.php
+	* includes/builder/module/helpers/Slider.php
+	* includes/builder/module/type/PostContent.php
+	* includes/builder/module/type/WithSpamProtection.php
+	* includes/builder/module/woocommerce/AdditionalInfo.php
+	* includes/builder/module/woocommerce/Breadcrumb.php
+	* includes/builder/module/woocommerce/Description.php
+	* includes/builder/module/woocommerce/Images.php
+	* includes/builder/module/woocommerce/RelatedProducts.php
+	* includes/builder/module/woocommerce/Title.php
+	* includes/builder/plugin-compat/cartflows.php
+	* includes/builder/plugin-compat/woocommerce.php
+	* includes/builder/scripts/builder.js
+	* includes/builder/scripts/frontend-builder-scripts.js
+	* includes/builder/styles/style.css
+	* js/custom.js
+	* js/theme-customizer.js
+	* options_divi.php
+
 version 4.0.6 ( updated 11-07-2019 )
 - Fixing compatibility issues for upcoming WordPress 5.3.
 - Fixed Woocommerce Cart Notice duplication on product pages built with Theme Builder.

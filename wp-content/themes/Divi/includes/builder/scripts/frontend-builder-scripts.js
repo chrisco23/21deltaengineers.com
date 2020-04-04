@@ -420,10 +420,10 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 				}
 
 				if ( window.et_load_event_fired ) {
-					et_fix_slider_height( $et_slider );
+					'function' === typeof et_fix_slider_height && et_fix_slider_height( $et_slider );
 				} else {
 					$et_window.on( 'load', function() {
-						et_fix_slider_height( $et_slider );
+						'function' === typeof et_fix_slider_height && et_fix_slider_height( $et_slider );
 					} );
 				}
 
@@ -1318,10 +1318,11 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 					}
 
 					// Fix z-index for menu modules
-					var is_z_index_increase = isNaN( $this_row.css('z-index') ) || $this_row.css('z-index') < 3;
+					var zIndexIncreaseMax    = $this_row.parents('.et_pb_section.section_has_divider').length ? 6 : 3;
+					var zIndexShouldIncrease = isNaN( $this_row.css('z-index') ) || $this_row.css('z-index') < zIndexIncreaseMax;
 
-					if ($this_row.find('.et_pb_module.et_pb_menu').length && is_z_index_increase) {
-						$this_row.css('z-index', 3);
+					if ($this_row.find('.et_pb_module.et_pb_menu').length && zIndexShouldIncrease) {
+						$this_row.css('z-index', zIndexIncreaseMax);
 					}
 				});
 			}
@@ -1407,7 +1408,8 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 						}
 					} );
 				};
-				et_pb_video_section_init( $et_pb_video_section );
+
+				$et_pb_video_section.length > 0 && et_pb_video_section_init( $et_pb_video_section );
 			}
 
 			et_init_audio_modules();
@@ -2671,32 +2673,73 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 			});
 
 			$et_pb_background_layout_hoverable.each(function() {
-				var $this_el                = $(this);
-				var background_layout       = $this_el.data('background-layout');
-				var background_layout_hover = $this_el.data('background-layout-hover');
+				var $this_el                 = $(this);
+				var background_layout        = $this_el.data('background-layout');
+				var background_layout_hover  = $this_el.data('background-layout-hover');
+				var background_layout_tablet = $this_el.data('background-layout-tablet');
+				var background_layout_phone  = $this_el.data('background-layout-phone');
 
-				// Switch the target element for the button module
+				var $this_el_item, $this_el_parent;
+
+				// Switch the target element for some modules.
 				if ($this_el.hasClass('et_pb_button_module_wrapper')) {
+					// Button, change the target to main button block.
 					$this_el = $this_el.find('> .et_pb_button');
+				} else if ($this_el.hasClass('et_pb_gallery')) {
+					// Gallery, add gallery item as target element.
+					$this_el_item = $this_el.find('.et_pb_gallery_item');
+					$this_el      = $this_el.add($this_el_item);
+				} else if ($this_el.hasClass('et_pb_post_slider')) {
+					// Post Slider, add slide item as target element.
+					$this_el_item = $this_el.find('.et_pb_slide');
+					$this_el      = $this_el.add($this_el_item);
+				} else if ($this_el.hasClass('et_pb_slide')) {
+					// Slider, add slider as target element.
+					$this_el_parent = $this_el.closest('.et_pb_slider');
+					$this_el        = $this_el.add($this_el_parent);
+				}
+
+				var layout_class_list      = 'et_pb_bg_layout_light et_pb_bg_layout_dark et_pb_text_color_dark';
+				var layout_class           = 'et_pb_bg_layout_' + background_layout;
+				var layout_class_hover     = 'et_pb_bg_layout_' + background_layout_hover;
+				var text_color_class       = 'light' === background_layout ? 'et_pb_text_color_dark' : '';
+				var text_color_class_hover = 'light' === background_layout_hover ? 'et_pb_text_color_dark' : '';
+
+				// Only includes tablet class if it's needed.
+				if (background_layout_tablet) {
+					layout_class_list      += ' et_pb_bg_layout_light_tablet et_pb_bg_layout_dark_tablet et_pb_text_color_dark_tablet';
+					layout_class           += ' et_pb_bg_layout_' + background_layout_tablet + '_tablet';
+					layout_class_hover     += ' et_pb_bg_layout_' + background_layout_hover + '_tablet';
+					text_color_class       += 'light' === background_layout_tablet ? ' et_pb_text_color_dark_tablet' : '';
+					text_color_class_hover += 'light' === background_layout_hover ? ' et_pb_text_color_dark_tablet' : '';
+				}
+
+				// Only includes phone class if it's needed.
+				if (background_layout_phone) {
+					layout_class_list      += ' et_pb_bg_layout_light_phone et_pb_bg_layout_dark_phone et_pb_text_color_dark_phone';
+					layout_class           += ' et_pb_bg_layout_' + background_layout_phone + '_phone';
+					layout_class_hover     += ' et_pb_bg_layout_' + background_layout_hover + '_phone';
+					text_color_class       += 'light' === background_layout_phone ? ' et_pb_text_color_dark_phone' : '';
+					text_color_class_hover += 'light' === background_layout_hover ? ' et_pb_text_color_dark_phone' : '';
 				}
 
 				$this_el.on('mouseenter', function() {
-					$this_el.removeClass('et_pb_bg_layout_light et_pb_bg_layout_dark et_pb_text_color_dark');
+					$this_el.removeClass(layout_class_list);
 
-					$this_el.addClass('et_pb_bg_layout_' + background_layout_hover);
+					$this_el.addClass(layout_class_hover);
 
-					if ($this_el.hasClass('et_pb_audio_module') && 'light' === background_layout_hover) {
-						$this_el.addClass('et_pb_text_color_dark');
+					if ($this_el.hasClass('et_pb_audio_module') && '' !== text_color_class_hover) {
+						$this_el.addClass(text_color_class_hover);
 					}
 				});
 
 				$this_el.on('mouseleave', function() {
-					$this_el.removeClass('et_pb_bg_layout_light et_pb_bg_layout_dark et_pb_text_color_dark');
+					$this_el.removeClass(layout_class_list);
 
-					$this_el.addClass('et_pb_bg_layout_' + background_layout);
+					$this_el.addClass(layout_class);
 
-					if ($this_el.hasClass('et_pb_audio_module') && 'light' === background_layout) {
-						$this_el.addClass('et_pb_text_color_dark');
+					if ($this_el.hasClass('et_pb_audio_module') && '' !== text_color_class) {
+						$this_el.addClass(text_color_class);
 					}
 				});
 			});
@@ -3063,6 +3106,11 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 			var et_email_reg_html5 = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 			var $et_contact_container = $('.et_pb_contact_form_container');
+			var is_recaptcha_enabled  = ! isBuilder && $('.et_pb_module.et_pb_recaptcha_enabled').length > 0;
+
+			if (is_recaptcha_enabled) {
+				etCore.api.spam.recaptcha.isEnabled() && $('body').addClass('et_pb_recaptcha_enabled');
+			}
 
 			if ($et_contact_container.length) {
 				$et_contact_container.each(function() {
@@ -3098,242 +3146,250 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 						var inputs_list             = [];
 						var hidden_fields           = [];
 
-						et_message = '<ul>';
+						etCore.api.spam.recaptcha.interaction('Divi/Module/ContactForm/' + form_unique_id).then(function(token) {
+							et_message = '<ul>';
 
-						$this_inputs.removeClass('et_contact_error');
+							$this_inputs.removeClass('et_contact_error');
 
-						$this_inputs.each(function() {
-							var $this_el      = $(this);
-							var $this_wrapper = false;
+							$this_inputs.each(function() {
+								var $this_el      = $(this);
+								var $this_wrapper = false;
 
-							if ('checkbox' === $this_el.data('field_type')) {
-								$this_wrapper = $this_el.parents('.et_pb_contact_field');
-								$this_wrapper.removeClass('et_contact_error');
-							}
-
-							if ('radio' === $this_el.data('type')) {
-								$this_el      = $this_el.find('input[type="radio"]');
-								$this_wrapper = $this_el.parents('.et_pb_contact_field');
-							}
-
-							var this_id       = $this_el.attr('id');
-							var this_val      = $this_el.val();
-							var this_label    = $this_el.siblings('label:first').text();
-							var field_type    = typeof $this_el.data('field_type') !== 'undefined' ? $this_el.data('field_type') : 'text';
-							var required_mark = typeof $this_el.data('required_mark') !== 'undefined' ? $this_el.data('required_mark') : 'not_required';
-							var original_id   = typeof $this_el.data('original_id') !== 'undefined' ? $this_el.data('original_id') : '';
-							var unchecked     = false;
-							var default_value;
-
-							// radio field properties adjustment
-							if ('radio' === field_type) {
-								if (0 !== $this_wrapper.find('input[type="radio"]').length) {
-									field_type = 'radio';
-
-									var $firstRadio = $this_wrapper.find('input[type="radio"]:first');
-
-									required_mark = typeof $firstRadio.data('required_mark') !== 'undefined' ? $firstRadio.data('required_mark') : 'not_required';
-
-									this_val = '';
-									if ($this_wrapper.find('input[type="radio"]:checked')) {
-										this_val = $this_wrapper.find('input[type="radio"]:checked').val();
-									}
+								if ('checkbox' === $this_el.data('field_type')) {
+									$this_wrapper = $this_el.parents('.et_pb_contact_field');
+									$this_wrapper.removeClass('et_contact_error');
 								}
 
-								this_label  = $this_wrapper.find('.et_pb_contact_form_label').text();
-								this_id     = $this_wrapper.find('input[type="radio"]:first').attr('name');
-								original_id = $this_wrapper.attr('data-id');
-
-								if (0 === $this_wrapper.find('input[type="radio"]:checked').length) {
-									unchecked = true;
-								}
-							}
-
-							// radio field properties adjustment
-							if ('checkbox' === field_type) {
-								this_val = '';
-
-								if (0 !== $this_wrapper.find('input[type="checkbox"]').length) {
-									field_type = 'checkbox';
-
-									var $checkboxHandle = $this_wrapper.find('.et_pb_checkbox_handle');
-
-									required_mark = typeof $checkboxHandle.data('required_mark') !== 'undefined' ? $checkboxHandle.data('required_mark') : 'not_required';
-
-									if ($this_wrapper.find('input[type="checked"]:checked')) {
-										this_val = [];
-										$this_wrapper.find('input[type="checkbox"]:checked').each(function() {
-											this_val.push($(this).val());
-										});
-
-										this_val = this_val.join(', ');
-									}
+								if ('radio' === $this_el.data('type')) {
+									$this_el      = $this_el.find('input[type="radio"]');
+									$this_wrapper = $this_el.parents('.et_pb_contact_field');
 								}
 
-								$this_wrapper.find('.et_pb_checkbox_handle').val(this_val);
+								var this_id       = $this_el.attr('id');
+								var this_val      = $this_el.val();
+								var this_label    = $this_el.siblings('label:first').text();
+								var field_type    = typeof $this_el.data('field_type') !== 'undefined' ? $this_el.data('field_type') : 'text';
+								var required_mark = typeof $this_el.data('required_mark') !== 'undefined' ? $this_el.data('required_mark') : 'not_required';
+								var original_id   = typeof $this_el.data('original_id') !== 'undefined' ? $this_el.data('original_id') : '';
+								var unchecked     = false;
+								var default_value;
 
-								this_label  = $this_wrapper.find('.et_pb_contact_form_label').text();
-								this_id     = $this_wrapper.find('.et_pb_checkbox_handle').attr('name');
-								original_id = $this_wrapper.attr('data-id');
+								// radio field properties adjustment
+								if ('radio' === field_type) {
+									if (0 !== $this_wrapper.find('input[type="radio"]').length) {
+										field_type = 'radio';
 
-								if (0 === $this_wrapper.find('input[type="checkbox"]:checked').length) {
-									unchecked = true;
-								}
-							}
+										var $firstRadio = $this_wrapper.find('input[type="radio"]:first');
 
-							// Escape double quotes in label
-							this_label = this_label.replace(/"/g, "&quot;");
+										required_mark = typeof $firstRadio.data('required_mark') !== 'undefined' ? $firstRadio.data('required_mark') : 'not_required';
 
-							// Store the labels of the conditionally hidden fields so that they can be
-							// removed later if a custom message pattern is enabled
-							if (! $this_el.is(':visible') && 'hidden' !== $this_el.attr('type') && 'radio' !== $this_el.attr('type')) {
-								hidden_fields.push(original_id);
-								return;
-							}
-
-							if (('hidden' === $this_el.attr('type') || 'radio' === $this_el.attr('type')) && ! $this_el.parents('.et_pb_contact_field').is(':visible')) {
-								hidden_fields.push(original_id);
-								return;
-							}
-
-							// add current field data into array of inputs
-							if (typeof this_id !== 'undefined') {
-								inputs_list.push({
-									'field_id':      this_id,
-									'original_id':   original_id,
-									'required_mark': required_mark,
-									'field_type':    field_type,
-									'field_label':   this_label
-								});
-							}
-
-							// add error message for the field if it is required and empty
-						if ('required' === required_mark && ('' === this_val || true === unchecked) && ! $this_el.is('[id^="et_pb_contact_et_number_"]')) {
-
-								if (false === $this_wrapper) {
-									$this_el.addClass('et_contact_error');
-								} else {
-									$this_wrapper.addClass('et_contact_error');
-								}
-
-								this_et_contact_error = true;
-
-								default_value = this_label;
-
-								if ('' === default_value) {
-									default_value = et_pb_custom.captcha;
-								}
-
-								et_fields_message += '<li>' + default_value + '</li>';
-							}
-
-							// add error message if email field is not empty and fails the email validation
-							if ('email' === field_type) {
-								// remove trailing/leading spaces and convert email to lowercase
-								var processed_email = this_val.trim().toLowerCase();
-								var is_valid_email  = et_email_reg_html5.test(processed_email);
-
-								if ('' !== processed_email && this_label !== processed_email && ! is_valid_email) {
-									$this_el.addClass('et_contact_error');
-									this_et_contact_error = true;
-
-									if (! is_valid_email) {
-										et_message += '<li>' + et_pb_custom.invalid + '</li>';
-									}
-								}
-							}
-						});
-
-						// check the captcha value if required for current form
-						if ($captcha_field.length && '' !== $captcha_field.val()) {
-							var first_digit  = parseInt($captcha_field.data('first_digit'));
-							var second_digit = parseInt($captcha_field.data('second_digit'));
-
-							if (parseInt($captcha_field.val()) !== first_digit + second_digit) {
-
-								et_message += '<li>' + et_pb_custom.wrong_captcha + '</li>';
-								this_et_contact_error = true;
-
-								// generate new digits for captcha
-								first_digit  = Math.floor((Math.random() * 15) + 1);
-								second_digit = Math.floor((Math.random() * 15) + 1);
-
-								// set new digits for captcha
-								$captcha_field.data('first_digit', first_digit);
-								$captcha_field.data('second_digit', second_digit);
-
-								// regenerate captcha on page
-								$this_contact_form.find('.et_pb_contact_captcha_question').empty().append(first_digit + ' + ' + second_digit);
-							}
-
-						}
-
-						if (! this_et_contact_error) {
-							// Mark this form as `submitted` to prevent repeated processing.
-							$this_contact_form.data('submitted', true);
-
-							var $href     = $(this).attr('action');
-							var form_data = $(this).serializeArray();
-
-							form_data.push({
-								'name':  'et_pb_contact_email_fields_' + form_unique_id,
-								'value': JSON.stringify(inputs_list)
-							});
-
-							if (hidden_fields.length > 0) {
-								form_data.push({
-									'name':  'et_pb_contact_email_hidden_fields_' + form_unique_id,
-									'value': JSON.stringify(hidden_fields)
-								});
-							}
-
-							$this_contact_container.removeClass('et_animated').removeAttr('style').fadeTo('fast', 0.2, function() {
-								$this_contact_container.load($href + ' #' + $this_contact_container.attr('id') + '> *', form_data, function(responseText) {
-									if (! $(responseText).find('.et_pb_contact_error_text').length) {
-
-										et_pb_maybe_log_event($this_contact_container, 'con_goal');
-
-										// redirect if redirect URL is not empty and no errors in contact form
-										if ('' !== redirect_url) {
-											window.location.href = redirect_url;
+										this_val = '';
+										if ($this_wrapper.find('input[type="radio"]:checked')) {
+											this_val = $this_wrapper.find('input[type="radio"]:checked').val();
 										}
 									}
 
-									$this_contact_container.fadeTo('fast', 1);
-								});
-							});
-						}
+									this_label  = $this_wrapper.find('.et_pb_contact_form_label').text();
+									this_id     = $this_wrapper.find('input[type="radio"]:first').attr('name');
+									original_id = $this_wrapper.attr('data-id');
 
-						et_message += '</ul>';
-
-						if ('' !== et_fields_message) {
-							if (et_message !== '<ul></ul>') {
-								et_message = '<p class="et_normal_padding">' + et_pb_custom.contact_error_message + '</p>' + et_message;
-							}
-
-							et_fields_message = '<ul>' + et_fields_message + '</ul>';
-
-							et_fields_message = '<p>' + et_pb_custom.fill_message + '</p>' + et_fields_message;
-
-							et_message = et_fields_message + et_message;
-						}
-
-						if (et_message !== '<ul></ul>') {
-							$et_contact_message.html(et_message);
-
-							// If parent of this contact form uses parallax
-							if ($this_contact_container.parents('.et_pb_section_parallax').length) {
-								$this_contact_container.parents('.et_pb_section_parallax').each(function() {
-									var $parallax_element = $(this);
-									var $parallax         = $parallax_element.children('.et_parallax_bg');
-									var is_true_parallax  = (! $parallax.hasClass('et_pb_parallax_css'));
-
-									if (is_true_parallax) {
-										$et_window.trigger('resize');
+									if (0 === $this_wrapper.find('input[type="radio"]:checked').length) {
+										unchecked = true;
 									}
+								}
+
+								// radio field properties adjustment
+								if ('checkbox' === field_type) {
+									this_val = '';
+
+									if (0 !== $this_wrapper.find('input[type="checkbox"]').length) {
+										field_type = 'checkbox';
+
+										var $checkboxHandle = $this_wrapper.find('.et_pb_checkbox_handle');
+
+										required_mark = typeof $checkboxHandle.data('required_mark') !== 'undefined' ? $checkboxHandle.data('required_mark') : 'not_required';
+
+										if ($this_wrapper.find('input[type="checked"]:checked')) {
+											this_val = [];
+											$this_wrapper.find('input[type="checkbox"]:checked').each(function() {
+												this_val.push($(this).val());
+											});
+
+											this_val = this_val.join(', ');
+										}
+									}
+
+									$this_wrapper.find('.et_pb_checkbox_handle').val(this_val);
+
+									this_label  = $this_wrapper.find('.et_pb_contact_form_label').text();
+									this_id     = $this_wrapper.find('.et_pb_checkbox_handle').attr('name');
+									original_id = $this_wrapper.attr('data-id');
+
+									if (0 === $this_wrapper.find('input[type="checkbox"]:checked').length) {
+										unchecked = true;
+									}
+								}
+
+								// Escape double quotes in label
+								this_label = this_label.replace(/"/g, "&quot;");
+
+
+								// Store the labels of the conditionally hidden fields so that they can be
+								// removed later if a custom message pattern is enabled
+								if (!$this_el.is(':visible') && $this_el.parents('[data-conditional-logic]').length && 'hidden' !== $this_el.attr('type') && 'radio' !== $this_el.attr('type')) {
+									hidden_fields.push(original_id);
+									return;
+								}
+
+								if (('hidden' === $this_el.attr('type') || 'radio' === $this_el.attr('type')) && ! $this_el.parents('.et_pb_contact_field').is(':visible')) {
+									hidden_fields.push(original_id);
+									return;
+								}
+
+								// add current field data into array of inputs
+								if (typeof this_id !== 'undefined') {
+									inputs_list.push({
+										'field_id':      this_id,
+										'original_id':   original_id,
+										'required_mark': required_mark,
+										'field_type':    field_type,
+										'field_label':   this_label
+									});
+								}
+
+								// add error message for the field if it is required and empty
+							if ('required' === required_mark && ('' === this_val || true === unchecked) && ! $this_el.is('[id^="et_pb_contact_et_number_"]')) {
+
+									if (false === $this_wrapper) {
+										$this_el.addClass('et_contact_error');
+									} else {
+										$this_wrapper.addClass('et_contact_error');
+									}
+
+									this_et_contact_error = true;
+
+									default_value = this_label;
+
+									if ('' === default_value) {
+										default_value = et_pb_custom.captcha;
+									}
+
+									et_fields_message += '<li>' + default_value + '</li>';
+								}
+
+								// add error message if email field is not empty and fails the email validation
+								if ('email' === field_type) {
+									// remove trailing/leading spaces and convert email to lowercase
+									var processed_email = this_val.trim().toLowerCase();
+									var is_valid_email  = et_email_reg_html5.test(processed_email);
+
+									if ('' !== processed_email && this_label !== processed_email && ! is_valid_email) {
+										$this_el.addClass('et_contact_error');
+										this_et_contact_error = true;
+
+										if (! is_valid_email) {
+											et_message += '<li>' + et_pb_custom.invalid + '</li>';
+										}
+									}
+								}
+							});
+
+							// check the captcha value if required for current form
+							if ($captcha_field.length && '' !== $captcha_field.val()) {
+								var first_digit  = parseInt($captcha_field.data('first_digit'));
+								var second_digit = parseInt($captcha_field.data('second_digit'));
+
+								if (parseInt($captcha_field.val()) !== first_digit + second_digit) {
+
+									et_message += '<li>' + et_pb_custom.wrong_captcha + '</li>';
+									this_et_contact_error = true;
+
+									// generate new digits for captcha
+									first_digit  = Math.floor((Math.random() * 15) + 1);
+									second_digit = Math.floor((Math.random() * 15) + 1);
+
+									// set new digits for captcha
+									$captcha_field.data('first_digit', first_digit);
+									$captcha_field.data('second_digit', second_digit);
+
+									// regenerate captcha on page
+									$this_contact_form.find('.et_pb_contact_captcha_question').empty().append(first_digit + ' + ' + second_digit);
+								}
+
+							}
+
+							if (! this_et_contact_error) {
+								// Mark this form as `submitted` to prevent repeated processing.
+								$this_contact_form.data('submitted', true);
+
+								var $href     = $this_contact_form.attr('action');
+								var form_data = $this_contact_form.serializeArray();
+
+								form_data.push({
+									'name':  'et_pb_contact_email_fields_' + form_unique_id,
+									'value': JSON.stringify(inputs_list)
+								});
+
+								form_data.push({
+									name: 'token',
+									value: token
+								});
+
+								if (hidden_fields.length > 0) {
+									form_data.push({
+										'name':  'et_pb_contact_email_hidden_fields_' + form_unique_id,
+										'value': JSON.stringify(hidden_fields)
+									});
+								}
+
+								$this_contact_container.removeClass('et_animated').removeAttr('style').fadeTo('fast', 0.2, function() {
+									$this_contact_container.load($href + ' #' + $this_contact_container.attr('id') + '> *', form_data, function(responseText) {
+										if (! $(responseText).find('.et_pb_contact_error_text').length) {
+
+											et_pb_maybe_log_event($this_contact_container, 'con_goal');
+
+											// redirect if redirect URL is not empty and no errors in contact form
+											if ('' !== redirect_url) {
+												window.location.href = redirect_url;
+											}
+										}
+
+										$this_contact_container.fadeTo('fast', 1);
+									});
 								});
 							}
-						}
+
+							et_message += '</ul>';
+
+							if ('' !== et_fields_message) {
+								if (et_message !== '<ul></ul>') {
+									et_message = '<p class="et_normal_padding">' + et_pb_custom.contact_error_message + '</p>' + et_message;
+								}
+
+								et_fields_message = '<ul>' + et_fields_message + '</ul>';
+
+								et_fields_message = '<p>' + et_pb_custom.fill_message + '</p>' + et_fields_message;
+
+								et_message = et_fields_message + et_message;
+							}
+
+							if (et_message !== '<ul></ul>') {
+								$et_contact_message.html(et_message);
+
+								// If parent of this contact form uses parallax
+								if ($this_contact_container.parents('.et_pb_section_parallax').length) {
+									$this_contact_container.parents('.et_pb_section_parallax').each(function() {
+										var $parallax_element = $(this);
+										var $parallax         = $parallax_element.children('.et_parallax_bg');
+										var is_true_parallax  = (! $parallax.hasClass('et_pb_parallax_css'));
+
+										if (is_true_parallax) {
+											$et_window.trigger('resize');
+										}
+									});
+								}
+							}
+						});
 					});
 				});
 			}
@@ -3642,7 +3698,7 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 					return true;
 				} // otherwise keep things moving
 
-        var $newsletter_container = $submit.closest('.et_pb_newsletter');
+				var $newsletter_container = $submit.closest('.et_pb_newsletter');
 				var $name                 = $newsletter_container.find('input[name="et_pb_signup_firstname"]');
 				var $lastname             = $newsletter_container.find('input[name="et_pb_signup_lastname"]');
 				var $email                = $newsletter_container.find('input[name="et_pb_signup_email"]');
@@ -3905,70 +3961,73 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 					return decodeURIComponent( $.param( query ) );
 				}
 
-				$.ajax( {
-					type: "POST",
-					url: et_pb_custom.ajaxurl,
-					dataType: "json",
-					data: {
-						action : 'et_pb_submit_subscribe_form',
-						et_frontend_nonce : et_pb_custom.et_frontend_nonce,
-						et_list_id : list_id,
-						et_firstname : $name.val(),
-						et_lastname : $lastname.val(),
-						et_email : $email.val(),
-						et_provider : provider,
-						et_account: account,
-						et_ip_address: ip_address,
-						et_custom_fields: custom_fields,
-						et_hidden_fields: hidden_fields
-					},
-					beforeSend: function() {
-						$newsletter_container
-							.find( '.et_pb_newsletter_button' )
-							.addClass( 'et_pb_button_text_loading' )
-							.find('.et_subscribe_loader')
-							.show();
-					},
-					complete: function() {
-						$newsletter_container
-							.find( '.et_pb_newsletter_button' )
-							.removeClass( 'et_pb_button_text_loading' )
-							.find('.et_subscribe_loader')
-							.hide();
-					},
-					success: function( data ) {
-						if ( ! data ) {
-							$error_message.html( et_pb_custom.subscription_failed ).show();
-							return;
-						}
+				etCore.api.spam.recaptcha.interaction('Divi/Module/EmailOptin/List/' + list_id).then(function(token) {
+					$.ajax( {
+						type: "POST",
+						url: et_pb_custom.ajaxurl,
+						dataType: "json",
+						data: {
+							action : 'et_pb_submit_subscribe_form',
+							et_frontend_nonce : et_pb_custom.et_frontend_nonce,
+							et_list_id : list_id,
+							et_firstname : $name.val(),
+							et_lastname : $lastname.val(),
+							et_email : $email.val(),
+							et_provider : provider,
+							et_account: account,
+							et_ip_address: ip_address,
+							et_custom_fields: custom_fields,
+							et_hidden_fields: hidden_fields,
+							token: token
+						},
+						beforeSend: function() {
+							$newsletter_container
+								.find( '.et_pb_newsletter_button' )
+								.addClass( 'et_pb_button_text_loading' )
+								.find('.et_subscribe_loader')
+								.show();
+						},
+						complete: function() {
+							$newsletter_container
+								.find( '.et_pb_newsletter_button' )
+								.removeClass( 'et_pb_button_text_loading' )
+								.find('.et_subscribe_loader')
+								.hide();
+						},
+						success: function( data ) {
+							if ( ! data ) {
+								$error_message.html( et_pb_custom.subscription_failed ).show();
+								return;
+							}
 
-						if ( data.error ) {
-							$error_message.show().append('<h2>').text( data.error );
-						}
+							if ( data.error ) {
+								$error_message.show().append('<h2>').text( data.error );
+							}
 
-						if ( data.success ) {
-							if (redirect_url) {
-								et_pb_maybe_log_event($newsletter_container, 'con_goal', function() {
-									var query = get_redirect_query();
+							if ( data.success ) {
+								if (redirect_url) {
+									et_pb_maybe_log_event($newsletter_container, 'con_goal', function() {
+										var query = get_redirect_query();
 
-									if (query.length) {
-										if (redirect_url.indexOf('?') > - 1) {
-											redirect_url += '&';
-										} else {
-											redirect_url += '?';
+										if (query.length) {
+											if (redirect_url.indexOf('?') > - 1) {
+												redirect_url += '&';
+											} else {
+												redirect_url += '?';
+											}
 										}
-									}
 
-									window.location = redirect_url + query;
-								});
-							} else {
-								et_pb_maybe_log_event($newsletter_container, 'con_goal');
-								$newsletter_container.find('.et_pb_newsletter_fields').hide();
-								$success_message.show();
+										window.location = redirect_url + query;
+									});
+								} else {
+									et_pb_maybe_log_event($newsletter_container, 'con_goal');
+									$newsletter_container.find('.et_pb_newsletter_fields').hide();
+									$success_message.show();
+								}
 							}
 						}
-					}
-				} );
+					} );
+				});
 			};
 
 			window.et_fix_testimonial_inner_width = function() {
@@ -4891,13 +4950,15 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 							if ( ( event.target !== event.currentTarget && ! et_is_click_exception($(event.target)) ) || event.target === event.currentTarget ) {
 								event.stopPropagation();
 
+								var url = link_option_entry.url;
+								url     = url.replace(/&#91;/g, '[');
+								url     = url.replace(/&#93;/g, ']');
+
 								if ('_blank' === link_option_entry.target) {
-									window.open( link_option_entry.url );
+									window.open(url);
 
 									return;
 								}
-
-								var url = link_option_entry.url;
 
 								if ('#product_reviews_tab' === url) {
 									var $reviewsTabLink = $('.reviews_tab a');
@@ -4956,6 +5017,9 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 					'.et_pb_menu__search-button',
 					'.et_pb_menu__close-search-button',
 					'.et_pb_menu__search-container *',
+
+					// Fullwidth Header
+					'.et_pb_fullwidth_header_scroll *',
 				];
 
 				for (var i = 0; i < click_exceptions.length; i++) {
@@ -6040,13 +6104,16 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 					et_pb_comments_init( $comments_module );
 				});
 			}
-			
+
 			// Wait the page fully loaded to make sure all the css applied before calculating sizes
+			var previousCallback = document.onreadystatechange || function () {};
 			document.onreadystatechange = function () {
-				if ( 'complete' === document.readyState ) {
+				if ('complete' === document.readyState) {
 					window.et_fix_pricing_currency_position();
 				}
-			}
+
+				previousCallback();
+			};
 
 			$('.et_pb_contact_form_container, .et_pb_newsletter_custom_fields').each( function() {
 				var $form = $(this);
@@ -6529,13 +6596,13 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 
 		// Adjust spacing based on layout and the logo used.
 		$search.css('padding-top', 0);
-		if ($module.hasClass('et_pb_menu--style-left_aligned')) {
+		if ($module.hasClass('et_pb_menu--style-left_aligned') || $module.hasClass('et_pb_fullwidth_menu--style-left_aligned')) {
 			$search.css('padding-left', $logo.width());
 		} else {
 			var logoHeight = $logo.height();
 
 			$search.css('padding-left', 0);
-			if (isMobile || $module.hasClass('et_pb_menu--style-centered')) {
+			if (isMobile || $module.hasClass('et_pb_menu--style-centered') || $module.hasClass('et_pb_fullwidth_menu--style-centered')) {
 				// 30 = logo margin-bottom.
 				$search.css('padding-top', logoHeight > 0 ? logoHeight + 30 : 0);
 			}
@@ -6614,13 +6681,24 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 	// Muti View Data Handler (Responsive + Hover)
 	var et_multi_view = {
 		contexts: ['content', 'attrs', 'styles', 'classes', 'visibility'],
-		windowWidth: $(window).width(),
-		init: function () {
+		screenMode: undefined,
+		windowWidth: undefined,
+		init: function (screenMode, windowWidth) {
+			et_multi_view.screenMode  = screenMode;
+			et_multi_view.windowWidth = windowWidth;
+
 			$('#main-header, #main-footer').off('mouseenter', et_multi_view.resetHoverStateHandler);
 			$('#main-header, #main-footer').on('mouseenter', et_multi_view.resetHoverStateHandler);
 
-			$('[data-et-multi-view]').each(function () {
-				var data = et_multi_view.getData($(this));
+			et_multi_view.getElements().each(function () {
+				var $multiView = $(this);
+
+				// Skip for builder element
+				if (et_multi_view.isBuilderElement($multiView)) {
+					return;
+				}
+
+				var data = et_multi_view.getData($multiView);
 
 				et_multi_view.normalStateHandler(data);
 
@@ -6660,7 +6738,14 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 			}
 
 			$hoverSelector.find('[data-et-multi-view]').each(function () {
-				datas.push(et_multi_view.getData($(this)));
+				var $multiView = $(this);
+
+				// Skip for builder element
+				if (et_multi_view.isBuilderElement($multiView)) {
+					return;
+				}
+
+				datas.push(et_multi_view.getData($multiView));
 			});
 
 			if (event.type === 'mouseenter' && !$hoverSelector.hasClass('et_multi_view__hovered')) {
@@ -6687,8 +6772,15 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 			}
 		},
 		resetHoverStateHandler: function ($exclude) {
-			$('[data-et-multi-view]').each(function () {
-				var data = et_multi_view.getData($(this));
+			et_multi_view.getElements().each(function () {
+				var $multiView = $(this);
+
+				// Skip for builder element
+				if (et_multi_view.isBuilderElement($multiView)) {
+					return;
+				}
+
+				var data = et_multi_view.getData($multiView);
 
 				if (data &&
 					data.$hoverSelector &&
@@ -7368,39 +7460,78 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 			}
 		},
 		getScreenMode: function () {
-			var screenMode;
-
-			if (et_multi_view.windowWidth > 980) {
-				screenMode = 'desktop';
-			} else if (et_multi_view.windowWidth > 767) {
-				screenMode = 'tablet';
-			} else {
-				screenMode = 'phone';
+			if (isBuilder && et_multi_view.screenMode) {
+				return et_multi_view.screenMode;
 			}
 
-			return screenMode;
+			var windowWidth = et_multi_view.getWindowWidth();
+
+			if (windowWidth > 980) {
+				return 'desktop';
+			}
+
+			if (windowWidth > 767) {
+				return 'tablet';
+			}
+
+			return 'phone';
 		},
+		getWindowWidth: function () {
+			if (et_multi_view.windowWidth) {
+				return et_multi_view.windowWidth;
+			}
+
+			if (isBuilder) {
+				return $(".et-core-frame").width();
+			}
+
+			return $(window).width();
+		},
+		getElements: function () {
+			if (isBuilder) {
+				return $(".et-core-frame").contents().find('[data-et-multi-view]');
+			}
+
+			return $('[data-et-multi-view]');
+		},
+		isBuilderElement: function ($element) {
+			return $element.closest('#et-fb-app').length > 0;
+		}
 	};
 
-	if (!isBuilder) {
-		$(document).ready(et_multi_view.init);
+	function etMultiViewBootstrap() {
+		if (isBuilder) {
+			$(window).on('et_fb_preview_mode_changed', function (event, screenMode) {
+				// Just a gimmick to make the event parameter used.
+				if ('et_fb_preview_mode_changed' !== event.type) {
+					return;
+				}
 
-		var et_multi_view_timer = null;
-		$(window).on('resize', function () {
-			// Make sure only to run this when the actual window size width is changed
-			var resizedWindowWidth = $(window).width();
+				et_multi_view.init(screenMode);
+			});
+		} else {
+			$(document).ready(function () {
+				et_multi_view.init();
+			});
 
-			if (resizedWindowWidth === et_multi_view.windowWidth) {
-				return;
-			}
+			var et_multi_view_window_resize_timer = null;
 
-			et_multi_view.windowWidth = resizedWindowWidth;
+			$(window).on('resize', function (event) {
+				// Bail early when the resize event is triggered programmatically.
+				if (!event.originalEvent || !event.originalEvent.isTrusted) {
+					return;
+				}
 
-			clearTimeout(et_multi_view_timer);
+				clearTimeout(et_multi_view_window_resize_timer);
 
-			et_multi_view_timer = setTimeout(et_multi_view.init, 300);
-		});
+				et_multi_view_window_resize_timer = setTimeout(function () {
+					et_multi_view.init(undefined, $(window).width());
+				}, 200);
+			});
+		}
 	}
+
+	etMultiViewBootstrap();
 
 	if (isBuilder) {
 		$(document).ready(function () {

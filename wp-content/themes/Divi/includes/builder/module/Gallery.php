@@ -116,7 +116,7 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 						'fullwidth' => 'off',
 					),
 					'css' => array(
-						'main'         => '%%order_class%% .et_pb_gallery_image img',
+						'main'         => '%%order_class%% .et_pb_gallery_image',
 						'overlay' => 'inset',
 					),
 					'default_on_fronts'  => array(
@@ -502,13 +502,6 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 		$zoom_icon_color_values          = et_pb_responsive_options()->get_property_values( $this->props, 'zoom_icon_color' );
 		$hover_overlay_color_values      = et_pb_responsive_options()->get_property_values( $this->props, 'hover_overlay_color' );
 
-		$background_layout               = $this->props['background_layout'];
-		$background_layout_hover         = et_pb_hover_options()->get_value( 'background_layout', $this->props, 'light' );
-		$background_layout_hover_enabled = et_pb_hover_options()->is_enabled( 'background_layout', $this->props );
-		$background_layout_values        = et_pb_responsive_options()->get_property_values( $this->props, 'background_layout' );
-		$background_layout_tablet        = isset( $background_layout_values['tablet'] ) ? $background_layout_values['tablet'] : '';
-		$background_layout_phone         = isset( $background_layout_values['phone'] ) ? $background_layout_values['phone'] : '';
-
 		$hover_icon                      = $this->props['hover_icon'];
 		$hover_icon_values               = et_pb_responsive_options()->get_property_values( $this->props, 'hover_icon' );
 		$hover_icon_tablet               = isset( $hover_icon_values['tablet'] ) ? $hover_icon_values['tablet'] : '';
@@ -535,24 +528,18 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 
 		wp_enqueue_script( 'hashchange' );
 
-		$background_class          = "et_pb_bg_layout_{$background_layout}";
 		$video_background          = $this->video_background();
 		$parallax_image_background = $this->get_parallax_image_background();
 		$posts_number              = 0 === intval( $posts_number ) ? 4 : intval( $posts_number );
 
 		// Module classnames
 		$this->add_classname( array(
-			$background_class,
 			$this->get_text_orientation_classname(),
 		) );
 
-		if ( ! empty( $background_layout_tablet ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_tablet}_tablet" );
-		}
-
-		if ( ! empty( $background_layout_phone ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_phone}_phone" );
-		}
+		// Background layout class names.
+		$background_layout_class_names = et_pb_background_layout_options()->get_background_layout_class( $this->props );
+		$this->add_classname( $background_layout_class_names );
 
 		if ( 'on' === $fullwidth ) {
 			$this->add_classname( array(
@@ -571,27 +558,16 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 			) );
 		}
 
-		$data_background_layout       = '';
-		$data_background_layout_hover = '';
-		if ( $background_layout_hover_enabled ) {
-			$data_background_layout = sprintf(
-				' data-background-layout="%1$s"',
-				esc_attr( $background_layout )
-			);
-			$data_background_layout_hover = sprintf(
-				' data-background-layout-hover="%1$s"',
-				esc_attr( $background_layout_hover )
-			);
-		}
+		// Background layout data attributes.
+		$data_background_layout = et_pb_background_layout_options()->get_background_layout_attrs( $this->props );
 
 		$output = sprintf(
-			'<div%1$s class="%2$s"%4$s%5$s>
+			'<div%1$s class="%2$s"%4$s>
 				<div class="et_pb_gallery_items et_post_gallery clearfix" data-per_page="%3$d">',
 			$this->module_id(),
 			$this->module_classname( $render_slug ),
 			esc_attr( $posts_number ),
-			et_core_esc_previously( $data_background_layout ),
-			et_core_esc_previously( $data_background_layout_hover ) // #5
+			et_core_esc_previously( $data_background_layout )
 		);
 
 		$output .= $video_background;
@@ -655,7 +631,7 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 
 			$output .= sprintf(
 				'<div class="et_pb_gallery_item%2$s%1$s%3$s">',
-				esc_attr( ' ' . $background_class ),
+				esc_attr( ' ' . implode( ' ', $background_layout_class_names ) ),
 				( 'on' !== $fullwidth ? ' et_pb_grid_item' : '' ),
 				$generate_css_filters_item
 			);

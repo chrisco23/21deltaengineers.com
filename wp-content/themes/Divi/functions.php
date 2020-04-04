@@ -3749,6 +3749,7 @@ function et_divi_add_customizer_css() {
 			$post_id = 'global';
 		}
 
+		$resource_slug  = et_theme_builder_decorate_page_resource_slug( $post_id, $resource_slug );
 		$styles_manager = et_core_page_resource_get( $resource_owner, $resource_slug, $post_id );
 
 		$styles_manager->forced_inline = $forced_inline;
@@ -4667,14 +4668,14 @@ function et_divi_add_customizer_css() {
 				.et_header_style_left .et-fixed-header #et-top-navigation, .et_header_style_split .et-fixed-header #et-top-navigation { padding: <?php echo esc_html( intval( round( $fixed_menu_height / 2 ) ) ); ?>px 0 0 0; }
 				.et_header_style_left .et-fixed-header #et-top-navigation nav > ul > li > a, .et_header_style_split .et-fixed-header #et-top-navigation nav > ul > li > a  { padding-bottom: <?php echo esc_html( round( $fixed_menu_height / 2 ) ); ?>px; }
 				.et_header_style_centered header#main-header.et-fixed-header .logo_container { height: <?php echo esc_html( $fixed_menu_height ); ?>px; }
-				.et_header_style_split .et-fixed-header .centered-inline-logo-wrap { width: <?php echo esc_html( $fixed_menu_height ); ?>px; margin: -<?php echo esc_html( $fixed_menu_height ); ?>px 0;  }
+				.et_header_style_split #main-header.et-fixed-header .centered-inline-logo-wrap { width: <?php echo esc_html( $fixed_menu_height ); ?>px; margin: -<?php echo esc_html( $fixed_menu_height ); ?>px 0;  }
 				.et_header_style_split .et-fixed-header .centered-inline-logo-wrap #logo { max-height: <?php echo esc_html( $fixed_menu_height ); ?>px; }
 				.et_pb_svg_logo.et_header_style_split .et-fixed-header .centered-inline-logo-wrap #logo { height: <?php echo esc_html( $fixed_menu_height ); ?>px; }
 				.et_header_style_slide .et-fixed-header #et-top-navigation, .et_header_style_fullscreen .et-fixed-header #et-top-navigation { padding: <?php echo esc_html( round( ( $fixed_menu_height - 18 ) / 2 ) ); ?>px 0 <?php echo esc_html( round( ( $fixed_menu_height - 18 ) / 2 ) ); ?>px 0 !important; }
 			<?php } ?>
 			<?php if ( 54 !== $logo_height && 'split' === $header_style ) { ?>
-				.et_header_style_split .centered-inline-logo-wrap { width: auto; height: <?php echo esc_html( ( ( intval( $menu_height ) / 100 ) * $logo_height ) + 14 ); ?>px; }
-				.et_header_style_split .et-fixed-header .centered-inline-logo-wrap { width: auto; height: <?php echo esc_html( ( ( intval( $fixed_menu_height ) / 100 ) * $logo_height ) + 14 ); ?>px; }
+				.et_header_style_split #main-header .centered-inline-logo-wrap { width: auto; height: <?php echo esc_html( ( ( intval( $menu_height ) / 100 ) * $logo_height ) + 14 ); ?>px; }
+				.et_header_style_split #main-header.et-fixed-header .centered-inline-logo-wrap { width: auto; height: <?php echo esc_html( ( ( intval( $fixed_menu_height ) / 100 ) * $logo_height ) + 14 ); ?>px; }
 				.et_header_style_split .centered-inline-logo-wrap #logo,
 				.et_header_style_split .et-fixed-header .centered-inline-logo-wrap #logo { height: auto; max-height: 100%; }
 
@@ -6229,6 +6230,10 @@ function et_layout_body_class( $classes ) {
 
 	do_action( 'et_layout_body_class_before', $classes );
 
+	if ( 'on' === get_post_meta( get_the_ID(), '_et_pb_side_nav', true ) && et_pb_is_pagebuilder_used( get_the_ID() ) ) {
+		$classes[] = 'et_pb_side_nav_page';
+	}
+
 	if ( ! $has_tb_header && ! $is_blank_page_tpl ) {
 		$vertical_nav = et_get_option( 'vertical_nav', false );
 		if ( et_divi_is_transparent_primary_nav() && ( false === $vertical_nav || '' === $vertical_nav ) ) {
@@ -6292,10 +6297,6 @@ function et_layout_body_class( $classes ) {
 
 		if ( $et_secondary_nav_items->secondary_nav && ! ( $et_secondary_nav_items->contact_info_defined || $et_secondary_nav_items->show_header_social_icons ) && 'slide' !== et_get_option( 'header_style', 'left' ) && 'fullscreen' !== et_get_option( 'header_style', 'left' ) ) {
 			$classes[] = 'et_secondary_nav_only_menu';
-		}
-
-		if ( 'on' === get_post_meta( get_the_ID(), '_et_pb_side_nav', true ) && et_pb_is_pagebuilder_used( get_the_ID() ) ) {
-			$classes[] = 'et_pb_side_nav_page';
 		}
 
 		if ( is_singular() && et_builder_enabled_for_post( get_the_ID() ) && 'on' == get_post_meta( get_the_ID(), '_et_pb_post_hide_nav', true ) ) {
@@ -7029,12 +7030,44 @@ function et_divi_truncate_post_use_custom_content( $custom, $content, $post ) {
 	$cached = get_post_meta( $post->ID, '_et_pb_truncate_post', true );
 
 	if ( $cached ) {
+        $cached_date = get_post_meta( $post->ID, '_et_pb_truncate_post_date', true );
+		$cached_date = $cached_date ? $cached_date : get_post_field( 'post_modified', $post->ID );
+        $global_modules = array();
+
+        $shortcodes = array();
+        preg_match_all( '/'. get_shortcode_regex() .'/s', $content, $shortcodes );
+
+        if ( is_array( $shortcodes ) && isset( $shortcodes[3] ) ) {
+            foreach ( $shortcodes[3] as $raw_attributes ) {
+                $attributes = shortcode_parse_atts( $raw_attributes );
+                $attributes = is_array( $attributes ) ? $attributes : array();
+                $global_id = (int) et_()->array_get( $attributes, 'global_module', 0 );
+
+                if ( $global_id > 0 ) {
+                    $global_modules[] = $global_id;
+                }
+            }
+        }
+
+        foreach ( $global_modules as $module_post_id ) {
+            // Dates are using the Y-m-d H:i:s format so we can compare them as strings for simplicity.
+            if ( strcmp( get_post_field( 'post_modified', $module_post_id ), $cached_date ) > 0 ) {
+                // A global module used in the post has been updated more recently than
+                // the post's cached excerpt so we need to invalidate the cache.
+                $cached = '';
+                break;
+            }
+        }
+	}
+
+	if ( $cached ) {
 		return $cached;
 	}
 
 	$custom = apply_filters( 'the_content', $content );
 	// Save the result because expensive to compute.
 	update_post_meta( $post->ID, '_et_pb_truncate_post', $custom );
+	update_post_meta( $post->ID, '_et_pb_truncate_post_date', date( 'Y-m-d H:i:s' ) );
 
 	return $custom;
 }
@@ -7092,6 +7125,7 @@ function et_divi_save_post( $post_id ) {
 	// Unset cache
 	update_post_meta( $post_id, '_et_pb_first_image', false );
 	update_post_meta( $post_id, '_et_pb_truncate_post', false );
+	update_post_meta( $post_id, '_et_pb_truncate_post_date', '' );
 }
 endif;
 add_action( 'et_save_post', 'et_divi_save_post', 1 );

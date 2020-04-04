@@ -17,7 +17,7 @@ return array(
 	'Add New Template'           => esc_html__( 'Add New Template', 'et_builder' ),
 	'Added template'             => esc_html__( 'Added template', 'et_builder' ),
 	// Translators: %1$s: Number of extra template conditions.
-	'And %1$s More.'             => esc_html__( 'And %1$s More.', 'et_builder' ),
+	'And %1$s More'              => esc_html__( 'And %1$s More', 'et_builder' ),
 	'Assigned layout to template' => esc_html__( 'Assigned layout to template', 'et_builder' ),
 	'Backup Exists'              => esc_html__( 'Backup Exists', 'et_builder' ),
 	'Backup Exists Content'      => esc_html__( 'A backup exists for the Theme Builder that is newer than the version you are currently viewing. This backup was captured during your previous editing session, but you never saved it. Would you like to restore this backup and continue editing where you left off?', 'et_builder' ),
@@ -45,6 +45,7 @@ return array(
 	'Divi Theme Builder Templates' => esc_html__( 'Divi Theme Builder Templates', 'et_builder' ),
 	'Don\'t Restore'             => esc_html__( 'Don\'t Restore', 'et_builder' ),
 	'Duplicate Template'         => esc_html__( 'Duplicate Template', 'et_builder' ),
+	'Edit %1$s Layout'           => esc_html__( 'Edit %1$s Layout', 'et_builder' ),
 	'Edit Template Layout'       => esc_html__( 'Edit Template Layout', 'et_builder' ),
 	'Enable Template'            => esc_html__( 'Enable Template', 'et_builder' ),
 	'Enabled template'           => esc_html__( 'Enabled template', 'et_builder' ),

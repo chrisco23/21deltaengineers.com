@@ -5,7 +5,7 @@ window.wp = window.wp || {};
 /**
  * The builder version and product name will be updated by grunt release task. Do not edit!
  */
-window.et_builder_version = '4.0.6';
+window.et_builder_version = '4.0.9';
 window.et_builder_product_name = 'Divi';
 
 ( function($) {
@@ -4825,7 +4825,16 @@ window.et_builder_product_name = 'Divi';
 
 				if ( $time_picker.length ) {
 					// use the specified date format to avoid issues with date translation to different languages
-					$time_picker.datetimepicker({'dateFormat':'yy-mm-dd'});
+					$time_picker.datetimepicker({
+						dateFormat :'yy-mm-dd',
+						beforeShow : function(){
+							// We have css prefix for the jquery ui, add wrapper to make the css work
+							var $datetimepicker = $('#ui-datepicker-div');
+							if ($datetimepicker.closest('.et-fb-option--date-picker').length < 1) {
+								$datetimepicker.wrap('<span class="et-fb-option--date-picker"></span>');
+							}
+					   }
+					});
 				}
 
 				if( $validation_element.length ){

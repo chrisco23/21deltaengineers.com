@@ -115,7 +115,7 @@ class ET_Builder_Module_Map_Item extends ET_Builder_Module {
 			'attrs'   => array(
 				'class' => 'infowindow',
 			),
-			'required' => array( 'title', 'content' ),
+			'required_some' => array( 'title', 'content' ),
 		) );
 
 		$title_multi_view_data_attr = $multi_view->render_attrs( array(

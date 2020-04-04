@@ -102,14 +102,8 @@ class ET_Builder_Module_Woocommerce_Breadcrumb extends ET_Builder_Module {
 			),
 			'margin_padding' => array(
 				'css'            => array(
-					'margin'    => '%%order_class%%',
+					'margin'    => '%%order_class%% .woocommerce-breadcrumb',
 					'important' => 'all',
-				),
-				'custom_margin'  => array(
-					'default' => '0em|0em|1em|0em|false|false',
-				),
-				'custom_padding' => array(
-					'default' => '0em|0em|0em|0em|false|false',
 				),
 			),
 			'text'           => array(

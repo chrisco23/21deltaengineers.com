@@ -521,6 +521,7 @@ class ET_Builder_Module_Field_TextShadow extends ET_Builder_Module_Field_Base {
 
 		// Use a different selector for plugin
 		$css_element = $this->is_plugin_active && isset( $font['css']['limited_main'] ) ? 'css.limited_main' : 'css.main';
+
 		// Use 'text_shadow' selector if defined, fallback to $css_element or default selector
 		$selector = $utils->array_get( $font, 'css.text_shadow', $utils->array_get( $font, $css_element, $main_element_selector ) );
 		$responsive_selector = $selector;
@@ -529,7 +530,7 @@ class ET_Builder_Module_Field_TextShadow extends ET_Builder_Module_Field_Base {
 			if ( is_array( $selector ) ) {
 				$selector = array_map( array( $this, 'add_hover_to_selectors' ), $selector );
 			} else {
-				$selector = et_pb_hover_options()->add_hover_to_order_class( $selector );
+				$selector = et_pb_hover_options()->add_hover_to_selectors( $selector );
 			}
 
 			$selector = $utils->array_get( $font, 'css.text_shadow_hover', $utils->array_get( $font, 'css.hover', $selector ) );
@@ -632,7 +633,7 @@ class ET_Builder_Module_Field_TextShadow extends ET_Builder_Module_Field_Base {
 
 					if ( 'none' !== $utils->array_get( $all_values, $shadow_style, 'none' ) ) {
 						// We have a preset selected which isn't none, need to add text-shadow style
-						$this->update_styles( $module, $label, $font, $function_name, $is_hover, $suffix );
+						$this->update_styles( $module, $label, $font, $function_name, $is_hover, $suffix, $label );
 					}
 				}
 			}

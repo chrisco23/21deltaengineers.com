@@ -4,7 +4,7 @@ require_once 'module/helpers/Overflow.php';
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '4.0.6' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '4.0.9' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -853,12 +853,14 @@ function et_fb_app_preferences_settings() {
 			'default' => 'off',
 		),
 		'quick_actions_recent_queries' => array(
-			'type'    => 'string',
-			'default' => '',
+			'type'       => 'string',
+			'default'    => '',
+			'max_length' => 100,
 		),
 		'quick_actions_recent_category' => array(
-			'type'    => 'string',
-			'default' => '',
+			'type'       => 'string',
+			'default'    => '',
+			'max_length' => 100,
 		),
 		'modal_preference'       => array(
 			'type'    => 'string',
@@ -1637,6 +1639,12 @@ function et_fb_ajax_save() {
 					break;
 			}
 
+			$preference_value_max_length =  et_()->array_get( $preference_data, 'max_length', 0 );
+
+			if ( $preference_value && is_numeric( $preference_value_max_length ) && $preference_value_max_length > 0 ) {
+				$preference_value = substr( $preference_value, 0, $preference_value_max_length );
+			}
+
 			$option_name = 'et_fb_pref_' . $preference_key;
 
 			if ( in_array( $preference_key, et_fb_unsynced_preferences() ) ) {
@@ -1661,8 +1669,23 @@ function et_fb_ajax_save() {
 		}
 
 		// Get saved post, verify its content against the one that is being sent
-		$saved_post = get_post( $update );
-		$saved_verification = $saved_post->post_content === stripslashes( $sanitized_content );
+		$saved_post           = get_post( $update );
+		$saved_post_content   = $saved_post->post_content;
+		$builder_post_content = stripslashes( $sanitized_content );
+
+		// If `post_content` column on wp_posts table doesn't use `utf8mb4` charset, the saved post
+		// content's emoji will be encoded which means the check of saved post_content vs
+		// builder's post_content will be false; Thus check the charset of `post_content` column
+		// first then encode the builder's post_content if needed
+		// @see https://make.wordpress.org/core/2015/04/02/omg-emoji-%f0%9f%98%8e/
+		// @see https://make.wordpress.org/core/2015/04/02/the-utf8mb4-upgrade/
+		global $wpdb;
+
+		if ( 'utf8' === $wpdb->get_col_charset( $wpdb->posts, 'post_content' ) ) {
+			$builder_post_content = wp_encode_emoji( $builder_post_content );
+		}
+
+		$saved_verification = $saved_post_content === $builder_post_content;
 
 		if ( $saved_verification ) {
 			// Strip non-printable characters to ensure preg_match_all operation work properly.
@@ -2793,10 +2816,10 @@ function et_pb_set_video_oembed_thumbnail_resolution( $image_src, $resolution = 
 }
 endif;
 
-function et_builder_widgets_init(){
+function et_builder_widgets_init() {
 	$et_pb_widgets = get_theme_mod( 'et_pb_widgets' );
 
-	if ( $et_pb_widgets['areas'] ) {
+	if ( count( et_()->array_get( $et_pb_widgets, 'areas', array() ) ) ) {
 		foreach ( $et_pb_widgets['areas'] as $id => $name ) {
 			register_sidebar( array(
 				'name' => sanitize_text_field( $name ),
@@ -3575,6 +3598,7 @@ function et_pb_fix_builder_shortcodes( $content ) {
 	return $content;
 }
 add_filter( 'the_content', 'et_pb_fix_builder_shortcodes' );
+add_filter( 'et_builder_render_layout', 'et_pb_fix_builder_shortcodes' );
 
 
 function et_pb_the_content_prep_code_module_for_wpautop( $content ) {
@@ -3584,6 +3608,7 @@ function et_pb_the_content_prep_code_module_for_wpautop( $content ) {
 	return $content;
 }
 add_filter( 'the_content', 'et_pb_the_content_prep_code_module_for_wpautop', 0 );
+add_filter( 'et_builder_render_layout', 'et_pb_the_content_prep_code_module_for_wpautop', 0 );
 
 // generate the html for "Add new template" Modal in Library
 if ( ! function_exists( 'et_pb_generate_new_layout_modal' ) ) {
@@ -3790,8 +3815,29 @@ function et_bfb_enqueue_scripts() {
 		'default_initial_text_module' => apply_filters( 'et_builder_default_initial_text_module', 'et_pb_text' ),
 		'skip_default_content_adding' => apply_filters( 'et_builder_skip_content_activation', false, $post ) ? 'skip' : '',
 	) ) );
+
+	// Add filter to register tinyMCE buttons that is missing from BFB
+	add_filter( 'mce_external_plugins', 'et_bfb_filter_mce_plugin' );
 }
 endif;
+
+/**
+ * BFB use built-in WordPress tinyMCE initialization while visual builder uses standalone tinyMCE
+ * initialization which leads to several buttons in VB not available in BFB. This function register
+ * them as plugins
+ *
+ * @since 4.0.9
+ *
+ * @param array tinyMCE plugin list
+ *
+ * @return array
+ */
+function et_bfb_filter_mce_plugin( $plugins ) {
+	// NOTE: `ET_FB_ASSETS_URI` constant isn't available yet at this point, so use `ET_BUILDER_URI`
+	$plugins['table'] = ET_BUILDER_URI . '/frontend-builder/assets/vendors/plugins/table/plugin.min.js';
+
+	return $plugins;
+}
 
 function et_pb_wp_editor_settings( $settings, $editor_id ) {
 	if ( 'content' === $editor_id ) {
@@ -4140,7 +4186,7 @@ function et_pb_add_builder_page_js_css(){
 	et_core_load_main_fonts();
 
 	wp_enqueue_style( 'et_pb_admin_css', ET_BUILDER_URI .'/styles/style.css', array(), ET_BUILDER_VERSION );
-	wp_enqueue_style( 'et_pb_admin_date_css', ET_BUILDER_URI . '/styles/jquery-ui-1.10.4.custom.css', array(), ET_BUILDER_VERSION );
+	wp_enqueue_style( 'et_pb_admin_date_css', ET_BUILDER_URI . '/styles/jquery-ui-1.12.1.custom.css', array(), ET_BUILDER_VERSION );
 
 	wp_add_inline_style( 'et_pb_admin_css', et_pb_ab_get_subject_rank_colors_style() );
 }
@@ -10555,8 +10601,11 @@ if ( ! function_exists( 'et_pb_get_column_svg' ) ) {
 function et_builder_responsive_image_metadata( $image_src, $image_meta = null, $size = null ) {
 	$cache = ET_Core_Cache_File::get( 'image_responsive_metadata' );
 
-	if ( isset( $cache[ $image_src ] ) ) {
-		return $cache[ $image_src ];
+	// Normalize image URL to remove the HTTP/S protocol.
+	$normalized_url = et_attachment_normalize_url( $image_src );
+
+	if ( isset( $cache[ $normalized_url ] ) ) {
+		return $cache[ $normalized_url ];
 	}
 
 	$responsive_sizes = array();
@@ -10564,7 +10613,7 @@ function et_builder_responsive_image_metadata( $image_src, $image_meta = null, $
 	$image_id = is_numeric( $image_src ) ? intval( $image_src ) : et_get_attachment_id_by_url( $image_src );
 
 	if ( ! $image_id ) {
-		return $responsive_sizes;
+		return array();
 	}
 
 	if ( is_null( $image_meta ) ) {
@@ -10572,7 +10621,7 @@ function et_builder_responsive_image_metadata( $image_src, $image_meta = null, $
 	}
 
 	if ( ! $image_meta || empty( $image_meta['sizes'] ) )  {
-		return $responsive_sizes;
+		return array();
 	}
 
 	if ( is_null( $size ) ) {
@@ -10592,7 +10641,7 @@ function et_builder_responsive_image_metadata( $image_src, $image_meta = null, $
 	}
 
 	if ( ! $size || ! is_array( $size ) )  {
-		return $responsive_sizes;
+		return array();
 	}
 
 	foreach ( $image_meta['sizes'] as $size_key => $size_data ) {
@@ -10609,11 +10658,11 @@ function et_builder_responsive_image_metadata( $image_src, $image_meta = null, $
 
 	if ( $responsive_sizes ) {
 		ksort( $responsive_sizes );
+
+		// Cache the responsive sizes data.
+		$cache[ $normalized_url ] = $responsive_sizes;
+		ET_Core_Cache_File::set( 'image_responsive_metadata', $cache );
 	}
-
-	$cache[ $image_src ] = $responsive_sizes;
-
-	ET_Core_Cache_File::set( 'image_responsive_metadata', $cache );
 
 	return $responsive_sizes;
 }
@@ -10796,3 +10845,33 @@ function et_filter_wp_calculate_image_sizes( $sizes, $size, $image_src, $image_m
 }
 endif;
 add_filter( 'wp_calculate_image_sizes', 'et_filter_wp_calculate_image_sizes', 10, 4 );
+
+/**
+ * Register and localize assets early enough to avoid conflicts
+ * with third party plugins that use the same assets.
+ *
+ * @since 4.0.9
+ */
+function et_builder_register_assets() {
+	global $wp_version;
+
+	$root             = ET_BUILDER_URI;
+	$wp_major_version = substr( $wp_version, 0, 3 );
+
+	wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), false, 1 );
+	wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), false, 1 );
+
+	if ( version_compare( $wp_major_version, '4.9', '>=' ) ) {
+		wp_register_script( 'wp-color-picker-alpha', "{$root}/scripts/ext/wp-color-picker-alpha.min.js", array( 'jquery', 'wp-color-picker' ), ET_BUILDER_VERSION, true );
+	} else {
+		wp_register_script( 'wp-color-picker-alpha', "{$root}/scripts/ext/wp-color-picker-alpha-48.min.js", array( 'jquery', 'wp-color-picker' ), ET_BUILDER_VERSION, true );
+	}
+
+	wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', array(
+		'clear'         => esc_html__( 'Clear', 'et_builder' ),
+		'defaultString' => esc_html__( 'Default', 'et_builder' ),
+		'pick'          => esc_html__( 'Select Color', 'et_builder' ),
+		'current'       => esc_html__( 'Current Color', 'et_builder' ),
+	) );
+}
+add_action( 'init', 'et_builder_register_assets', 11 );

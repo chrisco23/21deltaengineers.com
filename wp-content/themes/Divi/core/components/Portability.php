@@ -352,6 +352,7 @@ class ET_Core_Portability {
 			'context'       => 'et_builder',
 			'data'          => $data,
 			'images'        => $images['images'],
+			'post_title'    => get_post_field( 'post_title', $post_id ),
 			'post_type'     => get_post_type( $post_id ),
 			'theme_builder' => $theme_builder_meta,
 		);
@@ -555,6 +556,7 @@ class ET_Core_Portability {
 		if ( $result['ready'] ) {
 			$import['data']   = $this->replace_images_urls( $result['images'], $import['data'] );
 			$post_type        = self::$_->array_get( $import, 'post_type', 'post' );
+			$post_title       = self::$_->array_get( $import, 'post_title', '' );
 			$post_type_object = get_post_type_object( $post_type );
 
 			if ( ! $post_type_object || ! current_user_can( $post_type_object->cap->create_posts ) ) {
@@ -563,11 +565,16 @@ class ET_Core_Portability {
 
 			$content = array_values( $import['data'] );
 			$content = $content[0];
-
-			$post_id = et_theme_builder_insert_layout( array(
+			$args    = array(
 				'post_type'    => $post_type,
 				'post_content' => current_user_can( 'unfiltered_html' ) ? $content : wp_kses_post( $content ),
-			) );
+			);
+
+			if ( ! empty( $post_title ) ) {
+				$args['post_title'] = current_user_can( 'unfiltered_html' ) ? $post_title : wp_kses( $post_title );
+			}
+
+			$post_id = et_theme_builder_insert_layout( $args );
 
 			if ( is_wp_error( $post_id ) ) {
 				return false;

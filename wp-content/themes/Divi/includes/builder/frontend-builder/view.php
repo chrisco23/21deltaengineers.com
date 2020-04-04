@@ -56,6 +56,7 @@ function et_fb_app_boot( $content ) {
 	return $content;
 }
 add_filter( 'the_content', 'et_fb_app_boot', 1 );
+add_filter( 'et_builder_render_layout', 'et_fb_app_boot', 1 );
 
 function et_fb_wp_nav_menu( $menu ) {
 	// Ensure we fix any unclosed HTML tags in menu since they would break the VB

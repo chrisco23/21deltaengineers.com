@@ -17,7 +17,7 @@ class ET_Builder_Module_Woocommerce_Additional_Info extends ET_Builder_Module {
 	/**
 	 * Initialize.
 	 *
-	 * @since ?? Implemented Attribute Row, Title and Body Custom CSS fields.
+	 * @since 4.0.6 Implemented Attribute Row, Title and Body Custom CSS fields.
 	 */
 	public function init() {
 		$this->name       = esc_html__( 'Woo Additional Info', 'et_builder' );

@@ -5,6 +5,8 @@ if ( ! function_exists( 'et_core_init' ) ):
  * {@see 'plugins_loaded' (9999999) Must run after cache plugins have been loaded.}
  */
 function et_core_init() {
+	ET_Core_API_Spam_Providers::instance();
+	ET_Core_Cache_Directory::instance();
 	ET_Core_PageResource::startup();
 
 	if ( defined( 'ET_CORE_UPDATED' ) ) {
@@ -345,6 +347,19 @@ endif;
 if ( ! function_exists( 'et_debug' ) ):
 function et_debug( $msg, $bt_index = 4, $log_ajax = true ) {
 	ET_Core_Logger::debug( $msg, $bt_index, $log_ajax );
+}
+endif;
+
+
+if ( ! function_exists( 'et_wrong' ) ):
+function et_wrong( $msg, $error = false ) {
+	$msg = "You're Doing It Wrong! {$msg}";
+
+	if ( $error ) {
+		et_error( $msg );
+	} else {
+		et_debug( $msg );
+	}
 }
 endif;
 

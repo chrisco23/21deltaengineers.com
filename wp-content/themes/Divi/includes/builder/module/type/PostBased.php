@@ -9,10 +9,14 @@ abstract class ET_Builder_Module_Type_PostBased extends ET_Builder_Module {
 	 * Loads and returns the contents of the "No Results" template.
 	 *
 	 * @since 3.0.77
+	 * 
+	 * @param string $heading_tag
 	 *
 	 * @return string
 	 */
-	public static function get_no_results_template() {
+	public static function get_no_results_template( $heading_tag = 'h1' ) {
+		global $et_no_results_heading_tag;
+		$et_no_results_heading_tag = $heading_tag;
 		ob_start();
 
 		if ( et_is_builder_plugin_active() ) {

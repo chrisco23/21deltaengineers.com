@@ -584,6 +584,7 @@ function et_theme_builder_get_template_settings_options_for_post_type( $post_typ
 				? et_core_intentionally_unescaped( __( 'Blog', 'et_builder' ), 'react_jsx' )
 				// Translators: %1$s: Post type plural name.
 				: et_core_intentionally_unescaped( sprintf( __( '%1$s Archive Page', 'et_builder' ), $post_type_plural ), 'react_jsx' ),
+			'title'    => trim( str_replace( home_url(), '', get_post_type_archive_link( $post_type_name ) ), '/' ),
 			'priority' => 60,
 			'validate' => 'et_theme_builder_template_setting_validate_archive_post_type',
 		);
@@ -953,6 +954,7 @@ function et_theme_builder_get_template_setting_child_options( $parent, $include 
 		case 'post_type':
 			$posts  = get_posts( array(
 				'post_type'      => $parent['options']['value'],
+				'post_status'    => 'any',
 				'post__in'       => $include,
 				's'              => $search,
 				'posts_per_page' => $per_page,
@@ -1114,7 +1116,7 @@ function et_theme_builder_get_template_layouts( $request = null, $cache = true, 
 /**
  * Get whether TB overrides the specified layout for the current request.
  *
- * @since ??
+ * @since 4.0.6
  *
  * @param string $layout Layout post type.
  *
@@ -1378,5 +1380,41 @@ function et_theme_builder_cache_post_type( $post_type ) {
 	}
 
 	return $post_type;
+}
+add_filter( 'et_builder_cache_post_type', 'et_theme_builder_cache_post_type' );
+
+/**
+ * Decorate a page resource slug based on the current request and TB.
+ *
+ * @since 4.0.7
+ *
+ * @param integer|string $post_id
+ * @param string $resource_slug
+ *
+ * @return string
+ */
+function et_theme_builder_decorate_page_resource_slug( $post_id, $resource_slug ) {
+	if ( ! is_numeric( $post_id ) || ! is_singular() ) {
+		return $resource_slug;
+	}
+
+	$post_type = get_post_type( (int) $post_id );
+
+	if ( et_theme_builder_is_layout_post_type( $post_type ) ) {
+		$resource_slug .= '-tb-for-' . ET_Post_Stack::get_main_post_id();
+	} else {
+		$layout_types = et_theme_builder_get_layout_post_types();
+		$layouts      = et_theme_builder_get_template_layouts();
+
+		foreach ( $layout_types as $type ) {
+			if ( ! isset( $layouts[ $type ] ) || ! $layouts[ $type ]['override'] ) {
+				continue;
+			}
+
+			$resource_slug .= '-tb-' . $layouts[ $type ]['id'];
+		}
+	}
+
+	return $resource_slug;
 }
 add_filter( 'et_builder_cache_post_type', 'et_theme_builder_cache_post_type' );

@@ -113,41 +113,17 @@ class ET_Builder_Plugin_Compat_Advanced_Custom_Fields extends ET_Builder_Plugin_
 	 * @return array[] modified $custom_fields
 	 */
 	public function maybe_filter_dynamic_content_fields( $custom_fields, $post_id, $raw_custom_fields ) {
-		$_          = ET_Core_Data_Utils::instance();
-		$post_type  = get_post_type( $post_id );
-
-		if ( ! $post_id || et_theme_builder_is_layout_post_type( $post_type ) ) {
-			return $this->maybe_filter_dynamic_content_fields_in_tb( $custom_fields, $post_id, $raw_custom_fields );
+		if ( ! $post_id || et_theme_builder_is_layout_post_type( get_post_type( $post_id ) ) ) {
+			$post_id = 0;
 		}
 
-		$acf_values = get_fields( $post_id );
-
-		// If exist, loop ACF fields values and modify its field definition.
-		if ( ! empty( $acf_values ) ) {
-			foreach ( $acf_values as $key => $value ) {
-				// Get field definition.
-				$acf_field = get_field_object($key, $post_id );
-
-				switch ( $acf_field['type'] ) {
-					case 'taxonomy':
-						// If enable_html option exist in taxonomy field, set enable_html default to `on` so builder
-						// automatically render taxonomy list properly as unescaped HTML.
-						if ( $_->array_get( $custom_fields, "custom_meta_{$key}.fields.enable_html.default", false ) ) {
-							$_->array_set( $custom_fields, "custom_meta_{$key}.fields.enable_html.default", 'on' );
-						}
-
-						break;
-				}
-			}
-		}
-
-		return $custom_fields;
+		return $this->maybe_filter_dynamic_content_fields_from_groups( $custom_fields, $post_id, $raw_custom_fields );
 	}
 
 	/**
 	 * Format ACF dynamic content fields for TB layouts.
 	 *
-	 * @since 4.0
+	 * @since 4.0.9
 	 *
 	 * @param array[] $custom_fields
 	 * @param int     $post_id
@@ -155,13 +131,19 @@ class ET_Builder_Plugin_Compat_Advanced_Custom_Fields extends ET_Builder_Plugin_
 	 *
 	 * @return array[] modified $custom_fields
 	 */
-	public function maybe_filter_dynamic_content_fields_in_tb( $custom_fields, $post_id, $raw_custom_fields ) {
-		$groups = acf_get_field_groups();
+	public function maybe_filter_dynamic_content_fields_from_groups( $custom_fields, $post_id, $raw_custom_fields ) {
+		$groups = 0 !== $post_id ? acf_get_field_groups( array( 'post_id' => $post_id ) ) : acf_get_field_groups();
 
 		foreach ( $groups as $group ) {
-			$fields = acf_get_fields( $group['ID'] );
+			$fields = $this->expand_fields( acf_get_fields( $group['ID'] ) );
 
 			foreach ( $fields as $field ) {
+				if ( 'group' === $field['type'] ) {
+					// Remove all group fields as ACF stores empty values for them.
+					unset( $custom_fields["custom_meta_{$field['name']}"] );
+					continue;
+				}
+
 				$settings = array(
 					'label'  => esc_html( $field['label'] ),
 					'type'   => 'any',
@@ -192,7 +174,9 @@ class ET_Builder_Plugin_Compat_Advanced_Custom_Fields extends ET_Builder_Plugin_
 							'on'  => esc_html__( 'Yes', 'et_builder' ),
 							'off' => esc_html__( 'No', 'et_builder' ),
 						),
-						'default' => 'off',
+						// Set enable_html default to `on` for taxonomy fields so builder
+						// automatically renders taxonomy list properly as unescaped HTML.
+						'default' => 'taxonomy' === $field['type'] ? 'on' : 'off',
 						'show_on' => 'text',
 					);
 				}
@@ -202,6 +186,42 @@ class ET_Builder_Plugin_Compat_Advanced_Custom_Fields extends ET_Builder_Plugin_
 		}
 
 		return $custom_fields;
+	}
+
+	/**
+	 * Expand ACF fields into their subfields in the order they are specified, if any.
+	 *
+	 * @since 4.0.9
+	 *
+	 * @param array[] $fields
+	 * @param string $name_prefix
+	 * @param string $label_prefix
+	 *
+	 * @return array[]
+	 */
+	public function expand_fields( $fields, $name_prefix = '', $label_prefix = '' ) {
+		$expanded = array();
+
+		foreach ( $fields as $field ) {
+			$expanded[] = array( array_merge( $field, array(
+				'name'  => $name_prefix . $field['name'],
+				'label' => $label_prefix . $field['label'],
+			) ) );
+
+			if ('group' === $field['type']) {
+				$expanded[] = $this->expand_fields(
+					$field['sub_fields'],
+					$name_prefix . $field['name'] . '_',
+					$label_prefix . $field['label'] . ': '
+				);
+			}
+		}
+
+		if ( empty( $expanded ) ) {
+			return array();
+		}
+
+		return call_user_func_array( 'array_merge', $expanded );
 	}
 
 	/**

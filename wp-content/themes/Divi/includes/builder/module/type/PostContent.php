@@ -37,8 +37,8 @@ abstract class ET_Builder_Module_Type_PostContent extends ET_Builder_Module {
 				'ul'       => array(
 					'label'       => esc_html__( 'Unordered List', 'et_builder' ),
 					'css'         => array(
-						'main'        => "{$this->main_css_element} ul",
-						'color'       => "{$this->main_css_element}.et_pb_post_content ul",
+						'main'        => "{$this->main_css_element} ul li",
+						'color'       => "{$this->main_css_element}.et_pb_post_content ul li",
 						'line_height' => "{$this->main_css_element} ul li",
 					),
 					'line_height' => array(

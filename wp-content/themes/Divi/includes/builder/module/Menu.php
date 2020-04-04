@@ -903,7 +903,7 @@ class ET_Builder_Module_Menu extends ET_Builder_Module {
 		/**
 		 * Filter the cart icon output.
 		 *
-		 * @since ??
+		 * @since 4.0.6
 		 *
 		 * @param string $output
 		 * @param string $menu_slug

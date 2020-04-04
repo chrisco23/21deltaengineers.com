@@ -218,13 +218,6 @@ class ET_Builder_Module_Circle_Counter extends ET_Builder_Module {
 		$custom_padding_phone            = $this->props['custom_padding_phone'];
 		$header_level                    = $this->props['title_level'];
 
-		$background_layout               = $this->props['background_layout'];
-		$background_layout_hover         = et_pb_hover_options()->get_value( 'background_layout', $this->props, 'light' );
-		$background_layout_hover_enabled = et_pb_hover_options()->is_enabled( 'background_layout', $this->props );
-		$background_layout_values        = et_pb_responsive_options()->get_property_values( $this->props, 'background_layout' );
-		$background_layout_tablet        = isset( $background_layout_values['tablet'] ) ? $background_layout_values['tablet'] : '';
-		$background_layout_phone         = isset( $background_layout_values['phone'] ) ? $background_layout_values['phone'] : '';
-
 		$bar_bg_color                    = $this->props['bar_bg_color'];
 		$bar_bg_color_values             = et_pb_responsive_options()->get_property_values( $this->props, 'bar_bg_color' );
 		$bar_bg_color_tablet             = isset( $bar_bg_color_values['tablet'] ) ? $bar_bg_color_values['tablet'] : '';
@@ -287,18 +280,8 @@ class ET_Builder_Module_Circle_Counter extends ET_Builder_Module {
 			sprintf( ' data-alpha-hover="%1$s"', esc_attr( $circle_color_alpha_hover ) )
 			: '';
 
-		$data_background_layout       = '';
-		$data_background_layout_hover = '';
-		if ( $background_layout_hover_enabled ) {
-			$data_background_layout = sprintf(
-				' data-background-layout="%1$s"',
-				esc_attr( $background_layout )
-			);
-			$data_background_layout_hover = sprintf(
-				' data-background-layout-hover="%1$s"',
-				esc_attr( $background_layout_hover )
-			);
-		}
+		// Background layout data attributes.
+		$data_background_layout = et_pb_background_layout_options()->get_background_layout_attrs( $this->props );
 
 		$multi_view_data_attr = $multi_view->render_attrs( array(
 			'attrs' => array(
@@ -314,26 +297,21 @@ class ET_Builder_Module_Circle_Counter extends ET_Builder_Module {
 
 		// Module classnames
 		$this->add_classname( array(
-			"et_pb_bg_layout_{$background_layout}",
 			'container-width-change-notify',
 			$this->get_text_orientation_classname(),
 		) );
 
-		if ( ! empty( $background_layout_tablet ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_tablet}_tablet" );
-		}
-
-		if ( ! empty( $background_layout_phone ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_phone}_phone" );
-		}
+		// Background layout class names.
+		$background_layout_class_names = et_pb_background_layout_options()->get_background_layout_class( $this->props );
+		$this->add_classname( $background_layout_class_names );
 
 		if ( '' !== $title ) {
 			$this->add_classname( 'et_pb_with_title' );
 		}
 
 		$output = sprintf(
-			'<div%1$s class="%2$s"%11$s%12$s>
-				<div class="et_pb_circle_counter_inner" data-number-value="%3$s" data-bar-bg-color="%4$s"%7$s%8$s%13$s%14$s%15$s%16$s%17$s%18$s%19$s%20$s%21$s%22$s>
+			'<div%1$s class="%2$s"%11$s>
+				<div class="et_pb_circle_counter_inner" data-number-value="%3$s" data-bar-bg-color="%4$s"%7$s%8$s%12$s%13$s%14$s%15$s%16$s%17$s%18$s%19$s%20$s%21$s>
 				%10$s
 				%9$s
 					<div class="percent"%19$s><p><span class="percent-value"></span><span class="percent-sign">%5$s</span></p></div>
@@ -351,16 +329,15 @@ class ET_Builder_Module_Circle_Counter extends ET_Builder_Module {
 			$video_background,
 			$parallax_image_background, // #10
 			et_core_esc_previously( $data_background_layout ),
-			et_core_esc_previously( $data_background_layout_hover ),
 			$bar_bg_color_data_tablet,
 			$bar_bg_color_data_phone,
-			$circle_color_data_tablet, // #15
-			$circle_color_data_phone,
+			$circle_color_data_tablet,
+			$circle_color_data_phone, // #15
 			$circle_color_alpha_data_tablet,
 			$circle_color_alpha_data_phone,
 			$bar_bg_color_data_hover,
-			$circle_color_data_hover, // #20
-			$circle_color_alpha_data_hover,
+			$circle_color_data_hover,
+			$circle_color_alpha_data_hover, // #20
 			$multi_view_data_attr
 		);
 
@@ -371,7 +348,7 @@ class ET_Builder_Module_Circle_Counter extends ET_Builder_Module {
 	 * Filter multi view value.
 	 *
 	 * @since 3.27.1
-	 * 
+	 *
 	 * @see ET_Builder_Module_Helper_MultiViewOptions::filter_value
 	 *
 	 * @param mixed $raw_value Props raw value.

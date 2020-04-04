@@ -92,9 +92,8 @@ function et_fb_get_dynamic_asset( $prefix, $post_type = false, $update = false )
 	}
 
 	$url = ! $exists ? false : sprintf(
-		'%s/%s/%s-%s-%s.js',
-		content_url( ET_Core_PageResource::get_cache_directory( 'relative' ) ),
-		$lang,
+		'%s/%s-%s-%s.js',
+		et_()->path( et_core_cache_dir()->url, $lang ),
 		$prefix,
 		$post_type,
 		$uniq
@@ -157,25 +156,6 @@ function et_fb_enqueue_assets() {
 
 	// Get WP major version
 	$wp_major_version = substr( $wp_version, 0, 3 );
-
-	// Register scripts.
-	wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), false, 1 );
-	wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), false, 1 );
-
-	if ( version_compare( $wp_major_version, '4.9', '>=' ) ) {
-		wp_register_script( 'wp-color-picker-alpha', "{$root}/scripts/ext/wp-color-picker-alpha.min.js", array( 'jquery', 'wp-color-picker' ), ET_BUILDER_VERSION, true );
-	} else {
-		wp_register_script( 'wp-color-picker-alpha', "{$root}/scripts/ext/wp-color-picker-alpha-48.min.js", array( 'jquery', 'wp-color-picker' ), ET_BUILDER_VERSION, true );
-	}
-
-	$colorpicker_l10n = array(
-		'clear'         => esc_html__( 'Clear', 'et_builder' ),
-		'defaultString' => esc_html__( 'Default', 'et_builder' ),
-		'pick'          => esc_html__( 'Select Color', 'et_builder' ),
-		'current'       => esc_html__( 'Current Color', 'et_builder' ),
-	);
-
-	wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n );
 
 	wp_register_script( 'react-tiny-mce', "{$assets}/vendors/tinymce.min.js" );
 

@@ -225,7 +225,7 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 		$this->custom_css_fields = array(
 			'slide_title' => array(
 				'label'    => esc_html__( 'Slide Title', 'et_builder' ),
-				'selector' => '.et_pb_slide_description h2',
+				'selector' => '.et_pb_slide_description .et_pb_slide_title',
 			),
 			'slide_container' => array(
 				'label'    => esc_html__( 'Slide Description Container', 'et_builder' ),
@@ -508,6 +508,11 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 
 		$video_url = esc_url( $args['video_url'] );
 
+		// Bail early if video URL is empty.
+		if ( empty( $video_url ) ) {
+			return '';
+		}
+
 		$autoembed      = $wp_embed->autoembed( $video_url );
 		$is_local_video = has_shortcode( $autoembed, 'video' );
 		$video_embed    = '';
@@ -652,13 +657,6 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 		$custom_icon_tablet              = isset( $custom_icon_values['tablet'] ) ? $custom_icon_values['tablet'] : '';
 		$custom_icon_phone               = isset( $custom_icon_values['phone'] ) ? $custom_icon_values['phone'] : '';
 
-		$background_layout               = $this->props['background_layout'];
-		$background_layout_hover         = et_pb_hover_options()->get_value( 'background_layout', $this->props, 'light' );
-		$background_layout_hover_enabled = et_pb_hover_options()->is_enabled( 'background_layout', $this->props );
-		$background_layout_values        = et_pb_responsive_options()->get_property_values( $this->props, 'background_layout' );
-		$background_layout_tablet        = isset( $background_layout_values['tablet'] ) ? $background_layout_values['tablet'] : '';
-		$background_layout_phone         = isset( $background_layout_values['phone'] ) ? $background_layout_values['phone'] : '';
-
 		global $et_pb_slider, $et_pb_slider_has_video, $et_pb_slider_parallax, $et_pb_slider_parallax_method, $et_pb_slider_show_mobile, $et_pb_slider_custom_icon, $et_pb_slider_custom_icon_tablet, $et_pb_slider_custom_icon_phone, $et_pb_slider_item_num, $et_pb_slider_button_rel;
 
 		$et_pb_slider_item_num++;
@@ -782,19 +780,11 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 			) );
 		}
 
+		// Background layout class names.
+		$background_layout_class_names = et_pb_background_layout_options()->get_background_layout_class( $this->props );
+		$this->add_classname( $background_layout_class_names );
+
 		// Module classnames
-		$this->add_classname( array(
-			"et_pb_bg_layout_{$background_layout}",
-		) );
-
-		if ( ! empty( $background_layout_tablet ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_tablet}_tablet" );
-		}
-
-		if ( ! empty( $background_layout_phone ) ) {
-			$this->add_classname( "et_pb_bg_layout_{$background_layout_phone}_phone" );
-		}
-
 		if ( $multi_view->has_value( 'image' ) || $multi_view->has_value( 'video_url' ) ) {
 			$this->add_classname( 'et_pb_slide_with_image' );
 		}
@@ -883,18 +873,8 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 			);
 		}
 
-		$data_background_layout       = '';
-		$data_background_layout_hover = '';
-		if ( $background_layout_hover_enabled ) {
-			$data_background_layout = sprintf(
-				' data-background-layout="%1$s"',
-				esc_attr( $background_layout )
-			);
-			$data_background_layout_hover = sprintf(
-				' data-background-layout-hover="%1$s"',
-				esc_attr( $background_layout_hover )
-			);
-		}
+		// Background layout data attributes.
+		$data_background_layout = et_pb_background_layout_options()->get_background_layout_attrs( $this->props );
 
 		$multi_view_classes = $multi_view->render_attrs( array(
 			'classes' => array(
@@ -908,7 +888,7 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 		) );
 
 		$output = sprintf(
-			'<div class="%4$s"%7$s%8$s%10$s%11$s data-slide-id="%12$s"%13$s>
+			'<div class="%4$s"%7$s%8$s%10$s data-slide-id="%11$s"%12$s>
 				%6$s
 				%9$s
 				<div class="et_pb_container clearfix">
@@ -933,7 +913,6 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 			'',
 			'on' === $use_bg_overlay ? '<div class="et_pb_slide_overlay_container"></div>' : '',
 			et_core_esc_previously( $data_background_layout ), // #10
-			et_core_esc_previously( $data_background_layout_hover ),
 			self::get_module_order_class( $render_slug ),
 			$multi_view_classes
 		);
@@ -945,7 +924,7 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 	 * Filter multi view value.
 	 *
 	 * @since 3.27.1
-	 * 
+	 *
 	 * @see ET_Builder_Module_Helper_MultiViewOptions::filter_value
 	 *
 	 * @param mixed $raw_value Props raw value.

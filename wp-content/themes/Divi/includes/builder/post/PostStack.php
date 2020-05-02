@@ -127,7 +127,7 @@ class ET_Post_Stack {
 	public static function get_main_post() {
 		global $wp_query;
 
-		if ( ! $wp_query || 0 === $wp_query->found_posts ) {
+		if ( ! $wp_query || 0 === $wp_query->post_count ) {
 			// Handle special case where there is no current post but once the_content()
 			// gets called the global $post is polluted and will no longer reset to null.
 			return null;

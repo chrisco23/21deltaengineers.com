@@ -28,6 +28,10 @@ if ( ! defined( 'ET_THEME_BUILDER_SETTING_SEPARATOR' ) ) {
 	define( 'ET_THEME_BUILDER_SETTING_SEPARATOR', ':' );
 }
 
+if ( ! defined( 'ET_THEME_BUILDER_DYNAMIC_CONTENT_REGEX' ) ) {
+	define( 'ET_THEME_BUILDER_DYNAMIC_CONTENT_REGEX', '/@ET-DC@(.*?)@/' );
+}
+
 require_once ET_THEME_BUILDER_DIR . 'ThemeBuilderApiErrors.php';
 require_once ET_THEME_BUILDER_DIR . 'ThemeBuilderRequest.php';
 require_once ET_THEME_BUILDER_DIR . 'template-setting-validations.php';
@@ -39,6 +43,13 @@ require_once ET_THEME_BUILDER_DIR . 'dynamic-content.php';
 // Conditional Includes.
 if ( et_is_woocommerce_plugin_active() ) {
 	require_once ET_THEME_BUILDER_DIR . 'woocommerce.php';
+	require_once ET_THEME_BUILDER_DIR . 'WoocommerceProductVariationPlaceholder.php';
+	require_once ET_THEME_BUILDER_DIR . 'WoocommerceProductVariablePlaceholder.php';
+	require_once ET_THEME_BUILDER_DIR . 'WoocommerceProductVariablePlaceholderDataStoreCPT.php';
+}
+
+if ( et_core_is_wpml_plugin_active() ) {
+	require_once ET_THEME_BUILDER_DIR . 'wpml.php';
 }
 
 /**
@@ -591,17 +602,46 @@ function et_theme_builder_get_template_settings_options_for_post_type( $post_typ
 	}
 
 	foreach ( $taxonomies as $taxonomy ) {
-		if ( ! $taxonomy->public || ! $taxonomy->show_ui ) {
+		/**
+		 * Filters whether the given taxonomy should be used to generate the following template settings:
+		 * - Posts with Specific %
+		 *
+		 * @since 4.3.3
+		 *
+		 * @param boolean $show
+		 */
+		$show = apply_filters( 'et_theme_builder_template_settings_options_posts_with_specific_term', $taxonomy->show_ui );
+
+		if ( ! $show ) {
 			continue;
 		}
 
-		$taxonomy_plural = ucwords( $taxonomy->labels->name );
-		// Translators: %1$s: Post type plural name; %2$s: Taxonomy plural name.
-		$label           = et_core_intentionally_unescaped( sprintf( __( '%1$s with Specific %2$s', 'et_builder' ), $post_type_plural, $taxonomy_plural ), 'react_jsx' );
+		$taxonomy_plural  = ucwords( $taxonomy->labels->name );
+		$use_short_plural = in_array( $taxonomy->name, array(
+			'project_category',
+			'project_tag',
+			'product_cat',
+			'product_tag',
+		), true );
 
-		if ( in_array( $taxonomy->name, array( 'category', 'project_category', 'product_cat' ) ) ) {
+		// Translators: %1$s: Post type plural name; %2$s: Taxonomy plural name.
+		$label = et_core_intentionally_unescaped(
+			sprintf(
+				__( '%1$s with Specific %2$s', 'et_builder' ),
+				$post_type_plural,
+				$use_short_plural ? esc_html__( 'Tags', 'et_builder' ) : $taxonomy_plural
+			),
+		'react_jsx' );
+
+		if ( in_array( $taxonomy->name, array( 'category', 'project_category', 'product_cat' ), true ) ) {
 			// Translators: %1$s: Post type plural name; %2$s: Taxonomy plural name.
-			$label = et_core_intentionally_unescaped( sprintf( __( '%1$s in Specific %2$s', 'et_builder' ), $post_type_plural, $taxonomy_plural ), 'react_jsx' );
+			$label = et_core_intentionally_unescaped(
+				sprintf(
+					__( '%1$s in Specific %2$s', 'et_builder' ),
+					$post_type_plural,
+					$use_short_plural ? esc_html__( 'Categories', 'et_builder' ) : $taxonomy_plural
+				),
+			'react_jsx' );
 		}
 
 		$group['settings'][] = array(
@@ -699,7 +739,18 @@ function et_theme_builder_get_template_settings_options_for_archive_pages() {
 	);
 
 	foreach ( $taxonomies as $taxonomy ) {
-		if ( ! $taxonomy->public || ! $taxonomy->show_ui ) {
+		/**
+		 * Filters whether the given taxonomy should be used to generate the following template settings:
+		 * - All % Pages
+		 * - Specific % Pages
+		 *
+		 * @since 4.3.3
+		 *
+		 * @param boolean $show
+		 */
+		$show = apply_filters( 'et_theme_builder_template_settings_options_term_pages', $taxonomy->public && $taxonomy->show_ui );
+
+		if ( ! $show ) {
 			continue;
 		}
 
@@ -763,6 +814,21 @@ function et_theme_builder_get_template_settings_options_for_archive_pages() {
 		'options'  => array(
 			'label' => et_core_intentionally_unescaped( __( 'Users', 'et_builder' ), 'react_jsx' ),
 			'type'  => 'user',
+			'value' => '',
+		),
+	);
+
+	$group['settings'][] = array(
+		'id'       => implode(
+			ET_THEME_BUILDER_SETTING_SEPARATOR,
+			array( 'archive', 'user', 'role', '' )
+		),
+		'label'    => et_core_intentionally_unescaped( __( 'Specific Author Page By Role', 'et_builder' ), 'react_jsx' ),
+		'priority' => 53,
+		'validate' => 'et_theme_builder_template_setting_validate_archive_user_role',
+		'options'  => array(
+			'label' => et_core_intentionally_unescaped( __( 'Roles', 'et_builder' ), 'react_jsx' ),
+			'type'  => 'user_role',
 			'value' => '',
 		),
 	);
@@ -948,7 +1014,19 @@ function et_theme_builder_get_template_setting_child_options( $parent, $include 
 		$per_page = -1;
 	}
 
-	$page = $page >= 1 ? $page : 1;
+	$page   = $page >= 1 ? $page : 1;
+	$values = array();
+
+	/**
+	 * Fires before loading child options from the database.
+	 *
+	 * @since 4.2
+	 *
+	 * @param string $parent_id
+	 * @param string $child_type
+	 * @param string $child_value
+	 */
+	do_action( 'et_theme_builder_before_get_template_setting_child_options', $parent['id'], $parent['options']['type'], $parent['options']['value'] );
 
 	switch ( $parent['options']['type'] ) {
 		case 'post_type':
@@ -960,7 +1038,6 @@ function et_theme_builder_get_template_setting_child_options( $parent, $include 
 				'posts_per_page' => $per_page,
 				'paged'          => $page,
 			) );
-			$values = array();
 
 			foreach ( $posts as $post ) {
 				$id            = $parent['id'] . $post->ID;
@@ -973,8 +1050,6 @@ function et_theme_builder_get_template_setting_child_options( $parent, $include 
 					'validate'  => $parent['validate'],
 				);
 			}
-
-			return $values;
 			break;
 
 		case 'taxonomy':
@@ -986,7 +1061,6 @@ function et_theme_builder_get_template_setting_child_options( $parent, $include 
 				'number'     => -1 === $per_page ? false : $per_page,
 				'offset'     => -1 !== $per_page ? ($page - 1) * $per_page : 0,
 			) );
-			$values = array();
 
 			foreach ( $terms as $term ) {
 				$id            = $parent['id'] . $term->term_id;
@@ -999,8 +1073,6 @@ function et_theme_builder_get_template_setting_child_options( $parent, $include 
 					'validate'  => $parent['validate'],
 				);
 			}
-
-			return $values;
 			break;
 
 		case 'user':
@@ -1010,7 +1082,6 @@ function et_theme_builder_get_template_setting_child_options( $parent, $include 
 				'number'  => $per_page,
 				'paged'   => $page,
 			) );
-			$values = array();
 
 			foreach ( $users as $user ) {
 				$id            = $parent['id'] . $user->ID;
@@ -1023,12 +1094,37 @@ function et_theme_builder_get_template_setting_child_options( $parent, $include 
 					'validate'  => $parent['validate'],
 				);
 			}
+			break;
 
-			return $values;
+		case 'user_role':
+			$roles  = wp_roles()->get_names();
+
+			foreach ( $roles as $role => $label ) {
+				$id            = $parent['id'] . $role;
+				$values[ $id ] = array(
+					'id'        => $id,
+					'parent'    => $parent['id'],
+					'label'     => et_core_intentionally_unescaped( $label, 'react_jsx' ),
+					'title'     => et_core_intentionally_unescaped( $role, 'react_jsx' ),
+					'priority'  => $parent['priority'],
+					'validate'  => $parent['validate'],
+				);
+			}
 			break;
 	}
 
-	return array();
+	/**
+	 * Fires after loading child options from the database.
+	 *
+	 * @since 4.2
+	 *
+	 * @param string $parent_id
+	 * @param string $child_type
+	 * @param string $child_value
+	 */
+	do_action( 'et_theme_builder_after_get_template_setting_child_options', $parent['id'], $parent['options']['type'], $parent['options']['value'] );
+
+	return $values;
 }
 
 /**
@@ -1046,10 +1142,20 @@ function et_theme_builder_get_template_layouts( $request = null, $cache = true, 
 	static $store = array();
 
 	if ( null === $request ) {
+		if ( is_embed() ) {
+			// Ignore TB templates when displaying posts intended for embedding.
+			return array();
+		}
+
+		if ( is_et_pb_preview() ) {
+			// Ignore TB templates when previewing.
+			return array();
+		}
+
 		$request = ET_Theme_Builder_Request::from_current();
 	}
 
-	if ( null === $request ) {
+	if ( null === $request || ET_GB_Block_Layout::is_layout_block_preview() ) {
 		return array();
 	}
 

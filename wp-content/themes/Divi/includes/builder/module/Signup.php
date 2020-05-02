@@ -87,10 +87,12 @@ class ET_Builder_Module_Signup extends ET_Builder_Module_Type_WithSpamProtection
 						'tabbed_subtoggles' => true,
 						'bb_icons_support'  => true,
 						'css'               => array(
-							'link'  => "{$this->main_css_element} .et_pb_newsletter_description a, {$this->main_css_element} .et_pb_newsletter_form a",
-							'ul'    => "{$this->main_css_element} .et_pb_newsletter_description ul li, {$this->main_css_element} .et_pb_newsletter_form ul li",
-							'ol'    => "{$this->main_css_element} .et_pb_newsletter_description ol li, {$this->main_css_element} .et_pb_newsletter_form ol li",
-							'quote' => "{$this->main_css_element} .et_pb_newsletter_description blockquote, {$this->main_css_element} .et_pb_newsletter_form blockquote",
+							'link'           => "{$this->main_css_element} .et_pb_newsletter_description a, {$this->main_css_element} .et_pb_newsletter_form a",
+							'ul'             => "{$this->main_css_element} .et_pb_newsletter_description ul li, {$this->main_css_element} .et_pb_newsletter_form ul li",
+							'ul_item_indent' => "{$this->main_css_element} .et_pb_newsletter_description ul, {$this->main_css_element} .et_pb_newsletter_form ul",
+							'ol'             => "{$this->main_css_element} .et_pb_newsletter_description ol li, {$this->main_css_element} .et_pb_newsletter_form ol li",
+							'ol_item_indent' => "{$this->main_css_element} .et_pb_newsletter_description ol, {$this->main_css_element} .et_pb_newsletter_form ol",
+							'quote'          => "{$this->main_css_element} .et_pb_newsletter_description blockquote, {$this->main_css_element} .et_pb_newsletter_form blockquote",
 						),
 					),
 				),
@@ -338,6 +340,7 @@ class ET_Builder_Module_Signup extends ET_Builder_Module_Type_WithSpamProtection
 				'show_if'         => $show_if_conditions,
 				'class'           => 'et_pb_email_' . $field_id,
 				'toggle_slug'     => 'provider',
+				'not_required'    => self::$_->array_get( $field_info, 'not_required', false ),
 			);
 		}
 
@@ -369,7 +372,7 @@ class ET_Builder_Module_Signup extends ET_Builder_Module_Type_WithSpamProtection
 				'type'            => 'select_with_option_groups',
 				'option_category' => 'basic_option',
 				'options'         => isset( $lists[ $provider_slug ] ) ? $lists[ $provider_slug ] : $no_lists,
-				'description'     => esc_html__( 'Choose a list. If you don\'t see any lists, click "Add" to add an account.' ),
+				'description'     => esc_html__( 'Choose a list. If you don\'t see any lists, click "Add" to add an account.', 'et_builder' ),
 				'show_if'         => array(
 					'provider' => $provider_slug,
 				),
@@ -954,6 +957,9 @@ class ET_Builder_Module_Signup extends ET_Builder_Module_Type_WithSpamProtection
 						esc_attr( $ip_address )
 					);
 				}
+
+				$html .= sprintf( '<input type="hidden" value="%1$d" name="et_pb_signup_post_id" />', self::get_layout_id() );
+
 				break;
 		}
 
@@ -1141,6 +1147,14 @@ class ET_Builder_Module_Signup extends ET_Builder_Module_Type_WithSpamProtection
 			$this->add_classname( 'et_pb_with_focus_border' );
 		}
 
+		if ( ! $multi_view->has_value( 'title' ) ) {
+			$this->add_classname( 'et_pb_newsletter_description_no_title' );
+		}
+
+		if ( ! $multi_view->has_value( 'content' ) ) {
+			$this->add_classname( 'et_pb_newsletter_description_no_content' );
+		}
+
 		// Remove automatically added classnames
 		$this->remove_classname( array(
 			$render_slug,
@@ -1151,32 +1165,49 @@ class ET_Builder_Module_Signup extends ET_Builder_Module_Type_WithSpamProtection
 			'content' => '{{description}}',
 		) );
 
-		// We'll hide the entire Title & Description block if there's no content in either of them
-		$show_description_block = $title || $description;
+		$content_wrapper = $multi_view->render_element( array(
+			'tag'     => 'div',
+			'content' => "{$title}{$description}",
+			'attrs'   => array(
+				'class' => 'et_pb_newsletter_description',
+			),
+			'classes' => array(
+				'et_multi_view_hidden' => array(
+					'title'       => '__empty',
+					'description' => '__empty',
+				),
+			),
+		) );
+
+		$wrapper_multi_view_classes = $multi_view->render_attrs( array(
+			'classes' => array(
+				'et_pb_newsletter_description_no_title' => array(
+					'title' => '__empty',
+				),
+				'et_pb_newsletter_description_no_content' => array(
+					'content' => '__empty',
+				),
+			),
+		) );
 
 		$output = sprintf(
-			'<div%6$s class="%4$s"%5$s%9$s%10$s%11$s>
-				%8$s
+			'<div%5$s class="%3$s"%4$s%8$s%9$s%10$s%11$s>
 				%7$s
-				%12$s
-					%1$s
-					%2$s
-				%13$s
-				%3$s
+				%6$s
+				%1$s
+				%2$s
 			</div>',
-			et_core_esc_previously( $title ),
-			$description,
+			et_core_esc_previously( $content_wrapper ),
 			$form,
 			$this->module_classname( $render_slug ),
-			'', // #5
-			$this->module_id(),
+			'',
+			$this->module_id(), // #5
 			$video_background,
 			$parallax_image_background,
 			$success_redirect_url,
-			$success_redirect_query, // #10
-			et_core_esc_previously( $data_background_layout ),
-			$show_description_block ? '<div class="et_pb_newsletter_description">' : '',
-			$show_description_block ? '</div>' : ''
+			$success_redirect_query,
+			et_core_esc_previously( $data_background_layout ), // #10,
+			$wrapper_multi_view_classes
 		);
 
 		return $output;
@@ -1206,13 +1237,14 @@ class ET_Builder_Module_Signup extends ET_Builder_Module_Type_WithSpamProtection
 	public function multi_view_filter_value( $raw_value, $args, $multi_view ) {
 		$name = isset( $args['name'] ) ? $args['name'] : '';
 		$mode = isset( $args['mode'] ) ? $args['mode'] : '';
+		$context = isset( $args['context'] ) ? $args['context'] : '';
 
 		$fields_need_escape = array(
 			'title',
 		);
 
-		if ( $raw_value && in_array( $name, $fields_need_escape, true ) ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
+		if ( 'content' === $context && $raw_value && in_array( $name, $fields_need_escape, true ) ) {
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'none', $raw_value );
 		}
 
 		if ( $raw_value && in_array( $name, array( 'description', 'footer_content' ), true ) ) {

@@ -775,6 +775,21 @@ class ET_Builder_Module_Helper_ResponsiveOptions {
 	}
 
 	/**
+	 * Get breakpoint minimum widths
+	 *
+	 * @since 4.3.2
+	 *
+	 * @return array
+	 */
+	public function get_breakpoint_min_widths() {
+		return array(
+			'desktop' => 980,
+			'tablet'  => 768,
+			'phone'   => 0,
+		);
+	}
+
+	/**
 	 * Get breakpoint based on device name.
 	 *
 	 * @since 4.0
@@ -1452,10 +1467,4 @@ class ET_Builder_Module_Helper_ResponsiveOptions {
 
 }
 
-/**
- * @return ET_Builder_Module_Helper_ResponsiveOptions
- */
-function et_pb_responsive_options() {
-	return ET_Builder_Module_Helper_ResponsiveOptions::instance();
-}
 

@@ -220,6 +220,8 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 				),
 			),
 			'height'                => false,
+			'scroll_effects'        => false,
+			'position_fields'       => false,
 		);
 
 		$this->custom_css_fields = array(

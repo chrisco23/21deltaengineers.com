@@ -1098,11 +1098,11 @@ class ET_Core_SupportCenter {
 			$et_license = get_option( 'et_automatic_updates_options', array() );
 		}
 
-		if ( ! array_key_exists( 'username', $et_license ) || empty( $et_license['username'] ) ) {
+		if ( ! et_()->array_get( $et_license, 'username' ) ) {
 			return false;
 		}
 
-		if ( ! array_key_exists( 'api_key', $et_license ) || empty( $et_license['api_key'] ) ) {
+		if ( ! et_()->array_get( $et_license, 'api_key' ) ) {
 			return false;
 		}
 
@@ -1127,7 +1127,10 @@ class ET_Core_SupportCenter {
 		// Early exit: internal PHP function `file_get_contents()` appears to be on lockdown
 		if ( ! function_exists( 'file_get_contents' ) ) {
 			$log['error'] = esc_attr__( 'Divi Support Center :: WordPress debug log cannot be read.', 'et-core' );
-			et_error( $log['error'] );
+
+			if ( defined( 'ET_DEBUG' ) ) {
+				et_error( $log['error'] );
+			}
 
 			return $log;
 		}
@@ -1135,7 +1138,10 @@ class ET_Core_SupportCenter {
 		// Early exit: WP_DEBUG_LOG isn't defined in wp-config.php (or it's defined, but it's empty)
 		if ( ! defined( 'WP_DEBUG_LOG' ) || ! WP_DEBUG_LOG ) {
 			$log['error'] = esc_attr__( 'Divi Support Center :: WordPress debug.log is not configured.', 'et-core' );
-			et_error( $log['error'] );
+
+			if ( defined( 'ET_DEBUG' ) ) {
+				et_error( $log['error'] );
+			}
 
 			return $log;
 		}
@@ -1156,7 +1162,10 @@ class ET_Core_SupportCenter {
 		// Early exit: `debug.log` doesn't exist or otherwise can't be read
 		if ( ! isset( $wp_debug_log_path ) || ! file_exists( $wp_debug_log_path ) || ! is_readable( $wp_debug_log_path ) ) {
 			$log['error'] = esc_attr__( 'Divi Support Center :: WordPress debug log cannot be found.', 'et-core' );
-			et_error( $log['error'] );
+
+			if ( defined( 'ET_DEBUG' ) ) {
+				et_error( $log['error'] );
+			}
 
 			return $log;
 		}
@@ -1253,7 +1262,7 @@ class ET_Core_SupportCenter {
 				'pass_minus_one' => false,
 				'pass_zero'      => true,
 				'minimum'        => null,
-				'recommended'    => '180',
+				'recommended'    => '120',
 				'actual'         => ini_get( 'max_execution_time' ),
 				'help_text'      => et_get_safe_localization( sprintf( __( 'Max Execution Time affects how long a page is allowed to load before it times out. If the limit is too low, you may not be able to import large layouts and files into the builder. You can adjust your max execution time within your <a href="%1$s">php.ini file</a>, or by contacting your host for assistance.', 'et-core' ), 'http://php.net/manual/en/info.configuration.php#ini.max-execution-time' ) ),
 				'learn_more'     => 'http://php.net/manual/en/info.configuration.php#ini.max-execution-time',
@@ -1277,7 +1286,7 @@ class ET_Core_SupportCenter {
 				'pass_minus_one' => true,
 				'pass_zero'      => true,
 				'minimum'        => null,
-				'recommended'    => '180',
+				'recommended'    => '120',
 				'actual'         => ini_get( 'max_input_time' ),
 				'help_text'      => et_get_safe_localization( sprintf( __( 'This sets the maximum time in seconds a script is allowed to parse input data. If the limit is too low, the Divi Builder may time out before it is allowed to load. You can adjust your max input time within your <a href="%1$s" target="_blank">php.ini file</a>, or by contacting your host for assistance.', 'et-core' ), 'http://php.net/manual/en/info.configuration.php#ini.max-input-time' ) ),
 				'learn_more'     => 'http://php.net/manual/en/info.configuration.php#ini.max-input-time',

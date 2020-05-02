@@ -517,7 +517,7 @@ See LICENSE.md for the full GPLv2 license.
 jQuery Easy Pie Chart
 --------------
 
-includes/builder/scripts/jquery.easypiechart.js
+includes/builder/scripts/ext/jquery.easypiechart.js
 
 ```text
 Copyright (c) 2015 Robert Fleischmann, contributors. Released under the MIT, GPL licenses
@@ -528,7 +528,7 @@ See LICENSE.md for the full GPLv2 license.
 jQuery Fit Text
 ---------------
 
-includes/builder/scripts/jquery.fittext.js
+includes/builder/scripts/ext/jquery.fittext.js
 
 ```text
 Copyright 2011, Dave Rupert http://daverupert.com
@@ -551,7 +551,7 @@ TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 jQuery Fit Vids
 ---------------
 
-includes/builder/scripts/jquery.fitvids.js
+includes/builder/scripts/ext/jquery.fitvids.js
 
 ```text
 Copyright 2013, Chris Coyier - http://css-tricks.com + Dave Rupert - http://daverupert.com
@@ -591,7 +591,7 @@ See LICENSE.md for the full GPLv2 license.
 Magnific Popup
 --------------
 
-includes/builder/scripts/jquery.magnific-popup.js
+includes/builder/scripts/ext/jquery.magnific-popup.js
 inculdes/builder/styles/magnific_popup.css
 
 ```text
@@ -620,7 +620,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 jQuery Mobile
 -------------
 
-includes/builder/scripts/jquery.mobile.custom.min.js
+includes/builder/scripts/ext/jquery.mobile.custom.min.js
 
 ```text
 The MIT License (MIT)
@@ -637,7 +637,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 Salvattore
 ----------
 
-includes/builder/scripts/salvattore.min.js
+includes/builder/scripts/ext/salvattore.min.js
 
 ```text
 The MIT License (MIT)
@@ -665,7 +665,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 Waypoints
 ---------
 
-includes/builder/scripts/waypoints.min.js
+includes/builder/scripts/ext/waypoints.min.js
 
 ```text
 The MIT License (MIT)
@@ -1361,7 +1361,7 @@ WordPress is released under the GPL
 LZ-String
 ---------
 
-includes/builder/scripts/lz-string.min.js
+includes/builder/scripts/ext/lz-string.min.js
 
 ```text
 DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE

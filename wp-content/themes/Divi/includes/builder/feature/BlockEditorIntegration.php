@@ -84,6 +84,35 @@ class ET_Builder_Block_Editor_Integration {
 	}
 
 	/**
+	 * Get user capabilities that is relevant to block editor integration
+	 *
+	 * @since 4.1.0
+	 *
+	 * @return array
+	 */
+	public function get_current_user_capabilities() {
+		/**
+		 * Make relevant capabilities filterable should the need to check for more caps arises
+		 *
+		 * @since 4.1.0
+		 *
+		 * @param array user capabilities
+		 */
+		$relevant_capabilities = apply_filters( 'et_block_editor_relevant_capabilities', array(
+			'divi_library',
+			'use_visual_builder',
+		) );
+
+		$capabilities = array();
+
+		foreach ( $relevant_capabilities as $cap_name ) {
+			$capabilities[ $cap_name ] = et_pb_is_allowed( $cap_name );
+		}
+
+		return $capabilities;
+	}
+
+	/**
 	 * Filter used to disable GB for certain post types.
 	 *
 	 * @param bool $can_edit
@@ -107,22 +136,54 @@ class ET_Builder_Block_Editor_Integration {
 	 * @return void
 	 */
 	public function enqueue_block_editor_assets() {
-		et_builder_enqueue_open_sans();
-		et_fb_enqueue_bundle( 'et-builder-gutenberg', 'gutenberg.js', array( 'jquery' ) );
-		et_fb_enqueue_bundle( 'et-builder-gutenberg', 'gutenberg.css', array() );
-		$res = et_pb_is_pagebuilder_used();
+		// Load script dependencies that is used by builder on top window. These dependencies
+		// happen to be the exact same scripts required by BFB top window's scripts
+		et_bfb_enqueue_scripts_dependencies();
 
-		$post_type = get_post_type();
+		// Enqueue open sans
+		et_builder_enqueue_open_sans();
+
+		// Enqueue integration & blocks scripts
+		et_fb_enqueue_bundle( 'et-builder-gutenberg', 'gutenberg.js', array(
+			'jquery',
+			'et_bfb_admin_date_addon_js',
+			'wp-hooks',
+		) );
+
+		// Enqueue top window style
+		wp_register_style(
+			'et-fb-top-window',
+			ET_BUILDER_URI . '/frontend-builder/assets/css/fb-top-window.css',
+			array(),
+			ET_BUILDER_VERSION
+		);
+
+		// Enqueue integration & blocks styles
+		et_fb_enqueue_bundle( 'et-builder-gutenberg', 'gutenberg.css', array(
+			'et-fb-top-window',
+		) );
+
+		// this enqueue bundle.css
+		et_builder_enqueue_assets_main();
+
+		$post_id         = get_the_ID();
+		$post_type       = get_post_type();
 		$enabled_for_post_type = et_builder_enabled_for_post_type( $post_type );
+		$updates_options = get_site_option( 'et_automatic_updates_options', array() );
+		$et_account      = array(
+			'et_username' => et_()->array_get( $updates_options, 'username', '' ),
+			'et_api_key'  => et_()->array_get( $updates_options, 'api_key', '' ),
+			'status'      => get_site_option( 'et_account_status', 'not_active' ),
+		);
 
 		// Set helpers needed by our own Gutenberg bundle.
 		wp_localize_script( 'et-builder-gutenberg', 'et_builder_gutenberg', array(
 			'helpers' => array(
-				'postID'             => get_the_ID(),
+				'postID'             => $post_id,
 				'postType'           => $post_type,
 				'is3rdPartyPostType' => et_builder_is_post_type_custom( $post_type ) ? 'yes' : 'no',
 				'vbUrl'              => et_fb_get_vb_url(),
-				'builderUsed'        => et_pb_is_pagebuilder_used(),
+				'builderUsed'        => et_pb_is_pagebuilder_used( $post_id ),
 				'scriptDebug'        => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
 				'canToggle'          => et_pb_is_allowed( 'divi_builder_control' ) && $enabled_for_post_type,
 				'isEnabled'          => $enabled_for_post_type,
@@ -146,7 +207,62 @@ class ET_Builder_Block_Editor_Integration {
 					),
 				),
 			),
+
+			// Loaded into ETBlockUserStore
+			'capabilities' => $this->get_current_user_capabilities(),
+
+			// Loaded into ETBlockLibraryStore
+			'etAccount' => $et_account,
+
+			// Loaded into ETBlockSettingsStore
+			'conditions' => array(
+				'isRtl' => is_rtl(),
+			),
+			'constants' => array(
+				'emptyLayout' => '[et_pb_section admin_label="section"][et_pb_row admin_label="row"][/et_pb_row][/et_pb_section]',
+			),
+			'nonces' => array(
+				'et_builder_library_get_layouts_data' => wp_create_nonce( 'et_builder_library_get_layouts_data' ),
+				'et_builder_library_update_account'   => wp_create_nonce( 'et_builder_library_update_account' ),
+				'et_block_layout_preview'             => wp_create_nonce( 'et_block_layout_preview' ),
+				'et_rest_get_layout_content'          => wp_create_nonce( 'et_rest_get_layout_content' ),
+				'et_rest_process_builder_edit_data'   => wp_create_nonce( 'et_rest_process_builder_edit_data' ),
+			),
+			'urls' => array(
+				'adminAjax'   => admin_url( 'admin-ajax.php' ),
+				'diviLibrary' => ET_BUILDER_DIVI_LIBRARY_URL,
+				'home'        => home_url('/'),
+			),
+			/**
+			 * Make DOM selectors list filterable so third party can modified it if needed
+			 *
+			 * @since 4.1.0
+			 *
+			 * @param array list of selectors
+			 */
+			'selectors'     => apply_filters( 'et_gb_selectors', array(
+				'pageLayoutSelect' => '#et_pb_page_layout',
+			) ),
+			/**
+			 * Make Content Widhts settings filterable so third party can modified it if needed
+			 *
+			 * @since 4.1.0
+			 *
+			 * @param array content width configurations
+			 */
+			'contentWidths' => apply_filters( 'et_gb_content_widths', array(
+				// Intentionally set null for default and undefined if no saved content width found
+				// unless `et_gb_content_widths` is being filtered to handle Divi Builder Plugin
+				// situation which might not have deifined content width
+				'default' => null,
+				'current' => get_post_meta( $post_id, '_et_gb_content_width', true),
+				'min'     => 320,  // Min content width (small smartphone width)
+				'max'     => 2880, // Max content width (15" laptop * 2)
+			) ),
 		) );
+
+		// Set translated strings for the scripts
+		wp_set_script_translations( 'et-builder-gutenberg', 'et_builder', ET_BUILDER_DIR . 'languages' );
 	}
 
 	/**
@@ -226,6 +342,11 @@ class ET_Builder_Block_Editor_Integration {
 		// Maybe change this with et_fb_current_user_can_save or equivalent
 
 		if ( ! $this->_can_edit_post( $post ) || ! et_builder_enabled_for_post_type( $post->post_type )) {
+			return $actions;
+		}
+
+		if ( (int) get_option( 'page_for_posts' ) === $post->ID ) {
+			// Post is assigned as the blog page so it does not have editable content.
 			return $actions;
 		}
 
@@ -457,7 +578,12 @@ class ET_Builder_Block_Editor_Integration {
 	 * @return void
 	 */
 	public function add_meta_boxes( $post_type ) {
-		if ( $this->_is_block_editor_page() && function_exists( 'et_single_settings_meta_box' ) && et_builder_enabled_for_post_type( $post_type ) ) {
+		$is_block_editor_page = $this->_is_block_editor_page();
+		$is_metabox_exist     = function_exists( 'et_single_settings_meta_box' );
+		$is_builder_enabled   = et_builder_enabled_for_post_type( $post_type );
+		$is_metabox_allowed   = et_pb_is_allowed( 'page_options' );
+
+		if ( $is_block_editor_page && $is_metabox_exist && $is_builder_enabled && $is_metabox_allowed ) {
 			// Change our metabox id so that no custom style is applied.
 			remove_meta_box( 'et_settings_meta_box', $post_type, 'side' );
 			add_meta_box(
@@ -529,7 +655,7 @@ class ET_Builder_Block_Editor_Integration {
 		}
 
 		add_filter( 'et_fb_load_raw_post_content', array( $this, 'et_fb_load_raw_post_content' ) );
-		add_filter( 'init', array( $this, 'ensure_post_type_supports' ), 100 );
+		add_filter( 'init', array( $this, 'ensure_post_type_supports' ), 999999 );
 
 		// This is one of the most idiot things I had to do ever and its due to
 		// a 10 month old-yet not fixed WP bug: https://core.trac.wordpress.org/ticket/42069
@@ -562,8 +688,12 @@ class ET_Builder_Block_Editor_Integration {
 			'single'        => true,
 			'type'          => 'string',
 		) );
-		// Looks like this isn't needed for now
-		//add_filter( 'gutenberg_can_edit_post_type', array( $this, 'gutenberg_can_edit_post_type' ), 10, 2 );
+		register_meta( 'post', '_et_gb_content_width', array(
+			'auth_callback' => $auth,
+			'show_in_rest'  => true,
+			'single'        => true,
+			'type'          => 'string',
+		) );
 	}
 }
 

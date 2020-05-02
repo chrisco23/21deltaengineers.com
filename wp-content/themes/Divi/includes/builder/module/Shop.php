@@ -35,6 +35,7 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
 						'main' => "{$this->main_css_element} .woocommerce ul.products li.product h3, {$this->main_css_element} .woocommerce ul.products li.product h1, {$this->main_css_element} .woocommerce ul.products li.product h2, {$this->main_css_element} .woocommerce ul.products li.product h4, {$this->main_css_element} .woocommerce ul.products li.product h5, {$this->main_css_element} .woocommerce ul.products li.product h6",
+						'hover' => "{$this->main_css_element} .woocommerce ul.products li.product h3:hover, {$this->main_css_element} .woocommerce ul.products li.product h1:hover, {$this->main_css_element} .woocommerce ul.products li.product h2:hover, {$this->main_css_element} .woocommerce ul.products li.product h4:hover, {$this->main_css_element} .woocommerce ul.products li.product h5:hover, {$this->main_css_element} .woocommerce ul.products li.product h6:hover, {$this->main_css_element} .woocommerce ul.products li.product h1.hover, {$this->main_css_element} .woocommerce ul.products li.product h2.hover, {$this->main_css_element} .woocommerce ul.products li.product h3.hover, {$this->main_css_element} .woocommerce ul.products li.product h4.hover, {$this->main_css_element} .woocommerce ul.products li.product h5.hover, {$this->main_css_element} .woocommerce ul.products li.product h6.hover",
 						'important' => 'plugin_only',
 					),
 				),
@@ -42,6 +43,7 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 					'label'    => esc_html__( 'Price', 'et_builder' ),
 					'css'      => array(
 						'main' => "{$this->main_css_element} .woocommerce ul.products li.product .price, {$this->main_css_element} .woocommerce ul.products li.product .price .amount",
+						'hover' => "{$this->main_css_element} .woocommerce ul.products li.product .price:hover, {$this->main_css_element} .woocommerce ul.products li.product .price:hover .amount, {$this->main_css_element} .woocommerce ul.products li.product .price.hover, {$this->main_css_element} .woocommerce ul.products li.product .price.hover .amount",
 					),
 					'line_height' => array(
 						'range_settings' => array(
@@ -122,6 +124,7 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 							'border_radii_hover'  => "{$this->main_css_element} .et_shop_image > img:hover, {$this->main_css_element} .et_shop_image .et_overlay",
 							'border_styles' => "{$this->main_css_element} .et_shop_image > img",
 						),
+						'important' => 'all',
 					),
 					'label_prefix' => esc_html__( 'Image', 'et_builder' ),
 					'tab_slug'     => 'advanced',
@@ -179,6 +182,9 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 				'css' => array(
 					'main' => '%%order_class%% .et_shop_image',
 				),
+			),
+			'scroll_effects'        => array(
+				'grid_support' => 'yes',
 			),
 			'button'                => false,
 		);
@@ -483,16 +489,24 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 		$product_tags       = array();
 		$use_current_loop   = 'on' === $this->prop( 'use_current_loop', 'off' );
 		$use_current_loop   = $use_current_loop && ( is_post_type_archive( 'product' ) || is_search() || et_is_product_taxonomy() );
+		$product_attribute  = '';
+		$product_terms      = array();
 
 		if ( $use_current_loop ) {
 			$this->props['include_categories'] = 'all';
 
 			if ( is_product_category() ) {
 				$this->props['include_categories'] = (string) get_queried_object_id();
-			}
-
-			if ( is_product_tag() ) {
+			} else if ( is_product_tag() ) {
 				$product_tags = array( get_queried_object()->slug );
+			} else if ( is_product_taxonomy() ) {
+				$term = get_queried_object();
+
+				// Product attribute taxonomy slugs start with pa_
+				if ( et_()->starts_with( $term->taxonomy, 'pa_' ) ) {
+					$product_attribute = $term->taxonomy;
+					$product_terms[]   = $term->slug;
+				}
 			}
 		}
 
@@ -545,7 +559,7 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 		}
 
 		$shortcode = sprintf(
-			'[products %1$s limit="%2$s" orderby="%3$s" columns="%4$s" %5$s order="%6$s" %7$s %8$s %9$s]',
+			'[products %1$s limit="%2$s" orderby="%3$s" columns="%4$s" %5$s order="%6$s" %7$s %8$s %9$s %10$s %11$s]',
 			et_core_intentionally_unescaped( $wc_custom_view, 'fixed_string' ),
 			esc_attr( $posts_number ),
 			esc_attr( $orderby ),
@@ -554,7 +568,9 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 			esc_attr( $order ),
 			$pagination ? 'paginate="true"' : '',
 			$ids ? sprintf( 'ids="%s"', esc_attr( implode( ',', $ids ) ) ) : '',
-			$product_tags ? sprintf( 'tag="%s"', esc_attr( implode( ',', $product_tags ) ) ) : ''
+			$product_tags ? sprintf( 'tag="%s"', esc_attr( implode( ',', $product_tags ) ) ) : '',
+			$product_attribute ? sprintf( 'attribute="%s"', esc_attr( $product_attribute ) ) : '',
+			$product_terms ? sprintf( 'terms="%s"', esc_attr( implode( ',', $product_terms ) ) ) : ''
 		);
 
 		do_action( 'et_pb_shop_before_print_shop' );
@@ -703,9 +719,11 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 		if ( '0' === $columns ) {
 			$this->add_classname( 'et_pb_shop_grid' );
 		}
+		
+		$shop_order = self::_get_index( array( self::INDEX_MODULE_ORDER, $render_slug ) );
 
 		$output = sprintf(
-			'<div%2$s class="%3$s" %6$s>
+			'<div%2$s class="%3$s" %6$s data-shortcode_index="%7$s">
 				%5$s
 				%4$s
 				%1$s
@@ -715,7 +733,8 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 			$this->module_classname( $render_slug ),
 			$video_background,
 			$parallax_image_background,
-			et_core_esc_previously( $overlay_attributes )
+			et_core_esc_previously( $overlay_attributes ),
+			esc_attr( $shop_order )
 		);
 
 		return $output;
@@ -760,6 +779,9 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 		// Trick Woo filters into thinking the products shortcode query is the
 		// main page query as some widget filters have is_main_query checks.
 		$wp_the_query = $query;
+
+		// Set a flag to track that the main query is falsified.
+		$wp_the_query->et_pb_shop_query = true;
 
 		if ( function_exists( 'WC' ) ) {
 			add_filter( 'posts_clauses', array( WC()->query, 'price_filter_post_clauses' ), 10, 2 );

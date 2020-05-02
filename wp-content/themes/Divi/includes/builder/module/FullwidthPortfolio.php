@@ -150,7 +150,13 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 					'main' => '%%order_class%% .et_pb_portfolio_image',
 				),
 			),
+			'scroll_effects'        => array(
+				'grid_support' => 'yes',
+			),
 			'button'     => false,
+			'position_fields'   => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->custom_css_fields = array(
@@ -329,7 +335,8 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 
 		$query_args = array(
 			'post_type'   => 'project',
-			'post_status' => 'publish',
+			'post_status' => array( 'publish', 'private' ),
+			'perm'        => 'readable',
 		);
 
 		if ( is_numeric( $args['posts_number'] ) && $args['posts_number'] > 0 ) {
@@ -430,14 +437,20 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 			'posts_number'       => $posts_number,
 			'include_categories' => $include_categories,
 		) );
+		
+		$portfolio_order = self::_get_index( array( self::INDEX_MODULE_ORDER, $render_slug ) );
+		$items_count = 0;
 
 		ob_start();
 		if( $projects->post_count > 0 ) {
 			while ( $projects->have_posts() ) {
 				$projects->the_post();
 				ET_Post_Stack::replace( $post );
+				
+				$item_class = sprintf( 'et_pb_fullwidth_portfolio_item_%1$s_%2$s', $portfolio_order, $items_count );
+				$items_count++;
 				?>
-				<div id="post-<?php the_ID(); ?>" <?php post_class( 'et_pb_portfolio_item et_pb_grid_item ' ); ?>>
+				<div id="post-<?php the_ID(); ?>" <?php post_class( 'et_pb_portfolio_item et_pb_grid_item ' . $item_class ); ?>>
 				<?php
 					$thumb = '';
 
@@ -462,7 +475,7 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 
 							if ( $full_src ) {
 								$image_attrs['srcset'] = $full_src . ' 479w, ' . $thumb_src . ' 480w';
-								$image_attrs['sizes']  = '(max-width:479px) 479w, 100vw';
+								$image_attrs['sizes']  = '(max-width:479px) 479px, 100vw';
 							}
 
 							$this->render_image( $thumb_src, $image_attrs );
@@ -603,7 +616,7 @@ class ET_Builder_Module_Fullwidth_Portfolio extends ET_Builder_Module_Type_PostB
 		);
 
 		if ( $raw_value && in_array( $name, $fields_need_escape, true ) ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'none', $raw_value );
 		}
 
 		return $raw_value;

@@ -70,7 +70,7 @@ class ET_Builder_Module_Bar_Counters extends ET_Builder_Module {
 				),
 				'options' => array(
 					'background_color' => array(
-						'default'          => '#dddddd',
+						'default'          => '',
 					),
 				),
 			),
@@ -95,6 +95,9 @@ class ET_Builder_Module_Bar_Counters extends ET_Builder_Module {
 				'css' => array(
 					'main' => '%%order_class%%',
 				),
+			),
+			'scroll_effects'        => array(
+				'grid_support' => 'yes',
 			),
 			'button'                => false,
 		);
@@ -176,6 +179,7 @@ class ET_Builder_Module_Bar_Counters extends ET_Builder_Module {
 		$allow_player_pause        = $this->props['allow_player_pause'];
 		$bar_bg_color_values       = et_pb_responsive_options()->get_property_values( $this->props, 'bar_bg_color' );
 		$background_video_pause_outside_viewport = $this->props['background_video_pause_outside_viewport'];
+		$use_background_color_gradient           = $this->props['use_background_color_gradient'];
 
 		// Background Color.
 		$background_last_edited        = self::$_->array_get( $this->props, 'background_last_edited', '' );
@@ -211,6 +215,7 @@ class ET_Builder_Module_Bar_Counters extends ET_Builder_Module {
 			'bar_bg_color_phone'             => isset( $bar_bg_color_values['phone'] ) ? $bar_bg_color_values['phone'] : '',
 			'use_percentages'                => $multi_view->get_values( 'use_percentages' ),
 			'background_video_pause_outside_viewport' => $background_video_pause_outside_viewport,
+			'use_background_color_gradient'           => $use_background_color_gradient,
 		);
 	}
 

@@ -128,6 +128,12 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 				),
 			),
 			'button'                => false,
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
+			'z_index'               => array(
+				'default' => '1',
+			),
 		);
 
 		$this->custom_css_fields = array(
@@ -472,6 +478,7 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 			'attrs'   => array(
 				'class' => 'et_pb_toggle_title',
 			),
+			'required' => false,
 		) );
 
 		$multi_view_content = $multi_view->render_attrs( array(
@@ -494,9 +501,7 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 				%6$s
 				%5$s
 				%1$s
-				<div class="et_pb_toggle_content clearfix"%7$s>
-					%3$s
-				</div> <!-- .et_pb_toggle_content -->
+				<div class="et_pb_toggle_content clearfix"%7$s>%3$s</div> <!-- .et_pb_toggle_content -->
 			</div> <!-- .et_pb_toggle -->',
 			$heading,
 			$this->module_classname( $render_slug ),
@@ -514,7 +519,7 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 	 * Filter multi view value.
 	 *
 	 * @since 3.27.1
-	 * 
+	 *
 	 * @see ET_Builder_Module_Helper_MultiViewOptions::filter_value
 	 *
 	 * @param mixed $raw_value Props raw value.
@@ -536,7 +541,7 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 		$mode = isset( $args['mode'] ) ? $args['mode'] : '';
 
 		if ( $raw_value && 'title' === $name ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'none', $raw_value );
 		}
 
 		return $raw_value;

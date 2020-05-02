@@ -90,8 +90,8 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 				'image' => array(
 					'css' => array(
 						'main' => array(
-							'border_radii'  => "{$this->main_css_element} .et_pb_gallery_image img",
-							'border_styles' => "{$this->main_css_element} .et_pb_gallery_image img",
+							'border_radii'  => "{$this->main_css_element} .et_pb_gallery_image",
+							'border_styles' => "{$this->main_css_element} .et_pb_gallery_image",
 						)
 					),
 					'label_prefix'    => esc_html__( 'Image', 'et_builder' ),
@@ -166,6 +166,9 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 				'css' => array(
 					'main'    => '%%order_class%% .et_pb_gallery_image img',
 				),
+			),
+			'scroll_effects'        => array(
+				'grid_support' => 'yes',
 			),
 			'button' => false,
 		);
@@ -452,6 +455,7 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 
 		foreach ( $_attachments as $key => $val ) {
 			$attachments[$key] = $_attachments[$key];
+			$attachments[$key]->image_alt_text  = get_post_meta( $val->ID, '_wp_attachment_image_alt', true);
 			$attachments[$key]->image_src_full  = wp_get_attachment_image_src( $val->ID, 'full' );
 			$attachments[$key]->image_src_thumb = wp_get_attachment_image_src( $val->ID, array( $width, $height ) );
 		}
@@ -582,6 +586,8 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 			);
 		}
 
+		$images_count = 0;
+
 		foreach ( $attachments as $id => $attachment ) {
 			$data_icon = '' !== $hover_icon
 				? sprintf(
@@ -605,12 +611,12 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 				: '';
 
 			$image_attrs = array(
-				'alt' => $attachment->post_title,
+				'alt'          => $attachment->image_alt_text,
 			);
 
 			if ( 'on' !== $fullwidth ) {
 				$image_attrs['srcset'] = $attachment->image_src_full[0] . ' 479w, ' . $attachment->image_src_thumb[0] . ' 480w';
-				$image_attrs['sizes']  = '(max-width:479px) 479w, 100vw';
+				$image_attrs['sizes']  = '(max-width:479px) 479px, 100vw';
 			}
 
 			$image_output = sprintf(
@@ -629,12 +635,19 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 				$data_icon_phone
 			);
 
+			$gallery_order = self::_get_index( array( self::INDEX_MODULE_ORDER, $render_slug ) );
+			$item_class = sprintf( ' et_pb_gallery_item_%1$s_%2$s', $gallery_order, $images_count );
+
 			$output .= sprintf(
-				'<div class="et_pb_gallery_item%2$s%1$s%3$s">',
+				'<div class="et_pb_gallery_item%2$s%1$s%3$s%4$s">',
 				esc_attr( ' ' . implode( ' ', $background_layout_class_names ) ),
 				( 'on' !== $fullwidth ? ' et_pb_grid_item' : '' ),
-				$generate_css_filters_item
+				$generate_css_filters_item,
+				$item_class
 			);
+			
+			$images_count++;
+			
 			$output .= "
 				<div class='et_pb_gallery_image {$orientation}'>
 					$image_output

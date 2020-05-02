@@ -201,6 +201,7 @@ class ET_Builder_Custom_Defaults_Settings {
 	 */
 	public function maybe_convert_module_type( $type, $attrs ) {
 		if ( isset( self::$_module_types_conversion_map[ $type ] ) ) {
+			// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
 			$type = call_user_func_array(
 				array( $this, self::$_module_types_conversion_map[ $type ] ),
 				array( $attrs, $type )

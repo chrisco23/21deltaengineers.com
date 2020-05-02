@@ -54,6 +54,9 @@ class ET_Builder_Module_Fullwidth_Image extends ET_Builder_Module {
 			'text'                  => false,
 			'button'                => false,
 			'link_options'          => false,
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->help_videos = array(
@@ -227,6 +230,29 @@ class ET_Builder_Module_Fullwidth_Image extends ET_Builder_Module {
 		$video_background          = $this->video_background();
 		$parallax_image_background = $this->get_parallax_image_background();
 
+		// Load up Dynamic Content (if needed) to capture Featured Image objects.
+		// In this way we can process `alt` and `title` attributes defined in
+		// the WP Media Library when they haven't been specified by the user in
+		// Module Settings.
+		if ( empty($alt) || empty($title_text) ) {
+			$raw_src   = et_()->array_get( $this->attrs_unprocessed, 'src' );
+			$src_value = et_builder_parse_dynamic_content( $raw_src );
+
+			if ( $src_value->is_dynamic() && $src_value->get_content() === 'post_featured_image' ) {
+				// If there is no user-specified ALT attribute text, check the WP
+				// Media Library entry for text that may have been added there.
+				if ( empty($alt) ) {
+					$alt = et_builder_resolve_dynamic_content( 'post_featured_image_alt_text', array(), get_the_ID(), 'display' );
+				}
+
+				// If there is no user-specified TITLE attribute text, check the WP
+				// Media Library entry for text that may have been added there.
+				if ( empty($title_text) ) {
+					$title_text = et_builder_resolve_dynamic_content( 'post_featured_image_title_text', array(), get_the_ID(), 'display' );
+				}
+			}
+		}
+
 		// overlay can be applied only if image has link or if lightbox enabled
 		$is_overlay_applied = 'on' === $use_overlay && ( 'on' === $show_in_lightbox || ( 'off' === $show_in_lightbox && '' !== $url ) ) ? 'on' : 'off';
 
@@ -269,8 +295,8 @@ class ET_Builder_Module_Fullwidth_Image extends ET_Builder_Module {
 			'tag'   => 'img',
 			'attrs' => array(
 				'src'   => '{{src}}',
-				'alt'   => '{{alt}}',
-				'title' => '{{title_text}}',
+				'alt'   => $alt,
+				'title' => $title_text,
 			),
 			'required' => 'src',
 		) );
@@ -286,7 +312,7 @@ class ET_Builder_Module_Fullwidth_Image extends ET_Builder_Module {
 			$output = sprintf( '<a href="%1$s" class="et_pb_lightbox_image" title="%3$s">%2$s</a>',
 				esc_attr( $src ),
 				$output,
-				esc_attr( $alt )
+				esc_attr( $title_text )
 			);
 		} else if ( '' !== $url ) {
 			$output = sprintf( '<a href="%1$s"%3$s>%2$s</a>',

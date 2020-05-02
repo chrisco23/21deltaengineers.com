@@ -82,6 +82,11 @@ function et_core_clear_wp_cache( $post_id = '' ) {
 			}
 		}
 
+		// Hummingbird
+		if ( has_action( 'wphb_clear_page_cache' ) ) {
+			'' !== $post_id ? do_action( 'wphb_clear_page_cache', $post_id ) : do_action( 'wphb_clear_page_cache' );
+		}
+
 		// WordPress Cache Enabler
 		if ( has_action( 'ce_clear_cache' ) ) {
 			'' !== $post_id ? do_action( 'ce_clear_post_cache', $post_id ) : do_action( 'ce_clear_cache' );

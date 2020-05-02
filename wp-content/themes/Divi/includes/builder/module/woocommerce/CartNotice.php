@@ -129,6 +129,11 @@ class ET_Builder_Module_Woocommerce_Cart_Notice extends ET_Builder_Module {
 					'important' => 'all',
 				),
 			),
+			'border'         => array(
+				'css' => array(
+					'important' => true,
+				),
+			),
 		);
 
 		$this->custom_css_fields = array(
@@ -219,7 +224,33 @@ class ET_Builder_Module_Woocommerce_Cart_Notice extends ET_Builder_Module {
 	public static function disable_default_notice() {
 		global $post;
 
+		$remove_default_notices = false;
+		$tb_layouts             = et_theme_builder_get_template_layouts();
+		$tb_layout_types        = et_theme_builder_get_layout_post_types();
+
+		// Check if a TB layout outputs the notices.
+		foreach ( $tb_layout_types as $post_type ) {
+			$id      = et_()->array_get( $tb_layouts, array( $post_type, 'id' ), 0 );
+			$enabled = et_()->array_get( $tb_layouts, array( $post_type, 'enabled' ), 0 );
+
+			if ( ! $id || ! $enabled ) {
+				continue;
+			}
+
+			$content = get_post_field( 'post_content', $id );
+
+			if ( has_shortcode( $content, 'et_pb_wc_cart_notice' ) ) {
+				$remove_default_notices = true;
+				break;
+			}
+		}
+
+		// Check if the product itself outputs the notices.
 		if ( isset( $post->post_content ) && has_shortcode( $post->post_content, 'et_pb_wc_cart_notice' ) ) {
+			$remove_default_notices = true;
+		}
+
+		if ( $remove_default_notices ) {
 			remove_action( 'woocommerce_before_single_product', 'woocommerce_output_all_notices', 10 );
 		}
 	}

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Base.php';
-
 class ET_Builder_Module_Fields_Factory {
 
 	protected static $fields = array();

@@ -238,7 +238,9 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 					'main' => '%%order_class%% .et_pb_testimonial_portrait',
 				),
 			),
-			'button'                => false,
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->custom_css_fields = array(
@@ -627,7 +629,6 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 			'attrs'    => array(
 				'class' => 'et_pb_testimonial_author',
 			),
-			'required' => false,
 		) );
 
 		// Images: Add CSS Filters and Mix Blend Mode rules (if set)
@@ -684,9 +685,15 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 			}
 		}
 
-		$multi_view_content_data_attr = $multi_view->render_attrs( array(
-			'content' => '{{content}}',
-		) );
+		$multi_view_testimonial_content = $multi_view->render_element(
+			array(
+				'tag'     => 'div',
+				'content' => '{{content}}',
+				'attrs'   => array(
+					'class' => 'et_pb_testimonial_content',
+				),
+			)
+		);
 
 		$multi_view_icon_off_data_attr = $multi_view->render_attrs( array(
 			'classes' => array(
@@ -705,14 +712,12 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 				%8$s
 				%7$s
 				<div class="et_pb_testimonial_description">
-					<div class="et_pb_testimonial_description_inner"%12$s>
-					%1$s
+					<div class="et_pb_testimonial_description_inner">%1$s</div> <!-- .et_pb_testimonial_description_inner -->
 					%2$s
 					<p class="et_pb_testimonial_meta">%5$s</p>
-					</div> <!-- .et_pb_testimonial_description_inner -->
 				</div> <!-- .et_pb_testimonial_description -->
 			</div> <!-- .et_pb_testimonial -->',
-			$this->content,
+			$multi_view_testimonial_content,
 			et_core_esc_previously( $author ),
 			$this->module_id(),
 			$this->module_classname( $render_slug ),
@@ -722,8 +727,7 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 			$video_background,
 			$parallax_image_background,
 			et_core_esc_previously( $data_background_layout ), // #10
-			et_core_esc_previously( $multi_view_icon_off_data_attr ),
-			et_core_esc_previously( $multi_view_content_data_attr )
+			et_core_esc_previously( $multi_view_icon_off_data_attr )
 		);
 
 		return $output;
@@ -751,37 +755,41 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 	 * @return mixed
 	 */
 	public function multi_view_filter_value( $raw_value, $args, $multi_view ) {
-		$name               = isset( $args['name'] ) ? $args['name'] : '';
-		$mode               = isset( $args['mode'] ) ? $args['mode'] : '';
+		$context            = et_()->array_get( $args, 'context', '' );
+		$name               = et_()->array_get( $args, 'name', '' );
+		$mode               = et_()->array_get( $args, 'mode', '' );
 		$url                = $this->props['url'];
-		$url_new_window     = $this->props['url_new_window'];
-		$target             = 'on' === $url_new_window ? ' target="_blank"' : '';
+		$link_target        = 'on' === $this->props['url_new_window'] ? 'target="_blank"' : '';
 		$fields_need_escape = array(
 			'author',
 			'job_title',
 			'company_name',
 		);
 
-		if ( ! $raw_value || ! $url ) {
+		if ( ! $raw_value ) {
 			return $raw_value;
 		}
 
-		if ( in_array( $name,  $fields_need_escape, true ) ) {
-			$raw_value = $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
-		}
+		if ( $raw_value && 'content' === $context && in_array( $name, $fields_need_escape, true ) ) {
+			$raw_value = $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'none', $raw_value );
 
-		if ( 'author' === $name && $multi_view->has_value( 'company_name', '__empty', $mode ) ) {
-			$raw_value = sprintf('<a href="%2$s" target="%3$s">%1$s</a>',
-				$raw_value,
-				esc_url( $url ),
-				esc_attr( $target )
-			);
-		} else if ( 'company_name' === $name ) {
-			$raw_value = sprintf('<a href="%2$s" target="%3$s">%1$s</a>',
-				$raw_value,
-				esc_url( $url ),
-				esc_attr( $target )
-			);
+			if ( $url && $raw_value ) {
+				if ( 'author' === $name && ! $this->_esc_attr( $multi_view->get_name_by_mode( 'company_name', $mode ) ) ) {
+					$raw_value = sprintf(
+						'<a href="%2$s" %3$s>%1$s</a>',
+						$raw_value,
+						esc_url( $url ),
+						et_core_intentionally_unescaped( $link_target, 'fixed_string' )
+					);
+				} elseif ( 'company_name' === $name ) {
+					$raw_value = sprintf(
+						'<a href="%2$s" %3$s>%1$s</a>',
+						$raw_value,
+						esc_url( $url ),
+						et_core_intentionally_unescaped( $link_target, 'fixed_string' )
+					);
+				}
+			}
 		}
 
 		return $raw_value;

@@ -1,5 +1,29 @@
 <?php
 /**
+ * Filters an object id for use in template settings validation functions.
+ *
+ * @since 4.2
+ *
+ * @param integer $id
+ * @param string $type
+ * @param string $subtype
+ *
+ * @return integer
+ */
+function et_theme_builder_template_setting_filter_validation_object_id( $id, $type, $subtype ) {
+	/**
+	 * Filters template settings object id for validation use.
+	 *
+	 * @since 4.2
+	 *
+	 * @param integer $id
+	 * @param string $type
+	 * @param string $subtype
+	 */
+	return apply_filters( 'et_theme_builder_template_setting_filter_validation_id', $id, $type, $subtype );
+}
+
+/**
  * Validate homepage.
  *
  * @since 4.0
@@ -28,8 +52,8 @@ function et_theme_builder_template_setting_validate_homepage( $type, $subtype, $
  * @return bool
  */
 function et_theme_builder_template_setting_validate_singular_post_type_all( $type, $subtype, $id, $setting ) {
-	// Cover the homepage as well.
 	if ( ET_Theme_Builder_Request::TYPE_FRONT_PAGE === $type && 'page' === $setting[2] && $id === (int) get_option( 'page_on_front' ) ) {
+		// Cover the homepage as well.
 		return true;
 	}
 
@@ -65,11 +89,13 @@ function et_theme_builder_template_setting_validate_archive_post_type( $type, $s
  * @return bool
  */
 function et_theme_builder_template_setting_validate_singular_post_type_id( $type, $subtype, $id, $setting ) {
+	$object_id = et_theme_builder_template_setting_filter_validation_object_id( (int) $setting[4], 'post', $setting[2] );
+
 	return (
 		// Cover the special case where the post selected is assigned as the website homepage.
-		( ET_Theme_Builder_Request::TYPE_FRONT_PAGE === $type && $id === (int) $setting[4] )
+		( ET_Theme_Builder_Request::TYPE_FRONT_PAGE === $type && $id === $object_id )
 		||
-		( ET_Theme_Builder_Request::TYPE_SINGULAR === $type && $id === (int) $setting[4] )
+		( ET_Theme_Builder_Request::TYPE_SINGULAR === $type && $id === $object_id )
 	);
 }
 
@@ -90,7 +116,9 @@ function et_theme_builder_template_setting_validate_singular_post_type_children_
 		return false;
 	}
 
-	return in_array( (int) $setting[5], get_post_ancestors( $id ), true );
+	$object_id = et_theme_builder_template_setting_filter_validation_object_id( (int) $setting[5], 'post', $setting[2] );
+
+	return in_array( $object_id, get_post_ancestors( $id ), true );
 }
 
 /**
@@ -110,7 +138,10 @@ function et_theme_builder_template_setting_validate_singular_taxonomy_term_id( $
 		return false;
 	}
 
-	return has_term( (int) $setting[5], $setting[2], $id );
+	$taxonomy  = $setting[2];
+	$object_id = et_theme_builder_template_setting_filter_validation_object_id( (int) $setting[5], 'taxonomy', $taxonomy );
+
+	return has_term( $object_id, $taxonomy, $id );
 }
 
 /**
@@ -165,14 +196,17 @@ function et_theme_builder_template_setting_validate_archive_taxonomy_all( $type,
  * @return bool
  */
 function et_theme_builder_template_setting_validate_archive_taxonomy_term_id( $type, $subtype, $id, $setting ) {
-	if ( ET_Theme_Builder_Request::TYPE_TERM === $type && $subtype === $setting[2] ) {
+	$taxonomy  = $setting[2];
+	$object_id = et_theme_builder_template_setting_filter_validation_object_id( (int) $setting[5], 'post', $taxonomy );
+
+	if ( ET_Theme_Builder_Request::TYPE_TERM === $type && $subtype === $taxonomy ) {
 		// Exact match.
-		if ( $id === (int) $setting[5] ) {
+		if ( $id === $object_id ) {
 			return true;
 		}
 
-		// Specified setting term id ($setting[5]) is an ancestor of the request term id ($id).
-		if ( term_is_ancestor_of( (int) $setting[5], $id, $setting[2] ) ) {
+		// Specified setting term id is an ancestor of the request term id ($id).
+		if ( term_is_ancestor_of( $object_id, $id, $taxonomy ) ) {
 			return true;
 		}
 	}
@@ -210,6 +244,36 @@ function et_theme_builder_template_setting_validate_archive_user_all( $type, $su
  */
 function et_theme_builder_template_setting_validate_archive_user_id( $type, $subtype, $id, $setting ) {
 	return ET_Theme_Builder_Request::TYPE_AUTHOR === $type && $id === (int) $setting[3];
+}
+
+/**
+ * Validate archive:user:role:<role>.
+ *
+ * @since 4.0.10
+ *
+ * @param string $type
+ * @param string $subtype
+ * @param integer $id
+ * @param string[] $setting
+ *
+ * @return bool
+ */
+function et_theme_builder_template_setting_validate_archive_user_role( $type, $subtype, $id, $setting ) {
+	$user = get_userdata( $id );
+
+	if ( ! $user ) {
+		return false;
+	}
+
+	if ( 'administrator' === $setting[3] && is_super_admin( $user->ID ) ) {
+		// Superadmins may:
+		// - have a low-level role assigned in the current site
+		// - not be added to the site at all
+		// in either case they are treated as administrators so we have to handle this edge case.
+		return true;
+	}
+
+	return ET_Theme_Builder_Request::TYPE_AUTHOR === $type && in_array( $setting[3], $user->roles, true );
 }
 
 /**

@@ -1350,7 +1350,7 @@ function et_builder_ab_get_current_tests() {
 	$tests   = array();
 
 	foreach ( $layouts as $layout ) {
-		if ( $layout['override'] ) {
+		if ( is_array( $layout ) && $layout['override'] ) {
 			$posts[] = $layout['id'];
 		}
 	}

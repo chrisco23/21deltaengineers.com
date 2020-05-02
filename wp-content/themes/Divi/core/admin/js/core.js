@@ -2,6 +2,24 @@
 
 	"use strict";
 
+	var top_window = window;
+	var is_iframe  = false;
+
+	if (window.top && window.top.__Cypress__) {
+		if (window.parent === window.top) {
+			top_window = window;
+			is_iframe  = false;
+
+		} else {
+			top_window = window.parent;
+			is_iframe  = true;
+		}
+
+	} else if (window.top) {
+		top_window = window.top;
+		is_iframe  = window.top !== window.self;
+	}
+
 	// Extend etCore since it is declared by localization.
 	$.extend( etCore, {
 
@@ -11,8 +29,8 @@
 		},
 
 		$selector: function(selector) {
-			return window.top ? window.top.jQuery(selector) : jQuery(selector);
-		},		
+			return top_window.jQuery(selector);
+		},
 
 		applyMaxHeight: function() {
 			var $et_core_modal_overlay = this.$selector('.et-core-modal-overlay');
@@ -174,16 +192,21 @@
 
 	} );
 
-	$( window ).on( 'et-core-modal-active', function() {
-		etCore.applyMaxHeight();
-	} );
+	setTimeout(function() {
+		if ($('.wrap.woocommerce').length) {
+			return;
+		}
 
-	$( document ).ready( function() {
-		etCore.init();
+		$(window).on('et-core-modal-active', function() {
+			etCore.applyMaxHeight();
+		});
+
+		$(document).ready(function() {
+			etCore.init();
+		});
+
+		$(window).resize(function() {
+			etCore.applyMaxHeight();
+		});
 	});
-
-	$( window ).resize( function() {
-		etCore.applyMaxHeight();
-	} );
-
 })(jQuery);

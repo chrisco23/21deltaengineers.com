@@ -108,6 +108,3 @@ class ET_Builder_Module_Transition_Options {
 	}
 }
 
-function et_pb_transition_options() {
-	return ET_Builder_Module_Transition_Options::get();
-}

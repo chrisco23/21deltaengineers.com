@@ -123,6 +123,7 @@ class ET_Builder_Module_Text extends ET_Builder_Module {
 						'main'        => "{$this->main_css_element} ul li",
 						'color'       => "{$this->main_css_element}.et_pb_text ul li",
 						'line_height' => "{$this->main_css_element} ul li",
+						'item_indent' => "{$this->main_css_element} ul",
 					),
 					'line_height' => array(
 						'default' => '1em',
@@ -139,6 +140,7 @@ class ET_Builder_Module_Text extends ET_Builder_Module {
 						'main'        => "{$this->main_css_element} ol li",
 						'color'       => "{$this->main_css_element}.et_pb_text ol li",
 						'line_height' => "{$this->main_css_element} ol li",
+						'item_indent' => "{$this->main_css_element} ol",
 					),
 					'line_height' => array(
 						'default' => '1em',
@@ -463,14 +465,25 @@ class ET_Builder_Module_Text extends ET_Builder_Module {
 		return $fields;
 	}
 
-	function convert_embeds( $matches ) {
-		$pieces = explode( 'v=', $matches[1] );
-		return sprintf(
-			'<p><iframe width="1080" height="608" src="%s" allow="%s" allowfullscreen></iframe></p>',
-			sprintf( 'https://www.youtube.com/embed/%s', esc_attr( $pieces[1] ) ),
-			"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-		);
-	}
+    function convert_embeds( $matches ) {
+        $url = $matches[1];
+
+        if ( strpos( $url, '?v=' ) ) {
+            // e.g. https://www.youtube.com/watch?v=Wx6bTxiOmRc
+            $pieces = explode( 'v=', $url );
+            $video_id = $pieces[1];
+        } else {
+            // e.g. https://youtu.be/UABdOJQ3pdo
+            $pieces = explode('/', $url);
+            $video_id = end( $pieces );
+        }
+
+        return sprintf(
+            '<p><iframe width="1080" height="608" src="%s" allow="%s" allowfullscreen></iframe></p>',
+            sprintf( 'https://www.youtube.com/embed/%s', esc_attr( $video_id ) ),
+            "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        );
+    }
 
 	/**
 	 * Transition fields for Text module.

@@ -152,6 +152,9 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 					'main' => '%%order_class%% .et_portfolio_image',
 				),
 			),
+			'scroll_effects'        => array(
+				'grid_support' => 'yes',
+			),
 			'button'                => false,
 		);
 
@@ -370,9 +373,10 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 		}
 
 		$default_query_args = array(
-			'post_type'   => 'project',
-			'post_status' => 'publish',
-			'posts_per_page' => -1,
+			'post_type'      => 'project',
+			'post_status'    => array( 'publish', 'private' ),
+			'perm'           => 'readable',
+			'posts_per_page' => - 1,
 		);
 
 		$query_args = wp_parse_args( $query_args, $default_query_args );
@@ -419,11 +423,14 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 					}
 				}
 
-				// need to disable processnig to make sure get_thumbnail() doesn't generate errors
+				// need to disable processing to make sure get_thumbnail() doesn't generate errors
 				$et_fb_processing_shortcode_object = false;
 
+				// Capture the ALT text defined in WP Media Library
+				$alttext = get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true );
+
 				// Get thumbnail
-				$thumbnail = get_thumbnail( $width, $height, $classtext, $titletext, $titletext, false, 'Blogimage' );
+				$thumbnail = get_thumbnail( $width, $height, $classtext, $alttext, $titletext, false, 'Blogimage' );
 
 				$et_fb_processing_shortcode_object = $global_processing_original_value;
 
@@ -512,6 +519,10 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 		) );
 
 		$categories_included = array();
+		
+		$portfolio_order = self::_get_index( array( self::INDEX_MODULE_ORDER, $render_slug ) );
+		$items_count = 0;
+
 		ob_start();
 		if( $projects->post_count > 0 ) {
 			while ( $projects->have_posts() ) {
@@ -529,10 +540,14 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 
 				$category_classes = implode( ' ', $category_classes );
 
+				$item_class = sprintf( 'et_pb_filterable_portfolio_item_%1$s_%2$s', $portfolio_order, $items_count );
+				$items_count++;
+				
 				$main_post_class = sprintf(
-					'et_pb_portfolio_item%1$s %2$s',
+					'et_pb_portfolio_item%1$s %2$s %3$s',
 					( 'on' !== $fullwidth ? ' et_pb_grid_item' : '' ),
-					$category_classes
+					$category_classes,
+					$item_class
 				);
 
 				?>
@@ -543,14 +558,15 @@ class ET_Builder_Module_Filterable_Portfolio extends ET_Builder_Module_Type_Post
 					$width = 'on' === $fullwidth ?  1080 : 400;
 					$width = (int) apply_filters( 'et_pb_portfolio_image_width', $width );
 
-					$height = 'on' === $fullwidth ?  9999 : 284;
-					$height = (int) apply_filters( 'et_pb_portfolio_image_height', $height );
+					$height    = 'on' === $fullwidth ? 9999 : 284;
+					$height    = (int) apply_filters( 'et_pb_portfolio_image_height', $height );
 					$classtext = 'on' === $fullwidth ? 'et_pb_post_main_image' : '';
 					$titletext = get_the_title();
 					$permalink = get_permalink();
 					$post_meta = get_the_term_list( get_the_ID(), 'project_category', '', ', ' );
-					$thumbnail = get_thumbnail( $width, $height, $classtext, $titletext, $titletext, false, 'Blogimage' );
-					$thumb = $thumbnail["thumb"];
+					$alttext   = get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true );
+					$thumbnail = get_thumbnail( $width, $height, $classtext, $alttext, $titletext, false, 'Blogimage' );
+					$thumb     = $thumbnail["thumb"];
 
 
 					if ( '' !== $thumb ) : ?>

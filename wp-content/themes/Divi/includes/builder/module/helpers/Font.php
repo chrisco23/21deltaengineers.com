@@ -156,11 +156,3 @@ class ET_Builder_Module_Helper_Font {
 		return $main_selector;
 	}
 }
-
-/**
- * @return ET_Builder_Module_Helper_Font
- */
-function et_pb_font_options() {
-	return ET_Builder_Module_Helper_Font::instance();
-}
-

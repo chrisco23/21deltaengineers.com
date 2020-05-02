@@ -26,6 +26,21 @@ if ( ! defined( 'ET_BUILDER_WC_PRODUCT_PAGE_CONTENT_STATUS_META_KEY' ) ) {
 }
 
 /**
+ * Returning <img> string for default image placeholder
+ *
+ * @since 4.0.10
+ *
+ * @return string
+ */
+function et_builder_wc_placeholder_img() {
+	return sprintf(
+		'<img src="%1$s" alt="2$s" />',
+		et_core_esc_attr( 'placeholder', ET_BUILDER_PLACEHOLDER_LANDSCAPE_IMAGE_DATA ),
+		esc_attr__( 'Product image', 'et_builder' )
+	);
+}
+
+/**
  * Gets the Product Content options.
  *
  * This array is used in Divi Page Settings metabox and in Divi Theme Options ⟶ Builder ⟶ Post Type integration.
@@ -522,6 +537,7 @@ function et_builder_wc_render_module_template( $function_name, $args = array(), 
 				woocommerce_show_product_sale_flash();
 			}
 
+			// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
 			call_user_func( $function_name );
 
 			// Reset product's actual featured image id
@@ -539,13 +555,14 @@ function et_builder_wc_render_module_template( $function_name, $args = array(), 
 			echo wc_get_stock_html( $product );
 			break;
 		case 'wc_print_notice':
-			call_user_func( $function_name, wc_add_to_cart_message( $product->get_id(), false, true
-			) );
+			// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
+			call_user_func( $function_name, wc_add_to_cart_message( $product->get_id(), false, true ) );
 			break;
 		case 'wc_print_notices':
 			// Save existing notices to restore them as many times as we need.
 			$et_wc_cached_notices = WC()->session->get( 'wc_notices', array() );
 
+			// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
 			call_user_func( $function_name );
 
 			// Restore notices which were removed after wc_print_notices() executed to render multiple modules on page.
@@ -555,9 +572,11 @@ function et_builder_wc_render_module_template( $function_name, $args = array(), 
 			break;
 		case 'woocommerce_upsell_display':
 			$order = isset( $args['order'] ) ? $args['order'] : '';
+			// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
 			call_user_func( $function_name, '', '', '', $order );
 			break;
 		default:
+			// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
 			call_user_func( $function_name );
 	}
 
@@ -623,51 +642,11 @@ function et_builder_wc_override_template_part( $template, $slug, $name ) {
 }
 
 /**
- * Overrides the default WooCommerce layout.
+ * Disable all default WooCommerce single layout hooks.
  *
- * @see woocommerce/includes/wc-template-functions.php
- *
- * @since 3.29
+ * @since 4.0.10
  */
-function et_builder_wc_override_default_layout() {
-	if ( ! is_singular( 'product' ) ) {
-		return;
-	}
-
-	// global $post won't be available with `after_setup_theme` hook and hence `wp` hook is used.
-	global $post;
-
-	if ( ! et_pb_is_pagebuilder_used( $post->ID ) ) {
-		return;
-	}
-
-	$product_page_layout         = et_builder_wc_get_product_layout( $post->ID );
-	$is_product_content_modified = 'modified' === get_post_meta( $post->ID, ET_BUILDER_WC_PRODUCT_PAGE_CONTENT_STATUS_META_KEY, true );
-	$is_preview_loading          = is_preview();
-
-	// BFB was enabled but page content wasn't saved yet. Load default layout on FE.
-	if ( 'et_build_from_scratch' === $product_page_layout && ! $is_product_content_modified && ! $is_preview_loading ) {
-		return;
-	}
-
-	/*
-	 * The `has_shortcode()` check does not work here. Hence solving the need using `strpos()`.
-	 *
-	 * The WHY behind the check is explained in the following issue.
-	 * @see https://github.com/elegantthemes/Divi/issues/16155
-	 */
-	if ( ! $product_page_layout && ! et_core_is_fb_enabled()
-	     || ( $product_page_layout && 'et_build_from_scratch' !== $product_page_layout )
-	) {
-		return;
-	}
-
-	// Force use WooCommerce's default template if current theme is not Divi or Extra (handling
-	// possible custom template on DBP / Child Theme)
-	if ( ! in_array( wp_get_theme()->get( 'Name' ), array( 'Divi', 'Extra' ) ) ) {
-		add_filter( 'wc_get_template_part', 'et_builder_wc_override_template_part', 10, 3 );
-	}
-
+function et_builder_wc_disable_default_layout() {
 	// To remove a hook, the $function_to_remove and $priority arguments must match
 	// with which the hook was added.
 	remove_action(
@@ -736,6 +715,55 @@ function et_builder_wc_override_default_layout() {
 		'woocommerce_output_related_products',
 		20
 	);
+}
+
+/**
+ * Overrides the default WooCommerce layout.
+ *
+ * @see woocommerce/includes/wc-template-functions.php
+ *
+ * @since 3.29
+ */
+function et_builder_wc_override_default_layout() {
+	if ( ! is_singular( 'product' ) ) {
+		return;
+	}
+
+	// global $post won't be available with `after_setup_theme` hook and hence `wp` hook is used.
+	global $post;
+
+	if ( ! et_pb_is_pagebuilder_used( $post->ID ) ) {
+		return;
+	}
+
+	$product_page_layout         = et_builder_wc_get_product_layout( $post->ID );
+	$is_product_content_modified = 'modified' === get_post_meta( $post->ID, ET_BUILDER_WC_PRODUCT_PAGE_CONTENT_STATUS_META_KEY, true );
+	$is_preview_loading          = is_preview();
+
+	// BFB was enabled but page content wasn't saved yet. Load default layout on FE.
+	if ( 'et_build_from_scratch' === $product_page_layout && ! $is_product_content_modified && ! $is_preview_loading ) {
+		return;
+	}
+
+	/*
+	 * The `has_shortcode()` check does not work here. Hence solving the need using `strpos()`.
+	 *
+	 * The WHY behind the check is explained in the following issue.
+	 * @see https://github.com/elegantthemes/Divi/issues/16155
+	 */
+	if ( ! $product_page_layout && ! et_core_is_fb_enabled()
+	     || ( $product_page_layout && 'et_build_from_scratch' !== $product_page_layout )
+	) {
+		return;
+	}
+
+	// Force use WooCommerce's default template if current theme is not Divi or Extra (handling
+	// possible custom template on DBP / Child Theme)
+	if ( ! in_array( wp_get_theme()->get( 'Name' ), array( 'Divi', 'Extra' ) ) ) {
+		add_filter( 'wc_get_template_part', 'et_builder_wc_override_template_part', 10, 3 );
+	}
+
+	et_builder_wc_disable_default_layout();
 
 	do_action( 'et_builder_wc_product_before_render_layout_registration' );
 
@@ -800,11 +828,12 @@ function et_builder_has_woocommerce_module( $content = '' ) {
 }
 
 /**
- * Check if current global $post uses builder, not `product` CPT, and contains WooCommerce
- * module inside it. This check is needed because WooCommerce by default only adds scripts
- * and style to `product` CPT while WooCommerce Modules can be used at any CPT
+ * Check if current global $post uses builder / layout block, not `product` CPT, and contains
+ * WooCommerce module inside it. This check is needed because WooCommerce by default only adds
+ * scripts and style to `product` CPT while WooCommerce Modules can be used at any CPT
  *
  * @since 3.29
+ * @since 4.1.0 check if layout block is used instead of builder
  *
  * @since bool
  */
@@ -828,7 +857,26 @@ function et_builder_wc_is_non_product_post_type() {
 		}
 	}
 
-	return $post && et_pb_is_pagebuilder_used( $post->ID ) && et_builder_has_woocommerce_module( $post->post_content );
+	// If no post found, bail early
+	if ( ! $post ) {
+		return false;
+	}
+
+	$is_builder_used      = et_pb_is_pagebuilder_used( $post->ID );
+	$is_layout_block_used = has_block( 'divi/layout', $post->post_content );
+
+	// If no builder or layout block used, bail early
+	if ( ! $is_builder_used && ! $is_layout_block_used ) {
+		return false;
+	}
+
+	$has_wc_module = et_builder_has_woocommerce_module( $post->post_content );
+
+	if ( ( $is_builder_used || $is_layout_block_used ) && $has_wc_module ) {
+		return true;
+	}
+
+	return false;
 }
 
 /**
@@ -840,12 +888,28 @@ function et_builder_wc_is_non_product_post_type() {
  *       removed here because there is currently no WooCommerce module equivalent of them
  *
  * @since 3.29
+ *
+ * @since 4.3.3 Loads WC scripts on Shop, Product Category & Product Tags archives.
  */
 function et_builder_wc_load_scripts() {
 	global $post;
 
+	$is_shop             = function_exists( 'is_shop' ) && is_shop();
+
+	// is_product_taxonomy() is not returning TRUE for Category & Tags.
+	// Hence we check Category & Tag archives individually.
+	$is_product_category = function_exists( 'is_product_category' ) && is_product_category();
+	$is_product_tag      = function_exists( 'is_product_tag' ) && is_product_tag();
+
 	// If current page is not non-`product` CPT which using builder, stop early
-	if ( ( ! et_builder_wc_is_non_product_post_type() || ! class_exists( 'WC_Frontend_Scripts' ) ) && function_exists( 'et_fb_enabled' ) && ! et_fb_enabled() ) {
+	if ( ( ! et_builder_wc_is_non_product_post_type()
+			|| ! class_exists( 'WC_Frontend_Scripts' ) )
+		&& function_exists( 'et_fb_enabled' )
+		&& ! et_fb_enabled()
+		&& ! $is_shop
+		&& ! $is_product_category
+		&& ! $is_product_tag
+	) {
 		return;
 	}
 
@@ -1043,6 +1107,33 @@ function et_builder_set_product_content_status( $post_id ) {
 }
 
 /**
+ * Gets Woocommerce Tabs for the given Product ID.
+ *
+ * @since 4.4.2
+ */
+function et_builder_get_woocommerce_tabs() {
+	// Nonce verification.
+	et_core_security_check( 'edit_posts', 'et_builder_get_woocommerce_tabs', 'nonce' );
+
+	$_          = et_();
+	$product_id = $_->array_get( $_POST, 'product', 0 );
+
+	if ( null === $product_id || ! et_is_woocommerce_plugin_active() ) {
+		wp_send_json_error();
+	}
+
+	// Allow Latest Product ID which is a string 'latest'.
+	// `This Product` tabs are defined in et_fb_current_page_params()
+	if ( ! in_array( $product_id, array( 'current', 'latest' ) ) && 0 === absint( $product_id ) ) {
+		wp_send_json_error();
+	}
+
+	$tabs = ET_Builder_Module_Woocommerce_Tabs::get_tabs( array( 'product' => $product_id ) );
+
+	wp_send_json_success( $tabs );
+}
+
+/**
  * Returns alternative hook to make Woo Extra Product Options display fields in FE when TB is
  * enabled.
  *
@@ -1060,6 +1151,68 @@ function et_builder_set_product_content_status( $post_id ) {
  */
 function et_builder_trigger_extra_product_options( $hook ) {
 	return 'woocommerce_before_add_to_cart_form';
+}
+
+/**
+ * Strip Builder shortcodes to avoid nested parsing.
+ *
+ * @see   https://github.com/elegantthemes/Divi/issues/18682
+ *
+ * @param string $content
+ *
+ * @since 4.3.3
+ *
+ * @return string
+ */
+function et_builder_avoid_nested_shortcode_parsing( $content ) {
+	// Strip shortcodes only on non-builder pages that contain Builder shortcodes.
+	if ( et_pb_is_pagebuilder_used( get_the_ID() ) ) {
+		return $content;
+	}
+
+	// WooCommerce layout loads when builder is not enabled.
+	// So strip builder shortcodes from Post content.
+	if ( function_exists( 'is_product' ) && is_product() ) {
+		return et_strip_shortcodes( $content );
+	}
+
+	// Strip builder shortcodes from non-product pages.
+	// Only Tabs shortcode is checked since that causes nested rendering.
+	if ( has_shortcode( $content, 'et_pb_wc_tabs' ) ) {
+		return et_strip_shortcodes( $content );
+	}
+
+	return $content;
+}
+
+/**
+ * Parses Product description to
+ *
+ * - converts any [embed][/embed] shortcode to its respective HTML.
+ * - strips `et_` shortcodes to avoid nested rendering in Woo Tabs module.
+ * - adds <p> tag to keep the paragraph sanity.
+ * - runs other shortcodes if any using do_shortcode.
+ *
+ * @since 4.4.1
+ *
+ * @param string $description
+ *
+ * @return string
+ */
+function et_builder_wc_parse_description( $description ) {
+	if ( ! is_string( $description ) ) {
+		return $description;
+	}
+
+
+	global $wp_embed;
+
+	$parsed_description = et_strip_shortcodes( $description );
+	$parsed_description = $wp_embed->run_shortcode( $parsed_description );
+	$parsed_description = do_shortcode( $parsed_description );
+	$parsed_description = wpautop( $parsed_description );
+
+	return $parsed_description;
 }
 
 /**
@@ -1129,10 +1282,23 @@ function et_builder_wc_init() {
 	add_action( 'et_update_post', 'et_builder_set_product_content_status' );
 
 	/*
+	 * Handle get Woocommerce tabs AJAX call initiated by Tabs checkbox in settings modal.
+	 */
+	add_action( 'wp_ajax_et_builder_get_woocommerce_tabs', 'et_builder_get_woocommerce_tabs' );
+
+	/*
 	 * Fix Woo Extra Product Options addon compatibility.
 	 * @see https://github.com/elegantthemes/Divi/issues/17909
 	 */
 	add_filter( 'thwepof_hook_name_before_single_product', 'et_builder_trigger_extra_product_options' );
+
+	/*
+	 * Fix nested parsing on non-builder product pages w/ shortcode content.
+	 * @see https://github.com/elegantthemes/Divi/issues/18682
+	 */
+	add_filter( 'the_content', 'et_builder_avoid_nested_shortcode_parsing' );
+
+	add_filter( 'et_builder_wc_description', 'et_builder_wc_parse_description' );
 }
 
 et_builder_wc_init();

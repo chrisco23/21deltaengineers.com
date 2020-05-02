@@ -193,6 +193,12 @@ class ET_Builder_Module_Slider extends ET_Builder_Module {
 					)
 				)
 			),
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
+			'overflow'              => array(
+				'default' => 'hidden',
+			),
 		);
 
 		$this->custom_css_fields = array(

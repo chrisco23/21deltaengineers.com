@@ -11,8 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Direct access forbidden.' );
 }
 
-require_once 'Overlay.php';
-
 if ( et_is_woocommerce_plugin_active() ) {
 
 	/**
@@ -618,7 +616,8 @@ if ( et_is_woocommerce_plugin_active() ) {
 		}
 
 		/**
-		 * Return all possible product tabs. See woocommerce_default_product_tabs() in woocommerce/includes/wc-template-functions.php
+		 * Return all possible product tabs.
+		 * See woocommerce_default_product_tabs() in woocommerce/includes/wc-template-functions.php
 		 *
 		 * @return array
 		 */
@@ -642,6 +641,25 @@ if ( et_is_woocommerce_plugin_active() ) {
 			);
 
 			return $tabs;
+		}
+
+		public static function get_default_tab_options() {
+			$tabs    = self::get_default_product_tabs();
+			$options = array();
+
+			foreach ( $tabs as $name => $tab ) {
+				if ( ! isset( $tab['title'] ) ) {
+					continue;
+				}
+
+				$options[ $name ] = array(
+					'value' => $name,
+					'label' => 'reviews' === $name ? esc_html__( 'Reviews', 'et_builder' ) :
+						esc_html( $tab['title'] ),
+				);
+			}
+
+			return $options;
 		}
 
 		/**
@@ -827,27 +845,97 @@ if ( et_is_woocommerce_plugin_active() ) {
 					return $chars;
 			}
 		}
-	}
 
-	/**
-	 * Class ET_WC_Product_Variable_TB_Placeholder
-	 *
-	 * Variable product class extension for displaying WooCommerce placeholder on Theme Builder
-	 */
-	class ET_WC_Product_Variable_TB_Placeholder extends WC_Product_Variable {
 		/**
-		 * Add to cart's <select> requires variable product type and get_available_variations() method
-		 * outputting product->children value. Filtering get_available_variations() can't be done so
-		 * extending WC_Product_Variable and set fixed value for get_available_variations() method
+		 * Gets the WooCommerce Tabs defaults.
 		 *
-		 * @since 4.0.1
+		 * Implementation based on
+		 *
+		 * @see   https://github.com/elegantthemes/submodule-builder/pull/6568
+		 *
+		 * @since 4.4.2
 		 *
 		 * @return array
 		 */
-		function get_available_variations() {
-			$variation_1 = new WC_Product_Simple();
+		public static function get_woo_default_tabs() {
+			return array(
+				'filter',
+				'et_builder_get_woo_default_tabs',
+			);
+		}
 
-			return array( $variation_1 );
+		/**
+		 * Gets the WooCommerce Tabs options for the given Product.
+		 *
+		 * @since 4.4.2
+		 *
+		 * @return string
+		 */
+		public static function get_woo_default_tabs_options() {
+			$maybe_product_id = self::get_product_default_value();
+			$product_id       = self::get_product( $maybe_product_id );
+
+			$current_product = wc_get_product( $product_id );
+			if ( ! $current_product ) {
+				return '';
+			}
+
+			global $product, $post;
+			$original_product = $product;
+			$original_post    = $post;
+			$product          = $current_product;
+			$post             = get_post( $product->get_id() );
+
+			$tabs = apply_filters( 'woocommerce_product_tabs', array() );
+			// Reset global $product.
+			$product = $original_product;
+			$post    = $original_post;
+
+			if ( ! empty( $tabs ) ) {
+				return implode( '|', array_keys( $tabs ) );
+			}
+
+			return '';
+		}
+
+		/**
+		 * Sets the Display type to render only Products.
+		 *
+		 * @since 4.1.0
+		 *
+		 * @see     https://github.com/elegantthemes/Divi/issues/17998
+		 *
+		 * @used-by ET_Builder_Module_Woocommerce_Related_Products::render()
+		 * @used-by ET_Builder_Module_Woocommerce_Upsells::render()
+		 *
+		 * @param string $option_name
+		 * @param string $display_type
+		 *
+		 * @return string
+		 */
+		public static function set_display_type_to_render_only_products( $option_name,
+        $display_type = '' ) {
+			$existing_display_type = get_option( $option_name );
+			update_option( $option_name, $display_type );
+
+			return $existing_display_type;
+		}
+
+		/**
+		 * Resets the display type to the existing value.
+		 *
+		 * @since 4.1.0
+		 *
+		 * @see     https://github.com/elegantthemes/Divi/issues/17998
+		 *
+		 * @used-by ET_Builder_Module_Woocommerce_Related_Products::render()
+		 * @used-by ET_Builder_Module_Woocommerce_Upsells::render()
+		 *
+		 * @param $option_name
+		 * @param $display_type
+		 */
+		public static function reset_display_type( $option_name, $display_type ) {
+			update_option( $option_name, $display_type );
 		}
 	}
 
@@ -864,6 +952,14 @@ if ( et_is_woocommerce_plugin_active() ) {
 		array(
 			'ET_Builder_Module_Helper_Woocommerce_Modules',
 			'get_product_default_value',
+		)
+	);
+
+	add_filter(
+		'et_builder_get_woo_default_tabs',
+		array(
+			'ET_Builder_Module_Helper_Woocommerce_Modules',
+			'get_woo_default_tabs_options',
 		)
 	);
 }

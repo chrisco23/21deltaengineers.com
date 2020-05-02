@@ -430,6 +430,20 @@ class ET_Builder_Module_Woocommerce_Upsells extends ET_Builder_Module {
 	public static function get_upsells( $args = array(), $conditional_tags = array(), $current_page = array() ) {
 		self::$static_props = $args;
 
+		// Force set product's class to ET_Theme_Builder_Woocommerce_Product_Variable_Placeholder
+		// in TB so related product can outputs visible content based on pre-filled value in TB
+		if ( 'true' === et_()->array_get( $conditional_tags, 'is_tb', false ) ) {
+			// Set upsells id; adjust it with module's arguments. This is specifically needed if
+			// the module fetched the value via computed callback due to some fields no longer uses
+			// default value
+			ET_Theme_Builder_Woocommerce_Product_Variable_Placeholder::set_tb_upsells_ids( array(
+				'limit' => et_()->array_get( $args, 'posts_number', 4 ),
+			) );
+
+			add_filter( 'woocommerce_product_class', 'et_theme_builder_wc_product_class' );
+		}
+
+
 		add_filter(
 			'woocommerce_upsell_display_args',
 			array(
@@ -587,7 +601,36 @@ class ET_Builder_Module_Woocommerce_Upsells extends ET_Builder_Module {
 
 		$this->add_classname( $this->get_text_orientation_classname() );
 
+		$is_shop                        = function_exists( 'is_shop' ) && is_shop();
+		$is_wc_loop_prop_get_set_exists = function_exists( 'wc_get_loop_prop' ) && function_exists( 'wc_set_loop_prop' );
+		$is_product_category            = function_exists( 'is_product_category' ) && is_product_category();
+
+		if ( $is_shop ) {
+			$display_type = ET_Builder_Module_Helper_Woocommerce_Modules::set_display_type_to_render_only_products( 'woocommerce_shop_page_display' );
+		} else if ( is_product_category() ) {
+			$display_type = ET_Builder_Module_Helper_Woocommerce_Modules::set_display_type_to_render_only_products( 'woocommerce_category_archive_display' );
+		}
+
+		// Required to handle Customizer preview pane.
+		// Refer: https://github.com/elegantthemes/Divi/issues/17998#issuecomment-565955422
+		if ( $is_wc_loop_prop_get_set_exists && is_customize_preview() ) {
+			$is_filtered = wc_get_loop_prop( 'is_filtered' );
+			wc_set_loop_prop( 'is_filtered', true );
+		}
+
 		$output = self::get_upsells( $this->props );
+
+		// Required to handle Customizer preview pane.
+		// Refer: https://github.com/elegantthemes/Divi/issues/17998#issuecomment-565955422
+		if ( $is_wc_loop_prop_get_set_exists && is_customize_preview() && isset( $is_filtered ) ) {
+			wc_set_loop_prop( 'is_filtered', $is_filtered );
+		}
+
+		if ( $is_shop && isset( $display_type ) ) {
+			ET_Builder_Module_Helper_Woocommerce_Modules::reset_display_type( 'woocommerce_shop_page_display', $display_type );
+		} else if ( $is_product_category && isset( $display_type ) ) {
+			ET_Builder_Module_Helper_Woocommerce_Modules::reset_display_type( 'woocommerce_category_archive_display', $display_type );
+		}
 
 		// Render empty string if no output is generated to avoid unwanted vertical space.
 		if ( '' === $output ) {

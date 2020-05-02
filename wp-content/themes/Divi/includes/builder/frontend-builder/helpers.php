@@ -59,7 +59,7 @@ function et_fb_comments_submit_button( $submit_button ) {
 
 /**
  * Generate custom comments number for Comments Module preview in Theme Builder.
- * 
+ *
  * @return string
  */
 function et_builder_set_comments_number() {
@@ -68,7 +68,7 @@ function et_builder_set_comments_number() {
 
 /**
  * Generate Dummy comment for Comments Module preview in Theme Builder.
- * 
+ *
  * @return WP_Comment[]
  */
 function et_builder_add_fake_comments() {
@@ -83,7 +83,7 @@ function et_builder_add_fake_comments() {
 /**
  * Append all default comment fields such as Author, Email, Website to Comment field for Comments Module preview in Theme Builder.
  * @see comment_form() in /wp-includes/comment-template.php
- * 
+ *
  * @return string
  */
 function et_builder_set_comment_fields( $field ) {
@@ -106,7 +106,7 @@ function et_builder_set_comment_fields( $field ) {
 		esc_attr( $commenter['comment_author_email'] ),
 		et_core_intentionally_unescaped( $html_req, 'fixed_string' )
 	);
-	
+
 	$url = sprintf(
 		'<p class="comment-form-url"><label for="url">%1$s</label><input id="url" name="url" type="url" value="%2$s" size="30" maxlength="200" /></p>',
 		esc_html__( 'Website', 'et_builder' ),
@@ -119,7 +119,7 @@ function et_builder_set_comment_fields( $field ) {
 // comments template cannot be generated via AJAX so prepare it beforehand
 function et_fb_get_comments_markup() {
 	global $post;
-	
+
 	$post_type = isset( $post->post_type ) ? $post->post_type : false;
 
 	// Modify the Comments content for the Comment Module preview in TB.
@@ -190,11 +190,25 @@ function et_fb_get_dynamic_backend_helpers() {
 	$layout_scope = '';
 	$layout_built_for = '';
 
-	$post_type    = isset( $post->post_type ) ? $post->post_type : false;
-	$post_id      = isset( $post->ID ) ? $post->ID : false;
-	$post_status  = isset( $post->post_status ) ? $post->post_status : false;
-	$post_title   = isset( $post->post_title ) ? esc_attr( $post->post_title ) : false;
-	$current_user = wp_get_current_user();
+	// Override $post data if current visual builder is rendering layout block; This is needed
+	// because block editor might be used in CPT that has no frontend such as reusable block's
+	// `wp_block` CPT so layout block preview needs to be rendered using latest / other post
+	// frontend. To correctly render and update the layout, adjust post ID and other data accordingly
+	$is_layout_block_preview = ET_GB_Block_Layout::is_layout_block_preview();
+
+	if ( $is_layout_block_preview && isset( $_GET['et_post_id' ] ) ) {
+		$et_post_id = (int) $_GET['et_post_id'];
+
+		$post = get_post( $et_post_id );
+	}
+
+	$post_type            = isset( $post->post_type ) ? $post->post_type : false;
+	$post_id              = isset( $post->ID ) ? $post->ID : false;
+	$post_status          = isset( $post->post_status ) ? $post->post_status : false;
+	$post_title           = isset( $post->post_title ) ? esc_attr( $post->post_title ) : false;
+	$post_thumbnail_alt   = has_post_thumbnail() ? get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true ) : false;
+	$post_thumbnail_title = has_post_thumbnail() ? get_post( get_post_thumbnail_id() )->post_title : false;
+	$current_user         = wp_get_current_user();
 
 	if ( 'et_pb_layout' === $post_type ) {
 		$layout_type      = et_fb_get_layout_type( $post_id );
@@ -240,6 +254,9 @@ function et_fb_get_dynamic_backend_helpers() {
 		'postTitle'                       => $post_title,
 		'postStatus'                      => $post_status,
 		'postType'                        => $post_type,
+		'postMeta'                        => $post,
+		'postThumbnailAlt'                => $post_thumbnail_alt,
+		'postThumbnailTitle'              => $post_thumbnail_title,
 		'isCustomPostType'                => et_builder_is_post_type_custom( $post_type ) ? 'yes' : 'no',
 		'layoutType'                      => $layout_type,
 		'layoutScope'                     => $layout_scope,
@@ -267,7 +284,7 @@ function et_fb_get_dynamic_backend_helpers() {
 		'pageSettingsValues'              => ET_Builder_Settings::get_values(),
 		'abTestingSubjects'               => false !== ( $all_subjects_raw = get_post_meta( $post_id, '_et_pb_ab_subjects', true ) ) ? explode( ',', $all_subjects_raw ) : array(),
 		'productTourText'                 => et_fb_get_product_tour_text( $post_id ),
-		'show_page_creation'              => get_post_meta( $post_id, '_et_pb_show_page_creation', true ),
+		'show_page_creation'              => $is_layout_block_preview ? '' : get_post_meta( $post_id, '_et_pb_show_page_creation', true ),
 		'mediaButtons'                    => et_builder_get_media_buttons(),
 		'shortcode_tags'                  => et_fb_shortcode_tags(),
 		'customizer'                      => array(
@@ -367,6 +384,7 @@ function et_fb_get_dynamic_backend_helpers() {
 		),
 		'customDefaults'                  => ET_Builder_Element::get_custom_defaults(),
 		'module_cache_filename_id'        => ET_Builder_Element::get_cache_filename_id( $post_type ),
+		'registeredPostTypeOptions'       => et_get_registered_post_type_options(),
 	);
 
 	$helpers['css'] = array(
@@ -390,13 +408,17 @@ function et_fb_get_dynamic_backend_helpers() {
 // This function is used to add static helpers whose content changes rarely
 // eg: google fonts, module defaults and so on.
 function et_fb_get_static_backend_helpers($post_type) {
-
-	$use_google_fonts = et_core_use_google_fonts();
-	$websafe_fonts = et_builder_get_websafe_fonts();
-	$default_fonts_set = array_merge( array( 'Default' => array() ), $websafe_fonts );
-	$google_fonts = $use_google_fonts ? array_merge( $default_fonts_set, et_builder_get_google_fonts() ) : $default_fonts_set;
 	$custom_user_fonts = et_builder_get_custom_fonts();
-	$current_url  = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	$use_google_fonts  = et_core_use_google_fonts();
+	$websafe_fonts     = et_builder_get_websafe_fonts();
+	$google_fonts      = $websafe_fonts;
+
+	if ( $use_google_fonts ) {
+		$google_fonts = array_merge( $websafe_fonts, et_builder_get_google_fonts() ) ;
+		ksort( $google_fonts );
+	}
+
+	$google_fonts = array_merge( array( 'Default' => array() ), $google_fonts );
 
 	/**
 	 * Filters modules list.
@@ -450,6 +472,22 @@ function et_fb_get_static_backend_helpers($post_type) {
 		'autosaveInterval'             => et_builder_autosave_interval(),
 		'shortcodeObject'              => array(),
 		'autosaveShortcodeObject'      => array(),
+		'tinymcePlugins'               => apply_filters( 'et_fb_tinymce_plugins', array(
+			'autolink',
+			'link',
+			'image',
+			'lists',
+			'print',
+			'preview',
+			'autoresize',
+			'textcolor',
+			'table',
+			'paste',
+			'fullscreen',
+			'charmap',
+			'emoticons',
+			'wpview',
+		) ),
 		'tinymceSkinUrl'               => ET_FB_ASSETS_URI . '/vendors/tinymce-skin',
 		'tinymceCSSFiles'              => esc_url( includes_url( 'js/tinymce' ) . '/skins/wordpress/wp-content.css' ),
 		'images_uri'                   => ET_BUILDER_URI .'/images',
@@ -468,44 +506,7 @@ function et_fb_get_static_backend_helpers($post_type) {
 			'customTabs'                   => array(),
 			'customLayoutsTabs'            => array(),
 		),
-		'pageCreationOptions'          => array(
-			'build_from_scratch'    => array(
-				'className'       => 'accent-blue',
-				'imgSrc'          => 'scratch.png',
-				'imgSrcHover'     => 'scratch.gif',
-				'titleText'       => esc_html__( 'Build From Scratch', 'et_builder' ),
-				'descriptionText' => esc_html__( 'Build your page from the ground up. Don’t worry, you can access our premade layouts at any time.', 'et_builder' ),
-				'buttonText'      => esc_html__( 'Start Building', 'et_builder' ),
-				'permission'      => array( 'add_module' ),
-			),
-			'use_existing_content'  => array(
-				'className'       => 'accent-blue',
-				'imgSrc'          => 'existing.png',
-				'imgSrcHover'     => 'existing.gif',
-				'titleText'       => esc_html__( 'Use Existing Content', 'et_builder' ),
-				'descriptionText' => esc_html__( 'Use the Divi Builder while retaining your existing page content.', 'et_builder' ),
-				'buttonText'      => esc_html__( 'Start Building', 'et_builder' ),
-				'permission'      => array( 'edit_module' ),
-			),
-			'choose_premade_layout' => array(
-				'className'       => 'accent-purple',
-				'imgSrc'          => 'premade.png',
-				'imgSrcHover'     => 'premade.gif',
-				'titleText'       => esc_html__( 'Choose a premade Layout', 'et_builder' ),
-				'descriptionText' => esc_html__( 'Choose from hundreds of world-class premade layouts or start from any of your existing saved layouts.', 'et_builder' ),
-				'buttonText'      => esc_html__( 'Browse Layouts', 'et_builder' ),
-				'permission'      => array( 'load_layout' ),
-			),
-			'clone_existing_page'   => array(
-				'className'       => 'accent-green',
-				'imgSrc'          => 'clone.png',
-				'imgSrcHover'     => 'clone.gif',
-				'titleText'       => esc_html__( 'Clone Existing page', 'et_builder' ),
-				'descriptionText' => esc_html__( 'Jump start your layout design by duplicating another page that you’ve already built.', 'et_builder' ),
-				'buttonText'      => esc_html__( 'Choose Page', 'et_builder' ),
-				'permission'      => array( 'clone_page' ),
-			),
-		),
+		'pageCreationOptions'          => et_builder_page_creation_options(),
 		'findReplace'                  => array(
 			'groups'     => array(
 				'locations' => esc_html__( 'Locations', 'et_builder' ),
@@ -564,6 +565,11 @@ function et_fb_get_static_backend_helpers($post_type) {
 			),
 			array(
 				'slug'       => 'et_pb_column',
+				'name'       => esc_html__( 'Column', 'et_builder' ),
+				'namePlural' => esc_html__( 'Columns', 'et_builder' ),
+			),
+			array(
+				'slug'       => 'et_pb_column_inner',
 				'name'       => esc_html__( 'Column', 'et_builder' ),
 				'namePlural' => esc_html__( 'Columns', 'et_builder' ),
 			),
@@ -1424,6 +1430,7 @@ function et_fb_get_static_backend_helpers($post_type) {
 		'modules'                      => array_merge( $moduolesI10n, $aditionalI10n ),
 		'saveButtonText'               => esc_attr__( 'Save', 'et_builder' ),
 		'saveDraftButtonText'          => esc_attr__( 'Save Draft', 'et_builder' ),
+		'saveLayoutBlockButtonText'    => esc_attr__( 'Save & Exit', 'et_builder' ),
 		'publishButtonText'            => ( is_page() && ! current_user_can( 'publish_pages' ) ) || ( ! is_page() && ! current_user_can( 'publish_posts' ) ) ? esc_attr__( 'Submit', 'et_builder' ) : esc_attr__( 'Publish', 'et_builder' ),
 		'controls'                     => array(
 			'tinymce'                  => array(
@@ -1557,9 +1564,11 @@ function et_fb_get_static_backend_helpers($post_type) {
 			'endABTesting'             => esc_html__( 'End Split Test', 'et_builder' ),
 			'moduleType'               => array(
 				'module'   => esc_html__( 'Module', 'et_builder' ),
+				'column'   => esc_html__( 'Column', 'et_builder' ),
 				'row'      => esc_html__( 'Row', 'et_builder' ),
 				'section'  => esc_html__( 'Section', 'et_builder' ),
 				'modules'  => esc_html__( 'Modules', 'et_builder' ),
+				'columns'  => esc_html__( 'Columns', 'et_builder' ),
 				'rows'     => esc_html__( 'Rows', 'et_builder' ),
 				'sections' => esc_html__( 'Sections', 'et_builder' ),
 			),
@@ -1587,6 +1596,7 @@ function et_fb_get_static_backend_helpers($post_type) {
 			'makeStylesDefault'        => esc_html__( 'Make Styles Default', 'et_builder' ),
 			'modifyDefaultValue'       => esc_html__( 'Modify Default Value', 'et_builder' ),
 			'modifyDefaultValues'      => esc_html__( 'Modify Default Values', 'et_builder' ),
+			'goToLayer'                => esc_html__( 'Go To Layer', 'et_builder' ),
 		),
 		'tooltips' => array(
 			'insertModule'          => esc_html__( 'Insert Module', 'et_builder' ),
@@ -1730,6 +1740,29 @@ function et_fb_get_static_backend_helpers($post_type) {
 			'customDefaults' => array(
 				'title'    => esc_html__( '%s Defaults', 'et_builder' ),
 				'defaults' => esc_html__( 'Defaults', 'et_builder' ),
+			),
+			'layersView' => array(
+				'column'                => array(
+					'settings'  => esc_html__( 'Column Settings', 'et_builder' ),
+					'duplicate' => esc_html__( 'Duplicate Column', 'et_builder' ),
+					'delete'    => esc_html__( 'Delete Column', 'et_builder' ),
+				),
+				'title'                 => esc_html__( 'Layers', 'et_builder' ),
+				'toggleAll'             => esc_html__( 'Open/Close All', 'et_builder' ),
+				'toggleCollapse'        => esc_html__( 'Collapse', 'et_builder' ),
+				'toggleExpand'          => esc_html__( 'Expand', 'et_builder' ),
+				'searchLayers'          => esc_html__( 'Search Layers', 'et_builder' ),
+				'searchFilterItems'     => array(
+					'show_only' => array(
+						'section' => esc_html__( 'Sections', 'et_builder' ),
+						'row'     => esc_html__( 'Rows', 'et_builder' ),
+						'column'  => esc_html__( 'Columns', 'et_builder' ),
+						'module'  => esc_html__( 'Modules', 'et_builder' ),
+						'global'  => esc_html__( 'Global Elements', 'et_builder' ),
+					),
+				),
+				'filterNotice'          => esc_html__( 'No layers exist for this search query. Click here to clear your search filters.', 'et_builder' ),
+				'filterNoticeClickable' => esc_html__( 'Click here', 'et_builder' ),
 			),
 		),
 		'selectControl' => array(
@@ -1939,12 +1972,7 @@ function et_fb_get_static_backend_helpers($post_type) {
 					'on'   => esc_html__( 'On', 'et_builder' ),
 					'off'  => esc_html__( 'Off', 'et_builder' ),
 				),
-				'page_creation_flow_select' => array(
-					'0' => $app_preferences['page_creation_flow']['options']['default'],
-					'1' => $app_preferences['page_creation_flow']['options']['build_from_scratch'],
-					'2' => $app_preferences['page_creation_flow']['options']['choose_premade_layout'],
-					'3' => $app_preferences['page_creation_flow']['options']['clone_existing_page'],
-				),
+				'page_creation_flow_select' => et_builder_page_creation_settings( true ),
 			),
 		),
 		'video' => array(
@@ -1982,6 +2010,7 @@ function et_fb_get_static_backend_helpers($post_type) {
 			'global_module_alert'                      => esc_html__( 'You cannot add global modules into global sections or rows', 'et_builder' ),
 			'cannot_move_module_goal_out_from_subject' => esc_html__( 'Once set, a goal that has been placed inside a split testing subject cannot be moved outside the split testing subject. You can end your split test and start a new one if you would like to make this change.', 'et_builder' ),
 			'stop_dropping_3_col_row'                  => esc_html__( 'This number of columns cannot be used on this row.', 'et_builder' ),
+			'onlyColumnDraggedAway'                    => esc_html__( 'The row must have at least one column.', 'et_builder' ),
 		),
 		'tooltip' => array(
 			'pageSettingsBar' => array(
@@ -2151,6 +2180,7 @@ function et_fb_get_static_backend_helpers($post_type) {
 
 		'dynamicContent' => array(
 			'invalidField' => esc_html__( 'Invalid field or insufficient permissions.', 'et_builder' ),
+			'manualCustomField' => esc_html__( 'Manual Custom Field Name', 'et_builder' ),
 			'tooltips' => array(
 				'enable' => esc_html__( 'Use Dynamic Content', 'et_builder' ),
 				'disable' => esc_html__( 'Remove Dynamic Content', 'et_builder' ),

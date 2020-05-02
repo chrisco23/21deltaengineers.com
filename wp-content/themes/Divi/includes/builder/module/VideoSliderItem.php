@@ -60,6 +60,7 @@ class ET_Builder_Module_Video_Slider_Item extends ET_Builder_Module {
 			'margin_padding' => false,
 			'button'                => false,
 			'link_options'          => false,
+			'scroll_effects'        => false,
 		);
 	}
 

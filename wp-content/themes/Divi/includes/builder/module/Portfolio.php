@@ -144,6 +144,9 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 					'main' => '%%order_class%% .et_portfolio_image',
 				),
 			),
+			'scroll_effects'        => array(
+				'grid_support' => 'yes',
+			),
 			'button'                => false,
 		);
 
@@ -361,10 +364,11 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 		$is_search     = et_fb_conditional_tag( 'is_search', $conditional_tags );
 
 		// Prepare query arguments
-		$query_args    = array(
+		$query_args = array(
 			'posts_per_page' => (int) $args['posts_number'],
 			'post_type'      => 'project',
-			'post_status'    => 'publish',
+			'post_status'    => array( 'publish', 'private' ),
+			'perm'           => 'readable',
 		);
 
 		// Conditionally get paged data
@@ -437,8 +441,11 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 				// need to disable processnig to make sure get_thumbnail() doesn't generate errors
 				$et_fb_processing_shortcode_object = false;
 
+				// Capture the ALT text defined in WP Media Library
+				$alttext = get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true );
+
 				// Get thumbnail
-				$thumbnail = get_thumbnail( $width, $height, $classtext, $titletext, $titletext, false, 'Blogimage' );
+				$thumbnail = get_thumbnail( $width, $height, $classtext, $alttext, $titletext, false, 'Blogimage' );
 
 				$et_fb_processing_shortcode_object = $global_processing_original_value;
 
@@ -531,6 +538,9 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 
 		ob_start();
 
+		$portfolio_order = self::_get_index( array( self::INDEX_MODULE_ORDER, $render_slug ) );
+		$items_count = 0;
+
 		if ( $portfolio->have_posts() ) {
 			while( $portfolio->have_posts() ) {
 				$portfolio->the_post();
@@ -541,6 +551,12 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 
 				array_push( $post->post_class_name, 'et_pb_portfolio_item' );
 
+				$item_class = sprintf( 'et_pb_portfolio_item_%1$s_%2$s', $portfolio_order, $items_count );
+
+				array_push( $post->post_class_name, $item_class );
+
+				$items_count++;
+				
 				if ( 'on' !== $fullwidth ) {
 					array_push( $post->post_class_name, 'et_pb_grid_item' );
 				}
@@ -571,7 +587,7 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 
 								if ( ! empty( $post->featured_image ) ) {
 									$image_attrs['srcset'] = $post->featured_image . ' 479w, ' . $post->post_thumbnail . ' 480w';
-									$image_attrs['sizes']  = '(max-width:479px) 479w, 100vw';
+									$image_attrs['sizes']  = '(max-width:479px) 479px, 100vw';
 								}
 
 								$this->render_image( $post->post_thumbnail, $image_attrs );

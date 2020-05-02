@@ -217,6 +217,9 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 					),
 				),
 			),
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->custom_css_fields = array(
@@ -780,7 +783,7 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 					'src'   => '{{logo_image_url}}',
 					'class' => 'header-logo',
 					'title' => esc_attr( $logo_title ),
-					'alt'   => esc_attr( $logo_title ),
+					'alt'   => esc_attr( $logo_alt_text ),
 				),
 				'required' => 'logo_image_url',
 			) );
@@ -955,7 +958,7 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 		);
 
 		if ( $raw_value && 'content' === $context && in_array( $name, $fields_need_escape_full, true ) ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'full');
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'full', $raw_value );
 		}
 
 		$fields_need_escape_limited = array(

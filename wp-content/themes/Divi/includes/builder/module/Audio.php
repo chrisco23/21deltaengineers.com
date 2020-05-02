@@ -140,6 +140,9 @@ class ET_Builder_Module_Audio extends ET_Builder_Module {
 				),
 			),
 			'button'                => false,
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->custom_css_fields = array(
@@ -484,7 +487,7 @@ class ET_Builder_Module_Audio extends ET_Builder_Module {
 		);
 
 		if ( $raw_value && in_array( $name, $fields_need_escape, true ) ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'none', $raw_value );
 		}
 
 		return $raw_value;

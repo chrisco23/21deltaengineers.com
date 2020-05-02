@@ -349,6 +349,14 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 			$this->add_classname( 'et_pb_with_focus_border' );
 		}
 
+		if ( ! $multi_view->has_value( 'title' ) ) {
+			$this->add_classname( 'et_pb_newsletter_description_no_title' );
+		}
+
+		if ( ! $multi_view->has_value( 'content' ) ) {
+			$this->add_classname( 'et_pb_newsletter_description_no_content' );
+		}
+
 		$content = $multi_view->render_element( array(
 			'tag'      => 'div',
 			'content'  => '{{content}}',
@@ -358,25 +366,46 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 			),
 		) );
 
+		$content_wrapper = $multi_view->render_element( array(
+			'tag'     => 'div',
+			'content' => "{$title}{$content}",
+			'attrs'   => array(
+				'class' => 'et_pb_newsletter_description',
+			),
+			'classes' => array(
+				'et_multi_view_hidden' => array(
+					'title'   => '__empty',
+					'content' => '__empty',
+				),
+			),
+		) );
+
+		$wrapper_multi_view_classes = $multi_view->render_attrs( array(
+			'classes' => array(
+				'et_pb_newsletter_description_no_title' => array(
+					'title' => '__empty',
+				),
+				'et_pb_newsletter_description_no_content' => array(
+					'content' => '__empty',
+				),
+			),
+		) );
+
 		$output = sprintf(
-			'<div%6$s class="%4$s"%5$s%9$s>
-				%8$s
-				%7$s
-				<div class="et_pb_newsletter_description">
-					%1$s
-					%2$s
-				</div>
+			'<div%4$s class="%2$s"%7$s%7$s>
+				%6$s
+				%5$s
 				%3$s
+				%1$s
 			</div>',
-			$title,
-			$content,
 			$form,
 			$this->module_classname( $render_slug ),
-			'', // #5
+			et_core_esc_previously( $content_wrapper ),
 			$this->module_id(),
-			$video_background,
+			$video_background, // #5
 			$parallax_image_background,
-			et_core_esc_previously( $data_background_layout )
+			et_core_esc_previously( $data_background_layout ),
+			$wrapper_multi_view_classes
 		);
 
 		return $output;
@@ -413,10 +442,11 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 				? ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']
 				: '';
 
-			$raw_value .= sprintf( '<br/>%1$s <a href="%2$s">%3$s</a>',
+			$raw_value .= sprintf( '%4$s%1$s <a href="%2$s">%3$s</a>',
 				sprintf( esc_html__( 'Logged in as %1$s', 'et_builder' ), esc_html( $current_user->display_name ) ),
 				esc_url( wp_logout_url( esc_url( $redirect_url ) ) ),
-				esc_html__( 'Log out', 'et_builder' )
+				esc_html__( 'Log out', 'et_builder' ),
+				'' === $raw_value && ! $multi_view->has_value( 'title' ) ? '' : '<br/>'
 			);
 		}
 
@@ -425,7 +455,7 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 		);
 
 		if ( $raw_value && in_array( $name, $fields_need_escape, true ) ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'none', $raw_value );
 		}
 
 		return $raw_value;

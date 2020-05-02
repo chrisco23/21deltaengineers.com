@@ -47,7 +47,7 @@ class ET_Builder_Module_Accordion_Item extends ET_Builder_Module {
 				'closed_toggle' => array(
 					'label'           => esc_html__( 'Closed Toggle', 'et_builder' ),
 					'css'             => array(
-						'main'      => "{$this->main_css_element} .et_pb_toggle_close h5.et_pb_toggle_title, {$this->main_css_element} .et_pb_toggle_close h1.et_pb_toggle_title, {$this->main_css_element} .et_pb_toggle_close h2.et_pb_toggle_title, {$this->main_css_element} .et_pb_toggle_close h3.et_pb_toggle_title, {$this->main_css_element} .et_pb_toggle_close h4.et_pb_toggle_title, {$this->main_css_element} .et_pb_toggle_close h6.et_pb_toggle_title",
+						'main'      => "{$this->main_css_element}.et_pb_toggle_close h5.et_pb_toggle_title, {$this->main_css_element}.et_pb_toggle_close h1.et_pb_toggle_title, {$this->main_css_element}.et_pb_toggle_close h2.et_pb_toggle_title, {$this->main_css_element}.et_pb_toggle_close h3.et_pb_toggle_title, {$this->main_css_element}.et_pb_toggle_close h4.et_pb_toggle_title, {$this->main_css_element}.et_pb_toggle_close h6.et_pb_toggle_title",
 						'important' => 'plugin_only',
 					),
 					'hide_text_color' => true,
@@ -122,6 +122,12 @@ class ET_Builder_Module_Accordion_Item extends ET_Builder_Module {
 				'css' => array(
 					'main' => '%%order_class%% .et_pb_toggle_content'
 				)
+			),
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
+			'z_index'               => array(
+				'default' => '1',
 			),
 		);
 

@@ -459,7 +459,7 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 				),
 				'classes' => array(
 					'et-svg' => array(
-						'image_url' => array( $this, 'is_svg' ),
+						'image_url' => true,
 					),
 				),
 			) );
@@ -565,8 +565,9 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 	 * @return mixed
 	 */
 	public function multi_view_filter_value( $raw_value, $args, $multi_view ) {
-		$name = isset( $args['name'] ) ? $args['name'] : '';
-		$mode = isset( $args['mode'] ) ? $args['mode'] : '';
+		$name    = et_()->array_get( $args, 'name', '' );
+		$mode    = et_()->array_get( $args, 'mode', '' );
+		$context = et_()->array_get( $args, 'context', '' );
 
 		$fields_need_escape = array(
 			'name',
@@ -574,7 +575,11 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 		);
 
 		if ( $raw_value && in_array( $name, $fields_need_escape, true ) ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'none', $raw_value );
+		}
+
+		if ( 'image_url' === $name && 'classes' === $context ) {
+			$raw_value = $raw_value ? $this->is_svg( $raw_value ) : false;
 		}
 
 		return $raw_value;

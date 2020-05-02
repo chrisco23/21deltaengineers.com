@@ -322,12 +322,15 @@ class ET_Builder_Module_Bar_Counters_Item extends ET_Builder_Module {
 		}
 
 		$background_color_style = $bar_bg_color_style = '';
+		$parent_bg_image        = isset( $et_pb_counters_settings['background_image'] ) ? $et_pb_counters_settings['background_image'] : '';
+		$parent_use_bg_gradient = isset( $et_pb_counters_settings['use_background_color_gradient'] ) ? $et_pb_counters_settings['use_background_color_gradient'] : 'off';
+		$parent_enable_bg_image = ! empty( $parent_bg_image ) || 'on' === $parent_use_bg_gradient;
 
-		if ( '' !== $background_color ) {
+		if ( '' !== $background_color && $parent_enable_bg_image ) {
 			if ( empty( $background_image ) && 'on' !== $use_background_color_gradient ) {
 				ET_Builder_Element::set_style( $render_slug, array(
 					'selector'    => '.et_pb_counters %%order_class%% .et_pb_counter_container',
-					'declaration' => 'background-image: none;',
+					'declaration' => 'background-image: none!important;',
 				) );
 			}
 		}
@@ -408,7 +411,7 @@ class ET_Builder_Module_Bar_Counters_Item extends ET_Builder_Module {
 		) );
 
 		$output = sprintf(
-			'<li class="%6$s">
+			'<li class="et_pb_counter %6$s">
 				<span class="et_pb_counter_title"%9$s>%1$s</span>
 				<span class="et_pb_counter_container"%4$s%10$s>
 					%8$s

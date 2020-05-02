@@ -42,7 +42,7 @@ class ET_Builder_Module_Woocommerce_Images extends ET_Builder_Module {
 				'image'   => array(
 					'css'          => array(
 						'main' => array(
-							'border_radii'  => '%%order_class%% div.images ol.flex-control-thumbs.flex-control-nav li, %%order_class%% .flex-viewport, %%order_class%% .woocommerce-product-gallery--without-images .woocommerce-product-gallery__wrapper, %%order_class%% .woocommerce-product-gallery > div:not(.flex-viewport) .woocommerce-product-gallery__image, %%order_class%% .woocommerce-product-gallery > .woocommerce-product-gallery__wrapper .woocommerce-product-gallery__image',
+							'border_radii'  => '%%order_class%% div.images ol.flex-control-thumbs.flex-control-nav li, %%order_class%% .flex-viewport, %%order_class%% .woocommerce-product-gallery--without-images .woocommerce-product-gallery__wrapper, %%order_class%% .woocommerce-product-gallery > div:not(.flex-viewport) .woocommerce-product-gallery__image, %%order_class%% .woocommerce-product-gallery > .woocommerce-product-gallery__wrapper .woocommerce-product-gallery__image, %%order_class%% .woocommerce-product-gallery .woocommerce-product-gallery__wrapper .woocommerce-product-gallery__image',
 							'border_styles' => '%%order_class%% div.images ol.flex-control-thumbs.flex-control-nav li, %%order_class%% .flex-viewport, %%order_class%% .woocommerce-product-gallery--without-images .woocommerce-product-gallery__wrapper, %%order_class%% .woocommerce-product-gallery > div:not(.flex-viewport) .woocommerce-product-gallery__image, %%order_class%% .woocommerce-product-gallery > .woocommerce-product-gallery__wrapper .woocommerce-product-gallery__image',
 						),
 					),

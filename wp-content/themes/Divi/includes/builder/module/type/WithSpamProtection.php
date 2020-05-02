@@ -205,7 +205,7 @@ abstract class ET_Builder_Module_Type_WithSpamProtection extends ET_Builder_Modu
 				'type'             => 'select_with_option_groups',
 				'option_category'  => 'basic_option',
 				'options'          => isset( $accounts[ $provider_slug ] ) ? $accounts[ $provider_slug ] : $no_accounts,
-				'description'      => esc_html__( 'Choose an account or click "Add" to add a new account.' ),
+				'description'      => esc_html__( 'Choose an account or click "Add" to add a new account.', 'et_builder' ),
 				'show_if'          => array(
 					'spam_provider'    => $provider_slug,
 					'use_spam_service' => 'on',
@@ -243,6 +243,7 @@ abstract class ET_Builder_Module_Type_WithSpamProtection extends ET_Builder_Modu
 			'label'           => esc_html__( 'Minimum Score', 'et_builder' ),
 			'type'            => 'range',
 			'option_category' => 'configuration',
+			'validate_unit'    => false,
 			'range_settings'  => array(
 				'min'  => '0',
 				'max'  => '1',
@@ -283,6 +284,10 @@ abstract class ET_Builder_Module_Type_WithSpamProtection extends ET_Builder_Modu
 	 * @return bool
 	 */
 	public function is_spam_submission() {
+		if ( empty( $_POST['token'] ) ) {
+			return true;
+		}
+
 		$provider = $this->prop( 'spam_provider' );
 		$account  = $this->prop( "{$provider}_list" );
 
@@ -331,6 +336,13 @@ abstract class ET_Builder_Module_Type_WithSpamProtection extends ET_Builder_Modu
 	public function render( $attrs, $content = null, $render_slug ) {
 		if ( 'on' === $this->prop( 'use_spam_service' ) ) {
 			$this->add_classname( 'et_pb_recaptcha_enabled' );
+
+			if ( ! get_post_meta( self::get_current_post_id(), '_et_builder_use_spam_service', true ) ) {
+				update_post_meta( self::get_current_post_id(), '_et_builder_use_spam_service', true );
+			}
+
+		} else if ( get_post_meta( self::get_current_post_id(), '_et_builder_use_spam_service', true ) ) {
+			delete_post_meta( self::get_current_post_id(), '_et_builder_use_spam_service' );
 		}
 	}
 }

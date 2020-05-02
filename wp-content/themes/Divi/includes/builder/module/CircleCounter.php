@@ -93,6 +93,9 @@ class ET_Builder_Module_Circle_Counter extends ET_Builder_Module {
 				),
 			),
 			'button'                => false,
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->custom_css_fields = array(
@@ -135,7 +138,7 @@ class ET_Builder_Module_Circle_Counter extends ET_Builder_Module {
 				'type'              => 'text',
 				'option_category'   => 'basic_option',
 				'number_validation' => true,
-				'value_type'        => 'int',
+				'value_type'        => 'float',
 				'value_min'         => 0,
 				'value_max'         => 100,
 				'description'       => et_get_safe_localization( __( "Define a number for the circle counter. (Don't include the percentage sign, use the option below.). <strong>Note: You can use only natural numbers from 0 to 100</strong>", 'et_builder' ) ),
@@ -380,7 +383,7 @@ class ET_Builder_Module_Circle_Counter extends ET_Builder_Module {
 		);
 
 		if ( $raw_value && in_array( $name, $fields_need_escape, true ) ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'none', $raw_value );
 		}
 
 		return $raw_value;

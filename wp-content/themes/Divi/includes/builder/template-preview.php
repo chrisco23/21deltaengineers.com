@@ -78,16 +78,7 @@ $post = get_post( $post_id );
 
 					</div> <!-- .entry-content.post-content.entry -->
 					</div> <!-- #content -->
-					<div class="et_pb_modal_overlay link-disabled">
-						<div class="et_pb_prompt_modal">
-							<h3><?php esc_html_e( 'Link Disabled', 'et_builder' ); ?></h3>
-							<p><?php esc_html_e( 'During preview, link to different page is disabled', 'et_builder' ); ?></p>
-
-							<div class="et_pb_prompt_buttons">
-								<a href="#" class="et_pb_prompt_proceed"><?php esc_html_e( 'Close', 'et_builder' ); ?></a>
-							</div>
-						</div><!-- .et_pb_prompt_modal -->
-					</div><!-- .et_pb_modal_overlay -->
+					<?php echo et_builder_disabled_link_modal(); ?>
 				</div><!-- .container -->
 			</div><!-- #main-content -->
 		</div> <!-- #page-container -->

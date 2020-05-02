@@ -46,8 +46,8 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 				'default' => array(
 					'css' => array(
 						'main' => array(
-							'border_radii'  => "{$this->main_css_element} #commentform textarea, {$this->main_css_element} #commentform input[type='text'], {$this->main_css_element} #commentform input[type='email'], {$this->main_css_element} #commentform input[type='url']",
-							'border_styles' => "{$this->main_css_element} #commentform textarea, {$this->main_css_element} #commentform input[type='text'], {$this->main_css_element} #commentform input[type='email'], {$this->main_css_element} #commentform input[type='url']",
+							'border_radii'  => "{$this->main_css_element}",
+							'border_styles' => "{$this->main_css_element}",
 						),
 						'important' => 'all',
 					),
@@ -190,7 +190,8 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 								'main' => array(
 									'border_radii'  => "{$this->main_css_element} #commentform textarea, {$this->main_css_element} #commentform input[type='text'], {$this->main_css_element} #commentform input[type='email'], {$this->main_css_element} #commentform input[type='url']",
 									'border_styles' => "{$this->main_css_element} #commentform textarea, {$this->main_css_element} #commentform input[type='text'], {$this->main_css_element} #commentform input[type='email'], {$this->main_css_element} #commentform input[type='url']",
-								)
+								),
+								'important' => 'all',
 							),
 							'label_prefix' => esc_html__( 'Fields', 'et_builder' ),
 						),

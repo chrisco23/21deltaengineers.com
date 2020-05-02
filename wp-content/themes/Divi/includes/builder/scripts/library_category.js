@@ -1,26 +1,2 @@
-(function($){
-	$( document ).ready( function() {
-		var $main_table = $( '.wp-list-table' );
-		var $all_links = $main_table.find( '.row-title' );
-		var $opened_wp_menu = $( 'li.wp-menu-open' );
-
-		// hide unsupported options from the Categories list table
-		$main_table.find( '.row-actions .edit, .row-actions .view' ).css( 'display', 'none' );
-
-		// close the opened categories menu which is not related to library categories
-		$opened_wp_menu.find( 'a.wp-menu-open' ).removeClass( 'wp-menu-open wp-has-current-submenu' );
-		$opened_wp_menu.find( '.wp-submenu' ).addClass( 'wp-not-current-submenu' );
-		$opened_wp_menu.removeClass( 'wp-menu-open wp-has-current-submenu' );
-
-		// activate quick edit instead on category tite click because full editor is not supported for the library categories
-		$main_table.on( 'click', '.row-title', function() {
-			$( this ).closest( 'td' ).find( '.row-actions .inline a' ).trigger( 'click' );
-			return false;
-		} );
-
-		// disable links for posts counts because it doesn't work with library items which are not public.
-		$main_table.on( 'click', 'td.column-posts a', function() {
-			return false;
-		} );
-	});
-})(jQuery)
+/*! This minified app bundle contains open source software from several third party developers. Please review CREDITS.md in the root directory or LICENSE.md in the current directory for complete licensing, copyright and patent information. This file and the included code may not be redistributed without the attributions listed in LICENSE.md, including associate copyright notices and licensing information. */!function(e){var n={};function t(r){if(n[r])return n[r].exports;var o=n[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,t),o.l=!0,o.exports}t.m=e,t.c=n,t.d=function(e,n,r){t.o(e,n)||Object.defineProperty(e,n,{enumerable:!0,get:r})},t.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},t.t=function(e,n){if(1&n&&(e=t(e)),8&n)return e;if(4&n&&"object"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(t.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:e}),2&n&&"string"!=typeof e)for(var o in e)t.d(r,o,function(n){return e[n]}.bind(null,o));return r},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,n){return Object.prototype.hasOwnProperty.call(e,n)},t.p="",t(t.s=601)}({44:function(e,n){e.exports=jQuery},601:function(e,n,t){(function(e){e(document).ready(function(){var n=e(".wp-list-table"),t=e("li.wp-menu-open");n.find(".row-actions .edit, .row-actions .view").css("display","none"),t.find("a.wp-menu-open").removeClass("wp-menu-open wp-has-current-submenu"),t.find(".wp-submenu").addClass("wp-not-current-submenu"),t.removeClass("wp-menu-open wp-has-current-submenu"),n.on("click",".row-title",function(){return e(this).closest("td").find(".row-actions .inline a").trigger("click"),!1}),n.on("click","td.column-posts a",function(){return!1})})}).call(this,t(44))}});
+//# sourceMappingURL=library_category.js.map

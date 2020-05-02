@@ -270,8 +270,16 @@
 			} );
 		},
 
-		exportFB: function( exportUrl, postId, content, fileName, importFile, page, timestamp ) {
+		exportFB: function( exportUrl, postId, content, fileName, importFile, page, timestamp, progress = 0, estimation = 1 ) {
 			var $this = this;
+
+			// Trigger event which updates VB-UI's progress bar
+			window.et_fb_export_progress   = progress;
+			window.et_fb_export_estimation = estimation;
+
+			var exportEvent = document.createEvent('Event');
+			exportEvent.initEvent('et_fb_layout_export_in_progress', true, true);
+			window.dispatchEvent(exportEvent);
 
 			page = typeof page === 'undefined' ? 1 : page;
 
@@ -313,7 +321,36 @@
 							return;
 						}
 
-						return $this.exportFB(exportUrl, postId, content, fileName, importFile, (page + 1), response.timestamp);
+						// Update progress bar
+						var updatedProgress = Math.ceil((response.page * 100) / response.total_pages);
+						var updatedEstimation = Math.ceil(((response.total_pages - response.page) * 6) / 60);
+
+						// If progress param isn't empty, updated progress should continue from it
+						// because before exportFB(), shortcode should've been prepared via another
+						// ajax request first
+						if (0 < progress) {
+							const remainingProgress = (100 - progress) / 100;
+							updatedProgress = (updatedProgress * remainingProgress) + progress;
+						}
+
+						// Update global variables
+						window.et_fb_export_progress   = updatedProgress;
+						window.et_fb_export_estimation = updatedEstimation;
+
+						// Dispatch event to trigger UI update
+						window.dispatchEvent(exportEvent);
+
+						return $this.exportFB(
+							exportUrl,
+							postId,
+							content,
+							fileName,
+							importFile,
+							(page + 1),
+							response.timestamp,
+							updatedProgress,
+							updatedEstimation
+						);
 					} else if ( 'undefined' !== typeof response.data && 'undefined' !== typeof response.data.message ) {
 						window.et_fb_export_layout_message = $this.text[response.data.message];
 						window.dispatchEvent( errorEvent );
@@ -336,6 +373,12 @@
 					// Remove confirmation popup before relocation.
 					$( window ).unbind( 'beforeunload' );
 
+					// Update progress bar's global variables
+					window.et_fb_export_progress = 100;
+					window.et_fb_export_estimation = 0;
+
+					// Dispatch event to trigger UI update
+					window.dispatchEvent(exportEvent);
 					window.location.assign( encodeURI( downloadURL ) );
 
 					// perform import if needed

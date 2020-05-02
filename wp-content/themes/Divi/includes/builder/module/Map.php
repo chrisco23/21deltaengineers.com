@@ -69,6 +69,9 @@ class ET_Builder_Module_Map extends ET_Builder_Module {
 			'fonts'                 => false,
 			'text'                  => false,
 			'button'                => false,
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->help_videos = array(

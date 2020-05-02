@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Sizing.php';
-
 /**
  * Helper class that provides necessary functions for managing max width option
  *
@@ -14,6 +12,3 @@ class ET_Builder_Module_Helper_Max_Width extends ET_Builder_Module_Helper_Sizing
 	}
 }
 
-function et_pb_max_width_options( $prefix = '' ) {
-	return new ET_Builder_Module_Helper_Max_Width( $prefix );
-}

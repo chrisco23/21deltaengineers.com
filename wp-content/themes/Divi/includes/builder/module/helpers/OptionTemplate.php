@@ -717,10 +717,4 @@ class ET_Builder_Module_Helper_OptionTemplate {
 	}
 }
 
-/**
- * @return ET_Builder_Module_Helper_OptionTemplate
- */
-function et_pb_option_template() {
-	return ET_Builder_Module_Helper_OptionTemplate::instance();
-}
 

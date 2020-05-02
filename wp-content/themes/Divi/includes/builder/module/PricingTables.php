@@ -275,6 +275,9 @@ class ET_Builder_Module_Pricing_Tables extends ET_Builder_Module {
 					'text_shadow'      => '%%order_class%% .et_pb_pricing_heading, %%order_class%% .et_pb_pricing_content_top, %%order_class%% .et_pb_pricing_content',
 				),
 			),
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->help_videos = array(

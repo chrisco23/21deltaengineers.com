@@ -101,6 +101,9 @@ class ET_Builder_Module_Accordion extends ET_Builder_Module {
 					'important' => array( 'custom_margin' ),
 				),
 			),
+			'scroll_effects'        => array(
+				'grid_support' => 'yes',
+			),
 			'button'                => false,
 		);
 

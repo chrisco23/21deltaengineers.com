@@ -114,7 +114,7 @@ function et_fb_is_user_can_edit() {
 	return true;
 }
 
-define( 'ET_FB_ENABLED', et_fb_enabled() );
+define( 'ET_FB_ENABLED', et_core_is_fb_enabled() );
 
 // Set default value if the constant hasn't been defined
 if ( ! defined( 'ET_BUILDER_LOAD_ON_AJAX' ) ) {

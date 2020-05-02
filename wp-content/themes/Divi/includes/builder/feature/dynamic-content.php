@@ -64,13 +64,14 @@ function et_builder_get_built_in_dynamic_content_fields( $post_id ) {
 		return et_core_cache_get( $cache_key );
 	}
 
-	$post_type              = get_post_type( $post_id );
-	$post_type              = $post_type ? $post_type : 'post';
-	$post_type_object       = get_post_type_object( $post_type );
-	$post_type_label        = $post_type_object->labels->singular_name;
-	$post_taxonomy_types    = et_builder_get_taxonomy_types( $post_type );
-	$tag_taxonomy_post_type = $post_type;
-	$fields                 = array();
+	$post_type                = get_post_type( $post_id );
+	$post_type                = $post_type ? $post_type : 'post';
+	$post_type_object         = get_post_type_object( $post_type );
+	$post_type_label          = $post_type_object->labels->singular_name;
+	$post_taxonomy_types      = et_builder_get_taxonomy_types( $post_type );
+	$tag_taxonomy_post_type   = $post_type;
+	$fields                   = array();
+	$before_after_field_types = array( 'text', 'any' );
 
 	if ( et_theme_builder_is_layout_post_type( $post_type ) ) {
 		$post_type_label        = esc_html__( 'Post', 'et_builder' );
@@ -306,6 +307,13 @@ function et_builder_get_built_in_dynamic_content_fields( $post_id ) {
 		'type'  => 'text',
 	);
 
+	if ( et_builder_tb_enabled() ) {
+		$fields['term_description'] = array(
+			'label' => esc_html__( 'Category Description', 'et_builder' ),
+			'type'  => 'text',
+		);
+	}
+
 	$fields['site_title'] = array(
 		'label' => esc_html__( 'Site Title', 'et_builder' ),
 		'type'  => 'text',
@@ -340,6 +348,11 @@ function et_builder_get_built_in_dynamic_content_fields( $post_id ) {
 	$fields['post_link_url'] = array(
 		// Translators: %1$s: Post type name
 		'label'  => esc_html( sprintf( __( 'Current %1$s Link', 'et_builder' ), $post_type_label ) ),
+		'type'   => 'url',
+	);
+
+	$fields['post_author_url'] = array(
+		'label'  => esc_html__( 'Author Page Link', 'et_builder' ),
 		'type'   => 'url',
 	);
 
@@ -385,6 +398,33 @@ function et_builder_get_built_in_dynamic_content_fields( $post_id ) {
 		'type'   => 'image',
 	);
 
+	if ( et_builder_tb_enabled() ) {
+		$fields['post_meta_key'] = array(
+			'label'  => esc_html__( 'Manual Custom Field Name', 'et_builder' ),
+			'type'   => 'any',
+			'group'  => esc_html__( 'Custom Fields', 'et_builder' ),
+			'fields' => array(
+				'meta_key'    => array(
+					'label' => esc_html__( 'Field Name', 'et_builder' ),
+					'type'  => 'text',
+				),
+			),
+		);
+
+		if ( current_user_can( 'unfiltered_html' ) ) {
+			$fields['post_meta_key']['fields']['enable_html'] = array(
+				'label'   => esc_html__( 'Enable raw HTML', 'et_builder' ),
+				'type'    => 'yes_no_button',
+				'options' => array(
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
+				),
+				'default' => 'off',
+				'show_on' => 'text',
+			);
+		}
+	}
+
 	/*
 	 * Include Product dynamic fields on Product post type.
 	 *
@@ -399,9 +439,9 @@ function et_builder_get_built_in_dynamic_content_fields( $post_id ) {
 	// Fill in boilerplate.
 	foreach ( $fields as $key => $field ) {
 		$fields[ $key ]['custom'] = false;
-		$fields[ $key ]['group']  = 'Default';
+		$fields[ $key ]['group']  = et_()->array_get( $fields, "{$key}.group", 'Default' );
 
-		if ( 'text' === $field['type'] ) {
+		if ( in_array( $field['type'], $before_after_field_types, true ) ) {
 			$settings = isset( $field['fields'] ) ? $field['fields'] : array();
 			$settings = array_merge( array(
 				'before' => array(
@@ -464,6 +504,116 @@ function et_builder_get_taxonomy_types( $post_type ) {
 }
 
 /**
+ * Get a user-friendly custom field label for the given meta key.
+ *
+ * @since 4.4.4
+ *
+ * @param string $key
+ *
+ * @return string
+ */
+function et_builder_get_dynamic_content_custom_field_label( $key ) {
+	$label = str_replace( array( '_', '-' ), ' ', $key );
+	$label = ucwords( $label );
+	$label = trim( $label );
+	return $label;
+}
+
+/**
+ * Get all dynamic content fields in a given string.
+ *
+ * @since 4.4.4
+ *
+ * @param string $content
+ *
+ * @return array
+ */
+function et_builder_get_dynamic_contents( $content ) {
+	$is_matched = preg_match_all( ET_THEME_BUILDER_DYNAMIC_CONTENT_REGEX, $content, $matches );
+
+	if ( ! $is_matched ) {
+		return array();
+	}
+
+	return $matches[0];
+}
+
+/**
+ * Get all meta keys used as dynamic content in the content of a post.
+ *
+ * @param integer $post_id
+ *
+ * @return array
+ */
+function et_builder_get_used_dynamic_content_meta_keys( $post_id ) {
+	$transient      = 'et_builder_dynamic_content_used_meta_keys_' . $post_id;
+	$used_meta_keys = get_transient( $transient );
+
+	if ( false !== $used_meta_keys ) {
+		return $used_meta_keys;
+	}
+
+	// The most used meta keys will change from time to time so we will also retrieve the used meta keys in the layout
+	// content to make sure that the previously selected meta keys always stay in the list even if they are not in the
+	// most used meta keys list anymore.
+	$layout_post      = get_post( $post_id );
+	$used_meta_keys   = array();
+	$dynamic_contents = et_builder_get_dynamic_contents( $layout_post->post_content );
+
+	foreach ( $dynamic_contents as $dynamic_content ) {
+		$dynamic_content = et_builder_parse_dynamic_content( $dynamic_content );
+		$key             = $dynamic_content->get_content();
+
+		if ( et_()->starts_with( $key, 'custom_meta_' ) ) {
+			$meta_key         = substr( $key, strlen( 'custom_meta_' ) );
+			$used_meta_keys[] = $meta_key;
+		}
+	}
+
+	set_transient( $transient, $used_meta_keys, 5 * MINUTE_IN_SECONDS );
+
+	return $used_meta_keys;
+}
+
+/**
+ * Get most used meta keys on public post types.
+ *
+ * @since 4.4.4
+ *
+ * @param integer $post_id
+ *
+ * @return string[]
+ *
+ */
+function et_builder_get_most_used_post_meta_keys() {
+	global $wpdb;
+
+	$most_used_meta_keys = get_transient( 'et_builder_most_used_meta_keys' );
+	if ( false !== $most_used_meta_keys ) {
+		return $most_used_meta_keys;
+	}
+
+	$public_post_types      = array_keys( et_builder_get_public_post_types() );
+	$post_type_placeholders = implode( ',', array_fill( 0, count( $public_post_types ), '%s' ) );
+
+	$sql = $wpdb->prepare(
+		"SELECT DISTINCT pm.meta_key FROM {$wpdb->postmeta} pm
+		INNER JOIN {$wpdb->posts} p ON ( p.ID = pm.post_id AND p.post_type IN ({$post_type_placeholders}) )
+		WHERE pm.meta_key NOT LIKE '\_%'
+		GROUP BY pm.meta_key
+		ORDER BY COUNT(pm.meta_key) DESC
+		LIMIT 50",
+		$public_post_types
+	);
+
+	$most_used_meta_keys = $wpdb->get_col( $sql );
+
+	set_transient( 'et_builder_most_used_meta_keys', $most_used_meta_keys, 5 * MINUTE_IN_SECONDS );
+
+	return $most_used_meta_keys;
+}
+
+/**
  * Get custom dynamic content fields.
  *
  * @since 3.17.2
@@ -492,6 +642,15 @@ function et_builder_get_custom_dynamic_content_fields( $post_id ) {
 	 */
 	$display_hidden_meta_keys = apply_filters( 'et_builder_dynamic_content_display_hidden_meta_keys', array(), $post_id );
 
+	// Custom dynamic fields to be displayed on the TB.
+	if ( et_theme_builder_is_layout_post_type( get_post_type( $post_id ) ) ) {
+		$raw_custom_fields = array_merge(
+			$raw_custom_fields,
+			array_flip( et_builder_get_most_used_post_meta_keys() ),
+			array_flip( et_builder_get_used_dynamic_content_meta_keys( $post_id ) )
+		);
+	}
+
 	foreach ( $raw_custom_fields as $key => $values ) {
 		if ( substr( $key, 0, 1 ) === '_' && ! in_array( $key, $display_hidden_meta_keys ) ) {
 			// Ignore hidden meta keys.
@@ -503,9 +662,7 @@ function et_builder_get_custom_dynamic_content_fields( $post_id ) {
 			continue;
 		}
 
-		$label = str_replace( array( '_', '-' ), ' ', $key );
-		$label = ucwords( $label );
-		$label = trim( $label );
+		$label = et_builder_get_dynamic_content_custom_field_label( $key );
 
 		/**
 		 * Filter the display label for a custom field.
@@ -733,8 +890,25 @@ function et_builder_wrap_dynamic_content( $post_id, $name, $value, $settings ) {
 	$user_id     = get_post_field( 'post_author', $cap_post_id );
 
 	if ( ! user_can( $user_id, 'unfiltered_html' ) ) {
-		$before = esc_html( $before );
-		$after  = esc_html( $after );
+		$whitelist = array_merge(
+			wp_kses_allowed_html( '' ),
+			array(
+				'h1'   => array(),
+				'h2'   => array(),
+				'h3'   => array(),
+				'h4'   => array(),
+				'h5'   => array(),
+				'h6'   => array(),
+				'ol'   => array(),
+				'ul'   => array(),
+				'li'   => array(),
+				'span' => array(),
+				'p'    => array(),
+			)
+		);
+
+		$before = wp_kses( $before, $whitelist );
+		$after  = wp_kses( $after, $whitelist );
 	}
 
 	return $before . $value . $after;
@@ -754,7 +928,7 @@ function et_builder_wrap_dynamic_content( $post_id, $name, $value, $settings ) {
  * @return string
  */
 function et_builder_filter_resolve_default_dynamic_content( $content, $name, $settings, $post_id, $context, $overrides ) {
-	global $shortname;
+	global $shortname, $wp_query;
 
 	$_       = ET_Core_Data_Utils::instance();
 	$def     = 'et_builder_get_dynamic_attribute_field_default';
@@ -778,7 +952,7 @@ function et_builder_filter_resolve_default_dynamic_content( $content, $name, $se
 				$content = et_builder_get_current_title( $post_id );
 			}
 
-			$content = esc_html( $content );
+			$content = et_core_intentionally_unescaped( $content, 'cap_based_sanitized' );
 			break;
 
 		case 'post_excerpt':
@@ -956,6 +1130,10 @@ function et_builder_filter_resolve_default_dynamic_content( $content, $name, $se
 			$content = et_core_intentionally_unescaped( $author->description, 'cap_based_sanitized' );
 			break;
 
+		case 'term_description':
+			$content = et_core_intentionally_unescaped( term_description(), 'cap_based_sanitized' );
+			break;
+
 		case 'site_title':
 			$content = esc_html( get_bloginfo( 'name' ) );
 			break;
@@ -987,6 +1165,14 @@ function et_builder_filter_resolve_default_dynamic_content( $content, $name, $se
 			$content = esc_url( get_permalink( $post_id ) );
 			break;
 
+		case 'post_author_url':
+			if ( ! $author ) {
+				break;
+			}
+
+			$content = esc_url( get_author_posts_url( $author->ID ) );
+			break;
+
 		case 'home_url':
 			$content = esc_url( home_url( '/' ) );
 			break;
@@ -1001,9 +1187,7 @@ function et_builder_filter_resolve_default_dynamic_content( $content, $name, $se
 			break;
 
 		case 'post_featured_image':
-			if ( ! $post ) {
-				break;
-			}
+			$is_blog_query = isset( $wp_query->et_pb_blog_query ) && $wp_query->et_pb_blog_query;
 
 			if ( isset( $overrides[ $name ] ) ) {
 				$id      = (int) $overrides[ $name ];
@@ -1011,8 +1195,72 @@ function et_builder_filter_resolve_default_dynamic_content( $content, $name, $se
 				break;
 			}
 
-			$url = get_the_post_thumbnail_url( $post_id, 'full' );
-			$content = $url ? esc_url( $url ) : '';
+			if ( ! $is_blog_query && ( is_category() || is_tag() || is_tax() ) ) {
+				$term_id       = (int) get_queried_object_id();
+				$attachment_id = (int) get_term_meta( $term_id, 'thumbnail_id', true );
+				$url           = wp_get_attachment_image_url( $attachment_id, 'full' );
+				$content       = $url ? esc_url( $url ) : '';
+				break;
+			}
+
+			if ( $post ) {
+				$url     = get_the_post_thumbnail_url( $post_id, 'full' );
+				$content = $url ? esc_url( $url ) : '';
+				break;
+			}
+
+			break;
+
+		case 'post_featured_image_alt_text':
+			$is_blog_query = isset( $wp_query->et_pb_blog_query ) && $wp_query->et_pb_blog_query;
+
+			if ( isset( $overrides[ $name ] ) ) {
+				$id      = (int) $overrides[ $name ];
+				$img_alt = $id ? get_post_meta( $id, '_wp_attachment_image_alt', true ) : '';
+				$content = $img_alt ? esc_attr( $img_alt ) : '';
+				break;
+			}
+
+			if ( ! $is_blog_query && ( is_category() || is_tag() || is_tax() ) ) {
+				$term_id       = (int) get_queried_object_id();
+				$attachment_id = (int) get_term_meta( $term_id, 'thumbnail_id', true );
+				$img_alt       = $attachment_id ? get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) : '';
+				$content       = $img_alt ? esc_attr( $img_alt ) : '';
+				break;
+			}
+
+			if ( $post ) {
+				$img_alt = get_post_thumbnail_id() ? get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true ) : '';
+				$content = $img_alt ? esc_attr( $img_alt ) : '';
+				break;
+			}
+
+			break;
+
+		case 'post_featured_image_title_text':
+			$is_blog_query = isset( $wp_query->et_pb_blog_query ) && $wp_query->et_pb_blog_query;
+
+			if ( isset( $overrides[ $name ] ) ) {
+				$id      = (int) $overrides[ $name ];
+				$img_title = $id ? get_the_title( $id ) : '';
+				$content = $img_title ? esc_attr( $img_title ) : '';
+				break;
+			}
+
+			if ( ! $is_blog_query && ( is_category() || is_tag() || is_tax() ) ) {
+				$term_id       = (int) get_queried_object_id();
+				$attachment_id = (int) get_term_meta( $term_id, 'thumbnail_id', true );
+				$img_title     = $attachment_id ? get_the_title( $attachment_id ) : '';
+				$content       = $img_title ? esc_attr( $img_title ) : '';
+				break;
+			}
+
+			if ( $post ) {
+				$img_title = get_post_thumbnail_id() ? get_the_title( get_post_thumbnail_id() ) : '';
+				$content = $img_title ? esc_attr( $img_title ) : '';
+				break;
+			}
+
 			break;
 
 		case 'post_author_profile_picture':
@@ -1243,6 +1491,18 @@ function et_builder_filter_resolve_default_dynamic_content( $content, $name, $se
 				) );
 			} else {
 				$content = '';
+			}
+			break;
+
+		case 'post_meta_key':
+			$meta_key = $_->array_get( $settings, 'meta_key' );
+			$content  = '';
+			if ( ! empty( $meta_key ) ) {
+				$content = get_post_meta( $post_id, $meta_key, true );
+				$enable_html = $_->array_get( $settings, 'enable_html' );
+				if ( 'on' !== $enable_html ) {
+					$content = esc_html( $content );
+				}
 			}
 			break;
 	}

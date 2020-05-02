@@ -97,6 +97,9 @@ class ET_Builder_Module_Number_Counter extends ET_Builder_Module {
 				)
 			),
 			'button'                => false,
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		if ( et_builder_has_limitation( 'force_use_global_important' ) ) {
@@ -274,7 +277,7 @@ class ET_Builder_Module_Number_Counter extends ET_Builder_Module {
 		);
 
 		if ( $raw_value && in_array( $name, $fields_need_escape, true ) ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'none', $raw_value );
 		}
 
 		return $raw_value;

@@ -626,7 +626,8 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module_Type_WithSpamProt
 			$et_error_message = sprintf( '<p>%1$s</p>', et_core_esc_previously( $success_message ) );
 		}
 
-		$form = '';
+		$form        = '';
+		$current_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
 		$et_pb_captcha = sprintf( '
 			<div class="et_pb_contact_right">
@@ -661,7 +662,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module_Type_WithSpamProt
 						%4$s
 					</form>
 				</div> <!-- .et_pb_contact -->',
-				esc_url( get_permalink( get_the_ID() ) ),
+				esc_url( $current_url ),
 				(  'on' === $captcha && 'off' === $use_spam_service ? $et_pb_captcha : '' ),
 				esc_html( $multi_view->get_value( 'submit_button_text' ) ),
 				wp_nonce_field( 'et-pb-contact-form-submit', '_wpnonce-et-pb-contact-form-submitted-' . $et_pb_contact_form_num, true, false ),
@@ -744,7 +745,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module_Type_WithSpamProt
 		);
 
 		if ( $raw_value && in_array( $name, $fields_need_escape, true ) ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'none', $raw_value );
 		} else if ( 'submit_button_text' === $name ) {
 			if ( '' === trim( $raw_value ) ) {
 				$raw_value = __( 'Submit', 'et_builder' );

@@ -89,6 +89,7 @@ function et_setup_theme() {
 
 	// Load editor styling
 	add_editor_style( 'css/editor-style.css' );
+	add_editor_style( 'css/editor-blocks.css' );
 
 	// Load unminified scripts based on selected theme options field
 	add_filter( 'et_load_unminified_scripts', 'et_divi_load_unminified_scripts' );
@@ -207,9 +208,9 @@ function et_add_home_link( $args ) {
 add_filter( 'wp_page_menu_args', 'et_add_home_link' );
 
 function et_divi_load_scripts_styles(){
-	global $wp_styles;
+	global $wp_styles, $et_user_fonts_queue;
 
-	$script_suffix = et_load_unminified_scripts() ? '' : '.min';
+	$script_suffix = et_load_unminified_scripts() ? '' : '.unified';
 	$style_suffix  = et_load_unminified_styles() && ! is_child_theme() ? '.dev' : '';
 	$template_dir  = get_template_directory_uri();
 	$theme_version = et_get_theme_version();
@@ -229,7 +230,7 @@ function et_divi_load_scripts_styles(){
 		$dependencies_array[] = 'jquery-effects-core';
 	}
 
-	wp_enqueue_script( 'et-jquery-touch-mobile', $template_dir . '/includes/builder/scripts/jquery.mobile.custom.min.js', array( 'jquery' ), $theme_version, true );
+	wp_enqueue_script( 'et-jquery-touch-mobile', $template_dir . '/includes/builder/scripts/ext/jquery.mobile.custom.min.js', array( 'jquery' ), $theme_version, true );
 
 	if ( et_load_unminified_scripts() ) {
 		$dependencies_array[] = 'et-jquery-touch-mobile';
@@ -289,6 +290,10 @@ function et_divi_load_scripts_styles(){
 			}
 
 			et_builder_enqueue_font( $single_font );
+		}
+
+		if ( function_exists( 'et_builder_enqueue_user_fonts' ) && ! empty( $et_user_fonts_queue ) ) {
+			printf( '<style id="et-divi-userfonts">%1$s</style>', et_core_esc_previously( et_builder_enqueue_user_fonts( $et_user_fonts_queue ) ) );
 		}
 	}
 
@@ -371,7 +376,7 @@ function et_maybe_add_scroll_to_anchor_fix() {
 	if ( 'on' === $add_scroll_to_anchor_fix ) {
 		echo '<script>
 				document.addEventListener( "DOMContentLoaded", function( event ) {
-					window.et_location_hash = window.location.hash;
+					window.et_location_hash = window.location.hash.replace(/[^a-zA-Z0-9-_#]/g, "");
 					if ( "" !== window.et_location_hash ) {
 						// Prevent jump to anchor - Firefox
 						window.scrollTo( 0, 0 );
@@ -3723,6 +3728,7 @@ function et_divi_add_customizer_css() {
 		$post_id     = et_core_page_resource_get_the_ID();
 		$is_preview  = is_preview() || isset( $_GET['et_pb_preview_nonce'] ) || is_customize_preview();
 		$is_singular = et_core_page_resource_is_singular();
+		$is_cpt      = et_builder_is_custom_post_type_archive() || ( et_builder_post_is_of_custom_post_type( $post_id ) && et_pb_is_pagebuilder_used( $post_id ) );
 
 		$disabled_global = 'off' === et_get_option( 'et_pb_static_css_file', 'on' );
 		$disabled_post   = $disabled_global || ( $is_singular && 'off' === get_post_meta( $post_id, '_et_pb_static_css_file', true ) );
@@ -3733,7 +3739,7 @@ function et_divi_add_customizer_css() {
 		$unified_styles = $is_singular && ! $forced_inline && ! $builder_in_footer && et_core_is_builder_used_on_current_request();
 		$resource_owner = $unified_styles ? 'core' : 'divi';
 		$resource_slug  = $unified_styles ? 'unified' : 'customizer';
-		$resource_slug .= $unified_styles && et_builder_post_is_of_custom_post_type( $post_id ) && et_pb_is_pagebuilder_used( $post_id ) ? '-cpt' : '';
+		$resource_slug .= $is_cpt ? '-cpt' : '';
 		$css            = 'et_builder_maybe_wrap_css_selector';
 
 		if ( $is_preview ) {
@@ -6364,7 +6370,7 @@ function et_layout_body_class( $classes ) {
 	$classes[] = esc_attr( "et_pb_gutters{$gutter_width}" );
 
 	// Add the page builder class.
-	if ( et_pb_is_pagebuilder_used( get_the_ID() ) ) {
+	if ( et_pb_is_pagebuilder_used( get_the_ID() ) && ! ET_GB_Block_Layout::is_layout_block_preview() ) {
 		$classes[] = 'et_pb_pagebuilder_layout';
 	}
 
@@ -6478,6 +6484,8 @@ add_action( 'init', 'et_divi_activate_features' );
 require_once( get_template_directory() . '/et-pagebuilder/et-pagebuilder.php' );
 require_once get_template_directory() . '/includes/theme-builder.php';
 
+require_once( get_template_directory() . '/includes/block-editor-integration.php' );
+
 /**
  * Custom body classes for sidebar location in different places
  * @return array
@@ -6556,13 +6564,22 @@ function et_divi_customize_preview_class( $classes ) {
 add_filter( 'body_class', 'et_divi_customize_preview_class' );
 
 function et_modify_shop_page_columns_num( $columns_num ) {
-	$default_sidebar_class = is_rtl() ? 'et_left_sidebar' : 'et_right_sidebar';
-
-	if ( class_exists( 'woocommerce' ) && is_shop() ) {
-		$columns_num = 'et_full_width_page' !== et_get_option( 'divi_shop_page_sidebar', $default_sidebar_class )
-			? 3
-			: 4;
+	if ( ! et_is_woocommerce_plugin_active() ) {
+		return $columns_num;
 	}
+
+	// WooCommerce plugin active check ensures that archive function can be used.
+	$is_archive_page = is_shop() || is_product_category() || is_product_tag();
+
+	if ( ! $is_archive_page ) {
+		return $columns_num;
+	}
+
+	$default_sidebar_class  = is_rtl() ? 'et_left_sidebar' : 'et_right_sidebar';
+	$divi_shop_page_sidebar = et_get_option( 'divi_shop_page_sidebar', $default_sidebar_class );
+
+	// Assignment is intentional for readability.
+	$columns_num = 'et_full_width_page' === $divi_shop_page_sidebar ? 4 : 3;
 
 	return $columns_num;
 }
@@ -6894,7 +6911,7 @@ add_action( 'admin_init', 'et_divi_register_customizer_portability' );
 function et_register_updates_component() {
 	et_core_enable_automatic_updates( get_template_directory_uri(), ET_CORE_VERSION );
 }
-add_action( 'admin_init', 'et_register_updates_component' );
+add_action( 'admin_init', 'et_register_updates_component', 9 );
 
 /**
  * Register theme and modules Customizer portability link.

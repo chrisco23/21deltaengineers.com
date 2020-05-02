@@ -34,12 +34,13 @@ function et_theme_builder_add_admin_page( $parent ) {
 		return;
 	}
 
-	// We register the page with the 'read' capability since we check for the ET cap instead.
+	// We register the page with the 'edit_others_posts' capability since it's the lowest
+	// requirement to use VB and we already checked for the theme_builder ET cap.
 	add_submenu_page(
 		$parent,
 		esc_html__( 'Theme Builder', 'et_builder' ),
 		esc_html__( 'Theme Builder', 'et_builder' ),
-		'read',
+		'edit_others_posts',
 		'et_theme_builder',
 		'et_theme_builder_admin_page'
 	);
@@ -82,10 +83,23 @@ function et_theme_builder_enqueue_scripts() {
 	wp_register_script( 'jquery-ui-datepicker-addon', "{$root}/scripts/ext/jquery-ui-timepicker-addon.js", $dep, $ver, true );
 	wp_register_script( 'react-tiny-mce', "{$root}/frontend-builder/assets/vendors/tinymce.min.js" );
 
+	$asset_ver = ET_BUILDER_VERSION;
+
+	$frame_helpers_id   = 'et-frame-helpers';
+	$frame_helpers_path = ET_BUILDER_DIR . '/frontend-builder/build/frame-helpers.js';
+	$frame_helpers_url  = ET_BUILDER_URI . '/frontend-builder/build/frame-helpers.js';
+
+	if ( ! file_exists( $frame_helpers_path ) ) {
+		// Load "hot" from webpack-dev-server.
+		$site_url          = wp_parse_url( get_site_url() );
+		$frame_helpers_url = "{$site_url['scheme']}://{$site_url['host']}:31495/frame-helpers.js";
+	}
+
+	wp_register_script( $frame_helpers_id, $frame_helpers_url, array(), $asset_ver );
+
 	$asset_id     = 'et-theme-builder';
 	$asset_path   = ET_BUILDER_DIR . '/frontend-builder/build/theme-builder.js';
 	$asset_uri    = ET_BUILDER_URI . '/frontend-builder/build/theme-builder.js';
-	$asset_ver    = ET_BUILDER_VERSION;
 	$dependencies = array(
 		'jquery',
 		'jquery-ui-sortable',
@@ -95,6 +109,7 @@ function et_theme_builder_enqueue_scripts() {
 		'react-tiny-mce',
 		'et-core-admin',
 		'wp-hooks',
+		'et-frame-helpers',
 	);
 
 	if ( ! wp_script_is( 'wp-hooks', 'registered' ) ) {

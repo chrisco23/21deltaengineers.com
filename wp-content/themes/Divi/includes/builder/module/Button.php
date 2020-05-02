@@ -74,6 +74,16 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 			'max_width'             => false,
 			'height'                => false,
 			'link_options'          => false,
+			'position_fields'       => array(
+				'css' => array(
+					'main'=> "{$this->main_css_element}_wrapper",
+				),
+			),
+			'transform'             => array(
+				'css' => array(
+					'main' => "{$this->main_css_element}_wrapper",
+				),
+			),
 		);
 
 		$this->help_videos = array(
@@ -296,7 +306,7 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 		);
 
 		if ( $raw_value && 'content' === $context && in_array( $name, $fields_need_escape, true ) ) {
-			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ) );
+			return $this->_esc_attr( $multi_view->get_name_by_mode( $name, $mode ), 'none', $raw_value );
 		}
 
 		return $raw_value;

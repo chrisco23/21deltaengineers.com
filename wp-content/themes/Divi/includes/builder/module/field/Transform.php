@@ -275,7 +275,7 @@ class ET_Builder_Module_Field_Transform extends ET_Builder_Module_Field_Base {
 		);
 	}
 
-	public function getTransformDeclaration( $transformElements ) {
+	public function getTransformDeclaration( $transformElements, $view = 'desktop' ) {
 		$declaration = array();
 		unset( $transformElements['originX'], $transformElements['originY'] );
 		// Perspective is included on when combining with some animations
@@ -289,7 +289,8 @@ class ET_Builder_Module_Field_Transform extends ET_Builder_Module_Field_Base {
 			}
 		}
 		if ( ! empty( $declaration ) ) {
-			if ( $this->processing_props['transforms_important'] ) {
+
+			if ( $this->processing_props['transforms_important'] || 'hover' === $view ) {
 				array_push( $declaration, '!important' );
 			}
 

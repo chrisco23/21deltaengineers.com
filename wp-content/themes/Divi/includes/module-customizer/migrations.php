@@ -321,11 +321,13 @@ class ET_Module_Customizer_Migrations {
 						}
 						if ( array_key_exists( 'method', self::$_migration_map[ $setting_name ] ) ) {
 							if ( is_array( self::$_migration_map[ $setting_name ]['method'] ) ) {
+								// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
 								$customizer_value = call_user_func_array(
 									array( $this, self::$_migration_map[ $setting_name ]['method'][ $module_name ] ),
 									array( $customizer_value )
 								);
 							} else {
+								// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
 								$customizer_value = call_user_func_array(
 									array( $this, self::$_migration_map[ $setting_name ]['method'] ),
 									array( $customizer_value )

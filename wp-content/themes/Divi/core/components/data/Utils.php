@@ -826,7 +826,7 @@ class ET_Core_Data_Utils {
 	 * @return WP_Filesystem_Base {@see ET_Core_PageResource::wpfs()}
 	 */
 	public function WPFS() {
-		return ET_Core_PageResource::wpfs();
+		return et_core_cache_dir()->wpfs;
 	}
 
 	/**
@@ -920,6 +920,7 @@ class ET_Core_Data_Utils {
 	 * @return integer
 	 */
 	protected function _user_sort_callback( $a, $b ) {
+		// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
 		$result = (int) call_user_func( $this->sort_arguments['comparison'], $a, $b );
 
 		if ( 0 !== $result ) {

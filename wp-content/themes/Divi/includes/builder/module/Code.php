@@ -25,9 +25,6 @@ class ET_Builder_Module_Code extends ET_Builder_Module {
 		);
 
 		$this->advanced_fields = array(
-			'borders'               => array(
-				'default' => false,
-			),
 			'margin_padding' => array(
 				'css' => array(
 					'important' => array( 'custom_margin' ), // needed to overwrite last module margin-bottom styling
@@ -35,9 +32,6 @@ class ET_Builder_Module_Code extends ET_Builder_Module {
 			),
 			'text_shadow'           => array(
 				// Don't add text-shadow fields since they already are via font-options
-				'default' => false,
-			),
-			'box_shadow'            => array(
 				'default' => false,
 			),
 			'fonts'                 => false,

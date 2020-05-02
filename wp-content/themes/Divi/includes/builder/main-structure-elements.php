@@ -136,6 +136,9 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 			'fonts'      => false,
 			'text'       => false,
 			'button'     => false,
+			'position_fields'   => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->help_videos = array(
@@ -406,7 +409,12 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 	 */
 	public function is_transparent_background( $background_color = '' ) {
 		$page_setting_section_background = et_builder_settings_get( 'et_pb_section_background_color', get_the_ID() );
-		return 'rgba(255,255,255,0)' === $background_color || ( et_is_builder_plugin_active() && '' === $background_color && '' === $page_setting_section_background );
+		$is_empty_background_color       = '' === $background_color && '' === $page_setting_section_background;
+		$is_layout_block                 = ET_GB_Block_Layout::is_layout_block() || ET_GB_Block_Layout::is_layout_block_preview();
+
+		return 'rgba(255,255,255,0)' === $background_color
+			|| ( $is_layout_block && $is_empty_background_color )
+			|| ( et_is_builder_plugin_active() && $is_empty_background_color );
 	}
 
 	/**
@@ -557,6 +565,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 	}
 
 	function render( $atts, $content = null, $function_name ) {
+		$multi_view                                   = et_pb_multi_view_options( $this );
 		$background_video_mp4                         = $this->props['background_video_mp4'];
 		$background_video_webm                        = $this->props['background_video_webm'];
 		$inner_shadow                                 = $this->props['inner_shadow'];
@@ -1081,6 +1090,26 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 			}
 		}
 
+		// Position Options
+		if ( $multi_view->has_value( 'positioning', 'absolute' ) ) {
+			$this->add_classname( 'et_pb_section--absolute' );
+		}
+
+		if ( $multi_view->has_value( 'positioning', 'fixed' ) ) {
+			$this->add_classname( 'et_pb_section--fixed' );
+		}
+
+		$muti_view_attributes = $multi_view->render_attrs( array(
+			'classes' => array(
+				'et_pb_section--absolute' => array(
+					'positioning' => 'absolute',
+				),
+				'et_pb_section--fixed' => array(
+					'positioning' => 'fixed',
+				),
+			)
+		) );
+
 		// Remove automatically added classnames
 		$this->remove_classname( 'et_pb_module' );
 
@@ -1089,7 +1118,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 		$module_classes = $this->module_classname( $function_name );
 
 		$output = sprintf(
-			'<div%4$s class="%3$s"%8$s>
+			'<div%4$s class="%3$s"%8$s %11$s>
 				%9$s
 				%7$s
 				%2$s
@@ -1109,7 +1138,8 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 			$parallax_image, // 7
 			$this->get_module_data_attributes(), // 8
 			et_core_esc_previously( $top ), // 9
-			et_core_esc_previously( $bottom ) // 10
+			et_core_esc_previously( $bottom ), // 10,
+			et_core_esc_previously( $muti_view_attributes )
 		);
 
 		if ( 'on' === $specialty ) {
@@ -1249,6 +1279,9 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 			'fonts'                 => false,
 			'text'                  => false,
 			'button'                => false,
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->settings_modal_toggles = array(
@@ -1651,6 +1684,10 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 		// Remove automatically added classnames
 		$this->remove_classname( 'et_pb_module' );
 
+		if ( self::contains( $content, array( 'et_pb_menu', 'et_pb_fullwidth_menu' ) ) ) {
+			$this->add_classname( 'et_pb_row--with-menu' );
+		}
+
 		// Save module classes into variable BEFORE processing the content with `do_shortcode()`
 		// Otherwise order classes messed up with internal rows if exist
 		$module_classes = $this->module_classname( $function_name );
@@ -1712,6 +1749,9 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 				),
 			),
 			'max_width'             => array(
+				'css' => array(
+					'main' => '%%order_class%%.et_pb_row_inner',
+				),
 				'options' => array(
 					'module_alignment' => array(
 						'label' => esc_html__( 'Row Alignment', 'et_builder' ),
@@ -1722,6 +1762,9 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 			'fonts'                 => false,
 			'text'                  => false,
 			'button'                => false,
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->settings_modal_toggles = array(
@@ -1929,7 +1972,7 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 			'custom_css_after'                           => array( 'tab_slug' => 'custom_css' ),
 		) );
 
- 		return array_merge( $fields, $column_fields );
+		return array_merge( $fields, $column_fields );
 	}
 
 	public function get_transition_fields_css_props() {
@@ -2089,6 +2132,10 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 		// Remove automatically added classnames
 		$this->remove_classname( 'et_pb_module' );
 
+		if ( self::contains( $content, array( 'et_pb_menu', 'et_pb_fullwidth_menu' ) ) ) {
+			$this->add_classname( 'et_pb_row--with-menu' );
+		}
+
 		// Save module classes into variable BEFORE processing the content with `do_shortcode()`
 		// Otherwise order classes messed up with internal rows if exist
 		$module_classes = $this->module_classname( $function_name );
@@ -2138,6 +2185,13 @@ class ET_Builder_Column extends ET_Builder_Structure_Element {
 			'text'           => false,
 			'margin_padding' => array(
 				'use_margin' => false,
+			),
+			'z_index'        => array(
+				'default' => '2',
+				'important' => true,
+			),
+			'position_fields'=> array(
+				'default' => 'relative',
 			),
 		);
 
@@ -2610,6 +2664,10 @@ class ET_Builder_Column extends ET_Builder_Structure_Element {
 
 		if ( $is_last_column ) {
 			$this->add_classname( 'et-last-child' );
+		}
+
+		if ( self::contains( $content, array( 'et_pb_menu', 'et_pb_fullwidth_menu' ) ) ) {
+			$this->add_classname( 'et_pb_column--with-menu' );
 		}
 
 		// Module classname in column has to be contained in variable BEFORE content is being parsed

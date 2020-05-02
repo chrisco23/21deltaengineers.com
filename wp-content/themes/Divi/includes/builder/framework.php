@@ -28,15 +28,21 @@ if ( ! defined( 'ET_BUILDER_PLACEHOLDER_PORTRAIT_IMAGE_DATA' ) ) {
 	define( 'ET_BUILDER_PLACEHOLDER_PORTRAIT_IMAGE_DATA', 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxwYXRoIGZpbGw9IiNFQkVCRUIiIGQ9Ik0wIDBoNTAwdjUwMEgweiIvPgogICAgICAgIDxyZWN0IGZpbGwtb3BhY2l0eT0iLjEiIGZpbGw9IiMwMDAiIHg9IjY4IiB5PSIzMDUiIHdpZHRoPSIzNjQiIGhlaWdodD0iNTY4IiByeD0iMTgyIi8+CiAgICAgICAgPGNpcmNsZSBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIiBjeD0iMjQ5IiBjeT0iMTcyIiByPSIxMDAiLz4KICAgIDwvZz4KPC9zdmc+Cg==' );
 }
 
+require_once ET_BUILDER_DIR . 'autoload.php';
+require_once ET_BUILDER_DIR . 'compat/early.php';
+require_once ET_BUILDER_DIR . 'feature/gutenberg/blocks/Layout.php';
+require_once ET_BUILDER_DIR . 'feature/gutenberg/utils/Conversion.php';
 require_once ET_BUILDER_DIR . 'core.php';
 require_once ET_BUILDER_DIR . 'conditions.php';
 require_once ET_BUILDER_DIR . 'post/PostStack.php';
 require_once ET_BUILDER_DIR . 'feature/ClassicEditor.php';
+require_once ET_BUILDER_DIR . 'feature/AjaxCache.php';
 require_once ET_BUILDER_DIR . 'feature/post-content.php';
 require_once ET_BUILDER_DIR . 'feature/dynamic-content.php';
 require_once ET_BUILDER_DIR . 'feature/search-posts.php';
 require_once ET_BUILDER_DIR . 'feature/ErrorReport.php';
 require_once ET_BUILDER_DIR . 'api/DiviExtensions.php';
+require_once ET_BUILDER_DIR . 'api/rest/BlockLayout.php';
 require_once ET_BUILDER_DIR . 'frontend-builder/theme-builder/theme-builder.php';
 require_once ET_BUILDER_DIR . 'feature/custom-defaults/Settings.php';
 require_once ET_BUILDER_DIR . 'feature/custom-defaults/History.php';
@@ -98,7 +104,17 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'et_builder_retrieve_custom_defaults_history',
 			'et_theme_builder_api_import_theme_builder_step',
 			'et_pb_submit_subscribe_form',
+			'et_builder_get_woocommerce_tabs',
 		),
+	);
+
+	// AJAX requests that use PHP modules cache for performance reasons.
+	$builder_use_cache_actions = array(
+		'heartbeat',
+		'et_builder_retrieve_custom_defaults_history',
+		'et_fb_get_saved_templates',
+		'et_fb_ajax_save',
+		'et_fb_ajax_drop_autosave',
 	);
 
 	// Added built-in third party plugins support
@@ -149,10 +165,11 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 
 	define( 'ET_BUILDER_LOAD_ON_AJAX', $load_builder_on_ajax );
 
+	$action             = et_()->array_get( $_POST, 'action', false );
 	$force_builder_load = isset( $_POST['et_load_builder_modules'] ) && '1' === $_POST['et_load_builder_modules'];
-	$force_memory_limit = isset( $_POST['action'] ) && 'et_fb_retrieve_builder_data' === $_POST['action'];
+	$force_memory_limit = 'et_fb_retrieve_builder_data' === $action;
 
-	if ( isset( $_REQUEST['action'] ) && 'heartbeat' === $_REQUEST['action'] ) {
+	if ( 'heartbeat' === $action ) {
 		// if this is the heartbeat, and if its not packing our heartbeat data, then return
 		if ( !isset( $_REQUEST['data'] ) || !isset( $_REQUEST['data']['et'] ) ) {
 			return;
@@ -164,11 +181,15 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 	if ( $force_memory_limit || et_should_memory_limit_increase() ) {
 		et_increase_memory_limit();
 	}
+
+	if ( $action && in_array( $action, $builder_use_cache_actions ) ) {
+		add_filter( 'et_builder_ajax_use_cache', '__return_true' );
+	}
 	// phpcs:enable
 }
 
 function et_builder_load_global_functions_script() {
-	wp_enqueue_script( 'et-builder-modules-global-functions-script', ET_BUILDER_URI . '/scripts/frontend-builder-global-functions.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
+	wp_enqueue_script( 'et-builder-modules-global-functions-script', ET_BUILDER_URI . '/frontend-builder/build/frontend-builder-global-functions.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
 }
 add_action( 'wp_enqueue_scripts', 'et_builder_load_global_functions_script', 7 );
 
@@ -179,15 +200,15 @@ function et_builder_load_modules_styles() {
 	$is_ab_testing   = ! empty( $ab_tests );
 
 	wp_register_script( 'google-maps-api', esc_url_raw( add_query_arg( array( 'v' => 3, 'key' => et_pb_get_google_api_key() ), is_ssl() ? 'https://maps.googleapis.com/maps/api/js' : 'http://maps.googleapis.com/maps/api/js' ) ), array(), ET_BUILDER_VERSION, true );
-	wp_register_script( 'hashchange', ET_BUILDER_URI . '/scripts/jquery.hashchange.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
-	wp_register_script( 'salvattore', ET_BUILDER_URI . '/scripts/salvattore.min.js', array(), ET_BUILDER_VERSION, true );
-	wp_register_script( 'easypiechart', ET_BUILDER_URI . '/scripts/jquery.easypiechart.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
+	wp_register_script( 'hashchange', ET_BUILDER_URI . '/scripts/ext/jquery.hashchange.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
+	wp_register_script( 'salvattore', ET_BUILDER_URI . '/scripts/ext/salvattore.min.js', array(), ET_BUILDER_VERSION, true );
+	wp_register_script( 'easypiechart', ET_BUILDER_URI . '/scripts/ext/jquery.easypiechart.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
 
-	wp_enqueue_script( 'divi-fitvids', ET_BUILDER_URI . '/scripts/jquery.fitvids.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
-	wp_enqueue_script( 'waypoints', ET_BUILDER_URI . '/scripts/waypoints.min.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
-	wp_enqueue_script( 'magnific-popup', ET_BUILDER_URI . '/scripts/jquery.magnific-popup.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
-	wp_enqueue_script( 'et-jquery-touch-mobile', ET_BUILDER_URI . '/scripts/jquery.mobile.custom.min.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
-	wp_enqueue_script( 'et-builder-modules-script', ET_BUILDER_URI . '/scripts/frontend-builder-scripts.js', apply_filters( 'et_pb_frontend_builder_scripts_dependencies', array( 'jquery', 'et-jquery-touch-mobile' ) ), ET_BUILDER_VERSION, true );
+	wp_enqueue_script( 'divi-fitvids', ET_BUILDER_URI . '/scripts/ext/jquery.fitvids.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
+	wp_enqueue_script( 'waypoints', ET_BUILDER_URI . '/scripts/ext/waypoints.min.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
+	wp_enqueue_script( 'magnific-popup', ET_BUILDER_URI . '/scripts/ext/jquery.magnific-popup.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
+	wp_enqueue_script( 'et-jquery-touch-mobile', ET_BUILDER_URI . '/scripts/ext/jquery.mobile.custom.min.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
+	wp_enqueue_script( 'et-builder-modules-script', ET_BUILDER_URI . '/frontend-builder/build/frontend-builder-scripts.js', apply_filters( 'et_pb_frontend_builder_scripts_dependencies', array( 'jquery', 'et-jquery-touch-mobile' ) ), ET_BUILDER_VERSION, true );
 	wp_enqueue_style( 'magnific-popup', ET_BUILDER_URI . '/styles/magnific_popup.css', array(), ET_BUILDER_VERSION );
 
 	wp_localize_script( 'et-builder-modules-script', 'et_frontend_scripts', array(
@@ -207,7 +228,7 @@ function et_builder_load_modules_styles() {
 	}
 
 	if ( et_builder_has_limitation( 'register_fittext_script') ) {
-		wp_register_script( 'fittext', ET_BUILDER_URI . '/scripts/jquery.fittext.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
+		wp_register_script( 'fittext', ET_BUILDER_URI . '/scripts/ext/jquery.fittext.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
 	}
 
 	/**
@@ -221,7 +242,7 @@ function et_builder_load_modules_styles() {
 
 	// Load main styles CSS file only if the Builder plugin is active
 	if ( et_is_builder_plugin_active() ) {
-		$style_suffix = et_load_unminified_styles() ? '' : '.min';
+		$style_suffix = et_load_unminified_styles() ? '' : '.unified';
 		wp_enqueue_style( 'et-builder-modules-style', ET_BUILDER_URI . '/styles/frontend-builder-plugin-style' . $style_suffix . '.css', array(), ET_BUILDER_VERSION );
 	}
 
@@ -245,6 +266,7 @@ function et_builder_load_modules_styles() {
 		'previous'               => esc_html__( 'Previous', 'et_builder' ),
 		'next'                   => esc_html__( 'Next', 'et_builder' ),
 		'wrong_captcha'          => esc_html__( 'You entered the wrong number in captcha.', 'et_builder' ),
+		'wrong_checkbox'         => esc_html__( 'Checkbox', 'et_builder' ),
 		'ignore_waypoints'       => et_is_ignore_waypoints() ? 'yes' : 'no',
 		'is_divi_theme_used'     => function_exists( 'et_divi_fonts_url' ),
 		'widget_search_selector' => apply_filters( 'et_pb_widget_search_selector', '.widget_search' ),
@@ -287,7 +309,7 @@ function et_builder_load_modules_styles() {
 		}
 
 		wp_enqueue_style( 'et-builder-preview-style', ET_BUILDER_URI . '/styles/preview.css', array(), ET_BUILDER_VERSION );
-		wp_enqueue_script( 'et-builder-preview-script', ET_BUILDER_URI . '/scripts/frontend-builder-preview.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
+		wp_enqueue_script( 'et-builder-preview-script', ET_BUILDER_URI . '/frontend-builder/build/frontend-builder-preview.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
 		wp_localize_script( 'et-builder-preview-script', 'et_preview_params', array(
 			'preview_origin' => esc_url( $preview_origin ),
 			'alert_origin_not_matched' => sprintf(
@@ -594,7 +616,7 @@ function et_builder_body_classes( $classes ) {
 	$post_type = get_post_type( $post_id );
 
 	// Add layout classes when on library page
-	if ( 'et_pb_layout' === $post_type ) {
+	if ( et_core_is_fb_enabled() && 'et_pb_layout' === $post_type ) {
 		$layout_type = et_fb_get_layout_type( $post_id );
 		$layout_scope = et_fb_get_layout_term_slug( $post_id, 'scope' );
 

@@ -256,7 +256,10 @@ class ET_Core_API_Email_ActiveCampaign extends ET_Core_API_Email_Provider {
 	 */
 	public function subscribe( $args, $url= '' ) {
 		// Ensure to skip subscribe action if current email already subscribed.
-		if ( $this->get_subscriber( $args['email'] ) ) {
+		$subscriber_data  = $this->get_subscriber( $args['email'] );
+		$subscriber_lists = self::$_->array_get( $subscriber_data, 'lists', array() );
+		$subscriber_list  = self::$_->array_get( $subscriber_lists, $args['list_id'], false );
+		if ( $subscriber_list ) {
 			return 'success';
 		}
 

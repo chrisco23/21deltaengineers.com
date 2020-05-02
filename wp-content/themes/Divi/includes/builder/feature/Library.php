@@ -637,6 +637,11 @@ class ET_Builder_Library {
 		 */
 		$post_types = apply_filters( 'et_library_builder_post_types', et_builder_get_builder_post_types() );
 
+		// Remove Extra's category layouts from "Your Existing Pages" layout list
+		if ( in_array( 'layout', $post_types ) ) {
+			unset( $post_types[ array_search( 'layout', $post_types ) ] );
+		}
+
 		if ( wp_doing_ajax() ) {
 			// VB case
 			$exclude = isset( $_POST['postId'] ) ? (int) $_POST['postId'] : false;
@@ -1091,8 +1096,7 @@ class ET_Builder_Library {
 
 			wp_enqueue_style( 'library-styles', ET_BUILDER_URI . '/styles/library_pages.css', array( 'et-core-admin' ), ET_BUILDER_PRODUCT_VERSION );
 			wp_enqueue_script( 'library-scripts', ET_BUILDER_URI . '/scripts/library_scripts.js', array(
-				'jquery',
-				'et_pb_admin_global_js'
+				'jquery'
 			), ET_BUILDER_PRODUCT_VERSION );
 
 			wp_localize_script( 'library-scripts', 'et_pb_new_template_options', array(

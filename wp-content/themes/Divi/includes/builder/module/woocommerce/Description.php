@@ -403,10 +403,17 @@ class ET_Builder_Module_Woocommerce_Description extends ET_Builder_Module {
 		if ( 'description' === $args['description_type'] ) {
 			// If builder is not used on given post, display post content.
 			if ( ! et_pb_is_pagebuilder_used( $post_id ) ) {
+				/** This filter is documented in wp-includes/post-template.php */
 				$description = apply_filters( 'the_content', $post->post_content );
 			} else {
 				$description = get_post_meta( $post->ID, ET_BUILDER_WC_PRODUCT_LONG_DESC_META_KEY, true );
-				$description = wpautop( $description );
+
+				// Cannot use `the_content` filter since it adds content wrapper.
+				// Content wrapper added at
+				// `includes/builder/core.php`::et_builder_add_builder_content_wrapper()
+				// This filter is documented at
+				// includes/builder/feature/woocommerce-modules.php
+				$description = apply_filters( 'et_builder_wc_description', $description );
 			}
 		} else {
 			$description = apply_filters( 'woocommerce_short_description', $post->post_excerpt );

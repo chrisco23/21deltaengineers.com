@@ -61,6 +61,17 @@ class ET_Builder_Value {
 	}
 
 	/**
+	 * Retrieve the value content.
+	 *
+	 * @since 4.4.4
+	 *
+	 * @return string
+	 */
+	public function get_content() {
+		return $this->content;
+	}
+
+	/**
 	 * Get the resolved content.
 	 *
 	 * @since 3.17.2

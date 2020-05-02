@@ -946,7 +946,7 @@ class ET_Builder_Module_Menu extends ET_Builder_Module {
 					<form role="search" method="get" class="et_pb_menu__search-form" action="%1$s">
 						<input type="search" class="et_pb_menu__search-input" placeholder="%2$s" name="s" title="%3$s" />
 					</form>
-					<button type="button" class="et_pb_menu__icon et_pb_menu__close-search-button" />
+					<button type="button" class="et_pb_menu__icon et_pb_menu__close-search-button"></button>
 				</div>
 			</div>',
 			esc_url( home_url( '/' ) ),

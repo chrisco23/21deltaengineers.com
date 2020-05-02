@@ -10,6 +10,9 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 		$this->vb_support = 'on';
 		$this->fullwidth  = true;
 
+		// Save processed background so it can be modified & reapplied on another element
+		$this->save_processed_background = true;
+
 		// need to use global settings from the fullwidth slider module
 		$this->global_settings_slug = 'et_pb_fullwidth_slider';
 
@@ -68,10 +71,12 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 						'tabbed_subtoggles' => true,
 						'bb_icons_support'  => true,
 						'css'               => array(
-							'link'  => "{$this->main_css_element} .et_pb_slide_content a",
-							'ul'    => "{$this->main_css_element} .et_pb_slide_content ul li",
-							'ol'    => "{$this->main_css_element} .et_pb_slide_content ol li",
-							'quote' => "{$this->main_css_element} .et_pb_slide_content blockquote",
+							'link'           => "{$this->main_css_element} .et_pb_slide_content a",
+							'ul'             => "{$this->main_css_element} .et_pb_slide_content ul li",
+							'ul_item_indent' => "{$this->main_css_element} .et_pb_slide_content ul",
+							'ol'             => "{$this->main_css_element} .et_pb_slide_content ol li",
+							'ol_item_indent' => "{$this->main_css_element} .et_pb_slide_content ol",
+							'quote'          => "{$this->main_css_element} .et_pb_slide_content blockquote",
 						),
 					),
 				),
@@ -246,6 +251,9 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 					)
 				)
 			),
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->custom_css_fields = array(
@@ -311,7 +319,8 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 		// Include query args that we don't control.
 		$query_args = array_merge( array_diff_key( $args, $defaults ), array(
 			'posts_per_page' => (int) $args['posts_number'],
-			'post_status'    => 'publish',
+			'post_status'    => array( 'publish', 'private' ),
+			'perm'           => 'readable',
 		));
 
 		if ( 'on' === $args['use_current_loop'] ) {
@@ -420,7 +429,7 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 					global $more;
 
 					// Page builder doesn't support more tag, so display the_content() in case of post made with page builder.
-					if ( et_pb_is_pagebuilder_used( get_the_ID() ) ) {
+					if ( et_pb_is_pagebuilder_used( get_the_ID() ) || has_block( 'divi/layout', get_the_ID() ) ) {
 
 						// do_shortcode for Divi Plugin instead of applying `the_content` filter to avoid conflicts with 3rd party themes.
 						$builder_post_content = et_is_builder_plugin_active() ? do_shortcode( $post_content ) : apply_filters( 'the_content', $post_content );
@@ -443,7 +452,7 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 					global $more;
 
 					// page builder doesn't support more tag, so display the_content() in case of post made with page builder.
-					if ( et_pb_is_pagebuilder_used( get_the_ID() ) ) {
+					if ( et_pb_is_pagebuilder_used( get_the_ID() || has_block( 'divi/layout', get_the_ID() ) ) ) {
 
 						// do_shortcode for Divi Plugin instead of applying `the_content` filter to avoid conflicts with 3rd party themes.
 						$builder_post_content = et_is_builder_plugin_active() ? do_shortcode( $post_content ) : apply_filters( 'the_content', $post_content );
@@ -951,70 +960,6 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 
 		$is_text_overlay_applied = 'on' === $use_text_overlay;
 
-		// Applying backround-related style to slide item since advanced_option only targets module wrapper
-		if ( 'on' === $this->props['show_image'] && 'background' === $this->props['image_placement'] && 'off' === $parallax ) {
-			if ('' !== $background_color) {
-				ET_Builder_Module::set_style( $render_slug, array(
-					'selector'    => '%%order_class%% .et_pb_slide:not(.et_pb_slide_with_no_image)',
-					'declaration' => sprintf(
-						'background-color: %1$s;',
-						esc_html( $background_color )
-					),
-				) );
-			}
-
-			if ( '' !== $background_size && 'default' !== $background_size ) {
-				ET_Builder_Module::set_style( $render_slug, array(
-					'selector'    => '%%order_class%% .et_pb_slide',
-					'declaration' => sprintf(
-						'-moz-background-size: %1$s;
-						-webkit-background-size: %1$s;
-						background-size: %1$s;',
-						esc_html( $background_size )
-					),
-				) );
-
-				if ( 'initial' === $background_size ) {
-					ET_Builder_Module::set_style( $render_slug, array(
-						'selector'    => 'body.ie %%order_class%% .et_pb_slide',
-						'declaration' => '-moz-background-size: auto; -webkit-background-size: auto; background-size: auto;',
-					) );
-				}
-			}
-
-			if ( '' !== $background_position && 'default' !== $background_position ) {
-				$processed_position = str_replace( '_', ' ', $background_position );
-
-				ET_Builder_Module::set_style( $render_slug, array(
-					'selector'    => '%%order_class%% .et_pb_slide',
-					'declaration' => sprintf(
-						'background-position: %1$s;',
-						esc_html( $processed_position )
-					),
-				) );
-			}
-
-			if ( '' !== $background_repeat ) {
-				ET_Builder_Module::set_style( $render_slug, array(
-					'selector'    => '%%order_class%% .et_pb_slide',
-					'declaration' => sprintf(
-						'background-repeat: %1$s;',
-						esc_html( $background_repeat )
-					),
-				) );
-			}
-
-			if ( '' !== $background_blend ) {
-				ET_Builder_Module::set_style( $render_slug, array(
-					'selector'    => '%%order_class%% .et_pb_slide',
-					'declaration' => sprintf(
-						'background-blend-mode: %1$s;',
-						esc_html( $background_blend )
-					),
-				) );
-			}
-		}
-
 		if ( 'on' === $use_bg_overlay ) {
 			// Background Overlay color.
 			et_pb_responsive_options()->generate_responsive_css( $bg_overlay_color_values, '%%order_class%% .et_pb_slide .et_pb_slide_overlay_container', 'background-color', $render_slug, '', 'color' );
@@ -1122,12 +1067,12 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 					'classes' => array(
 						'et_pb_slide_with_image' => array(
 							'show_image'         => 'on',
-							'has_post_thumbnail' => '__return_true',
+							'has_post_thumbnail' => true,
 							'image_placement'    => array( 'left', 'right' ),
 						),
 						'et_pb_slide_with_no_image' => array(
 							'show_image'         => 'on',
-							'has_post_thumbnail' => '__return_false',
+							'has_post_thumbnail' => false,
 						),
 					),
 				) );
@@ -1141,8 +1086,19 @@ class ET_Builder_Module_Fullwidth_Post_Slider extends ET_Builder_Module_Type_Pos
 				$slide_class = 'off' !== $show_image && in_array( $image_placement, array( 'left', 'right' ) ) && $has_post_thumbnail ? ' et_pb_slide_with_image' : '';
 				$slide_class .= 'off' !== $show_image && ! $has_post_thumbnail ? ' et_pb_slide_with_no_image' : '';
 				$slide_class .= ' ' . implode( ' ', $background_layout_class_names );
+
+				// Reapply module's gradient background on slide item with featured image
+				$slide_post_id = $query->posts[ $post_index ]->ID;
+				$slide_class   .= " et_pb_post_slide-{$slide_post_id}";
+
+				ET_Builder_Module_Helper_Slider::reapply_module_background_on_slide( array(
+					'slide_post_id'       => $slide_post_id,
+					'post_featured_image' => $query->posts[ $post_index ]->post_featured_image,
+					'render_slug'         => $render_slug,
+					'props'               => $this->props,
+				) );
 			?>
-			<div class="et_pb_slide et_pb_media_alignment_center<?php echo esc_attr( $slide_class ); ?>" <?php if ( 'on' !== $parallax && $is_show_image && 'background' === $image_placement ) { printf( 'style="background-image:url(%1$s)"', esc_url( $query->posts[ $post_index ]->post_featured_image ) );  } ?><?php echo et_core_esc_previously( $multi_view_attrs_wrapper ); ?>>
+			<div class="et_pb_slide et_pb_media_alignment_center<?php echo esc_attr( $slide_class ); ?>" <?php echo et_core_esc_previously( $multi_view_attrs_wrapper ); ?>>
 				<?php if ( 'on' === $parallax && $is_show_image && 'background' === $image_placement ) { ?>
 					<div class="et_parallax_bg_wrap">
 						<div class="et_parallax_bg<?php if ( 'off' === $parallax_method ) { echo ' et_pb_parallax_css'; } ?>" style="background-image: url(<?php echo esc_url( $query->posts[ $post_index ]->post_featured_image ); ?>);"<?php echo et_core_esc_previously( $multi_view_attrs_parallax_bg ); ?>></div>

@@ -23,6 +23,7 @@ class ET_Builder_Module_Post_Title extends ET_Builder_Module {
 						'title'    => esc_html__( 'Text', 'et_builder' ),
 						'priority' => 49,
 					),
+					'image_settings' => esc_html__( 'Image', 'et_builder' )
 				),
 			),
 		);
@@ -141,7 +142,6 @@ class ET_Builder_Module_Post_Title extends ET_Builder_Module {
 				'affects'           => array(
 					'author',
 					'date',
-					'categories',
 					'comments',
 				),
 				'toggle_slug'       => 'elements',
@@ -200,7 +200,10 @@ class ET_Builder_Module_Post_Title extends ET_Builder_Module {
 					'off' => esc_html__( 'No', 'et_builder' ),
 				),
 				'default_on_front'  => 'on',
-				'depends_show_if'   => 'on',
+				'show_if'           => array(
+					'meta'                      => 'on',
+					'function.isPostOrTBLayout' => 'on',
+				),
 				'toggle_slug'       => 'elements',
 				'description'       => esc_html__( 'Here you can choose whether or not display the Categories in Post Meta. Note: This option doesn\'t work with custom post types.', 'et_builder' ),
 				'mobile_options'    => true,
@@ -251,6 +254,125 @@ class ET_Builder_Module_Post_Title extends ET_Builder_Module {
 				'depends_show_if'   => 'on',
 				'toggle_slug'       => 'elements',
 				'description'       => esc_html__( 'Here you can choose where to place the Featured Image', 'et_builder' ),
+			),
+			'force_fullwidth' => array(
+				'label'           => esc_html__( 'Force Fullwidth', 'et_builder' ),
+				'description'     => esc_html__( "When enabled, this will force your image to extend 100% of the width of the column it's in.", 'et_builder' ),
+				'type'            => 'yes_no_button',
+				'option_category' => 'layout',
+				'options'         => array(
+					'off' => esc_html__( 'No', 'et_builder' ),
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+				),
+				'default'         => 'on',
+				'tab_slug'        => 'advanced',
+				'toggle_slug'     => 'width',
+				'show_if'         => array(
+					'featured_image'     => 'on',
+					'featured_placement' => array( 'below', 'above' )
+				),
+			),
+			'image_width' => array(
+				'label'           => esc_html__( 'Featured Image Width', 'et_builder' ),
+				'description'     => esc_html__( 'Adjust the width of the featured image.', 'et_builder' ),
+				'type'            => 'range',
+				'option_category' => 'layout',
+				'tab_slug'        => 'advanced',
+				'toggle_slug'     => 'width',
+				'allowed_values'  => et_builder_get_acceptable_css_string_values( 'width' ),
+				'default'         => '100%',
+				'default_unit'    => '%',
+				'range_settings'  => array(
+					'min'  => '0',
+					'max'  => '100',
+					'step' => '1',
+				),
+				'responsive'      => true,
+				'show_if'         => array(
+					'featured_image'     => 'on',
+					'featured_placement' => array( 'below', 'above' ),
+					'force_fullwidth'    => 'off',
+				),
+			),
+			'image_max_width' => array(
+				'label'           => esc_html__( 'Featured Image Max Width', 'et_builder' ),
+				'description'     => esc_html__( 'Adjust the max width of the featured image.', 'et_builder' ),
+				'type'            => 'range',
+				'option_category' => 'layout',
+				'tab_slug'        => 'advanced',
+				'toggle_slug'     => 'width',
+				'allowed_values'  => et_builder_get_acceptable_css_string_values( 'max-width' ),
+				'default'         => 'none',
+				'default_unit'    => '%',
+				'range_settings'  => array(
+					'min'  => '0',
+					'max'  => '100',
+					'step' => '1',
+				),
+				'responsive'      => true,
+				'show_if'         => array(
+					'featured_image'     => 'on',
+					'featured_placement' => array( 'below', 'above' ),
+					'force_fullwidth'    => 'off',
+				),
+			),
+			'image_height' => array(
+				'label'           => esc_html__( 'Featured Image Height', 'et_builder' ),
+				'description'     => esc_html__( 'Adjust the height of the featured image.', 'et_builder' ),
+				'type'            => 'range',
+				'option_category' => 'layout',
+				'tab_slug'        => 'advanced',
+				'toggle_slug'     => 'width',
+				'allowed_values'  => et_builder_get_acceptable_css_string_values( 'height' ),
+				'default'         => 'auto',
+				'default_unit'    => 'px',
+				'range_settings'  => array(
+					'min'  => '0',
+					'max'  => '1000',
+					'step' => '1',
+				),
+				'responsive'      => true,
+				'show_if'         => array(
+					'featured_image'     => 'on',
+					'featured_placement' => array( 'below', 'above' )
+				),
+			),
+			'image_max_height' => array(
+				'label'           => esc_html__( 'Featured Image Max Height', 'et_builder' ),
+				'description'     => esc_html__( 'Adjust the max height of the featured image.', 'et_builder' ),
+				'type'            => 'range',
+				'option_category' => 'layout',
+				'tab_slug'        => 'advanced',
+				'toggle_slug'     => 'width',
+				'allowed_values'  => et_builder_get_acceptable_css_string_values( 'max-height' ),
+				'default'         => 'none',
+				'default_unit'    => 'px',
+				'range_settings'  => array(
+					'min'  => '0',
+					'max'  => '1000',
+					'step' => '1',
+				),
+				'responsive'      => true,
+				'show_if'         => array(
+					'featured_image'     => 'on',
+					'featured_placement' => array( 'below', 'above' )
+				),
+			),
+			'image_alignment' => array(
+				'label'           => esc_html__( 'Image Alignment', 'et_builder' ),
+				'description'     => esc_html__( 'Align image to the left, right or center.', 'et_builder' ),
+				'type'            => 'align',
+				'option_category' => 'layout',
+				'options'         => et_builder_get_text_orientation_options( array( 'justified' ) ),
+				'tab_slug'        => 'advanced',
+				'toggle_slug'     => 'image_settings',
+				'default'         => 'center',
+				'responsive'      => true,
+				'show_if'         => array(
+					'featured_image'     => 'on',
+					'featured_placement' => array( 'below', 'above' ),
+					'force_fullwidth'    => 'off',
+				),
 			),
 			'text_color' => array(
 				'label'             => esc_html__( 'Text Color', 'et_builder' ),
@@ -332,9 +454,19 @@ class ET_Builder_Module_Post_Title extends ET_Builder_Module {
 		$parallax_image_background = $this->get_parallax_image_background();
 
 		if ( $post_id && $multi_view->has_value( 'featured_image', 'on' ) && ( 'above' === $featured_placement || 'below' === $featured_placement ) ) {
+			$post_thumbnail_id  = get_post_thumbnail_id( $post_id );
+			$featured_image_src = et_()->array_get( wp_get_attachment_image_src( $post_thumbnail_id, 'full' ), 0 );
+
+			$featured_image_content = $multi_view->render_element( array(
+				'tag'     => 'img',
+				'attrs'   => array(
+					'src' => $featured_image_src,
+				)
+			) );
+
 			$featured_image_output = $multi_view->render_element( array(
 				'tag'     => 'div',
-				'content' => get_the_post_thumbnail( $post_id, 'large' ),
+				'content' => sprintf( '<span class="et_pb_image_wrap">%1$s</span>', $featured_image_content ),
 				'attrs'   => array(
 					'class' => 'et_pb_title_featured_container',
 				),
@@ -342,13 +474,67 @@ class ET_Builder_Module_Post_Title extends ET_Builder_Module {
 					'featured_image' => 'on',
 				),
 			) );
+
+			$image_height     = et_pb_responsive_options()->get_property_values( $this->props, 'image_height', 'auto' );
+			$image_max_height = et_pb_responsive_options()->get_property_values( $this->props, 'image_max_height', 'none' );
+
+			et_pb_responsive_options()->generate_responsive_css( $image_height, '%%order_class%% .et_pb_title_featured_container img', 'height', $render_slug );
+			et_pb_responsive_options()->generate_responsive_css( $image_max_height, '%%order_class%% .et_pb_title_featured_container img', 'max-height', $render_slug );
+
+			if ( 'off' === $this->props['force_fullwidth'] ) {
+				$image_width     = et_pb_responsive_options()->get_property_values( $this->props, 'image_width', '100%' );
+				$image_max_width = et_pb_responsive_options()->get_property_values( $this->props, 'image_max_width', 'none' );
+				et_pb_responsive_options()->generate_responsive_css( $image_width, '%%order_class%% .et_pb_title_featured_container', 'width', $render_slug );
+				et_pb_responsive_options()->generate_responsive_css( $image_max_width, '%%order_class%% .et_pb_title_featured_container', 'max-width', $render_slug );
+				// Image alignment style
+				$image_alignment_values = et_pb_responsive_options()->get_property_values( $this->props, 'image_alignment', 'none' );
+
+				et_pb_responsive_options()->generate_responsive_css(
+					$image_alignment_values,
+					'%%order_class%% .et_pb_title_featured_container',
+					'text-align',
+					$render_slug,
+					'',
+					'align'
+				);
+
+				$image_alignments = array(
+					'left'   => 'auto auto auto 0',
+					'center' => 'auto',
+					'right'  => 'auto 0 auto auto',
+				);
+
+				foreach ( $image_alignment_values as $breakpoint => $alignment ) {
+					$image_alignment_values[ $breakpoint ] = et_()->array_get(
+						$image_alignments,
+						$alignment,
+						''
+					);
+				}
+
+				et_pb_responsive_options()->generate_responsive_css(
+					$image_alignment_values,
+					'%%order_class%% .et_pb_title_featured_container',
+					'margin',
+					$render_slug,
+					'',
+					'align'
+				);
+
+
+				ET_Builder_Element::set_style( $render_slug, array(
+					'selector'    => '%%order_class%% .et_pb_image_wrap',
+					'declaration' => 'width: auto;',
+				) );
+			}
 		}
 
 		if ( $multi_view->has_value( 'title', 'on' ) ) {
 			if ( is_et_pb_preview() && isset( $_POST['post_title'] ) && wp_verify_nonce( $_POST['et_pb_preview_nonce'], 'et_pb_preview_nonce' ) ) {
 				$post_title = sanitize_text_field( wp_unslash( $_POST['post_title'] ) );
 			} else {
-				$post_title = esc_html( et_builder_get_current_title() );
+				// Unescaped for backwards compat reasons.
+				$post_title = et_core_intentionally_unescaped( et_builder_get_current_title(), 'html' );
 			}
 
 			$output .= $multi_view->render_element( array(

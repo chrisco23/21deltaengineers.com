@@ -221,6 +221,7 @@ class ET_Builder_Plugin_Compat_Advanced_Custom_Fields extends ET_Builder_Plugin_
 			return array();
 		}
 
+		// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
 		return call_user_func_array( 'array_merge', $expanded );
 	}
 

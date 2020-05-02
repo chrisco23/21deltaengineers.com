@@ -68,6 +68,9 @@ class ET_Builder_Module_Video extends ET_Builder_Module {
 			'text'                  => false,
 			'button'                => false,
 			'link_options'          => false,
+			'position_fields'       => array(
+				'default' => 'relative',
+			),
 		);
 
 		$this->help_videos = array(
@@ -424,7 +427,7 @@ class ET_Builder_Module_Video extends ET_Builder_Module {
 	 * Filter multi view value.
 	 *
 	 * @since 3.27.1
-	 * 
+	 *
 	 * @see ET_Builder_Module_Helper_MultiViewOptions::filter_value
 	 *
 	 * @param mixed $raw_value Props raw value.

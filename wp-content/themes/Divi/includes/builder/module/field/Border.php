@@ -113,7 +113,7 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 		$suffix             = $settings['suffix'];
 		$defaults           = $settings['defaults']['border_styles'];
 		$defaultUnit        = 'px';
-		
+
 		if ( $settings['use_radius'] ) {
 			$additional_options["border_radii{$suffix}"] = array(
 				'label'           => sprintf( '%1$s%2$s', '' !== $settings['label_prefix'] ? sprintf( '%1$s ', $settings['label_prefix'] ) : '', esc_html__( 'Rounded Corners', 'et_builder' ) ),
@@ -156,9 +156,10 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 							'default_unit'   => $defaultUnit,
 							'allowed_units'  => array( 'em', 'rem', 'px', 'cm', 'mm', 'in', 'pt', 'pc', 'ex', 'vh', 'vw' ),
 							'range_settings' => array(
-								'min'  => 0,
-								'max'  => 50,
-								'step' => 1,
+								'min'       => 0,
+								'max'       => 50,
+								'step'      => 1,
+								'min_limit' => 0,
 							),
 							'context' => "border_styles{$suffix}",
 							'mobile_options' => true,
@@ -402,13 +403,13 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 	 *
 	 * @since 3.23 Add responsive setting support.
 	 *
-	 * @param  array   $atts            All module attributes.
-	 * @param  array   $advanced_fields All module advanced fields definition.
-	 * @param  string  $suffix          Border options group or toggle name.
-	 * @param  boolean $overflow        Overflow status.
-	 * @param  boolean $is_hover        Hover options status.
-	 * @param  string  $device          Current active device.
-	 * @return string                   Generated border radii styles.
+	 * @param  array          $atts            All module attributes.
+	 * @param  array          $advanced_fields All module advanced fields definition.
+	 * @param  string         $suffix          Border options group or toggle name.
+	 * @param  boolean|string $overflow        Overflow status or type.
+	 * @param  boolean        $is_hover        Hover options status.
+	 * @param  string         $device          Current active device.
+	 * @return string                          Generated border radii styles.
 	 */
 	public function get_radii_style( array $atts, array $advanced_fields, $suffix = '', $overflow = true, $is_hover = false, $device = 'desktop' ) {
 		$style = '';
@@ -471,8 +472,11 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 
 				$important = et_core_intentionally_unescaped( $important, 'fixed_string' );
 				$style = "border-radius: {$top_left_radius} {$top_right_radius} {$bottom_right_radius} {$bottom_left_radius}{$important};";
-				if ( true === $overflow ) {
-					$style .= "overflow: hidden{$important};";
+				if ( true === $overflow || in_array( $overflow, array( 'overflow-x', 'overflow-y' ) ) ) {
+					// $overflow can be either a boolean or a string: 'overflow-x' / 'overflow-y'
+					// If it is a boolean the CSS property is set to 'overflow'
+					$overflow_property = in_array( $overflow, array( 'overflow-x', 'overflow-y' ), true ) ? $overflow : 'overflow';
+					$style            .= "{$overflow_property}: hidden{$important};";
 				}
 			}
 		}

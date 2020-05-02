@@ -998,6 +998,17 @@ function et_is_woocommerce_plugin_active() {
 }
 endif;
 
+/**
+ * Check if WPML plugin is active.
+ *
+ * @since 4.2
+ *
+ * @return bool
+ */
+function et_core_is_wpml_plugin_active() {
+	return class_exists( 'SitePress' );
+}
+
 if ( ! function_exists( 'et_is_product_taxonomy' ) ):
 /**
  * Wraps {@see is_product_taxonomy()} to check for its existence before calling.
@@ -1024,6 +1035,7 @@ if ( ! function_exists( 'et_core_add_allowed_protocols' ) ) :
  */
 function et_core_add_allowed_protocols( $protocols = array() ) {
 	$additional = array(
+		'skype', // Add Skype messaging protocol
 		'sms', // Add SMS text messaging protocol
 	);
 	$protocols  = array_unique( array_merge( $protocols, $additional ) );
@@ -1161,6 +1173,60 @@ function et_image_add_srcset_and_sizes( $image, $echo = false ) {
 }
 endif;
 
+if ( ! function_exists( 'et_get_attachment_id_by_url_sql' ) ) :
+	/**
+	 * Generate SQL query syntax to compute attachment ID by URL.
+	 *
+	 * @since 4.4.2
+	 *
+	 * @param string $url The URL being looked up.
+	 *
+	 * @return string SQL query syntax.
+	 */
+	function et_get_attachment_id_by_url_sql( $normalized_url ) {
+		global $wpdb;
+
+		// Strip the HTTP/S protocol.
+		$cleaned_url = preg_replace( '/^https?:/i', '', $normalized_url );
+
+		// Remove any thumbnail size suffix from the filename and use that as a fallback.
+		$fallback_url = preg_replace( '/-(\d+)x(\d+)\.(jpg|jpeg|gif|png)$/', '.$3', $cleaned_url );
+
+		if ( $cleaned_url === $fallback_url ) {
+			$attachments_query = $wpdb->prepare(
+				"SELECT id
+				FROM $wpdb->posts
+				WHERE `post_type` = %s
+					AND `guid` IN ( %s, %s )",
+				'attachment',
+				esc_url_raw( "https:{$cleaned_url}" ),
+				esc_url_raw( "http:{$cleaned_url}" )
+			);
+		} else {
+			// Scenario: Trying to find the attachment for a file called x-150x150.jpg.
+			// 1. Since WordPress adds the -150x150 suffix for thumbnail sizes we cannot be
+			// sure if this is an attachment or an attachment's generated thumbnail.
+			// 2. Since both x.jpg and x-150x150.jpg can be uploaded as separate attachments
+			// we must decide which is a better match.
+			// 3. The above is why we order by guid length and use the first result.
+			$attachments_query = $wpdb->prepare(
+				"SELECT id
+				FROM $wpdb->posts
+				WHERE `post_type` = %s
+					AND `guid` IN ( %s, %s, %s, %s )
+				ORDER BY CHAR_LENGTH( `guid` ) DESC",
+				'attachment',
+				esc_url_raw( "https:{$cleaned_url}" ),
+				esc_url_raw( "https:{$fallback_url}" ),
+				esc_url_raw( "http:{$cleaned_url}" ),
+				esc_url_raw( "http:{$fallback_url}" )
+			);
+		}
+
+		return $attachments_query;
+	}
+endif;
+
 if ( ! function_exists( 'et_get_attachment_id_by_url' ) ) :
 /**
  * Tries to get attachment ID by URL.
@@ -1174,10 +1240,37 @@ if ( ! function_exists( 'et_get_attachment_id_by_url' ) ) :
 function et_get_attachment_id_by_url( $url ) {
 	global $wpdb;
 
-	// Load cached data for attachment_id_by_url.
-	$cache = ET_Core_Cache_File::get( 'attachment_id_by_url' );
+	/**
+	 * Filters the attachment ID.
+	 *
+	 * @since 4.2.1
+	 *
+	 * @param bool    $attachment_id_pre Default value. Default is false.
+	 * @param string  $url               URL of the image need to query.
+	 *
+	 * @return bool|int
+	 */
+	$attachment_id_pre = apply_filters( 'et_get_attachment_id_by_url_pre', false, $url );
 
-	// Normalize image URL to remove the HTTP/S protocol.
+	if ( false !== $attachment_id_pre ) {
+		return $attachment_id_pre;
+	}
+
+	/**
+	 * Filters the attachment GUID.
+	 *
+	 * This filter intended to get the actual attachment guid URL in case the URL has been filtered before.
+	 * For example the URL has been modified to use CDN URL.
+	 *
+	 * @since 4.2.1
+	 *
+	 * @param string  $url URL of the image need to query.
+	 *
+	 * @return string
+	 */
+	$url = apply_filters( 'et_get_attachment_id_by_url_guid', $url );
+
+	// Normalize image URL.
 	$normalized_url = et_attachment_normalize_url( $url );
 
 	// Bail early if the url is invalid.
@@ -1185,48 +1278,37 @@ function et_get_attachment_id_by_url( $url ) {
 		return 0;
 	}
 
+	// Load cached data for attachment_id_by_url.
+	$cache = ET_Core_Cache_File::get( 'attachment_id_by_url' );
+
 	if ( isset( $cache[ $normalized_url ] ) ) {
-		return $cache[ $normalized_url ];
+		if ( et_core_is_uploads_dir_url( $normalized_url ) ) {
+			return $cache[ $normalized_url ];
+		}
+
+		unset( $cache[ $normalized_url ] );
+		ET_Core_Cache_File::set( 'attachment_id_by_url', $cache );
 	}
 
-	// Remove any thumbnail size suffix from the filename and use that as a fallback.
-	$fallback_url = preg_replace( '/-(\d+)x(\d+)\.(jpg|jpeg|gif|png)$/', '.$3', $normalized_url );
+	$attachments_sql_query = et_get_attachment_id_by_url_sql( $normalized_url );
+	$attachment_id         = (int) $wpdb->get_var( $attachments_sql_query );
 
-	if ( $normalized_url === $fallback_url ) {
-		$attachments_query = $wpdb->prepare(
-			"SELECT id
-			FROM $wpdb->posts
-			WHERE `post_type` = %s
-				AND `guid` IN ( %s, %s )",
-			'attachment',
-			esc_url_raw( "https:{$normalized_url}" ),
-			esc_url_raw( "http:{$normalized_url}" )
-		);
-	} else {
-		// Scenario: Trying to find the attachment for a file called x-150x150.jpg.
-		// 1. Since WordPress adds the -150x150 suffix for thumbnail sizes we cannot be
-		// sure if this is an attachment or an attachment's generated thumbnail.
-		// 2. Since both x.jpg and x-150x150.jpg can be uploaded as separate attachments
-		// we must decide which is a better match.
-		// 3. The above is why we order by guid length and use the first result.
-		$attachments_query = $wpdb->prepare(
-			"SELECT id
-			FROM $wpdb->posts
-			WHERE `post_type` = %s
-				AND `guid` IN ( %s, %s, %s, %s )
-			ORDER BY CHAR_LENGTH( `guid` ) DESC",
-			'attachment',
-			esc_url_raw( "https:{$normalized_url}" ),
-			esc_url_raw( "https:{$fallback_url}" ),
-			esc_url_raw( "http:{$normalized_url}" ),
-			esc_url_raw( "http:{$fallback_url}" )
-		);
+	// There is this new feature in WordPress 5.3 that allows users to upload big image file 
+	// (threshold being either width or height of 2560px) and the core will scale it down.
+	// This causing the GUID URL info stored is no more relevant since the WordPress core system
+	// will append "-scaled." string into the image URL when serving it in the frontend.
+	// Hence we run another query as fallback in case the attachment ID is not found and 
+	// there is "-scaled." string appear in the image URL
+	// @see https://make.wordpress.org/core/2019/10/09/introducing-handling-of-big-images-in-wordpress-5-3/
+	// @see https://wordpress.org/support/topic/media-images-renamed-to-xyz-scaled-jpg/
+	if ( ! $attachment_id && false !== strpos( $normalized_url, '-scaled.' ) ) {
+		$normalized_url_not_scaled = str_replace( '-scaled.', '.', $normalized_url );
+		$attachments_sql_query     = et_get_attachment_id_by_url_sql( $normalized_url_not_scaled );
+		$attachment_id             = (int) $wpdb->get_var( $attachments_sql_query );
 	}
-
-	$attachment_id = (int) $wpdb->get_var( $attachments_query );
 
 	// Cache data only if attachment ID is found.
-	if ( $attachment_id ) {
+	if ( $attachment_id && et_core_is_uploads_dir_url( $normalized_url ) ) {
 		$cache[ $normalized_url ] = $attachment_id;
 		ET_Core_Cache_File::set( 'attachment_id_by_url', $cache );
 	}
@@ -1247,9 +1329,7 @@ if ( ! function_exists( 'et_get_attachment_size_by_url' ) ) :
  * @return array|string Detected image size width and height or 'full' on failure.
  */
 function et_get_attachment_size_by_url( $url, $default_size = 'full' ) {
-	$cache = ET_Core_Cache_File::get( 'attachment_size_by_url' );
-
-	// Normalize image URL to remove the HTTP/S protocol.
+	// Normalize image URL.
 	$normalized_url = et_attachment_normalize_url( $url );
 
 	// Bail early if URL is invalid.
@@ -1257,8 +1337,15 @@ function et_get_attachment_size_by_url( $url, $default_size = 'full' ) {
 		return $default_size;
 	}
 
+	$cache = ET_Core_Cache_File::get( 'attachment_size_by_url' );
+
 	if ( isset( $cache[ $normalized_url ] ) ) {
-		return $cache[ $normalized_url ];
+		if ( et_core_is_uploads_dir_url( $normalized_url ) ) {
+			return $cache[ $normalized_url ];
+		}
+
+		unset( $cache[ $normalized_url ] );
+		ET_Core_Cache_File::set( 'attachment_size_by_url', $cache );
 	}
 
 	$attachment_id = et_get_attachment_id_by_url( $url );
@@ -1284,7 +1371,7 @@ function et_get_attachment_size_by_url( $url, $default_size = 'full' ) {
 	}
 
 	// Cache data only if size is found.
-	if ( $size !== $default_size ) {
+	if ( $size !== $default_size && et_core_is_uploads_dir_url( $normalized_url ) ) {
 		$cache[ $normalized_url ] = $size;
 		ET_Core_Cache_File::set( 'attachment_size_by_url', $cache );
 	}
@@ -1304,13 +1391,23 @@ if ( ! function_exists( 'et_get_image_srcset_sizes' ) ) :
  * @return (array|bool) Associative array of srcset & sizes attributes. False on failure.
  */
 function et_get_image_srcset_sizes( $url ) {
-	$cache = ET_Core_Cache_File::get( 'image_srcset_sizes' );
-
-	// Normalize image URL to remove the HTTP/S protocol.
+	// Normalize image URL.
 	$normalized_url = et_attachment_normalize_url( $url );
 
+	// Bail early if URL is invalid.
+	if ( ! $normalized_url ) {
+		return array();
+	}
+
+	$cache = ET_Core_Cache_File::get( 'image_srcset_sizes' );
+
 	if ( isset( $cache[ $normalized_url ] ) ) {
-		return $cache[ $normalized_url ];
+		if ( et_core_is_uploads_dir_url( $normalized_url ) ) {
+			return $cache[ $normalized_url ];
+		}
+
+		unset( $cache[ $normalized_url ] );
+		ET_Core_Cache_File::set( 'image_srcset_sizes', $cache );
 	}
 
 	$attachment_id = et_get_attachment_id_by_url( $url );
@@ -1335,8 +1432,10 @@ function et_get_image_srcset_sizes( $url ) {
 		'sizes'  => $sizes,
 	);
 
-	$cache[ $normalized_url ] = $data;
-	ET_Core_Cache_File::set( 'image_srcset_sizes', $cache );
+	if ( et_core_is_uploads_dir_url( $normalized_url ) ) {
+		$cache[ $normalized_url ] = $data;
+		ET_Core_Cache_File::set( 'image_srcset_sizes', $cache );
+	}
 
 	return $data;
 }
@@ -1364,7 +1463,15 @@ function et_attachment_normalize_url( $url ) {
 
 	// Set as full path URL.
 	if ( 0 !== strpos( $url, 'http' ) ) {
-		$url = site_url( $url );
+		$wp_upload_dir = wp_upload_dir( null, false );
+		$upload_dir    = str_replace( site_url( '/' ), '', $wp_upload_dir['baseurl'] );
+		$url_trimmed   = ltrim( $url, '/' );
+
+		if ( 0 === strpos( $url_trimmed, $upload_dir ) || 0 === strpos( $url_trimmed, 'wp-content' ) ) {
+			$url = site_url( $url_trimmed );
+		} else {
+			$url = $wp_upload_dir['baseurl'] . '/' . $url_trimmed;
+		}
 	}
 
 	// Validate URL format and file extension.
@@ -1373,10 +1480,24 @@ function et_attachment_normalize_url( $url ) {
 		return false;
 	}
 
-	// Strip HTTP & HTTPS protocol.
-	$url = preg_replace( '/^https?:/i', '', $url );
-
 	return esc_url( $url );
+}
+endif;
+
+if ( ! function_exists( 'et_core_is_uploads_dir_url' ) ) :
+/**
+ * Check if a URL starts with the base upload directory URL.
+ *
+ * @since 4.2
+ *
+ * @param string $url The URL being looked up.
+ *
+ * @return bool
+ */
+function et_core_is_uploads_dir_url( $url ) {
+	$upload_dir = wp_upload_dir( null, false );
+
+	return et_()->starts_with( $url, $upload_dir['baseurl'] );
 }
 endif;
 
@@ -1482,3 +1603,153 @@ function et_core_get_et_account() {
 		'status'      => get_site_option( 'et_account_status', 'not_active' ),
 	);
 }
+
+/**
+ * Get all meta saved by the builder for a given post.
+ *
+ * @since 4.0.10
+ *
+ * @param integer $post_id
+ *
+ * @return array
+ */
+function et_core_get_post_builder_meta( $post_id ) {
+	$raw_meta = get_post_meta( $post_id );
+	$meta     = array();
+
+	foreach ( $raw_meta as $key => $values ) {
+		if ( strpos( $key, '_et_pb_' ) !== 0 && strpos( $key, '_et_builder_' ) !== 0 ) {
+			continue;
+		}
+
+		if ( strpos( $key, '_et_pb_ab_' ) === 0 ) {
+			// Do not copy A/B meta as it is post-specific.
+			continue;
+		}
+
+		foreach ( $values as $value ) {
+			$meta[] = array(
+				'key'   => $key,
+				'value' => $value,
+			);
+		}
+	}
+
+	return $meta;
+}
+
+if ( ! function_exists( 'et_core_parse_google_fonts_json' ) ) :
+	/**
+	 * Parse google fonts json to array.
+	 *
+	 * @since 4.0.10
+	 *
+	 * @param string $json Google fonts json file content.
+	 *
+	 * @return array Associative array list of google fonts.
+	 */
+	function et_core_parse_google_fonts_json( $fonts_json ) {
+		if ( ! $fonts_json || ! is_string( $fonts_json ) ) {
+			return array();
+		}
+
+		$fonts_json_decoded = json_decode( $fonts_json, true );
+
+		if ( ! $fonts_json_decoded || empty( $fonts_json_decoded['items'] ) ) {
+			return array();
+		}
+
+		$fonts = array();
+
+		foreach ( $fonts_json_decoded['items'] as $font_item ) {
+			if ( ! isset( $font_item['family'], $font_item['variants'], $font_item['subsets'], $font_item['category'] ) ) {
+				continue;
+			}
+
+			$fonts[ sanitize_text_field( $font_item['family'] ) ] = array(
+				'styles'        => sanitize_text_field( implode( ',', $font_item['variants'] ) ),
+				'character_set' => sanitize_text_field( implode( ',', $font_item['subsets'] ) ),
+				'type'          => sanitize_text_field( $font_item['category'] ),
+			);
+		}
+
+		ksort( $fonts );
+
+		return $fonts;
+	}
+endif;
+
+if ( ! function_exists( 'et_core_get_saved_google_fonts' ) ) :
+	/**
+	 * Get saved google fonts list.
+	 *
+	 * @since 4.0.10
+	 *
+	 * @return array Associative array list of google fonts.
+	 */
+	function et_core_get_saved_google_fonts() {
+		static $saved_google_fonts;
+
+		if ( ! is_null( $saved_google_fonts ) ) {
+			return $saved_google_fonts;
+		}
+
+		$json_file = ET_CORE_PATH . 'json-data/google-fonts.json';
+
+		if ( ! et_()->WPFS()->is_readable( $json_file ) ) {
+			return array();
+		}
+
+		$saved_google_fonts = et_core_parse_google_fonts_json( et_()->WPFS()->get_contents( $json_file ) );
+
+		return $saved_google_fonts;
+	}
+endif;
+
+if ( ! function_exists( 'et_core_get_websafe_fonts' ) ) :
+	/**
+	 * Get websafe fonts list.
+	 *
+	 * @since 4.0.10
+	 *
+	 * @return array Associative array list of websafe fonts.
+	 */
+	function et_core_get_websafe_fonts() {
+		$websafe_fonts = array(
+			'Georgia' => array(
+				'styles'        => '300italic,400italic,600italic,700italic,800italic,400,300,600,700,800',
+				'character_set' => 'cyrillic,greek,latin',
+				'type'          => 'serif',
+			),
+			'Times New Roman' => array(
+				'styles'        => '300italic,400italic,600italic,700italic,800italic,400,300,600,700,800',
+				'character_set' => 'arabic,cyrillic,greek,hebrew,latin',
+				'type'          => 'serif',
+			),
+			'Arial' => array(
+				'styles'        => '300italic,400italic,600italic,700italic,800italic,400,300,600,700,800',
+				'character_set' => 'arabic,cyrillic,greek,hebrew,latin',
+				'type'          => 'sans-serif',
+			),
+			'Trebuchet' => array(
+				'styles'         => '300italic,400italic,600italic,700italic,800italic,400,300,600,700,800',
+				'character_set'  => 'cyrillic,latin',
+				'type'           => 'sans-serif',
+				'add_ms_version' => true,
+			),
+			'Verdana' => array(
+				'styles'        => '300italic,400italic,600italic,700italic,800italic,400,300,600,700,800',
+				'character_set' => 'cyrillic,latin',
+				'type'          => 'sans-serif',
+			),
+		);
+	
+		foreach ( array_keys( $websafe_fonts ) as $font_name ) {
+			$websafe_fonts[ $font_name ]['standard'] = true;
+		}
+	
+		ksort( $websafe_fonts );
+	
+		return apply_filters( 'et_websafe_fonts', $websafe_fonts );
+	}
+endif;

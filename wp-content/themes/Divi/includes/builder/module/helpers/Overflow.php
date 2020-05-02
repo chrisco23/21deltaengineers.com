@@ -88,7 +88,3 @@ class ET_Builder_Module_Helper_Overflow {
 		);
 	}
 }
-
-function et_pb_overflow() {
-	return ET_Builder_Module_Helper_Overflow::get();
-}

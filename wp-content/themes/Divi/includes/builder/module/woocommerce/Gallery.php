@@ -54,6 +54,9 @@ class ET_Builder_Module_Woocommerce_Gallery extends ET_Builder_Module_Gallery {
 		$this->advanced_fields['fonts']['caption']['line_height']    = array(
 			'default' => '1em',
 		);
+		$this->advanced_fields['position_fields']                           = array(
+			'default' => 'relative',
+		);
 
 		$this->custom_css_fields = array(
 			'gallery_item' => array(

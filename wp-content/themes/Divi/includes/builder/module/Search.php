@@ -140,6 +140,9 @@ class ET_Builder_Module_Search extends ET_Builder_Module {
 					),
 				),
 			),
+			'overflow'=>array(
+				'default' =>'hidden',
+			),
 		);
 
 		$this->custom_css_fields = array(

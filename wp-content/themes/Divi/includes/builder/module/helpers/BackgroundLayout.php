@@ -126,10 +126,3 @@ class ET_Builder_Module_Helper_BackgroundLayout {
 		return $data_background_layout;
 	}
 }
-
-/**
- * @return ET_Builder_Module_Helper_BackgroundLayout
- */
-function et_pb_background_layout_options() {
-	return ET_Builder_Module_Helper_BackgroundLayout::instance();
-}

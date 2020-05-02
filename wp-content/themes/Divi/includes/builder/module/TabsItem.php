@@ -82,6 +82,7 @@ class ET_Builder_Module_Tabs_Item extends ET_Builder_Module {
 			'max_width'             => false,
 			'height'                => false,
 			'button'                => false,
+			'scroll_effects'        => false,
 		);
 
 		$this->custom_css_fields = array(

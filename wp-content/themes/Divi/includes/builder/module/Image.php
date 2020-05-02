@@ -356,6 +356,29 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 
 		et_pb_responsive_options()->generate_responsive_css( $align_values, '%%order_class%%', '', $render_slug, '', 'alignment' );
 
+		// Load up Dynamic Content (if needed) to capture Featured Image objects.
+		// In this way we can process `alt` and `title` attributes defined in
+		// the WP Media Library when they haven't been specified by the user in
+		// Module Settings.
+		if ( empty($alt) || empty($title_text) ) {
+			$raw_src   = et_()->array_get( $this->attrs_unprocessed, 'src' );
+			$src_value = et_builder_parse_dynamic_content( $raw_src );
+
+			if ($src_value->is_dynamic() && $src_value->get_content() === 'post_featured_image' ) {
+				// If there is no user-specified ALT attribute text, check the WP
+				// Media Library entry for text that may have been added there.
+				if ( empty($alt) ) {
+					$alt = et_builder_resolve_dynamic_content( 'post_featured_image_alt_text', array(), get_the_ID(), 'display' );
+				}
+
+				// If there is no user-specified TITLE attribute text, check the WP
+				// Media Library entry for text that may have been added there.
+				if ( empty($title_text) ) {
+					$title_text = et_builder_resolve_dynamic_content( 'post_featured_image_title_text', array(), get_the_ID(), 'display' );
+				}
+			}
+		}
+
 		if ( 'on' === $is_overlay_applied ) {
 			if ( '' !== $overlay_icon_color ) {
 				ET_Builder_Element::set_style( $render_slug, array(
@@ -411,8 +434,8 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 			'tag'   => 'img',
 			'attrs' => array(
 				'src'   => '{{src}}',
-				'alt'   => '{{alt}}',
-				'title' => '{{title_text}}',
+				'alt'   => esc_attr( $alt ),
+				'title' => esc_attr( $title_text ),
 			),
 			'required' => 'src',
 		) );

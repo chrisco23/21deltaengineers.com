@@ -179,6 +179,3 @@ class ET_Builder_Module_Hover_Options {
 	}
 }
 
-function et_pb_hover_options() {
-	return ET_Builder_Module_Hover_Options::get();
-}

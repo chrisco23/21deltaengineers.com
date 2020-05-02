@@ -195,6 +195,7 @@ function et_core_esc_attr( $attr_key, $attr_value ) {
 		return array_map( $callback, $attr_value );
 	}
 
+	// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
 	return call_user_func( $callback, $attr_value );
 }
 endif;

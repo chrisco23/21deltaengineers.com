@@ -34,7 +34,8 @@ $container_tag        = 'product' === get_post_type( $post_id ) ? 'div' : 'artic
 					$height = (int) apply_filters( 'et_pb_index_blog_image_height', 675 );
 					$classtext = 'et_featured_image';
 					$titletext = get_the_title();
-					$thumbnail = get_thumbnail( $width, $height, $classtext, $titletext, $titletext, false, 'Blogimage' );
+					$alttext = get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true );
+					$thumbnail = get_thumbnail( $width, $height, $classtext, $alttext, $titletext, false, 'Blogimage' );
 					$thumb = $thumbnail["thumb"];
 
 					if ( 'on' === et_get_option( 'divi_page_thumbnails', 'false' ) && '' !== $thumb )

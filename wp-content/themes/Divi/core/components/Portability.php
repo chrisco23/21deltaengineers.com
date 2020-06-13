@@ -170,7 +170,9 @@ class ET_Core_Portability {
 						$this->apply_custom_defaults( $shortcode_object, $import['defaults'] );
 					}
 
-					$post['post_content'] = et_fb_process_to_shortcode( $shortcode_object, array(), '', false );
+					$post_content = et_fb_process_to_shortcode( $shortcode_object, array(), '', false );
+					// Add slashes for post content to avoid unwanted unslashing (by wp_unslash) while post is inserting.
+					$post['post_content'] = wp_slash( $post_content );
 				}
 			} else {
 				$custom_defaults = $import['defaults'];

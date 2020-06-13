@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin compatibility for WPML Sticky Links. This plugin needs WPML Multilingual
  * CMS plugin to work.
  *
- * @since ??
+ * @since 4.4.5
  *
  * @link https://wpml.org
  */
@@ -40,7 +40,7 @@ class ET_Builder_Plugin_Compat_WPML_Sticky_Links extends ET_Builder_Plugin_Compa
 	/**
 	 * Convert sticky links into permalinks on Global items.
 	 *
-	 * @since ??
+	 * @since 4.4.5
 	 *
 	 * @param  string $content
 	 * @param  array  $props

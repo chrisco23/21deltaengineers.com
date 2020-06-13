@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin compatibility for Max Mega Menu
  *
- * @since ??
+ * @since 4.4.5
  *
  * @link https://wordpress.org/plugins/megamenu/
  */
@@ -37,7 +37,7 @@ class ET_Builder_Plugin_Compat_Megamenu extends ET_Builder_Plugin_Compat_Base {
 	/**
 	 * Remove Mega Menu sidebar from Builders widget areas list.
 	 *
-	 * @since ??
+	 * @since 4.4.5
 	 *
 	 * @return void
 	 */

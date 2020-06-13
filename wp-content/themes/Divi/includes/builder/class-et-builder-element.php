@@ -154,6 +154,9 @@ class ET_Builder_Element {
 	// woocommerce module
 	private $_is_woocommerce_module;
 
+	// uses for ligatures disabling at elements with letter-spacing CSS property
+	private $letter_spacing_fix_selectors = array();
+
 	/**
 	 * Holds module styles for the current request.
 	 *
@@ -929,6 +932,12 @@ class ET_Builder_Element {
 		if ( 0 === $post_id && et_core_page_resource_is_singular() ) {
 			// It doesn't matter if post id is 0 because we're going to force inline styles.
 			$post_id = et_core_page_resource_get_the_ID();
+		} else {
+			$queried_object = get_queried_object();
+			if ( is_object( $queried_object ) && property_exists( $queried_object , 'term_id' ) ) {
+				$term_id = $queried_object->term_id;
+				$post_id = ! empty( $term_id ) ? $term_id : $post_id;
+			}
 		}
 
 		$is_preview       = is_preview() || is_et_pb_preview();
@@ -938,7 +947,8 @@ class ET_Builder_Element {
 
 		$resource_owner = $unified_styles ? 'core' : 'builder';
 		$resource_slug  = $unified_styles ? 'unified' : 'module-design';
-		$resource_slug .= $unified_styles && et_builder_post_is_of_custom_post_type( $post_id ) ? '-cpt' : '';
+		$resource_slug .= ! empty( $term_id ) ? '-term' : '';
+		$resource_slug .= empty( $term_id ) && $unified_styles && et_builder_post_is_of_custom_post_type( $post_id ) ? '-cpt' : '';
 		$resource_slug  = et_theme_builder_decorate_page_resource_slug( $post_id, $resource_slug );
 
 		// If the post is password protected and a password has not been provided yet,
@@ -10992,6 +11002,8 @@ class ET_Builder_Element {
 								'declaration' => rtrim( $style ),
 								'priority'    => $this->_style_priority,
 							) );
+
+							$this->maybe_push_element_to_letter_spacing_fix_list( $selector, array( 'body.safari ', 'body.iphone ', 'body.uiwebview ' ), rtrim( $style ), $default_letter_spacing );
 						}
 					} else {
 						if ( $is_hover ) {
@@ -11003,6 +11015,8 @@ class ET_Builder_Element {
 							'declaration' => rtrim( $style ),
 							'priority'    => $this->_style_priority,
 						) );
+
+						$this->maybe_push_element_to_letter_spacing_fix_list( $css_element, array( 'body.safari ', 'body.iphone ', 'body.uiwebview ' ), rtrim( $style ), $default_letter_spacing );
 
 						if ( $is_placeholder ) {
 							self::set_style( $function_name, array(
@@ -11122,6 +11136,18 @@ class ET_Builder_Element {
 							'priority'    => $this->_style_priority,
 							'media_query' => ET_Builder_Element::get_media_query( $current_media_query ),
 						) );
+
+						if( ! empty( $selector ) &&  in_array( $mobile_option, array( 'letter_spacing_phone', 'letter_spacing_tablet' ) ) ) {
+							switch( $mobile_option ) {
+								case 'letter_spacing_phone':
+									$css_prefix = 'body.iphone ';
+								break;
+								case 'letter_spacing_tablet':
+									$css_prefix = 'body.uiwebview ';
+								break;
+							}
+							$this->maybe_push_element_to_letter_spacing_fix_list( $selector, $css_prefix, $declaration, $default_letter_spacing );
+						}
 
 						if ( $is_placeholder ) {
 							self::set_style( $function_name, array(
@@ -11256,6 +11282,51 @@ class ET_Builder_Element {
 							),
 						) );
 					}
+				}
+			}
+		}
+		// sets ligatures disabling for all selectors
+		// from the list $this->letter_spacing_fix_selectors
+		foreach ($this->letter_spacing_fix_selectors as $selector_with_prefix) {
+			self::set_style( $function_name, array(
+				'selector'    => $selector_with_prefix,
+				'declaration' => 'font-variant-ligatures: no-common-ligatures;',
+				'priority'    => $this->_style_priority
+			) );
+		}
+	}
+
+	/**
+	 * Maybe push element to the letter spacing fix list
+	 *
+	 * @since 4.4.3 Checks a element for the having of the letter-spacing property,
+	 * adds a prefix to all its selectors, push prefixed selector
+	 * to the array ($this->letter_spacing_fix_selectors) of elements
+	 * that need to have ligature fix (same elements will be overridden).
+	 *
+	 * @param string $selector CSS selector of the current element.
+	 * @param array $css_prefixes array or string of CSS prefixes which will be added to the current element selector.
+	 * @param string $declaration CSS declaration of the current element.
+	 * @param string $default_letter_spacing default letter-spacing value at the current element.
+	 */
+	function maybe_push_element_to_letter_spacing_fix_list( $selector, $css_prefixes, $declaration, $default_letter_spacing ) {
+		if ( false === strpos( trim( $declaration ), 'letter-spacing' ) || empty( $css_prefixes ) ) {
+			return;
+		}
+		$css_value = str_replace( 'letter-spacing', '', $declaration );
+		$css_value = preg_replace( '/[^a-zA-Z0-9]/', '', $css_value );
+		if ( ! ( 0 === intval( $default_letter_spacing ) &&  0 === intval( $css_value ) ) || ( $css_value === $default_letter_spacing ) ) {
+			if( ! is_array( $css_prefixes ) ) {
+				$css_prefixes = array( $css_prefixes );
+			}
+			foreach( $css_prefixes as $css_prefix ) {
+				$selector_with_prefix = '';
+				$selector_elements    = explode( ',', $selector );
+				if( is_array( $selector_elements ) && count( $selector_elements ) > 0 ) {
+					$selector_with_prefix = implode( ',', preg_filter( '/^/', $css_prefix, $selector_elements ) );
+				}
+				if ( ! empty( $selector_with_prefix ) ) {
+					$this->letter_spacing_fix_selectors[ crc32( $selector_with_prefix ) ] = $selector_with_prefix;
 				}
 			}
 		}
@@ -15673,7 +15744,7 @@ class ET_Builder_Element {
 
 	/**
 	 * Intended to be used for unit testing
-	 * 
+	 *
 	 * @intendedForTesting
 	 */
 	static function reset_styles() {
@@ -16373,6 +16444,9 @@ class ET_Builder_Element {
 					esc_attr( implode( ' ', $parallax_classname ) ),
 					esc_url( $background_image )
 				);
+
+				// set `.et_parallax_bg_wrap` border-radius.
+				et_set_parallax_bg_wrap_border_radius( $this->props, $this->slug, $this->main_css_element );
 			}
 
 			// C.3. Hover parallax class.

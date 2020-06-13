@@ -2,7 +2,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '4.4.5' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '4.4.8' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -1044,19 +1044,19 @@ function et_fb_app_preferences_settings() {
 		),
 		'lv_modal_dimension_height' => array(
 			'type'    => 'int',
-			'default' => -1,
+			'default' => 0,
 		),
 		'lv_modal_dimension_width'  => array(
 			'type'    => 'int',
-			'default' => -1,
+			'default' => 0,
 		),
 		'lv_modal_position_x'       => array(
 			'type'    => 'int',
-			'default' => -1,
+			'default' => 0,
 		),
 		'lv_modal_position_y'       => array(
 			'type'    => 'int',
-			'default' => -1,
+			'default' => 0,
 		),
 	);
 
@@ -2354,7 +2354,7 @@ function et_builder_process_range_value( $range, $option_type = '' ) {
 		$range_digit = floatval( $range );
 	}
 
-	$range_string = str_replace( $range_digit, '', (string) $range );
+	$range_string = str_replace( et_()->to_css_decimal( $range_digit ), '', (string) $range );
 
 	if ( '' !== $option_type && in_array( $range, et_builder_get_acceptable_css_string_values( $option_type ) ) ) {
 		$result = $range;
@@ -2363,7 +2363,7 @@ function et_builder_process_range_value( $range, $option_type = '' ) {
 			$range_string = 'line_height' === $option_type && 3 >= $range_digit ? 'em' : 'px';
 		}
 
-		$result = $range_digit . $range_string;
+		$result = et_()->to_css_decimal( $range_digit ) . $range_string;
 	}
 
 	return apply_filters( 'et_builder_processed_range_value', $result, $range, $range_string );
@@ -3081,36 +3081,6 @@ function et_pb_set_video_oembed_thumbnail_resolution( $image_src, $resolution = 
 	return $image_src;
 }
 endif;
-
-function et_builder_widgets_init() {
-	$et_pb_widgets = get_theme_mod( 'et_pb_widgets' );
-
-	if ( count( et_()->array_get( $et_pb_widgets, 'areas', array() ) ) ) {
-		foreach ( $et_pb_widgets['areas'] as $id => $name ) {
-			register_sidebar( array(
-				'name' => sanitize_text_field( $name ),
-				'id' => sanitize_text_field( $id ),
-				'before_widget' => '<div id="%1$s" class="et_pb_widget %2$s">',
-				'after_widget' => '</div> <!-- end .et_pb_widget -->',
-				'before_title' => '<h4 class="widgettitle">',
-				'after_title' => '</h4>',
-			) );
-		}
-	}
-
-	// Disable built-in's recent comments widget link styling because ET Themes don't need it.
-	if ( ! et_is_builder_plugin_active() ) {
-		add_filter( 'show_recent_comments_widget_style', '__return_false' );
-	}
-}
-
-// call the widgets init at 'init' hook if Divi Builder plugin active
-// this is needed because plugin loads the Divi builder at 'init' hook and 'widgets_init' is too early.
-if ( et_is_builder_plugin_active() ) {
-	add_action( 'init', 'et_builder_widgets_init', 20 );
-} else {
-	add_action( 'widgets_init', 'et_builder_widgets_init' );
-}
 
 function et_builder_get_widget_areas_list() {
 	global $wp_registered_sidebars;
@@ -11209,3 +11179,78 @@ function et_builder_register_assets() {
 	) );
 }
 add_action( 'init', 'et_builder_register_assets', 11 );
+
+/**
+ * Set border radius to parallax background wrapper.
+ * 
+ * @since 4.4.8
+ * 
+ * @param array  $props
+ * @param string $module
+ * @param string $order_class
+ *
+ * @return void
+ */
+if ( ! function_exists( 'et_set_parallax_bg_wrap_border_radius' ) ):
+function et_set_parallax_bg_wrap_border_radius( $props, $module, $order_class ) {
+	$border_radius_values        = et_pb_responsive_options()->get_property_values( $props, 'border_radii' );
+	$border_radius_hover_enabled = et_builder_module_prop( 'border_radii__hover_enabled', $props, '' );
+	$border_radius_hover_values  = et_builder_module_prop( 'border_radii__hover', $props, '' );
+
+	foreach ( et_pb_responsive_options()->get_modes() as $device ) {
+		if ( $border_radius_values[$device] === 'on||||' ) {
+			$border_radius_values[$device] = '';
+			continue;
+		}
+
+		$border_radius_values[$device] = et_format_parallax_bg_wrap_radius_values( $border_radius_values[$device] );
+	}
+
+	et_pb_responsive_options()->generate_responsive_css(
+		$border_radius_values,
+		$order_class . ' .et_parallax_bg_wrap',
+		'border-radius',
+		$module,
+		'',
+		'border'
+	);
+
+	if ( $border_radius_hover_enabled === 'on|hover' ) {
+		$radius_hover_values = et_format_parallax_bg_wrap_radius_values( $border_radius_hover_values );
+	} else {
+		$radius_hover_values = $border_radius_values['desktop'];
+	}
+
+	if ( $radius_hover_values ) {
+		ET_Builder_Element::set_style( $module, array(
+			'selector'    => $order_class . ':hover .et_parallax_bg_wrap',
+			'declaration' => esc_html( sprintf(
+				'border-radius: %1$s;',
+				$radius_hover_values
+			) ),
+		) );
+	}
+}
+endif;
+
+/**
+ * Get formatted border radius of parallax background wrapper
+ * 
+ * @since 4.4.8
+ * 
+ * @param string $border_radius_values
+ *
+ * @return string
+ */
+if ( ! function_exists( 'et_format_parallax_bg_wrap_radius_values' ) ):
+function et_format_parallax_bg_wrap_radius_values( $border_radius_values ) {
+	$radius_values = array();
+	$radius_array  = explode( '|', $border_radius_values );
+
+	for ( $i = 1; $i < count( $radius_array ); $i++ ) {
+		$radius_values[] = $radius_array[$i] ? $radius_array[$i] : 0;
+	}
+
+	return trim( implode( ' ', $radius_values ) );
+}
+endif;

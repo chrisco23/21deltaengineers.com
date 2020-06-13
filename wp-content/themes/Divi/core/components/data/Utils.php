@@ -872,6 +872,23 @@ class ET_Core_Data_Utils {
 	}
 
 	/**
+	 * Returns a string with a valid CSS property value.
+	 * 
+	 * With some locales (ex: ro_RO) the decimal point can be ',' (comma) and
+	 * we need to convert that to a '.' (period) decimal point to ensure that
+	 * the value is a valid CSS property value.
+	 *
+	 * @since ??
+	 *
+	 * @param float $float Original float value.
+	 *
+	 * @return string
+	 */
+	public function to_css_decimal( $float ) {	
+		return strtr( $float, ',', '.' );
+	}
+
+	/**
 	 * Sort using a custom function accounting for the common undefined order
 	 * pitfall due to a return value of 0.
 	 *

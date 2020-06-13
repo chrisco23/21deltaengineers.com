@@ -705,7 +705,8 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 				),
 			),
 		) );
-
+		// Added span wrapper for comma between Job Title and Company Title
+		$testimonials_metas_string = implode( '<span class="et_pb_testimonial_separator">,</span> ', $metas );
 		$output = sprintf(
 			'<div%3$s class="%4$s"%10$s%11$s>
 				%9$s
@@ -721,7 +722,7 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 			et_core_esc_previously( $author ),
 			$this->module_id(),
 			$this->module_classname( $render_slug ),
-			et_core_esc_previously( implode( ', ', $metas ) ), // #5
+			et_core_esc_previously( $testimonials_metas_string ), // #5
 			'', // Deprecated
 			$portrait_image,
 			$video_background,

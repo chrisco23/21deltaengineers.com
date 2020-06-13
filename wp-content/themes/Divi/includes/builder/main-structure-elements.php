@@ -546,6 +546,9 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 					esc_attr( implode( ' ', $parallax_classname ) ),
 					esc_url( $background_image )
 				);
+
+				// set `.et_parallax_bg_wrap` border-radius
+				et_set_parallax_bg_wrap_border_radius( $this->props, $this->slug, '%%order_class%%' );
 			}
 
 			// C.3. Hover parallax class.

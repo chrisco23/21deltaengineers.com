@@ -62,7 +62,7 @@ class ET_Builder_Module_Posts_Navigation extends ET_Builder_Module {
 			'box_shadow'            => array(
 				'default' => array(
 					'css' => array(
-						'main'         => '%%order_class%% .nav-previous, %%order_class%% .nav-next',
+						'main'         => '%%order_class%% .nav-previous a, %%order_class%% .nav-next a',
 						'overlay' => 'inset',
 						'important'    => true,
 					),
@@ -374,7 +374,7 @@ class ET_Builder_Module_Posts_Navigation extends ET_Builder_Module {
 
 		if ( $multi_view->has_value( 'show_next', 'on' ) && ! empty( $posts_navigation['next']->permalink ) ) {
 			?>
-				<span class="nav-next"<?php $multi_view->render_attrs( array( 
+				<span class="nav-next"<?php $multi_view->render_attrs( array(
 						'visibility' => array(
 							'show_next' => 'on',
 						),

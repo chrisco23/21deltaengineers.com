@@ -35,8 +35,9 @@
 
 		init: function () {
 			// All in One SEO Pack - Begin
-			$("#wp-link .link-target").append('<br><label style="padding-left: 4px;"><span>&nbsp;</span><input type="checkbox" id="tanfl-add-nofollow">' + aioseopL10n.noFollow + "</label>");
-			$("#wp-link .link-target").append('<br><label style="padding-left: 4px;"><span>&nbsp;</span><input type="checkbox" id="tanfl-add-sponsored">' + aioseopL10n.sponsored + '</label><br>');
+			$("#wp-link .link-target").append('<br><label style="padding-left: 4px;"><span>&nbsp;</span><input type="checkbox" id="aioseop-add-nofollow">' + aioseopL10n.noFollow + "</label>");
+			$("#wp-link .link-target").append('<br><label style="padding-left: 4px;"><span>&nbsp;</span><input type="checkbox" id="aioseop-add-sponsored">' + aioseopL10n.sponsored + '</label>');
+			$("#wp-link .link-target").append('<br><label style="padding-left: 4px;"><span>&nbsp;</span><input type="checkbox" id="aioseop-add-ugc">' + aioseopL10n.ugc + '</label><br>');
 			$(".wp-link-text-field").before('<div class="link-title-field"><label><span style="padding-left: 4px;">' + aioseopL10n.labelTitle + '</span><input id="wp-link-title" type="text" name="linktitle" /></label></div>');
 			$('<style type="text/css"> .has-text-field #wp-link .query-results { top: 256px !important; } #wp-link-wrap.search-panel-visible {height: 549px !important;}</style>').appendTo("head");
 			// All in One SEO Pack - End
@@ -48,8 +49,9 @@
 			inputs.close = $('#wp-link-close');
 
 			// All in One SEO Pack - Begin
-			inputs.tanfl = $('#tanfl-add-nofollow');
-			inputs.tanfl_sponsored = $('#tanfl-add-sponsored');
+			inputs.tanfl = $('#aioseop-add-nofollow');
+			inputs.tanfl_sponsored = $('#aioseop-add-sponsored');
+			inputs.tanfl_ugc = $('#aioseop-add-ugc');
 			inputs.title = $('#wp-link-title');
 			// All in One SEO Pack - End
 
@@ -296,6 +298,11 @@
 				} else {
 					inputs.tanfl_sponsored.prop('checked', false);
 				}
+				if (editor.dom.getAttrib(linkNode, 'rel').indexOf("ugc") >= 0) {
+					inputs.tanfl_ugc.prop('checked', true);
+				} else {
+					inputs.tanfl_ugc.prop('checked', false);
+				}
 				inputs.title.val(editor.dom.getAttrib(linkNode, 'title'));
 				// All in One SEO Pack - End
 
@@ -358,7 +365,10 @@
 				tanfl_value += 'nofollow ';
 			}
 			if (inputs.tanfl_sponsored.prop('checked')) {
-				tanfl_value += 'sponsored';
+				tanfl_value += 'sponsored ';
+			}
+			if (inputs.tanfl_ugc.prop('checked')) {
+				tanfl_value += 'ugc';
 			}
 			// All in One SEO Pack - End
 
@@ -582,6 +592,7 @@
 			inputs.openInNewTab.prop('checked', false);
 			inputs.tanfl.prop('checked', false);
 			inputs.tanfl_sponsored.prop('checked', false);
+			inputs.tanfl_ugc.prop('checked', false);
 			// All in One SEO Pack - End
 
 			// Empty the search field and swap the "rivers".

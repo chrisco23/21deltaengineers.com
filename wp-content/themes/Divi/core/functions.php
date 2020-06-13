@@ -1753,3 +1753,68 @@ if ( ! function_exists( 'et_core_get_websafe_fonts' ) ) :
 		return apply_filters( 'et_websafe_fonts', $websafe_fonts );
 	}
 endif;
+
+if ( ! function_exists( 'et_maybe_update_hosting_card_status' ) ) :
+	/**
+	 * Divi Hosting Card :: Update dismiss status via ET API
+	 *
+	 * @since 4.4.7
+	 */
+	function et_maybe_update_hosting_card_status() {
+		$et_account        = et_core_get_et_account();
+		$et_username       = et_()->array_get( $et_account, 'et_username', '' );
+		$et_api_key        = et_()->array_get( $et_account, 'et_api_key', '' );
+
+		// Exit if ET Username and/or ET API Key is not found
+		if ( '' === $et_username || '' === $et_api_key ) {
+			// Remove any WP Cron for Updating Hosting Card Status
+			wp_unschedule_hook( 'et_maybe_update_hosting_card_status_cron' );
+
+			return;
+		}
+
+		global $wp_version;
+
+		// Prepare settings for API request
+		$options = array(
+			'timeout'    => 30,
+			'body'       => array(
+				'action'   => 'disable_hosting_card',
+				'username' => $et_username,
+				'api_key'  => $et_api_key,
+			),
+			'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
+		);
+
+		$request               = wp_remote_post( 'https://www.elegantthemes.com/api/api.php', $options );
+		$request_response_code = wp_remote_retrieve_response_code( $request );
+		$response_body         = wp_remote_retrieve_body( $request );
+		$response              = (array) json_decode( $response_body );
+
+		// API request has been updated successfully and the User has already disabled the card, or,
+		// when API request was successful and returns error message
+		if ( 'disabled' === et_()->array_get( $response, 'status' ) || '' !== et_()->array_get( $response, 'error', '' ) ) {
+			// Remove any WP Cron for Updating Hosting Card Status
+			wp_unschedule_hook( 'et_maybe_update_hosting_card_status_cron' );
+
+			return;
+		}
+
+		// Fail-safe :: Schedule WP Cron to try again
+		// Once something were wrong in API request, or, response has error code
+		if ( is_wp_error( $request ) || 200 !== $request_response_code ) {
+
+			// First API request has failed, which were done already in above, second request
+			// (via cron) will be made in a minute, then third (via cron) and future (via cron)
+			// call will be per hour. Once API request is successful, cron will be removed
+			$timestamp = time() + 1 * MINUTE_IN_SECONDS;
+
+			if ( ! wp_next_scheduled( 'et_maybe_update_hosting_card_status_cron' ) ) {
+				wp_schedule_event( $timestamp, 'hourly', 'et_maybe_update_hosting_card_status_cron' );
+			}
+		}
+	}
+endif;
+
+// Action for WP Cron: Disable Hosting Card status via ET API
+add_action( 'et_maybe_update_hosting_card_status_cron', 'et_maybe_update_hosting_card_status' );

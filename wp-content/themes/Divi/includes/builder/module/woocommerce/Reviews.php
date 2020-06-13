@@ -307,7 +307,7 @@ class ET_Builder_Module_Woocommerce_Reviews extends ET_Builder_Module_Comments {
 		$reviews_title = ET_Builder_Module_Helper_Woocommerce_Modules::get_reviews_title( $product );
 		// Product could be changed using the Product filter in the Settings modal.
 		// Hence supplying the Product ID to fetch data based on the selected Product.
-		$reviews         = get_comments( array( 'post_id' => $product->get_id() ) );
+		$reviews         = get_comments( array( 'post_id' => $product->get_id(), 'status' => 'approve' ) );
 		$total_pages     = get_comment_pages_count( $reviews );
 		$reviews_content = wp_list_comments(
 			array(

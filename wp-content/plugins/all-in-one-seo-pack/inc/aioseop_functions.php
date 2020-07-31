@@ -840,11 +840,12 @@ if ( ! function_exists( 'render_seo_column' ) ) {
 			}
 		}
 
+		$value = esc_html( trim( $value ) );
 		if ( empty( $value ) ) {
 			$value = sprintf( '<strong>%s</strong>', sprintf( __( 'No value', 'all-in-one-seo-pack' ), str_replace( '_', ' ', $name ) ) );
 		}
 
-		$span  = "<span id='aioseop_{$column_name}_{$post_id}_value'>" . trim( $value ) . '</span>';
+		$span  = "<span id='aioseop_{$column_name}_{$post_id}_value'>" . $value . '</span>';
 		$nonce = wp_create_nonce( "aioseop_meta_{$column_name}_{$post_id}" );
 
 		?>
@@ -920,7 +921,7 @@ if ( ! function_exists( 'aioseop_ajax_save_meta' ) ) {
 			}
 		}
 
-		update_post_meta( $post_id, $key, $value );
+		update_post_meta( $post_id, $key, esc_html( $value ) );
 	}
 }
 

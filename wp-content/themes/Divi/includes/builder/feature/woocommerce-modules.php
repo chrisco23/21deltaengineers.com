@@ -63,7 +63,7 @@ function et_builder_wc_get_page_layouts( $translation_context = 'et_builder' ) {
 		default:
 			$product_page_layouts = array(
 				'et_build_from_scratch' => esc_html__( 'Build From Scratch', 'et_builder' ),
-				'et_default_layout'     => esc_html__( 'Default', 'et_builder' ),
+				'et_default_layout'     => et_builder_i18n( 'Default' ),
 			);
 			break;
 	}
@@ -397,8 +397,8 @@ function et_builder_wc_render_module_template( $function_name, $args = array(), 
 		return;
 	}
 
-	// Check if passed function name is whitelisted or not
-	$whitelisted_functions = array(
+	// Check if passed function name is allowlisted or not
+	$allowlisted_functions = array(
 		'the_title',
 		'woocommerce_breadcrumb',
 		'woocommerce_template_single_price',
@@ -414,7 +414,7 @@ function et_builder_wc_render_module_template( $function_name, $args = array(), 
 		'woocommerce_upsell_display',
 	);
 
-	if ( ! in_array( $function_name, $whitelisted_functions ) ) {
+	if ( ! in_array( $function_name, $allowlisted_functions ) ) {
 		return '';
 	}
 

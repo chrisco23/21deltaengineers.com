@@ -4211,6 +4211,7 @@ class All_in_One_SEO_Pack extends All_in_One_SEO_Pack_Module {
 				if ( current_user_can( 'update_plugins' ) ) {
 					add_action( 'admin_notices', array( $aioseop_update_checker, 'key_warning' ) );
 				}
+				add_action( 'admin_init', array( $this, 'checkIfLicensed' ) );
 				add_action( 'after_plugin_row_' . AIOSEOP_PLUGIN_BASENAME, array( $aioseop_update_checker, 'add_plugin_row' ) );
 			}
 		} else {
@@ -5102,21 +5103,13 @@ class All_in_One_SEO_Pack extends All_in_One_SEO_Pack_Module {
 				$optlist = array_diff( $optlist, array( 'sitemap_priority', 'sitemap_frequency' ) );
 			}
 
-			foreach ( $optlist as $field_name ) {
-				$field = "aiosp_$field_name";
-				if ( isset( $_POST[ $field ] ) ) {
-					$$field = $_POST[ $field ];
+			foreach ( $optlist as $optionName ) {
+				$value = isset( $_POST[ "aiosp_$optionName" ] ) ? $_POST[ "aiosp_$optionName" ] : '';
+				
+				if ( is_string( $value) ) {
+					$value = esc_html( $value );
 				}
-
-				delete_post_meta( $id, "_aioseop_{$field_name}" );
-			}
-
-			foreach ( $optlist as $field_name ) {
-				$var   = "aiosp_$field_name";
-				$field = "_aioseop_$field_name";
-				if ( isset( $$var ) && ! empty( $$var ) ) {
-					add_post_meta( $id, $field, $$var );
-				}
+				update_post_meta( $id, "_aioseop_$optionName", $value );
 			}
 		}
 	}
@@ -5213,12 +5206,31 @@ class All_in_One_SEO_Pack extends All_in_One_SEO_Pack_Module {
 				$url = esc_url( admin_url( 'admin.php?page=' . $menu_slug ) );
 			}
 
+			// Check if there are new notifications.
+			$notifications = '';
+			$notices       = new AIOSEOP_Notices();
+			if ( count( $notices->remote_notices ) ) {
+				$count         = count( $notices->remote_notices ) < 10 ? count( $notices->remote_notices ) : '!';
+				$notifications = ' <div class="aioseo-menu-notification-counter"><span>' . $count . '</span></div>';
+			}
+
 			$wp_admin_bar->add_menu(
 				array(
 					'id'    => AIOSEOP_PLUGIN_DIRNAME,
-					'title' => '<span class="ab-icon aioseop-admin-bar-logo"></span>' . __( 'SEO', 'all-in-one-seo-pack' ),
+					'title' => '<span class="ab-icon aioseop-admin-bar-logo"></span>' . __( 'SEO', 'all-in-one-seo-pack' ) . $notifications,
 				)
 			);
+
+			if ( $notifications ) {
+				$wp_admin_bar->add_menu(
+					array(
+						'id'     => 'aioseop-notifications',
+						'parent' => AIOSEOP_PLUGIN_DIRNAME,
+						'title'  => __( 'Notifications', 'all-in-one-seo-pack' ) . $notifications,
+						'href'   => $url,
+					)
+				);
+			}
 
 			if ( ! is_admin() ) {
 				$wp_admin_bar->add_menu(
@@ -5238,6 +5250,10 @@ class All_in_One_SEO_Pack extends All_in_One_SEO_Pack_Module {
 					'href'   => $url,
 				)
 			);
+
+			if ( ! is_admin() ) {
+				AIOSEOP_Education::external_tools( $wp_admin_bar );
+			} 
 
 			$aioseop_admin_menu = 1;
 			if ( ! empty( $post ) ) {
@@ -5380,22 +5396,14 @@ class All_in_One_SEO_Pack extends All_in_One_SEO_Pack_Module {
 				$optlist = array_diff( $optlist, array( 'sitemap_priority', 'sitemap_frequency' ) );
 			}
 
-			foreach ( $optlist as $field_name ) {
-				$field = "aiosp_$field_name";
-				if ( isset( $_POST[ $field ] ) ) {
-					$$field = $_POST[ $field ];
+			
+			foreach ( $optlist as $optionName ) {
+				$value = isset( $_POST[ "aiosp_$optionName" ] ) ? $_POST[ "aiosp_$optionName" ] : '';
+				
+				if ( is_string( $value) ) {
+					$value = esc_html( $value );
 				}
-
-				delete_term_meta( $id, "_aioseop_{$field_name}" );
-			}
-
-			foreach ( $optlist as $field_name ) {
-				$var   = "aiosp_$field_name";
-				$field = "_aioseop_$field_name";
-
-				if ( isset( $$var ) && ! empty( $$var ) ) {
-					add_term_meta( $id, $field, $$var );
-				}
+				update_term_meta( $id, "_aioseop_$optionName", $value );
 			}
 		}
 	}
@@ -5634,19 +5642,6 @@ class All_in_One_SEO_Pack extends All_in_One_SEO_Pack_Module {
 		}
 		// Decode entities.
 		$value = $this->html_entity_decode( $value );
-		$value = preg_replace(
-			array(
-				'#<a.*?>([^>]*)</a>#i', // Remove link but keep anchor text.
-				'@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@', // Remove URLs.
-			),
-			array(
-				'$1', // Replacement link's anchor text.
-				'', // Replacement URLs.
-			),
-			$value
-		);
-		// Strip html.
-		$value = wp_strip_all_tags( $value );
 		// External trim.
 		$value = trim( $value );
 		// Internal whitespace trim.
@@ -5793,5 +5788,29 @@ class All_in_One_SEO_Pack extends All_in_One_SEO_Pack_Module {
 				do_action( $this->prefix . $action . '_' . $name );
 			}
 		}
+	}
+
+	/**
+	 * Checks if the plugin has a license key set, and otherwise wipes the addons/plan settings.
+	 *
+	 * @since 3.6.0
+	 *
+	 * @return void
+	 */
+	public function checkIfLicensed() {
+		global $aioseop_options;
+		if ( ! isset( $aioseop_options['aiosp_license_key'] ) ) {
+			return;
+		}
+
+		if ( empty( $aioseop_options['aiosp_license_key'] ) ) {
+			if ( isset( $aioseop_options['addons'] ) ) {
+				$aioseop_options['addons'] = '';
+			}
+			if ( isset( $aioseop_options['plan'] ) ) {
+				$aioseop_options['plan'] = 'unlicensed';
+			}
+		}
+		update_option( 'aioseop_options', $aioseop_options );
 	}
 }

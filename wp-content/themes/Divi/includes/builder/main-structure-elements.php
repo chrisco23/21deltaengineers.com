@@ -1,5 +1,12 @@
 <?php
 /**
+ * Fires before the builder's structure element classes are loaded.
+ *
+ * @since 4.4.9
+ */
+do_action( 'et_builder_structure_elements_load' );
+
+/**
  * Section Element class
  *
  * @since [version]
@@ -15,7 +22,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 			'general' => array(
 				'toggles' => array(
 					'background'     => array(
-						'title'       => esc_html__( 'Background', 'et_builder' ),
+						'title'       => et_builder_i18n( 'Background' ),
 						'sub_toggles' => array(
 							'main'     => '',
 							'column_1' => array( 'name' => esc_html__( 'Column 1', 'et_builder' ) ),
@@ -28,9 +35,9 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 			),
 			'advanced' => array(
 				'toggles' => array(
-					'layout'          => esc_html__( 'Layout', 'et_builder' ),
+					'layout'          => et_builder_i18n( 'Layout' ),
 					'width'           => array(
-						'title'    => esc_html__( 'Sizing', 'et_builder' ),
+						'title'    => et_builder_i18n( 'Sizing' ),
 						'priority' => 65,
 					),
 					'margin_padding'  => array(
@@ -57,7 +64,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 						),
 					),
 					'custom_css' => array(
-						'title'  => esc_html__( 'Custom CSS', 'et_builder' ),
+						'title'  => et_builder_i18n( 'Custom CSS' ),
 						'sub_toggles' => array(
 							'main'     => '',
 							'column_1' => array( 'name' => esc_html__( 'Column 1', 'et_builder' ) ),
@@ -111,7 +118,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 				'extra'   => array(
 					'inner' => array(
 						'css' => array(
-							'main' => '%%order_class%% > .et_pb_row',
+							'main' => array( '%%order_class%% > .et_pb_row', '%%order_class%%.et_section_specialty > .et_pb_row' ),
 						),
 						'options' => array(
 							'width'     => array(
@@ -143,7 +150,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 
 		$this->help_videos = array(
 			array(
-				'id'   => esc_html( '3kmJ_mMVB1w' ),
+				'id'   => '3kmJ_mMVB1w',
 				'name' => esc_html__( 'An introduction to Sections', 'et_builder' ),
 			),
 		);
@@ -156,8 +163,8 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 				'type'            => 'yes_no_button',
 				'option_category' => 'configuration',
 				'options'         => array(
-					'off' => esc_html__( 'No', 'et_builder' ),
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => et_builder_i18n( 'No' ),
+					'on'  => et_builder_i18n( 'Yes' ),
 				),
 				'default'         => 'off',
 				'description'     => esc_html__( 'Here you can select whether or not your section has an inner shadow. This can look great when you have colored backgrounds or background images.', 'et_builder' ),
@@ -171,8 +178,8 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 				'type'              => 'yes_no_button',
 				'option_category'   => 'layout',
 				'options'           => array(
-					'off' => esc_html__( 'No', 'et_builder' ),
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => et_builder_i18n( 'No' ),
+					'on'  => et_builder_i18n( 'Yes' ),
 				),
 				'default'           => 'off',
 				'tab_slug'          => 'advanced',
@@ -185,8 +192,8 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 				'type'              => 'yes_no_button',
 				'option_category'   => 'layout',
 				'options'           => array(
-					'off' => esc_html__( 'No', 'et_builder' ),
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => et_builder_i18n( 'No' ),
+					'on'  => et_builder_i18n( 'Yes' ),
 				),
 				'default'           => 'off',
 				'affects'           => array(
@@ -1300,7 +1307,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 			'advanced' => array(
 				'toggles' => array(
 					'width'          => array(
-						'title'    => esc_html__( 'Sizing', 'et_builder' ),
+						'title'    => et_builder_i18n( 'Sizing' ),
 						'priority' => 65,
 					),
 				),
@@ -1309,7 +1316,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 
 		$this->help_videos = array(
 			array(
-				'id'   => esc_html( 'R9ds7bEaHE8' ),
+				'id'   => 'R9ds7bEaHE8',
 				'name' => esc_html__( 'An introduction to Rows', 'et_builder' ),
 			),
 		);
@@ -1352,8 +1359,8 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 				'type'              => 'yes_no_button',
 				'option_category'   => 'layout',
 				'options'           => array(
-					'off' => esc_html__( 'No', 'et_builder' ),
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => et_builder_i18n( 'No' ),
+					'on'  => et_builder_i18n( 'Yes' ),
 				),
 				'default'           => 'off',
 				'affects'           => array(
@@ -1396,8 +1403,8 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 				'type'              => 'yes_no_button',
 				'option_category'   => 'layout',
 				'options'           => array(
-					'off' => esc_html__( 'No', 'et_builder' ),
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => et_builder_i18n( 'No' ),
+					'on'  => et_builder_i18n( 'Yes' ),
 				),
 				'default'           => 'off',
 				'tab_slug'          => 'advanced',
@@ -1783,7 +1790,7 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 			'advanced' => array(
 				'toggles' => array(
 					'width'         => array(
-						'title'    => esc_html__( 'Sizing', 'et_builder' ),
+						'title'    => et_builder_i18n( 'Sizing' ),
 						'priority' => 65,
 					),
 				),
@@ -1792,7 +1799,7 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 
 		$this->help_videos = array(
 			array(
-				'id'   => esc_html( 'R9ds7bEaHE8' ),
+				'id'   => 'R9ds7bEaHE8',
 				'name' => esc_html__( 'An introduction to Rows', 'et_builder' ),
 			),
 		);
@@ -1824,8 +1831,8 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 				'type'              => 'yes_no_button',
 				'option_category'   => 'layout',
 				'options'           => array(
-					'off' => esc_html__( 'No', 'et_builder' ),
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => et_builder_i18n( 'No' ),
+					'on'  => et_builder_i18n( 'Yes' ),
 				),
 				'default'           => 'off',
 				'affects'           => array(
@@ -1861,8 +1868,8 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 				'type'              => 'yes_no_button',
 				'option_category'   => 'layout',
 				'options'           => array(
-					'off' => esc_html__( 'No', 'et_builder' ),
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => et_builder_i18n( 'No' ),
+					'on'  => et_builder_i18n( 'Yes' ),
 				),
 				'default'           => 'off',
 				'tab_slug'          => 'advanced',
@@ -2202,7 +2209,7 @@ class ET_Builder_Column extends ET_Builder_Structure_Element {
 			'general' => array(
 				'toggles' => array(
 					'admin_label' => array(
-						'title'    => esc_html__( 'Admin Label', 'et_builder' ),
+						'title'    => et_builder_i18n( 'Admin Label' ),
 						'priority' => 99,
 					),
 				),
@@ -2211,7 +2218,7 @@ class ET_Builder_Column extends ET_Builder_Structure_Element {
 
 		$this->help_videos = array(
 			array(
-				'id'   => esc_html( 'R9ds7bEaHE8' ),
+				'id'   => 'R9ds7bEaHE8',
 				'name' => esc_html__( 'An introduction to the Column module', 'et_builder' ),
 			),
 		);
@@ -2248,7 +2255,7 @@ class ET_Builder_Column extends ET_Builder_Structure_Element {
 				'option_class'    => 'et_pb_custom_css_regular',
 			),
 			'admin_label'  => array(
-				'label'           => esc_html__( 'Admin Label', 'et_builder' ),
+				'label'           => et_builder_i18n( 'Admin Label' ),
 				'type'            => 'text',
 				'option_category' => 'configuration',
 				'description'     => esc_html__( 'This will change the label of the module in the builder for easy identification.', 'et_builder' ),
@@ -2704,3 +2711,10 @@ class ET_Builder_Column extends ET_Builder_Structure_Element {
 
 }
 new ET_Builder_Column;
+
+/**
+ * Fires after the builder's structure element classes are loaded.
+ *
+ * @since 4.4.9
+ */
+do_action( 'et_builder_structure_elements_loaded' );

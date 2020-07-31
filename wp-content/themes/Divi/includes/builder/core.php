@@ -369,8 +369,8 @@ function et_get_registered_post_type_options( $usort = false, $require_editor = 
 		return ET_Core_Cache::get( $key );
 	}
 
-	$blacklist = et_builder_get_blacklisted_post_types();
-	$whitelist = et_builder_get_third_party_post_types();
+	$blocklist = et_builder_get_blocklisted_post_types();
+	$allowlist = et_builder_get_third_party_post_types();
 
 	// Extra and Library layouts shouldn't appear in Theme Options as configurable post types.
 	/**
@@ -378,9 +378,9 @@ function et_get_registered_post_type_options( $usort = false, $require_editor = 
 	 *
 	 * @since 4.0
 	 *
-	 * @param string[] $blacklist Post types to blacklist.
+	 * @param string[] $blocklist Post types to blocklist.
 	 */
-	$blacklist      = apply_filters( 'et_builder_post_type_options_blacklist', array_merge( $blacklist, array(
+	$blocklist      = apply_filters( 'et_builder_post_type_options_blocklist', array_merge( $blocklist, array(
 		'et_pb_layout',
 		'layout',
 	) ) );
@@ -390,12 +390,12 @@ function et_get_registered_post_type_options( $usort = false, $require_editor = 
 	$post_types     = array();
 
 	foreach ( $raw_post_types as $post_type ) {
-		$is_whitelisted  = in_array( $post_type->name, $whitelist );
-		$is_blacklisted  = in_array( $post_type->name, $blacklist );
+		$is_allowlisted  = in_array( $post_type->name, $allowlist );
+		$is_blocklisted  = in_array( $post_type->name, $blocklist );
 		$supports_editor = $require_editor ? post_type_supports( $post_type->name, 'editor' ) : true;
 		$is_public       = et_builder_is_post_type_public( $post_type->name );
 
-		if ( ! $is_whitelisted && ( $is_blacklisted || ! $supports_editor || ! $is_public ) ) {
+		if ( ! $is_allowlisted && ( $is_blocklisted || ! $supports_editor || ! $is_public ) ) {
 			continue;
 		}
 
@@ -438,12 +438,12 @@ add_action( 'registered_post_type', 'et_clear_registered_post_type_options_cache
 /**
  * Get the list of unsupported Post Types.
  *
- * @since 3.10
+ * @since ??
  *
  * @return array
  */
-function et_builder_get_blacklisted_post_types() {
-	return apply_filters( 'et_builder_post_type_blacklist', array(
+function et_builder_get_blocklisted_post_types() {
+	return apply_filters( 'et_builder_post_type_blocklist', array(
 		// LearnDash
 		'sfwd-essays',
 
@@ -452,6 +452,20 @@ function et_builder_get_blacklisted_post_types() {
 		'topic',
 		'reply',
 	) );
+}
+
+/**
+ * Get the list of unsupported Post Types.
+ *
+ * @deprecated ?? No longer used by internal code; use `et_builder_get_blocklisted_post_types` instead.
+ *
+ * @since 3.10
+ * @since ?? Aliased to `et_builder_get_blocklisted_post_types`.
+ *
+ * @return array
+ */
+function et_builder_get_blacklisted_post_types() {
+	return et_builder_get_blocklisted_post_types();
 }
 
 /**
@@ -539,7 +553,7 @@ function et_builder_get_enabled_builder_post_types() {
 	$filtered = array();
 
 	foreach ( $options as $post_type => $state ) {
-		if ( 'on' === $state && array_key_exists( $post_type, et_get_registered_post_type_options() ) && ! in_array( $post_type, et_builder_get_blacklisted_post_types() ) ) {
+		if ( 'on' === $state && array_key_exists( $post_type, et_get_registered_post_type_options() ) && ! in_array( $post_type, et_builder_get_blocklisted_post_types() ) ) {
 			$filtered[] = $post_type;
 		}
 	}
@@ -669,13 +683,13 @@ function et_pb_is_allowed( $capabilities, $role = '' ) {
 		return false;
 	}
 
-	// Disable certain capabilities for non-whitelisted roles by default.
+	// Disable certain capabilities for non-allowlisted roles by default.
 	$dangerous       = array( 'theme_builder', 'read_dynamic_content_custom_fields' );
-	$roles_whitelist = array( 'administrator', 'et_support_elevated', 'et_support' );
+	$roles_allowlist = array( 'administrator', 'et_support_elevated', 'et_support' );
 
 	foreach ( (array) $capabilities as $capability ) {
 		$is_dangerous = in_array( $capability, $dangerous, true );
-		$role_not_whitelisted = ! in_array( $role, $roles_whitelist, true );
+		$role_not_allowlisted = ! in_array( $role, $roles_allowlist, true );
 
 		if ( $test_current_user && $is_dangerous && is_multisite() && is_super_admin() ) {
 			// Super admins always have access to dangerous capabilities and that cannot be
@@ -687,8 +701,8 @@ function et_pb_is_allowed( $capabilities, $role = '' ) {
 			return 'on' === $saved_capabilities[ $role ][ $capability ];
 		}
 
-		if ( $is_dangerous && $role_not_whitelisted ) {
-			// Whitelisted roles have access to dangerous capabilities by default,
+		if ( $is_dangerous && $role_not_allowlisted ) {
+			// Allowlisted roles have access to dangerous capabilities by default,
 			// but that can be changed in the role editor.
 			return false;
 		}
@@ -1186,12 +1200,12 @@ function et_pb_add_template_meta() {
 	$value = ! empty( $_POST['et_meta_value'] ) ? sanitize_text_field( $_POST['et_meta_value'] ) : '';
 	$custom_field = ! empty( $_POST['et_custom_field'] ) ? sanitize_text_field( $_POST['et_custom_field'] ) : '';
 
-	$whitelisted_meta_keys = array(
+	$allowlisted_meta_keys = array(
 		'_et_pb_row_layout',
 		'_et_pb_module_type',
 	);
 
-	if ( in_array( $custom_field, $whitelisted_meta_keys ) ) {
+	if ( in_array( $custom_field, $allowlisted_meta_keys ) ) {
 		update_post_meta( $post_id, $custom_field, $value );
 	}
 }
@@ -1545,7 +1559,7 @@ function et_pb_load_layout() {
 		die( -1 );
 	}
 
-	// sanitize via whitelisting
+	// sanitize via allowlisting
 	$replace_content = isset( $_POST['et_replace_content'] ) && 'on' === $_POST['et_replace_content'] ? 'on' : 'off';
 
 	set_theme_mod( 'et_pb_replace_content', $replace_content );
@@ -1655,7 +1669,7 @@ function et_builder_is_builder_built( $post_id, $built_by_builder ) {
 		return false;
 	}
 
-	// whitelist the builder slug
+	// allowlist the builder slug
 	$built_by_builder = in_array( $built_by_builder, array( 'fb', 'bb' ) ) ? $built_by_builder : '';
 
 	// the built by slug prepended to the first section automatically, in this format: fb_built="1"
@@ -1851,8 +1865,8 @@ function et_pb_heartbeat_post_modified( $response ) {
 				}
 			}
 
-			$custom_defaults_manager = ET_Builder_Custom_Defaults_Settings::instance();
-			$response['et']['custom_defaults'] = $custom_defaults_manager->get_custom_defaults();
+			$global_presets_manager = ET_Builder_Global_Presets_Settings::instance();
+			$response['et']['global_presets'] = $global_presets_manager->get_global_presets();
 		} else {
 			$response['et']['post_not_modified'] = true;
 			$response['et']['action'] = 'post content not modified externally'; // dev use
@@ -2200,10 +2214,9 @@ function et_fb_get_nonces() {
 		'searchPosts'                     => wp_create_nonce( 'et_builder_search_posts' ),
 		'getPostsList'                    => wp_create_nonce( 'et_fb_get_posts_list' ),
 		'sendErrorReport'                 => wp_create_nonce( 'et_fb_send_error_report' ),
-		'saveCustomDefaultsHistory'       => wp_create_nonce( 'et_builder_save_custom_defaults_history' ),
-		'retrieveCustomDefaultsHistory'   => wp_create_nonce( 'et_builder_retrieve_custom_defaults_history' ),
+		'saveGlobalPresetsHistory'        => wp_create_nonce( 'et_builder_save_global_presets_history' ),
+		'retrieveGlobalPresetsHistory'    => wp_create_nonce( 'et_builder_retrieve_global_presets_history' ),
 		'migrateModuleCustomizerPhaseTwo' => wp_create_nonce( 'et_builder_migrate_module_customizer_phase_two' ),
-		'searchPosts'                     => wp_create_nonce( 'et_builder_search_posts' ),
 		'getWoocommerceTabs'              => wp_create_nonce( 'et_builder_get_woocommerce_tabs' ),
 	);
 
@@ -2598,17 +2611,15 @@ function et_pb_submit_subscribe_form() {
 	$providers = ET_Core_API_Email_Providers::instance();
 	$utils     = ET_Core_Data_Utils::instance();
 
-	$post_id          = $utils->array_get_sanitized( $_POST, 'et_post_id' );
-	$post             = get_post( $post_id );
-	$has_email_optin  = is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'et_pb_signup' );
-	$use_spam_service = get_post_meta( $post_id, '_et_builder_use_spam_service', true );
+	$checksum         = $utils->array_get_sanitized( $_POST, 'et_checksum' );
+	$use_spam_service = get_option( 'et_pb_signup_' . $checksum );
 
 	$provider_slug = $utils->array_get_sanitized( $_POST, 'et_provider' );
 	$account_name  = $utils->array_get_sanitized( $_POST, 'et_account' );
 	$custom_fields = $utils->array_get( $_POST, 'et_custom_fields', array() );
 	$provider      = $providers->get( $provider_slug, $account_name, 'builder' );
 
-	if ( ! $provider || ! $has_email_optin ) {
+	if ( ! $provider || ! $use_spam_service ) {
 		et_core_die( esc_html__( 'Configuration Error: Invalid data.', 'et_builder' ) );
 	}
 
@@ -2631,7 +2642,7 @@ function et_pb_submit_subscribe_form() {
 
 	$signup = ET_Builder_Element::get_module( 'et_pb_signup' );
 
-	if ( $signup && $use_spam_service && $signup->is_spam_submission() ) {
+	if ( $signup && 'on' === $use_spam_service && $signup->is_spam_submission() ) {
 		et_core_die( esc_html__( 'You must be a human to submit this form.', 'et_builder' ) );
 	}
 
@@ -2819,7 +2830,7 @@ add_action( 'wp_ajax_et_pb_save_role_settings', 'et_pb_save_role_settings' );
  * @return array An array of tags to be removed during strip_shortcodes() call.
  */
 function et_pb_strip_non_builder_shortcodes_tagnames( $tags_to_remove ) {
-	// Initial whitelist
+	// Initial allowlist
 	$valid_tags = ET_Builder_Element::get_module_slugs_by_post_type();
 
 	/**
@@ -2830,7 +2841,7 @@ function et_pb_strip_non_builder_shortcodes_tagnames( $tags_to_remove ) {
 	 */
 	$valid_tags = apply_filters( 'et_pb_valid_builder_shortcodes', $valid_tags );
 
-	// Generate a blacklist, by subtracting the whitelist from all registered shortcodes.
+	// Generate a blocklist, by subtracting the allowlist from all registered shortcodes.
 	$tags_to_remove = array_diff( $tags_to_remove, $valid_tags );
 
 	return $tags_to_remove;
@@ -3331,40 +3342,40 @@ function et_builder_get_unsaved_notification_texts() {
 }
 endif;
 
-if ( ! function_exists( 'et_builder_get_custom_defaults_save_failure_texts' ) ) :
-function et_builder_get_custom_defaults_save_failure_texts() {
+if ( ! function_exists( 'et_builder_get_global_presets_save_failure_texts' ) ) :
+function et_builder_get_global_presets_save_failure_texts() {
 	$text = sprintf(
 		'<p>%1$s</p>
-		<a class="et-builder-custom-defaults-save-failure-download" style="display: none"></a>',
-		et_get_safe_localization( __( 'An error has occurred while saving the Global Defaults settings. Various problems can cause a save to fail, such as a lack of server resources, firewall blockages or plugin conflicts or server misconfiguration. You can try saving again by clicking Try Again, or you can download a backup of your unsaved defaults by clicking Download Backup. A backup can be helpful when contacting our Support Team.', 'et_builder' ) )
+		<a class="et-builder-global-presets-save-failure-download" style="display: none"></a>',
+		et_get_safe_localization( __( 'An error has occurred while saving the Global Presets settings. Various problems can cause a save to fail, such as a lack of server resources, firewall blockages or plugin conflicts or server misconfiguration. You can try saving again by clicking Try Again, or you can download a backup of your unsaved defaults by clicking Download Backup. A backup can be helpful when contacting our Support Team.', 'et_builder' ) )
 	);
 
 	return array(
-		'header'  => esc_html__( 'Save of Global Defaults Has Failed', 'et_builder' ),
+		'header'  => esc_html__( 'Save of Global Presets Has Failed', 'et_builder' ),
 		'text'    => $text,
 		'buttons' => array(
 			'secondary' => sprintf('<a href="#" class="et-core-modal-action et-core-modal-action-secondary">%1$s</a>', esc_html__( 'Try Again', 'et_builder' ) ),
 			'primary'   => sprintf('<a href="#" class="et-core-modal-action et-core-modal-action-primary">%1$s</a>', esc_html__( 'Download Backup', 'et_builder' ) ),
 		),
-		'classes' => 'et-builder-custom-defaults-save-failure-modal',
+		'classes' => 'et-builder-global-presets-save-failure-modal',
 	);
 }
 endif;
 
-if ( ! function_exists( 'et_builder_get_custom_defaults_load_failure_texts' ) ) :
-function et_builder_get_custom_defaults_load_failure_texts() {
+if ( ! function_exists( 'et_builder_get_global_presets_load_failure_texts' ) ) :
+function et_builder_get_global_presets_load_failure_texts() {
 	$text = sprintf(
 		'<p>%1$s</p>',
 		et_get_safe_localization( __( 'An error has occurred while loading the Global History States. Various problems can cause a save to fail, such as a lack of server resources, firewall blockages or plugin conflicts or server misconfiguration. You can try loading again by clicking Try Again.', 'et_builder' ) )
 	);
 
 	return array(
-		'header'  => esc_html__( 'Load of Global Defaults Has Failed', 'et_builder' ),
+		'header'  => esc_html__( 'Load of Global Presets Has Failed', 'et_builder' ),
 		'text'    => $text,
 		'buttons' => array(
 			'primary' => sprintf( '<a href="#" class="et-core-modal-action et-core-modal-action-primary">%1$s</a>', esc_html__( 'Try Again', 'et_builder' ) )
 		),
-		'classes' => 'et-builder-custom-defaults-load-failure-modal',
+		'classes' => 'et-builder-global-presets-load-failure-modal',
 	);
 }
 endif;
@@ -4357,7 +4368,7 @@ function et_builder_get_font_weight_list() {
 	$default_font_weights_list = array(
 		'100' => esc_html__( 'Thin', 'et_builder' ),
 		'200' => esc_html__( 'Ultra Light', 'et_builder' ),
-		'300' => esc_html__( 'Light', 'et_builder' ),
+		'300' => et_builder_i18n( 'Light' ),
 		'400' => esc_html__( 'Regular', 'et_builder' ),
 		'500' => esc_html__( 'Medium', 'et_builder' ),
 		'600' => esc_html__( 'Semi Bold', 'et_builder' ),
@@ -5969,7 +5980,7 @@ function et_builder_get_public_post_types() {
 	$cache_key = 'et_builder_get_public_post_types';
 
 	if ( ! et_core_cache_has( $cache_key ) ) {
-		$blacklist      = array_merge( array(
+		$blocklist      = array_merge( array(
 			'et_pb_layout',
 			ET_THEME_BUILDER_TEMPLATE_POST_TYPE,
 		), et_theme_builder_get_layout_post_types() );
@@ -5977,7 +5988,7 @@ function et_builder_get_public_post_types() {
 		$post_types     = array();
 
 		foreach ( $all_post_types as $post_type ) {
-			if ( ! in_array( $post_type->name, $blacklist, true ) && et_builder_is_post_type_public( $post_type->name ) ) {
+			if ( ! in_array( $post_type->name, $blocklist, true ) && et_builder_is_post_type_public( $post_type->name ) ) {
 				$post_types[ $post_type->name ] = $post_type;
 			}
 		}
@@ -6161,10 +6172,31 @@ function et_builder_filter_main_query_paged_for_blog_module( $query ) {
 }
 add_filter( 'pre_get_posts', 'et_builder_filter_main_query_paged_for_blog_module' );
 
+if ( ! function_exists( 'et_maybe_enable_embed_shortcode' ) ):
+	/**
+	 * Maybe enable [embed] shortcode at the content.
+	 *
+	 * @since 4.4.9
+	 *
+	 * @param string  $content
+	 * @param boolean $is_content
+	 *
+	 * @return string
+	 */
+	function et_maybe_enable_embed_shortcode( $content, $is_content ) {
+		if ( $is_content && has_shortcode( $content, 'embed' ) ) {
+			global $wp_embed;
+			$content = $wp_embed->run_shortcode( $content );
+		}
+
+		return $content;
+	}
+endif;
+
 /**
  * Register custom sidebars.
  *
- * @since ?? Moved from builder/functions.php, so it can be loaded on wp_ajax_save_widget()
+ * @since 4.4.8 Moved from builder/functions.php, so it can be loaded on wp_ajax_save_widget()
  */
 function et_builder_widgets_init() {
 	$et_pb_widgets = get_theme_mod( 'et_pb_widgets' );

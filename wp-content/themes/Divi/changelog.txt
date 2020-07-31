@@ -1,3 +1,233 @@
+version 4.5.1 ( updated 07-13-2020 )
+- Fixed the issue preventing to switch between the tabs of the responsive options.
+- Added hover background when button is hovered in Visual Builder.
+- Allow 3rd Party Extension to use builder editable elements on their custom modules.
+- Fixed PHP 7.4+ deprecated passing parameters to implode in reverse order.
+- Fixed bug with Parallax effect on iPad with iOS 13.
+- Prevent setting selected option on the 2nd position in select control when total results size is 1.
+- Fixed Blog Module conflict with Video widget.
+- Fixed issue with dynamic categories on custom post types.
+- Fixed the Button Icon option description text.
+- Fixed CSS filter's hover transition effect on desktop.
+- Fixed contact form rendering issue when option filed was added with keyboard shortcut.
+- Fixed products per page plugin compatibility.
+- Fixed the issue where module attributes were empty while importing a layout either through Divi Library or Divi Builder.
+- Fixed the issue caused by incompatibility with PHP 5.4.
+- Changed blacklist and whitelist terms to blocklist and allowlist throughout codebase.
+- Fixed a typo in the Theme Options "Grab the first post image" option description.
+	* core/admin/js/support-center.js
+	* core/components/Portability.php
+	* core/components/SupportCenter.php
+	* core/components/VersionRollback.php
+	* core/components/api/ElegantThemes.php
+	* core/components/data/Utils.php
+	* core/components/mu-plugins/SupportCenterSafeModeDisablePlugins.php
+	* core/functions.php
+	* core/ui/utils/utils.js
+	* epanel/custom_functions.php
+	* includes/builder/ab-testing.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/core.php
+	* includes/builder/deprecations.php
+	* includes/builder/feature/dynamic-content.php
+	* includes/builder/feature/global-presets/History.php
+	* includes/builder/feature/global-presets/Settings.php
+	* includes/builder/feature/woocommerce-modules.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/theme-builder/theme-builder.php
+	* includes/builder/functions.php
+	* includes/builder/module/Blurb.php
+	* includes/builder/module/ContactFormItem.php
+	* includes/builder/module/helpers/HoverOptions.php
+	* includes/builder/plugin-compat/eventon.php
+	* includes/builder/plugin-compat/woocommerce.php
+	* includes/builder/scripts/frontend/scripts.js
+	* includes/builder/scripts/src/builder.js
+	* options_divi.php
+
+version 4.5 ( updated 07-09-2020 )
+- Added new Divi Presets system
+- Latest Products sorting option added in the Shop Module.
+- Fixed query to the image by URL failed when served URL different with guid URL.
+- Fixed duplicate Post Tags group label name on Theme Builder settings when The Events Calendar plugin is enabled.
+- If a WooCommerce product has no ratings, the demo rating is shown so you can edit the Woo Rating Module settings in Visual Builder.
+- Fixed TB layout and template is not being updated immediately on the FE when caching plugin is active.
+- Fixed a bug which were causing View Modified Styles right-click menu in Layers panel to not work in some cases.
+- Fixed turning off the default background color for slides for FullWidth Slider and Slider modules.
+  * core/admin/js/portability.js
+  * core/components/data/Utils.php
+  * core/components/Portability.php
+  * core/functions.php
+  * includes/builder/class-et-builder-element.php
+  * includes/builder/class-et-global-settings.php
+  * includes/builder/core.php
+  * includes/builder/feature/global-presets/History.php
+  * includes/builder/feature/global-presets/Settings.php
+  * includes/builder/framework.php
+  * includes/builder/frontend-builder/bundle.js
+  * includes/builder/frontend-builder/theme-builder/api.php
+  * includes/builder/frontend-builder/theme-builder/theme-builder.php
+  * includes/builder/functions.php
+  * includes/builder/module/Shop.php
+  * includes/builder/module/SliderItem.php
+
+version 4.4.9 ( updated 07-01-2020 )
+- Fixed conflict "Use Current Page" option with "Product Category" view type in Shop Module.
+- In order to increase the rating of page loading speed and to eliminate the warning from Lighthouse "Ensure text remains visible during webfont loading", the directive font-display has been added to css rules@font-face (for the Divi fonts and for Opens Sans fonts, which loading from googleapis.com).
+- Fixed an issue that caused the color picker of 3rd party plugins to not be visible in some cases.
+- Fixed background images from Smush CDN is not saved in the static resources.
+- Fixed bug with using Fullwidth slider below theme builder global header with negative margin.
+- Fixed accordion editable text on Visual Builder when Section/Row is locked.
+- Introduces custom fields registration for 3rd party extensions and ability to disable context menu on these fields.
+- Fixed bug with video height in slider.
+- Improved UX for the Layers in Layers panel that doesn't have respective plugin activated.
+- Fixed video module can't be played when overlay is being used and lazyload for iframe is enabled on Smush plugin.
+- Disabled stripping the [embed] shortcode on the frontend, which was added via Custom Fields by Dynamic Content feature to the content area.
+- Fixed bug with video positioning inside the slider.
+- Fixed full width slider editable text when module or section is set to locked.
+- Fixed gallery module background parallax issue on the Front-End.
+- Fixed the appearance of php-warnings when using the  Contact Form module that has a layout with the hover mode enabled for Fields Letter Spacing with the same 0px value for both.
+- Fixed inner width styling option for Speciality Section when used in a Product Page.
+- Fixed bug with play icon color when multiple sliders are added to the page.
+- Fixed bug with module gradient background applied on top of a row which has a video background set.
+- Fixed an issue that caused the looping animations to be removed from elements.
+- Added title attribute to Theme Builder's vertical menu items.
+- Added selective sync options on transforms settings.
+- Updated Layers panel to not allow ESC key to close it.
+- Avoid transforms on click mode when a module is selected but not when settings modal is open.
+- Fixed The Event Calendar Event Community compatibility issue when TB overrides the layouts.
+- Fixed bug with settings modal when visual builder is disabled.
+- Fixed bug with dynamic categories when they are added to a post via Divi library.
+- Fixed animations for sections that are located right after the fullscreen header.
+- Added auto-function when rendering content in Woo Tab modules.
+- Fixed bug with positioning in visual builder when vh unit is used.
+- Fixed adding modules/rows to locked sections when interaction mode is set to "Click Mode".
+- Fixed Email Optin subscription fail error.
+- Changed row right/left draggable margin behaviour when right/left margin is set to auto.
+- Changed module right/left draggable margin behaviour when right/left margin is empty.
+- Fixed a bug in Layers panel to allow Multi-select to work properly.
+- Fixed issue with un-clickable buttons in Full-Width Header in some cases.
+- Fixed bug with Admin Label control icons.
+- Fixed a styling issue when section/row was set to Locked and Interaction mode was set to "Click Mode".
+- Fixed image inner shadow styling for Blog module.
+- Fixed incorrect Contact Form module captcha input autocomplete attribute value.
+- Fixed an issue with wpautop not getting properly applied in Code module in certain cases.
+- Fixed a bug that prevented user from moving sections if Split Testing option was off in Divi Role Editor.
+- Fixed failing intentional-error test because Divi loads another product's core.
+- Fixed bug with reset field options in Contact Form module.
+- Fixed bug with a search results page that has a custom post type posts with the visual builder enabled.
+- Fixed bug with background-repeat when button background color on hover is set in Customizer.
+	* core/components/data/Utils.php
+	* core/cypress.json
+	* core/ui/components/controls/sortable-list/sortable-list.jsx
+	* functions.php
+	* includes/builder/api/DiviExtension.php
+	* includes/builder/autoload.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/class-et-builder-settings.php
+	* includes/builder/core.php
+	* includes/builder/feature/BlockEditorIntegration.php
+	* includes/builder/feature/I18n.php
+	* includes/builder/feature/dynamic-content.php
+	* includes/builder/feature/woocommerce-modules.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/i18n/generic.php
+	* includes/builder/frontend-builder/i18n/library.php
+	* includes/builder/frontend-builder/i18n/quick-actions.php
+	* includes/builder/functions.php
+	* includes/builder/main-structure-elements.php
+	* includes/builder/module/Accordion.php
+	* includes/builder/module/AccordionItem.php
+	* includes/builder/module/Audio.php
+	* includes/builder/module/BarCounters.php
+	* includes/builder/module/BarCountersItem.php
+	* includes/builder/module/Blog.php
+	* includes/builder/module/Blurb.php
+	* includes/builder/module/Button.php
+	* includes/builder/module/CircleCounter.php
+	* includes/builder/module/Code.php
+	* includes/builder/module/Comments.php
+	* includes/builder/module/ContactForm.php
+	* includes/builder/module/ContactFormItem.php
+	* includes/builder/module/CountdownTimer.php
+	* includes/builder/module/Cta.php
+	* includes/builder/module/Divider.php
+	* includes/builder/module/FilterablePortfolio.php
+	* includes/builder/module/FullwidthCode.php
+	* includes/builder/module/FullwidthHeader.php
+	* includes/builder/module/FullwidthImage.php
+	* includes/builder/module/FullwidthMap.php
+	* includes/builder/module/FullwidthMenu.php
+	* includes/builder/module/FullwidthPortfolio.php
+	* includes/builder/module/FullwidthPostSlider.php
+	* includes/builder/module/FullwidthPostTitle.php
+	* includes/builder/module/FullwidthSlider.php
+	* includes/builder/module/Gallery.php
+	* includes/builder/module/Image.php
+	* includes/builder/module/Login.php
+	* includes/builder/module/Map.php
+	* includes/builder/module/MapItem.php
+	* includes/builder/module/Menu.php
+	* includes/builder/module/NumberCounter.php
+	* includes/builder/module/Portfolio.php
+	* includes/builder/module/PostSlider.php
+	* includes/builder/module/PostTitle.php
+	* includes/builder/module/PostsNavigation.php
+	* includes/builder/module/PricingTables.php
+	* includes/builder/module/PricingTablesItem.php
+	* includes/builder/module/Search.php
+	* includes/builder/module/Shop.php
+	* includes/builder/module/Sidebar.php
+	* includes/builder/module/Signup.php
+	* includes/builder/module/SignupItem.php
+	* includes/builder/module/Slider.php
+	* includes/builder/module/SliderItem.php
+	* includes/builder/module/SocialMediaFollow.php
+	* includes/builder/module/SocialMediaFollowItem.php
+	* includes/builder/module/Tabs.php
+	* includes/builder/module/TabsItem.php
+	* includes/builder/module/TeamMember.php
+	* includes/builder/module/Testimonial.php
+	* includes/builder/module/Text.php
+	* includes/builder/module/Toggle.php
+	* includes/builder/module/Video.php
+	* includes/builder/module/VideoSlider.php
+	* includes/builder/module/VideoSliderItem.php
+	* includes/builder/module/field/BoxShadow.php
+	* includes/builder/module/field/Divider.php
+	* includes/builder/module/field/Height.php
+	* includes/builder/module/field/MaxWidth.php
+	* includes/builder/module/field/Overflow.php
+	* includes/builder/module/field/Position.php
+	* includes/builder/module/field/Scroll.php
+	* includes/builder/module/field/Transform.php
+	* includes/builder/module/type/PostContent.php
+	* includes/builder/module/type/WithSpamProtection.php
+	* includes/builder/module/woocommerce/AddToCart.php
+	* includes/builder/module/woocommerce/AdditionalInfo.php
+	* includes/builder/module/woocommerce/Breadcrumb.php
+	* includes/builder/module/woocommerce/CartNotice.php
+	* includes/builder/module/woocommerce/Description.php
+	* includes/builder/module/woocommerce/Gallery.php
+	* includes/builder/module/woocommerce/Images.php
+	* includes/builder/module/woocommerce/Meta.php
+	* includes/builder/module/woocommerce/Price.php
+	* includes/builder/module/woocommerce/Rating.php
+	* includes/builder/module/woocommerce/RelatedProducts.php
+	* includes/builder/module/woocommerce/Reviews.php
+	* includes/builder/module/woocommerce/Stock.php
+	* includes/builder/module/woocommerce/Tabs.php
+	* includes/builder/module/woocommerce/Title.php
+	* includes/builder/module/woocommerce/Upsells.php
+	* includes/builder/plugin-compat/advanced-custom-fields.php
+	* includes/builder/plugin-compat/the-events-calendar-community-events.php
+	* includes/builder/plugin-compat/wp-smushit.php
+	* includes/builder/post/type/Layout.php
+	* includes/builder/scripts/frontend/scripts.js
+	* includes/builder/tests/codeception/wpunit/Translations.php
+
 version 4.4.8 ( updated 06-04-2020 )
 - Fixed a bug which caused Add New button in Layers panel to not work in some cases In Wireframe mode.
 - Updated Layers panel to allow adding Row/Module from empty Section/Column.
@@ -887,7 +1117,7 @@ version 4.1 ( updated 01-09-2020 )
 - Fixed large import files failing to import in the Theme Builder.
 - Introduced paste styles on mixed selected items.
 - Fixed Woo Related Products to display only Products when used in Shop page irrespective of the Theme Customizer's Shop Page Display setting.
-- Added the Skype protocol ("skype:") to WP's URL whitelist, so that Skype URLs can be used in link fields.
+- Added the Skype protocol ("skype:") to WP's URL allowlist, so that Skype URLs can be used in link fields.
 - Updated translation tasks so it can handle Divi Layout Block's translatable string mechanism.
 - Added styling for Block Editor which matches Divi's frontend appearance.
 	* core/functions.php
@@ -1772,7 +2002,7 @@ version 4.0.2 ( updated 10-18-2019 )
 	* includes/builder/plugin-compat/wp-smushit.php
 
 version 4.0.1 ( updated 10-17-2019 )
-- Added Remote User roles to the whitelist used for capability checks on "dangerous" capabilities.
+- Added Remote User roles to the allowlist used for capability checks on "dangerous" capabilities.
 - Fixed button not visible on hover for Slider, Fullwitdh Header & Pricing Table module.
 - Fixed videos don't works on mobile.
 - TB keyboard shortcuts were overriding VB shortcuts. TinyMCE event handling was probably more aggressive which is why it worked.
@@ -2732,7 +2962,7 @@ version 3.25 ( updated 06-20-2019 )
 - Fixed copy/paste issue between Speciality and Normal section, when Speciality Inner row Sizing settings was copied on Normal section.
 - Fixed Speciality Section Inner Module Alignment.
 - Fixed cases when user could not focus on inline text editor for modules in 1/4 columns.
-- Added the "Really Simple SSL" plugin to Support Center's Safe Mode whitelist.
+- Added the "Really Simple SSL" plugin to Support Center's Safe Mode allowlist.
 - Fixed Project meta section appearing twice on projects that use the "No Sidebar" layout and do not use the builder.
 	* core/components/SupportCenter.php
 	* includes/builder/class-et-builder-element.php

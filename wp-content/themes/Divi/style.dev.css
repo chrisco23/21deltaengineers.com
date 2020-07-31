@@ -1,7 +1,7 @@
 /*!
 Theme Name: Divi
 Theme URI: http://www.elegantthemes.com/gallery/divi/
-Version: 4.4.8
+Version: 4.5.1
 Description: Smart. Flexible. Beautiful. Divi is the most powerful theme in our collection.
 Author: Elegant Themes
 Author URI: http://www.elegantthemes.com
@@ -3952,6 +3952,7 @@ body #main-content .et_builder_inner_content > p {
  */
 @font-face {
   font-family: 'ETmodules';
+  font-display: swap;
   src: url("core/admin/fonts/modules.eot");
   src: url("core/admin/fonts/modules.eot?#iefix") format("embedded-opentype"), url("core/admin/fonts/modules.ttf") format("truetype"), url("core/admin/fonts/modules.woff") format("woff"), url("core/admin/fonts/modules.svg#ETmodules") format("svg");
   font-weight: normal;
@@ -12751,6 +12752,11 @@ body.rtl.et-db:not(.et-fb-no-rtl) .et_audio_container .mejs-controls div.mejs-ti
   width: 80%;
   max-width: 1080px; }
 
+.et_pb_slide_video .mejs-mediaelement {
+  position: relative; }
+  .et_pb_slide_video .mejs-mediaelement .wp-video-shortcode {
+    display: block; }
+
 /* Slider Arrows */
 .et-pb-arrow-prev,
 .et-pb-arrow-next {
@@ -13351,6 +13357,9 @@ ul.et_pb_social_media_follow {
   overflow: hidden;
   position: relative; }
 
+.et_pb_column > .et_pb_section_video_bg {
+  z-index: -1; }
+
 .et_pb_section_video_bg {
   visibility: visible;
   position: absolute;
@@ -13492,6 +13501,11 @@ ul.et_pb_social_media_follow {
 
 .et_pb_fullscreen {
   padding: 0; }
+
+header.et-l.et-l--header:after {
+  clear: both;
+  display: block;
+  content: ''; }
 
 .et_pb_fullwidth_header .et_pb_fullwidth_header_container {
   position: relative;
@@ -13685,7 +13699,13 @@ ul.et_pb_social_media_follow {
   margin-top: 20px;
   display: inline-block; }
 
-.et_pb_fullwidth_header .et_pb_fullwidth_header_container .et_pb_button_two {
+.et_pb_fullwidth_header .et_pb_fullwidth_header_container .et_pb_button_one {
+  margin-right: 15px; }
+
+.et_pb_fullwidth_header .et_pb_fullwidth_header_container.right .et_pb_button_one {
+  margin-right: 0; }
+
+.et_pb_fullwidth_header .et_pb_fullwidth_header_container.right .et_pb_button_two {
   margin-left: 15px; }
 
 /* Header Overlay */
@@ -13722,10 +13742,12 @@ ul.et_pb_social_media_follow {
   z-index: 3;
   right: 0;
   bottom: 0;
-  left: 0; }
+  left: 0;
+  pointer-events: none; }
 
 .et_pb_fullwidth_header .et_pb_fullwidth_header_scroll a {
-  display: inline-block; }
+  display: inline-block;
+  pointer-events: all; }
 
 .et_pb_fullwidth_header .et_pb_fullwidth_header_scroll a .et-pb-icon {
   color: #FFF;
@@ -15473,13 +15495,21 @@ body.woocommerce-page #content .et_builder_inner_content.product .et_pb_wc_image
     margin: .4em 0 0; }
   /* Slider Module */
   .et_pb_column_1_2 .et_pb_slide_image,
+  .et_pb_column_1_2 .et_pb_slide_video,
   .et_pb_column_3_5 .et_pb_slide_image,
+  .et_pb_column_3_5 .et_pb_slide_video,
   .et_pb_column_1_4 .et_pb_slide_image,
+  .et_pb_column_1_4 .et_pb_slide_video,
   .et_pb_column_1_5 .et_pb_slide_image,
+  .et_pb_column_1_5 .et_pb_slide_video,
   .et_pb_column_1_6 .et_pb_slide_image,
+  .et_pb_column_1_6 .et_pb_slide_video,
   .et_pb_column_1_3 .et_pb_slide_image,
+  .et_pb_column_1_3 .et_pb_slide_video,
   .et_pb_column_2_5 .et_pb_slide_image,
-  .et_pb_column_3_8 .et_pb_slide_image {
+  .et_pb_column_2_5 .et_pb_slide_video,
+  .et_pb_column_3_8 .et_pb_slide_image,
+  .et_pb_column_3_8 .et_pb_slide_video {
     top: auto;
     bottom: auto;
     position: relative; }

@@ -66,9 +66,8 @@ class AIOSEOP_Updates {
 				set_transient( '_aioseop_activation_redirect', true, 30 ); // Sets 30 second transient for welcome screen redirect on activation.
 			}
 			delete_transient( 'aioseop_feed' );
-			// add_action( 'admin_init', array( $this, 'aioseop_welcome' ) ); //Uncomment for welcome screen.
-
 		}
+		add_action( 'current_screen', array( $this, 'showWelcomePage' ) );
 
 		/**
 		 * Perform updates that are dependent on external factors, not
@@ -77,13 +76,23 @@ class AIOSEOP_Updates {
 		$this->do_feature_updates();
 	}
 
-	function aioseop_welcome() {
-		if ( get_transient( '_aioseop_activation_redirect' ) ) {
-			delete_transient( '_aioseop_activation_redirect' );
-			$aioseop_welcome = new aioseop_welcome();
-			$aioseop_welcome->init( true );
+	/**
+	 * Shows the Welcome page if the transient exists.
+	 *
+	 * @since 3.6.0
+	 *
+	 * @return void
+	 */
+	function showWelcomePage() {
+		if (
+			! get_transient( '_aioseop_activation_redirect' ) ||
+			wp_doing_ajax() ||
+			! in_array( get_current_screen()->id, aioseop_get_admin_screens(), true )
+		) {
+			return;
 		}
-
+		$aioseop_welcome = new AIOSEOP_Welcome();
+		$aioseop_welcome->showPage();
 	}
 
 	/**

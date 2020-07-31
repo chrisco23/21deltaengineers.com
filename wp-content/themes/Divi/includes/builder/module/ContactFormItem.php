@@ -18,14 +18,14 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 		$this->settings_modal_toggles = array(
 			'general'  => array(
 				'toggles' => array(
-					'main_content'      => esc_html__( 'Text', 'et_builder' ),
+					'main_content'      => et_builder_i18n( 'Text' ),
 					'field_options'     => esc_html__( 'Field Options', 'et_builder' ),
 					'conditional_logic' => esc_html__( 'Conditional Logic', 'et_builder' ),
 				),
 			),
 			'advanced' => array(
 				'toggles' => array(
-					'layout' => esc_html__( 'Layout', 'et_builder' ),
+					'layout' => et_builder_i18n( 'Layout' ),
 				),
 			),
 		);
@@ -160,7 +160,7 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 				'option_category'  => 'basic_option',
 			),
 			'field_title' => array(
-				'label'       => esc_html__( 'Title', 'et_builder' ),
+				'label'       => et_builder_i18n( 'Title' ),
 				'type'        => 'text',
 				'description' => esc_html__( 'Here you can define the content that will be placed within the current tab.', 'et_builder' ),
 				'toggle_slug' => 'main_content',
@@ -279,8 +279,8 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 				'option_category' => 'configuration',
 				'default'         => 'on',
 				'options'         => array(
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
-					'off' => esc_html__( 'No', 'et_builder' ),
+					'on'  => et_builder_i18n( 'Yes' ),
+					'off' => et_builder_i18n( 'No' ),
 				),
 				'description'     => esc_html__( 'Define whether the field should be required or optional', 'et_builder' ),
 				'toggle_slug'     => 'field_options',
@@ -290,8 +290,8 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 				'type'            => 'yes_no_button',
 				'option_category' => 'layout',
 				'options'         => array(
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
-					'off' => esc_html__( 'No', 'et_builder' ),
+					'on'  => et_builder_i18n( 'Yes' ),
+					'off' => et_builder_i18n( 'No' ),
 				),
 				'tab_slug'        => 'advanced',
 				'toggle_slug'     => 'layout',
@@ -304,8 +304,8 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 				'option_category' => 'layout',
 				'default'         => 'off',
 				'options'         => array(
-					'on'  => esc_html__( 'Yes', 'et_builder' ),
-					'off' => esc_html__( 'No', 'et_builder' ),
+					'on'  => et_builder_i18n( 'Yes' ),
+					'off' => et_builder_i18n( 'No' ),
 				),
 				'affects'         => array(
 					'conditional_logic_rules',
@@ -670,7 +670,7 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 					$radio_options  = json_decode( $radio_options );
 
 					foreach ( $radio_options as $index => $option ) {
-						$is_checked  = 1 === $option->checked ? true : false;
+						$is_checked  = ( isset( $option->checked ) && 1 === $option->checked ) ? true : false;
 						$drag_id     = isset( $option->dragID ) ? $option->dragID : '';
 						$option_id   = isset( $option->id ) ? $option->id : $drag_id;
 						$option_id   = sprintf( ' data-id="%1$s"', esc_attr( $option_id ) );
@@ -693,7 +693,7 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 							esc_attr( $field_title ), // #5
 							'off' === $required_mark ? 'not_required' : 'required',
 							esc_attr( $index ),
-							esc_attr( wp_strip_all_tags( $option->value ) ),
+							esc_attr( wp_strip_all_tags( isset( $option->value ) ? $option->value : '' ) ),
 							checked( $is_checked, true, false ),
 							esc_attr( $render_count ), // #10
 							$option_id,

@@ -302,13 +302,17 @@ if ( ! class_exists( 'All_in_One_SEO_Pack_Sitemap' ) ) {
 			 * @param	bool	Whether or not the Google News sitemap should be output. Defaults to true.
 			 */
 			if ( apply_filters( 'aioseo_news_sitemap_enabled', true ) ) {
-				$news_sitemap = array(
+				$addl_sitemap_options['publication_name'] = array(
+					'name'    => __( 'Google News Publication Name', 'all-in-one-seo-pack' ),
+					'type'    => 'text',
+					'default' => get_bloginfo( 'name' ) ? get_bloginfo( 'name' ) : "",
+				);
+
+				$addl_sitemap_options['posttypes_news'] = array(
 					'name'    => __( 'Google News Sitemap Post Types', 'all-in-one-seo-pack' ),
 					'type'    => 'multicheckbox',
 					'default' => array( 'post' ),
 				);
-
-				$addl_sitemap_options['posttypes_news'] = $news_sitemap;
 			}
 
 			$addl_pages_options = array(
@@ -419,6 +423,10 @@ if ( ! class_exists( 'All_in_One_SEO_Pack_Sitemap' ) ) {
 			add_filter( $this->prefix . 'output_option', array( $this, 'display_custom_options' ), 10, 2 );
 			add_action( $this->prefix . 'daily_update_cron', array( $this, 'daily_update' ) );
 			add_action( 'init', array( $this, 'make_dynamic_xsl' ) );
+			
+			// Disable Core Sitemaps functionality.
+			remove_action( 'init', 'wp_sitemaps_get_server' );
+			add_filter( 'wp_sitemaps_enabled', '__return_false' );
 
 			// TODO is this required for dynamic sitemap?
 			add_action( 'transition_post_status', array( $this, 'update_sitemap_from_posts' ), 10, 3 );
@@ -2537,6 +2545,10 @@ if ( ! class_exists( 'All_in_One_SEO_Pack_Sitemap' ) ) {
 			$urls = $this->get_homepage_timestamp( $urls );
 			$urls = $this->get_posts_page_timestamp( $urls );
 
+			if ( in_array( 'page', $options[ "{$this->prefix}posttypes" ], true ) ) {
+				$urls = $this->removeWooCommercePages( $urls );
+			}
+
 			return $urls;
 		}
 
@@ -4063,6 +4075,7 @@ if ( ! class_exists( 'All_in_One_SEO_Pack_Sitemap' ) ) {
 				foreach ( $post_image_urls as $k1_index => $v1_image_url ) {
 					$v1_image_url                 = aiosp_common::absolutize_url( $v1_image_url );
 					$post_image_urls[ $k1_index ] = $v1_image_url;
+					$v1_image_url                 = $this->prepare_url( $v1_image_url );
 					$attachment_id                = aiosp_common::attachment_url_to_postid( $v1_image_url );
 
 					if ( $attachment_id ) {
@@ -4133,6 +4146,23 @@ if ( ! class_exists( 'All_in_One_SEO_Pack_Sitemap' ) ) {
 			}
 
 			return $rtn_image_attributes;
+		}
+
+		/**
+		 * Prepares a given image URL for further processing by removing the image dimensions from the slug.
+		 *
+		 * @since 3.6.0
+		 *
+		 * @param  string $url The image URL.
+		 * @return string      The prepared image URL.
+		 */
+		private function prepare_url( $url ) {
+			$upload_dir     = wp_get_upload_dir();
+			$upload_dir_url = $upload_dir['baseurl'];
+			if ( ! preg_match( "#$upload_dir_url.*#", $url ) ) {
+				return $url;
+			}
+			return preg_replace( '#(-[0-9]*x[0-9]*)#', '', $url );
 		}
 
 		/**
@@ -4633,7 +4663,47 @@ if ( ! class_exists( 'All_in_One_SEO_Pack_Sitemap' ) ) {
 				$links = $this->update_woocommerce_shop_timestamp( $links );
 			}
 
+			if ( 'page' === $include ) {
+				$links = $this->removeWooCommercePages( $links );
+			}
+
 			return $links;
+		}
+
+		/**
+		 * Excludes the Cart, Checkout and My Account pages from the sitemap if WooCommerce noindex them.
+		 *
+		 * @since 3.6.0
+		 *
+		 * @param  array $urls          The URLs.
+		 * @return array $remainingUrls The filtered URLs.
+		 */
+		private function removeWooCommercePages( $urls ) {
+			// Check if WooCommerce is noindexing its own pages.
+			if ( ! aioseop_is_woocommerce_active() || ! has_action( 'wp_head', 'wc_page_noindex' ) ) {
+				return $urls;
+			}
+	
+			$pages = array(
+				wc_get_cart_url(),
+				wc_get_checkout_url(),
+				wc_get_page_permalink( 'myaccount' )
+			);
+
+			$remainingUrls = array();
+			foreach ( $urls as $url ) {
+				$isNoindexed = false;
+				foreach( $pages as $page ) {
+					if ( $page === $url['loc'] ) {
+						$isNoindexed = true;
+						break;
+					}
+				}
+				if ( ! $isNoindexed ) {
+					$remainingUrls[] = $url;
+				}
+			}
+			return $remainingUrls;
 		}
 
 		/**

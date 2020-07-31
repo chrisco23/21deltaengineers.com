@@ -2004,6 +2004,11 @@ if ( ! class_exists( 'All_in_One_SEO_Pack_Opengraph' ) ) {
 						if ( $update ) {
 							$prefix  = $this->get_prefix( $k );
 							$options = apply_filters( $prefix . 'filter_term_metabox_options', $options, $k, $term_id );
+							foreach ( $options as $option ) {
+								if ( is_string( $option ) ) {
+									$option = esc_html( $option );
+								}
+							}
 							update_term_meta( $term_id, '_' . $prefix . $k, $options );
 						}
 					}

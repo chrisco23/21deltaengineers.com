@@ -714,8 +714,9 @@ class AIOSEOP_Helper {
 			'aiosp_sitemap_excl_pages'      => __( 'Use page slugs or page IDs, separated by commas, to exclude pages from the sitemap.', 'all-in-one-seo-pack' ),
 
 			// Additional Sitemaps
-			'aiosp_sitemap_posttypes_news'  => __( 'Select which Post Types should appear in your Google News sitemap. This sitemap only includes posts that were published in the last 48 hours.', 'all-in-one-seo-pack' ),
-			'aiosp_sitemap_rss_sitemap'     => __( 'Generate an RSS sitemap in addition to the regular XML Sitemap.', 'all-in-one-seo-pack' ),
+			'aiosp_sitemap_posttypes_news'   => __( 'Select which Post Types should appear in your Google News sitemap. This sitemap only includes posts that were published in the last 48 hours.', 'all-in-one-seo-pack' ),
+			'aiosp_sitemap_rss_sitemap'      => __( 'Generate an RSS sitemap in addition to the regular XML Sitemap.', 'all-in-one-seo-pack' ),
+			'aiosp_sitemap_publication_name' => __( 'The publication name for your Google News sitemap. It must exactly match the name as it appears on your articles on news.google.com, except for anything in parentheses.', 'all-in-one-seo-pack' ),
 			
 			// Priorities.
 			'aiosp_sitemap_prio_homepage'   => sprintf( __( 'Manually set the %1$s of your %2$s.', 'all-in-one-seo-pack' ), __( 'priority', 'all-in-one-seo-pack' ), __( 'Homepage', 'all-in-one-seo-pack' ) ),
@@ -756,7 +757,6 @@ class AIOSEOP_Helper {
 
 		$help_doc_link = array(
 			// XML Sitemap.
-			'aiosp_sitemap_rss_sitemap'     => 'https://semperplugins.com/documentation/xml-sitemaps-module/#create-rss_sitemap',
 			'aiosp_sitemap_daily_cron'      => 'https://semperplugins.com/documentation/xml-sitemaps-module/#schedule-updates',
 			'aiosp_sitemap_indexes'         => 'https://semperplugins.com/documentation/xml-sitemaps-module/#enable-sitemap-indexes',
 			'aiosp_sitemap_max_posts'       => 'https://semperplugins.com/documentation/xml-sitemaps-module/#enable-sitemap-indexes',
@@ -769,7 +769,9 @@ class AIOSEOP_Helper {
 			'aiosp_sitemap_rewrite'         => 'https://semperplugins.com/documentation/xml-sitemaps-module/#dynamically-generate-sitemap',
 
 			// Additional Sitemaps
-			'aiosp_sitemap_posttypes_news'  => 'https://semperplugins.com/documentation/google-news-sitemap/',
+			'aiosp_sitemap_rss_sitemap'      => 'https://semperplugins.com/documentation/xml-sitemaps-module/#create-rss_sitemap',
+			'aiosp_sitemap_posttypes_news'   => 'https://semperplugins.com/documentation/google-news-sitemap/',
+			'aiosp_sitemap_publication_name' => 'https://semperplugins.com/documentation/google-news-sitemap/',
 
 			// Additional Pages.
 			'aiosp_sitemap_addl_url'        => 'https://semperplugins.com/documentation/xml-sitemaps-module/#additional-pages',

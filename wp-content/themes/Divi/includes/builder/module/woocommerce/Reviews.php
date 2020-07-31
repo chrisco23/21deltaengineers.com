@@ -29,7 +29,7 @@ class ET_Builder_Module_Woocommerce_Reviews extends ET_Builder_Module_Comments {
 
 		// Modify toggle settings.
 		$this->settings_modal_toggles['general']['toggles']['main_content'] = array(
-			'title'    => esc_html__( 'Content', 'et_builder' ),
+			'title'    => et_builder_i18n( 'Content' ),
 			'priority' => 1,
 		);
 
@@ -39,7 +39,7 @@ class ET_Builder_Module_Woocommerce_Reviews extends ET_Builder_Module_Comments {
 		);
 
 		$this->settings_modal_toggles['advanced']['toggles']['image'] = array(
-			'title'    => esc_html__( 'Image', 'et_builder' ),
+			'title'    => et_builder_i18n( 'Image' ),
 			'priority' => 30,
 		);
 
@@ -141,7 +141,7 @@ class ET_Builder_Module_Woocommerce_Reviews extends ET_Builder_Module_Comments {
 
 		$this->help_videos = array(
 			array(
-				'id'   => esc_html( '7X03vBPYJ1o' ),
+				'id'   => '7X03vBPYJ1o',
 				'name' => esc_html__( 'Divi WooCommerce Modules', 'et_builder' ),
 			),
 		);

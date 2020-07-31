@@ -61,6 +61,7 @@ class AIOSEOP_Core {
 			'bad_robots',
 			'performance',
 			'video_sitemap',
+			'schema_local_business',
 			'image_seo',
 		);
 
@@ -136,13 +137,8 @@ class AIOSEOP_Core {
 		}
 		// ^^ TODO Should this be moved to (Pro) updater class?
 
-		// TODO Move this to updates file.
-		// FIXME This is executed in AIOSEOP_Core::aioseop_welcome() on admin_init hook.
-		new aioseop_welcome();
 		AIOSEOP_Education::init();
 		AIOSEOP_Flyout::init();
-
-		add_action( 'admin_init', array( $this, 'aioseop_welcome' ) );
 
 		// TODO Move this add_action to All_in_One_SEO_Pack::__construct().
 		add_action( 'init', array( $aiosp, 'add_hooks' ) );
@@ -331,7 +327,7 @@ class AIOSEOP_Core {
 		require_once AIOSEOP_PLUGIN_DIR . 'inc/compatibility/class-aioseop-php-functions.php';
 		require_once AIOSEOP_PLUGIN_DIR . 'public/front.php';
 		require_once AIOSEOP_PLUGIN_DIR . 'public/google-analytics.php';
-		require_once AIOSEOP_PLUGIN_DIR . 'admin/display/welcome.php';
+		require_once AIOSEOP_PLUGIN_DIR . 'admin/display/aioseop-welcome.php';
 		require_once AIOSEOP_PLUGIN_DIR . 'admin/display/dashboard_widget.php';
 		require_once AIOSEOP_PLUGIN_DIR . 'admin/display/menu.php';
 		require_once AIOSEOP_PLUGIN_DIR . 'admin/class-aioseop-notices.php';
@@ -402,6 +398,8 @@ class AIOSEOP_Core {
 	 */
 	public function add_hooks() {
 		global $wp_version;
+
+		AIOSEOP_Welcome::hooks();
 
 		add_action( 'plugins_loaded', array( $this, 'add_cap' ) );
 
@@ -708,19 +706,6 @@ class AIOSEOP_Core {
 	}
 
 	/**
-	 * AIOSEOP's Welcome Page
-	 *
-	 * @since ?
-	 */
-	public function aioseop_welcome() {
-		if ( get_transient( '_aioseop_activation_redirect' ) ) {
-			$aioseop_welcome = new aioseop_welcome();
-			delete_transient( '_aioseop_activation_redirect' );
-			$aioseop_welcome->init( true );
-		}
-	}
-
-	/**
 	 * Admin Notices Already Defined
 	 *
 	 * @since ?
@@ -788,10 +773,12 @@ class AIOSEOP_Core {
 	/**
 	 * Enqueues stylesheets used on the frontend.
 	 *
-	 * @since   3.4.0
+	 * @since 3.4.0
+	 * 
+	 * @return void
 	 */
 	function front_enqueue_styles() {
-		if ( ! is_user_logged_in() ) {
+		if ( ! current_user_can( 'aiosp_manage_seo' ) ) {
 			return;
 		}
 		wp_enqueue_style( 'aioseop-toolbar-menu', AIOSEOP_PLUGIN_URL . 'css/admin-toolbar-menu.css', null, AIOSEOP_VERSION, 'all' );

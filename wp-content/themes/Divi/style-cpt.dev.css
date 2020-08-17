@@ -11671,7 +11671,8 @@ span.comment_date {
     visibility: hidden; }
   body.et_pb_recaptcha_enabled .grecaptcha-badge {
     visibility: visible;
-    visibility: initial; }
+    visibility: initial;
+    z-index: 9999; }
   .et-db #et-boc .et-l .et_pb_contact_form {
     margin-left: -3%; }
   .et-db #et-boc .et-l .et_pb_contact_form [data-conditional-logic] {

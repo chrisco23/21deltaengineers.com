@@ -1279,6 +1279,29 @@ class ET_Core_SupportCenter {
 			return $log;
 		}
 
+		/**
+		 * At this point, we know:
+		 * (1) `$wp_debug_log_path` is set,
+		 * (2) it points to a valid location, and
+		 * (3) what it points to is readable.
+		 *
+		 * Before we continue, we'll ensure `$wp_debug_log_path` does not point to a directory.
+		 */
+
+		// Early exit: debug log definition points to a directory, not a file.
+		if ( is_dir( $wp_debug_log_path ) ) {
+			$log['error'] = esc_attr__(
+				'Divi Support Center :: WordPress debug log setting points to a directory, but should point to a file.',
+				'et-core'
+			);
+
+			if ( defined( 'ET_DEBUG' ) ) {
+				et_error( $log['error'] );
+			}
+
+			return $log;
+		}
+
 		// Load the debug.log file
 		$file = new SplFileObject( $wp_debug_log_path );
 
@@ -1290,7 +1313,7 @@ class ET_Core_SupportCenter {
 		if ( $lines_to_return > 0 ) {
 			$file->seek( PHP_INT_MAX );
 			$total_lines = $file->key();
-			// If the file is smaller than the number of lines requested, return the entire file
+			// If the file is smaller than the number of lines requested, return the entire file.
 			$reader         = new LimitIterator( $file, max( 0, $total_lines - $lines_to_return ) );
 			$log['entries'] = '';
 			foreach ( $reader as $line ) {

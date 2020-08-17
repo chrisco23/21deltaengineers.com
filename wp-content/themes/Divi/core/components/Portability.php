@@ -87,8 +87,8 @@ class ET_Core_Portability {
 		if ( $temp_file ) {
 			$import = json_decode( $filesystem->get_contents( $temp_file ), true );
 		} else {
-			if ( ! isset( $_FILES['file'] ) ) {
-				return false;
+			if ( ! isset( $_FILES['file']['name'] ) || ! et_()->ends_with( sanitize_file_name( $_FILES['file']['name'] ), '.json' ) ) {
+				return array( 'message' => 'invalideFile' );
 			}
 
 			if ( ! in_array( $file_context, array( 'upload', 'sideload' ) ) ) {
@@ -117,6 +117,8 @@ class ET_Core_Portability {
 			$import['data'] = $this->apply_query( $import['data'], 'set' );
 
 			if ( ! isset( $import['context'] ) || ( isset( $import['context'] ) && $import['context'] !== $this->instance->context ) ) {
+				$this->delete_temp_files( 'et_core_import' );
+
 				return array( 'message' => 'importContextFail' );
 			}
 

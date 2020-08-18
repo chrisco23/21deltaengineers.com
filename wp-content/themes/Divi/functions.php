@@ -7245,3 +7245,4 @@ function et_divi_disable_theme_builder_header_footer_on_blank_template( $layouts
 	return $layouts;
 }
 add_filter( 'et_theme_builder_template_layouts', 'et_divi_disable_theme_builder_header_footer_on_blank_template' );
+

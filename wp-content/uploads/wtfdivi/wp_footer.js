@@ -1,0 +1,1 @@
+jQuery(function($){});jQuery(function($){if(!$('#logo-text').length){$('#logo').after("<div id=\"db_title_and_tagline\"><h5 id=\"logo-tagline-above\" class=\"logo-tagline\">&nbsp;<\/h5><h1 id=\"logo-text\">21 Delta Engineers<\/h1><h5 id=\"logo-tagline\" class=\"logo-tagline\">Mechanical, Electrical, Fire Protection, Plumbing, and Civil Engineering<\/h5><\/div>");}});

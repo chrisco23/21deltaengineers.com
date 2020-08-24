@@ -392,10 +392,14 @@ final class Wicked_Folders {
 		// Bail if we don't have a post type
 		if ( ! $post_type ) return array();
 
+		$total_count 			= 0;
+		$assigned_count 		= 0;
+		$counts 				= array();
 		$folders 				= array();
 		$cache_key 				= array();
 		$post_type_object 		= get_post_type_object( $post_type );
 		$show_unassigned_folder = get_option( 'wicked_folders_show_unassigned_folder', true );
+		$show_item_counts 		= get_option( 'wicked_folders_show_item_counts', true );
 		$enable_dynamic_folders = self::dynamic_folders_enabled_for( $post_type );
 		$stub_types 			= array(
 			self::get_user_post_type_name(),
@@ -406,48 +410,51 @@ final class Wicked_Folders {
 
 		if ( ! $taxonomy ) $taxonomy = Wicked_Folders::get_tax_name( $post_type );
 
-		if ( in_array( $post_type, $stub_types ) ) {
-			$counts 		= $wpdb->get_results( $wpdb->prepare( "SELECT tr.term_taxonomy_id, COUNT(tr.object_id) AS n FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy = %s GROUP BY tr.term_taxonomy_id", $taxonomy ), OBJECT_K );
-			$assigned_count = ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT(tr.object_id)) AS n, tt.taxonomy FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy = %s GROUP BY tt.taxonomy", $taxonomy ) );
-		} else {
-			$counts 		= $wpdb->get_results( $wpdb->prepare( "SELECT tr.term_taxonomy_id, COUNT(tr.object_id) AS n FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id INNER JOIN {$wpdb->posts} p ON tr.object_id = p.ID WHERE tt.taxonomy = %s AND p.post_status NOT IN ('trash') GROUP BY tr.term_taxonomy_id", $taxonomy ), OBJECT_K );
-			$assigned_count = ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT(p.ID)) AS n, tt.taxonomy FROM {$wpdb->posts} AS p INNER JOIN {$wpdb->term_relationships} AS tr ON p.ID = tr.object_id INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE p.post_type = %s AND p.post_status NOT IN ('trash') AND tt.taxonomy = %s GROUP BY tt.taxonomy", $post_type, $taxonomy ) );
-			$total_count 	= ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(p.ID) AS n FROM {$wpdb->posts} AS p WHERE p.post_type = %s AND p.post_status NOT IN ('trash')", $post_type ) );
-		}
-
-		if ( $post_type == self::get_user_post_type_name() ) {
-			$total_count = ( int ) $wpdb->get_var( "SELECT COUNT(ID) AS n FROM {$wpdb->users}" );
-		}
-
-		if ( $post_type == self::get_plugin_post_type_name() ) {
-			if ( ! function_exists( 'get_plugins' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		// Only run count queries when show item counts setting is enabled
+		if ( $show_item_counts ) {
+			if ( in_array( $post_type, $stub_types ) ) {
+				$counts 		= $wpdb->get_results( $wpdb->prepare( "SELECT tr.term_taxonomy_id, COUNT(tr.object_id) AS n FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy = %s GROUP BY tr.term_taxonomy_id", $taxonomy ), OBJECT_K );
+				$assigned_count = ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT(tr.object_id)) AS n, tt.taxonomy FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy = %s GROUP BY tt.taxonomy", $taxonomy ) );
+			} else {
+				$counts 		= $wpdb->get_results( $wpdb->prepare( "SELECT tr.term_taxonomy_id, COUNT(tr.object_id) AS n FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id INNER JOIN {$wpdb->posts} p ON tr.object_id = p.ID WHERE tt.taxonomy = %s AND p.post_status NOT IN ('trash') GROUP BY tr.term_taxonomy_id", $taxonomy ), OBJECT_K );
+				$assigned_count = ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT(p.ID)) AS n, tt.taxonomy FROM {$wpdb->posts} AS p INNER JOIN {$wpdb->term_relationships} AS tr ON p.ID = tr.object_id INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE p.post_type = %s AND p.post_status NOT IN ('trash') AND tt.taxonomy = %s GROUP BY tt.taxonomy", $post_type, $taxonomy ) );
+				$total_count 	= ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(p.ID) AS n FROM {$wpdb->posts} AS p WHERE p.post_type = %s AND p.post_status NOT IN ('trash')", $post_type ) );
 			}
 
-			$plugins = get_plugins();
-
-			$total_count = count( $plugins );
-		}
-
-		if ( $post_type == self::get_gravity_forms_form_post_type_name() ) {
-			if ( class_exists( 'GFAPI' ) ) {
-				$active_forms 	= GFAPI::get_forms();
-				$inactive_forms = GFAPI::get_forms( false );
-
-				$total_count = count( $active_forms ) + count( $inactive_forms );
+			if ( $post_type == self::get_user_post_type_name() ) {
+				$total_count = ( int ) $wpdb->get_var( "SELECT COUNT(ID) AS n FROM {$wpdb->users}" );
 			}
-		}
 
-		if ( $post_type == self::get_gravity_forms_entry_post_type_name() ) {
-			if ( class_exists( 'GFAPI' ) && class_exists( 'RGFormsModel' ) && class_exists( 'RGForms' ) ) {
-				$forms   = RGFormsModel::get_forms( null, 'title' );
-				$form_id = RGForms::get( 'id' );
-
-				if ( empty( $form_id ) && isset( $forms[0]->id ) ) {
-					$form_id = $forms[0]->id;
+			if ( $post_type == self::get_plugin_post_type_name() ) {
+				if ( ! function_exists( 'get_plugins' ) ) {
+					require_once ABSPATH . 'wp-admin/includes/plugin.php';
 				}
 
-				$total_count = GFAPI::count_entries( $form_id, array( 'status' => 'active' ) );
+				$plugins = get_plugins();
+
+				$total_count = count( $plugins );
+			}
+
+			if ( $post_type == self::get_gravity_forms_form_post_type_name() ) {
+				if ( class_exists( 'GFAPI' ) ) {
+					$active_forms 	= GFAPI::get_forms();
+					$inactive_forms = GFAPI::get_forms( false );
+
+					$total_count = count( $active_forms ) + count( $inactive_forms );
+				}
+			}
+
+			if ( $post_type == self::get_gravity_forms_entry_post_type_name() ) {
+				if ( class_exists( 'GFAPI' ) && class_exists( 'RGFormsModel' ) && class_exists( 'RGForms' ) ) {
+					$forms   = RGFormsModel::get_forms( null, 'title' );
+					$form_id = RGForms::get( 'id' );
+
+					if ( empty( $form_id ) && isset( $forms[0]->id ) ) {
+						$form_id = $forms[0]->id;
+					}
+
+					$total_count = GFAPI::count_entries( $form_id, array( 'status' => 'active' ) );
+				}
 			}
 		}
 

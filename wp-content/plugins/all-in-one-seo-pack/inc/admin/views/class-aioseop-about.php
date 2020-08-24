@@ -224,6 +224,8 @@ class AIOSEOP_About {
 				self::output_versus_grid();
 				break;
 			}
+			default:
+				break;
 		}
 
 		echo '</div>';

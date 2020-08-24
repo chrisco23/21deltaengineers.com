@@ -6569,6 +6569,10 @@ function et_modify_shop_page_columns_num( $columns_num ) {
 		return $columns_num;
 	}
 
+	if ( ! get_queried_object() ) {
+		return $columns_num;
+	}
+
 	// WooCommerce plugin active check ensures that archive function can be used.
 	$is_archive_page = is_shop() || is_product_category() || is_product_tag();
 
@@ -7245,4 +7249,3 @@ function et_divi_disable_theme_builder_header_footer_on_blank_template( $layouts
 	return $layouts;
 }
 add_filter( 'et_theme_builder_template_layouts', 'et_divi_disable_theme_builder_header_footer_on_blank_template' );
-

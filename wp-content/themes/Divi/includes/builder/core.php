@@ -75,7 +75,8 @@ add_action( 'init', 'et_builder_add_filters' );
 if ( ! function_exists( 'et_builder_should_load_framework' ) ) :
 	function et_builder_should_load_framework() {
 		global $pagenow;
-		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
+		// reason: Since we are accessing $_GET only for the comparision, nonce verification is not required.
+		// phpcs:disable WordPress.Security.NonceVerification
 
 		static $should_load = null;
 
@@ -104,7 +105,9 @@ if ( ! function_exists( 'et_builder_should_load_framework' ) ) :
 		$is_extra_builder             = $post_id && 'layout' === get_post_type( $post_id );
 		$is_edit_page_not_bfb         = in_array( $pagenow, array( 'post-new.php', 'post.php' ) ) && ! $is_bfb_used;
 		$is_role_editor_page          = 'admin.php' === $pagenow && isset( $_GET['page'] ) && apply_filters( 'et_divi_role_editor_page', 'et_divi_role_editor' ) === $_GET['page'];
-		$is_import_page               = 'admin.php' === $pagenow && isset( $_GET['import'] ) && 'WordPress' === $_GET['import']; // Page Builder files should be loaded on import page as well to register the et_pb_layout post type properly
+		// reason: $_GET['import'] variable does not contain the 'WordPress' string.
+		// phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled -- $_GET['import'] contain 'wordpress' string.
+		$is_import_page               = 'admin.php' === $pagenow && isset( $_GET['import'] ) && 'wordpress' === $_GET['import']; // Page Builder files should be loaded on import page as well to register the et_pb_layout post type properly.
 		$is_wpml_page                 = 'admin.php' === $pagenow && isset( $_GET['page'] ) && 'sitepress-multilingual-cms/menu/languages.php' === $_GET['page']; // Page Builder files should be loaded on WPML clone page as well to register the custom taxonomies properly
 		$is_edit_layout_category_page = 'edit-tags.php' === $pagenow && isset( $_GET['taxonomy'] ) && ( 'layout_category' === $_GET['taxonomy'] || 'layout_pack' === $_GET['taxonomy'] );
 
@@ -2897,7 +2900,11 @@ function et_pb_save_role_settings() {
 	// Delete cached definitions / helpers
 	et_fb_delete_builder_assets();
 
-	die();
+	$response = array(
+		'success' => true,
+	);
+
+	wp_send_json( $response );
 }
 add_action( 'wp_ajax_et_pb_save_role_settings', 'et_pb_save_role_settings' );
 
@@ -3179,11 +3186,13 @@ if ( ! function_exists( 'et_builder_get_cache_notification_modal' ) ) :
 
 			$cache_plugin_message = '<p>' . $cache_plugin_message . '</p>';
 
-			$cache_plugin_message .= sprintf(
-				'<a href="%1$s" class="et_builder_modal_action_button" target="_blank">%2$s</a>',
-				esc_url( admin_url( $cache_plugin['page'] ) ),
-				esc_html__( 'Clear Plugin Cache', 'et_builder' )
-			);
+			if ( ! empty( $cache_plugin['page'] ) ) {
+				$cache_plugin_message .= sprintf(
+					'<a href="%1$s" class="et_builder_modal_action_button" target="_blank">%2$s</a>',
+					esc_url( admin_url( $cache_plugin['page'] ) ),
+					esc_html__( 'Clear Plugin Cache', 'et_builder' )
+				);
+			}
 		}
 
 		$browser_cache_message = '<p>' . esc_html__( 'Builder files may also be cached in your browser. Please clear your browser cache.', 'et_builder' ) . '</p>';
@@ -3734,6 +3743,7 @@ if ( ! function_exists( 'et_pb_detect_cache_plugins' ) ) :
 	 * @return string or bool
 	 */
 	function et_pb_detect_cache_plugins() {
+		// Cache Plugins.
 		if ( function_exists( 'edd_w3edge_w3tc_activate_license' ) ) {
 			return array(
 				'name' => 'W3 Total Cache',
@@ -3812,6 +3822,95 @@ if ( ! function_exists( 'et_pb_detect_cache_plugins' ) ) :
 			return array(
 				'name' => 'Hummingbird',
 				'page' => 'admin.php?page=wphb',
+			);
+		}
+
+		if ( class_exists( 'comet_cache' ) ) {
+			return array(
+				'name' => 'Comet Cache',
+				'page' => 'admin.php?page=comet_cache',
+			);
+		}
+
+		if ( class_exists( 'Cache_Enabler' ) ) {
+			return array(
+				'name' => 'Cache Enabler',
+				'page' => 'options-general.php?page=cache-enabler',
+			);
+		}
+
+		// Hosting Provider Caching.
+		if ( class_exists( 'batcache' ) ) {
+			// Doesn't have clear cache button on WP Admin area.
+			return array(
+				'name' => 'Pressable Cache',
+				'page' => '',
+			);
+		}
+
+		if ( class_exists( 'WpeCommon' ) ) {
+			return array(
+				'name' => 'WP Engine Cache',
+				'page' => 'admin.php?page=wpengine-common',
+			);
+		}
+
+		if ( class_exists( 'Endurance_Page_Cache' ) ) {
+			// The purge cache button exists on MU plugins page.
+			return array(
+				'name' => 'Endurance Page Cache',
+				'page' => 'plugins.php?plugin_status=mustuse',
+			);
+		}
+
+		if ( function_exists( 'pantheon_wp_clear_edge_all' ) ) {
+			// Doesn't have clear cache button on WP Admin area.
+			return array(
+				'name' => 'Pantheon Advanced Page Cache',
+				'page' => '',
+			);
+		}
+
+		if ( function_exists( 'sg_cachepress_purge_cache' ) ) {
+			return array(
+				'name' => 'SG Optimizer',
+				'page' => 'admin.php?page=sg-cachepress',
+			);
+		}
+
+		if ( class_exists( 'Breeze_Admin' ) ) {
+			return array(
+				'name' => 'Breeze',
+				'page' => 'options-general.php?page=breeze',
+			);
+		}
+
+		if ( class_exists( '\Kinsta\Cache' ) ) {
+			return array(
+				'name' => 'Kinsta Cache',
+				'page' => 'admin.php?page=kinsta-tools',
+			);
+		}
+
+		if ( class_exists( '\WPaaS\Cache' ) ) {
+			return array(
+				'name' => 'GoDaddy Cache',
+				'page' => '',
+			);
+		}
+
+		// Complimentary Performance Plugins.
+		if ( class_exists( 'autoptimizeCache' ) ) {
+			return array(
+				'name' => 'Autoptimize',
+				'page' => 'options-general.php?page=autoptimize',
+			);
+		}
+
+		if ( class_exists( 'WP_Optimize' ) ) {
+			return array(
+				'name' => 'WP-Optimize',
+				'page' => 'admin.php?page=wpo_settings',
 			);
 		}
 
@@ -6356,6 +6455,28 @@ if ( ! function_exists( 'et_maybe_enable_embed_shortcode' ) ) :
 		return $content;
 	}
 endif;
+
+/**
+ * Calculate value which has unit on it.
+ *
+ * Might need to group this style rendering related utils function if there are more of them
+ *
+ * @used-by ET_Builder_Module_Helper_Overlay::process_icon_font_size()
+ *
+ * @param string         $value      base value which has unit.
+ * @param int|float      $multiplier multiplier (literally).
+ * @param bool|int|float $min_value  minimum $value to do calculation. set to false to skip.
+ *
+ * @return string
+ */
+function et_builder_multiply_value_has_unit( $value, $multiplier, $min_value = false ) {
+	$number           = (float) $value;
+	$unit             = str_replace( $number, '', $value );
+	$should_calculate = false === $min_value || $min_value < $number;
+	$product          = $should_calculate ? $number * (float) $multiplier : $min_value;
+
+	return (string) $product . $unit;
+}
 
 /**
  * Register custom sidebars.

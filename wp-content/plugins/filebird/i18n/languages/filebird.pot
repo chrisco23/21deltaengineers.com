@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: FileBird Lite\n"
-"POT-Creation-Date: 2020-08-10 17:47+0700\n"
-"PO-Revision-Date: 2020-08-10 17:47+0700\n"
+"POT-Creation-Date: 2020-08-11 16:18+0700\n"
+"PO-Revision-Date: 2020-08-11 16:17+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,94 @@ msgstr ""
 "_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
+
+#: assets/dist/app.js:18
+msgid "delete_folder"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "are_you_sure_delete"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "folders"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "folder"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "delete"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "cancel"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "rename"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "bulk_select"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "folder_limit_reached"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "upgrade_to_pro"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "new_folder"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "all_files"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "uncategorized"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "update_noti_title"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "update_noti_desc"
+msgstr ""
+
+#: assets/dist/app.js:18
+msgid "update_noti_btn"
+msgstr ""
+
+#: assets/dist/app.js:24
+msgid "modal"
+msgstr ""
+
+#: assets/dist/app.js:29
+msgid "quick_feedback"
+msgstr ""
+
+#: assets/dist/app.js:29
+msgid "deactivate_sadly"
+msgstr ""
+
+#: assets/dist/app.js:29
+msgid "thank_you_so_much"
+msgstr ""
+
+#: assets/dist/app.js:29
+msgid "deactivate"
+msgstr ""
+
+#: assets/dist/app.js:29
+msgid "skip_and_deactivate"
+msgstr ""
 
 #: includes/Classes/Convert.php:128
 msgid "Import categories to FileBird"

@@ -151,6 +151,13 @@ If you have a large number of files and want to use more than 10 folders/categor
 
 == Changelog ==
 
+= Aug 26, 2020 - Version 4.0.6 =
+- Added: Compatible with Cornerstone Page Builder (From X Theme)
+- Fixed: Browser security issue with Microsoft Edge, Firefox
+- Fixed: Conflict jQuery-UI with ACF plugin
+- Fixed: Can't create table 'fbv_attachment_folder'
+- Fixed: Screen Option hidden in Media Upload
+
 = 4.0.5 =
 - Fixed: Cache issues
 - Fixed: Mobile view

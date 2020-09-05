@@ -38,6 +38,11 @@ class PageBuilders {
         if (class_exists('Brizy_Editor')) {
             $this->registerForBrizy();
         }
+
+        // Cornerstone
+        if (class_exists('Cornerstone_Plugin')) {
+            $this->registerCornerstone();
+        }
     }
 
     public function enqueueScripts(){
@@ -54,5 +59,9 @@ class PageBuilders {
 
     public function registerForBrizy(){
         add_action('brizy_editor_enqueue_scripts', array($this, 'enqueueScripts'));
+    }
+    
+    public function registerCornerstone(){
+        add_action('cornerstone_before_wp_editor', array($this, 'enqueueScripts'));
     }
 }

@@ -1,3 +1,8 @@
+= 3.2.9 =
+* Removed unnecessary element in site title / tagline markup
+* Removed empty blurb section on settings page
+* Fixed gallery settings not applied to custom theme builder layouts
+
 = 3.2.8 =
 * Improved detection of map load when showing map details open by default
 * Portfolio project order setting now works when Post Types Order plugin active

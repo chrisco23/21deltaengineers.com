@@ -1,5 +1,11 @@
 <?php
 
+// === TB inline styles ===
+
+
+
+// === END TB inline styles
+
 add_filter('dbmo_et_pb_gallery_whitelisted_fields', 'dbmo_et_pb_gallery_register_fields');
 add_filter('dbmo_et_pb_gallery_fields', 'dbmo_et_pb_gallery_add_fields');
 add_filter('db_pb_gallery_content', 'db_pb_gallery_filter_content', 10, 2);

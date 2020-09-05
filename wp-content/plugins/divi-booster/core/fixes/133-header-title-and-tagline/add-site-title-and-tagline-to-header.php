@@ -44,7 +44,10 @@ if (!function_exists('db133_title_and_tagline_html_from_data')) {
 		$result = '';
 		if (!empty($data['title_tag']) && !empty($data['tagline_tag'])) {
 			$result = sprintf(
-				'<div id="db_title_and_tagline"><%4$s id="logo-tagline-above" class="logo-tagline">&nbsp;</%4$s><%2$s id="logo-text">%1$s</%2$s><%4$s id="logo-tagline" class="logo-tagline">%3$s</%4$s></div>', 
+				'<div id="db_title_and_tagline">
+					<%2$s id="logo-text">%1$s</%2$s>
+					<%4$s id="logo-tagline" class="logo-tagline">%3$s</%4$s>
+				</div>', 
 				esc_html($data['title']),
 				esc_html($data['title_tag']),
 				esc_html($data['tagline']),

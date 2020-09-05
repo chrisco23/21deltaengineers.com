@@ -1,9 +1,6 @@
 #db_title_and_tagline {
 	display: inline;
 }
-#db_title_and_tagline #logo-tagline-above {
-	display: none;
-}
 #logo { 
 	padding-right: 10px; 
 }

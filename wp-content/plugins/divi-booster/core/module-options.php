@@ -159,7 +159,7 @@ function dbmo_wrap_module_shortcode($match) {
 	return $outer;
 }
 
-// === Register shortcodes ===
+// === Register shortcodes to add {$tag}_content filter 
 
 function divibooster_register_module_shortcodes(){
 	
@@ -172,11 +172,23 @@ function divibooster_register_module_shortcodes(){
 	}
 }
 
-// Shortcode callback
 function divibooster_module_shortcode_callback($atts, $content, $tag) {
 	$content = do_shortcode($content);
 	$content = apply_filters("{$tag}_content", $content, $atts);
 	return $content;
+}
+
+// === Enable {$tag}_content filter in theme builder layouts
+
+add_filter('et_module_shortcode_output', 'dbdb_addFilterToThemeBuilderLayouts', 10, 3);
+
+function dbdb_addFilterToThemeBuilderLayouts($output, $render_slug, $module) {
+	if ($render_slug === 'et_pb_gallery' && isset($module->props)) {
+		if (is_callable('ET_Builder_Element::is_theme_builder_layout') && ET_Builder_Element::is_theme_builder_layout()) {
+			$output = apply_filters("db_pb_gallery_content", $output, $module->props);
+		}
+	}
+	return $output;
 }
 
 // === Avoid local caching === 

@@ -229,11 +229,12 @@ class ET_Core_Portability {
 		$this->prevent_failure();
 		et_core_nonce_verified_previously();
 
-		$timestamp      = $this->get_timestamp();
-		$filesystem     = $this->set_filesystem();
-		$temp_file_id   = sanitize_file_name( $timestamp );
-		$temp_file      = $this->has_temp_file( $temp_file_id, 'et_core_export' );
-		$global_presets = '';
+		$timestamp            = $this->get_timestamp();
+		$filesystem           = $this->set_filesystem();
+		$temp_file_id         = sanitize_file_name( $timestamp );
+		$temp_file            = $this->has_temp_file( $temp_file_id, 'et_core_export' );
+		$apply_global_presets = isset( $_POST['apply_global_presets'] ) ? wp_validate_boolean( $_POST['apply_global_presets'] ) : false;
+		$global_presets       = '';
 
 		if ( $temp_file ) {
 			$file_data      = json_decode( $filesystem->get_contents( $temp_file ) );
@@ -282,15 +283,22 @@ class ET_Core_Portability {
 			$data = $this->apply_query( $data, 'set' );
 
 			if ( 'post_type' === $this->instance->type ) {
-				$used_global_presets  = array();
+				$used_global_presets = array();
+				$options             = array(
+					'apply_global_presets' => true,
+				);
 
 				foreach ( $data as $post ) {
 					$shortcode_object = et_fb_process_shortcode( $post->post_content );
 
-					$used_global_presets = array_merge(
-						$this->get_used_global_presets( $shortcode_object, $used_global_presets ),
-						$used_global_presets
-					);
+					if ( $apply_global_presets ) {
+						$post->post_content = et_fb_process_to_shortcode( $shortcode_object, $options, '', false );
+					} else {
+						$used_global_presets = array_merge(
+							$this->get_used_global_presets( $shortcode_object, $used_global_presets ),
+							$used_global_presets
+						);
+					}
 				}
 
 				if ( ! empty ( $used_global_presets ) ) {
@@ -2103,6 +2111,8 @@ class ET_Core_Portability {
 
 		), admin_url() );
 
+		$is_etdev_plugin_activated = is_plugin_active( 'etdev/etdev.php' );
+
 		?>
 		<div class="et-core-modal-overlay et-core-form" data-et-core-portability="<?php echo esc_attr( $this->instance->context ); ?>">
 			<div class="et-core-modal">
@@ -2122,7 +2132,11 @@ class ET_Core_Portability {
 								<input type="text" name="" value="<?php echo esc_attr( $this->instance->name ); ?>">
 								<?php if ( 'post_type' === $this->instance->type ) : ?>
 									<div class="et-core-clearfix"></div>
-									<label><input type="checkbox" name="et-core-portability-posts"/><?php esc_html_e( 'Only export selected items', ET_CORE_TEXTDOMAIN ); ?></label>
+									<label><input type="checkbox" name="et-core-portability-posts" <?php echo $is_etdev_plugin_activated ? 'checked' : ''; ?> /><?php esc_html_e( 'Only export selected items', ET_CORE_TEXTDOMAIN ); ?></label>
+								<?php endif; ?>
+								<?php if ( $is_etdev_plugin_activated ) : ?>
+									<div class="et-core-clearfix"></div>
+									<label><input type="checkbox" name="et-core-portability-apply-presets" checked /><?php esc_html_e( 'Export Presets As Static Styles', ET_CORE_TEXTDOMAIN ); ?></label>
 								<?php endif; ?>
 							</form>
 						</div>

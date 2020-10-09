@@ -611,7 +611,7 @@ if ( ! function_exists( 'print_thumbnail' ) ) {
 					empty( $class ) ? '' : esc_attr( $class ),
 					$thumbnail_orig . ' 479w, ' . $thumbnail . ' 480w',
 					'(max-width:479px) 479px, 100vw',
-					apply_filters( 'et_print_thumbnail_dimensions', " width='" . esc_attr( $width ) . "' height='" . esc_attr( $height ) . "'" )
+					apply_filters( 'et_print_thumbnail_dimensions', ' width="' . esc_attr( $width ) . '" height="' . esc_attr( $height ) . '"' )
 				);
 			} else {
 				$output = sprintf(
@@ -619,7 +619,7 @@ if ( ! function_exists( 'print_thumbnail' ) ) {
 					$raw ? $thumbnail : esc_url( $thumbnail ),
 					esc_attr( wp_strip_all_tags( $alttext ) ),
 					empty( $class ) ? '' : esc_attr( $class ),
-					apply_filters( 'et_print_thumbnail_dimensions', " width='" . esc_attr( $width ) . "' height='" . esc_attr( $height ) . "'" )
+					apply_filters( 'et_print_thumbnail_dimensions', ' width="' . esc_attr( $width ) . '" height="' . esc_attr( $height ) . '"' )
 				);
 
 				if ( ! $raw ) {
@@ -1555,7 +1555,7 @@ function et_custom_posts_per_page( $query = false ) {
 		}
 		$query->set( 'posts_per_page', (int) et_get_option( $shortname . '_searchnum_posts', '5' ) );
 	} elseif ( $query->is_archive ) {
-	
+
 		if ( function_exists( 'is_woocommerce' ) && is_woocommerce() ) {
 			// Plugin Compatibility :: Skip query->set if "loop_shop_per_page" filter is being used by 3rd party plugins
 			if ( ! has_filter( 'loop_shop_per_page' ) ) {

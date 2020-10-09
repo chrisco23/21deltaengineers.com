@@ -978,7 +978,6 @@ class ET_Builder_Module_Post_Slider extends ET_Builder_Module_Type_PostBased {
 			// Background Overlay color.
 			$this->generate_styles(
 				array(
-					'hover'          => false,
 					'base_attr_name' => 'bg_overlay_color',
 					'selector'       => '%%order_class%% .et_pb_slide .et_pb_slide_overlay_container',
 					'css_property'   => 'background-color',
@@ -992,7 +991,6 @@ class ET_Builder_Module_Post_Slider extends ET_Builder_Module_Type_PostBased {
 			// Text Overlay color.
 			$this->generate_styles(
 				array(
-					'hover'          => false,
 					'base_attr_name' => 'text_overlay_color',
 					'selector'       => '%%order_class%% .et_pb_slide .et_pb_text_overlay_wrapper',
 					'css_property'   => 'background-color',

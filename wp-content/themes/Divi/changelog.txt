@@ -1,3 +1,128 @@
+version 4.6.5 ( updated 09-25-2020 )
+- Fixed broken image size on Image module and image logo of Menu module.
+- Fixed navigation anchor wrong target position with position-fixed section in theme builder header.
+- Removed alternative scroll-to-anchor option from Divi Theme Options and made it the default behavior.
+	* functions.php
+	* includes/builder/autoload.php
+	* includes/builder/module/FullwidthImage.php
+	* includes/builder/module/FullwidthMenu.php
+	* includes/builder/module/Image.php
+	* includes/builder/module/Menu.php
+	* includes/builder/module/helpers/class-et-builder-module-helper-media.php
+	* includes/builder/scripts/frontend/global-functions.js
+	* options_divi.php
+
+version 4.6.4 ( updated 09-24-2020 )
+- Product ordering issue fixed in the Shop module.
+- Fixed the Button background color Sticky state not being properly applied.
+- Fixed CSS string value auto turn into 0auto.
+- Fixed stuttering sticky element on sticky section at theme builder header due to image that affects section height, slow connection, and disabled cache.
+- Fixed sticky background gradient and image not working in Section.
+- Fixed default WordPress lazy load feature not working properly with images in Divi Builder modules.
+- Fixed the Button background color Sticky state not being properly applied.
+- Fixed the issue with downloading a backup of Divi Theme Options.
+	* core/admin/js/portability.js
+	* epanel/custom_functions.php
+	* includes/builder/api/rest/BlockLayout.php
+	* includes/builder/autoload.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/core.php
+	* includes/builder/feature/AjaxCache.php
+	* includes/builder/feature/BlockEditorIntegration.php
+	* includes/builder/feature/ClassicEditor.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/module/Blurb.php
+	* includes/builder/module/FullwidthHeader.php
+	* includes/builder/module/FullwidthImage.php
+	* includes/builder/module/FullwidthMenu.php
+	* includes/builder/module/FullwidthPortfolio.php
+	* includes/builder/module/FullwidthPostTitle.php
+	* includes/builder/module/Gallery.php
+	* includes/builder/module/Image.php
+	* includes/builder/module/Menu.php
+	* includes/builder/module/PostTitle.php
+	* includes/builder/module/Shop.php
+	* includes/builder/module/SliderItem.php
+	* includes/builder/module/TeamMember.php
+	* includes/builder/module/field/TextShadow.php
+	* includes/builder/module/helpers/ResponsiveOptions.php
+	* includes/builder/module/helpers/StickyOptions.php
+	* includes/builder/module/helpers/class-et-builder-module-helper-media.php
+	* includes/builder/scripts/frontend/sticky-element.js
+
+version 4.6.3 ( updated 09-18-2020 )
+- Fixed speciality section inner max-width option.
+	* includes/builder/class-et-builder-element.php
+
+version 4.6.2 ( updated 09-17-2020 )
+- Fixed incorrect sticky state in the section with a video module.
+- Fixed sticky element that doesn't correctly exits sticky state because fixed header transition is completed after document height props are updated.
+- Fixed inconsistent row alignment output in frontend and visual builder when custom margin is used.
+- Removed unnecessary overflow hidden for rows with 4+ columns.
+- Revived background overlay and text overlay colors on hover state for post slider.
+- Fixed javascript error in Internet Explorer.
+- Enabled sorting in the Store module on the frontend.
+- Fixed incorrect warning on Minify And Combine Javascript & Style Files options when 3rd party extension plugin is activated.
+- Fixed incorrect module width on sticky state when sticky margin is set and width is auto.
+- Fixed inability to drag and drop image to media library that is opened on gallery module's images field.
+- Fixed unwanted padding change when specialty row enters sticky state.
+- Fixed issue when changing the scale of the Button module.
+- Fixed javascript error when setting the sticky Section Divider height.
+- Fixed sticky style not implemented if module is sticky module inside sticky module.
+- Fixed issue with links not working inside of the mobile menus.
+- Fixed a case where Divi page would cause an error when loaded inside an iframe hosted on a different domain.
+- Fixed default primary menu active link color.
+	* core/admin/js/portability.js
+	* core/components/Portability.php
+	* core/components/Updates.php
+	* core/ui/utils/frame-helpers.js
+	* functions.php
+	* includes/builder/ab-testing.php
+	* includes/builder/api/DiviExtension.php
+	* includes/builder/api/DiviExtensions.php
+	* includes/builder/autoload.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/class-et-builder-plugin-compat-loader.php
+	* includes/builder/class-et-builder-settings.php
+	* includes/builder/class-et-builder-value.php
+	* includes/builder/class-et-global-settings.php
+	* includes/builder/conditions.php
+	* includes/builder/core.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/functions.php
+	* includes/builder/main-modules.php
+	* includes/builder/main-structure-elements.php
+	* includes/builder/module/PostSlider.php
+	* includes/builder/module/Shop.php
+	* includes/builder/module/field/Position.php
+	* includes/builder/module/helpers/StickyOptions.php
+	* includes/builder/plugin-compat/scripts/sitepress-multilingual-cms.js
+	* includes/builder/scripts/frontend/background-layout.js
+	* includes/builder/scripts/frontend/global-functions.js
+	* includes/builder/scripts/frontend/motion-effects.js
+	* includes/builder/scripts/frontend/preview.js
+	* includes/builder/scripts/frontend/scripts.js
+	* includes/builder/scripts/frontend/sticky-element.js
+	* includes/builder/scripts/frontend/sticky-elements.js
+	* includes/builder/scripts/src/admin_global_functions.js
+	* includes/builder/scripts/src/bfb_admin_script.js
+	* includes/builder/scripts/src/block-layout-frontend-preview.js
+	* includes/builder/scripts/src/builder.js
+	* includes/builder/scripts/src/cache_notice.js
+	* includes/builder/scripts/src/cpt-modules-wrapper.js
+	* includes/builder/scripts/src/failure_notice.js
+	* includes/builder/scripts/src/library_category.js
+	* includes/builder/scripts/src/library_scripts.js
+	* includes/builder/scripts/src/page-settings-metabox.js
+	* includes/builder/scripts/src/reset_memory_limit_increase_setting.js
+	* includes/builder/scripts/src/roles_admin.js
+	* includes/builder/scripts/stores/document.js
+	* includes/builder/scripts/stores/sticky.js
+	* includes/builder/scripts/stores/window.js
+	* includes/builder/scripts/utils/sticky.js
+	* includes/builder/scripts/utils/utils.js
+	* js/src/theme-customizer.js
+
 version 4.6.1 ( updated 09-03-2020 )
 - Fixed issue with the Shop module which was not rendering the right template when it was returning no results.
 - Fixed incorrect sticky element in sticky state when window is resized.
@@ -204,9 +329,9 @@ version 4.5.6 ( updated 08-10-2020 )
 	* js/src/theme-customizer.js
 
 version 4.5.5 ( updated 08-08-2020 )
-- Fixed bottom section dividers appearing at the top of sections. 
+- Fixed bottom section dividers appearing at the top of sections.
 	* style.css
-	
+
 version 4.5.4 ( updated 08-07-2020 )
 - Fixed missing backward compatibility function to handle Gutenberg data for block editor.
 - Hide block inserter button when Divi Layout is not activated yet.

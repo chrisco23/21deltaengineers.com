@@ -14207,7 +14207,7 @@ span.comment_date {
     height: 100%;
     margin: 0; }
   .et-db #et-boc .et-l .et_pb_fullwidth_portfolio .et_pb_portfolio_image img {
-    max-width: inherit;
+    max-width: 100%;
     height: inherit;
     min-height: 100%;
     min-width: 100%; }
@@ -15822,19 +15822,6 @@ span.comment_date {
         display: flex;
         -ms-flex-wrap: wrap;
         flex-wrap: wrap; }
-        .et-db #et-boc .et-l .et_pb_row_4col:not(.et_pb_row--with-menu),
-        .et-db #et-boc .et-l .et_pb_row_5col:not(.et_pb_row--with-menu),
-        .et-db #et-boc .et-l .et_pb_row_6col:not(.et_pb_row--with-menu),
-        .et-db #et-boc .et-l .et_pb_row_1-6_1-6_1-6_1-2:not(.et_pb_row--with-menu),
-        .et-db #et-boc .et-l .et_pb_row_1-6_1-6_1-6:not(.et_pb_row--with-menu),
-        .et-db #et-boc .et-l .et_pb_row_1-2_1-6_1-6_1-6:not(.et_pb_row--with-menu),
-        .et-db #et-boc .et-l .et_pb_row_1-5_1-5_3-5:not(.et_pb_row--with-menu),
-        .et-db #et-boc .et-l .et_pb_row_3-5_1-5_1-5:not(.et_pb_row--with-menu),
-        .et-db #et-boc .et-l .et_pb_row_1-4_1-4_1-2:not(.et_pb_row--with-menu),
-        .et-db #et-boc .et-l .et_pb_row_1-2_1-4_1-4:not(.et_pb_row--with-menu),
-        .et-db #et-boc .et-l .et_pb_row_1-4_1-4:not(.et_pb_row--with-menu),
-        .et-db #et-boc .et-l .et_pb_row_1-6_1-6_1-6_1-6:not(.et_pb_row--with-menu) {
-          overflow: hidden; }
       .et-db #et-boc .et-l .et_pb_row_4col > .et_pb_column.et_pb_column_1_4, .et-db #et-boc .et-l .et_pb_row_1-4_1-4_1-2 > .et_pb_column.et_pb_column_1_4, .et-db #et-boc .et-l .et_pb_row_1-4_1-4 > .et_pb_column.et_pb_column_1_4 {
         width: 47.25%;
         margin-right: 5.5%; }

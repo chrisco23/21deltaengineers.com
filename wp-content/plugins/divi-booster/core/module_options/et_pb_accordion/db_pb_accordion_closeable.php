@@ -42,8 +42,10 @@ function db_pb_accordion_add_closeable_code_to_content($content, $args, $module=
 	$js = '';
 	$css = '';
 	
+	$globallyCloseable = dbdb_option('106-make-accordions-closable', 'enabled');
+	
 	// Set toggles as closeable
-	if (!empty($args['db_closeable'])) {
+	if (!$globallyCloseable && !empty($args['db_closeable'])) {
 		
 		if ($args['db_closeable'] === 'on') {
 			$js .= db_pb_accordion_js_closeable($order_class);

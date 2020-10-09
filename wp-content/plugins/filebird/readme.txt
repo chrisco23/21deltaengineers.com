@@ -1,54 +1,86 @@
 === FileBird - WordPress Media Library Folders & File Manager ===
 Contributors: ninjateam
-Tags: wordpress media library folders, media library folders, media library folder, filebird, wp media folder, wordpress media folder, wordpress media folders, wordpress media library, wordpress media library plugin, wordpress file manager, wordpress media manager, file manager, file bird
+Tags: wordpress media library folders, media library folders, media library folder, filebird, wp media folder, wp media folders, media folder, wordpress media folders, wordpress media library, file manager, wordpress media manager, media manager, file bird, firebird
 Requires at least: 3.0
 Tested up to: 5.5
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Organize thousands of WordPress media files into folders/ categories at ease.
+Organize thousands of WordPress media files in folders / categories at ease.
 
 
 == Description ==
+FileBird is a media file manager plugin to help you organize WordPress media library folders by drag and drop.
 
-FileBird is a powerful plugin that works as a WordPress media library folder creator and dashboard file manager.
+It allows you to create virtual folders to contain your WordPress media library. So when you move files and folders, that won’t break permalinks to your images in the content.
 
-The technique behind this plugin is to create virtual folders to contain WordPress media library and set taxonomy while keeping all your files intact.
+With FileBird Pro you can save time on WP media management, search for any file & folder, sort them out, add folder gallery, etc. That’s a great way to improve your admin workflow and productivity.
 
-With FileBird you can arrange all your media files properly, organize them wisely, and manage WordPress database professionally.
-
-[TEST DRIVE](https://media-folder.ninjateam.org/create/) | [DOCUMENTATION](https://ninjateam.gitbook.io/filebird/) 
+[TEST DRIVE](https://media-folder.ninjateam.org/create/) | [DOCUMENTATION](https://ninjateam.gitbook.io/filebird/)
 
 Video Demo:
 [youtube https://www.youtube.com/watch?v=NjeEbqmMVwU]
 
-== FEATURES ==
+###⚡️ FEATURES
 
 **Friendly User Interface**
-Drag and drop to upload/move files into folders. Drag and drop to rearrange folders.
+Drag and drop to upload or bulk move files into folders. Drag and drop to arrange folders and subfolders.
 
 **Smart Context Menu**
-Right click your mouse to quickly create, rename or delete folders like what you do on your computer.
+Right-click to quickly create, rename or delete folders just the way you do on your computer.
 
 **Full Control In One Toolbar**
-The toolbar on the left allows you control all of your folders/ files. You can create, rearrange, rename or delete folders.
+FileBird’s resizable sidebar provides you with the ultimate control over all uploaded files and created folders.
+
+**Painless Migration**
+Import and seamlessly synchronize media structure from Enhanced Media Library, WP Media Folder by JoomUnited, WordPress Media Library Folders by Max Foundry, and Real Media Library.
+
+**Powerful Search Feature**
+You can search for file and folder name not only in Media library sidebar but also in FileBird file browser when editing page/post.
 
 **Unlimited Folders/ Subfolders (PRO)**
-You can create unlimited folders/subfolders for all your media files. Lite version support 10 folders/subfolders.
+You can create unlimited folders and nested folders for all your media files. Lite version supports up to 10 including folders and subfolders.
 
-**Many File Types Supported**
-As WordPress default, you are allowed to only upload the most commonly used file types. With this plugin, you can manually manage most of allowed file types.
+**Various Sort Options (PRO)**
+Go advanced with 2 ways to sort folders and 8 ways to sort files. This is a great time-saver for all busy WordPress admins & webmasters.
+
+**Bulk-Delete Folders**
+Now you can bulk-select folders and delete them in a single click. All those files will be moved to the Uncategorized folder and remain intact.
 
 **RTL Supported**
 FileBird supports RTL languages including Hebrew, Arabic, etc.
 
 **Many Languages Supported**
-This plugin supports most popular languages such as English, Spanish, Italian, French, etc.
+This plugin supports most popular languages such as English, Spanish, Italian, French, Germany, etc.
 
-== COMPATIBLE WITH ==
+###⛩️ HOW IT WORKS
+Are you a WordPress website administrator?
 
-FileBird has been developed to be **compatible with the most popular WordPress page builders, themes and plugins**
+Managing a WordPress site means that you’ll be adding tons of multi-media files such as images, videos, audios, documents, etc., into your WP media library.
+
+As a result, your library has to store thousands of files and could become a total mess. WordPress default file name search function is a good thing but it will never match the ease of going directly to a folder. That’s when FileBird comes in to help with managing files in WordPress!
+
+This media file manager gives you the ability to easily organize all files by drag and drop between folders. With FileBird in hand, things will be a lot better than they were.
+
+The best thing about a folder-based structure is it makes it very easy to find the files you need and saves you so much time.
+
+You won’t see WordPress media library not loading, as FileBird smart-loads one folder at a time.
+
+###🚀 Tips to manage WP media folders like a pro with FileBird
+
+* Give files and folders logical, specific names
+* Nest folders within parent folders
+* Resize the left sidebar to get an overview of all folders
+* Upload files to a specific folder by choosing the folder from the **drop-down**
+* Easily **search** for the name of file/folder right on the sidebar
+* From the page/post composer, **browse** files and folders in the FileBird UI
+* Use FileBird block gallery to insert multiple media files in a page, post, and custom post type
+* Keep your folders uncluttered by clearing out the old files using **Sort features**
+
+###🎉 COMPATIBILITY
+
+[FileBird WordPress Media Library Folders](https://ninjateam.org/wordpress-media-library-folders/) has been developed to be compatible with the most popular WordPress page builders, themes and plugins
 
 **PAGE BUILDERS**
 
@@ -58,86 +90,76 @@ FileBird has been developed to be **compatible with the most popular WordPress p
 * Divi Builder plugin from ElegantThemes (PRO)
 * WPBakery Page Builder – Top #1 page builder selling on CodeCanyon (PRO)
 * Brizy – Fast and easy page builder (PRO)
-* Thrive Architect - Fastest, Truly Visual ​WordPress Page Builder (PRO)
+* Thrive Architect - Fastest, Truly Visual WordPress Page Builder (PRO)
 * And a lot more +++
 
 **THEMES**
 
 * Avada – Top #1 WordPress selling Theme of all time
 * Divi - Theme from ElegantThemes (PRO)
-* Enfold – The user friendliest WordPress Theme ever made
+* Enfold – The user-friendliest WordPress Theme ever made
 * Uncode – The highly anticipated Frontend Editor
 * Jupiter - Elementor Multi-Purpose Theme
 * Flatsome – Best selling WooCommerce Theme
 * Salient - Responsive Multi-Purpose Theme
+* XStore - Responsive Multi-Purpose WooCommerce WordPress Theme
+* [KLEO](https://1.envato.market/KLEO-Pro) - Community Multi Purpose BuddyPress Theme
 * And a lot more +++
 
 **PLUGINS**
 
-* WPML – Best WP plugin to translate and display your website in any languages.
-* Polylang – A plugin allows you to create a bilingual or multilingual WordPress site.
-* Gutenberg – New editor Gutenberg from WordPress 5.0.
-* Classic Editor – Old WordPress editor to display tree view folders.
+* WPML – Best WP plugin to translate and display your website in any languages
+* Polylang – A plugin allows you to create a bilingual or multilingual WordPress site
+* Gutenberg – New editor Gutenberg from WordPress 5.0
+* Classic Editor – Old WordPress editor to display tree view folders
 * Slider Revolution – Best selling WordPress Responsive plugin
 * EWWW Image Optimizer
 * FooGallery Image Gallery – Responsive Photo Gallery
 * Smush - Compress, Image Optimizer, Lazy Load, WebP Images
 * And a lot more +++
 
-
-== HOW IT WORKS ==
-Are you a WordPress website administrator?
-
-Developing a site means that you’ll be adding tons of new media files such as images, videos, audios, PDF, txt, docx, .ect into your site database day by day.
-
-As a result, your site will have to store thousands of files. In the default WordPress media database, you are not able to arrange files in a logical manner and you wish you could do that like what you do with your files in your own computer, right? When you want to look for a particular uploaded file on your WordPress site, don’t you know how to find it?
-
-FileBird was born to help you overcome the obstacle. This plugin gives you the ability to easily organize your files in media library of your site. With this tool in hand, you can manage and arrange thousands of images, audios, videos, and other files in your media library.
-
-Managing files in WordPress has never been easier. You are able to just drag and drop to upload or move files/ folders. This will help you save a ton of time that goes into putting your media files in place. The hierarchical view of your folders will also make things easier for you to quickly find specific folders in just a blink of an eye.
-
-In somes cases, your WordPress media library not loading, please chat with our support at [https://m.me/ninjateam.org/](https://m.me/ninjateam.org) to get help.
-
-
 == Installation ==
-Manual installation is easy and takes fewer than one minute.
+Setup is easy and takes fewer than one minute.
 
 1. Download the plugin from wordpress.org, unpack it and upload the **[FileBird]** folder to your **wp-content/plugins/** directory.
 2. Activate the plugin through the ‘Plugins‘ menu in WordPress.
-3. Go to your main **WordPress menu > Media** to start create folder to manage your files
+3. Go to your main **WordPress menu > Media** to create a folder to manage your files.
 
 You’re done. Enjoy.
 
 == Frequently Asked Questions ==
-= Is it compatible with WordPress 5? = 
-Definitely yes! We’re always up-to-date to give you the best experience in using our plugin.
+= Is it compatible with WordPress 5? =
+Definitely yes! Our plugins are always up-to-date to give you the best user experience.
 
-= When I create a new post, how can I choose an uploaded file in a specific folder? = 
-Yes, you can choose the folder in the dropdown list of the filter box beside the search box.
+= When I create a new post, how can I choose an uploaded file in a specific folder? =
+You can use the search box in FileBird sidebar to find the file or folder you’re looking for.
 
 = How can I bulk select multiple files and put them into a folder? =
-You can use the bulk select Button in media grid, bulk select files you want and just drag them into a folder.
+You can use the Bulk Select button in media grid mode, tick all files you want then just drag & drop them into a folder.
 
-= Do all of my uploaded files remain the same after I first install this plugin? =
-Yes, they do.
+= Do all of my previously uploaded files remain the same after I first install this plugin? =
+Yes, you can find them in the **All Files** folder.
 
-= When I move an image to another folder, does this action affect the image appearance on my frontend? =
+= When I move an image to another folder, does this action affect how the image appears on my frontend? =
 No, it does not. The image is still displayed correctly on the site frontend.
 
 = If I create a folder or category, does this override the default WordPress path "wp-content/uploads"? =
-No, it does not. The plugin helps organize files into folders visually. The file default path still remains.
+No, it does not. The plugin helps organize files into folders visually. Every file permalink remains unchanged.
 
-= Is there anything happen on my site if I uninstall FileBird? =
-No worries, your website will be safe. All your media files can be found in the library as before you install FileBird.
+= Will anything happen to my site if I uninstall FileBird? =
+No worries, your website will be completely unaffected. Upon deactivation, all your media files can be found in the library under WordPress chronological order.
 
-= Where can I find the Documentation for this plugin? =
+= Where can I find the documentation for this plugin? =
 You can find it here [https://ninjateam.gitbook.io/filebird/](https://ninjateam.gitbook.io/filebird/)
 
+= How can I get support? =
+You can reach us here [https://ninjateam.org/support/](https://ninjateam.org/support/)
+
 = Is FileBird free? =
-Yes, FileBird is free to use with 10 folders/categories
+Yes, FileBird is free of charge for up to 10 folders/categories.
 
 = Should I purchase a paid plan? =
-If you have a large number of files and want to use more than 10 folders/categories, you can [upgrade to PRO version here](https://codecanyon.net/item/media-folders-manager-for-wordpress/21715379)
+If you have a large number of files and want to use more than 10 folders/categories, you can **[upgrade to FileBird PRO here](https://codecanyon.net/item/media-folders-manager-for-wordpress/21715379?irgwc=1&clickid=ynBwuiXfXxyORfPwUx0Mo3QWUkiVPZQJY3UNU00&iradid=275988&irpid=418490&iradtype=ONLINE_TRACKING_LINK&irmptype=mediapartner&mp_value1=&utm_campaign=af_impact_radius_418490&utm_medium=affiliate&utm_source=impact_radius)**.
 
 == Screenshots ==
 1. Media library folders
@@ -150,6 +172,13 @@ If you have a large number of files and want to use more than 10 folders/categor
 8. FileBird gallery block settings
 
 == Changelog ==
+
+= Sep 16, 2020 - Version 4.0.7 =
+- Added: User can use API to create folders
+- Improved: Cut/Paste function
+- Fixed: Counter with Polylang
+- Fixed: Import function
+- Fixed: Counter in import message
 
 = Aug 26, 2020 - Version 4.0.6 =
 - Added: Compatible with Cornerstone Page Builder (From X Theme)
@@ -214,7 +243,7 @@ If you have a large number of files and want to use more than 10 folders/categor
 = 2.8 =
 - Added: Support Thrive Architect
 - Added: Language files for Taiwan (Thanks to soga172)
-- Fixed: List view order item bug 
+- Fixed: List view order item bug
 - Fixed: WPML bug
 - Fixed: Scroll bar
 - Fixed: Some smart bugs
@@ -321,7 +350,7 @@ Jun 04, 2019 - Version 2.1
 * Fixed: Auto Deselect bulk when none file
 * Fixed: Count file selected in bulk select
 * Fixed: Conflict with Avada theme
-* Updated: CSS 
+* Updated: CSS
 * Removed: Unused files
 
 = 2.0 =
@@ -333,7 +362,7 @@ May 29, 2019 - Version 2.0
 * Added: Compatible with WPML 4.x version
 * Fixed: WPML 3.9 conflict
 * Fixed: Move one file not click image
-* Fixed: CSS over when edit folder 
+* Fixed: CSS over when edit folder
 * Fixed: Load too much database
 * Fixed: Treeview interface Elementor Builder
 * Fixed: Upload images

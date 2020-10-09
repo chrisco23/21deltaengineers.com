@@ -639,6 +639,12 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 				$image_attrs['sizes']  = '(max-width:479px) 479px, 100vw';
 			}
 
+			$image_attachment_class = et_pb_media_options()->get_image_attachment_class( $this->props, '', $attachment->ID );
+
+			if ( ! empty( $image_attachment_class ) ) {
+				$image_attrs['class'] = esc_attr( $image_attachment_class );
+			}
+
 			$image_output = sprintf(
 				'<a href="%1$s" title="%2$s">
 					%3$s

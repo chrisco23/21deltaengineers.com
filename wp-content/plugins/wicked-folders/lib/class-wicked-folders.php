@@ -350,7 +350,7 @@ final class Wicked_Folders {
 			if ( in_array( $post_type, $stub_types ) ) {
 				$count = ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT(tr.object_id)) AS n, tt.taxonomy FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy = %s AND tt.term_id = %d GROUP BY tt.taxonomy", $taxonomy, $term->term_id ) );
 			} else {
-				$count = ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT(p.ID)) AS n, tt.taxonomy FROM {$wpdb->posts} AS p INNER JOIN {$wpdb->term_relationships} AS tr ON p.ID = tr.object_id INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE p.post_type = %s AND p.post_status NOT IN ('trash') AND tt.taxonomy = %s AND tt.term_id = %d GROUP BY tt.taxonomy", $post_type, $taxonomy, $term->term_id ) );
+				$count = ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT(p.ID)) AS n, tt.taxonomy FROM {$wpdb->posts} AS p INNER JOIN {$wpdb->term_relationships} AS tr ON p.ID = tr.object_id INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE p.post_type = %s AND p.post_status NOT IN ('trash', 'auto-draft') AND tt.taxonomy = %s AND tt.term_id = %d GROUP BY tt.taxonomy", $post_type, $taxonomy, $term->term_id ) );
 			}
 
 			$folder = new Wicked_Folders_Term_Folder( array(
@@ -413,12 +413,12 @@ final class Wicked_Folders {
 		// Only run count queries when show item counts setting is enabled
 		if ( $show_item_counts ) {
 			if ( in_array( $post_type, $stub_types ) ) {
-				$counts 		= $wpdb->get_results( $wpdb->prepare( "SELECT tr.term_taxonomy_id, COUNT(tr.object_id) AS n FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy = %s GROUP BY tr.term_taxonomy_id", $taxonomy ), OBJECT_K );
+				$counts 		= $wpdb->get_results( $wpdb->prepare( "SELECT tt.term_id, COUNT(tr.object_id) AS n FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy = %s GROUP BY tr.term_taxonomy_id", $taxonomy ), OBJECT_K );
 				$assigned_count = ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT(tr.object_id)) AS n, tt.taxonomy FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy = %s GROUP BY tt.taxonomy", $taxonomy ) );
 			} else {
-				$counts 		= $wpdb->get_results( $wpdb->prepare( "SELECT tr.term_taxonomy_id, COUNT(tr.object_id) AS n FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id INNER JOIN {$wpdb->posts} p ON tr.object_id = p.ID WHERE tt.taxonomy = %s AND p.post_status NOT IN ('trash') GROUP BY tr.term_taxonomy_id", $taxonomy ), OBJECT_K );
-				$assigned_count = ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT(p.ID)) AS n, tt.taxonomy FROM {$wpdb->posts} AS p INNER JOIN {$wpdb->term_relationships} AS tr ON p.ID = tr.object_id INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE p.post_type = %s AND p.post_status NOT IN ('trash') AND tt.taxonomy = %s GROUP BY tt.taxonomy", $post_type, $taxonomy ) );
-				$total_count 	= ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(p.ID) AS n FROM {$wpdb->posts} AS p WHERE p.post_type = %s AND p.post_status NOT IN ('trash')", $post_type ) );
+				$counts 		= $wpdb->get_results( $wpdb->prepare( "SELECT tt.term_id, COUNT(tr.object_id) AS n FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id INNER JOIN {$wpdb->posts} p ON tr.object_id = p.ID WHERE tt.taxonomy = %s AND p.post_status NOT IN ('trash', 'auto-draft') GROUP BY tr.term_taxonomy_id", $taxonomy ), OBJECT_K );
+				$assigned_count = ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT(p.ID)) AS n, tt.taxonomy FROM {$wpdb->posts} AS p INNER JOIN {$wpdb->term_relationships} AS tr ON p.ID = tr.object_id INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE p.post_type = %s AND p.post_status NOT IN ('trash', 'auto-draft') AND tt.taxonomy = %s GROUP BY tt.taxonomy", $post_type, $taxonomy ) );
+				$total_count 	= ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(p.ID) AS n FROM {$wpdb->posts} AS p WHERE p.post_type = %s AND p.post_status NOT IN ('trash', 'auto-draft')", $post_type ) );
 			}
 
 			if ( $post_type == self::get_user_post_type_name() ) {
@@ -672,7 +672,7 @@ final class Wicked_Folders {
 		if ( 'attachment' == $post_type ) {
 			$results = $wpdb->get_results( "SELECT post_date FROM {$wpdb->posts} WHERE post_type = 'attachment' ORDER BY post_date ASC" );
 		} else {
-			$results = $wpdb->get_results( $wpdb->prepare( "SELECT post_date FROM {$wpdb->posts} WHERE post_type = %s AND post_status NOT IN ('trash', 'inherit', 'auto-draft') ORDER BY post_date ASC", $post_type ) );
+			$results = $wpdb->get_results( $wpdb->prepare( "SELECT post_date FROM {$wpdb->posts} WHERE post_type = %s AND post_status NOT IN ('trash', 'auto-draft') ORDER BY post_date ASC", $post_type ) );
 		}
 
 		// Check for cache

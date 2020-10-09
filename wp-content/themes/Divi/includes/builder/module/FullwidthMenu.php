@@ -871,13 +871,23 @@ class ET_Builder_Module_Fullwidth_Menu extends ET_Builder_Module {
 		$logo_url            = $this->props['logo_url'];
 		$logo_url_new_window = $this->props['logo_url_new_window'];
 
+		$logo_image_attrs = array(
+			'src'    => '{{logo}}',
+			'alt'    => $logo_alt,
+			'height' => 'auto',
+			'width'  => 'auto',
+		);
+
+		$logo_image_attachment_class = et_pb_media_options()->get_image_attachment_class( $this->props, 'logo' );
+
+		if ( ! empty( $logo_image_attachment_class ) ) {
+			$logo_image_attrs['class'] = esc_attr( $logo_image_attachment_class );
+		}
+
 		$logo_html = $multi_view->render_element(
 			array(
 				'tag'            => 'img',
-				'attrs'          => array(
-					'src' => '{{logo}}',
-					'alt' => $logo_alt,
-				),
+				'attrs'          => $logo_image_attrs,
 				'required'       => 'logo',
 				'hover_selector' => '%%order_class%% .et_pb_menu__logo-wrap .et_pb_menu__logo img',
 			)

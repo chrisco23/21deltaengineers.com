@@ -1,3 +1,13 @@
+= 3.3.3 =
+* Fixed gallery images per row affecting slider
+* Fixed social icon font loading when not needed
+* Added caching headers to social icon font files
+* Fixed array offset errors in version update code
+
+= 3.3.2 =
+* Added cors header to socion font files for improved CDN support
+* Fixed mobile content width affecting Divi Machine loop layout
+
 = 3.3.1 =
 * Fixed mobile content width affecting theme builder header row width
 

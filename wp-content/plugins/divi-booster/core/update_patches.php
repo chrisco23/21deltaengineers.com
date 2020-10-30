@@ -1,20 +1,25 @@
 <?php
+
 // === Add update hook ===
 function booster_update_check() {
 	global $wtfdivi;
-	
-	// Get the old and new version
 	$old = get_option(BOOSTER_VERSION_OPTION);
 	$new = BOOSTER_VERSION;
-	
-	// Run update actions
-    if ($old!=$new) { 
-		do_action('booster_update', $wtfdivi, $old, $new); 
+    if ($old !== $new) { 
+		if (dbdbHasUpdated($old, $new)) {
+			do_action('booster_update', $wtfdivi, $old, $new); 
+		}
 		update_option(BOOSTER_VERSION_OPTION, $new);
 	} 
-	
 }
 add_action('plugins_loaded', 'booster_update_check');
+
+function dbdbHasUpdated($old, $new) {
+	if ($old && $new) {
+		return version_compare($old, $new, '<');
+	}
+	return false;
+}
 
 // === v1.9.4: db074 - Add 0.7 opacity to old colors ===
 function db074_add_alpha($plugin, $old, $new) {
@@ -22,17 +27,19 @@ function db074_add_alpha($plugin, $old, $new) {
 		
 		// set alpha value to 0.7 - default for divi
 		$fulloption = get_option('wtfdivi');
-		$col = $fulloption['fixes']['074-set-header-menu-hover-color']['col'];
-		
-		// convert from hex to rgba
-		if (preg_match("/^#?([0-9a-f]{3,6})$/", $col, $matches)) { 
-			$hex = $matches[1];
-			list($r,$g,$b) = str_split($hex,(strlen($hex)==6)?2:1);
-			$r=hexdec($r); $g=hexdec($g); $b=hexdec($b);
-		
-			// Update the option with the rgba form of the color
-			$fulloption['fixes']['074-set-header-menu-hover-color']['col'] = "rgba($r,$g,$b,0.7)";
-			update_option('wtfdivi', $fulloption);
+		if ($fulloption && isset($fulloption['fixes']['074-set-header-menu-hover-color']['col'])) {
+			$col = $fulloption['fixes']['074-set-header-menu-hover-color']['col'];
+			
+			// convert from hex to rgba
+			if (preg_match("/^#?([0-9a-f]{3,6})$/", $col, $matches)) { 
+				$hex = $matches[1];
+				list($r,$g,$b) = str_split($hex,(strlen($hex)==6)?2:1);
+				$r=hexdec($r); $g=hexdec($g); $b=hexdec($b);
+			
+				// Update the option with the rgba form of the color
+				$fulloption['fixes']['074-set-header-menu-hover-color']['col'] = "rgba($r,$g,$b,0.7)";
+				update_option('wtfdivi', $fulloption);
+			}
 		}
 	}
 }
@@ -59,17 +66,19 @@ function db095_add_alpha($plugin, $old, $new) {
 		
 		// set alpha value to 0.7 - default for divi
 		$fulloption = get_option('wtfdivi');
-		$col = $fulloption['fixes']['095-secondary-nav-hover-color']['hovercol'];
+		if ($fulloption && isset($fulloption['fixes']['095-secondary-nav-hover-color']['hovercol'])) {
+			$col = $fulloption['fixes']['095-secondary-nav-hover-color']['hovercol'];
 
-		// convert from hex to rgba
-		if (preg_match("/^#?([0-9a-f]{3,6})$/", $col, $matches)) { 
-			$hex = $matches[1];
-			list($r,$g,$b) = str_split($hex,(strlen($hex)==6)?2:1);
-			$r=hexdec($r); $g=hexdec($g); $b=hexdec($b);
-			
-			// Update the option with the rgba form of the color
-			$fulloption['fixes']['095-secondary-nav-hover-color']['hovercol'] = "rgba($r,$g,$b,0.7)";
-			update_option('wtfdivi', $fulloption);
+			// convert from hex to rgba
+			if (preg_match("/^#?([0-9a-f]{3,6})$/", $col, $matches)) { 
+				$hex = $matches[1];
+				list($r,$g,$b) = str_split($hex,(strlen($hex)==6)?2:1);
+				$r=hexdec($r); $g=hexdec($g); $b=hexdec($b);
+				
+				// Update the option with the rgba form of the color
+				$fulloption['fixes']['095-secondary-nav-hover-color']['hovercol'] = "rgba($r,$g,$b,0.7)";
+				update_option('wtfdivi', $fulloption);
+			}
 		}
 	}
 }

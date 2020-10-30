@@ -11,6 +11,7 @@ function db121_enqueue_scripts() {
 	// Load the icon styles
 	wp_enqueue_style('db121_socicons'); // Divi-specific socicon CSS
 	wp_enqueue_style('dbdb-icons-socicon'); // Socicon font
+	add_action('wp_head', 'dbdb_icons_socicon_inline_css');
 }
 add_action('wp_enqueue_scripts', 'db121_enqueue_scripts');
 

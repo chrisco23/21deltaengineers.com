@@ -1,3 +1,30 @@
+version 4.6.6 ( updated 10-15-2020 )
+- Fix scroll behavior after drag & drop content to the builder.
+- Fixes incorrect generated selector when 3rd party extension use Divi Module Elements on their modules.
+- Fixed unwanted UI lag when draggable padding UI is dragged.
+- Fixed a bug in the border options that allowed negative values to be entered.
+- Fixed a typo in the Gallery module's layout option help text.
+- Fixed the SVG logo without width not showing in Menu module.
+- Restored the "Clear" link for variations on the product page.
+- Fixed alternative scroll-to-anchor method not enabled by default.
+- Fixed the issue when settings from Divi Global Defaults Editor were not migrated to Div Presets for the Divi Builder plugin.
+- Fixed broken image size on image of Slider & Fullwidth Slider modules.
+- Added JS filter 'et.builder.store.setting.update' to hook on page settings values.
+- Fixed an issue that caused the meta description to be duplicated when Rank Math SEO plugin was active.
+- Fixes issue making user unable to save BFB layout when cache and scheduled cache preloading are enabled on WP Optimize plugin.
+- Fixes incorrect generated selector when 3rd party extension use Divi Module Elements on their modules.
+- Fixed broken image size on image of Slider & Fullwidth Slider modules.
+	* core/components/init.php
+	* epanel/custom_functions.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/core.php
+	* includes/builder/feature/global-presets/Settings.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/module/Gallery.php
+	* includes/builder/module/SliderItem.php
+	* includes/builder/module/field/Border.php
+	* includes/builder/scripts/frontend/scripts.js
+
 version 4.6.5 ( updated 09-25-2020 )
 - Fixed broken image size on Image module and image logo of Menu module.
 - Fixed navigation anchor wrong target position with position-fixed section in theme builder header.

@@ -19,6 +19,10 @@ final class Wicked_Folders {
         add_action( 'init',				array( $this, 'init' ), 15 );
 		add_action( 'pre_get_posts', 	array( $this, 'pre_get_posts' ), 20 ); // Must be called after pre_get_posts action in Wicked_Folders_Admin
 
+		// Keep folder order in sync with sort order changes made by Category
+		// Order and Taxonomy Terms Order plugin
+		add_action( 'tto/update-order', array( $this, 'migrate_folder_order' ) );
+
 		// Initalize admin singleton
 		Wicked_Folders_Admin::get_instance();
 
@@ -152,6 +156,11 @@ final class Wicked_Folders {
 		if ( version_compare( $db_version, '2.17.0', '<' ) ) {
 			update_option( 'wicked_folders_enable_folder_pages', false );
 			update_option( 'wicked_folders_db_version', '2.17.0' );
+		}
+
+		if ( version_compare( $db_version, '2.17.5', '<' ) ) {
+			$this->migrate_folder_order();
+			update_option( 'wicked_folders_db_version', '2.17.5' );
 		}
     }
 
@@ -503,6 +512,7 @@ final class Wicked_Folders {
 		if ( ! is_wp_error( $terms ) ) {
 			foreach ( $terms as $term ) {
 				$term_count = isset( $counts[ $term->term_id ] ) ? $counts[ $term->term_id ]->n : 0;
+				$term_order = ( int ) get_term_meta( $term->term_id, 'wf_order', true );
 
 				$folders[] = new Wicked_Folders_Term_Folder( array(
 					'id' 			=> $term->term_id,
@@ -511,7 +521,7 @@ final class Wicked_Folders {
 					'post_type' 	=> $post_type,
 					'taxonomy' 		=> $taxonomy,
 					'item_count' 	=> $term_count,
-					'order' 		=> ( int ) $term->term_order,
+					'order' 		=> $term_order,
 				) );
 			}
 		}
@@ -1226,6 +1236,43 @@ final class Wicked_Folders {
 
 		update_option( 'wicked_folders_tax_name_migration_done', true );
 
+	}
+
+	/**
+	 * Migrates folder sort order from wp_terms.term_order to a term meta value
+	 * named 'wf_order'.  Prior to version 2.17.5, the folder sort order was
+	 * stored in this column; however, it appears that term_order is not part of
+	 * the WordPress table schema for wp_terms.  Instead, it appears that the
+	 * field was added by the Category Order and Taxonomy Terms Order plugin and
+	 * the field was mistakenly thought to be a native WordPress field.
+	 */
+	public function migrate_folder_order() {
+		global $wpdb;
+
+		// Nothing to do if the column doesn't exist
+		if ( ! $this->term_order_field_exists() ) return;
+
+		// Fetch all Wicked Folder terms that have an order
+		$results = $wpdb->get_results( "SELECT t.term_id, t.term_order FROM {$wpdb->terms} t INNER JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id WHERE tt.taxonomy LIKE 'wf_%_folders' AND t.term_order <> 0" );
+
+		// Store sort orders in term meta
+		foreach ( $results as $result ) {
+			update_term_meta( $result->term_id, 'wf_order', $result->term_order );
+		}
+	}
+
+	/**
+	 * Determines whether or not the field wp_terms.term_order exists.
+	 *
+	 * @return boolean
+	 *  True if the field exists, false otherwise.
+	 */
+	public function term_order_field_exists() {
+		global $wpdb;
+
+		$result = $wpdb->query( "SHOW COLUMNS FROM {$wpdb->terms} LIKE 'term_order'" );
+
+		return 1 === $result;
 	}
 
 	/**

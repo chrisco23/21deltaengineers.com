@@ -7,6 +7,7 @@ add_filter('dbdbsmsn_add_social_media_follow_fields', 'dbdbsmsn_sort_network_opt
 if (!function_exists('dbdbsmsn_load_socicon')) {
 	function dbdbsmsn_load_socicon() { 
 		wp_enqueue_style('dbdb-icons-socicon'); 
+		add_action('wp_footer', 'dbdb_icons_socicon_inline_css');
 	}
 }
 

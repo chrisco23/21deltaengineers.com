@@ -3,7 +3,7 @@ Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
 Tested up to: 5.5
-Stable tag: 2.17.4
+Stable tag: 2.17.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,9 @@ When you search folders by keyword, folders that don't match the keyword are gre
 6. Pro feature: media library folders
 
 == Changelog ==
+
+= 2.17.5 (October 14, 2020) =
+* Fix bug causing custom folder sort order to not be preserved
 
 = 2.17.4 (September 17, 2020) =
 * Exclude auto draft posts from folder item counts

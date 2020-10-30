@@ -1141,12 +1141,39 @@ if ( ! function_exists( 'elegant_titles_filter' ) ) {
 }
 add_filter( 'pre_get_document_title', 'elegant_titles_filter' );
 
+if ( ! function_exists( 'et_is_seo_plugin_active' ) ) {
+	/**
+	 * Determine if SEO plugin is active.
+	 *
+	 * @since ??
+	 * @return bool
+	 */
+	function et_is_seo_plugin_active() {
+		// WordPress SEO.
+		if ( class_exists( 'WPSEO_Frontend' ) ) {
+			return true;
+		}
+
+		// All In One SEO Pack.
+		if ( class_exists( 'All_in_One_SEO_Pack' ) ) {
+			return true;
+		}
+
+		// Rank Math SEO.
+		if ( class_exists( 'RankMath\Frontend\Frontend' ) ) {
+			return true;
+		}
+
+		return false;
+	}
+}
+
 /*this function controls the meta description display*/
 if ( ! function_exists( 'elegant_description' ) ) {
 
 	function elegant_description() {
-		// Don't use ePanel SEO if WordPress SEO or All In One SEO Pack plugins are active
-		if ( class_exists( 'WPSEO_Frontend' ) || class_exists( 'All_in_One_SEO_Pack' ) ) {
+		// Don't use ePanel SEO if a SEO plugin is active.
+		if ( et_is_seo_plugin_active() ) {
 			return;
 		}
 
@@ -1221,8 +1248,8 @@ if ( ! function_exists( 'elegant_description' ) ) {
 if ( ! function_exists( 'elegant_keywords' ) ) {
 
 	function elegant_keywords() {
-		// Don't use ePanel SEO if WordPress SEO or All In One SEO Pack plugins are active
-		if ( class_exists( 'WPSEO_Frontend' ) || class_exists( 'All_in_One_SEO_Pack' ) ) {
+		// Don't use ePanel SEO if a SEO plugin is active.
+		if ( et_is_seo_plugin_active() ) {
 			return;
 		}
 
@@ -1256,8 +1283,8 @@ if ( ! function_exists( 'elegant_keywords' ) ) {
 if ( ! function_exists( 'elegant_canonical' ) ) {
 
 	function elegant_canonical() {
-		// Don't use ePanel SEO if WordPress SEO or All In One SEO Pack plugins are active
-		if ( class_exists( 'WPSEO_Frontend' ) || class_exists( 'All_in_One_SEO_Pack' ) ) {
+		// Don't use ePanel SEO if a SEO plugin is active.
+		if ( et_is_seo_plugin_active() ) {
 			return;
 		}
 

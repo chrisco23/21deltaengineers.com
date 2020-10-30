@@ -1,6 +1,5 @@
 <?php
 add_action('wp_enqueue_scripts', 'dbdb_icons_socicon_register_css');
-add_action('wp_head', 'dbdb_icons_socicon_inline_css');
 add_filter('dbdb_icons_socicon_data', 'dbdb_icons_socicon_correct_slugs');
 add_filter('dbdb_icons_socicon_data', 'dbdb_icons_socicon_correct_names');
 add_filter('dbdb_icons_socicon_data', 'dbdb_icons_socicon_remove_defunct_networks');

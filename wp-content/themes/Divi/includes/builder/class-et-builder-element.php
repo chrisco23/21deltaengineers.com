@@ -19294,7 +19294,7 @@ class ET_Builder_Element {
 		}
 
 		$selector = wp_strip_all_tags( apply_filters( 'et_pb_set_style_selector', $selector, $function_name ) );
-		$selector = et_builder_maybe_wrap_css_selectors( $selector, false );
+		$selector = et_builder_maybe_wrap_css_selectors( $selector, false, ".{$order_class_name}" );
 
 		// New lines are saved as || in CSS Custom settings, remove them.
 		$declaration = preg_replace( '/(\|\|)/i', '', $declaration );

@@ -6378,14 +6378,16 @@ add_filter( 'et_builder_render_layout', 'et_builder_add_builder_content_wrapper'
  * that target elements both inside AND outside the wrapper element.
  *
  * @since 3.10
+ * @since ?? New $inside_selectors parameter to extend default inside selector.
  *
- * @param string  $selector CSS selector to wrap.
- * @param string  $suffix   Selector partial to add to the wrapped selector after the wrapper (a space will be added first).
- * @param boolean $clone    Duplicate the selector, wrap the duplicate, and then return both selectors. Default `true`.
+ * @param string  $selector         CSS selector to wrap.
+ * @param string  $suffix           Selector partial to add to the wrapped selector after the wrapper (a space will be added first).
+ * @param boolean $clone            Duplicate the selector, wrap the duplicate, and then return both selectors. Default `true`.
+ * @param mixed   $inside_selectors Additional inside builder element selectors.
  *
  * @return string
  */
-function et_builder_maybe_wrap_css_selector( $selector, $suffix = '', $clone = true ) {
+function et_builder_maybe_wrap_css_selector( $selector, $suffix = '', $clone = true, $inside_selectors = '' ) {
 	static $should_wrap_selectors = array();
 
 	$post_id = ET_Builder_Element::get_theme_builder_layout_id();
@@ -6411,6 +6413,31 @@ function et_builder_maybe_wrap_css_selector( $selector, $suffix = '', $clone = t
 		$result .= $suffix ? "{$selector} {$suffix}, " : "{$selector}, ";
 	}
 
+	// By default, only selector that starts with `.et_pb` or `.et_fb` is considered as
+	// inside builder element. $inside_selectors param allow us to extend it and it would
+	// be useful for 3rd party extensions that use Divi Module Elements on their modules.
+	//
+	// Default inside builder element pattern as the first alternative, matches:
+	// - \.et[_-]      : Start with .et- or .et_
+	// - (?:pb|fb)[_-] : Followed by one of pb-, pb_, fb-, fb_.
+	$inside_selector_pattern = '\.et[_-](?:pb|fb)[_-]';
+
+	if ( ! empty( $inside_selectors ) ) {
+		if ( is_array( $inside_selectors ) ) {
+			$inside_selectors = implode( '|', $inside_selectors );
+		}
+
+		$inside_selector_pattern .= "|{$inside_selectors}";
+	}
+
+	// Elements selector pattern.
+	// - (html[^ ]*)?        : 1st group (html). Match html followed by non empty string
+	// - (body[^ ]*)?        : 2nd group (body). Match body followed by non empty string
+	// - (.*?)               : 3rd group (outside). Match any character.
+	// - ([^ ]*(?:inside).+) : 4th group (inside). Match one of inside builder element alternatives from $inside_selector_pattern.
+	// - (?: *)              : Non capturing group. Match any space character.
+	$elements_selector_pattern = '/^(html[^ ]*)?(?: *)(body[^ ]*)?(?: *)(.*?)(?: *)([^ ]*(?:' . $inside_selector_pattern . ').+)/';
+
 	if ( $suffix ) {
 		// $suffix param allows caller to split selector into two parts (1. outside builder and 2. inside builder)
 		// so that it can be wrapped properly. It was implemented before the regex solution below.
@@ -6421,7 +6448,7 @@ function et_builder_maybe_wrap_css_selector( $selector, $suffix = '', $clone = t
 			// Selector targets body element either directly or using a custom class.
 			$result .= "{$selector}{$wrapper} {$suffix}";
 		}
-	} elseif ( preg_match( '/^(html[^ ]*)?(?: *)(body[^ ]*)?(?: *)(.*?)(?: *)([^ ]*\.et[_-](?:pb|fb)[_-].+)/', $selector, $matches ) ) {
+	} elseif ( preg_match( $elements_selector_pattern, $selector, $matches ) ) {
 		// The selector includes elements outside builder content so we can't just prepend the wrapper to it.
 		list( $_, $html, $body, $outside_builder, $inside_builder ) = $matches;
 
@@ -6449,13 +6476,15 @@ function et_builder_maybe_wrap_css_selector( $selector, $suffix = '', $clone = t
  * at once (eg. selector1, selector2, selector3)
  *
  * @since 3.10
+ * @since ?? New $inside_selectors parameter to extend default inside selector.
  *
- * @param string $selector CSS selectors to wrap.
- * @param bool   $clone    {@see et_builder_maybe_wrap_css_selector()}.
+ * @param string $selector         CSS selectors to wrap.
+ * @param bool   $clone            {@see et_builder_maybe_wrap_css_selector()}.
+ * @param mixed  $inside_selectors Additional inside builder element selectora.
  *
  * @return string
  */
-function et_builder_maybe_wrap_css_selectors( $selector, $clone = true ) {
+function et_builder_maybe_wrap_css_selectors( $selector, $clone = true, $inside_selectors = '' ) {
 	static $should_wrap_selectors = array();
 
 	$post_id      = ET_Builder_Element::get_theme_builder_layout_id();
@@ -6483,7 +6512,7 @@ function et_builder_maybe_wrap_css_selectors( $selector, $clone = true ) {
 	$result    = array();
 
 	foreach ( $selectors as $css_selector ) {
-		$result[] = et_builder_maybe_wrap_css_selector( $css_selector, $clone );
+		$result[] = et_builder_maybe_wrap_css_selector( $css_selector, '', $clone, $inside_selectors );
 	}
 
 	return implode( ',', $result );

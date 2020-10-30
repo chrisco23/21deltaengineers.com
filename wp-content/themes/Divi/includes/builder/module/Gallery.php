@@ -258,7 +258,7 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 					'on'  => esc_html__( 'Slider', 'et_builder' ),
 				),
 				'default_on_front' => 'off',
-				'description'      => esc_html__( 'Toggle between the various blog layout types.', 'et_builder' ),
+				'description'      => esc_html__( 'Toggle between the various gallery layout types.', 'et_builder' ),
 				'affects'          => array(
 					'zoom_icon_color',
 					'caption_font',

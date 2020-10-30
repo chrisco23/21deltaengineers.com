@@ -491,12 +491,20 @@ final class Wicked_Folders_Ajax {
 	public function ajax_save_folder_order() {
 		global $wpdb;
 
-		$result  = array( 'error' => false );
-		$folders = isset( $_REQUEST['folders'] ) && is_array( $_REQUEST['folders' ] ) ? $_REQUEST['folders'] : array();
+		$result  			= array( 'error' => false );
+		$folders 			= isset( $_REQUEST['folders'] ) && is_array( $_REQUEST['folders' ] ) ? $_REQUEST['folders'] : array();
+		$order_field_exists = Wicked_Folders::get_instance()->term_order_field_exists();
 
 		foreach ( $folders as $folder ) {
-			$wpdb->update( $wpdb->terms, array( 'term_order' => $folder['order'] ), array( 'term_id' => $folder['id'] ) );
-
+			update_term_meta( $folder['id'], 'wf_order', ( int ) $folder['order'] );
+			
+			// Update wp_terms.term_order if the field exists. This field is
+			// used by the Category Order and Taxonomy Terms Order plugin so
+			// this should ensure that the folders appear in the expected order
+			// for users who use this plugin
+			if ( $order_field_exists ) {
+				$wpdb->update( $wpdb->terms, array( 'term_order' => $folder['order'] ), array( 'term_id' => $folder['id'] ) );
+			}
 		}
 
 		echo json_encode( $result );

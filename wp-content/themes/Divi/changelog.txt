@@ -1,3 +1,101 @@
+version 4.7.4 ( updated 11-24-2020 )
+- Introduced hooks for add, undo, redo, jump to, and discard actions on settings modal.
+- Fixed Featured Images import and export for Library items.
+- Fixed some shortcut keys not being overridden in Select2 input fields.
+- Fixed incorrect selectors in Woo Add to Cart module that affected Border options.
+- Fixed empty logo image alt text when not set from divi builder settings.
+- Fixed sticky elements position resets to top-left if sticky tab active in mobile view.
+- Fixed woocommerce long description can't update in classic Divi builder.
+- Fixed an issue in Visual Builder where the preview width could extend beyond the maximum allowed Tablet View width.
+- Fixed the styles on the password-protected page.
+- Fixed broken layout block preview after undo and redo actions.
+- Fixed empty title in bar counters module.
+- Fixed LearnDash content not being rendered properly when Post Content module is being used on theme builder body layout.
+- Fixed broken layout on product tour tooltip modal.
+- Align reset variations link on the right.
+- Fixed excerpt length issue that occurred when Excerpt Length set to 0 and showing dots.
+- Fixed project bottom margin when Divi Builder is enabled.
+	* core/components/Portability.php
+	* epanel/custom_functions.php
+	* functions.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/functions.php
+	* includes/builder/module/FullwidthMenu.php
+	* includes/builder/module/Menu.php
+	* includes/builder/plugin-compat/sfwd-lms.php
+	* includes/builder/scripts/utils/utils.js
+
+version 4.7.3 ( updated 11-19-2020 )
+- Fixed javascript error in select font options.
+	* includes/builder/frontend-builder/bundle.js
+
+version 4.7.2 ( updated 11-18-2020 )
+- Fixed an issue in Responsive View Modes where tooltips could be positioned incorrectly after scrolling to the top of the page.
+- Fixed issue where select gradient color start and end buttons don't work on background options.
+- Fixed an issue in Visual Builder's responsive views where the right-click menu positioned would not adjust to match page scroll.
+- Fixed an issue where the wrong icon would be displayed in some cases with RTL.
+- Fixed custom fields not populated after adding a new account in Email Optin module.
+- Fixed sticky not working in global modules.
+- Fixed an issue where modifying dimensions in Responsive Views would reset to the Desktop View mode.
+- Fixed the incorrect Custom Fields options order.
+- Fixed a typo in a legacy slider code.
+- Fixed ActiveCampaign general fields not shown in the custom field option.
+	* core/components/api/email/ActiveCampaign.php
+	* epanel/shortcodes/js/et_shortcodes_frontend.js
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/core.php
+	* includes/builder/frontend-builder/bundle.js
+
+version 4.7.1 ( updated 11-16-2020 )
+- Fixed a regression that caused changes to a global module's settings to not be updated in the database.
+- Fixed the menu logo image with max-height looks stretchy.
+- Fixed an issue in Visual Builder where custom CSS rules set in Theme Options could prevent scrolling in Tablet and Phone Views.
+- Fixed an issue where some changes made with Responsive Views controls would not update the ET_Builder API as expected.
+	* core/components/CompatibilityWarning.php
+	* core/components/Updates.php
+	* core/components/api/email/SendinBlue.php
+	* core/components/api/spam/ReCaptcha.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/main-structure-elements.php
+	* includes/builder/module/Blog.php
+	* includes/builder/plugin-compat/amazon-s3-and-cloudfront.php
+	* includes/builder/plugin-compat/relevanssi.php
+	* includes/builder/scripts/frontend/scripts.js
+	* includes/builder/scripts/frontend/sticky-element.js
+	* includes/builder/scripts/src/bfb_admin_script.js
+	* includes/builder/scripts/stores/sticky.js
+
+version 4.7 ( updated 11-11-2020 )
+- Fixed element position in wireframe preview mode.
+- Fixed builder UI's button affected by customizer style in Extra theme.
+- Fixed an issue where settings modal dimension were not defined prior to a height calculation.
+- Fixed issue where ReCaptcha js loaded in forms without spam protection enabled.
+- Fixed custom z-index for Row inside a Section with divider not working.
+- Email address validation in Contact Form changed to similar to how WordPress is_email() method works, on the FE.
+- The Responsive Views Update allows users to drag the width of view modes to a custom width to simulate different device widths, choose from preset widths for popular devices, and set custom default preview widths for tablet and phone.
+- Fixed Amazon S3 & Cloudfront image URLs not transformed in the builder.
+- Fixed issue with blog module not showing any posts on the search result page when Relevanssi plugin is activated.
+- Fixed issue with form being assigned to different account when editing the Email Option module.
+- Fixed some PHP notices regarding plugins and themes update checking.
+- Added support for the latest Sendinblue API (v3).
+- Introduces compatibility warning system for ET plugins/themes.
+	* core/admin/js/compatibility-warning.js
+	* core/components/CompatibilityWarning.php
+	* core/components/init.php
+	* core/functions.php
+	* core/wp_functions.php
+	* includes/builder/core.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/functions.php
+	* includes/builder/languages/et_builder-en_US-et-builder-gutenberg.po
+	* includes/builder/module/Blog.php
+	* includes/builder/plugin-compat/amazon-s3-and-cloudfront.php
+	* includes/builder/plugin-compat/relevanssi.php
+	* includes/builder/scripts/frontend/scripts.js
+	* includes/builder/scripts/src/builder.js
+	* js/src/custom.js
+
 version 4.6.6 ( updated 10-15-2020 )
 - Fix scroll behavior after drag & drop content to the builder.
 - Fixes incorrect generated selector when 3rd party extension use Divi Module Elements on their modules.

@@ -91,7 +91,8 @@ if (!function_exists('dbdbptst_show_meta')) {
 if (!function_exists('dbdb_posttitle_add_tags_to_meta')) {
 	function dbdb_posttitle_add_tags_to_meta($match) {
 		if (is_array($match) && isset($match[1]) && isset($match[2]) && isset($match[3])) {
-			$tags = get_the_tag_list('', ' ', '');
+			$taxonomy = (get_post_type() === 'project')?'project_tag':'post_tag';
+			$tags = get_the_term_list(get_the_id(), $taxonomy, '', ' ', '');
 			if ($tags) {
 				$meta_elements = array_filter(explode(' | ', $match[2]));
 				$meta_elements[] = '<span class="dbdb_posttitle_tags">'.$tags.'</span>';

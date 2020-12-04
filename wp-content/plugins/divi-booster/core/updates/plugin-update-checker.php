@@ -247,8 +247,6 @@ class Divi_Booster_PluginUpdateChecker {
 	 * @return PluginUpdate An instance of PluginUpdate, or NULL when no updates are available.
 	 */
 	public function requestUpdate(){
-		//For the sake of simplicity, this function just calls requestInfo() 
-		//and transforms the result accordingly.
 		$pluginInfo = $this->requestInfo(array('checking_for_updates' => '1'));
 		if ( $pluginInfo == null ){
 			return null;
@@ -256,11 +254,6 @@ class Divi_Booster_PluginUpdateChecker {
 		return Divi_Booster_PluginUpdate::fromPluginInfo($pluginInfo);
 	}
 	
-	/**
-	 * Get the currently installed version of the plugin.
-	 * 
-	 * @return string Version number.
-	 */
 	public function getInstalledVersion(){
 		if ( isset($this->cachedInstalledVersion) ) {
 			return $this->cachedInstalledVersion;
@@ -710,16 +703,6 @@ class Divi_Booster_PluginUpdateChecker {
 	public function addFilter($tag, $callback, $priority = 10, $acceptedArgs = 1) {
 		add_filter('puc_' . $tag . '-' . $this->slug, $callback, $priority, $acceptedArgs);
 	}
-
-	/**
-	 * Initialize the update checker Debug Bar plugin/add-on thingy.
-	 */
-	// public function initDebugBarPanel() {
-		// if ( class_exists('Debug_Bar') ) {
-			// require_once dirname(__FILE__) . '/debug-bar-plugin.php';
-			// $this->debugBarPlugin = new PucDebugBarPlugin($this);
-		// }
-	// }
 }
 
 endif;
@@ -874,6 +857,7 @@ class Divi_Booster_PluginUpdate {
 	 * @param bool $triggerErrors
 	 * @return PluginUpdate|null
 	 */
+	 /*
 	public static function fromJson($json, $triggerErrors = false){
 		//Since update-related information is simply a subset of the full plugin info,
 		//we can parse the update JSON as if it was a plugin info string, then copy over
@@ -885,6 +869,7 @@ class Divi_Booster_PluginUpdate {
 			return null;
 		}
 	}
+	*/
 
 	/**
 	 * Create a new instance of PluginUpdate based on an instance of PluginInfo.
@@ -943,17 +928,26 @@ class Divi_Booster_PluginUpdate {
 	 * @return object
 	 */
 	public function toWpFormat(){
-		$update = new StdClass;
+		$slug = $this->slug;
+		$pluginId = "{$slug}/{$slug}.php";
 		
-		$update->id = $this->id;
-		$update->slug = $this->slug;
+		$update = new stdClass;
+		$update->id = $pluginId;
+		$update->slug = $slug;
+		$update->plugin = $pluginId;
 		$update->new_version = $this->version;
 		$update->url = $this->homepage;
 		$update->package = $this->download_url;
+		$update->icons = array();
+		$update->banners = array();
+		$update->banners_rtl = array();
+		$update->tested = '';
+		$update->requires_php = '';
+		$update->compatibility = new stdClass();
+		
 		if ( !empty($this->upgrade_notice) ){
 			$update->upgrade_notice = $this->upgrade_notice;
 		}
-		
 		return $update;
 	}
 }

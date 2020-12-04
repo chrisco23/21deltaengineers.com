@@ -38,6 +38,7 @@ final class Wicked_Folders_Admin {
 
 		// Add move-to-folder column to LifterLMS Lessons
 		add_filter( 'manage_edit-lesson_columns', 			array( $this, 'manage_posts_columns' ) );
+		add_filter( 'manage_edit-pretty-link_columns', 		array( $this, 'manage_posts_columns' ) );
 
 		add_filter( 'plugin_action_links_wicked-folders/wicked-folders.php', array( $this, 'plugin_action_links' ) );
 

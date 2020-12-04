@@ -389,10 +389,12 @@ final class ET_Core_Updates {
 			$plugins_request = wp_remote_post( 'https://cdn.elegantthemes.com/api/api.php', $options );
 		}
 
-		if ( ! is_wp_error( $plugins_request ) && wp_remote_retrieve_response_code( $plugins_request ) === 200 ){
-			$plugins_response = unserialize( wp_remote_retrieve_body( $plugins_request ) );
+		$plugins_response = array();
 
-			if ( ! empty( $plugins_response ) ) {
+		if ( ! is_wp_error( $plugins_request ) && wp_remote_retrieve_response_code( $plugins_request ) === 200 ){
+			$plugins_response = maybe_unserialize( wp_remote_retrieve_body( $plugins_request ) );
+
+			if ( ! empty( $plugins_response ) && is_array( $plugins_response ) ) {
 				$request_settings = array( 'is_plugin_response' => true );
 
 				$plugins_response = $this->process_additional_response_settings( $plugins_response, $request_settings );
@@ -578,9 +580,9 @@ final class ET_Core_Updates {
 		}
 
 		if ( ! is_wp_error( $theme_request ) && wp_remote_retrieve_response_code( $theme_request ) === 200 ){
-			$theme_response = unserialize( wp_remote_retrieve_body( $theme_request ) );
+			$theme_response = maybe_unserialize( wp_remote_retrieve_body( $theme_request ) );
 
-			if ( ! empty( $theme_response ) ) {
+			if ( ! empty( $theme_response ) && is_array( $theme_response ) ) {
 				$theme_response = $this->process_additional_response_settings( $theme_response );
 
 				$last_update->checked  = $themes;

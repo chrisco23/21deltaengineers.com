@@ -871,6 +871,11 @@ class ET_Builder_Module_Fullwidth_Menu extends ET_Builder_Module {
 		$logo_url            = $this->props['logo_url'];
 		$logo_url_new_window = $this->props['logo_url_new_window'];
 
+		if ( empty( $logo_alt ) && ! empty( $this->props['logo'] ) ) {
+			$logo_id  = attachment_url_to_postid( esc_url( $this->props['logo'] ) );
+			$logo_alt = get_post_meta( $logo_id, '_wp_attachment_image_alt', true );
+		}
+
 		$logo_image_attrs = array(
 			'src'    => '{{logo}}',
 			'alt'    => $logo_alt,

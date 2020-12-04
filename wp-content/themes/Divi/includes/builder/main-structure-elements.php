@@ -1447,6 +1447,9 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 			'position_fields' => array(
 				'default' => 'relative',
 			),
+			'z_index'         => array(
+				'important' => true,
+			),
 		);
 
 		$this->settings_modal_toggles = array(

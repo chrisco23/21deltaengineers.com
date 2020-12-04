@@ -2540,20 +2540,28 @@ class ET_Builder_Element {
 
 		$this->props = shortcode_atts( $this->resolve_conditional_defaults( $attrs, $render_slug ), $attrs );
 
-		// Check if current module is inside sticky module based on previous $is_parent_sticky_module.
-		$is_inside_sticky_module = $is_parent_sticky_module;
+		// Only process if it's not a "global module's parent",
+		// the render method in the global module's parent will just call the `do_shortcode()` for the global module content.
+		// So processing the sticky should be done in the global module content render instead.
+		$should_process_sticky = ! in_array( $render_slug, array( 'et_pb_section', 'et_pb_row', 'et_pb_row_inner' ), true ) || empty( $this->props['global_module'] );
+		if ( $should_process_sticky ) {
+			// Check if current module is inside sticky module based on previous $is_parent_sticky_module.
+			$is_inside_sticky_module = $is_parent_sticky_module;
 
-		// Flag if current module rendering is sticky module or not.
-		// This is frequently used on sticky style rendering for modifying selectors.
-		$this->is_sticky_module = et_pb_sticky_options()->is_sticky_module( $this->props );
+			// Flag if current module rendering is sticky module or not.
+			// This is frequently used on sticky style rendering for modifying selectors.
+			$this->is_sticky_module = et_pb_sticky_options()->is_sticky_module( $this->props );
 
-		// If current module is sticky module, update $is_parent_sticky_module global; Module inside
-		// current module will check $is_parent_sticky_module global before $this->is_sticky_module
-		// property check to see if current module is inside another sticky module or not.
-		if ( $this->is_sticky_module ) {
-			// IMPORTANT: DO NOT use $is_parent_sticky_module global to check whether current module
-			// is inside another sticky or not. Use is_inside_sticky_module() util instead.
-			$is_parent_sticky_module = $this->is_sticky_module;
+			// If current module is sticky module, update $is_parent_sticky_module global; Module inside
+			// current module will check $is_parent_sticky_module global before $this->is_sticky_module
+			// property check to see if current module is inside another sticky module or not.
+			if ( $this->is_sticky_module ) {
+				// IMPORTANT: DO NOT use $is_parent_sticky_module global to check whether current module
+				// is inside another sticky or not. Use is_inside_sticky_module() util instead.
+				$is_parent_sticky_module = $this->is_sticky_module;
+			}
+		} else {
+			$this->is_sticky_module = false;
 		}
 
 		$this->_decode_double_quotes( $enabled_dynamic_attributes, $et_fb_processing_shortcode_object );
@@ -2718,7 +2726,9 @@ class ET_Builder_Element {
 		);
 
 		// Process sticky elements earlier to preserve the modules hierarchy during processing.
-		$this->process_sticky( $render_slug );
+		if ( $should_process_sticky ) {
+			$this->process_sticky( $render_slug );
+		}
 
 		// Process scroll effects earlier to preserve the modules hierarchy during processing.
 		$this->process_scroll_effects( $render_slug );
@@ -3020,7 +3030,6 @@ class ET_Builder_Element {
 				$content = $this->et_pb_maybe_fix_specialty_columns( $content );
 			}
 		}
-
 
 		$this->is_rendering = true;
 		$render_method      = $et_fb_processing_shortcode_object ? 'render_as_builder_data' : 'render';

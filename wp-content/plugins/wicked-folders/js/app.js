@@ -2573,7 +2573,7 @@
                     // Move all checked items if the item being draggeed is
                     // checked (or if the drag icon in the table header is being
                     // used; otherwise, only move the one item
-                    if ( checkbox.prop( 'checked' ) || 'on' == checkbox.val() || ! checkbox.val() ) {
+                    if ( checkbox.prop( 'checked' ) || 'on' == checkbox.val() ) {
                         posts = view.getSelectedPosts();
                     } else {
                         if ( isMedia ) {

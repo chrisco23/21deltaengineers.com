@@ -6174,7 +6174,7 @@ function et_password_form() {
 		$form_output
 	);
 
-	return $output;
+	return preg_replace( '/\t+/', '', $output );
 }
 add_filter( 'the_password_form', 'et_password_form' );
 
@@ -6259,6 +6259,10 @@ function et_layout_body_class( $classes ) {
 			$classes[] = 'et_hide_nav';
 		} else {
 			$classes[] = 'et_show_nav';
+		}
+
+		if ( is_singular() && 'on' === get_post_meta( get_the_ID(), '_et_pb_show_title', true ) ) {
+			$classes[] = 'et_pb_show_title';
 		}
 
 		if ( true === et_get_option( 'hide_primary_logo', false ) ) {

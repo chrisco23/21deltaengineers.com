@@ -1,3 +1,10 @@
+= 3.3.5 =
+* Fixed assign-op error in custom icon feature
+
+= 3.3.4 =
+* Option to show tags in post title module now works on projects
+* Fixed background automatic updates not working in WP 5.5
+
 = 3.3.3 =
 * Fixed gallery images per row affecting slider
 * Fixed social icon font loading when not needed

@@ -13,7 +13,10 @@ include(dirname(__FILE__).'/compat/compat.php');
 include(dirname(__FILE__).'/wtfplugin_1_0.class.php');
 
 // === Load the update checker ===
-include(dirname(__FILE__).'/updates/plugin-update-checker.php');
+//include(dirname(__FILE__).'/updates/plugin-update-checker.php');
+if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+	require dirname(__FILE__).'/plugin-update-checker/plugin-update-checker.php';
+}
 
 // === Load the plugins page code ===
 include(dirname(__FILE__).'/admin/plugins/plugins.php');
@@ -30,7 +33,14 @@ include(dirname(__FILE__).'/features/features.php');
 // === Automatic updates ===
 function booster_enable_updates($file) {
 	try {
-		$MyUpdateChecker = new Divi_Booster_PluginUpdateChecker(dbdb_update_url(), $file, dbdb_slug());
+		if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+			$myUpdateChecker = \DiviBooster\Puc_v4_Factory::buildUpdateChecker(
+				dbdb_update_url(),
+				$file, //Full path to the main plugin file or functions.php.
+				dbdb_slug()
+			);
+			//$MyUpdateChecker = new Divi_Booster_PluginUpdateChecker(dbdb_update_url(), $file, dbdb_slug());
+		}
 	} catch (Exception $e) { }
 }
 

@@ -1232,6 +1232,8 @@ function et_pb_retrieve_templates( $layout_type = 'layout', $module_width = '', 
 		)
 	);
 
+	$query->the_post(); // Call the_post() to properly configure post data.
+
 	wp_reset_postdata();
 
 	if ( ! empty( $query->posts ) ) {
@@ -1613,6 +1615,8 @@ function et_pb_get_global_module() {
 				'post_type' => ET_BUILDER_LAYOUT_POST_TYPE,
 			)
 		);
+
+		$query->the_post(); // Call the_post() to properly configure post data.
 
 		wp_reset_postdata();
 
@@ -2682,8 +2686,8 @@ if ( ! function_exists( 'et_builder_email_get_lists_field_data' ) ) :
 			);
 
 			if ( 'Signup' === $module_class ) {
-				$signup_field                 = new ET_Builder_Module_Signup_Item();
-				$fields_data['custom_fields'] = $signup_field->get_fields();
+				$signup_field                = new ET_Builder_Module_Signup_Item();
+				$field_data['custom_fields'] = $signup_field->get_fields();
 			}
 		}
 		// phpcs:enable
@@ -6378,7 +6382,7 @@ add_filter( 'et_builder_render_layout', 'et_builder_add_builder_content_wrapper'
  * that target elements both inside AND outside the wrapper element.
  *
  * @since 3.10
- * @since ?? New $inside_selectors parameter to extend default inside selector.
+ * @since 4.6.6 New $inside_selectors parameter to extend default inside selector.
  *
  * @param string  $selector         CSS selector to wrap.
  * @param string  $suffix           Selector partial to add to the wrapped selector after the wrapper (a space will be added first).
@@ -6476,7 +6480,7 @@ function et_builder_maybe_wrap_css_selector( $selector, $suffix = '', $clone = t
  * at once (eg. selector1, selector2, selector3)
  *
  * @since 3.10
- * @since ?? New $inside_selectors parameter to extend default inside selector.
+ * @since 4.6.6 New $inside_selectors parameter to extend default inside selector.
  *
  * @param string $selector         CSS selectors to wrap.
  * @param bool   $clone            {@see et_builder_maybe_wrap_css_selector()}.

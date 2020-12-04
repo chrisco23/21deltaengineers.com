@@ -184,6 +184,32 @@ class ET_Core_Portability {
 				$post_content = et_fb_process_to_shortcode( $shortcode_object, array(), '', false );
 				// Add slashes for post content to avoid unwanted unslashing (by wp_unslash) while post is inserting.
 				$post['post_content'] = wp_slash( $post_content );
+
+				// Upload thumbnail image if exist.
+				if ( ! empty( $post['post_meta'] ) && ! empty( $post['post_meta']['_thumbnail_id'] ) ) {
+					$post_thumbnail_origin_id = (int) $post['post_meta']['_thumbnail_id'][0];
+
+					if ( ! empty( $import['thumbnails'] ) && ! empty( $import['thumbnails'][ $post_thumbnail_origin_id ] ) ) {
+						$post_thumbnail_new = $this->upload_images( $import['thumbnails'][ $post_thumbnail_origin_id ] );
+						$new_thumbnail_data = reset( $post_thumbnail_new );
+
+						// New thumbnail image was uploaded and it should be updated.
+						if ( isset( $new_thumbnail_data['replacement_id'] ) ) {
+							$new_thumbnail_id  = $new_thumbnail_data['replacement_id'];
+							$post['thumbnail'] = $new_thumbnail_id;
+
+							if ( ! function_exists( 'wp_crop_image' ) ) {
+								include ABSPATH . 'wp-admin/includes/image.php';
+							}
+
+							$thumbnail_path = get_attached_file( $new_thumbnail_id );
+
+							// Generate all the image sizes and update thumbnail metadata.
+							$new_metadata = wp_generate_attachment_metadata( $new_thumbnail_id, $thumbnail_path );
+							wp_update_attachment_metadata( $new_thumbnail_id, $new_metadata );
+						}
+					}
+				}
 			}
 
 			if ( ! $this->import_posts( $data ) ) {
@@ -235,6 +261,7 @@ class ET_Core_Portability {
 		$temp_file            = $this->has_temp_file( $temp_file_id, 'et_core_export' );
 		$apply_global_presets = isset( $_POST['apply_global_presets'] ) ? wp_validate_boolean( $_POST['apply_global_presets'] ) : false;
 		$global_presets       = '';
+		$thumbnails           = '';
 
 		if ( $temp_file ) {
 			$file_data      = json_decode( $filesystem->get_contents( $temp_file ) );
@@ -316,12 +343,15 @@ class ET_Core_Portability {
 			$filesystem->put_contents( $temp_file, wp_json_encode( $file_data ) );
 		}
 
+		$thumbnails = $this->_get_thumbnail_images( $data );
+
 		$images = $this->get_data_images( $data );
 		$data = array(
-			'context'  => $this->instance->context,
-			'data'     => $data,
-			'presets' => $global_presets,
-			'images'   => $this->maybe_paginate_images( $images, 'encode_images', $timestamp ),
+			'context'    => $this->instance->context,
+			'data'       => $data,
+			'presets'    => $global_presets,
+			'images'     => $this->maybe_paginate_images( $images, 'encode_images', $timestamp ),
+			'thumbnails' => $thumbnails,
 		);
 
 		// Return exported content instead of printing it
@@ -1168,6 +1198,11 @@ class ET_Core_Portability {
 					update_post_meta( $post_id, $meta_key, $meta );
 				}
 			}
+
+			// Assign new thumbnail if provided.
+			if ( isset( $post['thumbnail'] ) ) {
+				set_post_thumbnail( $post_id, $post['thumbnail'] );
+			}
 		}
 
 		return true;
@@ -1417,6 +1452,36 @@ class ET_Core_Portability {
 		}
 
 		return $result['images'];
+	}
+
+	/**
+	 * Get all thumbnail images in the data given.
+	 *
+	 * @since ??
+	 *
+	 * @param array $data Array of data.
+	 *
+	 * @return array
+	 */
+	protected function _get_thumbnail_images( $data ) {
+		$thumbnails = array();
+
+		foreach ( $data as $post_data ) {
+			// If post has thumbnail.
+			if ( ! empty( $post_data->post_meta ) && ! empty( $post_data->post_meta->_thumbnail_id ) ) {
+				$post_thumbnail = get_the_post_thumbnail_url( $post_data->ID );
+
+				// If thumbnail image found in the WP Media library.
+				if ( $post_thumbnail ) {
+					$thumbnail_id    = (int) $post_data->post_meta->_thumbnail_id[0];
+					$thumbnail_image = $this->encode_images( array( $thumbnail_id ) );
+
+					$thumbnails[ $thumbnail_id ] = $thumbnail_image;
+				}
+			}
+		}
+
+		return $thumbnails;
 	}
 
 	/**

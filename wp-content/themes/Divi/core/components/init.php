@@ -8,6 +8,7 @@ function et_core_init() {
 	ET_Core_API_Spam_Providers::instance();
 	ET_Core_Cache_Directory::instance();
 	ET_Core_PageResource::startup();
+	ET_Core_CompatibilityWarning::instance();
 
 	if ( defined( 'ET_CORE_UPDATED' ) ) {
 		global $wp_rewrite;

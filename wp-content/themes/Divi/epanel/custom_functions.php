@@ -383,8 +383,11 @@ if ( ! function_exists( 'truncate_post' ) ) {
 
 				$truncate = implode( ' ', $new_words_array );
 
-				// append dots to the end of the string
-				$truncate .= $echo_out;
+				// Dots should not add to empty string
+				if ( '' !== $truncate ) {
+					// append dots to the end of the string
+					$truncate .= $echo_out;
+				}
 			}
 
 			if ( $echo ) {

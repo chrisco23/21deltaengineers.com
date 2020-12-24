@@ -1457,7 +1457,7 @@ class ET_Core_Portability {
 	/**
 	 * Get all thumbnail images in the data given.
 	 *
-	 * @since ??
+	 * @since 4.7.4
 	 *
 	 * @param array $data Array of data.
 	 *

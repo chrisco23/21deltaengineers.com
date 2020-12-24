@@ -379,7 +379,10 @@ if ( ! function_exists( 'truncate_post' ) ) {
 			// remove the last word to make sure we display all words correctly
 			if ( ! empty( $echo_out ) ) {
 				$new_words_array = (array) explode( ' ', $truncate );
-				array_pop( $new_words_array );
+				// Remove last word if word count is more than 1.
+				if ( count( $new_words_array ) > 1 ) {
+					array_pop( $new_words_array );
+				}
 
 				$truncate = implode( ' ', $new_words_array );
 

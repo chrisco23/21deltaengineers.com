@@ -52,7 +52,7 @@ class ET_Builder_Plugin_Compat_LearnDash extends ET_Builder_Plugin_Compat_Base {
 	/**
 	 * Maybe override `$wp_query` temporarily before TB layout body template.
 	 *
-	 * @since ??
+	 * @since 4.7.4
 	 *
 	 * @param integer $layout_id      TB layout post ID (header, body, footer).
 	 * @param boolean $layout_enabled Current layout status whether is enabled or not.
@@ -79,7 +79,7 @@ class ET_Builder_Plugin_Compat_LearnDash extends ET_Builder_Plugin_Compat_Base {
 	/**
 	 * Maybe restore `$wp_query` after TB layout body template rendered.
 	 *
-	 * @since ??
+	 * @since 4.7.4
 	 *
 	 * @param integer $layout_id      TB layout post ID (header, body, footer).
 	 * @param boolean $layout_enabled Current layout status whether is enabled or not.

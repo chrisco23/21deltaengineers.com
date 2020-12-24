@@ -1865,3 +1865,25 @@ endif;
 
 // Action for WP Cron: Disable Hosting Card status via ET API
 add_action( 'et_maybe_update_hosting_card_status_cron', 'et_maybe_update_hosting_card_status' );
+
+
+if ( ! function_exists( 'et_preload_fonts' ) ) :
+	/**
+	 * Preload fonts to speedup the site.
+	 */
+	function et_preload_fonts() {
+		$link_template = '<link rel="preload" href="%s" as="font" crossorigin="anonymous">';
+
+		$allowed_tags = array(
+			'link' => array(
+				'rel'         => array(),
+				'href'        => array(),
+				'as'          => array(),
+				'crossorigin' => array(),
+			),
+		);
+
+		echo wp_kses( sprintf( $link_template, esc_url( ET_CORE_URL . 'admin/fonts/modules.ttf' ) ), $allowed_tags );
+	}
+	add_action( 'wp_head', 'et_preload_fonts' );
+endif;

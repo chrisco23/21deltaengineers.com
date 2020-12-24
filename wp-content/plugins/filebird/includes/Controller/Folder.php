@@ -407,7 +407,7 @@ class Folder extends Controller {
       if($insert !== false) {
         wp_send_json_success(array('id' => $insert));
       } else {
-        wp_send_json_error(array('mess' => __('Please choose another name.', 'filebird')));
+        wp_send_json_error(array('mess' => __('A folder with this name already exists. Please choose another one.', 'filebird')));
       }
     } else {
       wp_send_json_error(array(
@@ -425,7 +425,7 @@ class Folder extends Controller {
       if($update === true) {
         wp_send_json_success();
       } else {
-        wp_send_json_error(array('mess' => __('Please choose another name.', 'filebird')));
+        wp_send_json_error(array('mess' => __('A folder with this name already exists. Please choose another one.', 'filebird')));
       }
       
     }

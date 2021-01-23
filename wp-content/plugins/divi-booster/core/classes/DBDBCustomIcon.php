@@ -82,21 +82,6 @@ if (!class_exists('DBDBCustomIcon')) {
 			.et_pb_portfolio_item .et_portfolio_image .et_pb_inline_icon[data-icon="<?php esc_attr_e($this->id); ?>"] img { 
 				margin-top: 14px; 
 			}
-			.et_pb_dmb_breadcrumbs a:first-child .db014_custom_hover_icon {
-				position: relative !important;
-				left: 0%; 
-				transform: none;
-				vertical-align: middle;
-				margin-right: 8px;
-			}
-			.et_pb_dmb_breadcrumbs li .db014_custom_hover_icon {
-				position: relative !important;
-				left: 0%; 
-				transform: none;
-				vertical-align: middle;
-				margin-right: 8px;
-				margin-left: 4px;
-			}
 			</style>
 			<?php
 		}
@@ -117,6 +102,29 @@ if (!class_exists('DBDBCustomIcon')) {
 				-moz-transform: translate(-50%,-50%); 
 				-ms-transform: translate(-50%,-50%); 
 				transform: translate(-50%,-50%); 
+			}
+			.et_pb_dmb_breadcrumbs a:first-child .db014_custom_hover_icon {
+				position: relative !important;
+				left: 0%; 
+				transform: none;
+				vertical-align: middle;
+				margin-right: 8px;
+			}
+			.et_pb_dmb_breadcrumbs li .db014_custom_hover_icon {
+				position: relative !important;
+				left: 0%; 
+				transform: none;
+				vertical-align: middle;
+				margin-right: 8px;
+				margin-left: 4px;
+			}
+			.et_pb_fullwidth_portfolio .et_overlay .db014_custom_hover_icon {
+				top: 45%;
+				-webkit-transition: all .3s;
+				transition: all .3s;
+			}
+			.et_pb_fullwidth_portfolio .et_pb_portfolio_image:hover .et_overlay .db014_custom_hover_icon {
+				top:33%;
 			}
 			</style>
 			<?php	

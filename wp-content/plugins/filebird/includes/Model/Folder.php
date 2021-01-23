@@ -116,9 +116,9 @@ class Folder {
     }
     return $wpdb->get_row($query);
   }
-  public static function findById($folder_id) {
+  public static function findById($folder_id, $select = 'id') {
     global $wpdb;
-    $query = "SELECT `id` FROM " . self::getTable(self::$folder_table) . " WHERE `id` = '".(int)$folder_id."'";
+    $query = "SELECT ".$select." FROM " . self::getTable(self::$folder_table) . " WHERE `id` = '".(int)$folder_id."'";
     return $wpdb->get_row($query);
   }
   public static function updateFolderName($new_name, $parent, $folder_id) {

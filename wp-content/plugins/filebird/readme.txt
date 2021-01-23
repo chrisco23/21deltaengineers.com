@@ -168,6 +168,14 @@ Happy Organizing! 😍
 
 == Changelog ==
 
+= Dec 21, 2020 - Version 4.3.1 =
+- Added: Support shortcode for Document Gallery
+- Added: API - Get folder detail by folder_id
+- Fixed: Modal append (Conflict with Yoast SEO)
+- Fixed: Conflict with Uncode theme
+- Fixed: Not loading media when uploaded by different modal in Elementor
+- Fixed: Reset file selection when move file in bulk select
+
 = Dec 14, 2020 - Version 4.3 =
 - Added: Press ESC key to exit Bulk select mode
 - Improved: Alert text

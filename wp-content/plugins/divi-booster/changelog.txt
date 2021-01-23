@@ -1,3 +1,7 @@
+= 3.3.6 =
+* Updated title / tagline feature to omit tagline element when not visible
+* Fixed custom overlay icon positioning in fullwidth portfolio
+
 = 3.3.5 =
 * Fixed assign-op error in custom icon feature
 

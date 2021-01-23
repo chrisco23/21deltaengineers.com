@@ -28,7 +28,7 @@ class Folder extends Controller {
     // add_action('edit_attachment', array($this, 'filebird_set_attachment_category'));
     add_action('delete_attachment', array($this, 'deleteAttachment'));
 
-    add_filter('ajax_query_attachments_args', array($this, 'ajaxQueryAttachmentsArgs'));
+    add_filter('ajax_query_attachments_args', array($this, 'ajaxQueryAttachmentsArgs'), 20);
     add_filter('restrict_manage_posts', array($this, 'restrictManagePosts'));
     //add_action('pre_get_posts', array($this, 'preGetPosts'));
     add_filter( 'posts_clauses', array($this, 'postsClauses'), 10, 2 );
@@ -270,8 +270,9 @@ class Folder extends Controller {
     if ($query->get("post_type") !== "attachment") {
       return $clauses;
     }
-    if(isset($_GET['fbv'])) {
-      $fbv = (int)sanitize_text_field($_GET['fbv']);
+    
+    if( isset($_GET['fbv']) || !empty($query->get('fbv')) ) {
+      $fbv = isset($_GET['fbv']) ? (int)sanitize_text_field($_GET['fbv']) : (int)$query->get('fbv');
       $in_not_in = FolderModel::getInAndNotInIds($fbv, true);
       if(count($in_not_in['post__not_in']) > 0) {
         $clauses['where'] .= "AND ID NOT IN (".implode(',', $in_not_in['post__not_in']).")";

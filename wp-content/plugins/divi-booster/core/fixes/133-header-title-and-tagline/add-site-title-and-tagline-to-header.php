@@ -43,18 +43,31 @@ if (!function_exists('db133_title_and_tagline_html_from_data')) {
 		));
 		$result = '';
 		if (!empty($data['title_tag']) && !empty($data['tagline_tag'])) {
-			$result = sprintf(
-				'<div id="db_title_and_tagline">
-					<%2$s id="logo-text">%1$s</%2$s>
-					<%4$s id="logo-tagline" class="logo-tagline">%3$s</%4$s>
-				</div>', 
+			$title = sprintf(
+				'<%2$s id="logo-text">%1$s</%2$s>', 
 				esc_html($data['title']),
-				esc_html($data['title_tag']),
+				esc_html($data['title_tag'])
+			);
+			$tagline = db133_site_tagline_html($data);
+			
+			$result = '<div id="db_title_and_tagline">'.$title.$tagline.'</div>';
+		}
+		return apply_filters('db133_title_and_tagline_html_from_data', $result, $data);
+	}
+}
+
+if (!function_exists('db133_site_tagline_html')) {
+	function db133_site_tagline_html($data) {
+		$layout = dbdb_option('133-header-title-and-tagline', 'layout', 'horizontal');
+		if ($layout !== 'title_only') {
+			return sprintf(
+				'<%2$s id="logo-tagline" class="logo-tagline">%1$s</%2$s>', 
 				esc_html($data['tagline']),
 				esc_html($data['tagline_tag'])
 			);
+		} else {
+			return '';
 		}
-		return apply_filters('db133_title_and_tagline_html_from_data', $result, $data);
 	}
 }
 

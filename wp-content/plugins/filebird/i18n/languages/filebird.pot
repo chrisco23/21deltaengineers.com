@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: FileBird\n"
-"POT-Creation-Date: 2020-12-07 10:04+0700\n"
-"PO-Revision-Date: 2020-12-07 10:03+0700\n"
+"POT-Creation-Date: 2020-12-18 14:32+0700\n"
+"PO-Revision-Date: 2020-12-18 14:31+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -47,74 +47,6 @@ msgstr ""
 
 #: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
 msgid "rename"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "sort_folders"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "sort_ascending"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "sort_descending"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "reset"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "sort_files"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "by_name"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "name_ascending"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "name_descending"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "by_date"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "date_ascending"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "date_descending"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "by_modified"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "modified_ascending"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "modified_descending"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "by_author"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "author_ascending"
-msgstr ""
-
-#: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
-msgid "author_descending"
 msgstr ""
 
 #: assets/dist/app-rtl.js:18 release/code/assets/dist/app.js:18
@@ -280,6 +212,10 @@ msgstr ""
 msgid "Already Updated"
 msgstr ""
 
+#: includes/Classes/DocumentGallery.php:37
+msgid "This folder ID does not exist, please check again."
+msgstr ""
+
 #: includes/Classes/EnhancedConvert.php:52
 #: release/code/includes/Classes/EnhancedConvert.php:52
 msgid "Updated"
@@ -326,20 +262,20 @@ msgstr ""
 msgid "Activated"
 msgstr ""
 
-#: includes/Controller/Api.php:82 release/code/includes/Controller/Api.php:82
+#: includes/Controller/Api.php:92 release/code/includes/Controller/Api.php:82
 msgid "Invalid action"
 msgstr ""
 
-#: includes/Controller/Api.php:101 release/code/includes/Controller/Api.php:101
+#: includes/Controller/Api.php:117 release/code/includes/Controller/Api.php:101
 msgid "folder_id is missing."
 msgstr ""
 
-#: includes/Controller/Api.php:112 release/code/includes/Controller/Api.php:112
+#: includes/Controller/Api.php:128 release/code/includes/Controller/Api.php:112
 msgid "Required fields are missing."
 msgstr ""
 
-#: includes/Controller/Api.php:126 includes/Controller/Folder.php:414
-#: includes/Controller/Folder.php:469 includes/Controller/Folder.php:482
+#: includes/Controller/Api.php:142 includes/Controller/Folder.php:415
+#: includes/Controller/Folder.php:470 includes/Controller/Folder.php:483
 #: release/code/includes/Controller/Api.php:126
 #: release/code/includes/Controller/Folder.php:414
 #: release/code/includes/Controller/Folder.php:469
@@ -359,7 +295,7 @@ msgstr ""
 
 #: includes/Controller/Folder.php:75 includes/I18n.php:118
 #: release/code/includes/Controller/Folder.php:75
-#: release/code/includes/I18n.php:115
+#: release/code/includes/I18n.php:116
 msgid "FileBird 4 Update Required"
 msgstr ""
 
@@ -388,7 +324,7 @@ msgstr ""
 msgid "All Folders"
 msgstr ""
 
-#: includes/Controller/Folder.php:252 includes/Controller/Folder.php:501
+#: includes/Controller/Folder.php:252 includes/Controller/Folder.php:502
 #: includes/I18n.php:62 includes/Model/Folder.php:34
 #: release/code/includes/Controller/Folder.php:252
 #: release/code/includes/Controller/Folder.php:501
@@ -396,21 +332,23 @@ msgstr ""
 msgid "Uncategorized"
 msgstr ""
 
-#: includes/Controller/Folder.php:371
+#: includes/Controller/Folder.php:372
 #: release/code/includes/Controller/Folder.php:371
 msgid "Please choose folder"
 msgstr ""
 
-#: includes/Controller/Folder.php:410 includes/Controller/Folder.php:428
+#: includes/Controller/Folder.php:411 includes/Controller/Folder.php:429
+#: release/code/includes/Controller/Folder.php:410
+#: release/code/includes/Controller/Folder.php:428
 msgid "A folder with this name already exists. Please choose another one."
 msgstr ""
 
-#: includes/Controller/Folder.php:457
+#: includes/Controller/Folder.php:458
 #: release/code/includes/Controller/Folder.php:457
 msgid "Can't delete folder, please try again later"
 msgstr ""
 
-#: includes/Controller/Folder.php:478
+#: includes/Controller/Folder.php:479
 #: release/code/includes/Controller/Folder.php:478
 msgid "Folder tree has been updated."
 msgstr ""
@@ -602,73 +540,73 @@ msgstr ""
 msgid "Thank you so much!"
 msgstr ""
 
-#: includes/I18n.php:86
+#: includes/I18n.php:86 release/code/includes/I18n.php:85
 msgid "I've purchased FileBird Pro."
 msgstr ""
 
-#: includes/I18n.php:88 release/code/includes/I18n.php:85
+#: includes/I18n.php:88 release/code/includes/I18n.php:86
 msgid "It doesn't have the features I'm looking for."
 msgstr ""
 
-#: includes/I18n.php:89 release/code/includes/I18n.php:86
+#: includes/I18n.php:89 release/code/includes/I18n.php:87
 msgid "Not work with my theme or other plugins."
 msgstr ""
 
-#: includes/I18n.php:90 release/code/includes/I18n.php:87
+#: includes/I18n.php:90 release/code/includes/I18n.php:88
 msgid "Found another plugin that works better."
 msgstr ""
 
-#: includes/I18n.php:91 release/code/includes/I18n.php:88
+#: includes/I18n.php:91 release/code/includes/I18n.php:89
 msgid "Don't know how to use it."
 msgstr ""
 
-#: includes/I18n.php:92 release/code/includes/I18n.php:89
+#: includes/I18n.php:92 release/code/includes/I18n.php:90
 msgid "This is just temporary, I will use it again."
 msgstr ""
 
-#: includes/I18n.php:93 release/code/includes/I18n.php:90
+#: includes/I18n.php:93 release/code/includes/I18n.php:91
 msgid "Other"
 msgstr ""
 
-#: includes/I18n.php:95 release/code/includes/I18n.php:92
+#: includes/I18n.php:95 release/code/includes/I18n.php:93
 msgid "Which features please?"
 msgstr ""
 
-#: includes/I18n.php:96 release/code/includes/I18n.php:93
+#: includes/I18n.php:96 release/code/includes/I18n.php:94
 msgid "Please tell us which one"
 msgstr ""
 
-#: includes/I18n.php:97 release/code/includes/I18n.php:94
+#: includes/I18n.php:97 release/code/includes/I18n.php:95
 msgid ""
 "Please read FileBird documentation <a target=\"_blank\" href=\"https://"
 "ninjateam.gitbook.io/filebird/\">here</a> or <a target=\"_blank\" href="
 "\"https://ninjateam.org/support/\">chat with us</a> if you need help"
 msgstr ""
 
-#: includes/I18n.php:98 release/code/includes/I18n.php:95
+#: includes/I18n.php:98 release/code/includes/I18n.php:96
 msgid ""
 "Please <a target=\"_blank\" href=\"https://ninjateam.org/support/\">ask for "
 "support here</a>, we will fix it for you."
 msgstr ""
 
-#: includes/I18n.php:99 release/code/includes/I18n.php:96
+#: includes/I18n.php:99 release/code/includes/I18n.php:97
 msgid "Please share your thoughts..."
 msgstr ""
 
-#: includes/I18n.php:100 release/code/includes/I18n.php:97
+#: includes/I18n.php:100 release/code/includes/I18n.php:98
 msgid "Want a better FileBird?"
 msgstr ""
 
-#: includes/I18n.php:101 release/code/includes/I18n.php:98
+#: includes/I18n.php:101 release/code/includes/I18n.php:99
 msgid ""
 "Sorry to see you walk away, please share why you want to deactivate FileBird?"
 msgstr ""
 
-#: includes/I18n.php:102 release/code/includes/I18n.php:99
+#: includes/I18n.php:102 release/code/includes/I18n.php:100
 msgid "Folder Limit Reached"
 msgstr ""
 
-#: includes/I18n.php:103 release/code/includes/I18n.php:100
+#: includes/I18n.php:103 release/code/includes/I18n.php:101
 msgid ""
 "<p>FileBird Lite version supports up to 10 folders.<br>Please upgrade to "
 "have unlimited folders and other premium features!</p>\n"
@@ -690,76 +628,76 @@ msgid ""
 "        </ul>"
 msgstr ""
 
-#: includes/I18n.php:113 release/code/includes/I18n.php:110
+#: includes/I18n.php:113 release/code/includes/I18n.php:111
 msgid "Including Divi, Fusion, Thrive Architect, WPBakery..."
 msgstr ""
 
-#: includes/I18n.php:114 release/code/includes/I18n.php:111
+#: includes/I18n.php:114 release/code/includes/I18n.php:112
 msgid "Upgrade to FileBird Pro now"
 msgstr ""
 
-#: includes/I18n.php:115 release/code/includes/I18n.php:112
+#: includes/I18n.php:115 release/code/includes/I18n.php:113
 msgid "Success."
 msgstr ""
 
-#: includes/I18n.php:116 release/code/includes/I18n.php:113
+#: includes/I18n.php:116 release/code/includes/I18n.php:114
 msgid "Congratulations. Successfully imported!"
 msgstr ""
 
-#: includes/I18n.php:117 release/code/includes/I18n.php:114
+#: includes/I18n.php:117 release/code/includes/I18n.php:115
 msgid "Go To Media"
 msgstr ""
 
-#: includes/I18n.php:119 release/code/includes/I18n.php:116
+#: includes/I18n.php:119 release/code/includes/I18n.php:117
 msgid ""
 "You're using the new FileBird 4. Please import database to view your folders "
 "correctly."
 msgstr ""
 
-#: includes/I18n.php:120 release/code/includes/I18n.php:117
+#: includes/I18n.php:120 release/code/includes/I18n.php:118
 msgid "Import now"
 msgstr ""
 
-#: includes/I18n.php:121 release/code/includes/I18n.php:118
+#: includes/I18n.php:121 release/code/includes/I18n.php:119
 msgid ""
 "Import failed. Please try again or <a href=\"https://ninjateam.org/support\" "
 "target=\"_blank\">contact our support</a>."
 msgstr ""
 
-#: includes/I18n.php:122 release/code/includes/I18n.php:119
+#: includes/I18n.php:122 release/code/includes/I18n.php:120
 msgid "Please enter your Purchase Code."
 msgstr ""
 
-#: includes/I18n.php:123 release/code/includes/I18n.php:120
+#: includes/I18n.php:123 release/code/includes/I18n.php:121
 msgid "Please enter your Personal Access Token or get one."
 msgstr ""
 
-#: includes/I18n.php:124 release/code/includes/I18n.php:121
+#: includes/I18n.php:124 release/code/includes/I18n.php:122
 msgid "Can not active your License, please try again."
 msgstr ""
 
-#: includes/I18n.php:125 release/code/includes/I18n.php:122
+#: includes/I18n.php:125 release/code/includes/I18n.php:123
 #: release/code/views/pages/html-settings.php:18
 #: release/code/views/pages/settings/tab-settings.php:1
 #: views/pages/html-settings.php:18 views/pages/settings/tab-settings.php:1
 msgid "Settings"
 msgstr ""
 
-#: includes/I18n.php:126 release/code/includes/I18n.php:123
+#: includes/I18n.php:126 release/code/includes/I18n.php:124
 #: release/code/views/pages/html-settings.php:59
 #: views/pages/html-settings.php:59
 msgid "FileBird Settings"
 msgstr ""
 
-#: includes/I18n.php:127 release/code/includes/I18n.php:124
+#: includes/I18n.php:127 release/code/includes/I18n.php:125
 msgid "Select a default startup folder:"
 msgstr ""
 
-#: includes/I18n.php:128 release/code/includes/I18n.php:125
+#: includes/I18n.php:128 release/code/includes/I18n.php:126
 msgid "Settings saved"
 msgstr ""
 
-#: includes/I18n.php:129 release/code/includes/I18n.php:126
+#: includes/I18n.php:129 release/code/includes/I18n.php:127
 msgid "Failed to save settings. Please try again!"
 msgstr ""
 
@@ -774,7 +712,7 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: includes/Page/Settings.php:68
+#: includes/Page/Settings.php:68 release/code/includes/Page/Settings.php:67
 msgid "Go Pro"
 msgstr ""
 
@@ -800,11 +738,6 @@ msgstr ""
 
 #: release/code/assets/dist/app.js:29
 msgid "skip_and_deactivate"
-msgstr ""
-
-#: release/code/includes/Controller/Folder.php:410
-#: release/code/includes/Controller/Folder.php:428
-msgid "Please choose another name."
 msgstr ""
 
 #: release/code/views/pages/html-settings.php:25

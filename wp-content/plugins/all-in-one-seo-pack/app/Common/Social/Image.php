@@ -20,15 +20,6 @@ class Image {
 	public $thumbnailSize;
 
 	/**
-	 * Class constructor.
-	 *
-	 * @since 4.0.0
-	 */
-	public function __construct() {
-		$this->thumbnailSize = apply_filters( 'aioseo_thumbnail_size', apply_filters( 'post_thumbnail_size', 'large' ) );
-	}
-
-	/**
 	 * Returns the Facebook or Twitter image.
 	 *
 	 * @since 4.0.0
@@ -39,6 +30,8 @@ class Image {
 	 * @return string|array              The image data.
 	 */
 	public function getImage( $type, $imageSource, $post ) {
+		$this->thumbnailSize = apply_filters( 'aioseo_thumbnail_size', 'fullsize' );
+
 		static $images = [];
 		if ( isset( $images[ $type ] ) ) {
 			return $images[ $type ];
@@ -86,13 +79,7 @@ class Image {
 			return $images[ $type ];
 		}
 
-		$uploadDirUrl = aioseo()->helpers->escapeRegex( aioseo()->helpers->getWpContentUrl() );
-		if ( ! preg_match( "/$uploadDirUrl.*/", $image ) ) {
-			$images[ $type ] = $image;
-			return $images[ $type ];
-		}
-
-		$attachmentId    = attachment_url_to_postid( aioseo()->helpers->removeImageDimensions( $image ) );
+		$attachmentId    = aioseo()->helpers->attachmentUrlToPostId( aioseo()->helpers->removeImageDimensions( $image ) );
 		$images[ $type ] = $attachmentId ? wp_get_attachment_image_src( $attachmentId, $this->thumbnailSize ) : $image;
 		return $images[ $type ];
 	}

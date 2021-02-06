@@ -43,7 +43,6 @@ $wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'aioseo_terms' );
 $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'aioseo\_%'" );
 
 // Remove any transients we've left behind.
-$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '\_transient\_aioseo\_%'" );
 $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '\_aioseo\_%'" );
 $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'aioseo\_%'" );
 

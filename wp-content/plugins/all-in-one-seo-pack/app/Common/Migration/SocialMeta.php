@@ -104,7 +104,7 @@ class SocialMeta {
 			'type'              => 'warning',
 			'level'             => [ 'all' ],
 			'button1_label'     => __( 'Learn More', 'all-in-one-seo-pack' ),
-			'button1_action'    => AIOSEO_MARKETING_URL . '/docs/deprecated-opengraph-settings',
+			'button1_action'    => aioseo()->helpers->utmUrl( AIOSEO_MARKETING_URL . 'docs/deprecated-opengraph-settings', 'notifications-center', 'v3-migration-deprecated-opengraph' ),
 			'start'             => gmdate( 'Y-m-d H:i:s' )
 		] );
 	}

@@ -164,7 +164,7 @@ class ET_GB_Editor_Typography {
 	 */
 	public function enqueue_block_typography_styles() {
 
-		if ( ! get_current_screen()->is_block_editor() ) {
+		if ( ! ( method_exists( get_current_screen(), 'is_block_editor' ) && get_current_screen()->is_block_editor() ) ) {
 			return;
 		}
 

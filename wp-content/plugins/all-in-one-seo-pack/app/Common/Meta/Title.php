@@ -16,8 +16,9 @@ class Title {
 	 *
 	 * @return string The page title.
 	 */
-	public function filterPageTitle() {
-		return aioseo()->helpers->encodeOutputHtml( $this->getTitle() );
+	public function filterPageTitle( $wpTitle = '' ) {
+		$title = $this->getTitle();
+		return ! empty( $title ) ? aioseo()->helpers->encodeOutputHtml( $title ) : $wpTitle;
 	}
 
 	/**
@@ -61,29 +62,11 @@ class Title {
 		}
 
 		if ( is_author() ) {
-			$title = $this->prepareTitle( aioseo()->options->searchAppearance->archives->author->title );
-			if ( $title ) {
-				return $title;
-			}
-			$author = get_queried_object();
-			$name   = trim( sprintf( '%1$s %2$s', get_the_author_meta( 'first_name', $author->ID ), get_the_author_meta( 'last_name', $author->ID ) ) );
-			return $this->prepareTitle( $name );
+			return $this->prepareTitle( aioseo()->options->searchAppearance->archives->author->title );
 		}
 
 		if ( is_date() ) {
-			$title = $this->prepareTitle( aioseo()->options->searchAppearance->archives->date->title );
-			if ( $title ) {
-				return $title;
-			}
-
-			if ( is_year() ) {
-				$title = get_the_date( 'Y' );
-			} elseif ( is_month() ) {
-				$title = get_the_date( 'F, Y' );
-			} elseif ( is_day() ) {
-				$title = get_the_date();
-			}
-			return $this->prepareTitle( "$title &#8211; #site_title" );
+			return $this->prepareTitle( aioseo()->options->searchAppearance->archives->date->title );
 		}
 
 		if ( is_search() ) {
@@ -125,7 +108,7 @@ class Title {
 		if ( ! $title ) {
 			$title = $this->prepareTitle( $this->getPostTypeTitle( $post->post_type ), $post->ID, $default );
 		}
-		return $title ? $title : $this->prepareTitle( $post->post_title, $post->ID, $default );
+		return $title ? $title : '';
 	}
 
 	/**
@@ -162,7 +145,7 @@ class Title {
 			$newTitle = preg_replace( '/#taxonomy_title/', $term->name, $newTitle );
 			$title    = $this->prepareTitle( $newTitle, false, $default );
 		}
-		return $title ? $title : $this->prepareTitle( single_term_title( '', false ), false, $default );
+		return $title ? $title : '';
 	}
 
 	/**
@@ -176,12 +159,16 @@ class Title {
 	 * @return string           The sanitized title.
 	 */
 	public function prepareTitle( $title, $id = false, $default = false ) {
-		if ( ! is_admin() && 1 < aioseo()->helpers->getPageNumber() ) {
-			$title .= aioseo()->options->searchAppearance->advanced->pagedFormat;
+		if ( ! empty( $title ) && ! is_admin() && 1 < aioseo()->helpers->getPageNumber() ) {
+			$title .= '&nbsp;' . trim( aioseo()->options->searchAppearance->advanced->pagedFormat );
 		}
 
 		$title = $default ? $title : aioseo()->tags->replaceTags( $title, $id );
 		$title = apply_filters( 'aioseo_title', $title );
+
+		if ( apply_filters( 'aioseo_title_do_shortcodes', true ) ) {
+			$title = aioseo()->helpers->doShortcodes( $title );
+		}
 
 		$title = aioseo()->helpers->decodeHtmlEntities( $title );
 		$title = wp_strip_all_tags( strip_shortcodes( $title ) );

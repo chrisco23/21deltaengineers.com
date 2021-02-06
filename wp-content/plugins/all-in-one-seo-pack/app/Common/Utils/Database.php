@@ -15,7 +15,9 @@ class Database {
 	 * @var array
 	 */
 	protected $customTables = [
-		'aioseo_notifications'
+		'aioseo_notifications',
+		'aioseo_posts',
+		'aioseo_terms'
 	];
 
 	/**

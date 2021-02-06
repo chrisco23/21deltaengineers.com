@@ -58,18 +58,14 @@ class Schema {
 	 */
 	public function get() {
 		// First, let's check if it's disabled.
-		if ( apply_filters( 'aioseo_schema_disable', false ) ) {
+		if (
+			apply_filters( 'aioseo_schema_disable', false ) ||
+			( in_array( 'enableSchemaMarkup', aioseo()->internalOptions->deprecatedOptions, true ) && ! aioseo()->options->deprecated->searchAppearance->global->schema->enableSchemaMarkup )
+		) {
 			return '';
 		}
 
-		if ( in_array( 'enableSchemaMarkup', aioseo()->internalOptions->deprecatedOptions, true ) ) {
-			if ( ! aioseo()->options->deprecated->searchAppearance->global->schema->enableSchemaMarkup ) {
-				return '';
-			}
-		}
-
 		$this->init();
-
 		if ( ! $this->graphs ) {
 			return '';
 		}
@@ -79,19 +75,17 @@ class Schema {
 			'@graph'   => []
 		];
 
-		// @TODO: [V4+] Use method to filter out empty or null values using recursion.
-		foreach ( array_unique( array_filter( $this->graphs ) ) as $graph ) {
-			$namespace = "\AIOSEO\Plugin\Common\Schema\Graphs\\$graph";
-			$schema['@graph'][] = array_filter( ( new $namespace )->get() );
+		$graphs = apply_filters( 'aioseo_schema_graphs', array_unique( array_filter( $this->graphs ) ) );
+		foreach ( $graphs as $graph ) {
+			if ( class_exists( "\AIOSEO\Plugin\Common\Schema\Graphs\\$graph" ) ) {
+				$namespace          = "\AIOSEO\Plugin\Common\Schema\Graphs\\$graph";
+				$schema['@graph'][] = array_filter( ( new $namespace )->get() );
+			}
 		}
 
-		// We need to filter again to check for completely empty graphs.
-		$schema['@graph'] = array_values( array_filter( $schema['@graph'] ) );
+		$schema['@graph'] = $this->cleanData( $schema['@graph'] );
 
-		if ( isset( $_GET['aioseo-dev'] ) ) {
-			return wp_json_encode( $schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
-		}
-		return wp_json_encode( $schema );
+		return isset( $_GET['aioseo-dev'] ) ? wp_json_encode( $schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) : wp_json_encode( $schema );
 	}
 
 	/**
@@ -103,7 +97,7 @@ class Schema {
 	 *
 	 * @return void
 	 */
-	private function init() {
+	protected function init() {
 		$context      = new Context();
 		$this->graphs = [
 			'WebSite',
@@ -229,5 +223,30 @@ class Schema {
 				}
 				return [ 'WebPage', ucfirst( $schemaType ) ];
 		}
+	}
+
+	/**
+	 * Strips HTML and removes all blank properties in each of our graphs.
+	 *
+	 * @since 4.0.13
+	 *
+	 * @param  array $data The graph data.
+	 * @return array       The cleaned graph data.
+	 */
+	protected function cleanData( $data ) {
+		foreach ( $data as $k => &$v ) {
+			if ( is_array( $v ) ) {
+				$v = $this->cleanData( $v );
+			} else {
+				$v = trim( wp_strip_all_tags( $v ) );
+			}
+
+			if ( empty( $v ) ) {
+				unset( $data[ $k ] );
+			} else {
+				$data[ $k ] = $v;
+			}
+		}
+		return $data;
 	}
 }

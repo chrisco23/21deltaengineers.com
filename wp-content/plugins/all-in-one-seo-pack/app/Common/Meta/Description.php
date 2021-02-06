@@ -200,12 +200,16 @@ class Description {
 	 * @return string  $description The sanitized description.
 	 */
 	public function prepareDescription( $description, $id = false, $default = false ) {
-		if ( ! is_admin() && 1 < aioseo()->helpers->getPageNumber() ) {
-			$description .= aioseo()->options->searchAppearance->advanced->pagedFormat;
+		if ( ! empty( $description ) && ! is_admin() && 1 < aioseo()->helpers->getPageNumber() ) {
+			$description .= '&nbsp;' . trim( aioseo()->options->searchAppearance->advanced->pagedFormat );
 		}
 
 		$description = $default ? $description : aioseo()->tags->replaceTags( $description, $id );
 		$description = apply_filters( 'aioseo_description', $description );
+
+		if ( apply_filters( 'aioseo_description_do_shortcodes', true ) ) {
+			$description = aioseo()->helpers->doShortcodes( $description );
+		}
 
 		$description = aioseo()->helpers->decodeHtmlEntities( $description );
 		$description = wp_strip_all_tags( strip_shortcodes( $description ) );

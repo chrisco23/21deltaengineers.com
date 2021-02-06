@@ -25,7 +25,7 @@ abstract class Graph {
 	 * @return array $data    The image graph data.
 	 */
 	protected function image( $imageId, $graphId ) {
-		$imageId = is_string( $imageId ) ? attachment_url_to_postid( $imageId ) : $imageId;
+		$imageId = is_string( $imageId ) && ! is_numeric( $imageId ) ? aioseo()->helpers->attachmentUrlToPostId( $imageId ) : $imageId;
 
 		$data = [
 			'@type' => 'ImageObject',
@@ -155,5 +155,28 @@ abstract class Graph {
 			$socialUrls['twitterUrl'] = '';
 		}
 		return array_values( array_filter( $socialUrls ) );
+	}
+
+	/**
+	 * Iterates over a list of functions and sets the results as graph data.
+	 *
+	 * @since 4.0.13
+	 *
+	 * @param  array $data          The graph data to add to.
+	 * @param  array $dataFunctions List of functions to loop over, associated with a graph property.
+	 * @return array $data          The graph data with the results added.
+	 */
+	protected function getData( $data, $dataFunctions ) {
+		foreach ( $dataFunctions as $k => $f ) {
+			if ( ! method_exists( $this, $f ) ) {
+				continue;
+			}
+
+			$value = $this->$f();
+			if ( $value ) {
+				$data[ $k ] = $value;
+			}
+		}
+		return $data;
 	}
 }

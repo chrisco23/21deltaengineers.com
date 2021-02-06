@@ -276,6 +276,11 @@ class Settings {
 			foreach ( $settings as $setting ) {
 				if ( $options->has( $setting ) ) {
 					$allSettings['settings'][ $setting ] = $options->$setting->all();
+
+					// It there is a related deprecated $setting, include it.
+					if ( $options->deprecated->has( $setting ) ) {
+						$allSettings['settings']['deprecated'][ $setting ] = $options->deprecated->$setting->all();
+					}
 				}
 			}
 		}

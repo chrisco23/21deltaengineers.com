@@ -56,9 +56,9 @@ class Links {
 			$paged = is_paged();
 			if ( ! is_single() ) {
 				if ( ! $paged ) {
-					$paged = 1;
+					$page = 1;
 				}
-				$nextpage = intval( $paged ) + 1;
+				$nextpage = intval( $page ) + 1;
 				if ( ! $maxPage || $maxPage >= $nextpage ) {
 					$next = get_pagenum_link( $nextpage );
 				}

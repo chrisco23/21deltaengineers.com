@@ -63,8 +63,8 @@ class Migration {
 
 		// Stop migration for new v4 users where it was incorrectly triggered.
 		if ( version_compare( $lastActiveVersion[0], '4.0.4', '=' ) && ! get_option( 'aioseop_options' ) ) {
-			delete_transient( 'aioseo_v3_migration_in_progress_posts' );
-			delete_transient( 'aioseo_v3_migration_in_progress_terms' );
+			aioseo()->transients->delete( 'v3_migration_in_progress_posts' );
+			aioseo()->transients->delete( 'v3_migration_in_progress_terms' );
 
 			try {
 				if ( as_next_scheduled_action( 'aioseo_migrate_post_meta' ) ) {
@@ -84,16 +84,15 @@ class Migration {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param  array $oldOptions The old options. We pass it in directly via the Importer/Exporter.
 	 * @return void
 	 */
-	public function doMigration( $oldOptions = [] ) {
+	public function doMigration() {
 		// If our tables do not exist, create them now.
 		if ( ! aioseo()->db->tableExists( 'aioseo_posts' ) ) {
 			aioseo()->updates->addInitialCustomTablesForV4();
 		}
 
-		$this->oldOptions = ( new OldOptions( $oldOptions ) )->oldOptions;
+		$this->oldOptions = ( new OldOptions() )->oldOptions;
 
 		if (
 			! $this->oldOptions ||
@@ -103,7 +102,9 @@ class Migration {
 			return;
 		}
 
-		set_transient( 'aioseo_v3_migration_in_progress_posts', time(), WEEK_IN_SECONDS );
+		update_option( 'aioseo_options_v3', $this->oldOptions );
+
+		aioseo()->transients->update( 'v3_migration_in_progress_posts', time(), WEEK_IN_SECONDS );
 
 		$this->migrateSettings();
 		$this->meta->migrateMeta();
@@ -119,7 +120,7 @@ class Migration {
 	 * @return void
 	 */
 	public function redoMetaMigration() {
-		set_transient( 'aioseo_v3_migration_in_progress_posts', time(), WEEK_IN_SECONDS );
+		aioseo()->transients->update( 'v3_migration_in_progress_posts', time(), WEEK_IN_SECONDS );
 		$this->meta->migrateMeta();
 	}
 
@@ -128,13 +129,29 @@ class Migration {
 	 *
 	 * @since 4.0.0
 	 *
+	 * @param  array $oldOptions The old options. We pass it in directly via the Importer/Exporter.
 	 * @return void
 	 */
-	protected function migrateSettings() {
+	public function migrateSettings( $oldOptions = [] ) {
+		if ( empty( $this->oldOptions ) && ! empty( $oldOptions ) ) {
+			$this->oldOptions = ( new OldOptions( $oldOptions ) )->oldOptions;
+
+			if (
+				! $this->oldOptions ||
+				! is_array( $this->oldOptions ) ||
+				! count( $this->oldOptions )
+			) {
+				return;
+			}
+		}
+
+		aioseo()->transients->update( 'v3_migration_in_progress_settings', time() );
+
 		new GeneralSettings();
 
 		if ( ! isset( $this->oldOptions['modules']['aiosp_feature_manager_options'] ) ) {
 			new Sitemap();
+			aioseo()->transients->delete( 'v3_migration_in_progress_settings' );
 			return;
 		}
 
@@ -159,6 +176,8 @@ class Migration {
 		if ( aioseo()->helpers->isWpmlActive() ) {
 			new Wpml();
 		}
+
+		aioseo()->transients->delete( 'v3_migration_in_progress_settings' );
 	}
 
 	/**

@@ -85,11 +85,47 @@ class ActionScheduler extends \ActionScheduler_ListTable {
 		}
 
 		$prefix = aioseo()->db->db->prefix;
+
+		// Clean up logs associated with entries in the actions table.
+		aioseo()->db->execute(
+			"DELETE al FROM {$prefix}actionscheduler_logs as al
+			JOIN {$prefix}actionscheduler_actions as aa on `aa`.`action_id` = `al`.`action_id`
+			JOIN {$prefix}actionscheduler_groups as ag on `ag`.`group_id` = `aa`.`group_id`
+			WHERE `ag`.`slug` = 'aioseo'
+			AND `aa`.`status` IN ('complete', 'failed', 'canceled');"
+		);
+
+		// Clean up actions.
 		aioseo()->db->execute(
 			"DELETE aa FROM {$prefix}actionscheduler_actions as aa
 			JOIN {$prefix}actionscheduler_groups as ag on `ag`.`group_id` = `aa`.`group_id`
 			WHERE `ag`.`slug` = 'aioseo'
-			AND `aa`.`status` IN ('complete', 'failed');"
+			AND `aa`.`status` IN ('complete', 'failed', 'canceled');"
 		);
+
+		// Clean up logs where there was no group.
+		aioseo()->db->execute(
+			"DELETE al FROM {$prefix}actionscheduler_logs as al
+			JOIN {$prefix}actionscheduler_actions as aa on `aa`.`action_id` = `al`.`action_id`
+			WHERE `aa`.`hook` LIKE 'aioseo_%'
+			AND `aa`.`group_id` = 0
+			AND `aa`.`status` IN ('complete', 'failed', 'canceled');"
+		);
+
+		// Clean up actions that start with aioseo_ and have no group.
+		aioseo()->db->execute(
+			"DELETE aa FROM {$prefix}actionscheduler_actions as aa
+			WHERE `aa`.`hook` LIKE 'aioseo_%'
+			AND `aa`.`group_id` = 0
+			AND `aa`.`status` IN ('complete', 'failed', 'canceled');"
+		);
+
+		// Clean up orphaned log files. @TODO: Look at adding this back in, however it was causing errors with the number of locks exceeding the lock table size.
+		// aioseo()->db->execute(
+		//  "DELETE al FROM {$prefix}actionscheduler_logs as al
+		//  LEFT JOIN {$prefix}actionscheduler_actions as aa on `aa`.`action_id` = `al`.`action_id`
+		//  WHERE `aa`.`action_id` IS NULL
+		//  LIMIT 100000;"
+		// );
 	}
 }

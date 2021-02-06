@@ -111,7 +111,7 @@ class ImportExport {
 		}
 
 		if ( ! empty( $oldOptions ) ) {
-			aioseo()->migration->doMigration( $oldOptions );
+			aioseo()->migration->migrateSettings( $oldOptions );
 		}
 
 		if ( ! empty( $postData ) ) {

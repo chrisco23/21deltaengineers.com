@@ -40,7 +40,7 @@ class Query {
 			// Attachments need to be fetched with all their fields because we need to get their post parent further down the line.
 			$$name = esc_sql( $value );
 			if ( 'root' === $name && $value && 'attachment' !== $includedPostTypes ) {
-				$fields = 'p.ID';
+				$fields = '`p`.`ID`, `p`.`post_type`';
 			}
 		}
 
@@ -105,104 +105,87 @@ class Query {
 			$post->ID = intval( $post->ID );
 		}
 
-		return $this->filterPosts( $postTypes, $posts );
+		return $this->filterPosts( $posts );
 	}
 
 	/**
-	 * Filters posts of a given post type.
+	 * Filters the queried posts.
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param  string $postTypes The post types.
-	 * @param  array  $posts     The posts.
-	 * @return array  $posts     The remaining posts.
+	 * @param  array $posts          The posts.
+	 * @return array $remainingPosts The remaining posts.
 	 */
-	public function filterPosts( $postTypes, $posts ) {
-		if ( ! is_array( $postTypes ) ) {
-			$postTypes = (array) $postTypes;
-		}
+	public function filterPosts( $posts ) {
+		$remainingPosts          = [];
+		$isWooCommerceActive     = aioseo()->helpers->isWooCommerceActive();
+		$isWooCommerceNoindexing = $isWooCommerceActive && has_action( 'wp_head', 'wc_page_noindex' );
+		$excludeHiddenProducts   = apply_filters( 'aioseo_sitemap_woocommerce_exclude_hidden_products', true );
 
-		foreach ( $postTypes as $postType ) {
-			if ( ! $posts || ( 'product' !== $postType && is_numeric( $posts[0] ) ) ) {
+		foreach ( $posts as $post ) {
+			if ( 'product' !== $post->post_type && is_numeric( $post ) ) {
+				$remainingPosts[] = $post;
 				continue;
 			}
 
-			switch ( $postType ) {
+			switch ( $post->post_type ) {
 				case 'page':
-					$posts = $this->filterPages( $posts );
+					if ( ! $isWooCommerceNoindexing || ! aioseo()->helpers->isWooCommercePage( $post->ID ) ) {
+						$remainingPosts[] = $post;
+					}
 					break;
 				case 'product':
-					$posts = $this->filterProducts( $posts );
+					if ( ! $isWooCommerceActive || ! $excludeHiddenProducts || ! $this->isHiddenProduct( $post ) ) {
+						$remainingPosts[] = $post;
+					}
 					break;
 				case 'attachment':
-					$posts = $this->filterAttachments( $posts );
+					if ( ! $this->isInvalidAttachment( $post ) ) {
+						$remainingPosts[] = $post;
+					}
 					break;
 				default:
+					$remainingPosts[] = $post;
 					break;
 			}
 		}
 
-		return $posts;
-	}
-
-	/**
-	 * Excludes noindexed WooCommerce pages from the sitemap.
-	 *
-	 * WooCommerce noindexes the Cart, Checkout and My Account pages by default.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @param  array $posts The posts.
-	 * @return array        The remaining posts.
-	 */
-	private function filterPages( $posts ) {
-		if ( ! aioseo()->helpers->isWooCommerceActive() || ! has_action( 'wp_head', 'wc_page_noindex' ) ) {
-			return $posts;
-		}
-
-		$remainingPosts = [];
-		foreach ( $posts as $post ) {
-			if ( ! aioseo()->helpers->isWooCommercePage( $post->ID ) ) {
-				$remainingPosts[] = $post;
-			}
-		}
 		return $remainingPosts;
 	}
 
 	/**
-	 * Excludes WooCommerce Products if they're catalog visibility is set to hidden.
+	 * Whether the WooCommerce product is hidden.
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param  array $posts The posts.
-	 * @return array        The remaining posts.
+	 * @param  Object  $post The post.
+	 * @return boolean       Whether the post is a hidden product.
 	 */
-	private function filterProducts( $posts ) {
-		$excludeHidden = apply_filters( 'aioseo_sitemap_woocommerce_exclude_hidden_products', true );
-		if ( ! aioseo()->helpers->isWooCommerceActive() || ! $excludeHidden ) {
-			return $posts;
-		}
+	private function isHiddenProduct( $post ) {
+		static $hiddenProductIds = null;
+		if ( null === $hiddenProductIds ) {
+			$hiddenProducts = aioseo()->db->start( 'term_relationships as tr' )
+				->select( 'tr.object_id' )
+				->join( 'term_taxonomy as tt', 'tr.term_taxonomy_id = tt.term_taxonomy_id' )
+				->join( 'terms as t', 'tt.term_id = t.term_id' )
+				->where( 't.name', 'exclude-from-catalog' )
+				->run()
+				->result();
 
-		$mappedPosts = [];
-		foreach ( $posts as $post ) {
-			if ( is_numeric( $post ) ) {
-				$mappedPosts[] = $post;
-				continue;
-			}
-			$mappedPosts[ $post->ID ] = $post;
-		}
-
-		$products = wc_get_products( [ 'post__in' => array_keys( $mappedPosts ) ] );
-		if ( ! $products ) {
-			return $posts;
-		}
-
-		foreach ( $products as $product ) {
-			if ( ! $product->is_visible() ) {
-				unset( $mappedPosts[ $product->get_id() ] );
+			$hiddenProductIds = [];
+			if ( ! empty( $hiddenProducts ) ) {
+				foreach ( $hiddenProducts as $hiddenProduct ) {
+					$hiddenProductIds[] = (int) $hiddenProduct->object_id;
+				}
 			}
 		}
-		return array_values( $mappedPosts );
+
+		$postId = $post;
+		if ( ! is_numeric( $post ) ) {
+			$postId = $post->ID;
+		}
+
+		return in_array( $postId, $hiddenProductIds, true );
 	}
 
 	/**
@@ -210,33 +193,27 @@ class Query {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param  array $posts     The posts.
-	 * @return array $remaining The remaining posts.
+	 * @param  Object  $post The post.
+	 * @return boolean       Whether the attachment is invalid.
 	 */
-	private function filterAttachments( $posts ) {
-		$remaining = [];
-		foreach ( $posts as $attachment ) {
-			if ( ! $attachment->post_parent ) {
-				$remaining[] = $attachment;
-				continue;
-			}
-
-			$parent = get_post( $attachment->post_parent );
-			if ( ! $parent ) {
-				$remaining[] = $attachment;
-				continue;
-			}
-
-			if (
-				'publish' !== $parent->post_status ||
-				! in_array( $parent->post_type, get_post_types(), true ) ||
-				$parent->post_password
-			) {
-				continue;
-			}
-			$remaining[] = $attachment;
+	private function isInvalidAttachment( $post ) {
+		if ( empty( $post->post_parent ) ) {
+			return false;
 		}
-		return $remaining;
+
+		$parent = get_post( $post->post_parent );
+		if ( ! is_object( $parent ) ) {
+			return false;
+		}
+
+		if (
+			'publish' !== $parent->post_status ||
+			! in_array( $parent->post_type, get_post_types(), true ) ||
+			$parent->post_password
+		) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -303,5 +280,24 @@ class Query {
 			$term->taxonomy = $taxonomy;
 		}
 		return $terms;
+	}
+
+	/**
+	 * Wipes all data and forces the plugin to rescan the site for images.
+	 *
+	 * @since 4.0.13
+	 *
+	 * @return void
+	 */
+	public function resetImages() {
+		aioseo()->db
+			->update( 'aioseo_posts' )
+			->set(
+				[
+					'images'          => null,
+					'image_scan_date' => null
+				]
+			)
+			->run();
 	}
 }

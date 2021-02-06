@@ -9,7 +9,7 @@ class Help {
 	 *
 	 * @var string
 	 */
-	private $url = 'https://aioseo.com/wp-content/docs.json';
+	private $url = 'https://cdn.aioseo.com/wp-content/docs.json';
 
 	/**
 	 * Settings.
@@ -47,7 +47,7 @@ class Help {
 	 * @return array Docs data.
 	 */
 	public function getDocs() {
-		$aioseoAdminHelpDocs          = get_transient( 'aioseo_admin_help_docs' );
+		$aioseoAdminHelpDocs          = aioseo()->transients->get( 'admin_help_docs' );
 		$aioseoAdminHelpDocsCacheTime = WEEK_IN_SECONDS;
 		if ( false === $aioseoAdminHelpDocs ) {
 			$request = wp_remote_get( $this->getUrl() );
@@ -61,9 +61,10 @@ class Help {
 			if ( ( $response['code'] <= 200 ) && ( $response['code'] > 299 ) ) {
 				$aioseoAdminHelpDocsCacheTime = 10 * MINUTE_IN_SECONDS;
 			}
-			$docs = wp_remote_retrieve_body( $request );
-			set_transient( 'aioseo_admin_help_docs', $docs, $aioseoAdminHelpDocsCacheTime );
+			$aioseoAdminHelpDocs = wp_remote_retrieve_body( $request );
+			aioseo()->transients->update( 'admin_help_docs', $aioseoAdminHelpDocs, $aioseoAdminHelpDocsCacheTime );
 		}
+
 		return $aioseoAdminHelpDocs;
 	}
 }

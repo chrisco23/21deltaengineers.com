@@ -632,7 +632,7 @@ class ET_Builder_Module_Menu extends ET_Builder_Module {
 		$menuClass .= ( '' !== $args['submenu_direction'] ? sprintf( ' %s', esc_attr( $args['submenu_direction'] ) ) : '' );
 
 		$menu_args = array(
-			'theme_location' => 'primary-menu',
+			'theme_location' => '',
 			'container'      => '',
 			'fallback_cb'    => '',
 			'menu_class'     => $menuClass,
@@ -642,6 +642,13 @@ class ET_Builder_Module_Menu extends ET_Builder_Module {
 
 		if ( '' !== $args['menu_id'] ) {
 			$menu_args['menu'] = (int) $args['menu_id'];
+		} else {
+			// When menu ID is not preset, let's use the primary menu.
+			// However, it's highly unlikely that the menu module won't have an ID.
+			// When were're using menu module via the `menu_id` we dont need the menu's theme location.
+			// We only need it when the menu doesn't have any ID and that occurs only used on headers and/or footers,
+			// Or any other static places where we need menu by location and not by ID.
+			$menu_args['theme_location'] = 'primary-menu';
 		}
 
 		$filter     = $is_fullwidth ? 'et_fullwidth_menu_args' : 'et_menu_args';

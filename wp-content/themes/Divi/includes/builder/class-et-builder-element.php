@@ -4792,23 +4792,26 @@ class ET_Builder_Element {
 		// Use background color toggle was added on pre color-alpha era. Added for backward
 		// compatibility. This option's output is printed manually on render().
 		if ( $this->advanced_fields['background']['has_background_color_toggle'] ) {
-			$additional_options['use_background_color'] = array(
-				'label'           => esc_html__( 'Use Background Color', 'et_builder' ),
-				'type'            => 'yes_no_button',
-				'option_category' => 'color_option',
-				'options'         => array(
-					'on'  => et_builder_i18n( 'Yes' ),
-					'off' => et_builder_i18n( 'No' ),
-				),
-				'affects'         => array(
-					'background_color',
-				),
-				'tab_slug'        => $tab_slug,
-				'toggle_slug'     => $toggle_slug,
-				'description'     => esc_html__( 'Here you can choose whether background color setting above should be used or not.', 'et_builder' ),
-				'mobile_options'  => true,
-				'sticky'          => true,
-				'hover'           => 'tabs',
+			$additional_options['use_background_color'] = self::background_field_template(
+				'use_color',
+				array(
+					'label'           => esc_html__( 'Use Background Color', 'et_builder' ),
+					'type'            => 'yes_no_button',
+					'option_category' => 'color_option',
+					'options'         => array(
+						'on'  => et_builder_i18n( 'Yes' ),
+						'off' => et_builder_i18n( 'No' ),
+					),
+					'affects'         => array(
+						'background_color',
+					),
+					'tab_slug'        => $tab_slug,
+					'toggle_slug'     => $toggle_slug,
+					'description'     => esc_html__( 'Here you can choose whether background color setting above should be used or not.', 'et_builder' ),
+					'mobile_options'  => true,
+					'sticky'          => true,
+					'hover'           => 'tabs',
+				)
 			);
 		}
 
@@ -14954,7 +14957,11 @@ class ET_Builder_Element {
 				$module_alignment = $this->prop( $slug, '' );
 
 				if ( $is_customized && isset( $module_alignment_styles[ $module_alignment ] ) ) {
-					$default_selector = self::$_->array_get( $field, 'css.main', '%%order_class%%.et_pb_module' );
+					if ( 'et_pb_contact_field' === $function_name ) {
+						$default_selector = self::$_->array_get( $field, 'css.main', 'p%%order_class%%' );
+					} else {
+						$default_selector = self::$_->array_get( $field, 'css.main', '%%order_class%%.et_pb_module' );
+					}
 					$selector         = self::$_->array_get( $field, 'css.module_alignment', $default_selector );
 
 					$el_style = array(
@@ -21244,6 +21251,16 @@ class ET_Builder_Element {
 							'hover'          => false,
 							'sticky'         => false,
 							'tab_filler'     => true,
+						),
+						'use_color'    => array(
+							'type'             => 'yes_no_button',
+							'mobile_options'   => false,
+							'hover'            => false,
+							'sticky'           => false,
+							// List of template slug that affecteds by this field.
+							'affects_template' => array(
+								'color',
+							),
 						),
 					),
 				),

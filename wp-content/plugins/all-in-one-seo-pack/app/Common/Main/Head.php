@@ -26,7 +26,7 @@ class Head {
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'addAnalytics' ] );
-		add_action( 'after_setup_theme', [ $this, 'registerTitleHooks' ], 1000 );
+		add_action( 'wp', [ $this, 'registerTitleHooks' ], 1000 );
 		add_action( 'wp_head', [ $this, 'init' ], 1 );
 
 		$this->analytics    = new GoogleAnalytics();
@@ -126,12 +126,14 @@ class Head {
 	 */
 	public function rewriteTitle() {
 		$content   = ob_get_clean();
-		$split     = preg_split( '#</head>#', $content );
+		$split     = explode( '</head>', $content );
 		$head      = $split[0] . '</head>';
-		$body      = $split[1];
+
+		unset( $split[0] );
+		$body = implode( '</head>', $split );
 
 		// Remove all existing title tags.
-		$head = preg_replace( '#<title.*?\/title>#', '', $head );
+		$head = preg_replace( '#<title.*?\/title>#s', '', $head );
 
 		// Add the new title tag to our own comment block.
 		$pageTitle = aioseo()->helpers->escapeRegexReplacement( $this->getTitle() );
@@ -151,13 +153,18 @@ class Head {
 	public function output() {
 		remove_action( 'wp_head', 'rel_canonical' );
 
+		$views = apply_filters( 'aioseo_meta_views', $this->views );
+		if ( empty( $views ) ) {
+			return;
+		}
+
 		echo "\n\t\t<!-- " . sprintf(
 			'%1$s %2$s',
 			esc_html( AIOSEO_PLUGIN_NAME ),
 			aioseo()->version // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		) . " -->\n";
 
-		foreach ( $this->views as $view ) {
+		foreach ( $views as $view ) {
 			require_once( $view );
 		}
 

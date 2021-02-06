@@ -82,19 +82,22 @@ class Breadcrumb {
 		$slug      = preg_replace( "/$homeUrl/", '', $permalink );
 		$tags      = array_filter( explode( '/', get_option( 'permalink_structure' ) ) ); // Permalink structure exploded into separate tag strings.
 		$objects   = array_filter( explode( '/', $slug ) ); // Permalink slug exploded into separate object slugs.
+		$postGraph = $this->getPostGraph();
 
 		if ( count( $tags ) !== count( $objects ) ) {
 			return [
 				'name'        => $post->post_title,
 				'description' => aioseo()->meta->description->getDescription( $post ),
 				'url'         => $permalink,
-				'type'        => $this->getPostGraph()
+				'type'        => $postGraph
 			];
 		}
 
 		$pairs = array_reverse( array_combine( $tags, $objects ) );
 
 		$breadcrumbs = [];
+		$dateName    = null;
+		$timestamp   = strtotime( $post->post_date_gmt );
 		foreach ( $pairs as $tag => $object ) {
 			// Determine the slug for the object.
 			preg_match( "#.*${object}[/]#", $permalink, $url );
@@ -126,7 +129,7 @@ class Breadcrumb {
 					break;
 				case '%author%':
 					$breadcrumb = [
-						'name'        => aioseo()->meta->title->prepareTitle( aioseo()->options->searchAppearance->archives->author->title ),
+						'name'        => trim( sprintf( '%1$s %2$s', get_the_author_meta( 'first_name', $post->post_author ), get_the_author_meta( 'last_name', $post->post_author ) ) ),
 						'description' => aioseo()->meta->description->prepareDescription( aioseo()->options->searchAppearance->archives->author->metaDescription ),
 						'url'         => $url[0],
 						'type'        => 'ProfilePage'
@@ -138,18 +141,26 @@ class Breadcrumb {
 						'name'        => $post->post_title,
 						'description' => aioseo()->meta->description->getDescription( $post ),
 						'url'         => $url[0],
-						'type'        => $this->getPostGraph()
+						'type'        => $postGraph
 					];
 					break;
 				case '%year%':
+					$dateName = date( 'Y', $timestamp );
 				case '%monthnum%':
+					if ( ! $dateName ) {
+						$dateName = date( 'F', $timestamp );
+					}
 				case '%day%':
+					if ( ! $dateName ) {
+						$dateName = date( 'j', $timestamp );
+					}
 					$breadcrumb = [
-						'name'        => aioseo()->meta->title->prepareTitle( aioseo()->options->searchAppearance->archives->date->title ),
+						'name'        => $dateName,
 						'description' => aioseo()->meta->description->prepareDescription( aioseo()->options->searchAppearance->archives->date->metaDescription ),
 						'url'         => $url[0],
 						'type'        => 'CollectionPage'
 					];
+					$dateName = null;
 					break;
 				default:
 					break;
@@ -211,7 +222,7 @@ class Breadcrumb {
 
 		$breadcrumbs = [
 			[
-				'name'        => aioseo()->meta->title->getTitle(),
+				'name'        => get_the_date( 'Y' ),
 				'description' => aioseo()->meta->description->getDescription(),
 				'url'         => trailingslashit( get_year_link( $wp_query->query_vars['year'] ) ),
 				'type'        => 'CollectionPage'
@@ -228,7 +239,7 @@ class Breadcrumb {
 		$wp_query->is_month = true;
 
 		$breadcrumbs[] = [
-			'name'        => aioseo()->meta->title->getTitle(),
+			'name'        => get_the_date( 'F, Y' ),
 			'description' => aioseo()->meta->description->getDescription(),
 			'url'         => trailingslashit( get_month_link(
 				$wp_query->query_vars['year'],
@@ -247,7 +258,7 @@ class Breadcrumb {
 		$wp_query->is_day = $oldDay;
 
 		$breadcrumbs[] = [
-			'name'        => aioseo()->meta->title->getTitle(),
+			'name'        => get_the_date(),
 			'description' => aioseo()->meta->description->getDescription(),
 			'url'         => trailingslashit( get_day_link(
 				$wp_query->query_vars['year'],

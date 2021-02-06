@@ -33,6 +33,11 @@ class Review {
 			return;
 		}
 
+		// Only show to users that interact with our pluign.
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			return;
+		}
+
 		// Only show if plugin has been active for over two weeks.
 		if ( ! aioseo()->internalOptions->internal->firstActivated ) {
 			aioseo()->internalOptions->internal->firstActivated = time();
@@ -44,6 +49,9 @@ class Review {
 		}
 
 		$this->showNotice();
+
+		// Print the script to the footer.
+		add_action( 'admin_footer', [ $this, 'printScript' ] );
 	}
 
 	/**
@@ -85,7 +93,6 @@ class Review {
 		$string10 = __( 'Nope, maybe later', 'all-in-one-seo-pack' );
 		$string11 = __( 'I already did', 'all-in-one-seo-pack' );
 
-		$nonce = wp_create_nonce( 'aioseo-dismiss-review' );
 		?>
 		<div class="notice notice-info aioseo-review-plugin-cta is-dismissible">
 			<div class="step-1">
@@ -118,64 +125,102 @@ class Review {
 				</p>
 			</div>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Print the script for dismissing the notice.
+	 *
+	 * @since 4.0.13
+	 * @return void
+	 */
+	public function printScript() {
+		// Create a nonce.
+		$nonce = wp_create_nonce( 'aioseo-dismiss-review' );
+		?>
 		<style>
-		.aioseop-notice-review_plugin_cta .aioseo-action-buttons {
-			display: none;
-		}
+			.aioseop-notice-review_plugin_cta .aioseo-action-buttons {
+				display: none;
+			}
+			@keyframes dismissBtnVisible {
+				from { opacity: 0.99; }
+				to { opacity: 1; }
+			}
+			.aioseo-review-plugin-cta button.notice-dismiss {
+				animation-duration: 0.001s;
+				animation-name: dismissBtnVisible;
+			}
 		</style>
-		<script type="text/javascript">
-		// @TODO: [V4+] Move this into vue or ES6 app.
-		jQuery(document).ready(function() {
-			var aioseoSetupButton = function (button) {
-				var delay = false;
-				var aioseoReviewPluginDismiss = function () {
-					jQuery.post(window.ajaxurl, {
-						delay  : delay,
-						nonce  : '<?php echo esc_attr( $nonce ); ?>',
-						action : 'aioseo-dismiss-review-plugin-cta'
-					});
-				};
-				button.addEventListener('click', function (event) {
-					// Dismiss notice here.
-					event.preventDefault();
-					aioseoReviewPluginDismiss();
-				});
+		<script>
+			window.addEventListener('load', function () {
+				var aioseoSetupButton,
+					dismissBtn,
+					interval
 
-				jQuery(document).on('click', '.aioseo-review-plugin-cta .aioseo-review-switch-step-3', function(event) {
-					event.preventDefault();
-					jQuery('.aioseo-review-plugin-cta .step-1, .aioseo-review-plugin-cta .step-2').hide();
-					jQuery('.aioseo-review-plugin-cta .step-3').show();
-				});
-				jQuery(document).on('click', '.aioseo-review-plugin-cta .aioseo-review-switch-step-2', function(event) {
-					event.preventDefault();
-					jQuery('.aioseo-review-plugin-cta .step-1, .aioseo-review-plugin-cta .step-3').hide();
-					jQuery('.aioseo-review-plugin-cta .step-2').show();
-				});
-				jQuery(document).on('click', '.aioseo-review-plugin-cta .aioseo-dismiss-review-notice-delay', function(event) {
-					event.preventDefault();
-					delay = true;
-					button.click();
-				});
-				jQuery(document).on('click', '.aioseo-review-plugin-cta .aioseo-dismiss-review-notice', function(event) {
-					if ('#' === jQuery(this).attr('href')) {
-						event.preventDefault();
-					}
-					button.click();
-				});
-			}
+				aioseoSetupButton = function (dismissBtn) {
+					var notice      = document.querySelector('.notice.aioseo-review-plugin-cta'),
+						delay       = false,
+						stepOne     = notice.querySelector('.step-1'),
+						stepTwo     = notice.querySelector('.step-2'),
+						stepThree   = notice.querySelector('.step-3')
 
-			var notice = document.querySelector('.notice.aioseo-review-plugin-cta');
-			var button = notice.querySelector('button.notice-dismiss');
-			if (!button) {
-				var interval = window.setInterval(function() {
-					button = notice.querySelector('button.notice-dismiss');
-					if (button) {
-						aioseoSetupButton(button);
-						window.clearInterval(interval)
-					}
-				}, 50);
-			}
-		});
+					// Add an event listener to the dismiss button.
+					dismissBtn.addEventListener('click', function (event) {
+						var httpRequest = new XMLHttpRequest(),
+							postData    = ''
+
+						// Build the data to send in our request.
+						postData += '&delay=' + delay
+						postData += '&action=aioseo-dismiss-review-plugin-cta'
+						postData += '&nonce=<?php echo esc_html( $nonce ); ?>'
+
+						httpRequest.open('POST', '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>')
+						httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+						httpRequest.send(postData)
+					})
+
+					notice.addEventListener('click', function (event) {
+						if (event.target.matches('.aioseo-review-switch-step-3')) {
+							event.preventDefault()
+							stepOne.style.display   = 'none'
+							stepTwo.style.display   = 'none'
+							stepThree.style.display = 'block'
+						}
+						if (event.target.matches('.aioseo-review-switch-step-2')) {
+							event.preventDefault()
+							stepOne.style.display   = 'none'
+							stepThree.style.display = 'none'
+							stepTwo.style.display   = 'block'
+						}
+						if (event.target.matches('.aioseo-dismiss-review-notice-delay')) {
+							event.preventDefault()
+							delay = true
+							dismissBtn.click()
+						}
+						if (event.target.matches('.aioseo-dismiss-review-notice')) {
+							if ('#' === event.target.getAttribute('href')) {
+								event.preventDefault()
+							}
+							dismissBtn.click()
+						}
+					})
+				}
+
+				dismissBtn = document.querySelector('.aioseo-review-plugin-cta .notice-dismiss')
+				if (!dismissBtn) {
+					document.addEventListener('animationstart', function (event) {
+						if (event.animationName == 'dismissBtnVisible') {
+							dismissBtn = document.querySelector('.aioseo-review-plugin-cta .notice-dismiss')
+							if (dismissBtn) {
+								aioseoSetupButton(dismissBtn)
+							}
+						}
+					}, false)
+
+				} else {
+					aioseoSetupButton(dismissBtn)
+				}
+			});
 		</script>
 		<?php
 	}
@@ -188,6 +233,11 @@ class Review {
 	 * @return WP_Response The successful response.
 	 */
 	public function dismissNotice() {
+		// Early exit if we're not on a aioseo-dismiss-review-plugin-cta action.
+		if ( ! isset( $_POST['action'] ) || 'aioseo-dismiss-review-plugin-cta' !== $_POST['action'] ) {
+			return;
+		}
+
 		check_ajax_referer( 'aioseo-dismiss-review', 'nonce' );
 		$delay = isset( $_POST['delay'] ) ? 'true' === wp_unslash( $_POST['delay'] ) : false; // phpcs:ignore HM.Security.ValidatedSanitizedInput.InputNotSanitized
 

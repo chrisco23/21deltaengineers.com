@@ -93,18 +93,24 @@ class Robots {
 	 */
 	protected function metaHelper() {
 		$pageNumber = aioseo()->helpers->getPageNumber();
-		if ( 1 < $pageNumber ) {
-			if ( aioseo()->options->searchAppearance->advanced->globalRobotsMeta->noindexPaginated ) {
+		if ( 1 < $pageNumber || 0 < (int) get_query_var( 'cpage', 0 ) ) {
+			if (
+				aioseo()->options->searchAppearance->advanced->globalRobotsMeta->default ||
+				aioseo()->options->searchAppearance->advanced->globalRobotsMeta->noindexPaginated
+			) {
 				$this->attributes['noindex'] = 'noindex';
 			}
 
-			if ( aioseo()->options->searchAppearance->advanced->globalRobotsMeta->nofollowPaginated ) {
+			if (
+				aioseo()->options->searchAppearance->advanced->globalRobotsMeta->default ||
+				aioseo()->options->searchAppearance->advanced->globalRobotsMeta->nofollowPaginated
+			) {
 				$this->attributes['nofollow'] = 'nofollow';
 			}
 		}
 
-		// Never allow users to noindex the homepage.
-		if ( is_front_page() ) {
+		// Never allow users to noindex the first page of the homepage.
+		if ( is_front_page() && 1 === $pageNumber ) {
 			$this->attributes['noindex'] = '';
 		}
 

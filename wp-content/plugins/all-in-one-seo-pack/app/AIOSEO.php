@@ -246,8 +246,9 @@ namespace AIOSEO\Plugin {
 				$translations->init();
 			}
 
+			$this->transients         = new Common\Utils\Transients();
 			$this->helpers            = $this->pro ? new Pro\Utils\Helpers() : new Common\Utils\Helpers();
-			$this->addons             = new Common\Utils\Addons();
+			$this->addons             = $this->pro ? new Pro\Utils\Addons() : new Common\Utils\Addons();
 			$this->tags               = $this->pro ? new Pro\Utils\Tags() : new Common\Utils\Tags();
 			$this->badBotBlocker      = new Common\Tools\BadBotBlocker();
 			$this->internalOptions    = $this->pro ? new Pro\Utils\InternalOptions() : new Lite\Utils\InternalOptions();
@@ -274,7 +275,7 @@ namespace AIOSEO\Plugin {
 			if ( ! wp_doing_ajax() && ! wp_doing_cron() ) {
 				$this->rss              = new Common\Rss();
 				$this->main             = $this->pro ? new Pro\Main\Main() : new Common\Main\Main();
-				$this->schema           = new Common\Schema\Schema();
+				$this->schema           = $this->pro ? new Pro\Schema\Schema() : new Common\Schema\Schema();
 				$this->head             = $this->pro ? new Pro\Main\Head() : new Common\Main\Head();
 				$this->activate         = $this->pro ? new Pro\Main\Activate() : new Lite\Main\Activate();
 				$this->filters          = $this->pro ? new Pro\Main\Filters() : new Lite\Main\Filters();

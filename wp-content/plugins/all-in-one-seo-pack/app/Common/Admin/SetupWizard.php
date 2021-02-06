@@ -30,12 +30,12 @@ class SetupWizard {
 	 */
 	public function redirect() {
 		// Check if we should consider redirection.
-		if ( ! get_transient( 'aioseo_activation_redirect' ) ) {
+		if ( ! aioseo()->transients->get( 'activation_redirect' ) ) {
 			return;
 		}
 
 		// If we are redirecting, clear the transient so it only happens once.
-		delete_transient( 'aioseo_activation_redirect' );
+		aioseo()->transients->delete( 'activation_redirect' );
 
 		// Check option to disable welcome redirect.
 		if ( get_option( 'aioseo_activation_redirect', false ) ) {

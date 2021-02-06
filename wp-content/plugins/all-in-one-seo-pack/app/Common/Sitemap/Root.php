@@ -43,10 +43,13 @@ class Root {
 		}
 
 		$indexes = [];
+
+		$additionalPages = apply_filters( 'aioseo_sitemap_additional_pages', [] );
 		if (
 			'posts' === get_option( 'show_on_front' ) ||
 			( aioseo()->options->sitemap->general->additionalPages->enable && count( $pages ) ) ||
-			! in_array( 'page', $postTypes, true )
+			! in_array( 'page', $postTypes, true ) ||
+			! empty( $additionalPages )
 		) {
 			$indexes[] = $this->buildAdditionalIndexes();
 		}

@@ -7,6 +7,16 @@ namespace AIOSEO\Plugin\Common\Sitemap;
  * @since 4.0.0
  */
 class Image {
+
+	/**
+	 * The image scan action name.
+	 *
+	 * @since 4.0.13
+	 *
+	 * @var string
+	 */
+	private $imageScanAction = 'aioseo_image_sitemap_scan';
+
 	/**
 	 * Class constructor.
 	 *
@@ -18,13 +28,11 @@ class Image {
 			return;
 		}
 
-		add_action( 'aioseo_image_sitemap_scan', [ $this, 'scanPosts' ] );
+		add_action( $this->imageScanAction, [ $this, 'scanPosts' ] );
 
 		if ( wp_doing_ajax() || wp_doing_cron() ) {
 			return;
 		}
-
-		add_action( 'wp_insert_post', [ $this, 'scanPostManual' ], 10, 2 );
 
 		// Action Scheduler hooks.
 		add_filter( 'init', [ $this, 'scheduleScan' ], 3001 );
@@ -38,36 +46,12 @@ class Image {
 	 * @return void
 	 */
 	public function scheduleScan() {
-		try {
-			if ( ! as_next_scheduled_action( 'aioseo_image_sitemap_scan' ) ) {
-				as_schedule_single_action( time() + 10, 'aioseo_image_sitemap_scan', [], 'aioseo' );
-			}
-		} catch ( \RuntimeException $e ) {
-			// Do nothing.
+		if (
+			aioseo()->options->sitemap->general->enable &&
+			( ! aioseo()->options->sitemap->general->advancedSettings->enable || ! aioseo()->options->sitemap->general->advancedSettings->excludeImages )
+		) {
+			aioseo()->helpers->scheduleSingleAction( $this->imageScanAction, 10 );
 		}
-	}
-
-	/**
-	 * Triggers a manual scan of a post.
-	 *
-	 * @since 4.0.5
-	 *
-	 * @param  int          $postId The post ID.
-	 * @param  WP_Post|null $post   The post object.
-	 * @return void
-	 */
-	public function scanPostManual( $postId, $post = null ) {
-		if ( ! aioseo()->helpers->isValidPost( $post ) ) {
-			return;
-		}
-
-		static $isScanned = false;
-		if ( $isScanned ) {
-			return;
-		}
-
-		$isScanned = true;
-		$this->scanPost( $postId );
 	}
 
 	/**
@@ -78,14 +62,21 @@ class Image {
 	 * @return void
 	 */
 	public function scanPosts() {
-		$postsPerScan = apply_filters( 'aioseo_image_sitemap_posts_per_scan', 50 );
+		if (
+			! aioseo()->options->sitemap->general->enable ||
+			( aioseo()->options->sitemap->general->advancedSettings->enable && aioseo()->options->sitemap->general->advancedSettings->excludeImages )
+		) {
+			return;
+		}
+
+		$postsPerScan = apply_filters( 'aioseo_image_sitemap_posts_per_scan', 10 );
 		$postTypes    = implode( "', '", aioseo()->helpers->getPublicPostTypes( true ) );
 
 		$posts = aioseo()->db
 			->start( aioseo()->db->db->posts . ' as p', true )
 			->select( '`p`.`ID`, `p`.`post_type`, `p`.`post_content`, `p`.`post_excerpt`, `p`.`post_modified_gmt`' )
 			->leftJoin( 'aioseo_posts as ap', '`ap`.`post_id` = `p`.`ID`' )
-			->whereRaw( '( `ap`.`id` IS NULL OR `p`.`post_modified_gmt` > `ap`.`video_scan_date` OR `ap`.`image_scan_date` IS NULL )' )
+			->whereRaw( '( `ap`.`id` IS NULL OR `p`.`post_modified_gmt` > `ap`.`image_scan_date` OR `ap`.`image_scan_date` IS NULL )' )
 			->where( 'p.post_status', 'publish' )
 			->whereRaw( "`p`.`post_type` IN ( '$postTypes' )" )
 			->limit( $postsPerScan )
@@ -93,12 +84,15 @@ class Image {
 			->result();
 
 		if ( ! $posts ) {
+			aioseo()->helpers->scheduleSingleAction( $this->imageScanAction, 15 * MINUTE_IN_SECONDS );
 			return;
 		}
 
 		foreach ( $posts as $post ) {
 			$this->scanPost( $post );
 		}
+
+		aioseo()->helpers->scheduleSingleAction( $this->imageScanAction, 30 );
 	}
 
 	/**
@@ -146,7 +140,7 @@ class Image {
 		$ids = [];
 		foreach ( $urls as $url ) {
 			// Get the ID of the image so we can get its meta data. If there's no ID, then it's probably an external image.
-			$id = attachment_url_to_postid( $url );
+			$id = aioseo()->helpers->attachmentUrlToPostId( $url );
 			if ( $id ) {
 				$ids[] = $id;
 				continue;

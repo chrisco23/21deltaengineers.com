@@ -7549,7 +7549,11 @@ function et_layout_body_class( $classes ) {
 
 	do_action( 'et_layout_body_class_before', $classes );
 
-	if ( 'on' === get_post_meta( get_the_ID(), '_et_pb_side_nav', true ) && et_pb_is_pagebuilder_used( get_the_ID() ) ) {
+	// Check here if we want to enable the dot navigation for the Frontpage or Single page.
+	// On archive pages `get_the_ID()` always returns the ID of the first post.
+	// For that we need to check if its a single page or not as Dot navigation can only be enabled in single pages.
+	// If we want to use disable this we can always remove the safe check from the `et_pb_side_nav_on_single` feature.
+	if ( apply_filters( 'et_pb_side_nav_on_single', is_singular() || is_home() || is_front_page() ) && 'on' === get_post_meta( get_the_ID(), '_et_pb_side_nav', true ) && et_pb_is_pagebuilder_used( get_the_ID() ) ) {
 		$classes[] = 'et_pb_side_nav_page';
 	}
 

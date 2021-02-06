@@ -202,7 +202,8 @@ class GeneralSettings {
 
 		if ( 'posts' === $showOnFront ) {
 			$homePageTitle = $homePageTitle ? $homePageTitle : get_bloginfo( 'name' );
-			$title         = aioseo()->migration->helpers->macrosToSmartTags( preg_replace( '#%page_title%#', $homePageTitle, $format ) );
+			$title         = empty( $format ) ? $homePageTitle : preg_replace( '#%page_title%#', $homePageTitle, $format );
+			$title         = aioseo()->migration->helpers->macrosToSmartTags( $title );
 			aioseo()->options->searchAppearance->global->siteTitle = aioseo()->helpers->sanitizeOption( $title );
 			return;
 		}
@@ -220,10 +221,12 @@ class GeneralSettings {
 		if ( empty( $this->oldOptions['aiosp_use_static_home_info'] ) ) {
 			$homePageTitle = ! empty( $this->oldOptions['aiosp_home_title'] ) ? $this->oldOptions['aiosp_home_title'] : '#site_title';
 			$homePageTitle = ! empty( $metaTitle ) ? $metaTitle : $homePageTitle;
-			$homePageTitle = aioseo()->migration->helpers->macrosToSmartTags( preg_replace( '#%page_title%#', $homePageTitle, $format ) );
+			$homePageTitle = empty( $format ) ? $homePageTitle : preg_replace( '#%page_title%#', $homePageTitle, $format );
+			$homePageTitle = aioseo()->migration->helpers->macrosToSmartTags( $homePageTitle );
 		} else {
 			if ( ! empty( $metaTitle ) ) {
-				$homePageTitle = aioseo()->migration->helpers->macrosToSmartTags( preg_replace( '#%page_title%#', $metaTitle, $format ) );
+				$homePageTitle = empty( $format ) ? $metaTitle : preg_replace( '#%page_title%#', $metaTitle, $format );
+				$homePageTitle = aioseo()->migration->helpers->macrosToSmartTags( $homePageTitle );
 			}
 		}
 
@@ -277,7 +280,8 @@ class GeneralSettings {
 			$homePageDescription = $homePageDescription ? $homePageDescription : get_bloginfo( 'description' );
 			$homePageTitle       = ! empty( $this->oldOptions['aiosp_home_title'] ) ? $this->oldOptions['aiosp_home_title'] : get_bloginfo( 'name' );
 			$format              = preg_replace( '#%page_title%#', $homePageTitle, $format );
-			$description         = aioseo()->migration->helpers->macrosToSmartTags( preg_replace( '#%description%#', $homePageDescription, $format ) );
+			$description         = empty( $format ) ? $homePageDescription : preg_replace( '#%description%#', $homePageDescription, $format );
+			$description         = aioseo()->migration->helpers->macrosToSmartTags( $description );
 			aioseo()->options->searchAppearance->global->metaDescription = aioseo()->helpers->sanitizeOption( $description );
 			return;
 		}
@@ -299,11 +303,13 @@ class GeneralSettings {
 			$homePageDescription = ! empty( $metaDescription ) ? $metaDescription : $homePageDescription;
 		} else {
 			if ( ! empty( $metaDescription ) ) {
-				$homePageDescription = aioseo()->migration->helpers->macrosToSmartTags( preg_replace( '#%description%#', $metaDescription, $format ) );
+				$homePageDescription = empty( $format ) ? $metaDescription : preg_replace( '#%description%#', $metaDescription, $format );
+				$homePageDescription = aioseo()->migration->helpers->macrosToSmartTags( $homePageDescription );
 			}
 		}
 
-		$homePageDescription = aioseo()->migration->helpers->macrosToSmartTags( preg_replace( '#%description%#', $homePageDescription, $format ) );
+		$homePageDescription = empty( $format ) ? $homePageDescription : preg_replace( '#%page_title%#', $homePageDescription, $format );
+		$homePageDescription = aioseo()->migration->helpers->macrosToSmartTags( $homePageDescription );
 
 		$aioseoPost = Models\Post::getPost( $post->ID );
 		$aioseoPost->set( [
@@ -439,31 +445,23 @@ class GeneralSettings {
 		}
 
 		$p1 = sprintf(
-			// Translators: 1 - The plugin name ("All in One SEO"), 2 - Same as previous.
-			__( '%1$s migrated all your title formats, some of which were blank. As a result, we were not able to rewrite the title for these content types,
-			even if you manually entered a custom title.', 'all-in-one-seo-pack' ),
+			// Translators: 1 - The plugin short name ("AIOSEO"), 2 - The plugin short name ("AIOSEO"), 3 - Opening link tag, 4 - Closing link tag.
+			__( '%1$s migrated all your title formats, some of which were blank. If you were purposely using blank formats in the previous version of %2$s and want WordPress to handle your titles, you can safely dismiss this message. For more information, check out our documentation on %3$sblank title formats%4$s.', 'all-in-one-seo-pack' ), // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 			AIOSEO_PLUGIN_SHORT_NAME,
-			AIOSEO_PLUGIN_SHORT_NAME
-		);
-
-		$p2 = sprintf(
-			// Translators: 1 - The plugin name ("All in One SEO"), 2 - Same as previous.
-			__( 'If you were purposely using blank formats in the previous version of %1$s and want WordPress to handle your titles,
-			you can safely ignore this message. If this was not intended, you can let %2$s automatically fix this for you by clicking the button below. For more information,
-			please contact our support team.', 'all-in-one-seo-pack' ),
 			AIOSEO_PLUGIN_SHORT_NAME,
-			AIOSEO_PLUGIN_SHORT_NAME
+			'<a href="' . aioseo()->helpers->utmUrl( AIOSEO_MARKETING_URL . '/docs/blank-title-formats-detected', 'notifications-center', 'v3-migration-title-formats-blank' ) . '">',
+			'</a>'
 		);
 
 		Models\Notification::addNotification( [
 			'slug'              => uniqid(),
 			'notification_name' => 'v3-migration-title-formats-blank',
 			'title'             => __( 'Blank Title Formats Detected', 'all-in-one-seo-pack' ),
-			'content'           => '<p>' . $p1 . '</p><p>' . $p2 . '</p>',
-			'type'              => 'error',
+			'content'           => $p1,
+			'type'              => 'warning',
 			'level'             => [ 'all' ],
-			'button1_label'     => __( 'Fix Now', 'all-in-one-seo-pack' ),
-			'button1_action'    => 'http://action#migration/fix-blank-formats',
+			'button1_label'     => __( 'Learn More', 'all-in-one-seo-pack' ),
+			'button1_action'    => aioseo()->helpers->utmUrl( AIOSEO_MARKETING_URL . '/docs/blank-title-formats-detected', 'notifications-center', 'v3-migration-title-formats-blank' ),
 			'start'             => gmdate( 'Y-m-d H:i:s' )
 		] );
 	}
@@ -841,10 +839,11 @@ class GeneralSettings {
 		}
 
 		$excludedPosts = aioseo()->options->deprecated->searchAppearance->advanced->excludePosts;
-		$pages         = explode( ', ', $this->oldOptions['aiosp_ex_pages'] );
+		$pages         = explode( ',', $this->oldOptions['aiosp_ex_pages'] );
 		if ( count( $pages ) ) {
 			foreach ( $pages as $page ) {
-				$id = intval( $page );
+				$page = trim( $page );
+				$id   = intval( $page );
 				if ( ! $id ) {
 					$post = get_page_by_path( $page, OBJECT, aioseo()->helpers->getPublicPostTypes( true ) );
 					if ( $post && is_object( $post ) ) {

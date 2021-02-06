@@ -40,6 +40,14 @@ final class Wicked_Folders_Admin {
 		add_filter( 'manage_edit-lesson_columns', 			array( $this, 'manage_posts_columns' ) );
 		add_filter( 'manage_edit-pretty-link_columns', 		array( $this, 'manage_posts_columns' ) );
 
+		// Add move-to-folder to Ed School theme types
+		add_filter( 'manage_edit-agc_course_columns', 			array( $this, 'manage_posts_columns' ), 100 );
+		add_filter( 'manage_edit-layout_block_columns', 		array( $this, 'manage_posts_columns' ), 100 );
+
+		// Add move-to-folder to Testimonial Rotator plugin types
+		add_filter( 'manage_edit-testimonial_columns', 			array( $this, 'manage_posts_columns' ), 100 );
+		add_filter( 'manage_edit-testimonial_rotator_columns', 	array( $this, 'manage_posts_columns' ), 100 );
+		
 		add_filter( 'plugin_action_links_wicked-folders/wicked-folders.php', array( $this, 'plugin_action_links' ) );
 
 		if ( in_array( 'page', $post_types ) ) {

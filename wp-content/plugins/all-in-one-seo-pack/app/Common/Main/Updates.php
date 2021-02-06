@@ -41,7 +41,7 @@ class Updates {
 		$oldOptions = get_option( 'aioseop_options' );
 		if ( empty( $oldOptions ) && ( ! is_network_admin() || ! isset( $_GET['activate-multi'] ) ) ) {
 			// Sets 30 second transient for welcome screen redirect on activation.
-			set_transient( 'aioseo_activation_redirect', true, 30 );
+			aioseo()->transients->update( 'activation_redirect', true, 30 );
 		}
 
 		if ( ! empty( $oldOptions['last_active_version'] ) ) {
@@ -72,6 +72,10 @@ class Updates {
 
 		if ( ! aioseo()->pro && version_compare( $lastActiveVersion, '4.0.6', '=' ) && 'posts' !== get_option( 'show_on_front' ) ) {
 			aioseo()->migration->helpers->redoMigration();
+		}
+
+		if ( version_compare( $lastActiveVersion, '4.0.13', '<' ) ) {
+			$this->removeDuplicateRecords();
 		}
 	}
 
@@ -268,6 +272,35 @@ class Updates {
 				"ALTER TABLE {$tableName}
 				MODIFY robots_max_imagepreview varchar(20) DEFAULT 'large'"
 			);
+		}
+	}
+
+	/**
+	 * Deletes duplicate records in our custom tables.
+	 *
+	 * @since 4.0.13
+	 *
+	 * @return void
+	 */
+	protected function removeDuplicateRecords() {
+		$duplicates = aioseo()->db->start( 'aioseo_posts' )
+			->select( 'post_id, min(id) as id' )
+			->groupBy( 'post_id having count(post_id) > 1' )
+			->orderBy( 'count(post_id) DESC' )
+			->run()
+			->result();
+
+		if ( empty( $duplicates ) ) {
+			return;
+		}
+
+		foreach ( $duplicates as $duplicate ) {
+			$postId        = $duplicate->post_id;
+			$firstRecordId = $duplicate->id;
+
+			aioseo()->db->delete( 'aioseo_posts' )
+				->whereRaw( "( id > $firstRecordId AND post_id = $postId )" )
+				->run();
 		}
 	}
 }

@@ -26,13 +26,13 @@ class Notices {
 	public function __construct() {
 		add_action( 'updated_option', [ $this, 'maybeResetBlogVisibility' ], 10, 3 );
 		add_action( 'init', [ $this, 'init' ], 2 );
+		add_action( 'aioseo_admin_notifications_update', [ $this, 'update' ] );
 
 		if ( is_admin() ) {
 			$this->review    = new Review();
 			$this->migration = new Migration();
 			$this->import    = new Import();
 
-			add_action( 'aioseo_admin_notifications_update', [ $this, 'update' ] );
 			add_action( 'admin_notices', [ $this, 'notice' ] );
 		}
 	}

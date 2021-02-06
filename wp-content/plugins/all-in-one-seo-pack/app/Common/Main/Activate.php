@@ -18,9 +18,9 @@ class Activate {
 		register_deactivation_hook( AIOSEO_FILE, [ $this, 'deactivate' ] );
 
 		// If Pro just deactivated the lite version, we need to manually run the activation hook, because it doesn't run here.
-		$proDeactivatedLite = (bool) get_transient( 'aioseo_pro_just_deactivated_lite' );
+		$proDeactivatedLite = (bool) aioseo()->transients->get( 'pro_just_deactivated_lite' );
 		if ( $proDeactivatedLite ) {
-			delete_transient( 'aioseo_pro_just_deactivated_lite', true );
+			aioseo()->transients->delete( 'pro_just_deactivated_lite', true );
 			$this->activate( false );
 		}
 	}

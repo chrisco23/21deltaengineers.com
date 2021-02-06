@@ -118,6 +118,28 @@ class Helpers {
 			$pages[] = strtotime( $additionalPage->lastModified );
 		}
 
+		if ( empty( $pages ) ) {
+			$additionalPages = apply_filters( 'aioseo_sitemap_additional_pages', [] );
+			if ( empty( $additionalPages ) ) {
+				return false;
+			}
+
+			$lastModified = 0;
+			foreach ( $additionalPages as $page ) {
+				if ( empty( $page['lastmod'] ) ) {
+					continue;
+				}
+				$timestamp = strtotime( $page['lastmod'] );
+				if ( ! $timestamp ) {
+					continue;
+				}
+				if ( $lastModified < $timestamp ) {
+					$lastModified = $timestamp;
+				}
+			}
+			return 0 !== $lastModified ? aioseo()->helpers->formatDateTime( gmdate( 'Y-m-d H:i:s', $timestamp ) ) : false;
+		}
+
 		return aioseo()->helpers->formatDateTime( gmdate( 'Y-m-d H:i:s', max( $pages ) ) );
 	}
 

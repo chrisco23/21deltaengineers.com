@@ -380,7 +380,7 @@ class Content {
 			}
 
 			if ( ! count( $pages ) ) {
-				return $entries;
+				return apply_filters( 'aioseo_sitemap_additional_pages', $entries );
 			}
 
 			foreach ( $pages as $page ) {
@@ -414,7 +414,7 @@ class Content {
 			(
 				aioseo()->options->searchAppearance->archives->author->advanced->robotsMeta->default &&
 				(
-					! aioseo()->options->searchAppearance->advanced->globalRobotsMeta->default ||
+					! aioseo()->options->searchAppearance->advanced->globalRobotsMeta->default &&
 					aioseo()->options->searchAppearance->advanced->globalRobotsMeta->noindex
 				)
 			)
@@ -462,7 +462,7 @@ class Content {
 			(
 				aioseo()->options->searchAppearance->archives->date->advanced->robotsMeta->default &&
 				(
-					! aioseo()->options->searchAppearance->advanced->globalRobotsMeta->default ||
+					! aioseo()->options->searchAppearance->advanced->globalRobotsMeta->default &&
 					aioseo()->options->searchAppearance->advanced->globalRobotsMeta->noindex
 				)
 			)

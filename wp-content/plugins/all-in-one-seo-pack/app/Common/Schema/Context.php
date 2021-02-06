@@ -116,7 +116,7 @@ class Context {
 			'description' => $description,
 			'url'         => $url,
 			'breadcrumb'  => $this->breadcrumb->setPositions( [
-				'name'        => $title,
+				'name'        => trim( sprintf( '%1$s %2$s', get_the_author_meta( 'first_name', $author->ID ), get_the_author_meta( 'last_name', $author->ID ) ) ),
 				'description' => $description,
 				'url'         => $url,
 				'type'        => 'CollectionPage'
@@ -145,7 +145,7 @@ class Context {
 			'description' => $description,
 			'url'         => $url,
 			'breadcrumb'  => $this->breadcrumb->setPositions( [
-				'name'        => $title,
+				'name'        => $postType->label,
 				'description' => $description,
 				'url'         => $url,
 				'type'        => 'CollectionPage'
@@ -179,6 +179,7 @@ class Context {
 	 * @return array The context data.
 	 */
 	public function search() {
+		global $s;
 		$title       = aioseo()->meta->title->getTitle();
 		$description = aioseo()->meta->description->getDescription();
 		$url         = aioseo()->helpers->getUrl();
@@ -187,7 +188,7 @@ class Context {
 			'description' => $description,
 			'url'         => $url,
 			'breadcrumb'  => $this->breadcrumb->setPositions( [
-				'name'        => $title,
+				'name'        => $s,
 				'description' => $description,
 				'url'         => $url,
 				'type'        => 'SearchResultsPage'
@@ -212,7 +213,7 @@ class Context {
 			'description' => $description,
 			'url'         => $url,
 			'breadcrumb'  => $this->breadcrumb->setPositions( [
-				'name'        => $title,
+				'name'        => __( 'Not Found', 'all-in-one-seo-pack' ),
 				'description' => $description,
 				'url'         => $url
 			] )

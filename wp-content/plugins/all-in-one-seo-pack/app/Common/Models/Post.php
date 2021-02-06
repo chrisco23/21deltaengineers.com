@@ -35,6 +35,26 @@ class Post extends Model {
 	protected $hidden = [ 'id' ];
 
 	/**
+	 * Fields that should be boolean values.
+	 *
+	 * @since 4.0.13
+	 *
+	 * @var array
+	 */
+	protected $booleanFields = [
+		'twitter_use_og',
+		'pillar_content',
+		'robots_default',
+		'robots_noindex',
+		'robots_noarchive',
+		'robots_nosnippet',
+		'robots_nofollow',
+		'robots_noimageindex',
+		'robots_noodp',
+		'robots_notranslate',
+	];
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 4.0.0
@@ -173,7 +193,9 @@ class Post extends Model {
 		$thePost->twitter_title               = ! empty( $data['twitter_title'] ) ? sanitize_text_field( $data['twitter_title'] ) : null;
 		$thePost->twitter_description         = ! empty( $data['twitter_description'] ) ? sanitize_text_field( $data['twitter_description'] ) : null;
 		$thePost->schema_type                 = ! empty( $data['schema_type'] ) ? sanitize_text_field( $data['schema_type'] ) : 'none';
-		$thePost->schema_type_options         = ! empty( $data['schema_type_options'] ) ? wp_json_encode( $data['schema_type_options'] ) : parent::getDefaultSchemaOptions();
+		$thePost->schema_type_options         = ! empty( $data['schema_type_options'] )
+			? parent::getDefaultSchemaOptions( wp_json_encode( $data['schema_type_options'] ) )
+			: parent::getDefaultSchemaOptions();
 		$thePost->tabs                        = ! empty( $data['tabs'] ) ? wp_json_encode( $data['tabs'] ) : parent::getDefaultTabsOptions();
 		$thePost->local_seo                   = ! empty( $data['local_seo'] ) ? wp_json_encode( $data['local_seo'] ) : null;
 		$thePost->updated                     = gmdate( 'Y-m-d H:i:s' );

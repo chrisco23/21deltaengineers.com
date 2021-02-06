@@ -24,8 +24,8 @@ class PostMeta {
 				return;
 			}
 
-			if ( ! get_transient( 'aioseo_import_post_meta_yoast_seo' ) ) {
-				set_transient( 'aioseo_import_post_meta_yoast_seo', time(), WEEK_IN_SECONDS );
+			if ( ! aioseo()->transients->get( 'import_post_meta_yoast_seo' ) ) {
+				aioseo()->transients->update( 'import_post_meta_yoast_seo', time(), WEEK_IN_SECONDS );
 			}
 
 			as_schedule_single_action( time(), aioseo()->importExport->yoastSeo->postActionName, [], 'aioseo' );
@@ -44,7 +44,7 @@ class PostMeta {
 	public function importPostMeta() {
 		$postsPerAction  = 100;
 		$publicPostTypes = implode( "', '", aioseo()->helpers->getPublicPostTypes( true ) );
-		$timeStarted     = gmdate( 'Y-m-d H:i:s', get_transient( 'aioseo_import_post_meta_yoast_seo' ) );
+		$timeStarted     = gmdate( 'Y-m-d H:i:s', aioseo()->transients->get( 'import_post_meta_yoast_seo' ) );
 
 		$posts = aioseo()->db
 			->start( 'posts' . ' as p' )
@@ -60,7 +60,7 @@ class PostMeta {
 			->result();
 
 		if ( ! $posts || ! count( $posts ) ) {
-			delete_transient( 'aioseo_import_post_meta_yoast_seo' );
+			aioseo()->transients->delete( 'import_post_meta_yoast_seo' );
 			return;
 		}
 
@@ -224,7 +224,7 @@ class PostMeta {
 				// Do nothing.
 			}
 		} else {
-			delete_transient( 'aioseo_import_post_meta_yoast_seo' );
+			aioseo()->transients->delete( 'import_post_meta_yoast_seo' );
 		}
 	}
 }

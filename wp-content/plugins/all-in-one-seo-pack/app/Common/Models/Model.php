@@ -204,7 +204,7 @@ class Model implements \JsonSerializable {
 			if ( isset( $data[ $field ] ) && '' === $data[ $field ] ) {
 				unset( $data[ $field ] );
 			} elseif ( isset( $data[ $field ] ) ) {
-				$data[ $field ] = (bool) $data[ $field ];
+				$data[ $field ] = (bool) $data[ $field ] ? 1 : 0;
 			}
 		}
 
@@ -423,10 +423,49 @@ class Model implements \JsonSerializable {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @return string JSON object.
+	 * @param  string The existing options in JSON.
+	 * @return string The existing options with defaults added in JSON.
 	 */
-	public static function getDefaultSchemaOptions() {
-		return '{"webPage":{"webPageType":"WebPage"},"article":{"articleType":"BlogPosting"},"book":{},"course":{},"event":{},"jobPosting":{},"music":{},"person":{},"product":{},"recipe":{},"restaurant":{},"service":{},"software":{},"video":{}}'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+	public static function getDefaultSchemaOptions( $existingOptions = '' ) {
+		// If the root level value for a graph needs to be an object, we need to set at least one property inside of it so that PHP doesn't convert it to an empty array.
+
+		$defaults = [
+			'article'  => [
+				'articleType' => 'BlogPosting'
+			],
+			'course'   => [
+				'name'        => '',
+				'description' => '',
+				'provider'    => ''
+			],
+			'faq'      => [
+				'pages' => []
+			],
+			'product'  => [
+				'reviews' => []
+			],
+			'recipe'   => [
+				'ingredients'  => [],
+				'instructions' => [],
+				'keywords'     => []
+			],
+			'software' => [
+				'reviews'          => [],
+				'operatingSystems' => []
+			],
+			'webPage'  => [
+				'webPageType' => 'WebPage'
+			]
+		];
+
+		if ( empty( $existingOptions ) ) {
+			return wp_json_encode( $defaults );
+		}
+
+		$existingOptions = json_decode( $existingOptions, true );
+		$existingOptions = array_replace_recursive( $defaults, $existingOptions );
+
+		return wp_json_encode( $existingOptions );
 	}
 
 	/**

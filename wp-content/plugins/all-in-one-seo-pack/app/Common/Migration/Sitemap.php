@@ -117,10 +117,11 @@ class Sitemap {
 
 		$excludedPosts = aioseo()->options->sitemap->general->advancedSettings->excludePosts;
 		if ( ! empty( $this->oldOptions['modules']['aiosp_sitemap_options']['aiosp_sitemap_excl_pages'] ) ) {
-			$pages = explode( ', ', $this->oldOptions['modules']['aiosp_sitemap_options']['aiosp_sitemap_excl_pages'] );
+			$pages = explode( ',', $this->oldOptions['modules']['aiosp_sitemap_options']['aiosp_sitemap_excl_pages'] );
 			if ( count( $pages ) ) {
 				foreach ( $pages as $page ) {
-					$id = intval( $page );
+					$page = trim( $page );
+					$id   = intval( $page );
 					if ( ! $id ) {
 						$post = get_page_by_path( $page, OBJECT, aioseo()->helpers->getPublicPostTypes( true ) );
 						if ( $post && is_object( $post ) ) {

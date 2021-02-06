@@ -778,7 +778,7 @@ class Admin {
 			$postType = '_aioseo_type';
 		}
 		if ( 'edit' === $screen || 'upload' === $screen ) {
-			if ( aioseo()->options->advanced->postTypes->all ) {
+			if ( aioseo()->options->advanced->postTypes->all && in_array( $postType, aioseo()->helpers->getPublicPostTypes( true ), true ) ) {
 				return true;
 			}
 
@@ -1038,8 +1038,11 @@ class Admin {
 		// Remove all AIOSEO transients.
 		if ( isset( $_GET['aioseo-clear-cache'] ) ) {
 			$table = aioseo()->db->db->options;
-			aioseo()->db->db->query( "DELETE FROM {$table} WHERE option_name LIKE '\_transient\_aioseo\_%'" );
-			aioseo()->db->db->query( "DELETE FROM {$table} WHERE option_name LIKE '\_transient\_timeout\_aioseo\_%'" );
+			aioseo()->db->db->query( "DELETE FROM {$table} WHERE option_name LIKE '\_aioseo\_cache\_%'" );
+		}
+
+		if ( isset( $_GET['aioseo-image-rescan'] ) ) {
+			aioseo()->sitemap->query->resetImages();
 		}
 
 		$this->updateDeprecatedOptions();

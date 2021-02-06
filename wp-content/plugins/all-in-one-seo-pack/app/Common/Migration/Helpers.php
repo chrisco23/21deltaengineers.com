@@ -201,7 +201,7 @@ class Helpers {
 			return '';
 		}
 
-		$oldKeywords = array_filter( explode( ', ', $keywords ) );
+		$oldKeywords = array_filter( explode( ',', $keywords ) );
 		if ( ! is_array( $oldKeywords ) ) {
 			return '';
 		}
@@ -232,8 +232,8 @@ class Helpers {
 			->whereRaw( "`option_name` LIKE 'aioseo_options_internal%'" )
 			->run();
 
-		delete_transient( 'aioseo_v3_migration_in_progress_posts' );
-		delete_transient( 'aioseo_v3_migration_in_progress_terms' );
+		aioseo()->transients->delete( 'v3_migration_in_progress_posts' );
+		aioseo()->transients->delete( 'v3_migration_in_progress_terms' );
 
 		try {
 			if ( as_next_scheduled_action( 'aioseo_migrate_post_meta' ) ) {

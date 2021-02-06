@@ -18,7 +18,6 @@ class Main {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueueAssets' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueueFrontEndAssets' ] );
 		add_action( 'admin_footer', [ $this, 'adminFooter' ] );
-		add_action( 'wp_footer', [ $this, 'adminFooter' ] );
 	}
 
 	/**

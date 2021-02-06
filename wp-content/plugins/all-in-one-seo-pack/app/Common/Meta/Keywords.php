@@ -202,7 +202,7 @@ class Keywords {
 		}
 		if ( ! empty( $keywords ) ) {
 			foreach ( $keywords as $keyword ) {
-				$smallKeywords[] = trim( strtolower( $keyword ) );
+				$smallKeywords[] = trim( aioseo()->helpers->toLowercase( $keyword ) );
 			}
 		}
 		return array_unique( $smallKeywords );

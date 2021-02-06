@@ -9,6 +9,16 @@ use AIOSEO\Plugin\Common\Utils;
  * @since 4.0.0
  */
 class Addons {
+
+	/**
+	 * The licensing URL.
+	 *
+	 * @since 4.0.13
+	 *
+	 * @var string
+	 */
+	protected $licensingUrl = 'https://licensing-cdn.aioseo.com/keys/lite/all-in-one-seo-pack-pro.json';
+
 	/**
 	 * Returns our addons.
 	 *
@@ -20,18 +30,19 @@ class Addons {
 	public function getAddons( $flushCache = false ) {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-		$addons = get_transient( 'aioseo_addons' );
+		$addons = aioseo()->transients->get( 'addons' );
 		if ( false === $addons || $flushCache ) {
-			$addons = aioseo()->helpers->sendRequest( $this->getLicensingUrl() . 'addons/', $this->getAddonPayload() );
+			$response = wp_remote_get( $this->getLicensingUrl() );
+			if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+				$addons = json_decode( wp_remote_retrieve_body( $response ) );
+			}
 		}
 
-		$transientTime = 4 * HOUR_IN_SECONDS;
 		if ( ! $addons || ! empty( $addons->error ) ) {
-			$addons        = $this->getDefaultAddons();
-			$transientTime = 10 * MINUTE_IN_SECONDS;
+			$addons = $this->getDefaultAddons();
 		}
 
-		set_transient( 'aioseo_addons', $addons, $transientTime );
+		aioseo()->transients->update( 'addons', $addons );
 
 		// The API request will tell us if we can activate a plugin, but let's check if its already active.
 		$installedPlugins = array_keys( get_plugins() );
@@ -59,7 +70,7 @@ class Addons {
 	public function getAddon( $sku, $flushCache = false ) {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-		$addon = get_transient( 'aioseo_addon_' . $sku );
+		$addon = aioseo()->transients->get( 'addon_' . $sku );
 		if ( false === $addon || $flushCache ) {
 			$addon = aioseo()->helpers->sendRequest( $this->getLicensingUrl() . 'addons/', $this->getAddonPayload( $sku ) );
 		}
@@ -69,7 +80,7 @@ class Addons {
 			$addon = $this->getDefaultAddon( $sku );
 		}
 
-		set_transient( 'aioseo_addon_' . $sku, $addon, $transientTime );
+		aioseo()->transients->update( 'addon_' . $sku, $addon, $transientTime );
 
 		// The API request will tell us if we can activate a plugin, but let's check if its already active.
 		$installedPlugins  = array_keys( get_plugins() );
@@ -89,7 +100,7 @@ class Addons {
 	 * @param  string $sku The sku to use in the request.
 	 * @return array       A payload array.
 	 */
-	private function getAddonPayload( $sku = 'all-in-one-seo-pack-pro' ) {
+	protected function getAddonPayload( $sku = 'all-in-one-seo-pack-pro' ) {
 		return [
 			'license'     => aioseo()->options->has( 'general' ) && aioseo()->options->general->has( 'licenseKey' )
 				? aioseo()->options->general->licenseKey
@@ -155,11 +166,11 @@ class Addons {
 	 *
 	 * @return string The URL.
 	 */
-	private function getLicensingUrl() {
+	protected function getLicensingUrl() {
 		if ( defined( 'AIOSEO_LICENSING_URL' ) ) {
 			return AIOSEO_LICENSING_URL;
 		}
-		return 'https://licensing.aioseo.com/v1/';
+		return $this->licensingUrl;
 	}
 
 	/**
@@ -311,12 +322,14 @@ class Addons {
 				'levels'             => [
 					'business',
 					'agency',
+					'plus',
 					'pro',
 					'elite',
 				],
 				'currentLevels'      => [
-					'business',
-					'agency',
+					'plus',
+					'pro',
+					'elite'
 				],
 				'requiresUpgrade'    => false,
 				'description'        => '<p>Globally control the Title attribute and Alt text for images in your content. These attributes are essential for both accessibility and SEO.</p>',
@@ -341,12 +354,11 @@ class Addons {
 					'business',
 					'agency',
 					'pro',
-					'elite',
+					'elite'
 				],
 				'currentLevels'      => [
-					'individual',
-					'business',
-					'agency',
+					'pro',
+					'elite'
 				],
 				'requiresUpgrade'    => false,
 				'description'        => '<p>The Video Sitemap works in much the same way as the XML Sitemap module, it generates an XML Sitemap specifically for video content on your site. Search engines use this information to display rich snippet information in search results.</p>', // phpcs:ignore Generic.Files.LineLength.MaxExceeded
@@ -369,12 +381,14 @@ class Addons {
 				'levels'             => [
 					'business',
 					'agency',
+					'plus',
 					'pro',
-					'elite',
+					'elite'
 				],
 				'currentLevels'      => [
-					'business',
-					'agency',
+					'plus',
+					'pro',
+					'elite'
 				],
 				'requiresUpgrade'    => false,
 				'description'        => '<p>Local Business schema markup enables you to tell Google about your business, including your business name, address and phone number, opening hours and price range. This information may be displayed as a Knowledge Graph card or business carousel.</p>', // phpcs:ignore Generic.Files.LineLength.MaxExceeded
@@ -398,11 +412,11 @@ class Addons {
 					'business',
 					'agency',
 					'pro',
-					'elite',
+					'elite'
 				],
 				'currentLevels'      => [
-					'business',
-					'agency',
+					'pro',
+					'elite'
 				],
 				'requiresUpgrade'    => false,
 				'description'        => '<p>Our Google News Sitemap lets you control which content you submit to Google News and only contains articles that were published in the last 48 hours. In order to submit a News Sitemap to Google, you must have added your site to Google’s Publisher Center and had it approved.</p>', // phpcs:ignore Generic.Files.LineLength.MaxExceeded

@@ -1,3 +1,45 @@
+version 4.8.2 ( updated 01-28-2021 )
+- Changed default filename for Layout Export as the Page Title.
+- Fixed wrong  options filter placement in expanded single panel content settings modal.
+- Fixed builder crash with error "Cannot create property 'content' on string..." when dragging module or updating text module.
+- Added an option on shop module's custom css option to change the display property of the star ratings like color, font-size etc.
+- Fixed fatal error in the quick configuration wizard of Schema plugin.
+- Fixed Quick Actions modal being launched unintentionally when typing in focusable element.
+- Fixed builder crash when CSP is enabled by WP Simple Firewall plugin (Shield Security).
+- Fixed Find & Replace not replacing Button BG And Column Background.
+- Fixed video module not displaying proper video dimensions when border radius for the module is changed.
+- Fixed Overlay option being visible when slider layout was selected in Gallery Module.
+- Fixed HubSpot Single Checkboxes custom field get Converted to radio buttons in Email Optin Module.
+- Fixed image/icon position in Blurb module for mobile devices.
+- Fixed TinyMCE output content to produce consistent value before it's saved.
+- Fixed shop module not respecting the pagination display option for mobile devices.
+- Restored the missing "Use Background Color" option in some modules: Countdown Timer, Call To Action, Login, Email Optin, Testimonial.
+- Fixed Contact Form field alignments on Front End.
+- Fixed Header or Footer created from Theme Builder not working on Heroic Knowledge Base category pages.
+- Fixed issue where setting toggle group fields was empty when switching to global preset mode.
+- Resolved the issue where every menu's location added via the menu module was shown as primary even if it wasn't a primary menu.
+- Fixed button transition issue when button hover properties on hover applied.
+- Fixed an issue where the class names for the portfolio items were not the same for visual builder and on the frontend.
+- Fixed an issue where left padding for a section was affecting the position of the divider.
+- Fixed an issue with the Fullwidth menu module where background color wasn't displaying when the section had a parallax background.
+- Fixed an issue where, in some cases, mouse wheel scroll did not work inside the icon select option.
+- Fixed issue where one user with same email cannot subscribe to multiple MailPoet lists.
+- Fixed dot navigation appearing on archive pages if the first post on archive has it enabled.
+	* core/components/api/email/HubSpot.php
+	* core/components/api/email/_MailPoet3.php
+	* functions.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/feature/gutenberg/EditorTypography.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/module/ContactFormItem.php
+	* includes/builder/module/FullwidthMenu.php
+	* includes/builder/module/Gallery.php
+	* includes/builder/module/Menu.php
+	* includes/builder/module/Shop.php
+	* includes/builder/plugin-compat/ht-knowledge-base.php
+	* includes/builder/plugin-compat/wp-simple-firewall.php
+	* includes/builder/scripts/frontend/scripts.js
+
 version 4.8.1 ( updated 01-15-2021 )
 - Fixed JS Error e.state is null in 3rd party modules.
 - Fixed issue where alt/title text from background image could overwrite the Module's image alt/title text.

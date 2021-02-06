@@ -191,7 +191,7 @@ TEMPLATE
 					'description' => [ 'type' => 'string', 'localized' => true, 'default' => '' ],
 					'imageWidth'  => [ 'type' => 'number', 'default' => '' ],
 					'imageHeight' => [ 'type' => 'number', 'default' => '' ],
-					'objectType'  => [ 'type' => 'string', 'default' => 'article' ]
+					'objectType'  => [ 'type' => 'string', 'default' => 'website' ]
 				],
 				'advanced' => [
 					'enable'              => [ 'type' => 'boolean', 'default' => false ],
@@ -245,8 +245,8 @@ TEMPLATE
 					'default'           => [ 'type' => 'boolean', 'default' => true ],
 					'noindex'           => [ 'type' => 'boolean', 'default' => false ],
 					'nofollow'          => [ 'type' => 'boolean', 'default' => false ],
-					'noindexPaginated'  => [ 'type' => 'boolean', 'default' => false ],
-					'nofollowPaginated' => [ 'type' => 'boolean', 'default' => false ],
+					'noindexPaginated'  => [ 'type' => 'boolean', 'default' => true ],
+					'nofollowPaginated' => [ 'type' => 'boolean', 'default' => true ],
 					'noarchive'         => [ 'type' => 'boolean', 'default' => false ],
 					'noimageindex'      => [ 'type' => 'boolean', 'default' => false ],
 					'notranslate'       => [ 'type' => 'boolean', 'default' => false ],
@@ -265,7 +265,7 @@ TEMPLATE
 				'useCategoriesForMetaKeywords' => [ 'type' => 'boolean', 'default' => false ],
 				'useTagsForMetaKeywords'       => [ 'type' => 'boolean', 'default' => false ],
 				'dynamicallyGenerateKeywords'  => [ 'type' => 'boolean', 'default' => false ],
-				'pagedFormat'                  => [ 'type' => 'string', 'default' => ' - Page #page_number' ]
+				'pagedFormat'                  => [ 'type' => 'string', 'default' => '- Page #page_number' ]
 			],
 			'archives' => [
 				'author' => [
@@ -349,8 +349,9 @@ TEMPLATE
 		],
 		'tools'            => [
 			'robots'       => [
-				'enable' => [ 'type' => 'boolean', 'default' => false ],
-				'rules'  => [ 'type' => 'array', 'default' => [] ]
+				'enable'         => [ 'type' => 'boolean', 'default' => false ],
+				'rules'          => [ 'type' => 'array', 'default' => [] ],
+				'robotsDetected' => [ 'type' => 'boolean', 'default' => true ],
 			],
 			'importExport' => [
 				'backup' => [
@@ -522,7 +523,7 @@ TEMPLATE
 			}
 
 			if ( 'product' === $postType['name'] ) {
-				$defaultSchemaType  = 'WebPage'; // @TODO: [V4+] Replace this with Product after it's released.
+				$defaultSchemaType  = 'WebPage';
 				$defaultWebPageType = 'ItemPage';
 			}
 

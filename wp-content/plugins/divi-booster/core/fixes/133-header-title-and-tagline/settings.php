@@ -15,7 +15,7 @@ function db133_add_setting($plugin) {
 			'tagline_only' => 'Tagline only'
 		);
 		$selected = dbdb_option('133-header-title-and-tagline', 'layout', 'horizontal');
-		$plugin->selectpicker(__FILE__, '[layout]', $options, $selected);
+		$plugin->selectpicker(__FILE__, 'layout', $options, $selected);
 		?>
 	</div>
 	<div class="db_subsetting">
@@ -30,7 +30,7 @@ function db133_add_setting($plugin) {
 			'h6' => 'H6'
 		);
 		$selected = dbdb_option('133-header-title-and-tagline', 'titleHeaderLevel', 'h1');
-		$plugin->selectpicker(__FILE__, '[titleHeaderLevel]', $options, $selected);
+		$plugin->selectpicker(__FILE__, 'titleHeaderLevel', $options, $selected);
 		?>
 	</div>
 	<?php

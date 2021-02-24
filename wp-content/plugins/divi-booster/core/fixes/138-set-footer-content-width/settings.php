@@ -8,5 +8,5 @@ function db138_add_setting($plugin) {
 	$plugin->numberpicker(__FILE__, 'mobilewidth', 80); ?>%<?php
 	$plugin->setting_end(); 
 } 
-$wtfdivi->add_setting('footer', 'db138_add_setting');
+$wtfdivi->add_setting('footer-layout', 'db138_add_setting');
 

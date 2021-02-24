@@ -560,6 +560,13 @@ class ET_Builder_Element {
 	public static $advanced_styles_manager = null;
 
 	/**
+	 * Whether to force inline styles.
+	 *
+	 * @var bool
+	 */
+	public static $forced_inline_styles = false;
+
+	/**
 	 * `ET_Core_Data_Utils` instance.
 	 *
 	 * @var ET_Core_Data_Utils
@@ -749,6 +756,8 @@ class ET_Builder_Element {
 				// included with the builder css inline on first-load (since its in the head already).
 				add_filter( 'et_core_page_resource_get_data', array( 'ET_Builder_Element', 'filter_page_resource_data' ), 10, 3 );
 			}
+
+			add_action( 'wp_footer', array( 'ET_Builder_Element', 'maybe_force_inline_styles' ), 19 );
 		}
 
 		if ( null === self::$data_utils ) {
@@ -1402,12 +1411,6 @@ class ET_Builder_Element {
 		if ( 0 === $post_id && et_core_page_resource_is_singular() ) {
 			// It doesn't matter if post id is 0 because we're going to force inline styles.
 			$post_id = et_core_page_resource_get_the_ID();
-		} else {
-			$queried_object = get_queried_object();
-			if ( is_object( $queried_object ) && property_exists( $queried_object, 'term_id' ) ) {
-				$term_id = $queried_object->term_id;
-				$post_id = ! empty( $term_id ) ? $term_id : $post_id;
-			}
 		}
 
 		$is_preview       = is_preview() || is_et_pb_preview();
@@ -1417,8 +1420,7 @@ class ET_Builder_Element {
 
 		$resource_owner = $unified_styles ? 'core' : 'builder';
 		$resource_slug  = $unified_styles ? 'unified' : 'module-design';
-		$resource_slug .= ! empty( $term_id ) ? '-term' : '';
-		$resource_slug .= empty( $term_id ) && $unified_styles && et_builder_post_is_of_custom_post_type( $post_id ) ? '-cpt' : '';
+		$resource_slug .= $unified_styles && et_builder_post_is_of_custom_post_type( $post_id ) ? '-cpt' : '';
 		$resource_slug  = et_theme_builder_decorate_page_resource_slug( $post_id, $resource_slug );
 
 		// If the post is password protected and a password has not been provided yet,
@@ -1476,6 +1478,19 @@ class ET_Builder_Element {
 
 		// Pass styles to page resource which will handle their output.
 		self::$advanced_styles_manager->set_data( $styles, 40 );
+	}
+
+	/**
+	 * Set {@see ET_Builder_Element::$advanced_styles_manager} to force inline styles.
+	 */
+	public static function maybe_force_inline_styles() {
+		if ( et_core_is_fb_enabled() || self::$advanced_styles_manager->forced_inline || ! self::$forced_inline_styles ) {
+			return;
+		}
+
+		self::$advanced_styles_manager->forced_inline       = true;
+		self::$advanced_styles_manager->write_file_location = 'footer';
+		self::$advanced_styles_manager->set_output_location( 'footer' );
 	}
 
 	/**
@@ -2769,6 +2784,7 @@ class ET_Builder_Element {
 			$this->shortcode_atts();
 		}
 
+		$this->process_global_colors();
 		$this->process_additional_options( $render_slug );
 		$this->process_custom_css_fields( $render_slug );
 
@@ -3444,6 +3460,10 @@ class ET_Builder_Element {
 						if ( ! $is_global_template ) {
 							$this->props[ $single_attr ] = is_string( $global_atts[ $single_attr ] ) && ! array_intersect( array( "et_pb_{$single_attr}", $single_attr ), $this->dbl_quote_exception_options ) ? str_replace( '%22', '"', $global_atts[ $single_attr ] ) : $global_atts[ $single_attr ];
 						}
+
+						if ( 'global_colors_info' === $single_attr ) {
+							$this->props[ $single_attr ] = str_replace( array( '%91', '%93' ), array( '[', ']' ), $this->props[ $single_attr ] );
+						}
 					} elseif ( ! $use_updated_global_sync_method ) {
 						// prepare array of unsynced options to migrate the legacy modules to new system.
 						$unsynced_legacy_options[] = $single_attr;
@@ -3550,6 +3570,11 @@ class ET_Builder_Element {
 			if ( $is_include_attr ) {
 				$attrs[ $shortcode_attr_key ] = is_string( $value ) ? html_entity_decode( $value ) : $value;
 			}
+		}
+
+		// Enable `Global Colors` inside preset attrs.
+		if ( ! empty( $module_preset_settings['global_colors_info'] ) ) {
+			$attrs['global_colors_info'] = $module_preset_settings['global_colors_info'];
 		}
 
 		// Format FB component path
@@ -12022,6 +12047,7 @@ class ET_Builder_Element {
 		$fields['template_type']      = '';
 		$fields['inline_fonts']       = '';
 		$fields['collapsed']          = '';
+		$fields['global_colors_info'] = '';
 
 		// Default props of each modules are always identical; thus saves it as static prop
 		// so the next same modules doesn't need to process all of these again repetitively.
@@ -12337,6 +12363,108 @@ class ET_Builder_Element {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Update global colors info to match replace with value.
+	 *
+	 * @since 4.9.0
+	 *
+	 * @return void
+	 */
+	protected function _prepare_global_colors_info() {
+		// Retrive global_colors_info from post meta, which saved as string[][].
+		$props_gc_info = str_replace(
+			array( '&#91;', '&#93;' ),
+			array( '[', ']' ),
+			$this->props['global_colors_info']
+		);
+		$gc_info       = json_decode( $props_gc_info, true );
+		$global_colors = et_builder_get_all_global_colors();
+
+		if ( empty( $gc_info ) || ! is_array( $gc_info ) || ! is_array( $global_colors ) ) {
+			return;
+		}
+
+		$gc_info = $this->_remove_inactive_global_colors_module_info( $gc_info, $global_colors );
+
+		foreach ( $gc_info as $key => $old_info ) {
+			if (
+				empty( $global_colors[ $key ] )
+				|| ! is_array( $global_colors[ $key ] )
+				|| ! array_key_exists( 'replaced_with', $global_colors[ $key ] )
+			) {
+				continue;
+			}
+
+			$replaced_id = $global_colors[ $key ]['replaced_with'];
+			$new_info    = array();
+
+			if ( isset( $gc_info[ $replaced_id ] ) ) {
+				$new_info = $gc_info[ $replaced_id ];
+			}
+
+			// remove data from prev global color id.
+			$gc_info[ $key ] = array();
+
+			// add data to new global color id.
+			$gc_info[ $replaced_id ] = array_merge( $old_info, $new_info );
+		}
+
+		$this->props['global_colors_info'] = wp_json_encode( $gc_info );
+	}
+
+	/**
+	 * Remove inactive global colors info from module.
+	 *
+	 * @since 4.9.0
+	 *
+	 * @param string $gc_info Module's global colors info.
+	 * @param array  $global_colors Global colors.
+	 *
+	 * @return array
+	 */
+	protected function _remove_inactive_global_colors_module_info( $gc_info, $global_colors ) {
+		foreach ( $gc_info as $key => $info ) {
+			if ( isset( $global_colors[ $key ]['active'] ) && 'no' === $global_colors[ $key ]['active'] ) {
+				// Empty out module's global color info by global color ID.
+				$gc_info[ $key ] = array();
+			}
+		}
+
+		return $gc_info;
+	}
+
+	/**
+	 * Process global colors.
+	 * If there is a global color id need to be replaced, that is done here.
+	 *
+	 * @since 4.9.0
+	 *
+	 * @return void
+	 */
+	public function process_global_colors() {
+		if ( empty( $this->props['global_colors_info'] ) ) {
+			return;
+		}
+
+		$this->_prepare_global_colors_info();
+
+		foreach ( $this->props as $attr_key => $attr_value ) {
+			if ( empty( $attr_key ) || strpos( $attr_key, 'color' ) === false ) {
+				continue;
+			}
+
+			// if color value starts with `gcid-`.
+			if ( ! empty( $attr_value ) && strpos( $attr_value, 'gcid-' ) === 0 ) {
+				$global_color_info = et_builder_get_global_color_info( $attr_value );
+
+				// Making sure we skip empty value, if for any reason that happen.
+				if ( ! empty( $global_color_info['color'] ) ) {
+					$this->props[ $attr_key ] = esc_attr( $global_color_info['color'] );
+				}
+			}
+		}
 	}
 
 	/**
@@ -13509,6 +13637,8 @@ class ET_Builder_Element {
 		$style_hover  = '';
 		$style_sticky = '';
 
+		$dynamic_attributes = $this->_get_enabled_dynamic_attributes( $this->props );
+
 		// Background Desktop, Tablet, and Phone.
 		foreach ( $responsive->get_modes() as $device ) {
 			$is_desktop = 'desktop' === $device;
@@ -13575,6 +13705,15 @@ class ET_Builder_Element {
 			if ( $use_background_image_options && 'fields_only' !== $use_background_image_options ) {
 				$background_image = $responsive->get_inheritance_background_value( $this->props, 'background_image', $device, 'background', $this->fields_unprocessed );
 				$parallax         = $responsive->get_any_value( $this->props, "parallax{$suffix}", 'off' );
+
+				// Determine whether force inline styles.
+				if ( ! self::$forced_inline_styles ) {
+					$background_image_field = $responsive->get_field_name( 'background_image', $device );
+					$raw                    = isset( $this->attrs_unprocessed[ $background_image_field ] ) ? $this->attrs_unprocessed[ $background_image_field ] : '';
+					if ( $this->_is_dynamic_value( $background_image_field, $raw, $dynamic_attributes ) ) {
+						self::$forced_inline_styles = true;
+					}
+				}
 
 				// Featured image as background is in higher priority.
 				if ( $this->featured_image_background ) {
@@ -13839,6 +13978,15 @@ class ET_Builder_Element {
 				$background_image_hover = $responsive->get_inheritance_background_value( $this->props, 'background_image', 'hover', 'background', $this->fields_unprocessed );
 				$parallax_hover         = $hover->get_raw_value( 'parallax', $this->props );
 
+				// Determine whether force inline styles.
+				if ( ! self::$forced_inline_styles ) {
+					$background_image_field = 'background_image__hover';
+					$raw                    = isset( $this->attrs_unprocessed[ $background_image_field ] ) ? $this->attrs_unprocessed[ $background_image_field ] : '';
+					if ( $this->_is_dynamic_value( $background_image_field, $raw, $dynamic_attributes ) ) {
+						self::$forced_inline_styles = true;
+					}
+				}
+
 				// Featured image as background is in higher priority.
 				if ( $this->featured_image_background ) {
 					$featured_image         = et_()->array_get( $this->props, 'featured_image', '' );
@@ -14063,6 +14211,15 @@ class ET_Builder_Element {
 			if ( $use_background_image_options && 'fields_only' !== $use_background_image_options ) {
 				$background_image_sticky = $responsive->get_inheritance_background_value( $this->props, 'background_image', 'sticky', 'background', $this->fields_unprocessed );
 				$parallax_sticky         = $sticky->get_raw_value( 'parallax', $this->props );
+
+				// Determine whether force inline styles.
+				if ( ! self::$forced_inline_styles ) {
+					$background_image_field = 'background_image__sticky';
+					$raw                    = isset( $this->attrs_unprocessed[ $background_image_field ] ) ? $this->attrs_unprocessed[ $background_image_field ] : '';
+					if ( $this->_is_dynamic_value( $background_image_field, $raw, $dynamic_attributes ) ) {
+						self::$forced_inline_styles = true;
+					}
+				}
 
 				// Featured image as background is in higher priority.
 				if ( $this->featured_image_background ) {

@@ -1,3 +1,46 @@
+version 4.9 ( updated 02-10-2021 )
+- Introduced Divi's new global color system.
+- Fixed an issue with WooCommerce login on the Checkout page where login error notices would not be displayed in some cases.
+- Fixed an issue with the Contact Form module displaying unwanted additional options for all field types.
+- Fixed issue with Divider flip functionality on Safari.
+- Fixed Theme Builder Static CSS cache not bursting on the TB layout change.
+- Fixed Post Title Module's headings style of Theme Builder template affecting GB editor content.
+- Fixed the issue where button settings of the child Pricing Table element were not overriding settings of the parent Pricing Tables button.
+- Improves sub history action hooks on builder.
+- Fixed an error causing builder to not function properly when common dependencies are modified/used.
+- Fixed issue where you couldn't authorize a SalesForce account.
+- Improve LiteSpeed Cache compatibility during clear cache action.
+- Fixed call to action button hover background color from the customizer.
+	* core/admin/js/portability.js
+	* core/components/Portability.php
+	* core/components/SupportCenter.php
+	* core/components/VersionRollback.php
+	* core/components/api/OAuthHelper.php
+	* core/components/api/Service.php
+	* core/components/api/email/SalesForce.php
+	* core/components/init.php
+	* core/functions.php
+	* core/json-data/google-fonts.json
+	* core/ui/utils/attribute-binder.js
+	* core/ui/utils/frame-helpers.js
+	* core/ui/utils/frames.js
+	* core/ui/utils/utils.js
+	* functions.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/class-et-builder-settings.php
+	* includes/builder/core.php
+	* includes/builder/feature/gutenberg/EditorTypography.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/theme-builder/frontend.php
+	* includes/builder/functions.php
+	* includes/builder/module/ContactFormItem.php
+	* includes/builder/module/PricingTablesItem.php
+	* includes/builder/module/SliderItem.php
+	* includes/builder/plugin-compat/woocommerce.php
+	* includes/builder/plugin-compat/wp-simple-firewall.php
+
 version 4.8.2 ( updated 01-28-2021 )
 - Changed default filename for Layout Export as the Page Title.
 - Fixed wrong  options filter placement in expanded single panel content settings modal.

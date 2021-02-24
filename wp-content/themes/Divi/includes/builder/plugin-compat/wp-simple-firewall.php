@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin compatibility for WP Simple Firewall (Shield Security) plugin.
  *
- * @since ??
+ * @since 4.8.2
  *
  * @link https://wordpress.org/plugins/wp-simple-firewall/
  */
@@ -28,7 +28,7 @@ class ET_Builder_Plugin_Compat_WP_Simple_Firewall extends ET_Builder_Plugin_Comp
 	/**
 	 * Constructor
 	 *
-	 * @since ??
+	 * @since 4.8.2
 	 */
 	public function __construct() {
 		$this->init_hooks();
@@ -37,7 +37,7 @@ class ET_Builder_Plugin_Compat_WP_Simple_Firewall extends ET_Builder_Plugin_Comp
 	/**
 	 * Hook methods to WordPress
 	 *
-	 * @since ??
+	 * @since 4.8.2
 	 *
 	 * @return void
 	 */
@@ -54,7 +54,7 @@ class ET_Builder_Plugin_Compat_WP_Simple_Firewall extends ET_Builder_Plugin_Comp
 	/**
 	 * Inject "blob:" property into Content-Security-Policy HTTP header.
 	 *
-	 * @since ??
+	 * @since 4.8.2
 	 *
 	 * @param array $headers Associative array of headers to be sent.
 	 *

@@ -1,3 +1,10 @@
+= 3.3.8 =
+* Added option to set footer menu alignment
+* Improved footer option organization and wording
+
+= 3.3.7 =
+* Added Site-wide Settings > Accessibility > Enable Zooming option
+
 = 3.3.6 =
 * Updated title / tagline feature to omit tagline element when not visible
 * Fixed custom overlay icon positioning in fullwidth portfolio

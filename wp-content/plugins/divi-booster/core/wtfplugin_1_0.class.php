@@ -407,14 +407,15 @@ class wtfplugin_1_0 {
 		
 		$field_name = "{$name}[{$field}]";
 		?>
-		<input type="checkbox" name="<?php esc_attr_e($field_name); ?>" value="1" <?php checked($is_checked,1); ?>/>
+		<input id="dbdb-<?php esc_attr_e($feature_slug); ?>-<?php esc_attr_e($field);?>" type="checkbox" name="<?php esc_attr_e($field_name); ?>" value="1" <?php checked($is_checked,1); ?>/>
 		<?php
 	}
 	
 	function selectpicker($file, $field, $options, $selected) { 
+		$feature_slug = $this->feature_slug($file);
 		list($name, $option) = $this->get_setting_bases($file); ?>
 		<div class="wtf-select">
-		<select name="<?php echo $name; ?><?php echo $field; ?>">
+		<select id="dbdb-<?php esc_attr_e($feature_slug); ?>-<?php esc_attr_e($field);?>" name="<?php echo $name; ?>[<?php echo $field; ?>]">
 		<?php foreach($options as $val=>$text) { ?>
 			<option value="<?php esc_attr_e($val); ?>" <?php echo ($selected==$val)?'selected':''; ?>><?php esc_html_e($text); ?></option>
 		<?php } ?>

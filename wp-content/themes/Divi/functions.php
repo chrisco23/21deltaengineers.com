@@ -5747,6 +5747,7 @@ function et_divi_add_customizer_css() {
 		<?php } ?>
 		<?php if ( ! empty( $button_text_color_hover ) || 'rgba(255,255,255,0.2)' !== $button_bg_color_hover || 'rgba(0,0,0,0)' !== $button_border_color_hover || 3 !== $button_border_radius_hover || 0 !== $button_spacing_hover ) { ?>
 			<?php echo esc_attr( $css( 'body', '.et_pb_bg_layout_light.et_pb_button:hover' ) ); ?>,
+			<?php echo esc_attr( $css( 'body', '.et_pb_bg_layout_light .et_pb_button:hover' ) ); ?>,
 			<?php echo esc_attr( $css( 'body', '.et_pb_button:hover' ) ); ?> {
 				<?php if ( ! empty( $button_text_color_hover ) ) { ?>
 					color: <?php echo esc_html( $button_text_color_hover ); ?> !important;

@@ -8,6 +8,6 @@ Version: 0.1
 Author URI: http://www.divibooster.com
 */
 
-include_once(dirname(__FILE__).'/dbdb-socialmediafollow-socialnetworks-before.php');
-include_once(dirname(__FILE__).'/dbdb-socialmediafollow-socialnetworks-main.php');
+include_once(dirname(__FILE__).'/socialmediafollownetworks-before.php');
+include_once(dirname(__FILE__).'/socialmediafollownetworks-main.php');
 

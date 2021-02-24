@@ -195,6 +195,7 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 				'description'     => esc_html__( 'Choose the type of field', 'et_builder' ),
 				'affects'         => array(
 					'checkbox_options',
+					'booleancheckbox_options',
 					'radio_options',
 					'select_options',
 					'min_length',

@@ -8,7 +8,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '4.8.2' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '4.9.0' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -12369,4 +12369,118 @@ if ( ! function_exists( 'et_builder_generate_css_style' ) ) {
 
 		return sprintf( '%s: %s;', $args['style'], $args['prefix'] . $args['value'] . $args['suffix'] );
 	}
+}
+
+if ( ! function_exists( 'et_builder_default_colors_ajax_update_handler' ) ) :
+	/**
+	 * Default colors AJAX update handler.
+	 *
+	 * @since 4.9.0
+	 */
+	function et_builder_default_colors_ajax_update_handler() {
+		// Get nonce from $_POST.
+		$nonce = filter_input( INPUT_POST, 'et_builder_default_colors_nonce', FILTER_SANITIZE_STRING );
+
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'et_builder_default_colors_update' ) ) {
+			wp_send_json_error();
+		}
+
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error();
+		}
+
+		// Get default_colors from $_POST.
+		$post_default_colors = filter_input( INPUT_POST, 'default_colors', FILTER_SANITIZE_STRING );
+		$default_colors      = sanitize_text_field( wp_unslash( $post_default_colors ) );
+
+		et_update_option( 'divi_color_palette', str_replace( ',', '|', $default_colors ) );
+
+		wp_send_json_success();
+	}
+endif;
+
+add_action( 'wp_ajax_et_builder_default_colors_update', 'et_builder_default_colors_ajax_update_handler' );
+
+if ( ! function_exists( 'et_builder_global_colors_ajax_save_handler' ) ) :
+	/**
+	 * Global colors AJAX save handler.
+	 *
+	 * @since 4.9.0
+	 */
+	function et_builder_global_colors_ajax_save_handler() {
+		// Get nonce from $_POST.
+		$nonce = filter_input( INPUT_POST, 'et_builder_global_colors_save_nonce', FILTER_SANITIZE_STRING );
+
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'et_builder_global_colors_save' ) ) {
+			wp_send_json_error();
+		}
+
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error();
+		}
+
+		// Get colors from $_POST.
+		$post_colors   = filter_input( INPUT_POST, 'global_colors', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		$global_colors = array();
+
+		if ( is_array( $post_colors ) ) {
+			foreach ( $post_colors as $data_id => $data ) {
+				// Sanitize data_id (e.g: gcid-3330f0vf7 ).
+				$global_id = sanitize_text_field( $data_id );
+
+				foreach ( $data as $type => $value ) {
+					// Sanitize both type (e.g: color, active) and value (color value, yes/no).
+					$global_colors[ $global_id ][ sanitize_text_field( $type ) ] = sanitize_text_field( $value );
+				}
+			}
+		}
+
+		if ( empty( $global_colors ) ) {
+			wp_send_json_error();
+		}
+
+		// Global Color data has been sanitized above.
+		et_update_option( 'et_global_colors', $global_colors );
+		ET_Core_PageResource::remove_static_resources( 'all', 'all' );
+
+		wp_send_json_success();
+	}
+endif;
+
+add_action( 'wp_ajax_et_builder_global_colors_save', 'et_builder_global_colors_ajax_save_handler' );
+
+/**
+ * Get all global colors.
+ *
+ * @since 4.9.0
+ *
+ * @return array
+ */
+function et_builder_get_all_global_colors() {
+	return et_get_option( 'et_global_colors' );
+}
+
+/**
+ * Get a global color info by id.
+ *
+ * @since 4.9.0
+ *
+ * @param string $color_id Id of global color.
+ *
+ * @return array
+ */
+function et_builder_get_global_color_info( $color_id ) {
+	$colors = et_builder_get_all_global_colors();
+
+	if ( empty( $colors ) || ! array_key_exists( $color_id, $colors ) ) {
+		return null;
+	}
+
+	// if replaced value exists, return color info with that replaced id.
+	if ( isset( $colors[ $color_id ]['replaced_with'] ) ) {
+		$replaced_id = $colors[ $color_id ]['replaced_with'];
+		return $colors[ $replaced_id ];
+	}
+
+	return $colors[ $color_id ];
 }

@@ -666,7 +666,7 @@ class ET_Core_SupportCenter {
 		wp_enqueue_style( 'et-core-admin' );
 		wp_enqueue_script( 'et-core-admin' );
 
-		// Load only on `_et_support_center` pages
+		// Load only on `_et_support_center` pages.
 		if ( strpos( $hook, '_et_support_center' ) ) {
 			// Core Admin CSS
 			wp_enqueue_style( 'et-core',

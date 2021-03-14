@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '40d7b78e02223728e407e3919011bb394813062a',
+    'reference' => '22d9f81fbc1d94a24ab360b06a8de6b3cf2def79',
     'name' => 'awesomemotive/all-in-one-seo-pack-pro',
   ),
   'versions' => 
@@ -41,7 +41,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '40d7b78e02223728e407e3919011bb394813062a',
+      'reference' => '22d9f81fbc1d94a24ab360b06a8de6b3cf2def79',
     ),
     'monolog/monolog' => 
     array (

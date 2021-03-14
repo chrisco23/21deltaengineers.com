@@ -1,6 +1,11 @@
 <?php
 namespace AIOSEO\Plugin\Common\Meta;
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Handles the robots meta tag.
  *
@@ -29,6 +34,24 @@ class Robots {
 		'max-image-preview' => '',
 		'max-video-preview' => ''
 	];
+
+	/**
+	 * Class constructor.
+	 *
+	 * @since 4.0.16
+	 */
+	public function __construct() {
+		add_action( 'wp_head', [ $this, 'disableWpRobotsCore' ], -1 );
+	}
+
+	/**
+	 * Prevents WP Core from outputting its own robots meta tag.
+	 *
+	 * @since 4.0.16
+	 */
+	public function disableWpRobotsCore() {
+		remove_all_filters( 'wp_robots' );
+	}
 
 	/**
 	 * Returns the robots meta tag value.

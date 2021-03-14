@@ -1,5 +1,9 @@
 <?php
 namespace AIOSEO\Plugin {
+	// Exit if accessed directly.
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit;
+	}
 
 	/**
 	 * Main AIOSEO class.
@@ -328,6 +332,10 @@ namespace AIOSEO\Plugin {
 }
 
 namespace {
+	// Exit if accessed directly.
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit;
+	}
 
 	/**
 	 * The function which returns the one AIOSEO instance.

@@ -1,6 +1,11 @@
 <?php
 namespace AIOSEO\Plugin\Lite\Admin\Notices;
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use AIOSEO\Plugin\Common\Admin\Notices as CommonNotices;
 use AIOSEO\Plugin\Common\Models;
 

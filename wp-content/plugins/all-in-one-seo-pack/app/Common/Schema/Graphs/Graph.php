@@ -1,6 +1,11 @@
 <?php
 namespace AIOSEO\Plugin\Common\Schema\Graphs;
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * The base graph class.
  *
@@ -25,25 +30,30 @@ abstract class Graph {
 	 * @return array $data    The image graph data.
 	 */
 	protected function image( $imageId, $graphId ) {
-		$imageId = is_string( $imageId ) && ! is_numeric( $imageId ) ? aioseo()->helpers->attachmentUrlToPostId( $imageId ) : $imageId;
+		$attachmentId = is_string( $imageId ) && ! is_numeric( $imageId ) ? aioseo()->helpers->attachmentUrlToPostId( $imageId ) : $imageId;
+		$imageUrl     = wp_get_attachment_image_url( $attachmentId, 'full' );
 
 		$data = [
 			'@type' => 'ImageObject',
 			'@id'   => trailingslashit( home_url() ) . '#' . $graphId,
-			'url'   => wp_get_attachment_image_url( $imageId, 'full' ),
+			'url'   => $imageUrl ? $imageUrl : $imageId,
 		];
 
-		$metaData = wp_get_attachment_metadata( $imageId );
+		if ( ! $attachmentId ) {
+			return $data;
+		}
+
+		$metaData = wp_get_attachment_metadata( $attachmentId );
 		if ( $metaData ) {
 			$data['width']  = $metaData['width'];
 			$data['height'] = $metaData['height'];
 		}
 
-		$caption = wp_get_attachment_caption( $imageId );
+		$caption = wp_get_attachment_caption( $attachmentId );
 		if ( false !== $caption || ! empty( $caption ) ) {
 			$data['caption'] = $caption;
 		}
-		return array_filter( $data );
+		return $data;
 	}
 
 	/**

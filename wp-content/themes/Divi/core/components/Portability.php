@@ -305,12 +305,14 @@ class ET_Core_Portability {
 				$data = array( $post_data['ID'] => $post_data['post_content'] );
 
 				if ( isset( $_POST['global_presets'] ) ) {
-					$post_global_presets = filter_input( INPUT_POST, 'global_presets', FILTER_SANITIZE_STRING );
+					// phpcs:ignore ET.Sniffs.ValidatedSanitizedInput.InputNotSanitized -- filter_post_data() function does sanitation.
+					$post_global_presets = $this->_filter_post_data( $_POST['global_presets'] );
 					$global_presets      = json_decode( stripslashes( $post_global_presets ) );
 				}
 
 				if ( isset( $_POST['global_colors'] ) ) {
-					$post_global_colors = filter_input( INPUT_POST, 'global_colors', FILTER_SANITIZE_STRING );
+					// phpcs:ignore ET.Sniffs.ValidatedSanitizedInput.InputNotSanitized -- filter_post_data() function does sanitation.
+					$post_global_colors = $this->_filter_post_data( $_POST['global_colors'] );
 					$global_colors      = json_decode( stripslashes( $post_global_colors ) );
 				}
 			}
@@ -1925,6 +1927,17 @@ class ET_Core_Portability {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Filters a variable with string filter
+	 *
+	 * @param mixed $data - Value to filter.
+	 *
+	 * @return mixed
+	 */
+	protected function _filter_post_data( $data ) {
+		return filter_var( $data, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES );
 	}
 
 	/**

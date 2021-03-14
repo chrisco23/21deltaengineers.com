@@ -80,7 +80,7 @@ function db_add_module_field_filter() {
 				if ($obj instanceof ET_Builder_Element) {
 					
 					// Apply field whitelist for Divi pre-3.1
-					if (dbdb_is_divi('3.1', '<')) {
+					if (dbdb_is_divi('3.1', '<') && isset($obj->whitelisted_fields) && is_array($obj->whitelisted_fields)) {
 						$obj->whitelisted_fields = apply_filters("dbmo_{$slug}_whitelisted_fields", $obj->whitelisted_fields); 
 					}
 	

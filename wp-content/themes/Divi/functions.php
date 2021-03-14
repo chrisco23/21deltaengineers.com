@@ -4773,16 +4773,16 @@ function et_load_social_icons() {
 	echo '</div>';
 	?>
 	<script type="text/javascript">
-      ( function( $ ) {
-        var isCustomPostType = <?php echo json_encode( $is_custom_post_type ); ?>;
+		(function($) {
+			var isCustomPostType = <?php echo wp_json_encode( $is_custom_post_type ); ?>;
 
-        $(document).ready(function() {
-          $(document).trigger('et-customizer-preview-load', {
-            isCustomPostType: isCustomPostType,
-            selectorWrapper: <?php echo json_encode( ET_BUILDER_CSS_PREFIX ); ?>
-    	  });
-        });
-      }( jQuery ) );
+			$(function() {
+				$(document).trigger('et-customizer-preview-load', {
+					isCustomPostType: isCustomPostType,
+					selectorWrapper: <?php echo wp_json_encode( ET_BUILDER_CSS_PREFIX ); ?>
+				});
+			});
+		}(jQuery));
 	</script>
 	<?php
 }

@@ -1,6 +1,11 @@
 <?php
 namespace AIOSEO\Plugin\Common\Utils;
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use AIOSEO\Plugin\Common\Models;
 use AIOSEO\Plugin\Common\Tools;
 use AIOSEO\Plugin\Common\Traits\Helpers as TraitHelpers;
@@ -1969,6 +1974,21 @@ class Helpers {
 	 */
 	public function escapeRegexReplacement( $string ) {
 		return str_replace( '$', '\$', $string );
+	}
+
+	/**
+	 * preg_replace but with the replacement escaped.
+	 *
+	 * @since 4.0.10
+	 *
+	 * @param  string $pattern     The pattern to search for.
+	 * @param  string $replacement The replacement string.
+	 * @param  string $subject     The subject to search in.
+	 * @return string              The subject with matches replaced.
+	 */
+	public function pregReplace( $pattern, $replacement, $subject ) {
+		$replacement = $this->escapeRegexReplacement( $replacement );
+		return preg_replace( $pattern, $replacement, $subject );
 	}
 
 	/**

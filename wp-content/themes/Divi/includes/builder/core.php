@@ -6208,8 +6208,8 @@ if ( ! function_exists( 'et_builder_show_bfb_welcome_modal' ) ) :
 			</div>
 		</div> );
 		<script>
-			jQuery(document).ready(function() {
-				etCore.modalOpen(jQuery('.et-builder-bfb-welcome-modal:first'));
+			jQuery(function() {
+				etCore.modalOpen(jQuery('.et-builder-bfb-welcome-modal').first());
 			});
 		</script>
 		<?php

@@ -1148,8 +1148,8 @@ class ET_Builder_Module_Fullwidth_Menu extends ET_Builder_Module {
 		// Mobile Menu Background Color.
 		$is_mobile_menu_bg_responsive = et_pb_responsive_options()->is_responsive_enabled( $this->props, 'mobile_menu_bg_color' );
 		$mobile_menu_bg_color         = empty( $mobile_menu_bg_color ) ? $background_color : $mobile_menu_bg_color;
-		$mobile_menu_bg_color_tablet  = empty( $mobile_menu_bg_color_tablet ) ? $background_color : $mobile_menu_bg_color_tablet;
-		$mobile_menu_bg_color_phone   = empty( $mobile_menu_bg_color_phone ) ? $background_color : $mobile_menu_bg_color_phone;
+		$mobile_menu_bg_color_tablet  = empty( $mobile_menu_bg_color_tablet ) ? $mobile_menu_bg_color : $mobile_menu_bg_color_tablet;
+		$mobile_menu_bg_color_phone   = empty( $mobile_menu_bg_color_phone ) ? $mobile_menu_bg_color_tablet : $mobile_menu_bg_color_phone;
 		$mobile_menu_bg_color_values  = array(
 			'desktop' => esc_html( $mobile_menu_bg_color ),
 			'tablet'  => $is_mobile_menu_bg_responsive ? esc_html( $mobile_menu_bg_color_tablet ) : '',

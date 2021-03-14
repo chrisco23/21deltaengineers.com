@@ -1,6 +1,11 @@
 <?php
 namespace AIOSEO\Plugin\Common\Utils;
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use AIOSEO\Plugin\Common\Models;
 use AIOSEO\Plugin\Common\Traits;
 
@@ -507,7 +512,7 @@ TEMPLATE
 
 			// Search appearance
 			$defaultTitle       = '#post_title #separator_sa #site_title';
-			$defaultDescription = '#post_content';
+			$defaultDescription = $postType['hasExcerpt'] ? '#post_excerpt' : '#post_content';
 			$defaultSchemaType  = 'WebPage';
 			$defaultWebPageType = 'WebPage';
 			$defaultArticleType = 'BlogPosting';
@@ -908,6 +913,7 @@ TEMPLATE
 			$this->options['sitemap']['general']['additionalPages']['pages']['value']         = $this->sanitizeField( $options['sitemap']['general']['additionalPages']['pages'], 'array' );
 			$this->options['sitemap']['general']['advancedSettings']['excludePosts']['value'] = $this->sanitizeField( $options['sitemap']['general']['advancedSettings']['excludePosts'], 'array' );
 			$this->options['sitemap']['general']['advancedSettings']['excludeTerms']['value'] = $this->sanitizeField( $options['sitemap']['general']['advancedSettings']['excludeTerms'], 'array' );
+			$this->options['sitemap']['rss']['postTypes']['included']['value']                = $this->sanitizeField( $options['sitemap']['rss']['postTypes']['included'], 'array' );
 		}
 
 		if ( ! empty( $options['advanced'] ) ) {

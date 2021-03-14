@@ -115,6 +115,11 @@ class ET_GB_Editor_Typography {
 	private function _initialize() {
 		global $post;
 
+		// Bail early if no post found.
+		if ( empty( $post ) ) {
+			return;
+		}
+
 		self::$body_selectors  = array( 'p', 'ol', 'ul', 'dl', 'dt' );
 		$this->_body_selector  = self::_generate_selectors( self::$body_selectors, '.editor-styles-wrapper .wp-block .wp-block-freeform ' );
 		$this->_body_selector .= ',' . self::_generate_selectors( self::$body_selectors, '.block-editor-block-list__layout ', '.wp-block' );

@@ -1,3 +1,6 @@
+= 3.3.9 =
+* Fixed unsupported operand error in countdown timer module option
+
 = 3.3.8 =
 * Added option to set footer menu alignment
 * Improved footer option organization and wording

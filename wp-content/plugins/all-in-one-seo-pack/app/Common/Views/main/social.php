@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact
 
 // Set context for meta class to social meta.
-$socialMeta = aioseo()->social->output->getMeta();
+$socialMeta = array_filter( aioseo()->social->output->getMeta() );
 if ( ! $socialMeta || ! count( $socialMeta ) ) {
 	return;
 }

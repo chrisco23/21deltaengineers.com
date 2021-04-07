@@ -1057,8 +1057,7 @@ class Admin {
 
 		// Remove all AIOSEO transients.
 		if ( isset( $_GET['aioseo-clear-cache'] ) ) {
-			$table = aioseo()->db->db->options;
-			aioseo()->db->db->query( "DELETE FROM {$table} WHERE option_name LIKE '\_aioseo\_cache\_%'" );
+			aioseo()->transients->clearCache();
 		}
 
 		if ( isset( $_GET['aioseo-image-rescan'] ) ) {

@@ -18,22 +18,6 @@ function wtfdivi011_add_body_classes($classes) {
 }
 add_filter('body_class', 'wtfdivi011_add_body_classes');
 
-// Deals with html checkbox issue where unchecked values are not submitted. Uses zeros from hidden field as divider.
-function wtfdivi011_html_checkbox_vals($orig) {
-	//print_r($orig); exit;
-	$vals = array();
-	while ($count = count($orig)) {
-		if ($count>=2 and $orig[1]=='1') { // starts with 0,1 so enabled
-			$vals[]=1; 
-			$orig = array_slice($orig, 2); 
-		} else { 
-			$vals[]=0; 
-			$orig = array_slice($orig,1); 
-		}
-	}
-	return $vals;
-}
-
 function db011_user_css($plugin) {
 	list($name, $option) = $plugin->get_setting_bases(__FILE__); 
 	
@@ -41,11 +25,12 @@ function db011_user_css($plugin) {
 	$wtfdivi011_media_queries = wtfdivi011_media_queries();
 
 	if (isset($option['customcss'])) {
-		
+
+        $option = DBDBCssManagerOption::fromRawOption($option)->toArray();
 		// Output each enabled CSS block	
-		foreach(wtfdivi011_html_checkbox_vals($option['customcss']['enabled']) as $k=>$enabled) {
+        foreach($option['customcss']['enabled'] as $k=>$enabled) {
+
 			if ($k==0) { continue; } // ignore template block
-			
 			
 			if ($enabled) {
 				

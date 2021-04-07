@@ -77,7 +77,7 @@ class ImportExport {
 					$sections[ $sectionLabel ][ $matches[1] ] = '';
 				}
 			} else {
-				return false;
+				continue;
 			}
 		}
 

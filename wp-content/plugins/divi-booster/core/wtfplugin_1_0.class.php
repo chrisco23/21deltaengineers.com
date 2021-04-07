@@ -413,9 +413,13 @@ class wtfplugin_1_0 {
 	
 	function selectpicker($file, $field, $options, $selected) { 
 		$feature_slug = $this->feature_slug($file);
-		list($name, $option) = $this->get_setting_bases($file); ?>
+		list($name, $option) = $this->get_setting_bases($file); 
+        $nameAttribRoot =  DBDBHtmlNameAttribute::fromString($name);
+        $nameAttrib = $nameAttribRoot->withFields($field);
+        $nameAttribStr = $nameAttrib->toString();
+        ?>
 		<div class="wtf-select">
-		<select id="dbdb-<?php esc_attr_e($feature_slug); ?>-<?php esc_attr_e($field);?>" name="<?php echo $name; ?>[<?php echo $field; ?>]">
+		<select id="dbdb-<?php esc_attr_e($feature_slug); ?>-<?php esc_attr_e($field);?>" name="<?php esc_attr_e($nameAttribStr); ?>">
 		<?php foreach($options as $val=>$text) { ?>
 			<option value="<?php esc_attr_e($val); ?>" <?php echo ($selected==$val)?'selected':''; ?>><?php esc_html_e($text); ?></option>
 		<?php } ?>

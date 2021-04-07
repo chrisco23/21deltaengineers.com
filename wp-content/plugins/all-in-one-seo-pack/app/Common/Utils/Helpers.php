@@ -36,9 +36,10 @@ class Helpers {
 	 * @param  string      $url     The URL to parse.
 	 * @param  string      $medium  The UTM medium parameter.
 	 * @param  string|null $content The UTM content parameter or null.
+	 * @param  boolean     $esc     Whether or not to escape the URL.
 	 * @return string               The new URL.
 	 */
-	public function utmUrl( $url, $medium, $content = null ) {
+	public function utmUrl( $url, $medium, $content = null, $esc = true ) {
 		// First, remove any existing utm parameters on the URL.
 		$url = remove_query_arg( [
 			'utm_source',
@@ -60,7 +61,8 @@ class Helpers {
 		}
 
 		// Return the new URL.
-		return esc_url( add_query_arg( $args, $url ) );
+		$url = add_query_arg( $args, $url );
+		return $esc ? esc_url( $url ) : $url;
 	}
 
 	/**
@@ -456,6 +458,7 @@ class Helpers {
 				'rssSitemapUrl'     => home_url( '/sitemap.rss' ),
 				'robotsTxtUrl'      => $this->getSiteUrl() . '/robots.txt',
 				'blockedBotsLogUrl' => wp_upload_dir()['baseurl'] . '/aioseo-logs/aioseo-bad-bot-blocker.log',
+				'upgradeUrl'        => apply_filters( 'aioseo_upgrade_link', AIOSEO_MARKETING_URL ),
 				'staticHomePage'    => 'page' === get_option( 'show_on_front' ) ? get_edit_post_link( get_option( 'page_on_front' ), 'url' ) : null,
 				'connect'           => add_query_arg( [
 					'siteurl'  => site_url(),
@@ -546,8 +549,8 @@ class Helpers {
 				'priority'                    => ! empty( $post->priority ) ? $post->priority : 'default',
 				'frequency'                   => ! empty( $post->frequency ) ? $post->frequency : 'default',
 				'permalink'                   => get_the_permalink(),
-				'title'                       => ! empty( $post->title ) ? $post->title : '',
-				'description'                 => ! empty( $post->description ) ? $post->description : '',
+				'title'                       => ! empty( $post->title ) ? $post->title : aioseo()->meta->title->getPostTypeTitle( $postTypeObj->name ),
+				'description'                 => ! empty( $post->description ) ? $post->description : aioseo()->meta->description->getPostTypeDescription( $postTypeObj->name ),
 				'keywords'                    => ! empty( $post->keywords ) ? $post->keywords : wp_json_encode( [] ),
 				'keyphrases'                  => ! empty( $post->keyphrases )
 					? json_decode( $post->keyphrases )
@@ -2011,6 +2014,9 @@ class Helpers {
 			'WooCommerce Order Tracking' => '[woocommerce_order_tracking]',
 			'WooCommerce Cart'           => '[woocommerce_cart]',
 			'WooCommerce Registration'   => '[wwp_registration_form]',
+			'WISDM Group Registration'   => '[wdm_group_users]',
+			'WISDM Quiz Reporting'       => '[wdm_quiz_statistics_details]',
+			'WISDM Course Review'        => '[rrf_course_review]'
 		];
 
 		$conflictingShortcodes = apply_filters( 'aioseo_conflicting_shortcodes', $conflictingShortcodes );

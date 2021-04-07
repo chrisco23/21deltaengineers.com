@@ -32,9 +32,6 @@ function dbmo_et_pb_accordion_add_closeable_field($fields) {
 // Process added options
 function db_pb_accordion_add_closeable_code_to_content($content, $args, $module='et_pb_accordion') {
 
-	// Don't apply settings to excerpts
-	if (!is_singular()) { return $content; }	
-
 	// Get the class
 	$order_class = divibooster_get_order_class_from_content('et_pb_accordion', $content);
 	if (!$order_class) { return $content; }

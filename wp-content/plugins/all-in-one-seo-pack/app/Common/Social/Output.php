@@ -27,7 +27,7 @@ class Output {
 			! is_singular() &&
 			! aioseo()->helpers->isWooCommerceShopPage()
 		) {
-			return;
+			return [];
 		}
 
 		return apply_filters( 'aioseo_social_meta_tags', $this->getMetaHelper() );

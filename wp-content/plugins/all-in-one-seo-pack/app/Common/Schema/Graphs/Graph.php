@@ -75,18 +75,13 @@ abstract class Graph {
 			return [];
 		}
 
-		$caption = trim( sprintf( '%1$s %2$s', get_the_author_meta( 'first_name', $userId ), get_the_author_meta( 'last_name', $userId ) ) );
-		if ( ! $caption ) {
-			$caption = get_the_author_meta( 'display_name', $userId );
-		}
-
 		return array_filter( [
 			'@type'   => 'ImageObject',
 			'@id'     => aioseo()->schema->context['url'] . "#$graphId",
 			'url'     => $avatar['url'],
 			'width'   => $avatar['width'],
 			'height'  => $avatar['height'],
-			'caption' => $caption
+			'caption' => get_the_author_meta( 'display_name', $userId )
 		] );
 	}
 

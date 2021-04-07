@@ -1,3 +1,15 @@
+= 3.4.3 =
+* Fixed errors in CSS manager feature
+
+= 3.4.2 =
+* Fixed person module email and website not showing in theme builder layouts
+
+= 3.4.1 =
+* Fixed module options not applied in theme builder on some pages
+
+= 3.4.0 =
+* Added option to enable menu separator bars on menu module
+
 = 3.3.9 =
 * Fixed unsupported operand error in countdown timer module option
 

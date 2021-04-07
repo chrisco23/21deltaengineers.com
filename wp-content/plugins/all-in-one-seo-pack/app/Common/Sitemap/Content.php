@@ -252,8 +252,12 @@ class Content {
 	 */
 	private function postArchive() {
 		$entries = [];
-		foreach ( aioseo()->sitemap->helpers->includedPostTypes() as $postType ) {
-			if ( in_array( $postType, [ 'post', 'page', 'product' ], true ) ) {
+		foreach ( aioseo()->sitemap->helpers->includedPostTypes( true ) as $postType ) {
+			if (
+				aioseo()->options->noConflict()->searchAppearance->dynamic->archives->has( $postType ) &&
+				! aioseo()->options->searchAppearance->dynamic->archives->$postType->advanced->robotsMeta->default &&
+				aioseo()->options->searchAppearance->dynamic->archives->$postType->advanced->robotsMeta->noindex
+			) {
 				continue;
 			}
 

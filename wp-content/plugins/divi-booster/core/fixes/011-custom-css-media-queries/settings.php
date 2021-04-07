@@ -14,15 +14,7 @@ $media_queries = is_array($media_queries)?$media_queries:array();
 <input type="hidden" name="<?php echo $name; ?>[enabled]" value="1"/>
 
 <?php 
-// set up a blank custom css box if none exists
-if (empty($option['customcss']['css'])) { 
-	$option['customcss']['css']=array('');
-	$option['customcss']['enabled']=array(1);
-	$option['customcss']['mediaqueries']=array('all');
-} else {
-	// fix checkbox vals
-	$option['customcss']['enabled'] = wtfdivi011_html_checkbox_vals($option['customcss']['enabled']);
-}
+$option = DBDBCssManagerOption::fromRawOption($option)->toArray();
 
 foreach($option['customcss']['css'] as $k=>$v) { 
 
@@ -90,7 +82,7 @@ foreach($option['customcss']['css'] as $k=>$v) {
 		
 ?>
 
-	<input type="hidden" name="<?php echo $name; ?>[customcss][enabled][]" value="0"/>
+	<input class="wtfdivi011_cssblock_divider" type="hidden" name="<?php echo $name; ?>[customcss][enabled][]" value="0"/>
 	
 	<div class="wtfdivi011_cssblock">
 		
@@ -129,6 +121,7 @@ jQuery(function($){
 	
 	/* Create new textbox when add clicked */
 	$('.wtfdivi011_add').click(function(){
+		$(".wtfdivi011_cssblock_divider").first().clone(true).insertBefore(this);
 		var box = $(".wtfdivi011_cssblock:nth-of-type(1)").clone(true).insertBefore(this);
 		box.find('select option').prop('selected', false);
 		box.find('input[type=checkbox]').prop('checked', true);

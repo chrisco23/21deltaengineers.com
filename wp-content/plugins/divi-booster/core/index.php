@@ -35,11 +35,10 @@ function booster_enable_updates($file) {
 	try {
 		if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
 			$myUpdateChecker = \DiviBooster\Puc_v4_Factory::buildUpdateChecker(
-				dbdb_update_url(),
+				DBDBUpdateServer::create()->updatesUrl(),
 				$file, //Full path to the main plugin file or functions.php.
 				dbdb_slug()
 			);
-			//$MyUpdateChecker = new Divi_Booster_PluginUpdateChecker(dbdb_update_url(), $file, dbdb_slug());
 		}
 	} catch (Exception $e) { }
 }

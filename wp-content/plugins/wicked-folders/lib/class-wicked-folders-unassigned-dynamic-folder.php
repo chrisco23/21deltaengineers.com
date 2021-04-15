@@ -11,6 +11,7 @@ class Wicked_Folders_Unassigned_Dynamic_Folder extends Wicked_Folders_Dynamic_Fo
         parent::__construct( $args );
 
         $this->show_item_count = true;
+        $this->assignable = true;
     }
 
     public function pre_get_posts( $query ) {

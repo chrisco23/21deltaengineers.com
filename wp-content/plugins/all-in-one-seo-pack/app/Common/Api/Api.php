@@ -102,6 +102,7 @@ class Api {
 			'settings/import-plugins'                             => [ 'callback' => [ 'Settings', 'importPlugins' ], 'access' => 'aioseo_tools_settings' ],
 			'settings/toggle-card'                                => [ 'callback' => [ 'Settings', 'toggleCard' ] ],
 			'settings/toggle-radio'                               => [ 'callback' => [ 'Settings', 'toggleRadio' ] ],
+			'settings/clear-cache'                                => [ 'callback' => [ 'Settings', 'clearCache' ], 'access' => 'aioseo_tools_settings' ],
 			'sitemap/deactivate-conflicting-plugins'              => [ 'callback' => [ 'Sitemaps', 'deactivateConflictingPlugins' ] ],
 			'sitemap/delete-static-files'                         => [ 'callback' => [ 'Sitemaps', 'deleteStaticFiles' ] ],
 			'tools/delete-robots-txt'                             => [ 'callback' => [ 'Tools', 'deleteRobotsTxt' ], 'access' => 'aioseo_tools_settings' ],
@@ -158,9 +159,13 @@ class Api {
 						'callback'            => is_array( $options['callback'] )
 							? [
 								(
-									class_exists( $class->getNamespaceName() . '\\' . $options['callback'][0] )
-										? $class->getNamespaceName() . '\\' . $options['callback'][0]
-										: __NAMESPACE__ . '\\' . $options['callback'][0]
+									! empty( $options['callback'][2] )
+										? $options['callback'][2] . '\\' . $options['callback'][0]
+										: (
+											class_exists( $class->getNamespaceName() . '\\' . $options['callback'][0] )
+												? $class->getNamespaceName() . '\\' . $options['callback'][0]
+												: __NAMESPACE__ . '\\' . $options['callback'][0]
+										)
 								),
 								$options['callback'][1]
 							]
@@ -204,7 +209,7 @@ class Api {
 	 */
 	private function validateAccess( $request ) {
 		$route     = str_replace( '/' . $this->namespace . '/', '', $request->get_route() );
-		$routeData = $this->getRoutes()[ $request->get_method() ][ $route ];
+		$routeData = isset( $this->getRoutes()[ $request->get_method() ][ $route ] ) ? $this->getRoutes()[ $request->get_method() ][ $route ] : [];
 
 		if ( empty( $routeData['access'] ) ) {
 			return true;

@@ -50,8 +50,14 @@
         <% if ( 'delete' == mode ) { %>
             <p><%= deleteFolderConfirmation %></p>
         <% } else { %>
-            <div class="wicked-folder-name"><input type="text" name="wicked_folder_name" placeholder="<?php _e( 'Folder name', 'wicked-folders' ); ?>" value="<%= folderName %>" /></div>
-            <div class="wicked-folder-parent"></div>
+            <div class="wicked-folder-name">
+                <label for="wicked-folder-name" class="screen-reader-text"><?php _e( 'Folder name', 'wicked-folders' ); ?>:</label>
+                <input id="wicked-folder-name" type="text" name="wicked_folder_name" placeholder="<?php _e( 'Folder name', 'wicked-folders' ); ?>" value="<%= folderName %>" />
+            </div>
+            <div class="wicked-folder-parent">
+                <label for="wicked-folder-parent" class="screen-reader-text"><?php _e( 'Parent folder', 'wicked-folders' ); ?>:</label>
+                <div></div>
+            </div>
         <% } %>
         <% if ( 'edit' == mode ) { %>
             <fieldset>
@@ -68,6 +74,14 @@
                 </p>
                 <p><a class="button wicked-clone-folder" href="#"><%= cloneFolderLink %></a></p>
             </fieldset>
+            <p class="wicked-folder-owner">
+                <label for="wicked-folder-owner-id"><%= ownerLabel %></label>
+                <select id="wicked-folder-owner-id" name="wicked_folder_owner_id">
+                    <% if ( ownerId ) { %>
+                    <option value="<%= ownerId %>" selected="selected"><%= ownerName %></option>
+                    <% } %>
+                </select>
+            </p>
         <% } %>
     </div>
     <footer>
@@ -128,10 +142,28 @@
 
 <script type="text/html" id="tmpl-wicked-post-drag-details">
     <div class="items">
-        <% posts.each( function( post ) { %>
-            <div><%= post.get( 'title' ) %></div>
-        <% } ); %>
+        <div class="title">
+            <?php _e( 'Move', 'wicked-folders' ); ?> <%= count %>
+            <% if ( 1 == count ) { %>
+                <?php _e( 'Item', 'wicked-folders' ); ?>
+            <% } else { %>
+                <?php _e( 'Items', 'wicked-folders' ); ?>
+            <% } %>
+        </div>
+        <?php _e( 'Hold SHIFT key to copy items to folder', 'wicked-folders' ); ?>
     </div>
+</script>
+
+<script type="text/html" id="tmpl-wicked-folders-notification">
+    <div class="wicked-notification-message">
+        <div class="wicked-notification-title"><%= title %></div>
+        <%= message %>
+    </div>
+    <% if ( dismissible ) { %>
+        <button class="wicked-dismiss" type="button">
+            <span class="screen-reader-text">Close</span>
+        </button>
+    <% } %>
 </script>
 
 <script>
@@ -166,7 +198,12 @@
                 lazy:           folder.lazy,
                 order:          folder.order,
                 itemCount:      folder.itemCount,
-                showItemCount:  <?php echo $show_item_counts ? 'folder.showItemCount' : 'false'; ?>
+                showItemCount:  <?php echo $show_item_counts ? 'folder.showItemCount' : 'false'; ?>,
+                ownerId:        folder.ownerId,
+                ownerName:      folder.ownerName,
+                editable:       folder.editable,
+                deletable:      folder.deletable,
+                assignable:     folder.assignable
             }) );
         });
 
@@ -189,7 +226,8 @@
             isFolderPaneVisible:    <?php echo $state->is_folder_pane_visible ? 'true' : 'false'; ?>,
             sortMode:               '<?php echo $state->sort_mode; ?>',
             showItemCount:          <?php echo $show_item_counts ? 'true' : 'false'; ?>,
-            lang:                   <?php echo $lang ? "'{$lang}'" : 'false'; ?>
+            lang:                   <?php echo $lang ? "'{$lang}'" : 'false'; ?>,
+            enableCreate:           <?php echo $enable_create ? 'true' : 'false'; ?>
         });
 
         var pane = new ObjectFolderPane({

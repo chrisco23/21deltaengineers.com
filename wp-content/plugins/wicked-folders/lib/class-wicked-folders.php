@@ -1,5 +1,7 @@
 <?php
 
+use Wicked_Folders\Wicked_Common;
+
 // Disable direct load
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
@@ -102,9 +104,10 @@ final class Wicked_Folders {
 			'Wicked_Folders_Author_Dynamic_Folder'  		=> 'lib/class-wicked-folders-author-dynamic-folder.php',
 			'Wicked_Folders_Date_Dynamic_Folder'   			=> 'lib/class-wicked-folders-date-dynamic-folder.php',
 			'Wicked_Folders_Term_Dynamic_Folder'   			=> 'lib/class-wicked-folders-term-dynamic-folder.php',
-			'Wicked_Common' 								=> 'lib/class-wicked-common.php',
+			'Wicked_Folders\Wicked_Common' 					=> 'lib/class-wicked-common.php',
 			'Wicked_Folders_Unassigned_Dynamic_Folder' 		=> 'lib/class-wicked-folders-unassigned-dynamic-folder.php',
 			'Wicked_Folders_Post_Hierarchy_Dynamic_Folder' 	=> 'lib/class-wicked-folders-post-hierarchy-dynamic-folder.php',
+			'Wicked_Folders_Object_Collection' 				=> 'lib/class-wicked-folders-object-collection.php',
         );
 
 		if ( version_compare( get_bloginfo( 'version' ), '4.7.0', '<' ) ) {
@@ -162,6 +165,12 @@ final class Wicked_Folders {
 			$this->migrate_folder_order();
 			update_option( 'wicked_folders_db_version', '2.17.5' );
 		}
+
+		if ( version_compare( $db_version, '2.18.0', '<' ) ) {
+			// Clear dynamic folder cache
+			Wicked_Common::delete_transients_with_prefix( 'wicked_folders_dynamic' );
+			update_option( 'wicked_folders_db_version', '2.18.0' );
+		}
     }
 
     public function register_taxonomies() {
@@ -210,6 +219,7 @@ final class Wicked_Folders {
 
 			register_taxonomy( $tax_name, $post_type->name, $args );
 
+			add_action( "create_{$tax_name}", array( $this, 'create_folder_term' ), 10, 2 );
         }
 
 		$done = true;
@@ -356,6 +366,9 @@ final class Wicked_Folders {
 		if ( ! $term || is_wp_error( $term ) ) {
 			$folder = false;
 		} else {
+			$owner_id 	= ( int ) get_term_meta( $term->term_id, 'wf_owner_id', true );
+			$owner_data = get_userdata( $owner_id );
+
 			if ( in_array( $post_type, $stub_types ) ) {
 				$count = ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT(tr.object_id)) AS n, tt.taxonomy FROM {$wpdb->term_relationships} AS tr INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy = %s AND tt.term_id = %d GROUP BY tt.taxonomy", $taxonomy, $term->term_id ) );
 			} else {
@@ -370,6 +383,8 @@ final class Wicked_Folders {
 				'post_type' 		=> $post_type,
 				'show_item_count' 	=> true,
 				'item_count' 		=> $count,
+				'owner_id' 			=> $owner_id,
+				'owner_name' 		=> isset( $owner_data->data->display_name ) ? $owner_data->data->display_name : '',
 			) );
 		}
 
@@ -496,6 +511,9 @@ final class Wicked_Folders {
 			'taxonomy' 			=> $taxonomy,
 			'show_item_count' 	=> true,
 			'item_count' 		=> $total_count,
+			'editable' 			=> false,
+			'deletable' 		=> false,
+			'assignable' 		=> false,
 		) );
 
 		if ( version_compare( get_bloginfo( 'version' ), '4.5.0', '<' ) ) {
@@ -513,6 +531,8 @@ final class Wicked_Folders {
 			foreach ( $terms as $term ) {
 				$term_count = isset( $counts[ $term->term_id ] ) ? $counts[ $term->term_id ]->n : 0;
 				$term_order = ( int ) get_term_meta( $term->term_id, 'wf_order', true );
+				$owner_id 	= ( int ) get_term_meta( $term->term_id, 'wf_owner_id', true );
+				$owner_data = get_userdata( $owner_id );
 
 				$folders[] = new Wicked_Folders_Term_Folder( array(
 					'id' 			=> $term->term_id,
@@ -522,6 +542,8 @@ final class Wicked_Folders {
 					'taxonomy' 		=> $taxonomy,
 					'item_count' 	=> $term_count,
 					'order' 		=> $term_order,
+					'owner_id' 		=> $owner_id,
+					'owner_name' 	=> isset( $owner_data->data->display_name ) ? $owner_data->data->display_name : '',
 				) );
 			}
 		}
@@ -531,12 +553,14 @@ final class Wicked_Folders {
 
 			$dynamic_folders = array(
 				new Wicked_Folders_Folder( array(
-					'id' 		=> 'dynamic_root',
-					'name' 		=> __( 'Dynamic Folders', 'wicked-folders' ),
-					'parent' 	=> 'root',
-					'post_type' => $post_type,
-					'taxonomy' 	=> $taxonomy,
-					'order' 	=> -100,
+					'id' 			=> 'dynamic_root',
+					'name' 			=> __( 'Dynamic Folders', 'wicked-folders' ),
+					'parent' 		=> 'root',
+					'post_type' 	=> $post_type,
+					'taxonomy' 		=> $taxonomy,
+					'order' 		=> -100,
+					'editable' 		=> false,
+					'assignable' 	=> false,
 				) ),
 			);
 
@@ -573,11 +597,12 @@ final class Wicked_Folders {
 	 * @return bool
 	 */
 	public static function enabled_for( $post_type ) {
+		// Don't allow folders to be enabled for a post type that doesn't exist
+		if ( ! post_type_exists( $post_type ) ) return false;
 
 		$post_types = Wicked_Folders::post_types();
 
 		return in_array( $post_type, $post_types );
-
 	}
 
 	/**
@@ -1360,5 +1385,15 @@ final class Wicked_Folders {
 		}
 
 		return apply_filters( 'wicked_folders_is_folder_taxonomy_translated', $translated, $taxonomy );
+	}
+
+	/**
+	 * WordPress 'create_{$taxonomy}' action. Fires when a term is inserted into
+	 * a folder taxonomy. Added in register_taxonomies function.
+	 */
+	public function create_folder_term( $term_id, $tt_id ) {
+		$user_id = get_current_user_id();
+
+		add_term_meta( $term_id, 'wf_owner_id', $user_id );
 	}
 }

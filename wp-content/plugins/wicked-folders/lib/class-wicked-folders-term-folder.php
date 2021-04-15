@@ -96,6 +96,9 @@ class Wicked_Folders_Term_Folder extends Wicked_Folders_Folder {
             throw new Exception( $term->get_error_message() );
         }
 
+        // Store owner ID for new folder
+        add_term_meta( $term['term_id'], 'wf_owner_id', $folder->owner_id );
+
         // Update the new folder's ID
         $folder->id = ( string ) $term['term_id'];
 
@@ -157,4 +160,35 @@ class Wicked_Folders_Term_Folder extends Wicked_Folders_Folder {
         return $folders;
     }
 
+    /**
+     * Generates a unique slug to facilitate creating folders with the same name.
+     *
+     * @param string $name
+     *  The name of the folder to generate a slug for.
+     *
+     * @param string $taxonomy
+     *  The taxonomy to search for name collisions in.
+     *
+     * @return string
+     *  A unique slug.
+     */
+    public static function generate_unique_slug( $name, $taxonomy ) {
+        $unique     = false;
+        $slug       = sanitize_title( $name );
+        $base_slug  = $slug;
+        $index      = 0;
+
+        while ( ! $unique ) {
+            $term = get_term_by( 'slug', $slug, $taxonomy );
+
+            if ( false == $term ) {
+                $unique = true;
+            } else {
+                $index++;
+                $slug = "{$base_slug}-{$index}";
+            }
+        }
+
+        return $slug;
+    }
 }

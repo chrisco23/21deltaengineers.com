@@ -7,16 +7,11 @@
     </h2>
     <div class="wicked-settings wicked-clearfix">
         <div class="wicked-left">
-            <form action="" method="post">
-                <input type="hidden" name="action" value="wicked_folders_save_settings" />
-                <input type="hidden" name="wicked_folders_setting_tab" value="<?php echo $active_tab; ?>" />
-                <?php wp_nonce_field( 'wicked_folders_save_settings', 'nonce' ); ?>
-                <?php foreach ( $tabs as $tab ) : ?>
-                    <?php if ( $active_tab == $tab['slug'] ) : ?>
-                        <?php call_user_func( $tab['callback'] ); ?>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </form>
+            <?php foreach ( $tabs as $tab ) : ?>
+                <?php if ( $active_tab == $tab['slug'] ) : ?>
+                    <?php call_user_func( $tab['callback'] ); ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </div>
         <div class="wicked-right">
             <div class="wicked-logo">

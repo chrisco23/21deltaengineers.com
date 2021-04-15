@@ -3,7 +3,7 @@ Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
 Tested up to: 5.7
-Stable tag: 2.17.9
+Stable tag: 2.17.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,11 @@ When you search folders by keyword, folders that don't match the keyword are gre
 6. Pro feature: media library folders
 
 == Changelog ==
+
+= 2.17.10 (April 12, 2021) =
+* Add ability to copy (instead of moving) items to folders by holding the SHIFT key when dragging
+* Display a notification when items have been moved to a folder
+* Fix folder breadcrumb links not working
 
 = 2.17.9 (March 22, 2021) =
 * Fix PHP error that can occur due to an invalid timezone identifier string

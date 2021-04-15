@@ -205,7 +205,7 @@ class BadBotBlocker {
 	 */
 	public function init() {
 		$uploadDirectory = wp_upload_dir();
-		$logDirectory    = $uploadDirectory['basedir'] . '/aioseo-logs/';
+		$logDirectory    = $uploadDirectory['basedir'] . '/aioseo/logs/';
 		if ( wp_mkdir_p( $logDirectory ) ) {
 			$wpfs     = aioseo()->helpers->wpfs();
 			$filePath = $logDirectory . 'aioseo-bad-bot-blocker.log';
@@ -254,7 +254,7 @@ class BadBotBlocker {
 	 */
 	public function getLogSize() {
 		$uploadDirectory = wp_upload_dir();
-		$logDirectory    = $uploadDirectory['basedir'] . '/aioseo-logs/';
+		$logDirectory    = $uploadDirectory['basedir'] . '/aioseo/logs/';
 		$filePath        = $logDirectory . 'aioseo-bad-bot-blocker.log';
 		$wpfs            = aioseo()->helpers->wpfs();
 		if ( @$wpfs->exists( $filePath ) ) {
@@ -273,7 +273,7 @@ class BadBotBlocker {
 	 */
 	public function clearLog() {
 		$uploadDirectory = wp_upload_dir();
-		$logDirectory    = $uploadDirectory['basedir'] . '/aioseo-logs/';
+		$logDirectory    = $uploadDirectory['basedir'] . '/aioseo/logs/';
 		$filePath        = $logDirectory . 'aioseo-bad-bot-blocker.log';
 		$wpfs            = aioseo()->helpers->wpfs();
 		if ( @$wpfs->exists( $filePath ) ) {

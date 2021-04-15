@@ -12,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 4.0.0
  */
 class Breadcrumb {
-
 	/**
 	 * Returns the breadcrumb trail for the homepage.
 	 *

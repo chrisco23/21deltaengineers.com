@@ -94,6 +94,24 @@ namespace AIOSEO\Plugin {
 		private $autoUpdates = null;
 
 		/**
+		 * Holds our addon helper and loaded addons.
+		 *
+		 * @since 4.0.17
+		 *
+		 * @var object
+		 */
+		public $addons;
+
+		/**
+		 * Holds our template helper.
+		 *
+		 * @since 4.0.17
+		 *
+		 * @var Common\Utils\Templates
+		 */
+		public $templates;
+
+		/**
 		 * Main AIOSEO Instance.
 		 *
 		 * Insures that only one instance of AIOSEO exists in memory at any one
@@ -275,6 +293,7 @@ namespace AIOSEO\Plugin {
 			$this->migration          = $this->pro ? new Pro\Migration\Migration() : new Common\Migration\Migration();
 			$this->importExport       = $this->pro ? new Pro\ImportExport\ImportExport() : new Common\ImportExport\ImportExport();
 			$this->sitemap            = $this->pro ? new Pro\Sitemap\Sitemap() : new Common\Sitemap\Sitemap();
+			$this->templates          = new Common\Utils\Templates();
 
 			if ( ! wp_doing_ajax() && ! wp_doing_cron() ) {
 				$this->rss              = new Common\Rss();
@@ -287,7 +306,6 @@ namespace AIOSEO\Plugin {
 				$this->api              = $this->pro ? new Pro\Api\Api() : new Lite\Api\Api();
 				$this->postSettings     = $this->pro ? new Pro\Admin\PostSettings() : new Lite\Admin\PostSettings();
 				$this->filter           = new Common\Utils\Filter();
-				$this->localBusinessSeo = new Common\Admin\LocalBusinessSeo();
 				$this->help             = new Common\Help\Help();
 			}
 

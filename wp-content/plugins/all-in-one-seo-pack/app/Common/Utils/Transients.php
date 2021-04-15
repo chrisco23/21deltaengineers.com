@@ -12,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 4.0.13
  */
 class Transients {
-
 	/**
 	 * Our transients prefix.
 	 *

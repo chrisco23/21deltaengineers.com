@@ -40,7 +40,12 @@
             loading:        false,
             itemCount:      0,
             showItemCount:  true,
-            order:          0
+            order:          0,
+            editable:       true,
+            deletable:      true,
+            assignable:     true,
+            ownerId:        0,
+            ownerName:      ''
         },
 
         initialize: function(){
@@ -162,6 +167,37 @@
 
         }
 
+    });
+
+    wickedfolders.models.Notification = wickedfolders.models.Model.extend({
+        defaults: {
+            title:          'SUCCESS',
+            message:        '',
+            dismissible:    true,
+            dismissed:      false,
+            autoDismiss:    true,
+            delay:          3000
+        },
+
+        initialize: function(){
+            var model = this;
+
+            this.on( 'change:dismissed', this.dismiss, this );
+
+            if ( this.get( 'autoDismiss' ) ) {
+                setTimeout( function(){
+                    model.set( 'dismissed', true );
+                }, this.get( 'delay' ) )
+            }
+        },
+
+        dismiss: function(){
+            var model = this;
+
+            setTimeout( function(){
+                model.destroy();
+            }, 500 );
+        }
     });
 
     wickedfolders.collections.Posts = Backbone.Collection.extend({
@@ -314,6 +350,10 @@
         }
     });
 
+    wickedfolders.collections.Notifications = Backbone.Collection.extend({
+        model: wickedfolders.models.Notification,
+    });
+
     wickedfolders.views.View = Backbone.View.extend({
         constructor: function( options ) {
             if ( this.options ) {
@@ -332,6 +372,7 @@
 
         attributes: function(){
             return {
+                'id':   'wicked-folder-parent',
                 'name': this.options.name
             }
         },
@@ -339,9 +380,11 @@
         constructor: function( options ){
 
             _.defaults( options, {
-                selected:       '0',
-                name:           'wicked_folder_parent',
-                defaultText:    wickedFoldersL10n.folderSelectDefault
+                selected:           '0',
+                name:               'wicked_folder_parent',
+                defaultText:        wickedFoldersL10n.folderSelectDefault,
+                hideUneditable:     false,
+                hideUnassignable:   false
             } );
 
             wickedfolders.views.View.prototype.constructor.apply( this, arguments );
@@ -374,6 +417,9 @@
                 space = '&nbsp;&nbsp;&nbsp;';
 
             this.collection.each( function( folder ) {
+                if ( view.options.hideUneditable && ! folder.get( 'editable' ) ) return;
+                if ( view.options.hideUnassignable && ! folder.get( 'assignable' ) ) return;
+
                 if ( folder.get( 'parent' ) == parent ) {
                     var option = $( '<option />' );
                     option.attr( 'value', folder.id );
@@ -647,8 +693,16 @@
         className: 	function() {
             var classes = 'wicked-tree-leaf wicked-folder-leaf';
 
-            if ( 'Wicked_Folders_Term_Folder' == this.model.get('type') ) {
+            if ( 'Wicked_Folders_Term_Folder' == this.model.get('type') && this.model.get( 'editable' ) ) {
                 classes += ' wicked-movable';
+            }
+
+            if ( this.model.get( 'editable' ) ) {
+                classes += ' editable';
+            }
+
+            if ( this.model.get( 'assignable' ) ) {
+                classes += ' assignable';
             }
 
             return classes;
@@ -758,7 +812,7 @@
                 this.$el.prepend( '<span class="wicked-checkbox"><input type="checkbox" name="wicked_folder[]" value="' + this.model.id + '" /></span>' );
             }
             this.$( '.wicked-checkbox input' ).prop( 'checked', this.options.checked );
-            this.$( '.wicked-checkbox input' ).prop( 'disabled', this.options.readOnly );
+            this.$( '.wicked-checkbox input' ).prop( 'disabled', this.options.readOnly || ! this.model.get( 'assignable' ) );
 
             // Only show item count if the item count is enabled for the folder
             // as well as the view itself
@@ -835,7 +889,7 @@
 
         },
 
-        moveObject: function( objectType, objectId, destinationObjectId, sourceFolderId ) {
+        moveObject: function( objectType, objectId, destinationObjectId, sourceFolderId, copy ) {
 
             // TODO: probably a better way to handle all of this...
 
@@ -850,7 +904,7 @@
                         'object_type':              objectType,
                         'object_id':                objectId,
                         'destination_object_id':    destinationObjectId,
-                        'source_folder_id':         sourceFolderId,
+                        'source_folder_id':         copy ? false : sourceFolderId,
                         'post_type':                model.get( 'postType' )
                     },
                     method: 'POST',
@@ -920,7 +974,9 @@
             lang:                   false,
             organizationMode:       'organize',
             sortMode:               'custom',
-            showItemCount:          true
+            showItemCount:          true,
+            enableCreate:           true,
+            enableAssign:           true
         },
 
         initialize: function(){
@@ -2063,6 +2119,17 @@
                 this.$( '.wicked-delete-folder' ).addClass( 'wicked-disabled' );
             }
 
+            if ( ! this.options.pane.model.get( 'enableCreate' ) ) {
+                this.$( '.wicked-add-folder' ).addClass( 'wicked-disabled' );
+            }
+
+            if ( ! folder.get( 'editable' ) ) {
+                this.$( '.wicked-edit-folder' ).addClass( 'wicked-disabled' );
+            }
+
+            if ( ! folder.get( 'deletable' ) ) {
+                this.$( '.wicked-delete-folder' ).addClass( 'wicked-disabled' );
+            }
         }
 
     });
@@ -2098,8 +2165,9 @@
             */
 
             this.folderSelect = new wickedfolders.views.FolderSelect({
-                collection: this.collection,
-                selected:	this.model.get( 'parent' )
+                collection:     this.collection,
+                selected:       this.model.get( 'parent' ),
+                hideUneditable: true
             });
 
             this.listenTo( this.model, 'change:parent', this.folderParentChanged );
@@ -2130,23 +2198,83 @@
                 mode: 						this.options.mode,
                 title: 						title,
                 folderName:                 this.model.get( 'name' ),
+                ownerId:                    this.model.get( 'ownerId' ),
+                ownerName:                  this.model.get( 'ownerName' ),
                 saveButtonLabel:            saveButtonLabel,
                 deleteFolderConfirmation: 	wickedFoldersL10n.deleteFolderConfirmation,
                 cloneFolderLink: 	        wickedFoldersL10n.cloneFolderLink,
                 cloneFolderTooltip:         wickedFoldersL10n.cloneFolderTooltip,
                 cloneChildFolders:          wickedFoldersL10n.cloneChildFolders,
-                cloneChildFoldersTooltip:   wickedFoldersL10n.cloneChildFoldersTooltip
+                cloneChildFoldersTooltip:   wickedFoldersL10n.cloneChildFoldersTooltip,
+                ownerLabel:                 wickedFoldersL10n.owner
             });
 
             this.folderSelect.options.selected = this.model.get( 'parent' );
 
             this.$el.html( html );
 
-            this.$( '.wicked-folder-parent' ).html( this.folderSelect.render().el );
+            this.$( '.wicked-folder-parent > div' ).html( this.folderSelect.render().el );
 
             this.setSaveButtonState();
 
+            this.renderFolderOwner();
+
             return this;
+        },
+
+        renderFolderOwner: function(){
+            var page    = 1;
+            var perPage = 25;
+            var term    = '';
+
+            this.$( '#wicked-folder-owner-id' ).select2({
+                width: '100%',
+                ajax: {
+                    url: wickedFoldersSettings.restURL + 'wp/v2/users',
+                    dataType: 'json',
+                    cache: true,
+                    data: function( params ){
+                        if ( term != params.term ) {
+                            term = params.term;
+                            page = 1;
+                        }
+
+                        return {
+                            per_page: perPage,
+                            search: params.term,
+                            page: page
+                        };
+                    },
+                    transport: function( params, success, failure ){
+                        var readHeaders = function( data, textStatus, jqXHR ) {
+                            var more    = false;
+                            var total   = parseInt( jqXHR.getResponseHeader( 'X-WP-Total' ) ) || 0;
+                            var fetched = page * perPage;
+
+                            if ( total > fetched ) {
+                                page++;
+                                more = true;
+                            }
+
+                            return {
+                                results: $.map( data, function( item ){
+                                    return {
+                                        id:     item.id,
+                                        text:   item.name
+                                    }
+                                } ),
+                                pagination: {
+                                    more: more
+                                }
+                            };
+                        };
+
+                        var request = $.ajax( params );
+                        request.then( readHeaders ).then( success );
+                        request.fail( failure );
+                    }
+                }
+            });
         },
 
         keyup: function( e ){
@@ -2171,7 +2299,8 @@
 
             var view = this,
                 parent = this.model.get( 'parent' ),
-                parentFolder = this.collection.get( parent );
+                parentFolder = this.collection.get( parent ),
+                originalFolder = this.model.clone();
 
             view.clearMessages();
             view.setBusy( true );
@@ -2180,7 +2309,7 @@
                 //this.model.set( '_actionOverride', 'wicked_folders_delete_folder' );
                 this.model.set( '_methodOverride', 'DELETE' );
                 this.model.destroy( {
-                    wait: false,
+                    wait: true,
                     success: function( model, response, options ){
                         // Move the deleted folder's children to it's parent
                         var children = view.collection.where( { parent: model.id } );
@@ -2197,14 +2326,21 @@
                         }
                         view.setBusy( false );
                         view.$el.hide();
+
+                        view.options.pane.model.set( 'folder', parentFolder );
+                    },
+                    error: function( model, response, options ){
+                        view.setErrorMessage( response.responseJSON.message );
+                        view.setSaveButtonState();
+                        view.setBusy( false );
                     }
                 } );
-
-                view.options.pane.model.set( 'folder', parentFolder );
             } else {
                 view.model.set( {
-                    name:   this.$( '[name="wicked_folder_name"]' ).val(),
-                    parent: this.$( '[name="wicked_folder_parent"]' ).val()
+                    name:       this.$( '[name="wicked_folder_name"]' ).val(),
+                    parent:     this.$( '[name="wicked_folder_parent"]' ).val(),
+                    ownerId:    this.$( '[name="wicked_folder_owner_id"]' ).val(),
+                    ownerName:  this.$( '[name="wicked_folder_owner_id"] option:selected' ).text()
                 } );
                 this.model.save( {}, {
                     success: function( model, response, options ){
@@ -2231,6 +2367,14 @@
                         view.setErrorMessage( response.responseJSON.message );
                         view.setSaveButtonState();
                         view.setBusy( false );
+
+                        // Revert model to previous values
+                        view.model.set( {
+                            name:       originalFolder.get( 'name' ),
+                            parent:     originalFolder.get( 'parent' ),
+                            ownerId:    originalFolder.get( 'ownerId' ),
+                            ownerName:  originalFolder.get( 'ownerName' )
+                        } );
                     }
                 } );
             }
@@ -2362,7 +2506,7 @@
     });
 
     wickedfolders.views.PostDragDetails = wickedfolders.views.View.extend({
-        className: 'wicked-post-drag-details',
+        className: 'wicked-drag-details',
 
         initialize: function(){
             this.template = _.template( $( '#tmpl-wicked-post-drag-details' ).html() );
@@ -2373,6 +2517,70 @@
                 count: this.collection.length,
                 posts: this.collection
             }) );
+
+            return this;
+        }
+    });
+
+    wickedfolders.views.NotificationCenter = wickedfolders.views.View.extend({
+        tagName:    'div',
+
+        className:  'wicked-folders-notifications',
+
+        initialize: function(){
+            this.collection.on( 'add remove', this.render, this );
+        },
+
+        render: function(){
+            var view = this;
+
+            this.$el.empty();
+
+            this.collection.each( function( notification ){
+                var notificationView = new wickedfolders.views.Notification({
+                    model: notification
+                });
+
+                view.$el.append( notificationView.el );
+            } );
+
+            return this;
+        }
+    });
+
+    wickedfolders.views.Notification = wickedfolders.views.View.extend({
+        className: 'wicked-folders-notification',
+
+        events: {
+            'click .wicked-dismiss': 'dismiss'
+        },
+
+        initialize: function(){
+            this.template = _.template( $( '#tmpl-wicked-folders-notification' ).html() );
+
+            this.model.on( 'change', this.render, this );
+
+            this.render();
+        },
+
+        dismiss: function(){
+            this.model.set( 'dismissed', true );
+        },
+
+        render: function(){
+            var notification = this.model;
+
+            if ( notification.get( 'dismissed' ) ) {
+                this.$el.addClass( 'dismissed' );
+            }
+
+            this.$el.html( this.template({
+                title:          notification.get( 'title' ),
+                message:        notification.get( 'message' ),
+                dismissible:    notification.get( 'dismissible' ),
+                dismissed:      notification.get( 'dismissed' ),
+            }) );
+
             return this;
         }
     });
@@ -2396,6 +2604,7 @@
 
             this.createFolderDetails();
             this.createBreadcrumbs();
+            this.createNotificationCenter();
 
             this.$( '.wicked-toolbar-container' ).append( this.toolbar.render().el );
 
@@ -2439,6 +2648,7 @@
             this.render();
             this.updateSelectAllDraggable();
             this.folderTreeView.expandToSelected();
+            this.bindInlineEdit();
 
             this.updateSearch = _.debounce( function( search ){
                 // Set silently to avoid rendering twice
@@ -2461,6 +2671,16 @@
             } );
         },
 
+        createNotificationCenter: function() {
+            this.notifications = new wickedfolders.collections.Notifications();
+
+            var notificationCenter = new wickedfolders.views.NotificationCenter( {
+                collection: this.notifications
+            } );
+
+            this.$el.append( notificationCenter.render().el );
+        },
+
         createBreadcrumbs: function() {
             if ( ! wickedFoldersSettings.showBreadcrumbs ) return;
 
@@ -2477,7 +2697,10 @@
 
             $( '#wpbody-content .wicked-folders-breadcrumbs > .wicked-folders-container' ).html( folderPath.el );
             $( '#wpbody-content .wicked-folders-breadcrumbs' ).on( 'click', 'a', function( e ){
-                view.clickFolder( e );
+                var folderId = $( this ).parent().attr( 'data-folder-id' ),
+                    folder = view.folders().get( folderId );
+
+                view.model.set( 'folder', folder );
 
                 return false;
             });
@@ -2554,8 +2777,9 @@
 
         makePostsDraggable: function() {
             var view = this,
-                isMedia = $( '.wp-list-table' ).hasClass( 'media' );
-                isWooCommerceOrders = $( 'body' ).hasClass( 'post-type-shop_order' );
+                isMedia = $( '.wp-list-table' ).hasClass( 'media' ),
+                isWooCommerceOrders = $( 'body' ).hasClass( 'post-type-shop_order' ),
+                folder = this.folder();
 
             $( 'body.post-type-shop_order .wp-list-table .column-wicked_move' ).click( function( e ){
                 return false;
@@ -2597,6 +2821,12 @@
                     view.model.set( 'postsToMove', posts, { silent: true } );
 
                     return dragger.render().el;
+                },
+                start: function( e, ui ){
+                    view.$( '.wicked-tree' ).addClass( 'highlight-assignable' );
+                },
+                stop: function( e, ui ){
+                    view.$( '.wicked-tree' ).removeClass( 'highlight-assignable' );
                 }
             } );
 
@@ -2635,7 +2865,22 @@
             if ( 'organize' == mode ) {
                 this.$( '.wicked-folder-leaf.wicked-movable' ).not( '[data-folder-id="0"]' ).draggable( {
                     revert: 'invalid',
-                    helper: 'clone'
+                    helper: 'clone',
+                    start: function( e, ui ){
+                        var folderId = $( this ).attr( 'data-folder-id' ),
+                            folder = view.folders().get( folderId ),
+                            parentId = folder.get( 'parent' );
+
+                        view.$( '.wicked-tree' ).addClass( 'highlight-editable' );
+
+                        if ( 0 != parentId ) {
+                            view.$( '[data-folder-id="0"]' ).addClass( 'editable' );
+                        }
+                    },
+                    stop: function( e, ui ){
+                        view.$( '.wicked-tree' ).removeClass( 'highlight-editable' );
+                        view.$( '[data-folder-id="0"]' ).removeClass( 'editable' );
+                    }
                 } );
 
                 if ( wickedfolders.util.isRtl() ) {
@@ -2651,6 +2896,9 @@
                 accept: function( draggable ){
 
                     var destinationFolderId = $( this ).parents( 'li' ).eq( 0 ).attr( 'data-folder-id' ),
+                        destinationFolder = view.folders().get( destinationFolderId ),
+                        draggedFolderId = draggable.attr( 'data-folder-id' ),
+                        draggedFolder = view.folders().get( draggedFolderId ),
                         folder = view.folder(),
                         accept = false;
 
@@ -2673,6 +2921,13 @@
                         if ( 'organize' != mode ) {
                             accept = false;
                         }
+
+                        // Don't allow dropping if either folder isn't editable
+                        if ( 0 != destinationFolderId ) {
+                            if ( ! destinationFolder.get( 'editable' ) || ! draggedFolder.get( 'editable' ) ) {
+                                accept = false;
+                            }
+                        }
                     }
 
                     if ( draggable.hasClass( 'wicked-move-multiple' ) ) {
@@ -2680,7 +2935,14 @@
                         if ( destinationFolderId == folder.id ) {
                             accept = false;
                         }
+
+                        // Don't allow items to be moved to 'All Folders'
                         if ( destinationFolderId == 0 ) {
+                            accept = false;
+                        }
+
+                        // Make sure target folder allows assignment
+                        if ( ! destinationFolder.get( 'assignable' ) ) {
                             accept = false;
                         }
                     }
@@ -2701,7 +2963,10 @@
                             objectIds = posts.pluck( 'id' ),
                             controller = new wickedfolders.models.FolderBrowserController(),
                             taxonomy = view.folder().get('taxonomy' ),
-                            folder = view.folder();
+                            folder = view.folder(),
+                            assignable = 'Wicked_Folders_Term_Folder' == folder.get( 'type' ) && '0' != folder.get( 'id' ) && folder.get( 'assignable' ),
+                            copy = e.shiftKey || ! assignable,
+                            message = ( copy ? 'Copied' : 'Moved' ) + ' ' + ( 1 == objectIds.length ? 'item' : objectIds.length + ' items' ) + ' to folder.';
 
                         controller.set( 'folders', view.folders(), { silent: true } );
                         controller.set( 'postType', view.model.get('postType'), { silent: true } );
@@ -2723,9 +2988,19 @@
                                     $( '.wp-list-table [id="post-' + id + '"] td.taxonomy-' + taxonomy ).html( '<span aria-hidden="true">—</span><span class="screen-reader-text">No categories</span>' );
                                 } );
                             }
+
+                            view.notifications.add( new wickedfolders.models.Notification({
+                                title:      'Success',
+                                message:    'Unassigned ' + ( 1 == objectIds.length ? 'item' : 'items' ) + ' from folders.'
+                            }) );
                         } else {
-                            controller.moveObject( 'post', objectIds, destinationFolderId, view.folder().id );
-                            view.removePostRows( objectIds );
+                            controller.moveObject( 'post', objectIds, destinationFolderId, view.folder().id, copy );
+                            if ( ! copy || '0' == folder.get( 'id' ) ) view.removePostRows( objectIds );
+
+                            view.notifications.add( new wickedfolders.models.Notification({
+                                title:      'Success',
+                                message:    message
+                            }) );
                         }
 
                         view.model.get( 'postsToMove' ).reset( null, { silent: true } );
@@ -2738,7 +3013,6 @@
                     }
 
                 }
-
             });
 
             if ( 'sort' == mode ) {
@@ -2930,6 +3204,8 @@
                 document.location = url;
             }
 
+            this.updateSelectAllDraggable();
+
             return false;
         },
 
@@ -3104,9 +3380,13 @@
 
         updateSelectAllDraggable: function(){
             var posts = this.getSelectedPosts(),
-                disableMoveMultiple = posts.length < 1;
+                disableMoveMultiple = posts.length < 1
 
-            $( '.wp-list-table th .wicked-move-multiple' ).draggable( 'option', 'disabled', disableMoveMultiple );
+            // We'll get an error if we try to set a draggable option and
+            // draggable hasn't been initalized
+            if ( $( '.wp-list-table th .wicked-move-multiple' ).hasClass( 'ui-draggable' ) ) {
+                $( '.wp-list-table th .wicked-move-multiple' ).draggable( 'option', 'disabled', disableMoveMultiple );
+            }
         },
 
         loadingChanged: function() {
@@ -3115,6 +3395,21 @@
             } else {
                 this.$( '.wicked-navigating-mask' ).hide();
             }
+        },
+
+        bindInlineEdit: function() {
+            var folders = this.folders(),
+                taxonomy = this.model.get( 'taxonomy' ),
+                selector = '.inline-edit-row .' + taxonomy + '-checklist';
+
+            $( '#wpbody' ).on( 'click', 'button.editinline', function(){
+                // Disable any folders that aren't assignable
+                folders.each( function( folder ){
+                    if ( ! folder.get( 'assignable' ) ) {
+                        $( selector ).find( 'input[value="' + folder.id + '"]').prop( 'disabled', true );
+                    }
+                } );
+            } );
         },
 
         /**

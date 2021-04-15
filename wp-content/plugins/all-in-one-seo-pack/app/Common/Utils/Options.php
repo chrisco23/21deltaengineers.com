@@ -465,6 +465,8 @@ TEMPLATE
 			$this->groupKey  = $originalGroupKey;
 			$this->subGroups = $originalSubGroups;
 		}
+
+		add_action( 'wp_loaded', [ $this, 'maybeFlushRewriteRules' ] );
 	}
 
 	/**
@@ -769,7 +771,7 @@ TEMPLATE
 	 *
 	 * @return void
 	 */
-	private function translateDefaults() {
+	protected function translateDefaults() {
 		$default = sprintf( '{"label":"%1$s","value":"default"}', __( 'default', 'all-in-one-seo-pack' ) );
 		$this->defaults['sitemap']['general']['advancedSettings']['priority']['homePage']['priority']['default']    = $default;
 		$this->defaults['sitemap']['general']['advancedSettings']['priority']['homePage']['frequency']['default']   = $default;
@@ -1018,5 +1020,54 @@ TEMPLATE
 		}
 
 		return $options;
+	}
+
+	/**
+	 * Set a redirection URL after saving options or a slug ( 'reload' )
+	 *
+	 * @since 4.0.17
+	 *
+	 * @param  string $urlOrSlug
+	 * @return void
+	 */
+	public function setRedirection( $urlOrSlug ) {
+		$this->screenRedirection = $urlOrSlug;
+	}
+
+	/**
+	 * Get the redirection URL after saving options
+	 *
+	 * @since 4.0.17
+	 *
+	 * @return boolean|string The screen redirection URL.
+	 */
+	public function getRedirection() {
+		return $this->screenRedirection ? $this->screenRedirection : false;
+	}
+
+
+	/**
+	 * Indicate we need to flush rewrite rules on next load.
+	 *
+	 * @since 4.0.17
+	 *
+	 * @return void
+	 */
+	public function flushRewriteRules() {
+		update_option( 'aioseo_flush_rewrite_rules_flag', true );
+	}
+
+	/**
+	 * Flush rewrite rules if needed.
+	 *
+	 * @since 4.0.17
+	 *
+	 * @return void
+	 */
+	public function maybeFlushRewriteRules() {
+		if ( get_option( 'aioseo_flush_rewrite_rules_flag' ) ) {
+			flush_rewrite_rules();
+			delete_option( 'aioseo_flush_rewrite_rules_flag' );
+		}
 	}
 }

@@ -14,7 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 4.0.0
  */
 class Person extends Graph {
-
 	/**
 	 * Returns the graph data.
 	 *

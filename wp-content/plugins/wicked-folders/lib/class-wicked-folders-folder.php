@@ -14,6 +14,20 @@ class Wicked_Folders_Folder implements \JsonSerializable {
     public $id = false;
 
     /**
+     * The ID of the user that owns the folder.
+     *
+     * @var int
+     */
+    public $owner_id = 0;
+
+    /**
+     * The display name of the owner.
+     *
+     * @var string
+     */
+    public $owner_name;
+
+    /**
      * The ID of the folder's parent.
      *
      * @var string
@@ -49,11 +63,25 @@ class Wicked_Folders_Folder implements \JsonSerializable {
     public $movable = true;
 
     /**
-     * Whether or not the folder can be edited or deleted.
+     * Whether or not the folder can be edited.
      *
      * @var boolean
      */
     public $editable = true;
+
+    /**
+     * Whether or not the folder can be deleted.
+     *
+     * @var boolean
+     */
+    public $deletable = true;
+
+    /**
+     * Whether or not items can be assigned to the folder.
+     *
+     * @var boolean
+     */
+    public $assignable = true;
 
     /**
      * Whether or not the folder's sub folders should be lazy loaded.
@@ -139,11 +167,15 @@ class Wicked_Folders_Folder implements \JsonSerializable {
         return array(
             'id'            => $this->id,
             'parent'        => $this->parent,
+            'ownerId'       => $this->owner_id,
+            'ownerName'     => $this->owner_name,
             'name'          => $this->name,
             'postType'      => $this->post_type,
             'taxonomy'      => $this->taxonomy,
             'movable'       => $this->movable,
             'editable'      => $this->editable,
+            'deletable'     => $this->deletable,
+            'assignable'    => $this->assignable,
             'lazy'          => $this->lazy,
             'itemCount'     => $this->item_count,
             'showItemCount' => $this->show_item_count,

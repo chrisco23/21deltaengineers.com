@@ -11,6 +11,7 @@ abstract class Wicked_Folders_Dynamic_Folder extends Wicked_Folders_Folder {
 
         $this->movable = false;
         $this->editable = false;
+        $this->assignable = false;
     }
 
     public abstract function pre_get_posts( $query );

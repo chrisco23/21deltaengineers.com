@@ -88,6 +88,12 @@ final class Wicked_Folders_Ajax {
 		$taxonomy 	= isset( $_REQUEST['taxonomy'] ) ? $_REQUEST['taxonomy'] : false;
 		$object_id 	= isset( $_REQUEST['object_id'] ) ? $_REQUEST['object_id'] : false;
 		$post_type 	= Wicked_Folders::get_post_name_from_tax_name( $taxonomy );
+		$policy 	= false;
+		$user_id 	= get_current_user_id();
+
+		if ( class_exists( 'Wicked_Folders_Folder_Collection_Policy' ) ) {
+			$policy = Wicked_Folders_Folder_Collection_Policy::get_taxonomy_policy( $taxonomy );
+		}
 
 		/*
 		if ( ! wp_verify_nonce( $nonce, 'wicked_folders_move_object' ) ) {
@@ -103,7 +109,21 @@ final class Wicked_Folders_Ajax {
 			$object_id = ( array ) $object_id;
 
 			foreach ( $object_id as $id ) {
-				$update_terms_result = wp_set_object_terms( ( int ) $id, null, $taxonomy );
+				$folder_ids = array();
+
+				// If a policy exists for the taxonomy, only unassign folders
+				// from the object that the user has assign permission for
+				if ( $policy ) {
+					$folder_ids = wp_get_object_terms( $id, $taxonomy, array( 'fields' => 'ids' ) );
+
+					for ( $i = count( $folder_ids ) - 1; $i > -1; $i-- ) {
+						if ( $policy->can_assign( $folder_ids[ $i ], $user_id ) ) {
+							unset( $folder_ids[ $i ] );
+						}
+					}
+				}
+
+				$update_terms_result = wp_set_object_terms( ( int ) $id, $folder_ids, $taxonomy );
 
 				$result['items'][] = array(
 					'objectId' 	=> $id,
@@ -292,6 +312,16 @@ final class Wicked_Folders_Ajax {
 		$method 	= isset( $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] ) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : 'POST';
 		$method 	= isset( $_REQUEST['_method_override'] ) ? $_REQUEST['_method_override'] : $method;
 		$folder		= json_decode( file_get_contents( 'php://input' ) );
+		$policy 	= false;
+		$user_id 	= get_current_user_id();
+
+		if ( 'DELETE' == $method ) {
+			$folder_id 	= $_REQUEST['id'];
+			$taxonomy 	= $_REQUEST['taxonomy'];
+		} else {
+			$folder_id 	= $folder->id;
+			$taxonomy 	= $folder->taxonomy;
+		}
 
 		// The Polylang plugin uses the jQuery ajaxPrefilter function to alter
 		// AJAX requests which breaks the request (see polylang/js/media.js).
@@ -314,13 +344,45 @@ final class Wicked_Folders_Ajax {
 			$folder = json_decode( $data );
 		}
 
+		if ( class_exists( 'Wicked_Folders_Folder_Collection_Policy' ) ) {
+			$policy = Wicked_Folders_Folder_Collection_Policy::get_taxonomy_policy( $taxonomy );
+
+			// If there's a security policy, enforce it
+			if ( $policy ) {
+				if (
+					( 'POST' == $method && false == $policy->can_create( $user_id ) ) ||
+					( 'PUT' == $method && false == $policy->can_edit( $folder_id, $user_id ) ) ||
+					( 'DELETE' == $method && false == $policy->can_delete( $folder_id, $user_id ) )
+				) {
+					$response['message'] 	= __( 'Permission denied.', 'wicked-folders' );
+					$response['error'] 		= true;
+
+					status_header( 400 );
+
+					echo json_encode( $response );
+
+					die();
+				}
+			}
+		}
+
 		// Insert folder
 		if ( 'POST' == $method ) {
+			// TODO: Refactor. We should be working with a proper folder object
+			// that is initalized from the JSON in the request and then
+			// serialized as JSON
 			$term = wp_insert_term( $folder->name, $folder->taxonomy, array(
-				'parent' => $folder->parent,
+				'parent' 	=> $folder->parent,
+				'slug' 		=> Wicked_Folders_Term_Folder::generate_unique_slug( $folder->name, $folder->taxonomy ),
 			) );
+
 			if ( ! is_wp_error( $term ) ) {
-				$folder->id = ( string ) $term['term_id'];
+				$owner_data 		= get_userdata( $user_id );
+				$folder->id 		= ( string ) $term['term_id'];
+				$folder->ownerId 	= $user_id;
+				$folder->ownerName 	= isset( $owner_data->data->display_name ) ? $owner_data->data->display_name : '';
+
+				add_term_meta( $term['term_id'], 'wf_owner_id', $user_id );
 			}
 		}
 
@@ -330,6 +392,8 @@ final class Wicked_Folders_Ajax {
 				'name' 		=> $folder->name,
 				'parent' 	=> $folder->parent,
 			) );
+
+			update_term_meta( $folder->id, 'wf_owner_id', ( int ) $folder->ownerId );
 		}
 
 		// Delete folder
@@ -363,8 +427,22 @@ final class Wicked_Folders_Ajax {
 		$post_type 		= isset( $_REQUEST['post_type'] ) ? $_REQUEST['post_type'] : false;
 		$parent 		= isset( $_REQUEST['parent'] ) ? $_REQUEST['parent'] : false;
 		$clone_children = isset( $_REQUEST['clone_children'] ) && 'true' == $_REQUEST['clone_children'] ? true : false;
+		$taxonomy 		= Wicked_Folders::get_tax_name( $post_type );
+		$user_id 		= get_current_user_id();
 
 		try {
+			if ( class_exists( 'Wicked_Folders_Folder_Collection_Policy' ) ) {
+				$policy = Wicked_Folders_Folder_Collection_Policy::get_taxonomy_policy( $taxonomy );
+
+				// If there's a security policy, enforce it
+				if ( $policy ) {
+					// Require edit permission to clone folder
+					if ( ! $policy->can_edit( $id, $user_id ) ) {
+						throw new Exception( __( 'Permission denied.', 'wicked-folders' ) );
+					}
+				}
+			}
+
 			$folder 	= Wicked_Folders::get_folder( $id, $post_type );
 			$folders 	= $folder->clone_folder( $clone_children, $parent );
 

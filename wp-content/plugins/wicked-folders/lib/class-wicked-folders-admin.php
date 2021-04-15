@@ -47,7 +47,7 @@ final class Wicked_Folders_Admin {
 		// Add move-to-folder to Testimonial Rotator plugin types
 		add_filter( 'manage_edit-testimonial_columns', 			array( $this, 'manage_posts_columns' ), 100 );
 		add_filter( 'manage_edit-testimonial_rotator_columns', 	array( $this, 'manage_posts_columns' ), 100 );
-		
+
 		add_filter( 'plugin_action_links_wicked-folders/wicked-folders.php', array( $this, 'plugin_action_links' ) );
 
 		if ( in_array( 'page', $post_types ) ) {
@@ -191,10 +191,12 @@ final class Wicked_Folders_Admin {
 			'confirmUnassign' 			=> __( 'This will unassign the selected item(s) from all folders.  Are you sure you want to continue?', 'wicked-folders' ),
 			'navigationFailure' 		=> __( 'An error occurred while attempting to navigate to the folder.  Please see following console messages for more details.', 'wicked-folders' ),
 			'settings' 					=> __( 'Settings', 'wicked-folders' ),
+			'owner' 					=> __( 'Owner', 'wicked-folders' ),
 		) );
 
 		wp_localize_script( 'wicked-folders-app', 'wickedFoldersSettings', array(
 			'ajaxURL' 			=> admin_url( 'admin-ajax.php' ),
+			'restURL' 			=> rest_url(),
 			'showBreadcrumbs' 	=> ( bool ) get_option( 'wicked_folders_show_breadcrumbs', true ),
 			'enableAjaxNav' 	=> ( bool ) get_option( 'wicked_folders_enable_ajax_nav', true ),
 			'afterAjaxScripts' 	=> apply_filters( 'wicked_folders_after_ajax_scripts', $after_ajax_scripts ),
@@ -213,6 +215,12 @@ final class Wicked_Folders_Admin {
 		}
 
 		if ( $this->is_folder_pane_enabled_page() ) {
+			wp_register_script( 'wicked-folders-select2', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/select2/js/select2.min.js', array(), Wicked_Folders::plugin_version() );
+			wp_register_style( 'wicked-folders-select2', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/select2/css/select2.min.css', array(), Wicked_Folders::plugin_version() );
+
+			wp_enqueue_script( 'wicked-folders-select2' );
+			wp_enqueue_style( 'wicked-folders-select2' );
+
 			// Note: get_screen_state uses get_current_screen which will lead to
 			// errors when calling before get_current_screen is defined; therefore
 			// this call has been moved inside of the current if condition (which
@@ -867,6 +875,9 @@ final class Wicked_Folders_Admin {
 		// Folders don't work with WooCommerce webhooks
 		unset( $post_types['shop_webhook'] );
 
+		// ...or folder collection policies
+		unset( $post_types['wf_collection_policy'] );
+
 		if ( isset( $post_types['elementor_library'] ) ) {
 			$post_types['elementor_library']->label = __( 'Elementor Templates', 'wicked-folders' );
 		}
@@ -1320,47 +1331,43 @@ final class Wicked_Folders_Admin {
 		$action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : false;
 
 		if ( 'wicked_folders_save_settings' == $action && wp_verify_nonce( $_REQUEST['nonce'], 'wicked_folders_save_settings' ) ) {
-			$tab = $_REQUEST['wicked_folders_setting_tab'];
+			// Only handle save requests
+			if ( isset( $_POST['submit'] ) ) {
+				$post_types 						= isset( $_POST['post_type'] ) ? ( array ) $_POST['post_type'] : array();
+				$dynamic_folder_post_types 			= isset( $_POST['dynamic_folder_post_type'] ) ? ( array ) $_POST['dynamic_folder_post_type'] : array();
+				$show_folder_contents_in_tree_view 	= isset( $_POST['show_folder_contents_in_tree_view'] );
+				$sync_upload_folder_dropdown 		= isset( $_POST['sync_upload_folder_dropdown'] );
+				$enable_folder_pages 				= isset( $_POST['enable_folder_pages'] );
+				$include_children 					= isset( $_POST['include_children'] );
+				$include_attachment_children 		= isset( $_POST['include_attachment_children'] );
+				$show_hierarchy_in_folder_column 	= isset( $_POST['show_hierarchy_in_folder_column'] );
+				$show_unassigned_folder 			= isset( $_POST['show_unassigned_folder'] );
+				$show_folder_search 				= isset( $_POST['show_folder_search'] );
+				$show_item_counts 					= isset( $_POST['show_item_counts'] );
+				$show_breadcrumbs 					= isset( $_POST['show_breadcrumbs'] );
+				$enable_ajax_nav 					= isset( $_POST['enable_ajax_nav'] );
 
-			if ( 'general' == $tab ) {
-				// Only handle save requests
-				if ( isset( $_POST['submit'] ) ) {
-					$post_types 						= isset( $_POST['post_type'] ) ? ( array ) $_POST['post_type'] : array();
-					$dynamic_folder_post_types 			= isset( $_POST['dynamic_folder_post_type'] ) ? ( array ) $_POST['dynamic_folder_post_type'] : array();
-					$show_folder_contents_in_tree_view 	= isset( $_POST['show_folder_contents_in_tree_view'] );
-					$sync_upload_folder_dropdown 		= isset( $_POST['sync_upload_folder_dropdown'] );
-					$enable_folder_pages 				= isset( $_POST['enable_folder_pages'] );
-					$include_children 					= isset( $_POST['include_children'] );
-					$include_attachment_children 		= isset( $_POST['include_attachment_children'] );
-					$show_hierarchy_in_folder_column 	= isset( $_POST['show_hierarchy_in_folder_column'] );
-					$show_unassigned_folder 			= isset( $_POST['show_unassigned_folder'] );
-					$show_folder_search 				= isset( $_POST['show_folder_search'] );
-					$show_item_counts 					= isset( $_POST['show_item_counts'] );
-					$show_breadcrumbs 					= isset( $_POST['show_breadcrumbs'] );
-					$enable_ajax_nav 					= isset( $_POST['enable_ajax_nav'] );
+				add_option( 'wicked_folders_show_breadcrumbs', $show_breadcrumbs );
 
-					add_option( 'wicked_folders_show_breadcrumbs', $show_breadcrumbs );
+				// Note: booleans are cast to integers because passing false
+				// when the option doesn't already exist will result in
+				// WordPress not adding the option (and hence the option
+				// setting not getting saved)
+				update_option( 'wicked_folders_post_types', $post_types );
+				update_option( 'wicked_folders_dynamic_folder_post_types', $dynamic_folder_post_types );
+				update_option( 'wicked_folders_show_folder_contents_in_tree_view', ( int ) $show_folder_contents_in_tree_view );
+				update_option( 'wicked_folders_sync_upload_folder_dropdown', ( int ) $sync_upload_folder_dropdown );
+				update_option( 'wicked_folders_enable_folder_pages', ( int ) $enable_folder_pages );
+				update_option( 'wicked_folders_include_children', ( int ) $include_children );
+				update_option( 'wicked_folders_include_attachment_children', ( int ) $include_attachment_children );
+				update_option( 'wicked_folders_show_hierarchy_in_folder_column', ( int ) $show_hierarchy_in_folder_column );
+				update_option( 'wicked_folders_show_unassigned_folder', ( int ) $show_unassigned_folder );
+				update_option( 'wicked_folders_show_folder_search', ( int ) $show_folder_search );
+				update_option( 'wicked_folders_show_item_counts', ( int ) $show_item_counts );
+				update_option( 'wicked_folders_show_breadcrumbs', ( int ) $show_breadcrumbs );
+				update_option( 'wicked_folders_enable_ajax_nav', ( int ) $enable_ajax_nav );
 
-					// Note: booleans are cast to integers because passing false
-					// when the option doesn't already exist will result in
-					// WordPress not adding the option (and hence the option
-					// setting not getting saved)
-					update_option( 'wicked_folders_post_types', $post_types );
-					update_option( 'wicked_folders_dynamic_folder_post_types', $dynamic_folder_post_types );
-					update_option( 'wicked_folders_show_folder_contents_in_tree_view', ( int ) $show_folder_contents_in_tree_view );
-					update_option( 'wicked_folders_sync_upload_folder_dropdown', ( int ) $sync_upload_folder_dropdown );
-					update_option( 'wicked_folders_enable_folder_pages', ( int ) $enable_folder_pages );
-					update_option( 'wicked_folders_include_children', ( int ) $include_children );
-					update_option( 'wicked_folders_include_attachment_children', ( int ) $include_attachment_children );
-					update_option( 'wicked_folders_show_hierarchy_in_folder_column', ( int ) $show_hierarchy_in_folder_column );
-					update_option( 'wicked_folders_show_unassigned_folder', ( int ) $show_unassigned_folder );
-					update_option( 'wicked_folders_show_folder_search', ( int ) $show_folder_search );
-					update_option( 'wicked_folders_show_item_counts', ( int ) $show_item_counts );
-					update_option( 'wicked_folders_show_breadcrumbs', ( int ) $show_breadcrumbs );
-					update_option( 'wicked_folders_enable_ajax_nav', ( int ) $enable_ajax_nav );
-
-					Wicked_Folders_Admin::add_admin_notice( __( 'Your changes have been saved.', 'wicked-folders' ) );
-				}
+				Wicked_Folders_Admin::add_admin_notice( __( 'Your changes have been saved.', 'wicked-folders' ) );
 			}
 		}
 
@@ -1426,6 +1433,7 @@ final class Wicked_Folders_Admin {
 			$classes 						= array();
 			$enable_horizontal_scrolling 	= Wicked_Folders::is_horizontal_scrolling_enabled();
 			$show_item_counts 				= get_option( 'wicked_folders_show_item_counts', true );
+			$enable_create 					= apply_filters( 'wicked_folders_enable_create', true, $taxonomy, get_current_user_id() );
 
 			if ( $enable_horizontal_scrolling ) $classes[] = 'wicked-scroll-horizontal';
 

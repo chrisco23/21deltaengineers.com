@@ -12,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 4.0.0
  */
 abstract class Graph {
-
 	/**
 	 * Returns the graph data.
 	 *
@@ -107,7 +106,7 @@ abstract class Graph {
 				'tumblrUrl'       => "https://$username.tumblr.com",
 				'yelpPageUrl'     => "https://yelp.com/biz/$username",
 				'soundCloudUrl'   => "https://soundcloud.com/$username",
-				'wikipediaUrl'    => "https://wikipedia.com/wiki/$username",
+				'wikipediaUrl'    => "https://en.wikipedia.org/wiki/$username",
 				'myspaceUrl'      => "https://myspace.com/$username"
 			];
 

@@ -216,7 +216,9 @@ class Content {
 				! empty( $entry['guid'] ) ? $entry['guid'] : ''
 			);
 
-			$location = apply_filters( 'wpml_permalink', $permalink, $translation->language_code, true );
+			$location = is_home()
+				? apply_filters( 'wpml_home_url', get_option( 'home' ) )
+				: apply_filters( 'wpml_permalink', $permalink, $translation->language_code );
 			if ( $rss ) {
 				$entry['guid'] = $location;
 				continue;

@@ -12,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 4.0.0
  */
 class Root {
-
 	/**
 	 * Returns the indexes for the sitemap root index.
 	 *

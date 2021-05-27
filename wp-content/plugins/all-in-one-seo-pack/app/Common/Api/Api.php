@@ -124,7 +124,7 @@ class Api {
 	 * @since 4.0.0
 	 */
 	public function __construct() {
-		add_filter( 'rest_pre_serve_request', [ $this, 'allowHeaders' ] );
+		add_filter( 'rest_allowed_cors_headers', [ $this, 'allowedHeaders' ] );
 		add_action( 'rest_api_init', [ $this, 'registerRoutes' ] );
 	}
 
@@ -185,6 +185,21 @@ class Api {
 	 */
 	public function allowHeaders() {
 		header( 'Access-Control-Allow-Headers: X-WP-Nonce' );
+	}
+
+	/**
+	 * Sets headers that are allowed for our API routes.
+	 *
+	 * @since 4.1.1
+	 *
+	 * @param  array $allowHeaders The allowed request headers.
+	 * @return array $allowHeaders The allowed request headers.
+	 */
+	public function allowedHeaders( $allowHeaders ) {
+		if ( ! array_search( 'X-WP-Nonce', $allowHeaders, true ) ) {
+			$allowHeaders[] = 'X-WP-Nonce';
+		}
+		return $allowHeaders;
 	}
 
 	/**

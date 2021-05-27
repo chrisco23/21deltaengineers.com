@@ -109,7 +109,7 @@ foreach($option['customcss']['css'] as $k=>$v) {
 <?php
 }
 ?>
-<a href="javascript:;" class="wtfdivi011_action wtfdivi011_add">Add another custom CSS box</a>
+<a href="javascript:;" class="wtfdivi011_action dbdb_add_custom_css_box">Add another custom CSS box</a>
 
 <script>
 jQuery(function($){
@@ -120,7 +120,7 @@ jQuery(function($){
 	$('.wtfdivi011_cssblock').wtfdivi011('update_selector_summary');
 	
 	/* Create new textbox when add clicked */
-	$('.wtfdivi011_add').click(function(){
+	$('.dbdb_add_custom_css_box').click(function(){
 		$(".wtfdivi011_cssblock_divider").first().clone(true).insertBefore(this);
 		var box = $(".wtfdivi011_cssblock:nth-of-type(1)").clone(true).insertBefore(this);
 		box.find('select option').prop('selected', false);

@@ -1,4 +1,5 @@
 <?php
+
 if (!class_exists('wtfplugin_1_0')) { 
 
 class wtfplugin_1_0 {
@@ -56,7 +57,7 @@ class wtfplugin_1_0 {
 			if (isset($data['enabled']) && $data['enabled']) { 
 				$fix_fn_file = $fix_dir."functions.php";
 				if (file_exists($fix_fn_file)) { 
-					include($fix_fn_file); 
+					include_once($fix_fn_file); 
 				}	
 			}
 		}
@@ -186,6 +187,8 @@ class wtfplugin_1_0 {
 		}
 		
 		do_action('dbdb_compile_patch_files_after', $this, $files);
+
+        //dbdb_save_mod_rewrite_rules();
 		
 		// Append our htaccess rules to the wordpress htaccess file
 		if (!function_exists('get_home_path')) { require_once(ABSPATH.'/wp-admin/includes/file.php'); }

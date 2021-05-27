@@ -154,7 +154,7 @@ class SocialMeta {
 			return;
 		}
 
-		$ogMeta = maybe_unserialize( $ogMeta );
+		$ogMeta = aioseo()->helpers->maybeUnserialize( $ogMeta );
 
 		$ogTitle = '';
 		if ( ! $useHomePageMeta ) {
@@ -236,7 +236,7 @@ class SocialMeta {
 			return;
 		}
 
-		$ogMeta = maybe_unserialize( $ogMeta );
+		$ogMeta = aioseo()->helpers->maybeUnserialize( $ogMeta );
 
 		$ogDescription = '';
 		if ( ! $useHomePageMeta ) {

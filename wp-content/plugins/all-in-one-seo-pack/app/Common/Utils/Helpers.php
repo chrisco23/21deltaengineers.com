@@ -2236,4 +2236,28 @@ class Helpers {
 		}
 		return implode( ',', $values );
 	}
+
+	/**
+	 * Checks if the given string is serialized, and if so, unserializes it.
+	 * If the serialized string contains an object, we abort to prevent PHP object injection.
+	 *
+	 * @since 4.1.0.2
+	 *
+	 * @param  string       $string The string.
+	 * @return string|array         The string or unserialized data.
+	 */
+	public function maybeUnserialize( $string ) {
+		if ( ! is_string( $string ) ) {
+			return $string;
+		}
+
+		$string = trim( $string );
+		if ( is_serialized( $string ) && false === $this->stringContains( $string, 'O:' ) ) {
+			// We want to add extra hardening for PHP versions greater than 5.6.
+			return version_compare( PHP_VERSION, '7.0', '<' )
+				? @unserialize( $string )
+				: @unserialize( $string, [ 'allowed_classes' => false ] ); // phpcs:disable PHPCompatibility.FunctionUse.NewFunctionParameters.unserialize_optionsFound
+		}
+		return $string;
+	}
 }

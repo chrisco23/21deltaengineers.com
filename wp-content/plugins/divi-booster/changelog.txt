@@ -1,3 +1,23 @@
+= 3.4.9 =
+* Reverted map pin feature to earlier loading method due to errors
+
+= 3.4.8 =
+* Added website and podcast icons to social media follow module
+
+= 3.4.7 =
+* Added site title / site tagline options to menu module
+* Improved custom map pin loading
+
+= 3.4.6 =
+* Added phone icon to social media follow module
+
+= 3.4.5 =
+* Fixed portfolio sorting by Id duplicating items in subsequent portfolios
+* Improved positioning of title text option in Extra
+
+= 3.4.4 =
+* Fixed errors when plugin loaded twice
+
 = 3.4.3 =
 * Fixed errors in CSS manager feature
 

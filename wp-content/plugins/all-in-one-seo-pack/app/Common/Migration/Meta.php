@@ -340,7 +340,7 @@ class Meta {
 	 * @return array $meta   The mapped meta.
 	 */
 	public function convertOpenGraphMeta( $ogMeta ) {
-		$ogMeta = maybe_unserialize( $ogMeta );
+		$ogMeta = aioseo()->helpers->maybeUnserialize( $ogMeta );
 
 		if ( ! is_array( $ogMeta ) ) {
 			return [];

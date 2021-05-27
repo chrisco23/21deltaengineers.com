@@ -5,7 +5,7 @@
  */
 class Wicked_Folders_Term_Dynamic_Folder extends Wicked_Folders_Dynamic_Folder {
 
-    private $term_id = false;
+    public $term_id = false;
 
     public function __construct( $args ) {
         parent::__construct( $args );
@@ -40,4 +40,11 @@ class Wicked_Folders_Term_Dynamic_Folder extends Wicked_Folders_Dynamic_Folder {
 
     }
 
+    public function jsonSerialize() {
+        $data = parent::jsonSerialize();
+
+        $data['termId'] = $this->term_id;
+
+        return $data;
+    }
 }

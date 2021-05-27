@@ -5,13 +5,14 @@
  */
 abstract class Wicked_Folders_Dynamic_Folder extends Wicked_Folders_Folder {
 
+    public $movable = false;
+    
+    public $editable = false;
+
+    public $assignable = false;
+
     public function __construct( $args ) {
-
         parent::__construct( $args );
-
-        $this->movable = false;
-        $this->editable = false;
-        $this->assignable = false;
     }
 
     public abstract function pre_get_posts( $query );

@@ -136,10 +136,12 @@ final class Wicked_Folders_Admin {
 		$after_ajax_scripts 	= array();
 		$is_woocommerce_active 	= false;
 		$is_wpml_active 		= false;
+		$is_tablepress_active 	= false;
 
 		if ( function_exists( 'is_plugin_active' ) ) {
 			$is_woocommerce_active 	= is_plugin_active( 'woocommerce/woocommerce.php' );
 			$is_wpml_active 		= is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' );
+			$is_tablepress_active 	= is_plugin_active( 'tablepress/tablepress.php' );
 		}
 
 		if ( function_exists( 'plugins_url' ) ) {
@@ -156,10 +158,17 @@ final class Wicked_Folders_Admin {
 					$after_ajax_scripts[] = plugins_url( 'woocommerce/assets/js/admin/quick-edit.min.js' );
 				}
 			}
+
+			if ( $is_tablepress_active && isset( $_GET['page'] ) && 'tablepress' == $_GET['page'] ) {
+				$after_ajax_scripts[] = plugins_url( 'tablepress/admin/js/list.js' );
+			}
 		}
 
 		wp_register_script( 'wicked-folders-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'js/admin.js', array(), Wicked_Folders::plugin_version() );
 		wp_register_script( 'wicked-folders-app', plugin_dir_url( dirname( __FILE__ ) ) . 'js/app.js', array( 'jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable', 'backbone' ), Wicked_Folders::plugin_version() );
+		wp_register_script( 'wicked-folders-select2', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/select2/js/select2.min.js', array(), Wicked_Folders::plugin_version() );
+
+		wp_register_style( 'wicked-folders-select2', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/select2/css/select2.min.css', array(), Wicked_Folders::plugin_version() );
 
 		wp_localize_script( 'wicked-folders-app', 'wickedFoldersL10n', array(
 			'allMedia' 					=> __( 'All media', 'wicked-folders' ),
@@ -215,9 +224,6 @@ final class Wicked_Folders_Admin {
 		}
 
 		if ( $this->is_folder_pane_enabled_page() ) {
-			wp_register_script( 'wicked-folders-select2', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/select2/js/select2.min.js', array(), Wicked_Folders::plugin_version() );
-			wp_register_style( 'wicked-folders-select2', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/select2/css/select2.min.css', array(), Wicked_Folders::plugin_version() );
-
 			wp_enqueue_script( 'wicked-folders-select2' );
 			wp_enqueue_style( 'wicked-folders-select2' );
 
@@ -316,6 +322,8 @@ final class Wicked_Folders_Admin {
 
 		if ( 'admin.php' == $page && isset( $_GET['page'] ) && 'gf_entries' == $_GET['page'] ) return Wicked_Folders::get_gravity_forms_entry_post_type_name();
 
+		if ( 'admin.php' == $page && isset( $_GET['page'] ) && 'tablepress' == $_GET['page'] ) return 'tablepress_table';
+
 		// Check the global $typenow - set in admin.php
 		if ( $typenow ) {
 			return $typenow;
@@ -390,6 +398,8 @@ final class Wicked_Folders_Admin {
 
 		if ( 'admin.php' == $page && isset( $_GET['page'] ) && 'gf_entries' == $_GET['page'] ) $type = Wicked_Folders::get_gravity_forms_entry_post_type_name();
 
+		if ( 'admin.php' == $page && isset( $_GET['page'] ) && 'tablepress' == $_GET['page'] ) $type = 'tablepress_table';
+
 		// Prevent folder pane from displaying on legacy folder pages
 		if ( isset( $_GET['page'] ) && Wicked_Folders::get_tax_name( $type ) == $_GET['page'] ) {
 			return false;
@@ -407,6 +417,8 @@ final class Wicked_Folders_Admin {
 			if ( 'admin.php' == $page && isset( $_GET['page'] ) && ( 'gf_edit_forms' == $_GET['page'] || 'gf_new_form' == $_GET['page'] ) && empty( $_GET['id'] ) ) return true;
 
 			if ( 'admin.php' == $page && isset( $_GET['page'] ) && 'gf_entries' == $_GET['page'] && empty( $_GET['lid'] ) ) return true;
+
+			if ( 'admin.php' == $page && isset( $_GET['page'] ) && 'tablepress' == $_GET['page'] && empty( $_GET['table_id'] ) ) return true;
 		}
 
 		return false;
@@ -837,6 +849,7 @@ final class Wicked_Folders_Admin {
 			'acf',
 			'shop_order',
 			'shop_coupon',
+			'tablepress_table',
 			Wicked_Folders::get_user_post_type_name(),
 			Wicked_Folders::get_plugin_post_type_name(),
 			Wicked_Folders::get_gravity_forms_form_post_type_name(),
@@ -870,6 +883,12 @@ final class Wicked_Folders_Admin {
 			$gravity_entry_stub_post_type->show_ui = true;
 
 			$post_types[] = $gravity_entry_stub_post_type;
+		}
+
+		if ( $tablepress_post_type = get_post_type_object( 'tablepress_table' ) ) {
+			$tablepress_post_type->show_ui = true;
+
+			$post_types[] = $tablepress_post_type;
 		}
 
 		// Folders don't work with WooCommerce webhooks
@@ -976,7 +995,16 @@ final class Wicked_Folders_Admin {
 
 				// Term folders
 				if ( $folder && 'Wicked_Folders_Term_Folder' == $folder_type ) {
-					$include_children = Wicked_Folders::include_children( $post_type, $folder );
+					$can_view 			= true;
+					$include_children 	= Wicked_Folders::include_children( $post_type, $folder );
+
+					if ( class_exists( 'Wicked_Folders_Folder_Collection_Policy' ) ) {
+						$policy = Wicked_Folders_Folder_Collection_Policy::get_taxonomy_policy( $taxonomy );
+
+						if ( $policy && false == $policy->can_view( $folder, get_current_user_id() ) ) {
+							$can_view = false;
+						}
+					}
 
 					// If the query is being filtered by a taxonomy query string
 					// parameter, make sure it respects the include children
@@ -987,15 +1015,23 @@ final class Wicked_Folders_Admin {
 						if ( isset( $query->tax_query->queries ) && is_array( $query->tax_query->queries ) ) {
 							$tax_queries = $query->tax_query->queries;
 
-							foreach ( $tax_queries as $index => $tax_query ) {
-								if ( $tax_query['taxonomy'] == $taxonomy ) {
+							for ( $index = count( $tax_queries ) - 1; $index > -1; $index-- ) {
+								if ( $tax_queries[ $index ]['taxonomy'] == $taxonomy ) {
 									$tax_queries[ $index ]['include_children'] = $include_children;
+								}
+
+								// If the user doesn't have permission to view
+								// the folder, remove it from the query
+								if ( ! $can_view ) {
+									unset( $tax_queries[ $index ] );
+
+									$query->set( $taxonomy, null );
 								}
 							}
 
 							$query->set( 'tax_query', $tax_queries );
 						}
-					} else {
+					} elseif ( $can_view ) {
 						$tax_query = array(
 							array(
 								'taxonomy' 			=> $taxonomy,
@@ -1015,7 +1051,6 @@ final class Wicked_Folders_Admin {
 							}
 						}
 					}
-
 				}
 
 				// Dynamic folders
@@ -1461,6 +1496,15 @@ final class Wicked_Folders_Admin {
 			// Make sure the folder exists
 			if ( ! Wicked_Folders::get_folder( $active_folder_id, $post_type ) && 'Wicked_Folders_Term_Folder' == $active_folder_type ) {
 				$active_folder_id = '0';
+			}
+
+			// Fall back to root folder if active folder is not/no longer viewable
+			if ( class_exists( 'Wicked_Folders_Folder_Collection_Policy' ) ) {
+				$policy = Wicked_Folders_Folder_Collection_Policy::get_taxonomy_policy( $taxonomy );
+
+				if ( $policy && false == $policy->can_view( $active_folder_id, get_current_user_id() ) ) {
+					$active_folder_id = '0';
+				}
 			}
 
 			// For other folder types, check folders array to make sure folder exists

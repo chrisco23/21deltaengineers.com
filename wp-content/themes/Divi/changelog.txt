@@ -1,3 +1,35 @@
+version 4.9.4 ( updated 04-13-2021 )
+- Fixed search module custom left and right padding not working when you hide the search button.
+- Fixed incorrect scrollTo behavior when the $target is sticky module that sticks to top.
+- Fixed builder crash when Content Security Policy (CSP) header is enabled.
+- Fixed button hover color from theme customizer affects the media library button when editing products.
+- Fixed an issue with the Testimonial module where the spacing on builder and frontend were irregular.
+- Added Logo Width and Height options to the Menu module.
+- Fix fullwidth header image bottom alignment not working on the default layout.
+- Fixed global color set on hover state overwrites normal state on save.
+- Fixed incorrect posts result on the Blog module when Relevanssi Premium plugin is active.
+- Fixed the color picker input shows up when Rank Math plugin is activated.
+- Allow third-party extensions to access post or page setting values on builder via ET_Builder.API.
+- Fixed the color picker input shows up when Rank Math plugin is activated.
+- Fixed a bug where when importing a layout with global colors the colors would not be imported as global.
+- Fixed the color picker input shows up when Rank Math plugin is activated.
+	* core/admin/js/wp-color-picker-alpha.min.js
+	* core/components/Portability.php
+	* core/ui/utils/frames.js
+	* core/ui/utils/utils.js
+	* epanel/js/wp-color-picker-alpha.min.js
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/languages/et_builder-en_US-et-builder-gutenberg.po
+	* includes/builder/module/ContactFormItem.php
+	* includes/builder/module/FullwidthMenu.php
+	* includes/builder/module/Menu.php
+	* includes/builder/plugin-compat/relevanssi-premium.php
+	* includes/builder/plugin-compat/relevanssi.php
+	* includes/builder/plugin-compat/wp-simple-firewall.php
+	* includes/builder/scripts/ext/wp-color-picker-alpha.js
+	* includes/builder/scripts/ext/wp-color-picker-alpha.min.js
+	* includes/builder/scripts/utils/sticky.js
+
 version 4.9.3 ( updated 04-01-2021 )
 - Fixed inability to click into the search field in a FullwidthMenu module on small screens.
 - Fixed Theme Builder not saved properly when has many templates.

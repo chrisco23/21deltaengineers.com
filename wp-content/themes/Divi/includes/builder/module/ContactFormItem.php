@@ -910,7 +910,7 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 	/**
 	 * Checks if module has background.
 	 *
-	 * @since ??
+	 * @since 4.9.3
 	 *
 	 * @return bool
 	 */

@@ -43,6 +43,13 @@ class Integrations {
 	public static function semrushAuthenticate( $request ) {
 		$body = $request->get_json_params();
 
+		if ( empty( $body['code'] ) ) {
+			return new \WP_REST_Response( [
+				'success' => false,
+				'message' => 'Missing authorization code.'
+			], 400 );
+		}
+
 		Semrush::authenticate( $body['code'] );
 
 		return new \WP_REST_Response( [

@@ -1700,4 +1700,44 @@ final class Wicked_Common {
 			return ltrim( $key['option_name'], '_transient_' );
 		}, $keys );
 	}
+
+	/**
+     * Checks if the current request is a WP REST API request.
+     *
+     * Case #1: After WP_REST_Request initialisation
+     * Case #2: Support "plain" permalink settings
+     * Case #3: It can happen that WP_Rewrite is not yet initialized,
+     *          so do this (wp-settings.php)
+     * Case #4: URL Path begins with wp-json/ (your REST prefix)
+     *          Also supports WP installations in subfolders
+     *
+     * @returns boolean
+     * @author matzeeable
+     */
+    function is_rest_request() {
+		// Statically cache function response
+		static $is_rest_request = null;
+
+		if ( null !== $is_rest_request ) return $is_rest_request;
+
+        $prefix = rest_get_url_prefix( );
+
+        if ( defined( 'REST_REQUEST' ) && REST_REQUEST // (#1)
+                || isset( $_GET['rest_route'] ) // (#2)
+                        && strpos( trim( $_GET['rest_route'], '\\/' ), $prefix , 0 ) === 0)
+                $is_rest_request = true;
+
+        // (#3)
+        global $wp_rewrite;
+
+        if ( $wp_rewrite === null ) $wp_rewrite = new \WP_Rewrite();
+
+        // (#4)
+        $rest_url 		= wp_parse_url( trailingslashit( rest_url( ) ) );
+        $current_url 	= wp_parse_url( add_query_arg( array( ) ) );
+
+        $is_rest_request = strpos( $current_url['path'], $rest_url['path'], 0 ) === 0;
+
+		return $is_rest_request;
+    }
 }

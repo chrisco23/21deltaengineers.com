@@ -250,6 +250,10 @@ final class Wicked_Folders {
 			'show_ui' => true,
 		), 'objects' );
 
+		if ( $tablepress_post_type = get_post_type_object( 'tablepress_table' ) ) {
+			$all_post_types[] = $tablepress_post_type;
+		}
+
 		foreach ( $all_post_types as $post_type ) {
 			if ( in_array( $post_type->name, $enabled_post_types ) ) {
 				$post_types[] = $post_type;
@@ -489,13 +493,14 @@ final class Wicked_Folders {
 
 		// Unassigned folder
 		$unassigned_items = new Wicked_Folders_Unassigned_Dynamic_Folder( array(
-			'id' 		=> 'unassigned_dynamic_folder',
-			'name' 		=> __( 'Unassigned Items', 'wicked-folders' ),
-			'parent' 	=> apply_filters( 'wicked_folders_unassigned_items_parent', 'root', $filter_args ),
-			'post_type' => $post_type,
-			'taxonomy' 	=> $taxonomy,
-			'item_count'=> $total_count - $assigned_count,
-			'order' 	=> -10,
+			'id' 			=> 'unassigned_dynamic_folder',
+			'name' 			=> __( 'Unassigned Items', 'wicked-folders' ),
+			'parent' 		=> apply_filters( 'wicked_folders_unassigned_items_parent', 'root', $filter_args ),
+			'post_type' 	=> $post_type,
+			'taxonomy' 		=> $taxonomy,
+			'item_count'	=> $total_count - $assigned_count,
+			'order' 		=> -10,
+			'assignable' 	=> true,
 		) );
 
 		if ( $show_unassigned_folder ) $folders[] = $unassigned_items;
@@ -923,12 +928,12 @@ final class Wicked_Folders {
 
 				if ( version_compare( get_bloginfo( 'version' ), '4.5.0', '<' ) ) {
 					$terms = get_terms( $taxonomy->name, array(
-						'hide_empty' 	=> true,
+						'hide_empty' 	=> false,
 					) );
 				} else {
 					$terms = get_terms( array(
 						'taxonomy' 		=> $taxonomy->name,
-						'hide_empty' 	=> true,
+						'hide_empty' 	=> false,
 					) );
 				}
 
@@ -948,7 +953,7 @@ final class Wicked_Folders {
 								'name' 		=> $taxonomy->labels->name,
 								'parent' 	=> 'dynamic_root',
 								'post_type' => $post_type,
-								'taxonomy' 	=> $original_taxonomy,
+								'taxonomy' 	=> $taxonomy->name,
 							)
 						);
 
@@ -961,11 +966,13 @@ final class Wicked_Folders {
 							}
 
 							$folders[] = new Wicked_Folders_Term_Dynamic_Folder( array(
-								'id' 		=> $id,
-								'name' 		=> $term->name,
-								'parent' 	=> $parent,
-								'post_type' => $post_type,
-								'taxonomy' 	=> $original_taxonomy,
+								'id' 			=> $id,
+								'name' 			=> $term->name,
+								'parent' 		=> $parent,
+								'post_type' 	=> $post_type,
+								'taxonomy' 		=> $taxonomy->name,
+								'term_id' 		=> $term->term_id,
+								'assignable' 	=> 'attachment' == $post_type ? false : true,
 							) );
 						}
 

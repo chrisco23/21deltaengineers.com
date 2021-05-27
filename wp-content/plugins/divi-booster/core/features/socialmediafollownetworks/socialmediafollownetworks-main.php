@@ -14,10 +14,11 @@ if (!function_exists('dbdbsmsn_set_frontend_styles')) {
 			dbdbsmsn_load_socicon();
 			$selected_network = $module->props['social_network'];
 			$networks = dbdbsmsn_networks();
+            $fontFamily = isset($networks[$selected_network]['font-family'])?$networks[$selected_network]['font-family']:'Socicon';
 			if (isset($networks[$selected_network]['code'])) {
 				ET_Builder_Element::set_style($render_slug, array(
 					'selector'    => '%%order_class%% a.icon:before',
-					'declaration' => 'content: "'.$networks[$selected_network]['code'].'";font-family: "Socicon" !important;'
+					'declaration' => 'content: "'.$networks[$selected_network]['code'].'";font-family: "'.esc_attr($fontFamily).'" !important;'
 					)
 				);
 			}
@@ -60,12 +61,14 @@ if (!function_exists('dbdbsmsn_set_builder_styles')) {
 		dbdbsmsn_load_socicon();
 		?>
 		<style>
-		<?php foreach(dbdbsmsn_networks() as $id=>$network) { ?>
+		<?php foreach(dbdbsmsn_networks() as $id=>$network) { 
+            $fontFamily = isset($network['font-family'])?$network['font-family']:'Socicon';
+        ?>
 			.et-social-<?php esc_html_e($id); ?> a.icon:before,
 			.et-db #et-boc .et-l .et_pb_social_icon.et-social-<?php esc_html_e($id); ?> a.icon:before /* TB override */
 			{
 				content: "<?php esc_attr_e($network['code']); ?>";
-				font-family: 'Socicon' !important;
+				font-family: '<?php esc_attr_e($fontFamily); ?>' !important;
 			}
 		<?php } ?>
 		</style>

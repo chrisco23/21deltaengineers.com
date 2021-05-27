@@ -3,7 +3,7 @@ Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
 Tested up to: 5.7
-Stable tag: 2.17.10
+Stable tag: 2.18.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,7 +11,7 @@ Organize pages and custom post types into folders.
 
 == Description ==
 
-Wicked Folders is the ultimate tool for managing large numbers of pages and custom post types.  The plugin simplifies content management by allowing you to organize your content into folders.  Wicked Folders is an administration plugin that does not alter your content’s permalinks or hierarchy giving you the complete freedom to organize your pages and/or custom post types any way you want independently of your site’s structure.
+Wicked Folders is the ultimate tool for managing large numbers of pages and custom post types.  The plugin simplifies content management by allowing you to organize your content into folders.  Wicked Folders does not alter your content’s permalinks or hierarchy giving you the freedom to organize your pages, posts, and custom post types any way you want independently of your site’s structure.
 
 = Features =
 * Organize pages, posts, and custom post types into folders
@@ -46,6 +46,7 @@ Organize your WordPress media library, users, plugins, and more using folders wi
 * Plugins
 * Gravity Forms entries and forms
 * WooCommerce products, orders, and coupons
+* TablePress tables
 
 [Learn more about Wicked Folders Pro](https://wickedplugins.com/plugins/wicked-folders/?utm_source=readme&utm_campaign=wicked_folders&utm_content=pro_learn_more_link).
 
@@ -81,7 +82,7 @@ No, only the folder is deleted.
 There are two ways.  The first is to visit the Pages screen, move your mouse over the "move" icon that shows up in the pages list when hovering over a row and drag and drop the page to the desired folder.  Alternatively, you can edit the page and assign folders in the ‘Folders’ meta box in the right sidebar.
 
 = How do I put a page in multiple folders? =
-Edit the page and select the desired folders in the ‘Folders’ meta box in the right sidebar.
+You can copy a page to multiple folders by holding the Shift key while dragging a page to a folder. This will keep the page in the current folder while also assigning it to the new folder. You can repeat this step to assign the page to as many folders as you want.
 
 = How do I remove a page from a folder? =
 Edit the page and uncheck the box next to the folder you want to remove it from in the ‘Folders’ meta box in the right sidebar.
@@ -101,6 +102,9 @@ Yes, the pro version of the plugin, Wicked Folders Pro, adds folders for Gravity
 = Can I organize WooCommerce products, orders, and coupons into folders? =
 Yes, the pro version of the plugin, Wicked Folders Pro, adds folders for WooCommerce products, orders and coupons.  [Learn more](https://wickedplugins.com/plugins/wicked-folders/?utm_source=readme&utm_campaign=wicked_folders&utm_content=woocommerce_faq_link).
 
+= Can I organize TablePress tables into folders? =
+Yes, the pro version of the plugin, Wicked Folders Pro, adds folder support for TablePress tables.  [Learn more](https://wickedplugins.com/plugins/wicked-folders/?utm_source=readme&utm_campaign=wicked_folders&utm_content=tablepress_faq_link).
+
 = How does the "Page Hierarchy" folder work?
 The "Page Hierarchy" folder (found under "Dynamic Folders") is a dynamic folder (meaning it's generated on the fly) that lets your browse the hierarchy of your site as if each parent page was a folder. For example, imagine you have two pages ("Child A" and "Child B") that are assigned to a parent page (called "Parent Page"). In that case, expanding the "Page Hierarchy" folder would show a folder labeled "Parent Page" and, clicking on it, would filter the list of pages to show you the pages assigned to that parent (in this case "Child A" and "Child B").
 
@@ -116,16 +120,32 @@ Yes.  To sort folders in a specific order, click the 'Settings' button (i.e. the
 = Why are some of my folders grayed out? =
 When you search folders by keyword, folders that don't match the keyword are greyed out so that folders that do match the search term stand out.  Delete the text in the folder search field to return the folders to their normal non-greyed-out state.
 
+= Can I set permissions to control who can manage folders? =
+Yes, folder permissions are available in Wicked Folders Pro.  [Learn more](https://wickedplugins.com/plugins/wicked-folders/?utm_source=readme&utm_campaign=wicked_folders&utm_content=permissions_faq_link).
+
 == Screenshots ==
 
 1. Page folders
 2. Easily drag and drop folders to rearrange
 3. Drag and drop pages to quickly move pages into folders
 4. Bulk move pages to folders
-5. Dynamic folders let you quickly filter content by properties like date or author
-6. Pro feature: media library folders
+5. Pro feature: media library folders
+6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 2.18.0 (May 7, 2021) =
+* Posts are no longer removed from list after copying (instead of moving) a post to a folder
+* Posts can now be assigned to category dynamic folders
+* Fix folder sort order reverting to previous sort order when switching from 'Sort' to 'Normal' mode in folder pane
+* Add folder support for TablePress tables (Wicked Folders Pro)
+
+= 2.17.12 (April 13, 2021) =
+* Increase z-index of Select2 results when using Divi page builder (Wicked Folders Pro)
+
+= 2.17.11 (April 13, 2021) =
+* Fix JavaScript error that can occur when using folders on front-end due to Select2 only being registered on back-end
+* Fix behavior when dragging items from 'Unassigned Items' folder
 
 = 2.17.10 (April 12, 2021) =
 * Add ability to copy (instead of moving) items to folders by holding the SHIFT key when dragging

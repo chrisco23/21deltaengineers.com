@@ -153,7 +153,7 @@
                 <?php foreach ( $post_types as $post_type ) : ?>
                     <?php
                         if ( ! $is_pro_active && in_array( $post_type->name, $pro_post_types ) ) continue;
-                        if ( in_array( $post_type->name, array( Wicked_Folders::get_plugin_post_type_name(), Wicked_Folders::get_gravity_forms_form_post_type_name(), Wicked_Folders::get_gravity_forms_entry_post_type_name() ) ) ) continue;
+                        if ( in_array( $post_type->name, array( Wicked_Folders::get_plugin_post_type_name(), Wicked_Folders::get_gravity_forms_form_post_type_name(), Wicked_Folders::get_gravity_forms_entry_post_type_name(), 'tablepress_table' ) ) ) continue;
                         if ( ! $post_type->show_ui ) continue;
                     ?>
                     <label>

@@ -138,7 +138,7 @@ class PostMeta {
 						$meta['keyphrases'] = wp_json_encode( $keyphrase );
 						break;
 					case 'rank_math_robots':
-						$value = maybe_unserialize( $value );
+						$value = aioseo()->helpers->maybeUnserialize( $value );
 						if ( ! empty( $value ) ) {
 							$meta['robots_default'] = false;
 							foreach ( $value as $robotsName ) {
@@ -147,7 +147,7 @@ class PostMeta {
 						}
 						break;
 					case 'rank_math_advanced_robots':
-						$value = maybe_unserialize( $value );
+						$value = aioseo()->helpers->maybeUnserialize( $value );
 						if ( ! empty( $value['max-snippet'] ) && intval( $value['max-snippet'] ) ) {
 							$meta['robots_max_snippet'] = intval( $value['max-snippet'] );
 						}

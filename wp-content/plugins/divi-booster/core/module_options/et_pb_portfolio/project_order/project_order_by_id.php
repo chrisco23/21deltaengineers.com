@@ -67,6 +67,7 @@ class DBDB_portfolio_by_id {
 	
 	function remove_pre_get_posts_filter($content) {
 		remove_action('pre_get_posts', array($this, 'set_query_order'));
+        $this->projects = new DBDB_idlist(); // Reset the id list
 		return $content;
 	}
 

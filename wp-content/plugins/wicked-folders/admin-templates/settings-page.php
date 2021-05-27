@@ -24,7 +24,7 @@
             <hr />
             <?php if ( ! $is_pro_active && Wicked_Folders::is_upsell_enabled() ) : ?>
                 <h4><?php _e( 'Media Library Folders!', 'wicked-folders' ); ?></h4>
-                <p class="wicked-pro-screenshot"><a href="https://wickedplugins.com/plugins/wicked-folders/?utm_source=core_settings&utm_campaign=wicked_folders&utm_content=sidebar_media_library_photo" target="_blank"><img src="<?php echo plugin_dir_url( dirname( __FILE__ ) ); ?>images/media-library-folders.jpg" alt="<?php esc_attr_e( 'Screenshot of media library using Wicked Folders Pro', 'wicked-folders' ); ?>" width="800" height="465" /></a></p>
+                <p class="wicked-pro-screenshot"><a href="https://wickedplugins.com/plugins/wicked-folders/?utm_source=core_settings&utm_campaign=wicked_folders&utm_content=sidebar_media_library_photo" target="_blank"><img src="<?php echo plugin_dir_url( dirname( __FILE__ ) ); ?>images/media-library-folders.jpg?r=2" alt="<?php esc_attr_e( 'Screenshot of media library using Wicked Folders Pro', 'wicked-folders' ); ?>" width="800" height="465" /></a></p>
                 <p><?php _e( 'Upgrade to <a href="https://wickedplugins.com/plugins/wicked-folders/?utm_source=core_settings&utm_campaign=wicked_folders&utm_content=sidebar_text_link" target="_blank">Wicked Folders Pro</a> to organize your media library using folders!', 'wicked-folders' ); ?></p>
                 <hr />
             <?php endif; ?>

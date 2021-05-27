@@ -1261,6 +1261,7 @@ body.post-type-shop_order .wicked-folders-breadcrumbs + .wp-list-table {
 
 .wicked-folder-details footer {
 	text-align: right;
+	margin: 10px 0 0 0;
 }
 
 .wicked-folder-details .wicked-cancel {
@@ -1890,6 +1891,10 @@ Media library modal
 	font-weight: normal;
 }
 
+.wicked-drag-details .items {
+	color: #fff;
+}
+
 .wicked-drag-details .title {
 	font-weight: bold;
 	font-size: 16px;
@@ -2349,4 +2354,8 @@ Responsive
  */
 body.settings_page_menu_editor #toplevel_page_wicked_folders_toggle {
 	display: none;
+}
+
+body[class*="et_pb_"] .select2-container {
+	z-index: 100000000;
 }

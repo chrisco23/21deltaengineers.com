@@ -150,7 +150,9 @@
                 <?php _e( 'Items', 'wicked-folders' ); ?>
             <% } %>
         </div>
-        <?php _e( 'Hold SHIFT key to copy items to folder', 'wicked-folders' ); ?>
+        <% if ( enableCopy ) { %>
+            <?php _e( 'Hold SHIFT key to copy items to folder', 'wicked-folders' ); ?>
+        <% } %>
     </div>
 </script>
 
@@ -168,7 +170,7 @@
 
 <script>
 
-//var wickedFolderPane = wickedFolderPane || false;
+var wickedFolderPane;
 
 (function( $ ){
     $(function(){
@@ -203,7 +205,8 @@
                 ownerName:      folder.ownerName,
                 editable:       folder.editable,
                 deletable:      folder.deletable,
-                assignable:     folder.assignable
+                assignable:     folder.assignable,
+                termId:         'Wicked_Folders_Term_Dynamic_Folder' == folder.type ? folder.termId : false
             }) );
         });
 
@@ -247,6 +250,7 @@
             }
         } );
 
+        wickedFolderPane = pane;
     });
 })( jQuery );
 </script>

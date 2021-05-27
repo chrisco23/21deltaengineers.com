@@ -2510,12 +2510,17 @@
 
         initialize: function(){
             this.template = _.template( $( '#tmpl-wicked-post-drag-details' ).html() );
+
+            _.defaults( this.options, {
+                enableCopy: true
+            } );
         },
 
         render: function(){
             this.$el.html( this.template({
-                count: this.collection.length,
-                posts: this.collection
+                count:      this.collection.length,
+                posts:      this.collection,
+                enableCopy: this.options.enableCopy
             }) );
 
             return this;
@@ -2815,7 +2820,8 @@
                     }
 
                     var dragger = new wickedfolders.views.PostDragDetails({
-                        collection: posts
+                        collection: posts,
+                        enableCopy: 'unassigned_dynamic_folder' != folder.id
                     });
 
                     view.model.set( 'postsToMove', posts, { silent: true } );
@@ -2891,7 +2897,7 @@
                 }
             }
 
-            this.$( '.wicked-tree [data-folder-id="0"] .wicked-folder, .wicked-tree [data-folder-id="unassigned_dynamic_folder"] .wicked-folder' ).droppable( {
+            this.$( '.wicked-tree [data-folder-id="0"] .wicked-folder, .wicked-tree [data-folder-id="unassigned_dynamic_folder"] .wicked-folder, [data-folder-id^="dynamic_root"] > ul > [data-folder-id^="dynamic_term"] .wicked-folder' ).droppable( {
                 hoverClass: 'wicked-drop-hover',
                 accept: function( draggable ){
 
@@ -2964,9 +2970,20 @@
                             controller = new wickedfolders.models.FolderBrowserController(),
                             taxonomy = view.folder().get('taxonomy' ),
                             folder = view.folder(),
-                            assignable = 'Wicked_Folders_Term_Folder' == folder.get( 'type' ) && '0' != folder.get( 'id' ) && folder.get( 'assignable' ),
+                            destinationFolder = view.folders().get( destinationFolderId ),
+                            sourceFolderId = view.folder().id,
+                            assignable = folder.get( 'assignable' ),
                             copy = e.shiftKey || ! assignable,
                             message = ( copy ? 'Copied' : 'Moved' ) + ' ' + ( 1 == objectIds.length ? 'item' : objectIds.length + ' items' ) + ' to folder.';
+
+
+                        if ( 'Wicked_Folders_Term_Dynamic_Folder' == destinationFolder.get( 'type' ) ) {
+                            destinationFolderId = destinationFolder.get( 'termId' );
+                        }
+
+                        if ( 'Wicked_Folders_Term_Dynamic_Folder' == folder.get( 'type' ) ) {
+                            sourceFolderId = folder.get( 'termId' );
+                        }
 
                         controller.set( 'folders', view.folders(), { silent: true } );
                         controller.set( 'postType', view.model.get('postType'), { silent: true } );
@@ -2979,7 +2996,7 @@
 
                             controller.unassignFolders( objectIds );
 
-                            if ( folder.get( 'type' ) == 'Wicked_Folders_Term_Folder' ) {
+                            if ( folder.get( 'type' ) == 'Wicked_Folders_Term_Folder' || folder.get( 'type' ) == 'Wicked_Folders_Term_Dynamic_Folder' ) {
                                 // Only animate removing posts when in a term folder
                                 view.removePostRows( objectIds );
                             } else {
@@ -2994,8 +3011,15 @@
                                 message:    'Unassigned ' + ( 1 == objectIds.length ? 'item' : 'items' ) + ' from folders.'
                             }) );
                         } else {
-                            controller.moveObject( 'post', objectIds, destinationFolderId, view.folder().id, copy );
-                            if ( ! copy || '0' == folder.get( 'id' ) ) view.removePostRows( objectIds );
+                            controller.moveObject( 'post', objectIds, destinationFolderId, sourceFolderId, copy );
+
+                            if ( '0' == folder.get( 'id' ) && ! e.shiftKey ) {
+                                view.removePostRows( objectIds );
+                            } else if ( 'unassigned_dynamic_folder' == folder.get( 'id' ) ) {
+                                view.removePostRows( objectIds );
+                            } else if ( ! copy ) {
+                                view.removePostRows( objectIds );
+                            }
 
                             view.notifications.add( new wickedfolders.models.Notification({
                                 title:      'Success',
@@ -3037,6 +3061,8 @@
                         view.model.set( 'sortMode', 'custom' );
 
                         changedFolders.saveOrder();
+
+                        view.folders().sort();
                     }
                 });
             }
@@ -3367,6 +3393,11 @@
 
                 // Gravity Forms entries
                 $( '.wp-list-table.gf_entries tr[data-id="' + id + '"]' ).fadeOut( 500, function(){
+                    $( this ).remove();
+                });
+
+                // TablePress tables
+                $( '.wp-list-table.tablepress-all-tables tr[data-wf-post-id="' + id + '"]' ).fadeOut( 500, function(){
                     $( this ).remove();
                 });
             } );

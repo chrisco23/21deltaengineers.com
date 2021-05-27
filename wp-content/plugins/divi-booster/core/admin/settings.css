@@ -246,4 +246,4 @@ div.wtfdivi011_cssblock:nth-of-type(1) { display:none; }
 /* === actions === */
 a.wtfdivi011_action { margin:6px; vertical-align:bottom; background-repeat:no-repeat; background-size:16px 16px; display:inline-block; text-decoration:none; background-position:left center; padding-left:24px; }
 a.wtfdivi011_delete { background-image:url('../img/delete.png'); color:#c06; float:right; margin-right:-24px; }
-a.wtfdivi011_add { background-image:url('../img/icon_plus_alt2.png'); }
+a.dbdb_add_custom_css_box { background-image:url('../img/icon_plus_alt2.png'); }

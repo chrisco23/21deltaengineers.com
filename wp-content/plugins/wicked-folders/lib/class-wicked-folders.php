@@ -526,10 +526,19 @@ final class Wicked_Folders {
 				'hide_empty' 	=> false,
 			) );
 		} else {
-			$terms = get_terms( array(
+			$term_query = array(
 				'taxonomy' 		=> $taxonomy,
 				'hide_empty' 	=> false,
-			) );
+				// Polylang will only show folders for current language
+				// without the following. Show all folders regardless of
+				// language
+				'lang' 			=> '',
+			);
+
+			// Give others a chance to filter folder term query
+			$term_query = apply_filters( 'wicked_folders_folder_term_query_args' , $term_query );
+
+			$terms = get_terms( $term_query );
 		}
 
 		if ( ! is_wp_error( $terms ) ) {
@@ -957,7 +966,7 @@ final class Wicked_Folders {
 							)
 						);
 
-						foreach ( $terms as $term ) {
+						foreach ( $terms as $index => $term ) {
 							$id 	= 'dynamic_term_' . $taxonomy->name . '__id__' . $term->term_id;
 							$parent = 'dynamic_term_' . $taxonomy->name;
 
@@ -973,6 +982,7 @@ final class Wicked_Folders {
 								'taxonomy' 		=> $taxonomy->name,
 								'term_id' 		=> $term->term_id,
 								'assignable' 	=> 'attachment' == $post_type ? false : true,
+								'order' 		=> $index,
 							) );
 						}
 

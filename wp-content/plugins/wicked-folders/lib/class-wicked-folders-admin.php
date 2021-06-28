@@ -137,6 +137,7 @@ final class Wicked_Folders_Admin {
 		$is_woocommerce_active 	= false;
 		$is_wpml_active 		= false;
 		$is_tablepress_active 	= false;
+		$in_footer 				= false;
 
 		if ( function_exists( 'is_plugin_active' ) ) {
 			$is_woocommerce_active 	= is_plugin_active( 'woocommerce/woocommerce.php' );
@@ -164,9 +165,17 @@ final class Wicked_Folders_Admin {
 			}
 		}
 
-		wp_register_script( 'wicked-folders-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'js/admin.js', array(), Wicked_Folders::plugin_version() );
-		wp_register_script( 'wicked-folders-app', plugin_dir_url( dirname( __FILE__ ) ) . 'js/app.js', array( 'jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable', 'backbone' ), Wicked_Folders::plugin_version() );
-		wp_register_script( 'wicked-folders-select2', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/select2/js/select2.min.js', array(), Wicked_Folders::plugin_version() );
+		// Load scripts in footer when Thrive Quiz Builder is active; for some
+		// reason media library isn't loading when scripts are loaded in head
+		if ( isset( $_GET['post_type'] ) && 'tqb_quiz' == $_GET['post_type'] ) {
+			$in_footer = true;
+		}
+
+		$in_footer = apply_filters( 'wicked_folders_enqueue_scripts_in_footer', $in_footer );
+
+		wp_register_script( 'wicked-folders-select2', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/select2/js/select2.min.js', array(), Wicked_Folders::plugin_version(), $in_footer );
+		wp_register_script( 'wicked-folders-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'js/admin.js', array(), Wicked_Folders::plugin_version(), $in_footer );
+		wp_register_script( 'wicked-folders-app', plugin_dir_url( dirname( __FILE__ ) ) . 'js/app.js', array( 'jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable', 'backbone' ), Wicked_Folders::plugin_version(), $in_footer );
 
 		wp_register_style( 'wicked-folders-select2', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/select2/css/select2.min.css', array(), Wicked_Folders::plugin_version() );
 
@@ -209,9 +218,10 @@ final class Wicked_Folders_Admin {
 			'showBreadcrumbs' 	=> ( bool ) get_option( 'wicked_folders_show_breadcrumbs', true ),
 			'enableAjaxNav' 	=> ( bool ) get_option( 'wicked_folders_enable_ajax_nav', true ),
 			'afterAjaxScripts' 	=> apply_filters( 'wicked_folders_after_ajax_scripts', $after_ajax_scripts ),
+			'isElementorActive' => isset( $_GET['action'] ) && 'elementor' == $_GET['action'] ? true : false,
 		) );
 
-		wp_register_style( 'wicked-folders-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'css/admin.css?', array(), Wicked_Folders::plugin_version() );
+		wp_register_style( 'wicked-folders-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'css/admin.css', array(), Wicked_Folders::plugin_version() );
 
 		wp_enqueue_script( 'wicked-folders-admin' );
 		wp_enqueue_script( 'wicked-folders-app' );

@@ -24,6 +24,13 @@
             } else {
                 return isRtl;
             }
+        },
+
+        templateSettings: {
+            evaluate:    /<#([\s\S]+?)#>/g,
+            interpolate: /\{\{\{([\s\S]+?)\}\}\}/g,
+            escape:      /\{\{([^\}]+?)\}\}(?!\})/g,
+            variable:    'data'
         }
     };
 
@@ -103,6 +110,16 @@
                     dataType: 'json'
                 }
             );
+        },
+
+        hasChildren: function() {
+            var id = this.get( 'id' );
+
+            var children = _.filter( this.collection.models, function( folder ){
+                return folder.get( 'parent' ) == id;
+            } );
+
+            return children.length > 0;
         }
     });
 
@@ -396,16 +413,20 @@
         },
 
         render: function(){
+            var parent = wp.hooks.applyFilters( 'wickedFolders.folderSelectRenderParent', '0' );
             var id = this.options.selected;
+
             this.$el.empty();
             this.$el.append( '<option value="0">' + this.options.defaultText + '</option>' );
-            this.renderOptions( '0' );
+
+            this.renderOptions( parent );
+
             // Make sure the option still exists
             if ( ! this.$( '[value="' + id + '"]' ).length ) {
                 this.$el.val( '0' );
             }
-            return this;
 
+            return this;
         },
 
         renderOptions: function( parent, depth ){
@@ -471,7 +492,7 @@
                 var a = $( '<a class="wicked-folder" href="#" />' ),
                     li = $( '<li />' );
 
-                a.text( folder.get( 'name') );
+                a.html( folder.get( 'name') );
                 li.attr( 'data-folder-id', folder.id );
                 li.append( a );
                 view.$el.append( li );
@@ -479,7 +500,7 @@
 
             var li = $( '<li />' );
             li.attr( 'data-folder-id', selectedFolder.id );
-            li.text( selectedFolder.get( 'name') );
+            li.html( selectedFolder.get( 'name') );
             view.$el.append( li );
 
         }
@@ -705,6 +726,10 @@
                 classes += ' assignable';
             }
 
+            if ( this.model.hasChildren() ) {
+                classes += ' has-children';
+            }
+
             return classes;
 
         },
@@ -803,7 +828,7 @@
         render: function() {
             var itemCount = this.model.get( 'itemCount' );
 
-            this.$el.text( this.model.get( 'name' ) );
+            this.$el.html( this.model.get( 'name' ) );
             //this.$el.append( '<span class="wicked-folder-name">' + this.model.get( 'name' ) + '</span>' );
             if ( ! this.$( '.wicked-icon' ).length ) {
                 this.$el.prepend( '<span class="wicked-icon" />' );
@@ -845,7 +870,7 @@
         },
 
         render: function() {
-            this.$el.text( this.model.get( 'name' ) );
+            this.$el.html( this.model.get( 'name' ) );
         }
 
     });
@@ -2149,7 +2174,7 @@
 
         initialize: function(){
 
-            this.template = _.template( $( '#tmpl-wicked-folder-details' ).html() );
+            this.template = _.template( $( '#tmpl-wicked-folder-details' ).html(), wickedfolders.util.templateSettings );
 
             _.defaults( this.options, {
                 mode: 'add'
@@ -2468,7 +2493,7 @@
         },
 
         initialize: function(){
-            this.template = _.template( $( '#tmpl-wicked-folder-pane-settings' ).html() );
+            this.template = _.template( $( '#tmpl-wicked-folder-pane-settings' ).html(), wickedfolders.util.templateSettings );
 
             this.options.pane.model.on( 'change:organizationMode change:sortMode', this.render, this );
         },
@@ -2509,7 +2534,7 @@
         className: 'wicked-drag-details',
 
         initialize: function(){
-            this.template = _.template( $( '#tmpl-wicked-post-drag-details' ).html() );
+            this.template = _.template( $( '#tmpl-wicked-post-drag-details' ).html(), wickedfolders.util.templateSettings );
 
             _.defaults( this.options, {
                 enableCopy: true
@@ -2561,7 +2586,7 @@
         },
 
         initialize: function(){
-            this.template = _.template( $( '#tmpl-wicked-folders-notification' ).html() );
+            this.template = _.template( $( '#tmpl-wicked-folders-notification' ).html(), wickedfolders.util.templateSettings );
 
             this.model.on( 'change', this.render, this );
 

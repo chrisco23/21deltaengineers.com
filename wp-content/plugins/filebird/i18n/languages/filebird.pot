@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: FileBird\n"
-"POT-Creation-Date: 2021-03-29 11:40+0700\n"
+"POT-Creation-Date: 2021-05-08 00:10+0700\n"
 "PO-Revision-Date: 2020-12-18 14:31+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -30,18 +30,18 @@ msgstr ""
 msgid "FileBird Folder"
 msgstr ""
 
-#: includes/Classes/Convert.php:166
+#: includes/Classes/Convert.php:167
 msgid "Import categories to FileBird"
 msgstr ""
 
-#: includes/Classes/Convert.php:169
+#: includes/Classes/Convert.php:170
 #, php-format
 msgid ""
 "We found you have %1$s categories you created from <strong>%2$s</strong> "
 "plugin. Would you like to import it to <strong>FileBird</strong>?"
 msgstr ""
 
-#: includes/Classes/Convert.php:172 views/pages/settings/tab-import.php:25
+#: includes/Classes/Convert.php:173 views/pages/settings/tab-import.php:25
 #: views/pages/settings/tab-import.php:53
 #: views/pages/settings/tab-import.php:81
 #: views/pages/settings/tab-import.php:109
@@ -49,44 +49,44 @@ msgstr ""
 msgid "Import Now"
 msgstr ""
 
-#: includes/Classes/Convert.php:173
+#: includes/Classes/Convert.php:174
 msgid "No, thanks"
 msgstr ""
 
-#: includes/Classes/Convert.php:217
+#: includes/Classes/Convert.php:218
 msgid "Success"
 msgstr ""
 
-#: includes/Classes/Convert.php:233
+#: includes/Classes/Convert.php:234
 msgid "success"
 msgstr ""
 
-#: includes/Classes/Convert.php:235
+#: includes/Classes/Convert.php:236
 msgid "validation failed"
 msgstr ""
 
-#: includes/Classes/Convert.php:251
+#: includes/Classes/Convert.php:252
 msgid "Successfully wiped."
 msgstr ""
 
-#: includes/Classes/Convert.php:267
+#: includes/Classes/Convert.php:268
 msgid "Successfully cleared."
 msgstr ""
 
-#: includes/Classes/Convert.php:271
+#: includes/Classes/Convert.php:272
 msgid "Please try again."
 msgstr ""
 
-#: includes/Classes/Convert.php:358
+#: includes/Classes/Convert.php:360
 #, php-format
 msgid ""
 "Congratulations! We imported successfully %d folders into <strong>FileBird.</"
 "strong>"
 msgstr ""
 
-#: includes/Classes/Convert.php:368 includes/Classes/Convert.php:375
-#: includes/Classes/Convert.php:382 includes/Classes/Convert.php:389
-#: includes/Classes/Convert.php:396 includes/Classes/EnhancedConvert.php:43
+#: includes/Classes/Convert.php:370 includes/Classes/Convert.php:377
+#: includes/Classes/Convert.php:384 includes/Classes/Convert.php:391
+#: includes/Classes/Convert.php:398 includes/Classes/EnhancedConvert.php:43
 msgid "Already Updated"
 msgstr ""
 
@@ -124,6 +124,22 @@ msgstr ""
 msgid "Already did"
 msgstr ""
 
+#: includes/Classes/TabActive.php:40
+msgid "Activate your license for automatic updates"
+msgstr ""
+
+#: includes/Classes/TabActive.php:152
+msgid "Could not use this purchase code for your domain."
+msgstr ""
+
+#: includes/Classes/TabActive.php:155
+msgid "Could not verify your domain."
+msgstr ""
+
+#: includes/Classes/TabActive.php:167
+msgid "Please active license to update."
+msgstr ""
+
 #: includes/Controller/Api.php:104
 msgid "Invalid action"
 msgstr ""
@@ -136,60 +152,60 @@ msgstr ""
 msgid "Required fields are missing."
 msgstr ""
 
-#: includes/Controller/Api.php:154 includes/Controller/Folder.php:428
-#: includes/Controller/Folder.php:483 includes/Controller/Folder.php:496
+#: includes/Controller/Api.php:154 includes/Controller/Folder.php:432
+#: includes/Controller/Folder.php:487 includes/Controller/Folder.php:500
 msgid "Validation failed"
 msgstr ""
 
-#: includes/Controller/Folder.php:64
+#: includes/Controller/Folder.php:65
 msgid "Create your first folder for media library now."
 msgstr ""
 
-#: includes/Controller/Folder.php:66
+#: includes/Controller/Folder.php:67
 msgid "Get Started"
 msgstr ""
 
-#: includes/Controller/Folder.php:88 includes/I18n.php:124
+#: includes/Controller/Folder.php:89 includes/I18n.php:126
 msgid "FileBird 4 Update Required"
 msgstr ""
 
-#: includes/Controller/Folder.php:92
+#: includes/Controller/Folder.php:93
 msgid ""
 "You're using the new FileBird 4. Please update database to view your folders "
 "correctly."
 msgstr ""
 
-#: includes/Controller/Folder.php:98
+#: includes/Controller/Folder.php:99
 #: views/pages/settings/tab-update-database.php:10
 msgid "Update now"
 msgstr ""
 
-#: includes/Controller/Folder.php:232
+#: includes/Controller/Folder.php:235
 msgid "Your request can't be processed."
 msgstr ""
 
-#: includes/Controller/Folder.php:256 includes/Model/Folder.php:30
+#: includes/Controller/Folder.php:260 includes/Model/Folder.php:30
 msgid "All Folders"
 msgstr ""
 
-#: includes/Controller/Folder.php:260 includes/Controller/Folder.php:543
+#: includes/Controller/Folder.php:264 includes/Controller/Folder.php:599
 #: includes/I18n.php:70 includes/Model/Folder.php:34
 msgid "Uncategorized"
 msgstr ""
 
-#: includes/Controller/Folder.php:385
+#: includes/Controller/Folder.php:389
 msgid "Please choose folder"
 msgstr ""
 
-#: includes/Controller/Folder.php:424 includes/Controller/Folder.php:442
+#: includes/Controller/Folder.php:428 includes/Controller/Folder.php:446
 msgid "A folder with this name already exists. Please choose another one."
 msgstr ""
 
-#: includes/Controller/Folder.php:471
+#: includes/Controller/Folder.php:475
 msgid "Can't delete folder, please try again later"
 msgstr ""
 
-#: includes/Controller/Folder.php:492
+#: includes/Controller/Folder.php:496
 msgid "Folder tree has been updated."
 msgstr ""
 
@@ -384,84 +400,92 @@ msgid "Author Descending"
 msgstr ""
 
 #: includes/I18n.php:89
-msgid "Skip & Deactivate"
+msgid "By Title"
 msgstr ""
 
 #: includes/I18n.php:90
-msgid "Deactivate"
+msgid "Title Ascending"
 msgstr ""
 
 #: includes/I18n.php:91
-msgid "Thank you so much!"
+msgid "Title Descending"
+msgstr ""
+
+#: includes/I18n.php:92
+msgid "Skip & Deactivate"
 msgstr ""
 
 #: includes/I18n.php:93
-msgid "I've purchased FileBird Pro."
+msgid "Deactivate"
 msgstr ""
 
 #: includes/I18n.php:94
-msgid "It doesn't have the features I'm looking for."
-msgstr ""
-
-#: includes/I18n.php:95
-msgid "Not work with my theme or other plugins."
+msgid "Thank you so much!"
 msgstr ""
 
 #: includes/I18n.php:96
-msgid "Found another plugin that works better."
+msgid "It doesn't have the features I'm looking for."
 msgstr ""
 
 #: includes/I18n.php:97
-msgid "Don't know how to use it."
+msgid "Not work with my theme or other plugins."
 msgstr ""
 
 #: includes/I18n.php:98
-msgid "This is just temporary, I will use it again."
+msgid "Found another plugin that works better."
 msgstr ""
 
 #: includes/I18n.php:99
-msgid "Other"
+msgid "Don't know how to use it."
+msgstr ""
+
+#: includes/I18n.php:100
+msgid "This is just temporary, I will use it again."
 msgstr ""
 
 #: includes/I18n.php:101
-msgid "Which features please?"
-msgstr ""
-
-#: includes/I18n.php:102
-msgid "Please tell us which one"
+msgid "Other"
 msgstr ""
 
 #: includes/I18n.php:103
+msgid "Which features please?"
+msgstr ""
+
+#: includes/I18n.php:104
+msgid "Please tell us which one"
+msgstr ""
+
+#: includes/I18n.php:105
 msgid ""
 "Please read FileBird documentation <a target=\"_blank\" href=\"https://"
 "ninjateam.gitbook.io/filebird/\">here</a> or <a target=\"_blank\" href="
 "\"https://ninjateam.org/support/\">chat with us</a> if you need help"
 msgstr ""
 
-#: includes/I18n.php:104
+#: includes/I18n.php:106
 msgid ""
 "Please <a target=\"_blank\" href=\"https://ninjateam.org/support/\">ask for "
 "support here</a>, we will fix it for you."
 msgstr ""
 
-#: includes/I18n.php:105
+#: includes/I18n.php:107
 msgid "Please share your thoughts..."
 msgstr ""
 
-#: includes/I18n.php:106
+#: includes/I18n.php:108
 msgid "Want a better FileBird?"
 msgstr ""
 
-#: includes/I18n.php:107
+#: includes/I18n.php:109
 msgid ""
 "Sorry to see you walk away, please share why you want to deactivate FileBird?"
 msgstr ""
 
-#: includes/I18n.php:108
+#: includes/I18n.php:110
 msgid "Folder Limit Reached"
 msgstr ""
 
-#: includes/I18n.php:109
+#: includes/I18n.php:111
 msgid ""
 "<p>FileBird Lite version supports up to 10 folders.<br>Please upgrade to "
 "have unlimited folders and other premium features!</p>\n"
@@ -483,115 +507,176 @@ msgid ""
 "        </ul>"
 msgstr ""
 
-#: includes/I18n.php:119
+#: includes/I18n.php:121
 msgid "Including Divi, Fusion, Thrive Architect, WPBakery..."
 msgstr ""
 
-#: includes/I18n.php:120
+#: includes/I18n.php:122
 msgid "Upgrade to FileBird Pro now"
 msgstr ""
 
-#: includes/I18n.php:121
+#: includes/I18n.php:123
 msgid "Success."
 msgstr ""
 
-#: includes/I18n.php:122
+#: includes/I18n.php:124
 msgid "Congratulations. Successfully imported!"
 msgstr ""
 
-#: includes/I18n.php:123
+#: includes/I18n.php:125
 msgid "Go To Media"
 msgstr ""
 
-#: includes/I18n.php:125
+#: includes/I18n.php:127
 msgid ""
 "You're using the new FileBird 4. Please import database to view your folders "
 "correctly."
 msgstr ""
 
-#: includes/I18n.php:126
+#: includes/I18n.php:128
 msgid "Import now"
 msgstr ""
 
-#: includes/I18n.php:127
+#: includes/I18n.php:129
 msgid ""
 "Import failed. Please try again or <a href=\"https://ninjateam.org/support\" "
 "target=\"_blank\">contact our support</a>."
 msgstr ""
 
-#: includes/I18n.php:128
+#: includes/I18n.php:130
 msgid "Please enter your Purchase Code."
 msgstr ""
 
-#: includes/I18n.php:129
+#: includes/I18n.php:131
 msgid "Please enter your Personal Access Token or get one."
 msgstr ""
 
-#: includes/I18n.php:130
+#: includes/I18n.php:132
 msgid "Can not active your License, please try again."
 msgstr ""
 
-#: includes/I18n.php:131 views/pages/html-settings.php:18
+#: includes/I18n.php:133 views/pages/html-settings.php:24
 #: views/pages/settings/tab-settings.php:1
 msgid "Settings"
 msgstr ""
 
-#: includes/I18n.php:132 views/pages/html-settings.php:56
+#: includes/I18n.php:134 views/pages/html-settings.php:64
 msgid "FileBird Settings"
 msgstr ""
 
-#: includes/I18n.php:133
+#: includes/I18n.php:135
 msgid "Select a default startup folder:"
 msgstr ""
 
-#: includes/I18n.php:134
-msgid "Settings saved"
-msgstr ""
-
-#: includes/I18n.php:135
-msgid "Failed to save settings. Please try again!"
-msgstr ""
-
 #: includes/I18n.php:136
-msgid "Unlock new features"
+msgid "Auto sort files by:"
 msgstr ""
 
 #: includes/I18n.php:137
+msgid "Default"
+msgstr ""
+
+#: includes/I18n.php:138
+msgid "Settings saved"
+msgstr ""
+
+#: includes/I18n.php:139
+msgid "Failed to save settings. Please try again!"
+msgstr ""
+
+#: includes/I18n.php:140
+msgid "Unlock new features"
+msgstr ""
+
+#: includes/I18n.php:141
 msgid ""
 "To use FileBird folders with your current page builder/plugin, please "
 "upgrade to PRO version."
 msgstr ""
 
-#: includes/I18n.php:138
+#: includes/I18n.php:142
 msgid "Do more with FileBird PRO"
 msgstr ""
 
-#: includes/I18n.php:139
+#: includes/I18n.php:143
 msgid ""
 "You're using a third party plugin, which is supported in FileBird PRO. "
 "Please upgrade to browse files faster and get more done."
 msgstr ""
 
-#: includes/I18n.php:140 includes/Page/Settings.php:70
+#: includes/I18n.php:144
 msgid "Go Pro"
 msgstr ""
 
-#: includes/I18n.php:141
+#: includes/I18n.php:145
 msgid "View details."
 msgstr ""
 
-#: includes/I18n.php:142
+#: includes/I18n.php:146
 msgid "Turn off for 7 days"
 msgstr ""
 
-#: includes/I18n.php:143
+#: includes/I18n.php:147
 msgid "Collapse"
 msgstr ""
 
-#: includes/I18n.php:144
+#: includes/I18n.php:148
 msgid "Expand"
 msgstr ""
 
+#: includes/I18n.php:149
+msgid "Uploaded"
+msgstr ""
+
+#: includes/I18n.php:150
+msgid "Less than a min"
+msgstr ""
+
+#: includes/I18n.php:151
+msgid "Total size"
+msgstr ""
+
+#: includes/Lib/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:54
+msgid "View details"
+msgstr ""
+
+#: includes/Lib/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:77
+#, php-format
+msgid "More information about %s"
+msgstr ""
+
+#: includes/Lib/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:128
+msgid "Check for updates"
+msgstr ""
+
+#: includes/Lib/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:214
+#, php-format
+msgctxt "the plugin title"
+msgid "The %s plugin is up to date."
+msgstr ""
+
+#: includes/Lib/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:216
+#, php-format
+msgctxt "the plugin title"
+msgid "A new version of the %s plugin is available."
+msgstr ""
+
+#: includes/Lib/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:218
+#, php-format
+msgctxt "the plugin title"
+msgid "Could not determine if updates are available for %s."
+msgstr ""
+
+#: includes/Lib/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:224
+#, php-format
+msgid "Unknown update checker status \"%s\""
+msgstr ""
+
+#: includes/Lib/plugin-update-checker/Puc/v4p11/Vcs/PluginUpdateChecker.php:98
+msgid "There is no changelog available."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
 #: includes/Page/Settings.php:39 includes/Page/Settings.php:40
 msgid "FileBird"
 msgstr ""
@@ -600,21 +685,68 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: views/pages/html-settings.php:25
+#: views/pages/html-settings.php:19
+msgid "Activation"
+msgstr ""
+
+#: views/pages/html-settings.php:31
 #: views/pages/settings/tab-update-database.php:1
 msgid "Update Database"
 msgstr ""
 
-#: views/pages/html-settings.php:30
+#: views/pages/html-settings.php:36
 msgid "API"
 msgstr ""
 
-#: views/pages/html-settings.php:35 views/pages/settings/tab-uninstall.php:1
+#: views/pages/html-settings.php:41 views/pages/settings/tab-uninstall.php:1
 msgid "Uninstall"
 msgstr ""
 
-#: views/pages/html-settings.php:43
+#: views/pages/html-settings.php:50
 msgid "Import"
+msgstr ""
+
+#: views/pages/settings/tab-activated.php:9
+msgid "Congratulations! 🎉"
+msgstr ""
+
+#: views/pages/settings/tab-activated.php:12
+msgid "Your FileBird Pro was activated!"
+msgstr ""
+
+#: views/pages/settings/tab-activated.php:21
+msgid ""
+"Starting a new site? <a href=\"https://1.envato.market/Get-FileBird\" class="
+"\"njt-fb-purchase-more\">Buy another license</a>."
+msgstr ""
+
+#: views/pages/settings/tab-active.php:9
+msgid ""
+"To activate FileBird, please sign in to Envato and accept a few permissions."
+msgstr ""
+
+#: views/pages/settings/tab-active.php:11
+msgid "This helps verify your license."
+msgstr ""
+
+#: views/pages/settings/tab-active.php:14
+msgid "By activating FileBird, you’ll have:"
+msgstr ""
+
+#: views/pages/settings/tab-active.php:19
+msgid "Auto-update to the latest version"
+msgstr ""
+
+#: views/pages/settings/tab-active.php:22
+msgid "Premium Technical Support"
+msgstr ""
+
+#: views/pages/settings/tab-active.php:25
+msgid "Live Chat 1-1 on Facebook for any questions"
+msgstr ""
+
+#: views/pages/settings/tab-active.php:34
+msgid "Login with Envato"
 msgstr ""
 
 #: views/pages/settings/tab-api.php:1
@@ -740,12 +872,20 @@ msgid ""
 "installs will be imported."
 msgstr ""
 
-#: views/particle/folder_dropdown.php:2
-msgid "Choose folder: "
+#: views/particle/activation_fail.php:5
+msgid ""
+"It seems you don't have any valid FileBird license. Please <a href=\"https://"
+"ninjateam.org/support\" target=\"_blank\">contact support</a> to get help or "
+"<a href=\"https://1.envato.market/Get-FileBird\" target=\"_blank\">purchase "
+"a FileBird license</a>"
 msgstr ""
 
-#. Plugin Name of the plugin/theme
-msgid "FileBird Lite"
+#: views/particle/activation_fail.php:9
+msgid "Oops! Activation failed."
+msgstr ""
+
+#: views/particle/folder_dropdown.php:2
+msgid "Choose folder: "
 msgstr ""
 
 #. Plugin URI of the plugin/theme

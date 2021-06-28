@@ -3,7 +3,7 @@ Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
 Tested up to: 5.7
-Stable tag: 2.18.0
+Stable tag: 2.18.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -123,6 +123,9 @@ When you search folders by keyword, folders that don't match the keyword are gre
 = Can I set permissions to control who can manage folders? =
 Yes, folder permissions are available in Wicked Folders Pro.  [Learn more](https://wickedplugins.com/plugins/wicked-folders/?utm_source=readme&utm_campaign=wicked_folders&utm_content=permissions_faq_link).
 
+= Why is the folder toggle arrow greyed out? =
+The folder toggle arrow is greyed out when a folder doesn't have any child folders.  This is done to help you more easily determine which folders have child folders.
+
 == Screenshots ==
 
 1. Page folders
@@ -133,6 +136,20 @@ Yes, folder permissions are available in Wicked Folders Pro.  [Learn more](https
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 2.18.3 (June 25, 2021) =
+* Fix ampersands displaying as character entities in folder names
+* Add JavaScript filter that can be used to change the initial parent used when rendering the folder select dropdown
+* Dim folder toggle arrows to more easily identify which folders have child folders
+* Add empty 'lang' attribute to folder term query so that folders are displayed regardless of language when using Polylang
+* Add `wicked_folders_folder_term_query_args` filter to allow folder term query arguments to be filtered
+
+= 2.18.2 (June 4, 2021) =
+* Explicitly set Underscore template interpolation to use same syntax as WordPress to avoid conflicts when other plugins change the template settings
+* Update Backbone view templates to use WordPress syntax
+
+= 2.18.1 (May 14, 2021) =
+* Sort category dynamic folders in the order they are returned by WordPress
 
 = 2.18.0 (May 7, 2021) =
 * Posts are no longer removed from list after copying (instead of moving) a post to a folder

@@ -426,7 +426,7 @@ div[id^="wf"][id$="foldersdiv"] div[id^="wf"][id$="all"] {
 	position: fixed;
 	top: 100px;
 	right: 30px;
-	z-index: 1000000;
+	z-index: 100000000;
 }
 
 .wicked-folders-notification {
@@ -812,6 +812,10 @@ ul.wicked-tree a:focus {
 ul.wicked-tree a.wicked-toggle {
 	width: 30px;
 	vertical-align: middle;
+}
+
+ul.wicked-tree li:not(.has-children) a.wicked-toggle {
+	opacity: 0.2;
 }
 
 ul.wicked-tree a.wicked-toggle:before {
@@ -1239,13 +1243,16 @@ body.post-type-shop_order .wicked-folders-breadcrumbs + .wp-list-table {
 */
 
 .wicked-folder-details input[type="text"],
-.wicked-folder-details select {
+.wicked-folder-details select,
+.elementor-editor-active .wicked-folder-details input[type="text"],
+.elementor-editor-active .media-modal.wp-core-ui .wicked-folder-details select {
 	width: 100%;
 	display: block;
 	margin: 8px 0;
 }
 
-.wicked-folder-details fieldset {
+.wicked-folder-details fieldset,
+.elementor-editor-active .media-modal.wp-core-ui .wicked-folder-details fieldset {
 	border: solid 1px #ddd;
 	padding: 15px;
 	margin: 0 0 20px 0;
@@ -2354,6 +2361,11 @@ Responsive
  */
 body.settings_page_menu_editor #toplevel_page_wicked_folders_toggle {
 	display: none;
+}
+
+#wicked-folders-select2-dropdown {
+	position: relative;
+	z-index: 100000000;
 }
 
 body[class*="et_pb_"] .select2-container {

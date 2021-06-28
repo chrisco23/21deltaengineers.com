@@ -39,58 +39,58 @@
     </div>
 </div>
 
-<script type="text/html" id="tmpl-wicked-folder-details">
+<script type="text/template" id="tmpl-wicked-folder-details">
     <header>
-        <h2><%= title %></h2>
+        <h2>{{ data.title }}</h2>
         <span class="wicked-spinner"></span>
         <a class="wicked-close" href="#" title="<?php _e( 'Close', 'wicked-folders' ); ?>"><span class="screen-reader-text"><?php _e( 'Close', 'wicked-folders' ); ?></span></a>
     </header>
     <div>
         <div class="wicked-messages wicked-errors"></div>
-        <% if ( 'delete' == mode ) { %>
-            <p><%= deleteFolderConfirmation %></p>
-        <% } else { %>
+        <# if ( 'delete' == data.mode ) { #>
+            <p>{{ data.deleteFolderConfirmation }}</p>
+        <# } else { #>
             <div class="wicked-folder-name">
                 <label for="wicked-folder-name" class="screen-reader-text"><?php _e( 'Folder name', 'wicked-folders' ); ?>:</label>
-                <input id="wicked-folder-name" type="text" name="wicked_folder_name" placeholder="<?php _e( 'Folder name', 'wicked-folders' ); ?>" value="<%= folderName %>" />
+                <input id="wicked-folder-name" type="text" name="wicked_folder_name" placeholder="<?php _e( 'Folder name', 'wicked-folders' ); ?>" value="{{ data.folderName }}" />
             </div>
             <div class="wicked-folder-parent">
                 <label for="wicked-folder-parent" class="screen-reader-text"><?php _e( 'Parent folder', 'wicked-folders' ); ?>:</label>
                 <div></div>
             </div>
-        <% } %>
-        <% if ( 'edit' == mode ) { %>
+        <# } #>
+        <# if ( 'edit' == data.mode ) { #>
             <fieldset>
                 <legend>
-                    <%= cloneFolderLink %>
-                    <span class="dashicons dashicons-editor-help" title="<%= cloneFolderTooltip %>"></span>
+                    {{ data.cloneFolderLink }}
+                    <span class="dashicons dashicons-editor-help" title="{{ data.cloneFolderTooltip }}"></span>
                 </legend>
                 <p>
                     <label>
                         <input type="checkbox" name="wicked_clone_children" />
-                        <%= cloneChildFolders %>
+                        {{ data.cloneChildFolders }}
                     </label>
-                    <span class="dashicons dashicons-editor-help" title="<%= cloneChildFoldersTooltip %>"></span>
+                    <span class="dashicons dashicons-editor-help" title="{{ data.cloneChildFoldersTooltip }}"></span>
                 </p>
-                <p><a class="button wicked-clone-folder" href="#"><%= cloneFolderLink %></a></p>
+                <p><a class="button wicked-clone-folder" href="#">{{ data.cloneFolderLink }}</a></p>
             </fieldset>
             <p class="wicked-folder-owner">
-                <label for="wicked-folder-owner-id"><%= ownerLabel %></label>
+                <label for="wicked-folder-owner-id">{{ data.ownerLabel }}</label>
                 <select id="wicked-folder-owner-id" name="wicked_folder_owner_id">
-                    <% if ( ownerId ) { %>
-                    <option value="<%= ownerId %>" selected="selected"><%= ownerName %></option>
-                    <% } %>
+                    <# if ( data.ownerId ) { #>
+                    <option value="{{ data.ownerId }}" selected="selected">{{ data.ownerName }}</option>
+                    <# } #>
                 </select>
             </p>
-        <% } %>
+        <# } #>
     </div>
     <footer>
         <a class="button wicked-cancel" href="#"><?php _e( 'Cancel', 'wicked-folders' ); ?></a>
-        <button class="button-primary wicked-save" type="submit"><%= saveButtonLabel %></button>
+        <button class="button-primary wicked-save" type="submit">{{ data.saveButtonLabel }}</button>
     </footer>
 </script>
 
-<script type="text/html" id="tmpl-wicked-folder-pane-settings">
+<script type="text/template" id="tmpl-wicked-folder-pane-settings">
     <header>
         <h2><?php _e( 'Settings', 'wicked-folders' ); ?></h2>
         <span class="wicked-spinner"></span>
@@ -105,13 +105,13 @@
             <div class="wicked-field-options">
                 <div>
                     <label>
-                        <input type="radio" name="wicked_organization_mode" value="organize" <% if ( 'organize' == mode ) { %>checked<% } %> />
+                        <input type="radio" name="wicked_organization_mode" value="organize" <# if ( 'organize' == data.mode ) { #>checked<# } #> />
                         <?php _e( 'Normal', 'wicked-folders' ); ?>
                     </label>
                 </div>
                 <div>
                     <label>
-                        <input type="radio" name="wicked_organization_mode" value="sort" <% if ( 'sort' == mode ) { %>checked<% } %> />
+                        <input type="radio" name="wicked_organization_mode" value="sort" <# if ( 'sort' == data.mode ) { #>checked<# } #> />
                         <?php _e( 'Sort', 'wicked-folders' ); ?>
                     </label>
                 </div>
@@ -125,13 +125,13 @@
             <div class="wicked-field-options">
                 <div>
                     <label>
-                        <input type="radio" name="wicked_sort_mode" value="alpha" <% if ( 'alpha' == sortMode ) { %>checked<% } %> />
+                        <input type="radio" name="wicked_sort_mode" value="alpha" <# if ( 'alpha' == data.sortMode ) { #>checked<# } #> />
                         <?php _e( 'Alphabetical', 'wicked-folders' ); ?>
                     </label>
                 </div>
                 <div>
                     <label>
-                        <input type="radio" name="wicked_sort_mode" value="custom" <% if ( 'custom' == sortMode ) { %>checked<% } %> />
+                        <input type="radio" name="wicked_sort_mode" value="custom" <# if ( 'custom' == data.sortMode ) { #>checked<# } #> />
                         <?php _e( 'Custom', 'wicked-folders' ); ?>
                     </label>
                 </div>
@@ -140,32 +140,32 @@
     </div>
 </script>
 
-<script type="text/html" id="tmpl-wicked-post-drag-details">
+<script type="text/template" id="tmpl-wicked-post-drag-details">
     <div class="items">
         <div class="title">
-            <?php _e( 'Move', 'wicked-folders' ); ?> <%= count %>
-            <% if ( 1 == count ) { %>
+            <?php _e( 'Move', 'wicked-folders' ); ?> {{ data.count }}
+            <# if ( 1 == data.count ) { #>
                 <?php _e( 'Item', 'wicked-folders' ); ?>
-            <% } else { %>
+            <# } else { #>
                 <?php _e( 'Items', 'wicked-folders' ); ?>
-            <% } %>
+            <# } #>
         </div>
-        <% if ( enableCopy ) { %>
+        <# if ( data.enableCopy ) { #>
             <?php _e( 'Hold SHIFT key to copy items to folder', 'wicked-folders' ); ?>
-        <% } %>
+        <# } #>
     </div>
 </script>
 
-<script type="text/html" id="tmpl-wicked-folders-notification">
+<script type="text/template" id="tmpl-wicked-folders-notification">
     <div class="wicked-notification-message">
-        <div class="wicked-notification-title"><%= title %></div>
-        <%= message %>
+        <div class="wicked-notification-title">{{ data.title }}</div>
+        {{ data.message }}
     </div>
-    <% if ( dismissible ) { %>
+    <# if ( data.dismissible ) { #>
         <button class="wicked-dismiss" type="button">
             <span class="screen-reader-text">Close</span>
         </button>
-    <% } %>
+    <# } #>
 </script>
 
 <script>

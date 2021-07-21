@@ -428,7 +428,7 @@ final class Wicked_Folders_Admin {
 
 			if ( 'admin.php' == $page && isset( $_GET['page'] ) && 'gf_entries' == $_GET['page'] && empty( $_GET['lid'] ) ) return true;
 
-			if ( 'admin.php' == $page && isset( $_GET['page'] ) && 'tablepress' == $_GET['page'] && empty( $_GET['table_id'] ) ) return true;
+			if ( 'admin.php' == $page && isset( $_GET['page'] ) && 'tablepress' == $_GET['page'] && ( empty( $_GET['action'] ) || ( isset( $_GET['action'] ) && 'list' == $_GET['action'] ) ) ) return true;
 		}
 
 		return false;
@@ -881,14 +881,14 @@ final class Wicked_Folders_Admin {
 			$post_types[] = $plugin_stub_post_type;
 		}
 
-		if ( $gravity_form_stub_post_type = get_post_type_object( Wicked_Folders::get_gravity_forms_form_post_type_name() ) ) {
+		if ( $is_gravity_forms_active && $gravity_form_stub_post_type = get_post_type_object( Wicked_Folders::get_gravity_forms_form_post_type_name() ) ) {
 			// Settings page only shows post types where show_ui is true
 			$gravity_form_stub_post_type->show_ui = true;
 
 			$post_types[] = $gravity_form_stub_post_type;
 		}
 
-		if ( $gravity_entry_stub_post_type = get_post_type_object( Wicked_Folders::get_gravity_forms_entry_post_type_name() ) ) {
+		if ( $is_gravity_forms_active && $gravity_entry_stub_post_type = get_post_type_object( Wicked_Folders::get_gravity_forms_entry_post_type_name() ) ) {
 			// Settings page only shows post types where show_ui is true
 			$gravity_entry_stub_post_type->show_ui = true;
 

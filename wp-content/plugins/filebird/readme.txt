@@ -2,7 +2,7 @@
 Contributors: ninjateam
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
-Tested up to: 5.7.2
+Tested up to: 5.8
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -161,6 +161,27 @@ Happy Organizing! 😍
 8. FileBird gallery block settings
 
 == Changelog ==
+
+= Jul 21, 2021 - Version 4.8 =
+- Fixed: Compatible with WordPress 5.8
+- Fixed: Replace image 
+
+Jul 15, 2021 - Version 4.7.8
+- Fixed: Conflict with Photo Gallery plugin
+- Fixed: ACF warning
+- Fixed: ACF meta field image can't load
+- Fixed: WPML Counter (in WPML last version 4.4.10)
+
+Jun 2, 2021 - Version 4.7.7
+- Added: Notice when a license was used
+- Supported: Enhanced Media Library
+- Supported: Media Library Assistant
+- Improved: Load large files
+- Improved: Translation (Added missing strings)
+- Fixed: Loading Uncategorized folder
+- Fixed: Context menu position
+- Fixed: Security
+- Fixed: Small bugs
 
 Jun 11, 2021 - Version 4.7.4
 - Updated: Languages

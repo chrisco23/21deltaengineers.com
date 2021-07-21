@@ -149,8 +149,8 @@ final class Wicked_Folders_Ajax {
 		$screen = $data->screen;
 		$state 	= new Wicked_Folders_Screen_State( $screen, get_current_user_id(), $data->lang );
 
-		$state->folder 					= $data->folder->id;
-		$state->folder_type 			= $data->folder->type;
+		$state->folder 					= isset( $data->folder->id ) ? $data->folder->id : '0';
+		$state->folder_type 			= isset( $data->folder->type ) ? $data->folder->type : 'Wicked_Folders_Folder';
 		$state->expanded_folders 		= $data->expanded;
 		$state->tree_pane_width 		= $data->treePaneWidth;
 		$state->orderby 				= $data->orderby;

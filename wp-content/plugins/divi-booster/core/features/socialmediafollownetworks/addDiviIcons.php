@@ -1,8 +1,10 @@
 <?php
 
-add_filter('dbdbsmsn_networks', 'dbdbsmsn_add_phone_icon');
-add_filter('dbdbsmsn_networks', 'dbdbsmsn_add_podcast_icon');
-add_filter('dbdbsmsn_networks', 'dbdbsmsn_add_website_icon');
+if (function_exists('add_filter')) {
+    add_filter('dbdbsmsn_networks', 'dbdbsmsn_add_phone_icon');
+    add_filter('dbdbsmsn_networks', 'dbdbsmsn_add_podcast_icon');
+    add_filter('dbdbsmsn_networks', 'dbdbsmsn_add_website_icon');
+}
 
 if (!function_exists('dbdbsmsn_add_phone_icon')) {
 	function dbdbsmsn_add_phone_icon($networks) {

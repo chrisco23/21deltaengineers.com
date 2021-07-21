@@ -15,10 +15,7 @@ function booster_update_check() {
 add_action('plugins_loaded', 'booster_update_check');
 
 function dbdbHasUpdated($old, $new) {
-	if ($old && $new) {
-		return version_compare($old, $new, '<');
-	}
-	return false;
+	return ($old && $new && DBDBVersion::create($new)->newerThan($old));
 }
 
 // === v1.9.4: db074 - Add 0.7 opacity to old colors ===

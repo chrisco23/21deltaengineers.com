@@ -20,3 +20,11 @@ class DBDBFakeDivi implements DBDBAnyDivi
         return false;
     }
 }
+
+class DBDBFakeDiviIsTbLayout extends DBDBFakeDivi
+{
+    public function isThemeBuilderLayout()
+    {
+        return true;
+    }
+}

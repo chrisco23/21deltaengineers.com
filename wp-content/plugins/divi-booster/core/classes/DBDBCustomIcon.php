@@ -4,12 +4,14 @@ if (!class_exists('DBDBCustomIcon')) {
 	
 	class DBDBCustomIcon {
 		
+        private $wp;
 		protected $id;
 		protected $url;		
 		
-		public function __construct($id, $url='') {
+		public function __construct($id, $url='', $wp=null) {
 			$this->id = $id;
 			$this->url = $url;
+            $this->wp = is_null($wp)?\DBDBWp::create():$wp;
 		}
 		
 		public static function setup() {
@@ -218,8 +220,8 @@ END;
 		}
 		
 		public function getIconPickerCss() {
-			$url = esc_html($this->url);
-			$id = esc_attr($this->id);
+			$url = $this->wp->esc_html($this->url);
+			$id = $this->wp->esc_attr($this->id);
 			return <<<END
 			.et-fb-option--select-icon li[data-icon="{$id}"]:after,
 			.et-pb-option--select_icon li[data-icon="{$id}"]:before,

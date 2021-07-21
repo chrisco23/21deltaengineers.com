@@ -11,8 +11,11 @@ Author URI: http://www.divibooster.com
 
 // === Settings === 
 
-add_filter('et_pb_all_fields_unprocessed_et_pb_post_title', 'dbdb_posttitle_add_tags_option');
-add_filter('dbdbptst_show_tags', 'dbdb_posttitle_show_tags_based_on_module_setting', 10, 2);
+if (function_exists('add_filter')) {
+    add_filter('et_pb_all_fields_unprocessed_et_pb_post_title', 'dbdb_posttitle_add_tags_option');
+    add_filter('dbdbptst_show_tags', 'dbdb_posttitle_show_tags_based_on_module_setting', 10, 2);
+    add_filter('et_module_shortcode_output', 'dbdb_posttitle_add_tags_to_output', 10, 3);
+}
 
 if (!function_exists('dbdb_posttitle_add_tags_option')) {
 	function dbdb_posttitle_add_tags_option($fields) {
@@ -46,10 +49,6 @@ if (!function_exists('dbdb_posttitle_show_tags_based_on_module_setting')) {
 				$module->props['dbdb_show_tags'] === 'on');
 	}
 }
-
-// === Apply Feature === 
-
-add_filter('et_module_shortcode_output', 'dbdb_posttitle_add_tags_to_output', 10, 3);
 
 if (!function_exists('dbdb_posttitle_add_tags_to_output')) {
 	function dbdb_posttitle_add_tags_to_output($html, $render_slug, $module) {

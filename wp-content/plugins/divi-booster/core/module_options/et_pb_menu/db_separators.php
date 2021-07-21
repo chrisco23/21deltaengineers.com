@@ -31,18 +31,17 @@ function dbmo_et_pb_menu_add_separators_field($fields) {
 
 
 // Process added options
-function dbdbMenuModule_add_separators_code_to_content($content, $args, $module='et_pb_menu') {	
+function dbdbMenuModule_add_separators_code_to_content($content, $args) {	
 	
 	// Get the class
 	$order_class = divibooster_get_order_class_from_content('et_pb_menu', $content);
 	
 	if (!$order_class) { return $content; }
 	
-	$js = '';
 	$css = '';
 	
 	if (isset($args['db_separators']) && $args['db_separators'] === 'on') {
-		$css .= dbdbMenuModule_separators_css($order_class, $args);
+		$css .= dbdbMenuModule_separators_css($order_class);
 	}
 	
 	if (!empty($css)) { $content.="<style>$css</style>"; }
@@ -50,9 +49,9 @@ function dbdbMenuModule_add_separators_code_to_content($content, $args, $module=
 	return $content;
 }
 
-function dbdbMenuModule_separators_css($order_class, $args) {
+function dbdbMenuModule_separators_css($order_class) {
 	return <<<END
-.{$order_class} .et-menu.nav li + li a:before {
+.{$order_class} .et-menu.nav > li + li > a:before {
 	position: absolute;
 	left:-1em;
 	transform: translateX(-50%);

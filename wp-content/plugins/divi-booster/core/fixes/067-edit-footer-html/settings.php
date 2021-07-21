@@ -2,7 +2,7 @@
 if (!defined('ABSPATH')) { exit(); } // No direct access
 
 function db067_add_setting($plugin) { 
-	$plugin->setting_start(); 
+	$plugin->setting_start('dbdb-setting_067-edit-footer-html'); 
 	$plugin->techlink('https://divibooster.com/changing-the-footer-links-in-divi/'); 
 	$plugin->checkbox(__FILE__); ?> Replace footer credits with this text / HTML:<br><?php
 	$plugin->textboxpicker(__FILE__, 'footerhtml'); ?>

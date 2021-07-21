@@ -9,11 +9,15 @@ class DBDB_ContactForm_EmailBlacklist {
 	protected $email_blacklist_key = 'dbdb_email_blacklist';
 	
 	public function init() {
-		add_action('db_vb_css', array($this, 'suppress_vb_support_notices'));
-		add_action('db_admin_css', array($this, 'suppress_vb_support_notices'));
-		add_filter('et_pb_module_shortcode_attributes', array($this, 'filter_blacklisted_email'), 10, 3);
-		add_filter('et_pb_contact_form_shortcode_output', array($this, 'remove_is_email_filter'));
-		add_filter('et_pb_all_fields_unprocessed_et_pb_contact_form', array($this, 'add_fields'));
+        if (function_exists('add_action')) {
+            add_action('db_vb_css', array($this, 'suppress_vb_support_notices'));
+            add_action('db_admin_css', array($this, 'suppress_vb_support_notices'));
+        }
+        if (function_exists('add_filter')) {
+            add_filter('et_pb_module_shortcode_attributes', array($this, 'filter_blacklisted_email'), 10, 3);
+            add_filter('et_pb_contact_form_shortcode_output', array($this, 'remove_is_email_filter'));
+            add_filter('et_pb_all_fields_unprocessed_et_pb_contact_form', array($this, 'add_fields'));
+        }
 	}
 	
 	// Disable vb support notices for the added fields as the contact form is not submitable in vb so these notices are not applicable. 

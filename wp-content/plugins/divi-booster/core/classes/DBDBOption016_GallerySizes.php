@@ -40,10 +40,14 @@ class DBDBOption016_GallerySizes extends DBDBOption {
 	
 	public function filter_int($key) {
 		$default = $this->getDefault($key);
-		$option = wp_parse_args(
-			$this->option, 
-			array($key => $default)
-		);
+        $option = $this->option;
+        if (!isset($option[$key])) {
+            $option[$key] = $default;
+        }
+		// $option = wp_parse_args(
+		// 	$this->option, 
+		// 	array($key => $default)
+		// );
 		return filter_var($option[$key], FILTER_VALIDATE_INT, array(
 			"options" => array(
 				'min_range' => 1, 

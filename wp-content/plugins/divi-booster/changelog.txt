@@ -1,3 +1,10 @@
+= 3.5.3 =
+* Added "Image Icon" custom icon option to social media network list
+
+= 3.5.2 =
+* Fixed menu module vertical separators applied to submenu items
+* Added "Run Once" option to fullwidth slider automation animation
+
 = 3.5.1 =
 * Added option to change filterable portfolio tab order
 

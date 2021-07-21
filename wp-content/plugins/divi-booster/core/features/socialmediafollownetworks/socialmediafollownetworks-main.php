@@ -1,34 +1,54 @@
 <?php
 
-add_filter('et_pb_all_fields_unprocessed_et_pb_social_media_follow_network', 'dbdbsmsn_add_social_media_follow_fields');
-add_filter('et_pb_social_media_follow_network_shortcode_output', 'dbdbsmsn_replace_network_names_in_shortcode_output');
-add_filter('wp_head', 'dbdbsmsn_set_builder_styles');
-
-//add_filter('wp_enqueue_scripts', 'dbdbsmsn_load_socicon');
-
-add_filter('et_module_shortcode_output', 'dbdbsmsn_set_frontend_styles', 10, 3);
+if (function_exists('add_filter')) {
+    add_filter('et_pb_all_fields_unprocessed_et_pb_social_media_follow_network', 'dbdbsmsn_add_social_media_follow_fields');
+    //add_filter('et_pb_social_media_follow_network_shortcode_output', 'dbdbsmsn_replace_network_names_in_shortcode_output');
+    add_filter('et_module_shortcode_output', 'dbdbsmsn_replace_network_names_in_shortcode_output', 10, 3);
+    add_filter('wp_head', 'dbdbsmsn_set_builder_styles');
+    add_filter('et_module_shortcode_output', 'dbdbsmsn_set_frontend_styles', 10, 3);
+}
 
 if (!function_exists('dbdbsmsn_set_frontend_styles')) {
 	function dbdbsmsn_set_frontend_styles($html, $render_slug, $module) {
 		if ($render_slug === 'et_pb_social_media_follow_network' && isset($module->props['social_network'])) {
-			dbdbsmsn_load_socicon();
-			$selected_network = $module->props['social_network'];
-			$networks = dbdbsmsn_networks();
-            $fontFamily = isset($networks[$selected_network]['font-family'])?$networks[$selected_network]['font-family']:'Socicon';
-			if (isset($networks[$selected_network]['code'])) {
-				ET_Builder_Element::set_style($render_slug, array(
-					'selector'    => '%%order_class%% a.icon:before',
-					'declaration' => 'content: "'.$networks[$selected_network]['code'].'";font-family: "'.esc_attr($fontFamily).'" !important;'
-					)
-				);
-			}
+            if ($module->props['social_network'] === 'dbdb-custom-image') {
+                if (!empty($module->props['dbdb_image'])) {
+                    ET_Builder_Element::set_style(
+                        $render_slug, 
+                        array(
+                            'selector'    => '%%order_class%%.et-social-dbdb-custom-image a',
+                            'declaration' => "background-image: url('".esc_html($module->props['dbdb_image'])."');background-size: contain;"
+                        )
+                    );
+                    ET_Builder_Element::set_style(
+                        $render_slug, 
+                        array(
+                            'selector'    => '%%order_class%%.et-social-dbdb-custom-image a:before',
+                            'declaration' => 'content:"a"; visibility:hidden;' // need content so icon positioned same as font icons
+                        )
+                    );
+                }
+            } else {
+                dbdbsmsn_load_socicon();
+                $selected_network = $module->props['social_network'];
+                $networks = dbdbsmsn_networks();
+                $fontFamily = isset($networks[$selected_network]['font-family'])?$networks[$selected_network]['font-family']:'Socicon';
+                if (isset($networks[$selected_network]['code'])) {
+                    ET_Builder_Element::set_style($render_slug, array(
+                        'selector'    => '%%order_class%% a.icon:before',
+                        'declaration' => 'content: "'.$networks[$selected_network]['code'].'";font-family: "'.esc_attr($fontFamily).'" !important;'
+                        )
+                    );
+                }
+            }
 		}
 		return $html;
 	}
 }
 
 if (!function_exists('dbdbsmsn_replace_network_names_in_shortcode_output')) {
-	function dbdbsmsn_replace_network_names_in_shortcode_output($html) {
+	function dbdbsmsn_replace_network_names_in_shortcode_output($html, $render_slug, $module) {
+        if ($render_slug !== 'et_pb_social_media_follow_network') return $html;
 		if (!empty($_GET['et_fb'])) { // Don't process in visual builder
 			return $html; 
 		}
@@ -37,9 +57,18 @@ if (!function_exists('dbdbsmsn_replace_network_names_in_shortcode_output')) {
 		}
 		foreach(dbdbsmsn_networks() as $id=>$network) {
 			$name = preg_quote(isset($network['name'])?$network['name']:'');
-			$slug = preg_quote($id);
-			$html = preg_replace('/title="([^"]*)'.$slug.'([^"]*)"/', 'title="\\1'.$name.'\\2"', $html); // double quotes
-			$html = preg_replace("/title='([^']*)".$slug."([^']*)'/", "title='\\1".$name."\\2'", $html); // single quotes
+            if ($name === 'Image Icon') {
+                if (isset($module->props['dbdb_icon_title'])) {
+                    $name = $module->props['dbdb_icon_title'];
+                }
+                $slug = preg_quote($id);
+                $html = preg_replace('/title="([^"]*)'.$slug.'([^"]*)"/', 'title="'.esc_attr($name).'"', $html); // double quotes
+                $html = preg_replace("/title='([^']*)".$slug."([^']*)'/", "title='".esc_attr($name)."'", $html); // single quotes
+            } else {
+                $slug = preg_quote($id);
+                $html = preg_replace('/title="([^"]*)'.$slug.'([^"]*)"/', 'title="\\1'.$name.'\\2"', $html); // double quotes
+                $html = preg_replace("/title='([^']*)".$slug."([^']*)'/", "title='\\1".$name."\\2'", $html); // single quotes
+            }
 		}
 		return $html;
 	}

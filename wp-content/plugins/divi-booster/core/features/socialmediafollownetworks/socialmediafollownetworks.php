@@ -10,5 +10,6 @@ Author URI: http://www.divibooster.com
 
 include_once(dirname(__FILE__).'/socialmediafollownetworks-before.php');
 include_once(dirname(__FILE__).'/addDiviIcons.php');
+include_once(dirname(__FILE__).'/CustomImageIcon.php');
 include_once(dirname(__FILE__).'/socialmediafollownetworks-main.php');
 

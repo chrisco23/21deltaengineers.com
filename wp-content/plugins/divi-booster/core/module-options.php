@@ -243,7 +243,8 @@ function divibooster_get_order_class_from_content($module_slug, $content) {
 }
 
 function divibooster_module_options_credit() {
-	return apply_filters('divibooster_module_options_credit', 'Added by Divi Booster');
+    return trim((string) DBDBModuleFieldDescription::create(DBDBWp::create(), ''));
+	//return apply_filters('divibooster_module_options_credit', 'Added by Divi Booster');
 }
 
 // === Option styling === //

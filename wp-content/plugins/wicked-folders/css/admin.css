@@ -1559,7 +1559,9 @@ Attachment browser
 	z-index: 100;
 }
 
-.attachments-browser .attachments.wicked-dragging-attachment {
+/* .attachments-wrapper was introduced in WP 5.8 */
+.attachments-browser .attachments.wicked-dragging-attachment,
+.attachments-browser .attachments-wrapper.wicked-dragging-attachment {
 	overflow: visible;
 }
 
@@ -1762,7 +1764,9 @@ Media library modal
 	left: 300px;
 }
 
-.media-modal .attachments-browser.wicked-folder-pane-enabled.wicked-folder-pane-expanded .attachments {
+/* WordPres 5.8 introduced .attachments-wrapper */
+.media-modal .attachments-browser.wicked-folder-pane-enabled.wicked-folder-pane-expanded .attachments,
+.media-modal .attachments-browser.wicked-folder-pane-enabled.wicked-folder-pane-expanded .attachments-wrapper {
 	left: 300px;
 }
 

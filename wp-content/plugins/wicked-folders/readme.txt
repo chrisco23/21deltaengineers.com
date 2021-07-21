@@ -2,8 +2,8 @@
 Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
-Tested up to: 5.7
-Stable tag: 2.18.3
+Tested up to: 5.8
+Stable tag: 2.18.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,13 @@ The folder toggle arrow is greyed out when a folder doesn't have any child folde
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 2.18.4 (July 15, 2021) =
+* Add `wicked_folders_construct_screen_state` filter to allow folder screen state to be overridden
+* Fix style conflict with Advanced Custom Fields (ACF) fields that use Select2
+* Fix PHP notices that can occur when saving screen state
+* Fix folder pane disappearing after deleting TablePress table
+* Fix copied TablePress table not assigned to folders after copy
 
 = 2.18.3 (June 25, 2021) =
 * Fix ampersands displaying as character entities in folder names

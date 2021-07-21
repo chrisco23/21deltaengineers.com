@@ -1,7 +1,9 @@
 <?php
 
-add_filter('dbdbsmsn_networks', 'dbdbsmsn_remove_built_in_networks');
-add_filter('dbdbsmsn_add_social_media_follow_fields', 'dbdbsmsn_sort_network_options');
+if (function_exists('add_filter')) {
+    add_filter('dbdbsmsn_networks', 'dbdbsmsn_remove_built_in_networks');
+    add_filter('dbdbsmsn_add_social_media_follow_fields', 'dbdbsmsn_sort_network_options');
+}
 
 // Load socicon locally, overriding external load in -main.php
 if (!function_exists('dbdbsmsn_load_socicon')) {

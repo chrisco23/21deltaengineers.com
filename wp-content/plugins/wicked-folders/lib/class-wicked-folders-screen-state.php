@@ -99,6 +99,16 @@ final class Wicked_Folders_Screen_State {
 		// Filter tree pane width
 		$this->tree_pane_width = apply_filters( 'wicked_folders_screen_state_tree_pane_width', $this->tree_pane_width, $this );
 
+		/**
+		 * Give others a chance to override the constructed screen state object.
+		 *
+		 * @since 2.18.4
+		 *
+		 * @param object $state
+		 *  The current screen state instance.
+		 */
+		apply_filters( 'wicked_folders_construct_screen_state', $this );
+
         return $this;
 
     }

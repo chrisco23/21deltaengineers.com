@@ -39,7 +39,6 @@ class RobotsTxt {
 		}
 
 		$original      = explode( "\n", $original );
-		$sitemapUrls   = implode( "\r\n", array_merge( aioseo()->sitemap->helpers->getSitemapUrls(), $this->extractSitemapUrls( $original ) ) );
 		$originalRules = $this->extractRules( $original );
 		$networkRules  = [];
 		if ( is_multisite() ) {
@@ -53,13 +52,13 @@ class RobotsTxt {
 		if ( ! aioseo()->options->tools->robots->enable ) {
 			$networkAndOriginal = $this->mergeRules( $originalRules, $this->parseRules( $networkRules ) );
 			$networkAndOriginal = $this->robotsArrayUnique( $networkAndOriginal );
-			return $this->stringify( $networkAndOriginal ) . "\r\n" . $sitemapUrls;
+			return $this->stringify( $networkAndOriginal, $original );
 		}
 
 		$allRules = $this->mergeRules( $originalRules, $this->mergeRules( $this->parseRules( $networkRules ), $this->parseRules( aioseo()->options->tools->robots->rules ) ), true );
 		$allRules = $this->robotsArrayUnique( $allRules );
 
-		return $this->stringify( $allRules ) . "\r\n" . $sitemapUrls;
+		return $this->stringify( $allRules, $original );
 	}
 
 	/**
@@ -172,9 +171,10 @@ class RobotsTxt {
 	 * Stringifies the parsed rules.
 	 *
 	 * @param  array  $allRules The rules array.
+	 * @param  string $original The original robots.txt content.
 	 * @return string           The stringified rules.
 	 */
-	private function stringify( $allRules ) {
+	private function stringify( $allRules, $original ) {
 		$robots = [];
 		foreach ( $allRules as $agent => $rules ) {
 			if ( empty( $agent ) ) {
@@ -195,7 +195,16 @@ class RobotsTxt {
 
 			$robots[] = '';
 		}
-		return implode( "\r\n", $robots );
+
+		$robots = implode( "\r\n", $robots ) . "\r\n";
+
+		$sitemapUrls = array_merge( aioseo()->sitemap->helpers->getSitemapUrls(), $this->extractSitemapUrls( $original ) );
+		if ( ! empty( $sitemapUrls ) ) {
+			$sitemapUrls = implode( "\r\n", $sitemapUrls );
+			$robots     .= $sitemapUrls . "\r\n\r\n";
+		}
+
+		return $robots;
 	}
 
 	/**
@@ -231,7 +240,7 @@ class RobotsTxt {
 	 * @param  array $lines The lines to extract from.
 	 * @return array        An array of extracted rules.
 	 */
-	private function extractRules( $lines ) {
+	public function extractRules( $lines ) {
 		$rules     = [];
 		$userAgent = null;
 		foreach ( $lines as $line ) {
@@ -379,6 +388,20 @@ class RobotsTxt {
 		$currentRules = $this->parseRules( aioseo()->options->tools->robots->rules );
 		$allRules     = $this->mergeRules( $currentRules, $allRules, false, true );
 
+		aioseo()->options->tools->robots->rules = aioseo()->robotsTxt->prepareRobotsTxt( $allRules );
+
+		return true;
+	}
+
+	/**
+	 * Prepare robots.txt rules to save.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @param  array $allRules Array with the rules.
+	 * @return array           The prepared rules array.
+	 */
+	public function prepareRobotsTxt( $allRules = [] ) {
 		$robots = [];
 		foreach ( $allRules as $userAgent => $rules ) {
 			if ( empty( $userAgent ) ) {
@@ -407,9 +430,7 @@ class RobotsTxt {
 			}
 		}
 
-		aioseo()->options->tools->robots->rules = $robots;
-
-		return true;
+		return $robots;
 	}
 
 	/**

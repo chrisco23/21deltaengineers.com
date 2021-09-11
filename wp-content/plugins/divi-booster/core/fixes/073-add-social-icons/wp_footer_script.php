@@ -23,7 +23,7 @@ jQuery(function($){
 			$url = $option[$k];
 			if (!preg_match('#^(http:|https:|skype:|/)#', $url)) { $url = "http://$url"; }
 			?>
-			$('.et-social-icons').append('<li class="et-social-icon et-social-<?php esc_attr_e($k); ?>"><a href="<?php esc_attr_e($url); ?>" class="icon"><span><?php esc_html_e($v); ?></span></a></li>&nbsp;');
+			$('.et-social-icons:not(:has(.et-social-<?php esc_attr_e($k); ?>))').append('<li class="et-social-icon et-social-<?php esc_attr_e($k); ?>"><a href="<?php esc_attr_e($url); ?>" class="icon" alt="<?php esc_attr_e($v); ?>" aria-label="<?php esc_attr_e($v); ?>"><span><?php esc_html_e($v); ?></span></a></li>&nbsp;');
 			<?php
 		}
 	} 

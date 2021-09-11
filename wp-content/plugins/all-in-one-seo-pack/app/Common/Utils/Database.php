@@ -273,7 +273,7 @@ class Database {
 	 * @return boolean        Whether or not the table exists.
 	 */
 	public function tableExists( $table ) {
-		$results = $this->db->get_results( 'SHOW TABLES LIKE "' . $this->prefix . $table . '"' );
+		$results = $this->db->get_results( "SHOW TABLES LIKE '" . $this->prefix . $table . "'" );
 		return ! ( empty( $results ) );
 	}
 
@@ -696,7 +696,8 @@ class Database {
 			}
 
 			foreach ( $values as &$value ) {
-				if ( is_numeric( $value ) ) {
+				// Note: We can no longer check for `is_numeric` because a value like `61021e6242255` returns true and breaks the query.
+				if ( is_integer( $value ) || is_float( $value ) ) {
 					// No change.
 				} elseif ( is_null( $value ) || false !== stristr( $value, 'NULL' ) ) {
 					// Change to a true NULL value.
@@ -887,26 +888,6 @@ class Database {
 			}
 		}
 
-		return $this;
-	}
-
-	/**
-	 * Enable/disable HTML stripping.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @param boolean   $value Whether or not to enable/disable HTML stripping.
-	 * @return Database        Returns the Database class which can be method chained for more query building.
-	 */
-	public function setStripTags( $value ) {
-		$options = $this->getEscapeOptions();
-		if ( $value ) {
-			$options = $options | DatabaseConnection::ESCAPE_STRIP_HTML;
-		} else {
-			$options = $options & ~DatabaseConnection::ESCAPE_STRIP_HTML;
-		}
-
-		$this->setEscapeOptions( $options );
 		return $this;
 	}
 
@@ -1147,13 +1128,14 @@ class Database {
 				$value = wp_strip_all_tags( $value );
 			}
 
-			if ( ( $options & self::ESCAPE_FORCE ) !== 0 || php_sapi_name() === 'cli' ) {
-				$value = $this->db->_real_escape( $value );
-			}
-
-			if ( ( $options & self::ESCAPE_QUOTE ) !== 0 && ! is_integer( $value ) ) {
-				$value = addslashes( $value );
-				$value = "'$value'";
+			if (
+				( ( $options & self::ESCAPE_FORCE ) !== 0 || php_sapi_name() === 'cli' ) ||
+				( ( $options & self::ESCAPE_QUOTE ) !== 0 && ! is_integer( $value ) )
+			) {
+				$value = esc_sql( $value );
+				if ( ! is_integer( $value ) ) {
+					$value = "'$value'";
+				}
 			}
 
 			return $value;

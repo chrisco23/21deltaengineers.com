@@ -43,3 +43,10 @@ function db140_configure_image_links_to_open_in_lightbox($plugin) {
 	</script>
 	<?php 
 }
+
+// Load magnific popup
+add_action('wp_head', 'db140_enqueue_magnific_popup');
+
+function db140_enqueue_magnific_popup() {
+	DBDBMagnificPopup::create()->enqueue();
+}

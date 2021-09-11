@@ -149,8 +149,9 @@ function db121_get_icons() {
 function db126_icon_html_divi($icon) {
 	$id = empty($icon['id'])?false:$icon['id'];
 	$networks = db121_get_networks();
+    $name = isset($networks[$id])?$networks[$id]:'';
 	$span = isset($networks[$id])?'<span>'.esc_html($networks[$id]).'</span>':'';
-	return '<li class="et-social-icon"><a href="'.esc_attr(db126_get_icon_url($icon)).'" class="icon socicon socicon-'.esc_attr($id).'">'.$span.'</a></li>';
+	return '<li class="et-social-icon"><a href="'.esc_attr(db126_get_icon_url($icon)).'" class="icon socicon socicon-'.esc_attr($id).'" alt="'.esc_attr($name).'" aria-label="'.esc_attr($name).'">'.$span.'</a></li>';
 }
 
 function db126_icon_html_extra($icon) {

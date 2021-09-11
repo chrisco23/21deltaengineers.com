@@ -1,3 +1,30 @@
+= 3.6.1 =
+* Fixed open in lightbox feature not working in Divi 4.10
+* Changed social media follow tiktok icon background color to black
+* Added alt and aria-label attributes to header / footer social icons for accessibility
+
+= 3.6.0 =
+* Added menu module option to set link spacing
+
+= 3.5.9 =
+* Fixed menu module vertical separator not centered for some font sizes
+* Fixed visual builder styles not loaded when certain child themes active
+
+= 3.5.8 =
+* Updated social icons feature for Divi 4.10 compatibility
+
+= 3.5.7 =
+* Fixed person module icons not displaying when no other icons enabled
+
+= 3.5.6 =
+* Fixed person module icons not displaying in Divi 4.10
+
+= 3.5.5 =
+* Added option to show post tags in blog module
+
+= 3.5.4 =
+* Fixed undefined function et_builder_i18n() error in Divi pre 4.4.9
+
 = 3.5.3 =
 * Added "Image Icon" custom icon option to social media network list
 

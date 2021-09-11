@@ -45,7 +45,6 @@ function dbmo_et_pb_menu_add_title_and_tagline_field($fields) {
 
 // Process added options
 function dbdbMenuModule_add_title_and_tagline_code_to_content($content, $args) {	
-	
 	// Get the class
 	$order_class = divibooster_get_order_class_from_content('et_pb_menu', $content);
 	

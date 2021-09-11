@@ -1462,7 +1462,7 @@ return array (
   array (
     'name' => 'TikTok',
     'code' => '\\e96b',
-    'color' => '#09e5dd',
+    'color' => '#000000',
   ),
   'tinder' => 
   array (

@@ -45,4 +45,3 @@ function db_pb_map_pin_filter_content($content, $args) {
 function db_pb_map_pin_register_scripts() {
 	wp_register_script('db_pb_map_pin', plugins_url('et_pb_map_pin.js', __FILE__), array(), BOOSTER_VERSION, true);
 }
-  

@@ -176,10 +176,14 @@ abstract class ET_Builder_Module_Type_PostContent extends ET_Builder_Module {
 							'border_radii'  => "{$this->main_css_element} img",
 							'border_styles' => "{$this->main_css_element} img",
 						),
+						'important' => 'all',
 					),
 					'label_prefix' => et_builder_i18n( 'Image' ),
 					'tab_slug'     => 'advanced',
 					'toggle_slug'  => 'image',
+				),
+				'css'     => array(
+					'important' => 'all',
 				),
 			),
 			'box_shadow'     => array(
@@ -494,7 +498,7 @@ abstract class ET_Builder_Module_Type_PostContent extends ET_Builder_Module {
 				%5$s
 				%4$s
 				%1$s
-			</div> <!-- .et_pb_post_content -->',
+			</div>',
 			et_theme_builder_frontend_render_post_content(),
 			$this->module_classname( $render_slug ),
 			$this->module_id(),

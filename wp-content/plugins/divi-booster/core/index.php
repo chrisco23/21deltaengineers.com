@@ -3,8 +3,13 @@
 // === Load the functions and hooks ===
 include(dirname(__FILE__).'/divi/divi.php'); 
 include(dirname(__FILE__).'/functions.php'); 
-include(dirname(__FILE__).'/classes/classes.php'); 
+include(dirname(__FILE__).'/classes/classes.php');
 include(dirname(__FILE__).'/hooks/index.php');
+
+// Initialize assets
+DBDBMagnificPopup::create()->init();
+DBDBETModulesFont::create()->load_full_font();
+DBDBDynamicAsset::socialMediaFollowCss()->init();
 
 // === Load plugin compatibity files ===
 include(dirname(__FILE__).'/compat/compat.php');

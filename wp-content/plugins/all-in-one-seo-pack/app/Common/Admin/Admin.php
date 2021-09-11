@@ -43,6 +43,15 @@ class Admin {
 	protected $pages = [];
 
 	/**
+	 * The current page we are enqueuing.
+	 *
+	 * @since 4.1.3
+	 *
+	 * @var string
+	 */
+	protected $currentPage;
+
+	/**
 	 * An array of items to add to the admin bar.
 	 *
 	 * @since 4.0.0
@@ -63,74 +72,6 @@ class Admin {
 			return;
 		}
 
-		$this->pages = [
-			$this->pageSlug            => [
-				'menu_title' => esc_html__( 'Dashboard', 'all-in-one-seo-pack' ),
-				'capability' => apply_filters( 'aioseo_manage_seo', 'aioseo_manage_seo' ),
-				'parent'     => $this->pageSlug
-			],
-			'aioseo-settings'          => [
-				'menu_title' => esc_html__( 'General Settings', 'all-in-one-seo-pack' ),
-				'capability' => 'aioseo_general_settings',
-				'parent'     => $this->pageSlug
-			],
-			'aioseo-search-appearance' => [
-				'menu_title' => esc_html__( 'Search Appearance', 'all-in-one-seo-pack' ),
-				'capability' => 'aioseo_search_appearance_settings',
-				'parent'     => $this->pageSlug
-			],
-			'aioseo-social-networks'   => [
-				'menu_title' => esc_html__( 'Social Networks', 'all-in-one-seo-pack' ),
-				'capability' => 'aioseo_social_networks_settings',
-				'parent'     => $this->pageSlug
-			],
-			'aioseo-sitemaps'          => [
-				'menu_title' => esc_html__( 'Sitemaps', 'all-in-one-seo-pack' ),
-				'capability' => 'aioseo_sitemap_settings',
-				'parent'     => $this->pageSlug
-			],
-			// 'aioseo-internal-links'    => [
-			//  'menu_title' => esc_html__( 'Internal Links', 'all-in-one-seo-pack' ),
-			//  'capability' => 'aioseo_internal_links_settings',
-			//  'parent'     => $this->pageSlug
-			// ],
-			'aioseo-redirects'         => [
-				'menu_title' => esc_html__( 'Redirects', 'all-in-one-seo-pack' ),
-				'capability' => 'aioseo_redirects_settings',
-				'parent'     => $this->pageSlug
-			],
-			'aioseo-local-seo'         => [
-				'menu_title' => esc_html__( 'Local SEO', 'all-in-one-seo-pack' ),
-				'capability' => 'aioseo_local_seo_settings',
-				'parent'     => $this->pageSlug
-			],
-			'aioseo-seo-analysis'      => [
-				'menu_title' => esc_html__( 'SEO Analysis', 'all-in-one-seo-pack' ),
-				'capability' => 'aioseo_seo_analysis_settings',
-				'parent'     => $this->pageSlug
-			],
-			'aioseo-tools'             => [
-				'menu_title' => esc_html__( 'Tools', 'all-in-one-seo-pack' ),
-				'capability' => 'aioseo_tools_settings',
-				'parent'     => $this->pageSlug
-			],
-			'aioseo-feature-manager'   => [
-				'menu_title' => esc_html__( 'Feature Manager', 'all-in-one-seo-pack' ),
-				'capability' => 'aioseo_feature_manager_settings',
-				'parent'     => $this->pageSlug
-			],
-			'aioseo-monsterinsights'   => [
-				'menu_title' => esc_html__( 'Analytics', 'all-in-one-seo-pack' ),
-				'capability' => apply_filters( 'aioseo_manage_seo', 'aioseo_manage_seo' ),
-				'parent'     => 'aioseo-monsterinsights'
-			],
-			'aioseo-about'             => [
-				'menu_title' => esc_html__( 'About Us', 'all-in-one-seo-pack' ),
-				'capability' => apply_filters( 'aioseo_manage_seo', 'aioseo_manage_seo' ),
-				'parent'     => $this->pageSlug
-			]
-		];
-
 		add_action( 'sanitize_comment_cookies', [ $this, 'init' ], 20 );
 
 		$this->setupWizard = new SetupWizard();
@@ -145,7 +86,7 @@ class Admin {
 	 */
 	public function init() {
 		// Add the admin bar menu.
-		if ( is_user_logged_in() && current_user_can( 'aioseo_manage_seo' ) && ( ! is_multisite() || ! is_network_admin() ) ) {
+		if ( is_user_logged_in() && ( ! is_multisite() || ! is_network_admin() ) ) {
 			add_action( 'admin_bar_menu', [ $this, 'adminBarMenu' ], 1000 );
 		}
 
@@ -170,6 +111,74 @@ class Admin {
 
 			$this->registerLinkFormatHooks();
 		}
+
+		$this->loadTextDomain();
+		$this->setPages();
+	}
+
+	/**
+	 * Sets our menu pages.
+	 * It is important this runs AFTER we've loaded the text domain.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @return void
+	 */
+	private function setPages() {
+		$this->pages = [
+			$this->pageSlug            => [
+				'menu_title' => esc_html__( 'Dashboard', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			],
+			'aioseo-settings'          => [
+				'menu_title' => esc_html__( 'General Settings', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			],
+			'aioseo-search-appearance' => [
+				'menu_title' => esc_html__( 'Search Appearance', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			],
+			'aioseo-social-networks'   => [
+				'menu_title' => esc_html__( 'Social Networks', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			],
+			'aioseo-sitemaps'          => [
+				'menu_title' => esc_html__( 'Sitemaps', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			],
+			// 'aioseo-internal-links'    => [
+			//  'menu_title' => esc_html__( 'Internal Links', 'all-in-one-seo-pack' ),
+			//  'parent'     => $this->pageSlug
+			// ],
+			'aioseo-redirects'         => [
+				'menu_title' => esc_html__( 'Redirects', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			],
+			'aioseo-local-seo'         => [
+				'menu_title' => esc_html__( 'Local SEO', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			],
+			'aioseo-seo-analysis'      => [
+				'menu_title' => esc_html__( 'SEO Analysis', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			],
+			'aioseo-tools'             => [
+				'menu_title' => esc_html__( 'Tools', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			],
+			'aioseo-feature-manager'   => [
+				'menu_title' => esc_html__( 'Feature Manager', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			],
+			'aioseo-monsterinsights'   => [
+				'menu_title' => esc_html__( 'Analytics', 'all-in-one-seo-pack' ),
+				'parent'     => 'aioseo-monsterinsights'
+			],
+			'aioseo-about'             => [
+				'menu_title' => esc_html__( 'About Us', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			]
+		];
 	}
 
 	/**
@@ -320,14 +329,20 @@ class Admin {
 			return;
 		}
 
-		$count = count( Models\Notification::getAllActiveNotifications() );
-		$count = 10 > $count ? $count : '!';
-		$count = $count ? '<div class="aioseo-menu-notification-counter">' . $count . '</div>' : '';
+		$firstPageSlug = $this->getFirstAvailablePageSlug();
+		if ( ! $firstPageSlug ) {
+			return;
+		}
+
+		$count      = count( Models\Notification::getAllActiveNotifications() );
+		$htmlCount  = 10 > $count ? $count : '!';
+		$htmlCount  = $htmlCount ? '<div class="aioseo-menu-notification-counter">' . $htmlCount . '</div>' : '';
+		$htmlCount .= '<div id="aioseo-menu-new-notifications"></div>';
 
 		$this->adminBarMenuItems[] = [
 			'id'    => 'aioseo-main',
-			'title' => '<div class="ab-item aioseo-logo svg"></div><span class="text">' . esc_html__( 'SEO', 'all-in-one-seo-pack' ) . '</span>' . wp_kses_post( $count ),
-			'href'  => esc_url( admin_url( 'admin.php?page=aioseo' ) )
+			'title' => '<div class="ab-item aioseo-logo svg"></div><span class="text">' . esc_html__( 'SEO', 'all-in-one-seo-pack' ) . '</span>' . wp_kses_post( $htmlCount ),
+			'href'  => esc_url( admin_url( 'admin.php?page=' . $firstPageSlug ) )
 		];
 
 		if ( $count ) {
@@ -335,23 +350,29 @@ class Admin {
 				'parent' => 'aioseo-main',
 				'id'     => 'aioseo-notifications',
 				'title'  => esc_html__( 'Notifications', 'all-in-one-seo-pack' ) . ' <div class="aioseo-menu-notification-indicator"></div>',
-				'href'   => admin_url( 'admin.php?page=aioseo&notifications=true' ),
+				'href'   => admin_url( 'admin.php?page=' . $firstPageSlug . '&notifications=true' ),
 			];
 		}
 
-		if ( ! is_admin() ) {
+		$htmlSitemapRequested = aioseo()->htmlSitemap->isDedicatedPage;
+		if ( ! is_admin() && ! $htmlSitemapRequested ) {
 			$this->addPageAnalyzerMenuItems();
 		}
 
-		$this->addSettingsMenuItems();
-		$this->addPostMenuItems();
+		if ( $htmlSitemapRequested ) {
+			global $wp_admin_bar;
+			$wp_admin_bar->remove_node( 'edit' );
+		}
 
-		// Add the menu bar items.
+		$this->addSettingsMenuItems();
 		$this->addAdminBarMenuItems();
+		$this->addPostMenuItems();
 	}
 
 	/**
 	 * Actually adds the menu items to the admin bar.
+	 *
+	 * @since 4.0.0
 	 *
 	 * @return void
 	 */
@@ -497,6 +518,10 @@ class Admin {
 				continue;
 			}
 
+			if ( ! current_user_can( $this->getPageRequiredCapability( $id ) ) ) {
+				continue;
+			}
+
 			$this->adminBarMenuItems[] = [
 				'id'     => $id,
 				'parent' => $parent,
@@ -508,6 +533,7 @@ class Admin {
 
 	/**
 	 * Retreive data to build the admin bar.
+	 *
 	 * @since 4.0.0
 	 *
 	 * @param  WP_Post $post The post object.
@@ -539,6 +565,18 @@ class Admin {
 	}
 
 	/**
+	 * Get the required capability for given admin page.
+	 *
+	 * @since 4.1.3
+	 *
+	 * @param  string $pageSlug The slug of the page.
+	 * @return string           The required capability.
+	 */
+	public function getPageRequiredCapability( $pageSlug ) { // phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+		return apply_filters( 'aioseo_manage_seo', 'aioseo_manage_seo' );
+	}
+
+	/**
 	 * Add the menu inside of WordPress.
 	 *
 	 * @since 4.0.0
@@ -553,23 +591,40 @@ class Admin {
 				$page['parent'],
 				! empty( $page['page_title'] ) ? $page['page_title'] : $page['menu_title'],
 				$page['menu_title'],
-				$page['capability'],
+				$this->getPageRequiredCapability( $slug ),
 				$slug,
 				[ $this, 'page' ]
 			);
 			add_action( "load-{$hook}", [ $this, 'hooks' ] );
+		}
 
-			if ( ! current_user_can( 'aioseo_admin' ) ) {
-				remove_submenu_page( 'aioseo', 'aioseo' );
-			}
+		if ( ! current_user_can( $this->getPageRequiredCapability( $this->pageSlug ) ) ) {
+			remove_submenu_page( $this->pageSlug, $this->pageSlug );
 		}
 
 		global $submenu;
-		$submenu['tools.php'][] = [
-			esc_html__( 'Redirection Manager', 'all-in-one-seo-pack' ),
-			apply_filters( 'aioseo_redirects_settings', 'aioseo_redirects_settings' ),
-			admin_url( '/admin.php?page=aioseo-redirects' )
-		];
+		if ( current_user_can( $this->getPageRequiredCapability( 'aioseo-redirects' ) ) ) {
+			$submenu['tools.php'][] = [
+				esc_html__( 'Redirection Manager', 'all-in-one-seo-pack' ),
+				$this->getPageRequiredCapability( 'aioseo-redirects' ),
+				admin_url( '/admin.php?page=aioseo-redirects' )
+			];
+		}
+
+		// We use the global submenu, because we are adding an external link here.
+		$count         = count( Models\Notification::getAllActiveNotifications() );
+		$firstPageSlug = $this->getFirstAvailablePageSlug();
+		if (
+			$count &&
+			! empty( $submenu[ $this->pageSlug ] ) &&
+			! empty( $firstPageSlug )
+		) {
+			array_unshift( $submenu[ $this->pageSlug ], [
+				esc_html__( 'Notifications', 'all-in-one-seo-pack' ) . '<div class="aioseo-menu-notification-indicator"></div>',
+				$this->getPageRequiredCapability( $firstPageSlug ),
+				admin_url( 'admin.php?page=' . $firstPageSlug . '&notifications=true' )
+			] );
+		}
 	}
 
 	/**
@@ -606,7 +661,7 @@ class Admin {
 		add_menu_page(
 			$this->menuName,
 			$this->menuName,
-			apply_filters( 'aioseo_manage_seo', 'aioseo_manage_seo' ),
+			$this->getPageRequiredCapability( $slug ),
 			$slug,
 			'__return_true',
 			'data:image/svg+xml;base64,' . base64_encode( aioseo()->helpers->logo( 16, 16, '#A0A5AA' ) ),
@@ -743,44 +798,8 @@ class Admin {
 			remove_all_actions( 'admin_notices' );
 			remove_all_actions( 'all_admin_notices' );
 
-			// Scripts.
-			aioseo()->helpers->enqueueScript(
-				'aioseo-vendors',
-				'js/chunk-vendors.js'
-			);
-			aioseo()->helpers->enqueueScript(
-				'aioseo-common',
-				'js/chunk-common.js'
-			);
-			aioseo()->helpers->enqueueScript(
-				'aioseo-' . $page . '-script',
-				'js/' . $page . '.js'
-			);
-
-			// Styles.
-			$rtl = is_rtl() ? '.rtl' : '';
-			aioseo()->helpers->enqueueStyle(
-				'aioseo-vendors',
-				"css/chunk-vendors$rtl.css"
-			);
-			aioseo()->helpers->enqueueStyle(
-				'aioseo-common',
-				"css/chunk-common$rtl.css"
-			);
-			// aioseo()->helpers->enqueueStyle(
-			//  'aioseo-' . $page . '-style',
-			//  'css/' . $page . $rtl . '.css'
-			// );
-			// aioseo()->helpers->enqueueStyle(
-			//  'aioseo-' . $page . '-vendors-style',
-			//  'css/chunk-' . $page . $rtl . '-vendors.css'
-			// );
-
-			wp_localize_script(
-				'aioseo-' . $page . '-script',
-				'aioseo',
-				aioseo()->helpers->getVueData( $page )
-			);
+			$this->currentPage = $page;
+			add_action( 'admin_enqueue_scripts', [ $this, 'enqueueAssets' ], 11 );
 
 			add_action( 'admin_footer_text', [ $this, 'addFooterText' ] );
 
@@ -795,6 +814,55 @@ class Admin {
 
 			break;
 		}
+	}
+
+	/**
+	 * Enqueue admin assets for the current page.
+	 *
+	 * @since 4.1.3
+	 *
+	 * @return void
+	 */
+	public function enqueueAssets() {
+		// Scripts.
+		aioseo()->helpers->enqueueScript(
+			'aioseo-vendors',
+			'js/chunk-vendors.js'
+		);
+		aioseo()->helpers->enqueueScript(
+			'aioseo-common',
+			'js/chunk-common.js'
+		);
+		aioseo()->helpers->enqueueScript(
+			'aioseo-' . $this->currentPage . '-script',
+			'js/' . $this->currentPage . '.js'
+			// [ 'aioseo-common', 'aioseo-venders', 'aioseo-app' ]
+		);
+
+		// Styles.
+		$rtl = is_rtl() ? '.rtl' : '';
+		aioseo()->helpers->enqueueStyle(
+			'aioseo-vendors',
+			"css/chunk-vendors$rtl.css"
+		);
+		aioseo()->helpers->enqueueStyle(
+			'aioseo-common',
+			"css/chunk-common$rtl.css"
+		);
+		// aioseo()->helpers->enqueueStyle(
+		//  'aioseo-' . $this->currentPage . '-style',
+		//  'css/' . $this->currentPage . $rtl . '.css'
+		// );
+		// aioseo()->helpers->enqueueStyle(
+		//  'aioseo-' . $this->currentPage . '-vendors-style',
+		//  'css/chunk-' . $this->currentPage . $rtl . '-vendors.css'
+		// );
+
+		wp_localize_script(
+			'aioseo-' . $this->currentPage . '-script',
+			'aioseo',
+			aioseo()->helpers->getVueData( $this->currentPage )
+		);
 	}
 
 	/**
@@ -940,11 +1008,13 @@ class Admin {
 	 * @return array          The modified columns.
 	 */
 	public function postColumns( $columns ) {
-		$pageAnalysisCapability    = aioseo()->access->hasCapability( 'aioseo_page_analysis' );
-		$generalSettingsCapability = aioseo()->access->hasCapability( 'aioseo_page_general_settings' );
+		$canManageSeo = apply_filters( 'aioseo_manage_seo', 'aioseo_manage_seo' );
 		if (
-			! current_user_can( 'aioseo_manage_seo' ) ||
-			( empty( $pageAnalysisCapability ) && empty( $generalSettingsCapability ) )
+			! current_user_can( $canManageSeo ) &&
+			(
+				! current_user_can( 'aioseo_page_general_settings' ) &&
+				! current_user_can( 'aioseo_page_analysis' )
+			)
 		) {
 			return $columns;
 		}
@@ -968,6 +1038,7 @@ class Admin {
 		if ( ! current_user_can( 'edit_post', $postId ) && ! current_user_can( 'aioseo_manage_seo' ) ) {
 			return;
 		}
+
 		if ( 'aioseo-details' === $columnName ) {
 			// Add this column/post to the localized array.
 			global $wp_scripts;
@@ -1050,7 +1121,7 @@ class Admin {
 		$postTypes     = aioseo()->helpers->getPublicPostTypes();
 		$showTruSeo    = aioseo()->options->advanced->truSeo;
 		$isSpecialPage = aioseo()->helpers->isSpecialPage( $post->ID );
-		$showMetabox   = aioseo()->options->searchAppearance->dynamic->postTypes->{$post->post_type}->advanced->showMetaBox;
+		$showMetabox   = aioseo()->dynamicOptions->searchAppearance->postTypes->{$post->post_type}->advanced->showMetaBox;
 
 		$postTypesMB = [];
 		foreach ( $postTypes as $pt ) {
@@ -1084,7 +1155,7 @@ class Admin {
 						echo sprintf( esc_html__( '%1$s Score', 'all-in-one-seo-pack' ), esc_html( AIOSEO_PLUGIN_SHORT_NAME ) );
 					?>
 				</span>
-				<div id="aioseo-post-settings-sidebar-button" class="aioseo-score-button classic-editor <?php echo esc_attr( aioseo()->helpers->getScoreClass( $score ) ); ?>">
+				<div id="aioseo-post-settings-sidebar-button" class="aioseo-score-button classic-editor <?php echo esc_attr( $this->getScoreClass( $score ) ); ?>">
 					<span id="aioseo-post-score"><?php echo esc_attr( $score . '/100' ); ?></span>
 				</div>
 			</div>
@@ -1211,6 +1282,28 @@ class Admin {
 	}
 
 	/**
+	 * Get the first available page item for the current user.
+	 *
+	 * @since 4.1.3
+	 *
+	 * @return bool|string The page slug.
+	 */
+	public function getFirstAvailablePageSlug() {
+		foreach ( $this->pages as $slug => $page ) {
+			// Ignore other pages.
+			if ( $this->pageSlug !== $page['parent'] ) {
+				continue;
+			}
+
+			if ( current_user_can( $this->getPageRequiredCapability( $slug ) ) ) {
+				return $slug;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Updates deprecated options.
 	 *
 	 * @since 4.0.0
@@ -1297,5 +1390,37 @@ class Admin {
 		$messages['post']['trashed'] = $messages['post']['trashed'] . '&nbsp;<a href="' . $url . '">' . $addRedirect . '</a> |';
 		$messages['page']['trashed'] = $messages['page']['trashed'] . '&nbsp;<a href="' . $url . '">' . $addRedirect . '</a> |';
 		return $messages;
+	}
+
+	/**
+	* Get the class name for the Score button.
+	* Depending on the score the button should have different color.
+	*
+	* @since 4.0.0
+	*
+	* @param int $score The content to retrieve from the remote URL.
+	*
+	* @return string The class name for Score button.
+	*/
+	private function getScoreClass( $score ) {
+		$scoreClass = 50 < $score ? 'score-orange' : 'score-red';
+		if ( 0 === $score ) {
+			$scoreClass = 'score-none';
+		}
+		if ( $score >= 80 ) {
+			$scoreClass = 'score-green';
+		}
+		return $scoreClass;
+	}
+
+	/**
+	 * Loads the plugin text domain.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @return void
+	 */
+	public function loadTextDomain() {
+		aioseo()->helpers->loadTextDomain( 'all-in-one-seo-pack' );
 	}
 }

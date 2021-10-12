@@ -75,7 +75,8 @@ class Post extends Model {
 			->model( 'AIOSEO\\Plugin\\Common\\Models\\Post' );
 
 		if ( ! $post->exists() ) {
-			$post = self::setDynamicDefaults( $post, $postId );
+			$post->post_id = $postId;
+			$post          = self::setDynamicDefaults( $post, $postId );
 		}
 
 		return $post;

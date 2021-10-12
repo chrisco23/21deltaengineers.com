@@ -114,6 +114,12 @@ class ET_Core_Portability {
 			$temp_file = $this->temp_file( $temp_file_id, 'et_core_import', $upload['file'] );
 			$import = json_decode( $filesystem->get_contents( $temp_file ), true );
 			$import = $this->validate( $import );
+
+			// Check if Import contains Google Api Settings.
+			if ( isset( $import['data']['et_google_api_settings'] ) && 'epanel' === $this->instance->context ) {
+				$et_google_api_settings = $import['data']['et_google_api_settings'];
+			}
+
 			$import['data'] = $this->apply_query( $import['data'], 'set' );
 
 			if ( ! isset( $import['context'] ) || ( isset( $import['context'] ) && $import['context'] !== $this->instance->context ) ) {
@@ -151,6 +157,16 @@ class ET_Core_Portability {
 					// If synced, clear the legacy custom css value to avoid unwanted merging of old and new css.
 					$data[ "{$shortname}_custom_css" ] = '';
 				}
+			}
+
+			// Import Google API settings.
+			if ( isset( $et_google_api_settings ) ) {
+				// Get exising Google API key, sine it is not added to export.
+				$et_previous_google_api_settings   = get_option( 'et_google_api_settings' );
+				$et_previous_google_api_key        = isset( $et_previous_google_api_settings['api_key'] ) ? $et_previous_google_api_settings['api_key'] : '';
+				$et_google_api_settings['api_key'] = $et_previous_google_api_key;
+
+				update_option( 'et_google_api_settings', $et_google_api_settings );
 			}
 
 			// Merge remaining current data with new data and update options.
@@ -327,14 +343,31 @@ class ET_Core_Portability {
 
 			$data = $this->apply_query( $data, 'set' );
 
+			// Export Google API settings.
+			if ( 'epanel' === $this->instance->context ) {
+				$et_google_api_settings = get_option( 'et_google_api_settings', array() );
+
+				// Unset google api_key settings to prevent exporting it.
+				if ( isset( $et_google_api_settings['api_key'] ) ) {
+					unset( $et_google_api_settings['api_key'] );
+				}
+
+				$data['et_google_api_settings'] = $et_google_api_settings;
+			}
+
 			if ( 'post_type' === $this->instance->type ) {
 				$used_global_presets = array();
+				$used_global_colors  = array();
 				$options             = array(
 					'apply_global_presets' => true,
 				);
 
 				foreach ( $data as $post ) {
 					$shortcode_object = et_fb_process_shortcode( $post->post_content );
+
+					if ( 'post_type' === $this->instance->type ) {
+						$used_global_colors = $this->_get_used_global_colors( $shortcode_object, $used_global_colors );
+					}
 
 					if ( $apply_global_presets ) {
 						$post->post_content = et_fb_process_to_shortcode( $shortcode_object, $options, '', false );
@@ -348,6 +381,10 @@ class ET_Core_Portability {
 
 				if ( ! empty ( $used_global_presets ) ) {
 					$global_presets = (object) $used_global_presets;
+				}
+
+				if ( ! empty( $used_global_colors ) ) {
+					$global_colors = $this->_get_global_colors_data( $used_global_colors );
 				}
 			}
 
@@ -1079,7 +1116,8 @@ class ET_Core_Portability {
 				}
 
 				// Inject Global colors into imported presets.
-				$global_presets->$module_type->presets->$preset_id->settings = ET_Builder_Global_Presets_Settings::maybe_set_global_colors( $global_presets->$module_type->presets->$preset_id->settings );
+				$preset_settings = (array) $global_presets->$module_type->presets->$preset_id->settings;
+				$global_presets->$module_type->presets->$preset_id->settings = ET_Builder_Global_Presets_Settings::maybe_set_global_colors( $preset_settings );
 			}
 		}
 
@@ -1364,20 +1402,16 @@ class ET_Core_Portability {
 	protected function _maybe_inject_gcid( &$data ) {
 		foreach ( $data as $post_id => &$post_data ) {
 			if ( is_array( $post_data ) ) {
-				foreach ( $post_data as $post_param => &$param_value ) {
-					if ( ! is_array( $param_value ) ) {
-						$shortcode_object = et_fb_process_shortcode( $param_value );
-						$this->_inject_gcid( $shortcode_object );
-						$data[ $post_id ][ $post_param ] = et_fb_process_to_shortcode( $shortcode_object, array(), '', false );
-					}
-				}
-				unset( $param_value );
+				$shortcode_object = et_fb_process_shortcode( $post_data['post_content'] );
+				$this->_inject_gcid( $shortcode_object );
+				$data[ $post_id ]['post_content'] = et_fb_process_to_shortcode( $shortcode_object, array(), '', false );
 			} else {
 				$shortcode_object = et_fb_process_shortcode( $post_data );
 				$this->_inject_gcid( $shortcode_object );
 				$data[ $post_id ] = et_fb_process_to_shortcode( $shortcode_object, array(), '', false );
 			}
 		}
+
 		unset( $post_data );
 
 		return $data;
@@ -2194,6 +2228,69 @@ class ET_Core_Portability {
 		et_core_nonce_verified_previously();
 
 		return isset( $_POST['timestamp'] ) && ! empty( $_POST['timestamp'] ) ? sanitize_text_field( $_POST['timestamp'] ) : (string) current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested -- This is used to generate the temporary file ID so we don't need the accuracy.
+	}
+
+	/**
+	 * Get Global Colors array from provided global_colors_info.
+	 *
+	 * @since 4.10.8
+	 *
+	 * @param array $global_colors_info Array of global colors to process.
+	 *
+	 * @return array The list of the Global Colors for export.
+	 */
+	protected function _get_global_colors_data( $global_colors_info = array() ) {
+		$global_color_ids = array_unique( array_keys( $global_colors_info ) );
+
+		if ( empty( $global_color_ids ) ) {
+			return array();
+		}
+
+		$all_global_colors = et_builder_get_all_global_colors();
+		$used_colors       = array();
+
+		foreach ( $global_color_ids as $color_id ) {
+			if ( isset( $all_global_colors[ $color_id ] ) ) {
+				$color_data = array(
+					$color_id,
+					$all_global_colors[ $color_id ],
+				);
+
+				$used_colors[] = $color_data;
+			}
+		}
+
+		return $used_colors;
+	}
+
+	/**
+	 * Get List of global colors used in shortcode.
+	 *
+	 * @since 4.10.8
+	 *
+	 * @param array $shortcode_object   The multidimensional array representing a page structure.
+	 * @param array $used_global_colors List of global colors to merge with.
+	 *
+	 * @return array - The list of the Global Colors.
+	 */
+	protected function _get_used_global_colors( $shortcode_object, $used_global_colors = array() ) {
+		foreach ( $shortcode_object as $module ) {
+			if ( isset( $module['attrs']['global_colors_info'] ) ) {
+				// Retrive global_colors_info from post meta, which saved as string[][].
+				$gc_info_prepared   = str_replace(
+					array( '&#91;', '&#93;' ),
+					array( '[', ']' ),
+					$module['attrs']['global_colors_info']
+				);
+				$used_global_colors = array_merge( $used_global_colors, json_decode( $gc_info_prepared, true ) );
+			}
+
+			if ( isset( $module['content'] ) && is_array( $module['content'] ) ) {
+				$used_global_colors = array_merge( $used_global_colors, $this->_get_used_global_colors( $module['content'], $used_global_colors ) );
+			}
+		}
+
+		return $used_global_colors;
 	}
 
 	/**

@@ -156,7 +156,7 @@ class I18n {
 			'import_folder_to_filebird'       => __( 'Import folders to FileBird', 'filebird' ),
 			'go_to_import'                    => __( 'Go to import', 'filebird' ),
 			'no_thanks'						  => __( 'No, thanks', 'filebird' ),
-			'import_some_folders'             => __( 'You have some folders created by other media plugins. Would you like to import them', 'filebird' ),
+			'import_some_folders'             => __( 'You have some folders created by other media plugins. Would you like to import them?', 'filebird' ),
 		);
 		return $translation;
 	}

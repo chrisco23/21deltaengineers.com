@@ -87,8 +87,6 @@ class DynamicBackup {
 			return;
 		}
 
-		aioseo()->dynamicOptions->refresh();
-
 		$this->backup  = $backup;
 		$this->options = aioseo()->dynamicOptions->getDefaults();
 

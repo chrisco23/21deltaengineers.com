@@ -265,7 +265,7 @@ class Folder extends Controller
       'default_folder' => Helpers::getDefaultSelectedFolder(),
       'folders' => FolderModel::allFolders('id as term_id, name as term_name', array('term_id', 'term_name')),
       'relations' => FolderModel::getRelations(),
-      // 'is_upload' => $current_screen != null && $current_screen->id === 'upload' ? 1 : 0,
+      'is_upload_screen' => "upload.php" === $screenId ? '1' : '0',
       'i18n' => i18n::getTranslation(),
       'media_mode' => get_user_option('media_library_mode', get_current_user_id()),
       'json_url' => apply_filters('filebird_json_url', rtrim(rest_url(NJFB_REST_URL), "/")),

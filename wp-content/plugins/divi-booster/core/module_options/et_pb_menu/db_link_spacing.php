@@ -51,3 +51,14 @@ END;
 	}	
 	return $content;
 }
+
+add_filter('et_pb_module_shortcode_attributes', 'dbdbMenuModule_fixed_props', 10, 3);
+
+function dbdbMenuModule_fixed_props($props, $attrs, $render_slug) {
+    if ($render_slug === 'et_pb_menu') {
+        if (!isset($props['db_link_spacing']) && isset($attrs['db_link_spacing'])) {
+            $props['db_link_spacing'] = $attrs['db_link_spacing'];
+        }
+    }
+    return $props;
+}

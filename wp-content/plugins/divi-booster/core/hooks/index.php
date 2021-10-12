@@ -11,4 +11,4 @@ include_once($HOOKDIR.'action-db_vb_head.php');
 include_once($HOOKDIR.'action-db_vb_jquery.php');
 include_once($HOOKDIR.'filter-db_builder_should_load_framework.php');
 include_once($HOOKDIR.'filter-dbdb_filterable_portfolio_tabs_terms.php');
-//include_once($HOOKDIR.'jstrigger-db_vb_builder_data_retrieved.php');
+include_once($HOOKDIR.'filter-dbdb_render_slug_shortcode_output.php');

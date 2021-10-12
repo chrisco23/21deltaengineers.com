@@ -225,7 +225,7 @@ class ET_Builder_Critical_CSS {
 	/**
 	 * Safari doesn't support `prefetch`......
 	 *
-	 * @since ??
+	 * @since 4.10.7
 	 *
 	 * @return void
 	 */

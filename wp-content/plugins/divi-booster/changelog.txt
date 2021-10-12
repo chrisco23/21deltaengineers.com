@@ -1,3 +1,16 @@
+= 3.6.5 =
+* Fixed menu module link spacing not persisting in theme builder
+
+= 3.6.4 =
+* Fixed warning about missing method in slider run once feature
+* Updated "Run Once" option to work with both the standard and fullwidth slider
+
+= 3.6.3 =
+* Removed unnecessary thumbs.db files from plugin folder
+
+= 3.6.2 =
+* Slider module second button now previewable in the visual builder
+
 = 3.6.1 =
 * Fixed open in lightbox feature not working in Divi 4.10
 * Changed social media follow tiktok icon background color to black

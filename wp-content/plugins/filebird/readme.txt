@@ -168,6 +168,13 @@ Happy Organizing! 😍
 
 == Changelog ==
 
+= Sep 30, 2021 =
+- Updated: Some notice
+
+= Sep 14, 2021 - Version 4.9.3 =
+- Added: Import folders for Folders by Premio
+- Fixed: Compatible with WordPress old version.
+
 = Sep 9, 2021 - Version 4.9.2 =
 - Improved: Import notice
 - Fixed: Some small bugs

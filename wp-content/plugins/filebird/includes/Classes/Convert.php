@@ -136,6 +136,11 @@ class Convert {
       if ( ! $this->isUpdated( 'happyfiles' ) && ! $this->isNoThanks( 'happyfiles' ) ) {
         $oldHappyFilesFolders = $this->getOldFolders( 'happyfiles', true );
       }
+
+      $oldPremioFolders = array();
+      if ( ! $this->isUpdated( 'premio' ) && ! $this->isNoThanks( 'premio' ) ) {
+        $oldPremioFolders = $this->getOldFolders( 'premio', true );
+      }
   
       if ( count( $oldEnhancedFolders ) > 3 ) {
         $sites[] = array(
@@ -170,6 +175,13 @@ class Convert {
           'site'  => 'happyfiles',
           'title' => 'HappyFiles',
           'desc'  => $this->plugin_import_description(count($oldHappyFilesFolders), 'HappyFiles')
+        );
+      }
+      if ( count( $oldPremioFolders ) > 3 ) {
+        $sites[] = array(
+          'site'  => 'premio',
+          'title' => 'premio',
+          'desc'  => $this->plugin_import_description(count($oldPremioFolders), 'Folders')
         );
       }
   
@@ -291,12 +303,15 @@ class Convert {
           update_option('njt_fb_realmedia_no_thanks', '1');
         } else if($site == 'happyfiles') {
           update_option('njt_fb_happyfiles_no_thanks', '1');
+        } else if($site == 'premio') {
+          update_option('njt_fb_premio_no_thanks', '1');
         } elseif ( $site == 'all' ) {
           update_option( 'njt_fb_happyfiles_no_thanks', '1' );
           update_option( 'njt_fb_realmedia_no_thanks', '1' );
           update_option( 'njt_fb_wpmf_no_thanks', '1' );
           update_option( 'njt_fb_enhanced_no_thanks', '1' );
           update_option( 'njt_fb_wpmlf_no_thanks', '1' );
+          update_option( 'njt_fb_premio_no_thanks', '1' );
         }
         
         wp_send_json_success(array(
@@ -372,6 +387,8 @@ class Convert {
             $is = get_option('njt_fb_updated_from_realmedia', '0') === '1';
           } else if($site == 'happyfiles') {
             $is = get_option('njt_fb_updated_from_happyfiles', '0') === '1';
+          } else if($site == 'premio') {
+            $is = get_option('njt_fb_updated_from_premio', '0') === '1';
           }
 
           return $is;
@@ -387,6 +404,8 @@ class Convert {
           return get_option('njt_fb_realmedia_no_thanks', '0') === '1';
         } else if($site == 'happyfiles') {
           return get_option('njt_fb_happyfiles_no_thanks', '0') === '1';
+        } else if($site == 'premio') {
+          return get_option('njt_fb_premio_no_thanks', '0') === '1';
         }
       }
     // public function ajaxImport() {
@@ -491,6 +510,13 @@ class Convert {
             ));
             exit();
           }
+        } else if($site == 'premio') {
+          if(get_option('njt_fb_updated_from_premio', '0') == '1') {
+            wp_send_json_success(array(
+                'mess' => __('Already Updated', 'filebird')
+            ));
+            exit();
+          }
         }
     }
     public function getOldFolders($site, $flat = false) {
@@ -509,6 +535,8 @@ class Convert {
           }
         } else if($site == 'happyfiles') {
           $folders = Helpers::foldersFromHappyFiles(0, $flat);
+        } else if($site == 'premio') {
+          $folders = Helpers::foldersFromPremio(0, $flat);
         }
         return $folders;
     }
@@ -554,7 +582,9 @@ class Convert {
           $att = $wpdb->get_col($wpdb->prepare('SELECT attachment FROM %1$s WHERE fid = %2$d', $folder_table, $folder->id));
         } else if($site == 'happyfiles') {
           $att = $wpdb->get_col($wpdb->prepare('SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder->term_taxonomy_id));
-        }
+        } else if($site == 'premio') {
+          $att = $wpdb->get_col($wpdb->prepare('SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder->term_taxonomy_id));
+        } 
         return $att;
     }
     private function afterInsertingNewFolders($site) {
@@ -572,6 +602,8 @@ class Convert {
             update_option('njt_fb_updated_from_realmedia', '1');
         } else if($site == 'happyfiles') {
             update_option('njt_fb_updated_from_happyfiles', '1');
+        } else if($site == 'premio') {
+            update_option('njt_fb_updated_from_premio', '1');
         }
     }
   

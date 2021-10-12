@@ -155,10 +155,11 @@ function et_is_dynamic_front_end_request() {
 			! is_admin()
 			&& ! wp_doing_ajax()
 			&& ! wp_doing_cron()
-			// Disable when in builder preview modes.
+			// Disable when in preview modes.
 			&& ! is_customize_preview()
 			&& ! is_et_pb_preview()
 			&& ! ET_GB_Block_Layout::is_layout_block_preview()
+			&& ! is_preview()
 			// Disable when using the visual builder.
 			&& ! et_fb_is_enabled()
 			// Disable on paginated index pages when blog style mode is enabled and when using the Divi Builder plugin.

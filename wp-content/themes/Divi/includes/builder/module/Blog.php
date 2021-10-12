@@ -812,7 +812,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 
 		$query_args = array(
 			'posts_per_page' => intval( $args['posts_number'] ),
-			'post_status'    => array( 'publish', 'private' ),
+			'post_status'    => array( 'publish', 'private', 'inherit' ),
 			'perm'           => 'readable',
 			'post_type'      => $args['post_type'],
 		);
@@ -831,6 +831,22 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 		$query_args['cat'] = implode( ',', self::filter_include_categories( $args['include_categories'], $post_id ) );
 
 		$query_args['paged'] = $paged;
+
+		// WP_Query doesn't return sticky posts when it performed via Ajax.
+		// This happens because `is_home` is false in this case, but on FE it's true if no category set for the query.
+		// Set `is_home` = true to emulate the FE behavior with sticky posts in VB.
+		if ( empty( $query_args['cat'] ) ) {
+			add_action(
+				'pre_get_posts',
+				function( $query ) {
+					if ( true === $query->get( 'et_is_home' ) ) {
+						$query->is_home = true;
+					}
+				}
+			);
+
+			$query_args['et_is_home'] = true;
+		}
 
 		if ( '' !== $args['offset_number'] && ! empty( $args['offset_number'] ) ) {
 			/**
@@ -860,10 +876,12 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 		 * Filters Blog module's main query.
 		 *
 		 * @since 4.7.0
+		 * @since 4.11.0 Pass modified module attributes.
 		 *
 		 * @param WP_Query $query
+		 * @param array    $args  Modified module attributes.
 		 */
-		$query = apply_filters( 'et_builder_blog_query', $query ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- We intend to override $wp_query for blog module.
+		$query = apply_filters( 'et_builder_blog_query', $query, $args ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- We intend to override $wp_query for blog module.
 
 		// Keep page's $wp_query global
 		$wp_query_page = $wp_query;
@@ -1321,7 +1339,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 
 		$args = array(
 			'posts_per_page' => (int) $posts_number,
-			'post_status'    => array( 'publish', 'private' ),
+			'post_status'    => array( 'publish', 'private', 'inherit' ),
 			'perm'           => 'readable',
 			'post_type'      => $post_type,
 		);
@@ -1443,10 +1461,12 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 		 * Filters Blog module's main query.
 		 *
 		 * @since 4.7.0
+		 * @since 4.11.0 Pass modified module attributes.
 		 *
 		 * @param WP_Query $wp_query
+		 * @param array    $attrs    Modified module attributes.
 		 */
-		$wp_query = apply_filters( 'et_builder_blog_query', $wp_query ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- We intend to override $wp_query for blog module.
+		$wp_query = apply_filters( 'et_builder_blog_query', $wp_query, $attrs ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- We intend to override $wp_query for blog module.
 
 		// Manually set the max_num_pages to make the `next_posts_link` work
 		if ( '' !== $offset_number && ! empty( $offset_number ) ) {

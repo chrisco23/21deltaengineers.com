@@ -951,6 +951,22 @@ class ET_Builder_Element {
 
 		$i18n =& self::$i18n;
 
+		if ( ! isset( $i18n['conditions'] ) ) {
+			$i18n['conditions'] = array(
+				'label' => esc_html__( 'Conditions', 'et_builder' ),
+			);
+		}
+
+		$this->_add_settings_modal_toggles(
+			'custom_css',
+			array(
+				'conditions' => array(
+					'title'    => $i18n['conditions']['label'],
+					'priority' => 98,
+				),
+			)
+		);
+
 		if ( ! isset( $i18n['toggles'] ) ) {
 			// phpcs:disable WordPress.WP.I18n.MissingTranslatorsComment
 			$i18n['toggles'] = array(
@@ -2082,15 +2098,22 @@ class ET_Builder_Element {
 			// decode HTML entities and remove trailing and leading quote if needed.
 			$processed_attr_value = $need_html_entities_decode ? trim( htmlspecialchars_decode( $attribute_value, ENT_QUOTES ), '"' ) : $attribute_value;
 
+			$field_type = empty( $this->fields_unprocessed[ $attribute_key ]['type'] ) ? '' : $this->fields_unprocessed[ $attribute_key ]['type'];
+
 			// the icon shortcodes are fine.
-			if ( isset( $font_icon_options_as_keys[ $attribute_key ] ) ) {
+			if ( isset( $font_icon_options_as_keys[ $attribute_key ] ) || 'select_icon' === $field_type ) {
 				$shortcode_attributes[ $attribute_key ] = $processed_attr_value;
 				// icon attributes must not be str_replaced.
+
+				// Add responsive and hover types attributes on the font icon options list. Just
+				// assign empty string value because we just need the key.
+				$font_icon_options_as_keys[ "{$attribute_key}_tablet" ] = '';
+				$font_icon_options_as_keys[ "{$attribute_key}_phone" ]  = '';
+				$font_icon_options_as_keys[ "{$attribute_key}__hover" ] = '';
 				continue;
 			}
 
 			// Set empty TinyMCE content '&lt;br /&gt;<br />' as empty string.
-			$field_type = empty( $this->fields_unprocessed[ $attribute_key ]['type'] ) ? '' : $this->fields_unprocessed[ $attribute_key ]['type'];
 			if ( 'tiny_mce' === $field_type && 'ltbrgtbr' === preg_replace( '/[^a-z]/', '', $processed_attr_value ) ) {
 				$processed_attr_value = '';
 			}
@@ -3195,7 +3218,52 @@ class ET_Builder_Element {
 
 		$this->is_rendering = true;
 		$render_method      = $et_fb_processing_shortcode_object ? 'render_as_builder_data' : 'render';
-		$output             = $this->{$render_method}( $attrs, $content, $render_slug, $parent_address, $global_parent, $global_parent_type, $parent_type );
+
+		/**
+		 * Process Display Conditions and decide whether to display a module or not.
+		 */
+		// Setup variables.
+		$is_displayable                        = true;
+		$is_display_conditions_set             = isset( $this->props['display_conditions'] ) && ! empty( $this->props['display_conditions'] );
+		$is_display_conditions_as_base64_empty = 'W10=' === $this->props['display_conditions'];
+		$has_display_conditions                = $is_display_conditions_set && ! $is_display_conditions_as_base64_empty;
+
+		// Check if display_conditions attribute is defined, Decode the data and check if it is displayable.
+		if ( $has_display_conditions ) {
+			$display_conditions_json = base64_decode( $this->props['display_conditions'] ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode  -- The returned data is an array and necessary validation checks are performed.
+		}
+		if ( $has_display_conditions && false !== $display_conditions_json ) {
+			$display_conditions = json_decode( $display_conditions_json, true );
+			$is_displayable     = ET_Builder_Module_Fields_Factory::get( 'DisplayConditions' )->is_displayable( $display_conditions );
+		}
+
+		// Render the module as we normally would.
+		$output = $this->{$render_method}( $attrs, $content, $render_slug, $parent_address, $global_parent, $global_parent_type, $parent_type );
+
+		/**
+		 * Check if we're rendering on frontend, Then decide whether to keep the output or erase it.
+		 *
+		 * We do need to render the module first and then decide to keep it or not, This is because
+		 * we want the styles of the module (shortcode) and any nested modules inside it to get
+		 * registered so "Dynamic Assets" would include the styles of all modules used on the page.
+		 * Ref: https://github.com/elegantthemes/Divi/issues/24965
+		 */
+		if ( 'render' === $render_method ) {
+			if ( wp_doing_ajax() && et_pb_is_pagebuilder_used( get_the_ID() ) ) {
+				// "Blog Module" in VB will be rendered like a normal frontend request not as builder data, Here we set the output
+				// so it will always be visible in VB ignoring Display Conditions Ref: https://github.com/elegantthemes/Divi/issues/23309.
+				$is_vb_ajax_nonce_valid = isset( $_POST['et_pb_process_computed_property_nonce'] ) && wp_verify_nonce( sanitize_text_field( $_POST['et_pb_process_computed_property_nonce'] ), 'et_pb_process_computed_property_nonce' );
+				$output                 = $is_vb_ajax_nonce_valid ? $output : '';
+			} elseif ( 'et_pb_post_content' === $this->slug && ! $is_displayable && et_core_is_fb_enabled() ) {
+				// When VB is loaded and "Post Content" Module is used in TB and it's not displayable, set the correct
+				// output so it'd be displayed in VB and TB respectively Ref: https://github.com/elegantthemes/Divi/issues/23479.
+				$output = $output;
+			} else {
+				// All other scenarios will fall here, Normal frontend request, AJAX frontend request, etc.
+				$output = ( $is_displayable ) ? $output : '';
+			}
+		}
+
 		$this->is_rendering = false;
 
 		// Wrap 3rd party module rendered output with proper module wrapper
@@ -4078,6 +4146,8 @@ class ET_Builder_Element {
 		$this->_add_sizing_fields();
 
 		$this->_add_overflow_fields();
+
+		$this->_add_display_conditions_fields();
 
 		$this->_add_margin_padding_fields();
 
@@ -5424,6 +5494,18 @@ class ET_Builder_Element {
 			$this->_additional_fields_options = array_merge(
 				$this->_additional_fields_options,
 				ET_Builder_Module_Fields_Factory::get( 'Overflow' )->get_fields( array( 'default' => $default_overflow ) )
+			);
+		}
+	}
+
+	/**
+	 * Add display conditions option fields.
+	 */
+	protected function _add_display_conditions_fields() {
+		if ( is_array( et_()->array_get( $this->advanced_fields, 'display_conditions', array() ) ) ) {
+			$this->_additional_fields_options = array_merge(
+				$this->_additional_fields_options,
+				ET_Builder_Module_Fields_Factory::get( 'DisplayConditions' )->get_fields()
 			);
 		}
 	}
@@ -12256,6 +12338,7 @@ class ET_Builder_Element {
 		$fields['inline_fonts']       = '';
 		$fields['collapsed']          = '';
 		$fields['global_colors_info'] = '{}';
+		$fields['display_conditions'] = '';
 
 		// Default props of each modules are always identical; thus saves it as static prop
 		// so the next same modules doesn't need to process all of these again repetitively.

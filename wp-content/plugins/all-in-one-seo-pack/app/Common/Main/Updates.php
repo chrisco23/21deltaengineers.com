@@ -67,7 +67,7 @@ class Updates {
 	 */
 	public function runUpdates() {
 		// The dynamic options have not yet fully loaded, so let's refresh here to force that to happen.
-		aioseo()->dynamicOptions->refresh();
+		aioseo()->dynamicOptions->refresh(); // TODO: Check if we still need this since it already runs on 999 in the main AIOSEO file.
 
 		$lastActiveVersion = aioseo()->internalOptions->internal->lastActiveVersion;
 		if ( version_compare( $lastActiveVersion, '4.0.5', '<' ) ) {
@@ -105,7 +105,7 @@ class Updates {
 			$this->accessControlNewCapabilities();
 		}
 
-		if ( version_compare( $lastActiveVersion, '4.1.4', '<' ) ) {
+		if ( version_compare( $lastActiveVersion, '4.1.4.3', '<' ) ) {
 			$this->migrateDynamicSettings();
 		}
 
@@ -548,38 +548,41 @@ class Updates {
 						$options->searchAppearance->postTypes->$postTypeName->advanced->showMetaBox                 = $data['advanced']['showMetaBox'];
 						$options->searchAppearance->postTypes->$postTypeName->advanced->bulkEditing                 = $data['advanced']['bulkEditing'];
 					}
+
+					if ( 'attachment' === $postTypeName ) {
+						$options->searchAppearance->postTypes->$postTypeName->redirectAttachmentUrls = $data['redirectAttachmentUrls'];
+					}
 				}
 			}
 		}
 
 		// Search appearance taxonomy data.
 		if (
-			! empty( $rawOptions['searchAppearance']['dynamic']['taxonomy'] )
+			! empty( $rawOptions['searchAppearance']['dynamic']['taxonomies'] )
 		) {
-			foreach ( $rawOptions['searchAppearance']['dynamic']['taxonomy'] as $taxonomyName => $data ) {
-				if ( $options->searchAppearance->taxonomy->has( $taxonomyName ) ) {
-					$options->searchAppearance->taxonomy->$taxonomyName->show            = $data['show'];
-					$options->searchAppearance->taxonomy->$taxonomyName->title           = $data['title'];
-					$options->searchAppearance->taxonomy->$taxonomyName->metaDescription = $data['metaDescription'];
+			foreach ( $rawOptions['searchAppearance']['dynamic']['taxonomies'] as $taxonomyName => $data ) {
+				if ( $options->searchAppearance->taxonomies->has( $taxonomyName ) ) {
+					$options->searchAppearance->taxonomies->$taxonomyName->show            = $data['show'];
+					$options->searchAppearance->taxonomies->$taxonomyName->title           = $data['title'];
+					$options->searchAppearance->taxonomies->$taxonomyName->metaDescription = $data['metaDescription'];
 
 					// Advanced settings.
 					$advanced = ! empty( $data['advanced']['robotsMeta'] ) ? $data['advanced']['robotsMeta'] : null;
 					if ( ! empty( $advanced ) ) {
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->robotsMeta->default         = $data['advanced']['robotsMeta']['default'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->robotsMeta->noindex         = $data['advanced']['robotsMeta']['noindex'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->robotsMeta->nofollow        = $data['advanced']['robotsMeta']['nofollow'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->robotsMeta->noarchive       = $data['advanced']['robotsMeta']['noarchive'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->robotsMeta->noimageindex    = $data['advanced']['robotsMeta']['noimageindex'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->robotsMeta->notranslate     = $data['advanced']['robotsMeta']['notranslate'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->robotsMeta->nosnippet       = $data['advanced']['robotsMeta']['nosnippet'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->robotsMeta->noodp           = $data['advanced']['robotsMeta']['noodp'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->robotsMeta->maxSnippet      = $data['advanced']['robotsMeta']['maxSnippet'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->robotsMeta->maxVideoPreview = $data['advanced']['robotsMeta']['maxVideoPreview'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->robotsMeta->maxImagePreview = $data['advanced']['robotsMeta']['maxImagePreview'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->showDateInGooglePreview     = $data['advanced']['showDateInGooglePreview'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->showPostThumbnailInSearch   = $data['advanced']['showPostThumbnailInSearch'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->showMetaBox                 = $data['advanced']['showMetaBox'];
-						$options->searchAppearance->taxonomy->$taxonomyName->advanced->bulkEditing                 = $data['advanced']['bulkEditing'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->robotsMeta->default         = $data['advanced']['robotsMeta']['default'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->robotsMeta->noindex         = $data['advanced']['robotsMeta']['noindex'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->robotsMeta->nofollow        = $data['advanced']['robotsMeta']['nofollow'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->robotsMeta->noarchive       = $data['advanced']['robotsMeta']['noarchive'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->robotsMeta->noimageindex    = $data['advanced']['robotsMeta']['noimageindex'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->robotsMeta->notranslate     = $data['advanced']['robotsMeta']['notranslate'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->robotsMeta->nosnippet       = $data['advanced']['robotsMeta']['nosnippet'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->robotsMeta->noodp           = $data['advanced']['robotsMeta']['noodp'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->robotsMeta->maxSnippet      = $data['advanced']['robotsMeta']['maxSnippet'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->robotsMeta->maxVideoPreview = $data['advanced']['robotsMeta']['maxVideoPreview'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->robotsMeta->maxImagePreview = $data['advanced']['robotsMeta']['maxImagePreview'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->showDateInGooglePreview     = $data['advanced']['showDateInGooglePreview'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->showPostThumbnailInSearch   = $data['advanced']['showPostThumbnailInSearch'];
+						$options->searchAppearance->taxonomies->$taxonomyName->advanced->showMetaBox                 = $data['advanced']['showMetaBox'];
 					}
 				}
 			}

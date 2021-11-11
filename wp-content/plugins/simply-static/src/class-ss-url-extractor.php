@@ -29,7 +29,7 @@ class Url_Extractor {
 		// HTML
 		'a'            => array( 'href', 'urn' ),
 		'base'         => array( 'href' ),
-		'form'         => array( 'action', 'data' ),
+		'form'         => array( 'data' ),
 		'img'          => array( 'src', 'usemap', 'longdesc', 'dynsrc', 'lowsrc', 'srcset' ),
 		'amp-img'      => array( 'src', 'srcset' ),
 		'link'         => array( 'href' ),
@@ -37,7 +37,7 @@ class Url_Extractor {
 		'applet'       => array( 'code', 'codebase', 'archive', 'object' ),
 		'area'         => array( 'href' ),
 		'body'         => array( 'background', 'credits', 'instructions', 'logo' ),
-		'input'        => array( 'src', 'usemap', 'dynsrc', 'lowsrc', 'action', 'formaction' ),
+		'input'        => array( 'src', 'usemap', 'dynsrc', 'lowsrc', 'formaction' ),
 
 		'blockquote'   => array( 'cite' ),
 		'del'          => array( 'cite' ),
@@ -54,7 +54,7 @@ class Url_Extractor {
 		'embed'        => array( 'src', 'code', 'pluginspage' ),
 		'event-source' => array( 'src' ),
 		'html'         => array( 'manifest', 'background', 'xmlns' ),
-		'source'       => array( 'src' ),
+		'source'       => array( 'src', 'srcset' ),
 		'video'        => array( 'src', 'poster' ),
 
 		'bgsound'      => array( 'src' ),
@@ -66,7 +66,7 @@ class Url_Extractor {
 		'layer'        => array( 'src' ),
 		'xml'          => array( 'src' ),
 
-		'button'       => array( 'action', 'formaction' ),
+		'button'       => array( 'formaction' ),
 		'datalist'     => array( 'data' ),
 		'select'       => array( 'data' ),
 
@@ -103,7 +103,7 @@ class Url_Extractor {
 	 * The url of the site
 	 * @var array
 	 */
-	protected $extracted_urls = array();
+	public $extracted_urls = array();
 
 	/**
 	 * Constructor
@@ -289,6 +289,12 @@ class Url_Extractor {
 				$tag->innertext = $updated_css;
 			}
 
+			do_action(
+				'ss_after_extract_and_replace_urls_in_html',
+				$dom,
+				$this
+			);
+
 			return $dom->save();
 		}
 	}
@@ -404,7 +410,7 @@ class Url_Extractor {
 	 * @return string The URL that should be added to the list of extracted URLs
 	 * @return string The URL, converted to an absolute/relative/offline URL
 	 */
-	private function add_to_extracted_urls( $extracted_url ) {
+	public function add_to_extracted_urls( $extracted_url ) {
 		$url = Util::relative_to_absolute_url( $extracted_url, $this->static_page->url );
 
 		if ( $url && Util::is_local_url( $url ) ) {

@@ -484,6 +484,11 @@ class ET_Core_PageResource {
 	protected static function _maybe_create_static_resources( $location ) {
 		self::$current_output_location = $location;
 
+		// Disable for footer inside builder if page uses Theme Builder Editor to avoid conflict with critical CSS.
+		if ( 'footer' === $location && et_fb_is_enabled() && et_fb_is_theme_builder_used_on_page() ) {
+			return false;
+		}
+
 		$sorted_resources = self::get_resources_by_output_location( $location );
 
 		foreach ( $sorted_resources as $priority => $resources ) {
@@ -667,7 +672,7 @@ class ET_Core_PageResource {
 		// Output Location: head-late, right AFTER the theme and wp's custom css.
 		add_action( 'wp_head', array( $class, 'head_late_output_cb' ), 103 );
 
-		// Output Location: footer
+		// Output Location: footer.
 		add_action( 'wp_footer', array( $class, 'footer_output_cb' ), 20 );
 
 		// Always delete cached resources for a post upon saving.
@@ -676,8 +681,13 @@ class ET_Core_PageResource {
 		// Always delete cached resources for theme customizer upon saving.
 		add_action( 'customize_save_after', array( $class, 'customize_save_after_cb' ) );
 
-		// Always delete dynamic css when saving widgets.
+		/*
+		 * Always delete dynamic css when saving widgets.
+		 * `widget_update_callback` fires on save for any of the present widgets,
+		 * `delete_widget` fires on save for any deleted widget.
+		 */
 		add_filter( 'widget_update_callback', array( $class, 'widget_update_callback_cb' ) );
+		add_filter( 'delete_widget', array( $class, 'widget_update_callback_cb' ) );
 	}
 
 	/**
@@ -853,14 +863,33 @@ class ET_Core_PageResource {
 	 * @param bool    $update
 	 */
 	public static function save_post_cb( $post_id, $post, $update ) {
-		if ( ! $update || ! function_exists( 'et_builder_enabled_for_post' ) ) {
-			return;
-		}
+		// In Dynamic CSS, we parse the layout content for generating styles and store it under the `object_id`, so clearing
+		// only the layout assets won't update the page style if we made any changes to the layout/global modules etc.
+		// Hence, we need to clear all static resources when we update a layout.
+		// Also, we should only clear the cache if the layout being saved is a global module/row/section.
+		if ( 'et_pb_layout' === $post->post_type ) {
+			$taxonomies     = get_taxonomies( [ 'object_type' => [ 'et_pb_layout' ] ] );
+			$tax_to_clear   = array( 'scope', 'layout_type' );
+			$types_to_clear = array( 'module', 'row', 'section' );
 
-		if ( ! et_builder_enabled_for_post( $post_id ) ) {
-			return;
-		}
+			$scope_terms  = get_the_terms( $post_id, 'scope' );
+			$layout_terms = get_the_terms( $post_id, 'layout_type' );
 
+			if ( ! empty( $scope_terms ) && ! empty( $layout_terms ) ) {
+				$scope_terms       = wp_list_pluck( $scope_terms, 'slug' );
+				$layout_terms      = wp_list_pluck( $layout_terms, 'slug' );
+				$is_global         = in_array( 'global', $scope_terms, true );
+				$clearable_modules = array_intersect( $types_to_clear, $layout_terms );
+				$remove_resource   = $is_global && ! empty( $clearable_modules );
+
+				foreach ( $taxonomies as $taxonomy ) {
+					if ( in_array( $taxonomy, $tax_to_clear, true ) && $remove_resource ) {
+						$post_id = 'all';
+						break;
+					}
+				}
+			}
+		}
 		self::remove_static_resources( $post_id, 'all' );
 	}
 

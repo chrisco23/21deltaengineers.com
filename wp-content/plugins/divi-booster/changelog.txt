@@ -1,3 +1,6 @@
+= 3.6.6 =
+* Fixed secondary header social icons on right not hidden before being moved. Thanks to Victor of divimundo.com
+
 = 3.6.5 =
 * Fixed menu module link spacing not persisting in theme builder
 

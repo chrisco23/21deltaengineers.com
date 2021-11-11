@@ -173,7 +173,7 @@ final class Wicked_Folders_Admin {
 
 		$in_footer = apply_filters( 'wicked_folders_enqueue_scripts_in_footer', $in_footer );
 
-		wp_register_script( 'wicked-folders-select2', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/select2/js/select2.min.js', array(), Wicked_Folders::plugin_version(), $in_footer );
+		wp_register_script( 'wicked-folders-select2', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/select2/js/select2.full.min.js', array(), Wicked_Folders::plugin_version(), $in_footer );
 		wp_register_script( 'wicked-folders-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'js/admin.js', array(), Wicked_Folders::plugin_version(), $in_footer );
 		wp_register_script( 'wicked-folders-app', plugin_dir_url( dirname( __FILE__ ) ) . 'js/app.js', array( 'jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable', 'backbone' ), Wicked_Folders::plugin_version(), $in_footer );
 
@@ -223,17 +223,15 @@ final class Wicked_Folders_Admin {
 
 		wp_register_style( 'wicked-folders-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'css/admin.css', array(), Wicked_Folders::plugin_version() );
 
-		wp_enqueue_script( 'wicked-folders-admin' );
-		wp_enqueue_script( 'wicked-folders-app' );
-		wp_enqueue_style( 'wicked-folders-admin' );
-
 		if ( Wicked_Folders_Admin::is_folders_page() ) {
-
 			wp_enqueue_script( 'sticky-kit', plugin_dir_url( dirname( __FILE__ ) ) . 'vendor/sticky-kit/jquery.sticky-kit.min.js' );
-
 		}
 
 		if ( $this->is_folder_pane_enabled_page() ) {
+			wp_enqueue_script( 'wicked-folders-admin' );
+			wp_enqueue_script( 'wicked-folders-app' );
+			wp_enqueue_style( 'wicked-folders-admin' );
+
 			wp_enqueue_script( 'wicked-folders-select2' );
 			wp_enqueue_style( 'wicked-folders-select2' );
 
@@ -254,6 +252,13 @@ final class Wicked_Folders_Admin {
 				body.rtl.wp-admin.wicked-object-folder-pane #wpfooter {left: 0; right: " . ( $state->tree_pane_width - 6 ) . "px;}
 			";
 			wp_add_inline_style( 'wicked-folders-admin', $css );
+		}
+
+		// The admin CSS is needed on a few non-folder pages also...
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : false;
+
+		if ( ( isset( $_GET['page'] ) && 'wicked_folders_settings' == $_GET['page'] ) || 'wf_collection_policy' == $typenow || ( false !== $screen && 'media' == $screen->base && 'add' == $screen->action ) ) {
+			wp_enqueue_style( 'wicked-folders-admin' );
 		}
 
 		$done = true;
@@ -1092,10 +1097,34 @@ final class Wicked_Folders_Admin {
 					$query->set( 'tax_query', $tax_query );
 
 				}
+
+				// It appears that Polylang doesn't always filter posts when
+				// where there isn't a 'lang' parameter in the URL.  When
+				// returning to a folder, the 'lang' parameter usually isn't
+				// present and items for all languages are displayed.  Add a tax
+				// query for the language to fix this.
+
+				// Update 2021-10-26: This no longer appears to be working and
+				// is causing all folders to be empty on sites that use Polylang.
+				// Removing for now
+				/*
+				if ( $folder && function_exists( 'pll_current_language' ) ) {
+					$tax_query = $query->get( 'tax_query' );
+					$tax_query = is_array( $tax_query ) ? $tax_query : array();
+
+					$tax_query[] = array(
+						'taxonomy' 	=> 'language',
+						'field' 	=> 'slug',
+						'operator' 	=> 'IN',
+						'terms' 	=> array( pll_current_language() ),
+					);
+
+					$query->set( 'tax_query', $tax_query );
+				}
+				*/
 			}
 
 		}
-
 	}
 
 	/**

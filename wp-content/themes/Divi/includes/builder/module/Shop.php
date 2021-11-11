@@ -633,6 +633,10 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 			$order   = false !== strpos( strtolower( $request_orderby_value ), 'desc' ) ? 'DESC' : 'ASC';
 		}
 
+		if ( 'date' === $request_orderby_value ) {
+			$order = 'DESC';
+		}
+
 		add_filter( 'woocommerce_default_catalog_orderby', array( $this, 'set_default_orderby' ) );
 
 		$shortcode = sprintf(
@@ -863,6 +867,22 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 				'icon_tablet' => $hover_icon_tablet,
 				'icon_phone'  => $hover_icon_phone,
 				'icon_sticky' => $hover_icon_sticky,
+			)
+		);
+
+		// Overlay Icon Styles.
+		$this->generate_styles(
+			array(
+				'hover'          => false,
+				'utility_arg'    => 'icon_font_family',
+				'render_slug'    => $render_slug,
+				'base_attr_name' => 'hover_icon',
+				'important'      => true,
+				'selector'       => '%%order_class%% .et_overlay:before',
+				'processor'      => array(
+					'ET_Builder_Module_Helper_Style_Processor',
+					'process_extended_icon',
+				),
 			)
 		);
 

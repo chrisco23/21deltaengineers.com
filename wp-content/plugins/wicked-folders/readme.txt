@@ -3,7 +3,7 @@ Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
 Tested up to: 5.8
-Stable tag: 2.18.4
+Stable tag: 2.18.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,14 @@ The folder toggle arrow is greyed out when a folder doesn't have any child folde
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 2.18.6 (October 26, 2021) =
+* Revert changes made for Polylang in 2.18.5 to fix items not displaying in folders when Polylang is active
+
+= 2.18.5 (October 25, 2021) =
+* Fix folders sometimes displaying items from all languages when using Polylang
+* Load full version of Select2 to avoid conflicts with plugins that use options only available in full version
+* Only enqueue plugin scripts and styles when needed
 
 = 2.18.4 (July 15, 2021) =
 * Add `wicked_folders_construct_screen_state` filter to allow folder screen state to be overridden

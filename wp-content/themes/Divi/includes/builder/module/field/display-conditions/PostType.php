@@ -25,6 +25,11 @@ trait PostTypeCondition {
 	 * @return boolean Condition output.
 	 */
 	protected function _process_post_type_condition( $condition_settings ) {
+		// Only check for Posts.
+		if ( ! is_singular() ) {
+			return false;
+		}
+
 		$display_rule       = isset( $condition_settings['postTypeDisplay'] ) ? $condition_settings['postTypeDisplay'] : '';
 		$post_types_raw     = isset( $condition_settings['postTypes'] ) ? $condition_settings['postTypes'] : [];
 		$post_types_values  = array_map(
@@ -33,7 +38,8 @@ trait PostTypeCondition {
 			},
 			$post_types_raw
 		);
-		$current_queried_id = get_queried_object_id();
+		$is_on_shop_page    = class_exists( 'WooCommerce' ) && is_shop();
+		$current_queried_id = $is_on_shop_page ? wc_get_page_id( 'shop' ) : get_queried_object_id();
 		$post_type          = get_post_type( $current_queried_id );
 
 		$should_display = array_intersect( $post_types_values, (array) $post_type ) ? true : false;

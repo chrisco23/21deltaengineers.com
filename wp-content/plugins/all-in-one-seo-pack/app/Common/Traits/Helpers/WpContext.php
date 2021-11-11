@@ -149,8 +149,8 @@ trait WpContext {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param  int     $postId The post ID.
-	 * @return WP_Post         The post object.
+	 * @param  int          $postId The post ID.
+	 * @return WP_Post|null         The post object.
 	 */
 	public function getPost( $postId = false ) {
 		static $showOnFront  = null;
@@ -185,17 +185,43 @@ trait WpContext {
 		) {
 			return get_post( $postId );
 		}
+
+		return null;
 	}
 
 	/**
-	 * Returns the page content.
+	 * Returns the post content after parsing it.
+	 *
+	 * @since 4.1.5
+	 *
+	 * @param  WP_Post|int $post The post (optional).
+	 * @return string            The post content.
+	 */
+	public function getContent( $post = null ) {
+		$post = ( $post && is_object( $post ) ) ? $post : $post = $this->getPost( $post );
+
+		static $content = [];
+		if ( isset( $content[ $post->ID ] ) ) {
+			return $content[ $post->ID ];
+		}
+
+		if ( empty( $post->post_content ) ) {
+			return $post->post_content;
+		}
+
+		$content[ $post->ID ] = apply_filters( 'the_content', $post->post_content );
+		return $content[ $post->ID ];
+	}
+
+	/**
+	 * Returns the description based on the post content.
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param  WP_Post|int $post The post.
-	 * @return string            The content.
+	 * @param  WP_Post|int $post The post (optional).
+	 * @return string            The description.
 	 */
-	public function getContent( $post = null ) {
+	public function getDescriptionFromContent( $post = null ) {
 		$post = ( $post && is_object( $post ) ) ? $post : $post = $this->getPost( $post );
 
 		static $content = [];

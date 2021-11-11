@@ -2267,7 +2267,8 @@
                         return {
                             per_page: perPage,
                             search: params.term,
-                            page: page
+                            page: page,
+                            wf_include_users_without_posts: true
                         };
                     },
                     transport: function( params, success, failure ){

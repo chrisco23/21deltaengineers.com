@@ -178,6 +178,7 @@ trait WpContext {
 			return get_post();
 		}
 
+		// We need to check for this and not always return a post because we'll otherwise return a post on term pages.
 		if (
 			$this->isScreenBase( 'post' ) ||
 			$postId ||
@@ -209,8 +210,26 @@ trait WpContext {
 			return $post->post_content;
 		}
 
-		$content[ $post->ID ] = apply_filters( 'the_content', $post->post_content );
+		$content[ $post->ID ] = $this->theContent( $post->post_content );
 		return $content[ $post->ID ];
+	}
+
+	/**
+	 * Returns the post content after parsing shortcodes and blocks.
+	 * We avoid using the "the_content" hook because it breaks stuff if we call it outside the loop or main query.
+	 * See https://developer.wordpress.org/reference/hooks/the_content/
+	 *
+	 * @since 4.1.5.2
+	 *
+	 * @param  string $postContent The post content.
+	 * @return string              The parsed post content.
+	 */
+	public function theContent( $postContent ) {
+		// The order of the function calls below is intentional and should NOT change.
+		$postContent = do_blocks( $postContent );
+		$postContent = wpautop( $postContent );
+		$postContent = $this->doShortcodes( $postContent );
+		return $postContent;
 	}
 
 	/**
@@ -238,7 +257,7 @@ trait WpContext {
 			! in_array( 'runShortcodesInDescription', aioseo()->internalOptions->deprecatedOptions, true ) ||
 			aioseo()->options->deprecated->searchAppearance->advanced->runShortcodesInDescription
 		) {
-			$postContent = $this->doShortcodes( $postContent );
+			$postContent = $this->theContent( $postContent );
 		}
 
 		$postContent          = wp_trim_words( $postContent, 55, apply_filters( 'excerpt_more', ' ' . '[&hellip;]' ) );

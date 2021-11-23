@@ -168,6 +168,13 @@ Happy Organizing! 😍
 
 == Changelog ==
 
+= Nov 17, 2021 - Version 4.9.5 =
+- Fixed: WooCommerce conflict (break Upload Theme button)
+
+= Nov 10, 2021 – Version 4.9.4 =
+- Fixed: Elementor With PolyLang wrong folder counter
+- Fixed: Image ALT in FileBird Gutenberg Gallery
+
 = Sep 30, 2021 =
 - Updated: Some notice
 

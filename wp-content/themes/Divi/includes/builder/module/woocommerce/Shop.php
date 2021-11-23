@@ -9,12 +9,20 @@
  */
 
 // Include overlay helper.
-require_once 'helpers/Overlay.php';
+require_once dirname( __FILE__ ) . '/../helpers/Overlay.php';
 
 /**
+ * Class ET_Builder_Module_Shop
  * Handles setting up everything we need for shop module.
  */
 class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
+
+	/**
+	 * Number of products to be offset.
+	 *
+	 * @var int Default 0.
+	 */
+	public static $offset = 0;
 
 	/**
 	 * Initialize the module class.
@@ -23,10 +31,11 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 	 * @return void
 	 */
 	public function init() {
-		$this->name       = esc_html__( 'Shop', 'et_builder' );
-		$this->plural     = esc_html__( 'Shops', 'et_builder' );
-		$this->slug       = 'et_pb_shop';
-		$this->vb_support = 'on';
+		$this->name        = esc_html__( 'Woo Products', 'et_builder' );
+		$this->plural      = esc_html__( 'Woo Products', 'et_builder' );
+		$this->slug        = 'et_pb_shop';
+		$this->vb_support  = 'on';
+		$this->folder_name = 'et_pb_woo_modules';
 
 		$this->main_css_element = '%%order_class%%.et_pb_shop';
 
@@ -39,9 +48,10 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 			),
 			'advanced' => array(
 				'toggles' => array(
-					'overlay' => et_builder_i18n( 'Overlay' ),
-					'image'   => et_builder_i18n( 'Image' ),
-					'star'    => esc_html__( 'Star Rating', 'et_builder' ),
+					'overlay'    => et_builder_i18n( 'Overlay' ),
+					'image'      => et_builder_i18n( 'Image' ),
+					'star'       => esc_html__( 'Star Rating', 'et_builder' ),
+					'sale_badge' => esc_html__( 'Sale Badge Text', 'et_builder' ),
 				),
 			),
 		);
@@ -133,8 +143,8 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 				),
 			),
 			'borders'        => array(
-				'default' => array(),
-				'image'   => array(
+				'default'    => array(),
+				'image'      => array(
 					'css'          => array(
 						'main'      => array(
 							'border_radii'       => "{$this->main_css_element} .et_shop_image > img, {$this->main_css_element} .et_shop_image .et_overlay",
@@ -147,10 +157,25 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 					'tab_slug'     => 'advanced',
 					'toggle_slug'  => 'image',
 				),
+				'sale_badge' => array(
+					'css'          => array(
+						'main'      => array(
+							'border_radii'  => '%%order_class%% span.onsale',
+							'border_styles' => '%%order_class%% span.onsale',
+						),
+						'important' => true,
+					),
+					'defaults'     => array(
+						'border_radii' => 'on|3px|3px|3px|3px',
+					),
+					'label_prefix' => esc_html__( 'Sale Badge', 'et_builder' ),
+					'tab_slug'     => 'advanced',
+					'toggle_slug'  => 'sale_badge',
+				),
 			),
 			'box_shadow'     => array(
-				'default' => array(),
-				'image'   => array(
+				'default'    => array(),
+				'image'      => array(
 					'label'             => esc_html__( 'Image Box Shadow', 'et_builder' ),
 					'option_category'   => 'layout',
 					'tab_slug'          => 'advanced',
@@ -165,11 +190,24 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 						'position' => '',
 					),
 				),
+				'sale_badge' => array(
+					'label'           => esc_html__( 'Sale Badge Box Shadow', 'et_builder' ),
+					'option_category' => 'layout',
+					'tab_slug'        => 'advanced',
+					'toggle_slug'     => 'sale_badge',
+					'css'             => array(
+						'main'      => '%%order_class%% span.onsale',
+						'overlay'   => 'inset',
+						'important' => true,
+					),
+				),
 			),
 			'margin_padding' => array(
 				'css' => array(
 					'main'      => '%%order_class%%',
-					'important' => array( 'custom_margin' ), // needed to overwrite last module margin-bottom styling.
+
+					// Needed to overwrite last module margin-bottom styling.
+					'important' => array( 'custom_margin' ),
 				),
 			),
 			'text'           => array(
@@ -207,6 +245,31 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 				'grid_support' => 'yes',
 			),
 			'button'         => false,
+			'form_field'     => array(
+				'sale_badge' => array(
+					'label'                  => esc_html__( 'Sale Badge', 'et_builder' ),
+					'background_color'       => false,
+					'text_color'             => false,
+					'focus_background_color' => false,
+					'focus_text_color'       => false,
+					'font_field'             => false,
+					'margin_padding'         => array(
+						'css'            => array(
+							'main'      => '%%order_class%% ul.products li.product .onsale',
+							'important' => array( 'custom_margin', 'custom_padding' ),
+						),
+						'custom_margin'  => array(
+							'default' => '0px|0px|0px|0px|false|false',
+						),
+						'custom_padding' => array(
+							'default' => '6px|18px|6px|18px|false|false',
+						),
+						'toggle_slug'    => 'sale_badge',
+					),
+					'border_styles'          => false,
+					'box_shadow'             => false,
+				),
+			),
 		);
 
 		$this->custom_css_fields = array(
@@ -441,6 +504,85 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 				'mobile_options'  => true,
 				'sticky'          => true,
 			),
+			'show_name'           => array(
+				'label'            => esc_html__( 'Show Name', 'et_builder' ),
+				'type'             => 'yes_no_button',
+				'option_category'  => 'configuration',
+				'options'          => array(
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
+				),
+				'default_on_front' => 'on',
+				'toggle_slug'      => 'elements',
+				'description'      => esc_html__( 'Turn name on or off.', 'et_builder' ),
+				'mobile_options'   => true,
+				'hover'            => 'tabs',
+			),
+			'show_image'          => array(
+				'label'            => esc_html__( 'Show Image', 'et_builder' ),
+				'type'             => 'yes_no_button',
+				'option_category'  => 'configuration',
+				'options'          => array(
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
+				),
+				'default_on_front' => 'on',
+				'toggle_slug'      => 'elements',
+				'description'      => esc_html__( 'Turn image on or off.', 'et_builder' ),
+				'mobile_options'   => true,
+				'hover'            => 'tabs',
+			),
+			'show_price'          => array(
+				'label'            => esc_html__( 'Show Price', 'et_builder' ),
+				'type'             => 'yes_no_button',
+				'option_category'  => 'configuration',
+				'options'          => array(
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
+				),
+				'default_on_front' => 'on',
+				'toggle_slug'      => 'elements',
+				'description'      => esc_html__( 'Turn price on or off.', 'et_builder' ),
+				'mobile_options'   => true,
+				'hover'            => 'tabs',
+			),
+			'show_rating'         => array(
+				'label'            => esc_html__( 'Show Rating', 'et_builder' ),
+				'type'             => 'yes_no_button',
+				'option_category'  => 'configuration',
+				'options'          => array(
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
+				),
+				'default_on_front' => 'on',
+				'toggle_slug'      => 'elements',
+				'description'      => esc_html__( 'Turn rating on or off.', 'et_builder' ),
+				'mobile_options'   => true,
+				'hover'            => 'tabs',
+			),
+			'show_sale_badge'     => array(
+				'label'            => esc_html__( 'Show Sale Badge', 'et_builder' ),
+				'type'             => 'yes_no_button',
+				'option_category'  => 'configuration',
+				'options'          => array(
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
+				),
+				'default_on_front' => 'on',
+				'toggle_slug'      => 'elements',
+				'description'      => esc_html__( 'Turn sale badge on or off.', 'et_builder' ),
+				'mobile_options'   => true,
+				'hover'            => 'tabs',
+			),
+			'offset_number'       => ET_Builder_Module_Helper_Woocommerce_Modules::get_field(
+				'offset_number',
+				array(
+					'computed_affects' => array(
+						'__posts',
+						'__shop',
+					),
+				)
+			),
 			'__shop'              => array(
 				'type'                => 'computed',
 				'computed_callback'   => array( 'ET_Builder_Module_Shop', 'get_shop_html' ),
@@ -453,12 +595,14 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 					'show_pagination',
 					'__page',
 					'use_current_loop',
+					'offset_number',
 				),
 				'computed_minimum'    => array(
 					'posts_number',
 					'show_pagination',
 					'__page',
 					'use_current_loop',
+					'offset_number',
 				),
 			),
 			'__page'              => array(
@@ -479,6 +623,70 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 		);
 
 		return $fields;
+	}
+
+	/**
+	 * Fixes the incorrect total results in the WooCommerce query results
+	 * when both pagination and sorting is used.
+	 *
+	 * Since the following correct approaches doesn't work,
+	 * this (the following function) workaround is used.
+	 *
+	 * #1 Approach (that had no success)
+	 * `found_posts` filter is intended to manually fix the total count.
+	 * {@link https://developer.wordpress.org/reference/hooks/found_posts/}
+	 * However this filter turned out to be no good with the total count in this case.
+	 *
+	 * #2 Approach (that had no success)
+	 * WP_Query's `no_found_rows` query var should be unset when pagination is turned on.
+	 * This approach failed to show the correct count when Sorting was used
+	 * but worked as expected when sorting wasn't used.
+	 *
+	 * @param stdClass $results Query results.
+	 *
+	 * @return mixed
+	 */
+	public static function adjust_offset_pagination( $results ) {
+		if ( ! isset( $results->total ) ) {
+			return $results;
+		}
+
+		if ( 0 === absint( self::$offset ) ) {
+			return $results;
+		}
+
+		$results->total = (int) $results->total - self::$offset;
+
+		return $results;
+	}
+
+	/**
+	 * Appends offset to the WP_Query that retrieves Products.
+	 *
+	 * @since ??
+	 *
+	 * @param array $query_args Query args.
+	 *
+	 * @return array
+	 */
+	public static function append_offset( $query_args ) {
+		if ( ! is_array( $query_args ) ) {
+			return $query_args;
+		}
+
+		/*
+		 * In order to use offset without losing WordPress's pagination features, you will need to manually handle some basic pagination calculations.
+		 *
+		 * @see: https://codex.wordpress.org/Making_Custom_Queries_using_Offset_and_Pagination
+		 */
+		$paged = isset( $query_args['paged'] ) ? $query_args['paged'] : false;
+		if ( $paged && $paged > 1 ) {
+			$query_args['offset'] = ( ( $paged - 1 ) * 12 ) + intval( self::$offset );
+		} else {
+			$query_args['offset'] = self::$offset;
+		}
+
+		return $query_args;
 	}
 
 	/**
@@ -550,6 +758,7 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 		$use_current_loop   = $use_current_loop && ( is_post_type_archive( 'product' ) || is_search() || et_is_product_taxonomy() );
 		$product_attribute  = '';
 		$product_terms      = array();
+		$offset_number      = et_()->array_get( $this->props, 'offset_number', 0 );
 
 		if ( $use_current_loop ) {
 			$this->props['include_categories'] = 'all';
@@ -660,6 +869,22 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 
 		$query_backup = $wp_the_query;
 
+		$is_offset_valid = absint( $offset_number ) > 0;
+		if ( $is_offset_valid ) {
+			self::$offset = $offset_number;
+
+			add_filter(
+				'woocommerce_shortcode_products_query',
+				// phpcs:ignore WordPress.Arrays.CommaAfterArrayItem.NoComma -- This is a function call.
+				array( 'ET_Builder_Module_Shop', 'append_offset' )
+			);
+
+			add_filter(
+				'woocommerce_shortcode_products_query_results',
+				array( 'ET_Builder_Module_Shop', 'adjust_offset_pagination' )
+			);
+		}
+
 		if ( 'product_category' === $type || $use_current_loop ) {
 			add_filter( 'woocommerce_shortcode_products_query', array( $this, 'filter_products_query' ) );
 			add_action( 'pre_get_posts', array( $this, 'apply_woo_widget_filters' ), 10 );
@@ -670,6 +895,20 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 		}
 
 		$shop = do_shortcode( $shortcode );
+
+		if ( $is_offset_valid ) {
+			remove_filter(
+				'woocommerce_shortcode_products_query',
+				array( 'ET_Builder_Module_Shop', 'append_offset' )
+			);
+
+			remove_filter(
+				'woocommerce_shortcode_products_query_results',
+				array( 'ET_Builder_Module_Shop', 'adjust_offset_pagination' )
+			);
+
+			self::$offset = 0;
+		}
 
 		remove_filter( 'woocommerce_default_catalog_orderby', array( $this, 'set_default_orderby' ) );
 
@@ -785,6 +1024,7 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 		$posts_number       = $this->props['posts_number'];
 		$orderby            = $this->props['orderby'];
 		$columns            = $this->props['columns_number'];
+		$multi_view         = et_pb_multi_view_options( $this );
 
 		$video_background          = $this->video_background();
 		$parallax_image_background = $this->get_parallax_image_background();
@@ -902,25 +1142,68 @@ class ET_Builder_Module_Shop extends ET_Builder_Module_Type_PostBased {
 			)
 		);
 
+		if ( 'off' === $multi_view->get_value( 'show_name' ) ) {
+			$this->add_classname( 'et_pb_shop_no_name' );
+		}
+
+		if ( 'off' === $multi_view->get_value( 'show_image' ) ) {
+			$this->add_classname( 'et_pb_shop_no_image' );
+		}
+
+		if ( 'off' === $multi_view->get_value( 'show_price' ) ) {
+			$this->add_classname( 'et_pb_shop_no_price' );
+		}
+
+		if ( 'off' === $multi_view->get_value( 'show_rating' ) ) {
+			$this->add_classname( 'et_pb_shop_no_rating' );
+		}
+
+		if ( 'off' === $multi_view->get_value( 'show_sale_badge' ) ) {
+			$this->add_classname( 'et_pb_shop_no_sale_badge' );
+		}
+
 		if ( '0' === $columns ) {
 			$this->add_classname( 'et_pb_shop_grid' );
 		}
 
+		$multi_view_data_attr = $multi_view->render_attrs(
+			array(
+				'classes' => array(
+					'et_pb_shop_no_name'       => array(
+						'show_name' => 'off',
+					),
+					'et_pb_shop_no_image'      => array(
+						'show_image' => 'off',
+					),
+					'et_pb_shop_no_price'      => array(
+						'show_price' => 'off',
+					),
+					'et_pb_shop_no_rating'     => array(
+						'show_rating' => 'off',
+					),
+					'et_pb_shop_no_sale_badge' => array(
+						'show_sale_badge' => 'off',
+					),
+				),
+			)
+		);
+
 		$shop_order = self::_get_index( array( self::INDEX_MODULE_ORDER, $render_slug ) );
 
 		$output = sprintf(
-			'<div%2$s class="%3$s" %6$s data-shortcode_index="%7$s">
+			'<div%2$s class="%3$s"%8$s %6$s data-shortcode_index="%7$s">
 				%5$s
 				%4$s
 				%1$s
 			</div>',
-			$this->get_shop( array(), array(), array( 'id' => $this->get_the_ID() ) ),
-			$this->module_id(),
-			$this->module_classname( $render_slug ),
-			$video_background,
-			$parallax_image_background,
-			et_core_esc_previously( $overlay_attributes ),
-			esc_attr( $shop_order )
+			/* 1$s */ $this->get_shop( array(), array(), array( 'id' => $this->get_the_ID() ) ),
+			/* 2$s */ $this->module_id(),
+			/* 3$s */ $this->module_classname( $render_slug ),
+			/* 4$s */ $video_background,
+			/* 5$s */ $parallax_image_background,
+			/* 6$s */ et_core_esc_previously( $overlay_attributes ),
+			/* 7$s */ esc_attr( $shop_order ),
+			/* 8$s */ $multi_view_data_attr
 		);
 
 		return $output;

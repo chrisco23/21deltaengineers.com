@@ -7,7 +7,7 @@
  *
  * @package Divi\Builder
  *
- * @since   ??
+ * @since 4.14.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -20,7 +20,7 @@ final class ET_Builder_Module_Woocommerce_Checkout_Additional_Info extends ET_Bu
 	/**
 	 * Initialize.
 	 *
-	 * @since ?? Fixed PHP Warnings {@link https://github.com/elegantthemes/Divi/issues/22104}
+	 * @since 4.14.0 Fixed PHP Warnings {@link https://github.com/elegantthemes/Divi/issues/22104}
 	 */
 	public function init() {
 		$this->name        = esc_html__( 'Woo Checkout Information', 'et_builder' );
@@ -89,7 +89,14 @@ final class ET_Builder_Module_Woocommerce_Checkout_Additional_Info extends ET_Bu
 				'form_field' => array(
 					'label'           => esc_html__( 'Fields', 'et_builder' ),
 					'css'             => array(
-						'main' => '%%order_class%% form .form-row .input-text',
+						'main'             => '%%order_class%% form .form-row .input-text',
+						'focus_text_color' => implode(
+							',',
+							[
+								'.woocommerce %%order_class%% form .form-row .input-text:focus',
+								'.woocommerce-page %%order_class%% form .form-row .input-text:focus',
+							]
+						),
 					),
 					'box_shadow'      => false,
 					'border_styles'   => array(
@@ -423,7 +430,7 @@ final class ET_Builder_Module_Woocommerce_Checkout_Additional_Info extends ET_Bu
 	 * Since we do not have control over the WooCommerce Additional Info markup,
 	 * we inject Multi view attributes on to the Outer wrapper.
 	 *
-	 * @since ??
+	 * @since 4.14.0
 	 *
 	 * @param array $outer_wrapper_attrs Outer wrapper attributes.
 	 *
@@ -496,6 +503,15 @@ final class ET_Builder_Module_Woocommerce_Checkout_Additional_Info extends ET_Bu
 				'type'                            => 'color',
 			)
 		);
+
+		if ( isset( WC()->cart )
+			&& ! is_null( WC()->cart && method_exists( WC()->cart, 'check_cart_items' ) ) ) {
+			$return = WC()->cart->check_cart_items();
+
+			if ( wc_notice_count( 'error' ) > 0 ) {
+				$this->add_classname( 'et_pb_hide_module' );
+			}
+		}
 
 		$output = self::get_additional_info( $this->props );
 

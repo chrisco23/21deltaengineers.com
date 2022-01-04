@@ -3,7 +3,7 @@
 namespace WebpConverter\Settings\Option;
 
 use WebpConverter\Conversion\Method\GdMethod;
-use WebpConverter\Loader\HtaccessLoader;
+use WebpConverter\Loader\PassthruLoader;
 
 /**
  * {@inheritdoc}
@@ -23,7 +23,7 @@ class ExtraFeaturesOption extends OptionAbstract {
 	 * {@inheritdoc}
 	 */
 	public function get_priority(): int {
-		return 70;
+		return 80;
 	}
 
 	/**
@@ -62,11 +62,11 @@ class ExtraFeaturesOption extends OptionAbstract {
 	public function get_values( array $settings ): array {
 		return [
 			self::OPTION_VALUE_ONLY_SMALLER     => __(
-				'Automatic removal of WebP files larger than original',
+				'Automatic removal of files in output formats larger than original',
 				'webp-converter-for-media'
 			),
 			self::OPTION_VALUE_MOD_EXPIRES      => __(
-				'Browser Caching for WebP files (saving images in browser cache memory)',
+				'Browser Caching for files in output formats (saving images in browser cache memory)',
 				'webp-converter-for-media'
 			),
 			self::OPTION_VALUE_KEEP_METADATA    => __(
@@ -82,7 +82,7 @@ class ExtraFeaturesOption extends OptionAbstract {
 				'webp-converter-for-media'
 			),
 			self::OPTION_VALUE_REFERER_DISABLED => __(
-				'Force redirections to WebP for all domains (by default, images in WebP are loaded only in domain of your website - when image is displayed via URL on another domain that original file is loaded)',
+				'Force redirections to output formats for all domains (by default, images in output formats are loaded only in domain of your website - when image is displayed via URL on another domain that original file is loaded)',
 				'webp-converter-for-media'
 			),
 			self::OPTION_VALUE_DEBUG_ENABLED    => __(
@@ -102,7 +102,7 @@ class ExtraFeaturesOption extends OptionAbstract {
 		if ( ( $settings[ ConversionMethodOption::OPTION_NAME ] ?? '' ) === GdMethod::METHOD_NAME ) {
 			$values[] = self::OPTION_VALUE_KEEP_METADATA;
 		}
-		if ( ( $settings[ LoaderTypeOption::OPTION_NAME ] ?? '' ) !== HtaccessLoader::LOADER_TYPE ) {
+		if ( ( $settings[ LoaderTypeOption::OPTION_NAME ] ?? '' ) === PassthruLoader::LOADER_TYPE ) {
 			$values[] = self::OPTION_VALUE_REFERER_DISABLED;
 		}
 		return $values;

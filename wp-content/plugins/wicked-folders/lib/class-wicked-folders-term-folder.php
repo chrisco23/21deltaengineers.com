@@ -121,12 +121,12 @@ class Wicked_Folders_Term_Folder extends Wicked_Folders_Folder {
         }
 
         // Copy the existing folder's sort order
-        $wpdb->query( "
+        $wpdb->query( $wpdb->prepare( "
             INSERT INTO
                 {$wpdb->prefix}postmeta (post_id, meta_key, meta_value)
             SELECT
-                pm.post_id, '{$cloned_folder_sort_key}', pm.meta_value FROM {$wpdb->prefix}postmeta pm WHERE pm.meta_key = '{$sort_key}'
-        " );
+                pm.post_id, %s, pm.meta_value FROM {$wpdb->prefix}postmeta pm WHERE pm.meta_key = %s
+        ", $cloned_folder_sort_key, $sort_key ) );
 
         // Add the cloned folder to the array of cloned folders
         $folders[] = $folder;

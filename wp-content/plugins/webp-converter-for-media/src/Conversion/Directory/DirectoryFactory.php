@@ -11,18 +11,25 @@ use WebpConverter\Plugin\Uninstall\WebpFiles;
 class DirectoryFactory implements HookableInterface {
 
 	/**
+	 * @var PathsGenerator
+	 */
+	private $paths_generator;
+
+	/**
 	 * Object of directories integration.
 	 *
 	 * @var DirectoryIntegration
 	 */
 	private $directories_integration;
 
-	public function __construct() {
-		$this->set_integration( new GalleryDirectory() );
-		$this->set_integration( new PluginsDirectory() );
-		$this->set_integration( new ThemesDirectory() );
-		$this->set_integration( new UploadsDirectory() );
-		$this->set_integration( new UploadsWebpcDirectory() );
+	public function __construct( PathsGenerator $paths_generator = null ) {
+		$this->paths_generator = $paths_generator ?: new PathsGenerator();
+
+		$this->set_integration( new GalleryDirectory( $this->paths_generator ) );
+		$this->set_integration( new PluginsDirectory( $this->paths_generator ) );
+		$this->set_integration( new ThemesDirectory( $this->paths_generator ) );
+		$this->set_integration( new UploadsDirectory( $this->paths_generator ) );
+		$this->set_integration( new UploadsWebpcDirectory( $this->paths_generator ) );
 	}
 
 	/**
@@ -34,7 +41,7 @@ class DirectoryFactory implements HookableInterface {
 	 */
 	private function set_integration( DirectoryInterface $directory ) {
 		if ( $this->directories_integration === null ) {
-			$this->directories_integration = new DirectoryIntegration();
+			$this->directories_integration = new DirectoryIntegration( $this->paths_generator );
 		}
 		$this->directories_integration->add_directory( $directory );
 	}

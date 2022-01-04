@@ -2504,6 +2504,7 @@ function et_fb_get_nonces() {
 		'getTags'                         => wp_create_nonce( 'et_builder_ajax_get_tags' ),
 		'searchProducts'                  => wp_create_nonce( 'et_builder_ajax_search_products' ),
 		'getDisplayConditionsStatus'      => wp_create_nonce( 'et_builder_ajax_get_display_conditions_status' ),
+		'getPostMetaFields'               => wp_create_nonce( 'et_builder_ajax_get_post_meta_fields' ),
 		'globalColorsSave'                => wp_create_nonce( 'et_builder_global_colors_save' ),
 		'defaultColorsUpdate'             => wp_create_nonce( 'et_builder_default_colors_update' ),
 	);
@@ -6539,7 +6540,7 @@ function et_builder_add_builder_content_wrapper( $content ) {
 	 *
 	 * @param bool $wrap
 	 */
-	$wrap = apply_filters( 'et_builder_add_outer_content_wrap', et_core_is_fb_enabled() );
+	$wrap = apply_filters( 'et_builder_add_outer_content_wrap', true );
 
 	if ( $wrap ) {
 		$content = et_builder_get_builder_content_opening_wrapper() . $content . et_builder_get_builder_content_closing_wrapper();

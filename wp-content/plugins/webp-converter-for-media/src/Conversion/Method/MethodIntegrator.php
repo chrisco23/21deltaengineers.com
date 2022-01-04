@@ -22,16 +22,17 @@ class MethodIntegrator {
 	/**
 	 * Initializes converting source images using active and set conversion method.
 	 *
-	 * @param string[] $paths Server paths for source images.
+	 * @param string[] $paths            Server paths for source images.
+	 * @param bool     $regenerate_force .
 	 *
 	 * @return mixed[]|null Results data of conversion.
 	 */
-	public function init_conversion( array $paths ) {
+	public function init_conversion( array $paths, bool $regenerate_force ) {
 		if ( ! $method = $this->get_method_used() ) {
 			return null;
 		}
 
-		$method->convert_paths( $paths, $this->plugin_data->get_plugin_settings() );
+		$method->convert_paths( $paths, $this->plugin_data->get_plugin_settings(), $regenerate_force );
 		return [
 			'is_fatal_error' => $method->is_fatal_error(),
 			'errors'         => apply_filters( 'webpc_convert_errors', $method->get_errors() ),

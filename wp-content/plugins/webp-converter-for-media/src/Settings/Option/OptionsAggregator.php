@@ -19,6 +19,7 @@ class OptionsAggregator {
 
 		$this->set_option( new SupportedExtensionsOption() );
 		$this->set_option( new SupportedDirectoriesOption() );
+		$this->set_option( new AccessTokenOption() );
 		$this->set_option( new OutputFormatsOption( $conversion_method ) );
 		$this->set_option( $conversion_method );
 		$this->set_option( new ImagesQualityOption() );

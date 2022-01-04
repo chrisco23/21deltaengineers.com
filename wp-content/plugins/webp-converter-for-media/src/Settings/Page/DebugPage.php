@@ -3,6 +3,7 @@
 
 namespace WebpConverter\Settings\Page;
 
+use WebpConverter\Conversion\Directory\PathsGenerator;
 use WebpConverter\Error\Detector\RewritesErrorsDetector;
 use WebpConverter\Loader\LoaderAbstract;
 use WebpConverter\PluginData;
@@ -28,9 +29,19 @@ class DebugPage extends PageAbstract {
 	 */
 	private $file_loader;
 
-	public function __construct( PluginInfo $plugin_info, PluginData $plugin_data, FileLoader $file_loader = null ) {
-		$this->plugin_info = $plugin_info;
-		$this->file_loader = $file_loader ?: new FileLoader( $plugin_info, $plugin_data );
+	/**
+	 * @var PathsGenerator
+	 */
+	private $paths_generator;
+
+	public function __construct(
+		PluginInfo $plugin_info, PluginData $plugin_data,
+		FileLoader $file_loader = null,
+		PathsGenerator $paths_generator = null
+	) {
+		$this->plugin_info     = $plugin_info;
+		$this->file_loader     = $file_loader ?: new FileLoader( $plugin_info, $plugin_data );
+		$this->paths_generator = $paths_generator ?: new PathsGenerator();
 	}
 
 	/**
@@ -63,6 +74,7 @@ class DebugPage extends PageAbstract {
 					'%s&action=server',
 					PageIntegration::get_settings_page_url()
 				),
+				'site_root_path'        => $this->paths_generator->get_wordpress_root_path(),
 				'size_png_path'         => $this->file_loader->get_file_size_by_path(
 					$uploads_path . RewritesErrorsDetector::PATH_OUTPUT_FILE_PNG
 				),

@@ -1,3 +1,9 @@
+= 3.6.8 =
+* Custom icons updated to work with Divi extended icons
+
+= 3.6.7 =
+* Fixed custom mobile width incorrectly applying to rows with own width set
+
 = 3.6.6 =
 * Fixed secondary header social icons on right not hidden before being moved. Thanks to Victor of divimundo.com
 

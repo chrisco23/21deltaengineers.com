@@ -2,9 +2,13 @@
 /**
  * Widget displayed settings form on plugin settings page.
  *
- * @var mixed[] $options            Options of plugin settings.
- * @var string  $submit_value       Value of submit button.
- * @var string  $settings_debug_url URL of plugin settings page (debug view).
+ * @var mixed[] $options                 Options of plugin settings.
+ * @var string  $submit_value            Value of submit button.
+ * @var string  $submit_activate_token   .
+ * @var string  $submit_deactivate_token .
+ * @var bool    $token_valid_status      .
+ * @var string  $settings_debug_url      URL of plugin settings page (debug view).
+ * @var string  $api_calculate_url       URL of REST API endpoint.
  * @package WebP Converter for Media
  */
 

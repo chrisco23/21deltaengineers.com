@@ -2,6 +2,7 @@
 /**
  * Information about using filters displayed in server configuration widget.
  *
+ * @var string $site_root_path Root path of WordPress installation.
  * @package WebP Converter for Media
  */
 
@@ -12,7 +13,7 @@
 	<tr>
 		<td class="e">webpc_site_root</td>
 		<td class="v">
-			<?php echo esc_html( apply_filters( 'webpc_site_root', ABSPATH ) ); ?>
+			<?php echo esc_html( apply_filters( 'webpc_site_root', $site_root_path ) ); ?>
 		</td>
 	</tr>
 	<tr>

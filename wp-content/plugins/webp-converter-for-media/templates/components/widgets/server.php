@@ -3,6 +3,7 @@
  * Widget displayed server configuration on plugin settings page.
  *
  * @var string $settings_url          URL of plugin settings page.
+ * @var string $site_root_path        Root path of WordPress installation.
  * @var string $size_png_path         Size of file.
  * @var string $size_png2_path        Size of file.
  * @var string $size_png_url          Size of file.

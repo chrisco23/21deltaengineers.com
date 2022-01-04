@@ -85,6 +85,7 @@ class OptionIntegration {
 				}
 				return null;
 			case OptionAbstract::OPTION_TYPE_INPUT:
+			case OptionAbstract::OPTION_TYPE_TOKEN:
 				return sanitize_text_field( $current_value );
 		}
 

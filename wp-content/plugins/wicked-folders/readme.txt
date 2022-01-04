@@ -3,7 +3,7 @@ Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
 Tested up to: 5.8
-Stable tag: 2.18.6
+Stable tag: 2.18.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,21 @@ The folder toggle arrow is greyed out when a folder doesn't have any child folde
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 2.18.10 (December 30, 2021) =
+* Fix database queries that were not properly protected
+
+= 2.18.9 (December 29, 2021) =
+* Add additional sanitization and escaping to improve security
+* Remove old code and files for legacy folder pages
+
+= 2.18.8 (December 28, 2021) =
+* Add additional sanitization and escaping to improve security
+
+= 2.18.7 (December 28, 2021) =
+* Fix PHP warning that can occur if get_current_screen does not return an instance of WP_Screen
+* Add support for Woody Code Snippets
+* Fix unsanitized value that could lead to a SQL injection
 
 = 2.18.6 (October 26, 2021) =
 * Revert changes made for Polylang in 2.18.5 to fix items not displaying in folders when Polylang is active

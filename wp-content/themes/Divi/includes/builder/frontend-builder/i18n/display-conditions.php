@@ -100,11 +100,6 @@ return array(
 	'Editor'                                => esc_html__( 'Editor', 'et_builder' ),
 	'Subscriber'                            => esc_html__( 'Subscriber', 'et_builder' ),
 
-	'Pages'                                 => esc_html__( 'Pages', 'et_builder' ),
-	'Display Only If Page'                  => esc_html__( 'Display Only If Page', 'et_builder' ),
-
-	'Posts'                                 => esc_html__( 'Posts', 'et_builder' ),
-
 	'Post Type'                             => esc_html__( 'Post Type', 'et_builder' ),
 	'Display Only If Post Type'             => esc_html__( 'Display Only If Post Type', 'et_builder' ),
 
@@ -148,4 +143,114 @@ return array(
 	'Days'                                  => esc_html__( 'Days', 'et_builder' ),
 	'Minutes'                               => esc_html__( 'Minutes', 'et_builder' ),
 	'Hours'                                 => esc_html__( 'Hours', 'et_builder' ),
+
+	'Custom Field'                          => esc_html__( 'Custom Field', 'et_builder' ),
+	'Manual Custom Field Name'              => esc_html__( 'Manual Custom Field Name', 'et_builder' ),
+	'Manual Custom Field Value'             => esc_html__( 'Manual Custom Field Value', 'et_builder' ),
+	'Custom Field Name'                     => esc_html__( 'Custom Field Name', 'et_builder' ),
+	'Contains'                              => esc_html__( 'Contains', 'et_builder' ),
+	'Does Not Contain'                      => esc_html__( 'Does Not Contain', 'et_builder' ),
+	'Is Any Value'                          => esc_html__( 'Is Any Value', 'et_builder' ),
+	'Has No Value'                          => esc_html__( 'Has No Value', 'et_builder' ),
+	'Is Greater Than (numeric values only)' => esc_html__( 'Is Greater Than (numeric values only)', 'et_builder' ),
+	'Is Less Than (numeric values only)'    => esc_html__( 'Is Less Than (numeric values only)', 'et_builder' ),
+	'Custom Field Value'                    => esc_html__( 'Custom Field Value', 'et_builder' ),
+
+	'A Specific URL Parameter'              => esc_html__( 'A Specific URL Parameter', 'et_builder' ),
+	'Any URL Parameter'                     => esc_html__( 'Any URL Parameter', 'et_builder' ),
+	'Exist'                                 => esc_html__( 'Exist', 'et_builder' ),
+	'Does not Exist'                        => esc_html__( 'Does not Exist', 'et_builder' ),
+	'Equals'                                => esc_html__( 'Equals', 'et_builder' ),
+	'Does not Equal'                        => esc_html__( 'Does not Equal', 'et_builder' ),
+	'Contains'                              => esc_html__( 'Contains', 'et_builder' ),
+	'Does not Contain'                      => esc_html__( 'Does not Contain', 'et_builder' ),
+	'URL Parameter Name'                    => esc_html__( 'URL Parameter Name', 'et_builder' ),
+	'URL Parameter Value'                   => esc_html__( 'URL Parameter Value', 'et_builder' ),
+	'URL Parameter'                         => esc_html__( 'URL Parameter', 'et_builder' ),
+	'Any'                                   => esc_html__( 'Any', 'et_builder' ),
+
+	'Product Stock'                         => esc_html__( 'Product Stock', 'et_builder' ),
+	'Display Only If a Specific Product'    => esc_html__( 'Display Only If a Specific Product', 'et_builder' ),
+	'Is in stock'                           => esc_html__( 'Is in stock', 'et_builder' ),
+	'Is out of stock'                       => esc_html__( 'Is out of stock', 'et_builder' ),
+	'Only display if'                       => esc_html__( 'Only display if', 'et_builder' ),
+	'products are in stock'                 => esc_html__( 'products are in stock', 'et_builder' ),
+	'products are out of stock'             => esc_html__( 'products are out of stock', 'et_builder' ),
+	'product is in stock'                   => esc_html__( 'product is in stock', 'et_builder' ),
+	'product is out of stock'               => esc_html__( 'product is out of stock', 'et_builder' ),
+
+	// Logged In Status Tooltip.
+	'Only display to logged in visitors'    => esc_html__( 'Only display to logged in visitors', 'et_builder' ),
+	'Only display to logged out visitors'   => esc_html__( 'Only display to logged out visitors', 'et_builder' ),
+
+	// Post Type and Other Common Tooltips.
+	'Only display on'                       => esc_html__( 'Only display on', 'et_builder' ),
+	"Don't display on"                      => esc_html__( "Don't display on", 'et_builder' ),
+
+	// Author Tooltip.
+	'Only display on posts authored by'     => esc_html__( 'Only display on posts authored by', 'et_builder' ),
+	"Don't display on posts authored by"    => esc_html__( "Don't display on posts authored by", 'et_builder' ),
+
+	// User Role and Other Common Tooltips.
+	'Only display to'                       => esc_html__( 'Only display to', 'et_builder' ),
+	"Don't display to"                      => esc_html__( "Don't display to", 'et_builder' ),
+
+	// Date & Time Tooltip.
+	'Only display after'                    => esc_html__( 'Only display after', 'et_builder' ),
+	'Only display before'                   => esc_html__( 'Only display before', 'et_builder' ),
+	'Only display on first day of month'    => esc_html__( 'Only display on first day of the month', 'et_builder' ),
+	'Only display on last day of month'     => esc_html__( 'Only display on last day of the month', 'et_builder' ),
+
+	// Category Page, Tag Page, Page Visit Tooltip.
+	'Pages'                                 => esc_html__( 'Pages', 'et_builder' ),
+
+	// Cart Content Tooltip.
+	'Cart Contents Has Products'            => esc_html__( 'Only display to users with Products in their cart', 'et_builder' ),
+	'Cart Contents Is Empty'                => esc_html__( 'Only display to users with an empty cart', 'et_builder' ),
+	'Only display to users with'            => esc_html__( 'Only display to users with', 'et_builder' ),
+	'in their cart'                         => esc_html__( 'in their cart', 'et_builder' ),
+	'Only display to users without'         => esc_html__( 'Only display to users without', 'et_builder' ),
+
+	// Cookie Tooltip.
+	'cookie'                                => esc_html__( 'cookie', 'et_builder' ),
+	'cookie with'                           => esc_html__( 'cookie with', 'et_builder' ),
+	'value'                                 => esc_html__( 'value', 'et_builder' ),
+	'Only display to users who have'        => esc_html__( 'Only display to users who have', 'et_builder' ),
+	"Don't display to users who have"       => esc_html__( "Don't display to users who have", 'et_builder' ),
+
+	// Date Archive Tooltip.
+	'Only display on date archives after'   => esc_html__( 'Only display on date archives after', 'et_builder' ),
+	'Only display on date archives before'  => esc_html__( 'Only display on date archives before', 'et_builder' ),
+
+	// Number of Views Tooltip.
+	'Only display'                          => esc_html__( 'Only display', 'et_builder' ),
+	', Reset after'                         => esc_html__( ', Reset after', 'et_builder' ),
+	'times'                                 => esc_html__( 'times', 'et_builder' ),
+
+	// Page Visit, Post Visit Tooltip.
+	'Only display to users visited'         => esc_html__( 'Only display to users who have visited', 'et_builder' ),
+	"Don't display to users visited"        => esc_html__( "Don't display to users who have visited", 'et_builder' ),
+	'Posts'                                 => esc_html__( 'Posts', 'et_builder' ),
+
+	// Product Purchase Tooltip.
+	'Only display to users bought product'  => esc_html__( 'Only display to users who have bought a product', 'et_builder' ),
+	"Don't display to users bought product" => esc_html__( "Don't display to users who have bought a product", 'et_builder' ),
+	'Only Display to users who bought'      => esc_html__( 'Only Display to users who have bought', 'et_builder' ),
+	"Don't display to users who bought"     => esc_html__( "Don't display to users who have bought", 'et_builder' ),
+
+	// Search Results Tooltip.
+	'Only display on search results for'    => esc_html__( 'Only display on search results for', 'et_builder' ),
+	"Don't display on search results for"   => esc_html__( "Don't display on search results for", 'et_builder' ),
+
+	// Custom Field Tooltip.
+	'Only display on posts where'           => esc_html__( 'Only display on posts where', 'et_builder' ),
+	'custom field'                          => esc_html__( 'custom field', 'et_builder' ),
+	'is equal to'                           => esc_html__( 'is equal to', 'et_builder' ),
+	'is not equal to'                       => esc_html__( 'is not equal to', 'et_builder' ),
+	'contains'                              => esc_html__( 'custom field', 'et_builder' ),
+	'does not contain'                      => esc_html__( 'does not contain', 'et_builder' ),
+	'is any value'                          => esc_html__( 'is any value', 'et_builder' ),
+	'has no value'                          => esc_html__( 'has no value', 'et_builder' ),
+	'is greater than'                       => esc_html__( 'is greater than', 'et_builder' ),
+	'is less than'                          => esc_html__( 'is less than', 'et_builder' ),
 );

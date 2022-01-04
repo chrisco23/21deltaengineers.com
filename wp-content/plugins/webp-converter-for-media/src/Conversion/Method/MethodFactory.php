@@ -4,6 +4,9 @@ namespace WebpConverter\Conversion\Method;
 
 use WebpConverter\Conversion\Format\FormatFactory;
 use WebpConverter\Conversion\SkipCrashed;
+use WebpConverter\Conversion\SkipLarger;
+use WebpConverter\Repository\TokenRepository;
+use WebpConverter\Service\ServerConfigurator;
 
 /**
  * Adds support for all conversion methods and returns information about them.
@@ -16,17 +19,41 @@ class MethodFactory {
 	private $skip_crashed;
 
 	/**
+	 * @var SkipLarger
+	 */
+	private $skip_larger;
+
+	/**
+	 * @var TokenRepository
+	 */
+	private $token_repository;
+
+	/**
+	 * @var ServerConfigurator
+	 */
+	private $server_configurator;
+
+	/**
 	 * Objects of supported conversion methods.
 	 *
 	 * @var MethodInterface[]
 	 */
 	private $methods = [];
 
-	public function __construct( SkipCrashed $skip_crashed = null ) {
-		$this->skip_crashed = $skip_crashed ?: new SkipCrashed();
+	public function __construct(
+		SkipCrashed $skip_crashed = null,
+		SkipLarger $skip_larger = null,
+		TokenRepository $token_repository = null,
+		ServerConfigurator $server_configurator = null
+	) {
+		$this->skip_crashed        = $skip_crashed ?: new SkipCrashed();
+		$this->skip_larger         = $skip_larger ?: new SkipLarger();
+		$this->token_repository    = $token_repository ?: new TokenRepository();
+		$this->server_configurator = $server_configurator ?: new ServerConfigurator();
 
-		$this->set_integration( new ImagickMethod( $this->skip_crashed ) );
-		$this->set_integration( new GdMethod( $this->skip_crashed ) );
+		$this->set_integration( new ImagickMethod( $this->skip_crashed, $this->skip_larger, $this->server_configurator ) );
+		$this->set_integration( new GdMethod( $this->skip_crashed, $this->skip_larger, $this->server_configurator ) );
+		$this->set_integration( new RemoteMethod( $this->skip_larger, $this->token_repository, $this->server_configurator ) );
 	}
 
 	/**
@@ -72,14 +99,17 @@ class MethodFactory {
 	 * @return string[] Names of conversion methods with labels.
 	 */
 	public function get_available_methods(): array {
-		$values = [];
+		$token_status = $this->token_repository->get_token()->get_valid_status();
+		$values       = [];
 		foreach ( $this->get_methods_objects() as $method_name => $method ) {
 			if ( ! $method::is_method_installed()
 				|| ( ! ( new FormatFactory() )->get_available_formats( $method_name ) ) ) {
 				continue;
 			}
 
-			$values[ $method_name ] = $method->get_label();
+			if ( ( $token_status && $method::is_pro_feature() ) || ( ! $token_status && ! $method::is_pro_feature() ) ) {
+				$values[ $method_name ] = $method->get_label();
+			}
 		}
 		return $values;
 	}

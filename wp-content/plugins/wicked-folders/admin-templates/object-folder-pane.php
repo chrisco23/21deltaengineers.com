@@ -185,7 +185,7 @@ var wickedFolderPane;
         var folders = new FolderCollection(),
             folderData = <?php echo json_encode( $folders ); ?>;
 
-        folders.sortMode = '<?php echo $state->sort_mode; ?>';
+        folders.sortMode = '<?php echo esc_attr( $state->sort_mode ); ?>';
 
         Backbone.emulateHTTP = true;
 
@@ -210,24 +210,24 @@ var wickedFolderPane;
             }) );
         });
 
-        var activeFolder = folders.get( '<?php echo $active_folder_id; ?>' );
+        var activeFolder = folders.get( '<?php echo ( int ) $active_folder_id; ?>' );
 
         // In case we can't find the specified folder, fallback to the root folder
         if ( ! activeFolder ) activeFolder = folders.get( '0' );
 
         var controller = new ObjectFolderPaneController({
             expanded:               <?php echo json_encode( array_values( $state->expanded_folders ) ); ?>,
-            postType:               '<?php echo $post_type; ?>',
-            taxonomy:               '<?php echo $taxonomy; ?>',
+            postType:               '<?php echo esc_attr( $post_type ); ?>',
+            taxonomy:               '<?php echo esc_attr( $taxonomy ); ?>',
             folder:                 activeFolder,
             folders:                folders,
-            screen:                 '<?php echo $screen->id; ?>',
+            screen:                 '<?php echo esc_attr( $screen->id ); ?>',
             nonce:                  '<?php echo wp_create_nonce( 'wicked_folders_save_state' ); ?>',
-            treePaneWidth:          <?php echo $state->tree_pane_width; ?>,
+            treePaneWidth:          <?php echo ( int ) $state->tree_pane_width; ?>,
             //hideAssignedItems:      <?php echo ( int ) $state->hide_assigned_items; ?>,
             isSearch:               <?php echo empty( $_GET['s'] ) ? 'false' : 'true'; ?>,
             isFolderPaneVisible:    <?php echo $state->is_folder_pane_visible ? 'true' : 'false'; ?>,
-            sortMode:               '<?php echo $state->sort_mode; ?>',
+            sortMode:               '<?php echo esc_attr( $state->sort_mode ); ?>',
             showItemCount:          <?php echo $show_item_counts ? 'true' : 'false'; ?>,
             lang:                   <?php echo $lang ? "'{$lang}'" : 'false'; ?>,
             enableCreate:           <?php echo $enable_create ? 'true' : 'false'; ?>

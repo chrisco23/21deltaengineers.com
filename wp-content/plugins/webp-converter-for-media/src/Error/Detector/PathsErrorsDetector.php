@@ -2,6 +2,7 @@
 
 namespace WebpConverter\Error\Detector;
 
+use WebpConverter\Conversion\Directory\PathsGenerator;
 use WebpConverter\Error\Notice\PathHtaccessNotWritableNotice;
 use WebpConverter\Error\Notice\PathUploadsUnavailableNotice;
 use WebpConverter\Error\Notice\PathWebpDuplicatedNotice;
@@ -11,6 +12,15 @@ use WebpConverter\Error\Notice\PathWebpNotWritableNotice;
  * Checks for configuration errors about incorrect paths of directories.
  */
 class PathsErrorsDetector implements ErrorDetector {
+
+	/**
+	 * @var PathsGenerator
+	 */
+	private $paths_generator;
+
+	public function __construct( PathsGenerator $paths_generator = null ) {
+		$this->paths_generator = $paths_generator ?: new PathsGenerator();
+	}
 
 	/**
 	 * {@inheritdoc}
@@ -36,7 +46,7 @@ class PathsErrorsDetector implements ErrorDetector {
 	 */
 	private function if_uploads_path_exists(): bool {
 		$path = apply_filters( 'webpc_dir_path', '', 'uploads' );
-		return ( is_dir( $path ) && ( $path !== ABSPATH ) );
+		return ( is_dir( $path ) && ( $path !== $this->paths_generator->get_wordpress_root_path() ) );
 	}
 
 	/**

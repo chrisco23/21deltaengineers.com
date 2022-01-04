@@ -16,7 +16,7 @@ class LoaderTypeOption extends OptionAbstract {
 	 * {@inheritdoc}
 	 */
 	public function get_priority(): int {
-		return 60;
+		return 70;
 	}
 
 	/**

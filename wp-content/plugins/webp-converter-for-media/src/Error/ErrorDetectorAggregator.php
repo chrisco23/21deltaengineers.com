@@ -6,9 +6,12 @@ use WebpConverter\Error\Detector\LibsNotInstalledDetector;
 use WebpConverter\Error\Detector\LibsWithoutWebpSupportDetector;
 use WebpConverter\Error\Detector\PassthruExecutionDetector;
 use WebpConverter\Error\Detector\PathsErrorsDetector;
+use WebpConverter\Error\Detector\PermalinksStructureDetector;
 use WebpConverter\Error\Detector\RestApiDisabledDetector;
 use WebpConverter\Error\Detector\RewritesErrorsDetector;
 use WebpConverter\Error\Detector\SettingsIncorrectDetector;
+use WebpConverter\Error\Detector\TokenStatusDetector;
+use WebpConverter\Error\Detector\WebpFormatActivatedDetector;
 use WebpConverter\Error\Notice\ErrorNotice;
 use WebpConverter\Error\Notice\RewritesCachedNotice;
 use WebpConverter\HookableInterface;
@@ -139,9 +142,17 @@ class ErrorDetectorAggregator implements HookableInterface {
 
 		$this->cached_errors = [];
 
-		if ( $new_error = ( new LibsNotInstalledDetector() )->get_error() ) {
+		if ( $new_error = ( new TokenStatusDetector( $this->plugin_data ) )->get_error() ) {
 			$this->cached_errors[] = $new_error;
-		} elseif ( $new_error = ( new LibsWithoutWebpSupportDetector() )->get_error() ) {
+		} elseif ( $new_error = ( new LibsNotInstalledDetector( $this->plugin_data ) )->get_error() ) {
+			$this->cached_errors[] = $new_error;
+		} elseif ( $new_error = ( new LibsWithoutWebpSupportDetector( $this->plugin_data ) )->get_error() ) {
+			$this->cached_errors[] = $new_error;
+		} elseif ( $new_error = ( new WebpFormatActivatedDetector( $this->plugin_data ) )->get_error() ) {
+			$this->cached_errors[] = $new_error;
+		}
+
+		if ( $new_error = ( new PermalinksStructureDetector() )->get_error() ) {
 			$this->cached_errors[] = $new_error;
 		}
 
@@ -159,7 +170,11 @@ class ErrorDetectorAggregator implements HookableInterface {
 			$this->cached_errors[] = $new_error;
 		}
 
-		if ( ! $this->cached_errors && ( $new_error = ( new SettingsIncorrectDetector( $this->plugin_data ) )->get_error() ) ) {
+		if ( $this->cached_errors ) {
+			return $this->cached_errors;
+		}
+
+		if ( $new_error = ( new SettingsIncorrectDetector( $this->plugin_data ) )->get_error() ) {
 			$this->cached_errors[] = $new_error;
 		}
 

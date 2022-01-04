@@ -2,8 +2,8 @@
 
 namespace WebpConverter\Conversion\Method;
 
-use WebpConverter\Conversion\Exception;
 use WebpConverter\Conversion\OutputPath;
+use WebpConverter\Exception;
 use WebpConverter\Settings\Option\ExtraFeaturesOption;
 
 /**
@@ -38,6 +38,13 @@ abstract class MethodAbstract implements MethodInterface {
 	protected $size_after = 0;
 
 	/**
+	 * @return bool
+	 */
+	public static function is_pro_feature(): bool {
+		return false;
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function is_fatal_error(): bool {
@@ -63,16 +70,6 @@ abstract class MethodAbstract implements MethodInterface {
 	 */
 	public function get_size_after(): int {
 		return $this->size_after;
-	}
-
-	/**
-	 * @return void
-	 */
-	protected function set_server_config() {
-		ini_set( 'memory_limit', '1G' ); // phpcs:ignore
-		if ( strpos( ini_get( 'disable_functions' ) ?: '', 'set_time_limit' ) === false ) {
-			set_time_limit( 120 );
-		}
 	}
 
 	/**
@@ -112,21 +109,17 @@ abstract class MethodAbstract implements MethodInterface {
 	}
 
 	/**
-	 * Returns results data of conversion.
-	 *
 	 * @param string $source_path Server path of source image.
 	 * @param string $output_path Server path of output image.
 	 *
-	 * @return int[] Results data of conversion.
+	 * @return void
 	 */
-	protected function get_conversion_stats( string $source_path, string $output_path ): array {
+	protected function update_conversion_stats( string $source_path, string $output_path ) {
 		$size_before = filesize( $source_path );
 		$size_after  = ( file_exists( $output_path ) ) ? filesize( $output_path ) : $size_before;
 
-		return [
-			'size_before' => $size_before ?: 0,
-			'size_after'  => $size_after ?: 0,
-		];
+		$this->size_before += $size_before ?: 0;
+		$this->size_after  += $size_after ?: 0;
 	}
 
 	/**
@@ -135,7 +128,7 @@ abstract class MethodAbstract implements MethodInterface {
 	 *
 	 * @return void
 	 */
-	protected function save_conversion_error( string $error_message, array $plugin_settings ) {
+	protected function log_conversion_error( string $error_message, array $plugin_settings ) {
 		$features = $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ];
 		if ( in_array( ExtraFeaturesOption::OPTION_VALUE_DEBUG_ENABLED, $features ) ) {
 			error_log( sprintf( 'WebP Converter for Media: %s', $error_message ) ); // phpcs:ignore

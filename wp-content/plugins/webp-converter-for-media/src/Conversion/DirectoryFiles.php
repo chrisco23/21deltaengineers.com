@@ -4,6 +4,7 @@ namespace WebpConverter\Conversion;
 
 use WebpConverter\HookableInterface;
 use WebpConverter\PluginData;
+use WebpConverter\Service\ServerConfigurator;
 use WebpConverter\Settings\Option\SupportedExtensionsOption;
 
 /**
@@ -18,8 +19,14 @@ class DirectoryFiles implements HookableInterface {
 	 */
 	private $plugin_data;
 
-	public function __construct( PluginData $plugin_data ) {
-		$this->plugin_data = $plugin_data;
+	/**
+	 * @var ServerConfigurator
+	 */
+	private $server_configurator;
+
+	public function __construct( PluginData $plugin_data, ServerConfigurator $server_configurator = null ) {
+		$this->plugin_data         = $plugin_data;
+		$this->server_configurator = $server_configurator ?: new ServerConfigurator();
 	}
 
 	/**
@@ -43,6 +50,9 @@ class DirectoryFiles implements HookableInterface {
 		if ( ! file_exists( $dir_path ) ) {
 			return $value;
 		}
+
+		$this->server_configurator->set_memory_limit();
+		$this->server_configurator->set_execution_time();
 
 		$settings = $this->plugin_data->get_plugin_settings();
 		return $this->find_files_in_directory( $dir_path, $settings[ SupportedExtensionsOption::OPTION_NAME ], $skip_converted );

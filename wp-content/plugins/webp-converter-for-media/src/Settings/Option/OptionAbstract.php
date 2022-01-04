@@ -11,6 +11,7 @@ abstract class OptionAbstract implements OptionInterface {
 	const OPTION_TYPE_RADIO    = 'radio';
 	const OPTION_TYPE_QUALITY  = 'quality';
 	const OPTION_TYPE_INPUT    = 'input';
+	const OPTION_TYPE_TOKEN    = 'token';
 
 	/**
 	 * {@inheritdoc}

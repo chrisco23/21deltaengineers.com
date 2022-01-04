@@ -6,6 +6,7 @@ use WebpConverter\Error\ErrorDetectorAggregator;
 use WebpConverter\Notice\ThanksNotice;
 use WebpConverter\Notice\WelcomeNotice;
 use WebpConverter\Plugin\Update;
+use WebpConverter\Repository\TokenRepository;
 use WebpConverter\Service\OptionsAccessManager;
 use WebpConverter\Settings\SettingsSave;
 
@@ -26,5 +27,6 @@ class PluginSettings {
 		OptionsAccessManager::delete_option( ErrorDetectorAggregator::ERRORS_CACHE_OPTION );
 		OptionsAccessManager::delete_option( SettingsSave::SETTINGS_OPTION );
 		OptionsAccessManager::delete_option( Update::VERSION_OPTION );
+		OptionsAccessManager::delete_option( TokenRepository::TOKEN_OPTION );
 	}
 }

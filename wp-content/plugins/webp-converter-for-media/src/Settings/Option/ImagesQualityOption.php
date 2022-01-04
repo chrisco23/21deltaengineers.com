@@ -13,7 +13,7 @@ class ImagesQualityOption extends OptionAbstract {
 	 * {@inheritdoc}
 	 */
 	public function get_priority(): int {
-		return 50;
+		return 60;
 	}
 
 	/**

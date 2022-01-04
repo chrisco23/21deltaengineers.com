@@ -1,6 +1,6 @@
 <div id="wicked-folders-page" class="wrap">
     <h1 class="wp-heading-inline">
-        <?php echo $post_type_object->labels->singular_name; ?>
+        <?php echo esc_html( $post_type_object->labels->singular_name ); ?>
         <?php _e( 'Folders', 'wicked-folders' ); ?>
     </h1>
     <?php
@@ -10,11 +10,11 @@
         }
     ?>
     <hr class="wp-header-end" />
-    <div id="wicked-folder-browser" data-folder="<?php echo $active_folder_id; ?>">
+    <div id="wicked-folder-browser" data-folder="<?php echo esc_attr( $active_folder_id ); ?>">
         <form method="get">
-            <input type="hidden" name="post_type" value="<?php echo $post_type; ?>" />
-            <input type="hidden" name="page" value="<?php echo $taxonomy; ?>" />
-            <input type="hidden" name="folder" value="<?php echo $active_folder_id; ?>" />
+            <input type="hidden" name="post_type" value="<?php echo esc_attr( $post_type ); ?>" />
+            <input type="hidden" name="page" value="<?php echo esc_attr( $taxonomy ); ?>" />
+            <input type="hidden" name="folder" value="<?php echo esc_attr( $active_folder_id ); ?>" />
             <div class="wicked-head">
                 <div class="wicked-upper-row wicked-clearfix">
                     <div class="wicked-right">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="wicked-right">
                         <div class="tablenav top">
-                            <?php echo $wp_list_table->pagination( 'top' ); ?>
+                            <?php echo esc_html( $wp_list_table->pagination( 'top' ) ); ?>
                         </div>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
             <div class="wicked-body">
                 <div class="wicked-folder-path-pane"></div>
                 <div class="wicked-panes">
-                    <div class="wicked-folder-tree-pane" style="width: <?php echo $state->tree_pane_width; ?>px;">
+                    <div class="wicked-folder-tree-pane" style="width: <?php echo absint( $state->tree_pane_width ); ?>px;">
                         <div class="wicked-folder-tree-wrapper">
                             <div class="wicked-folder-tree"></div>
                         </div>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="wicked-right">
                     <div class="tablenav bottom">
-                        <?php echo $wp_list_table->pagination( 'bottom' ); ?>
+                        <?php echo esc_html( $wp_list_table->pagination( 'bottom' ) ); ?>
                     </div>
                 </div>
             </div>
@@ -112,7 +112,7 @@
         var folders = new FolderCollection(),
             folderData = <?php echo json_encode( $folders ); ?>,
             popping = false,
-            treePaneWidth = <?php echo $state->tree_pane_width; ?>,
+            treePaneWidth = <?php echo absint( $state->tree_pane_width ); ?>,
             documentHeight = $( document ).height(),
             windowHeight = $( window ).height(),
             adminBarHeight = 32;
@@ -141,20 +141,20 @@
 
         var controller = new FolderBrowserController({
             expanded:               <?php echo json_encode( array_values( $state->expanded_folders ) ); ?>,
-            postType:               '<?php echo $post_type; ?>',
-            taxonomy:               '<?php echo $taxonomy; ?>',
-            folder:                 folders.get( '<?php echo $active_folder_id; ?>' ),
+            postType:               '<?php echo esc_attr( $post_type ); ?>',
+            taxonomy:               '<?php echo esc_attr( $taxonomy ); ?>',
+            folder:                 folders.get( '<?php echo esc_attr( $active_folder_id ); ?>' ),
             folders:                folders,
-            screen:                 '<?php echo $screen->id; ?>',
+            screen:                 '<?php echo esc_attr( $screen->id ); ?>',
             nonce:                  '<?php echo wp_create_nonce( 'wicked_folders_save_state' ); ?>',
-            treePaneWidth:          <?php echo $state->tree_pane_width; ?>,
+            treePaneWidth:          <?php echo esc_attr( $state->tree_pane_width ); ?>,
             hideAssignedItems:      <?php echo ( int ) $state->hide_assigned_items; ?>,
-            itemsPerPage:           <?php echo $items_per_page; ?>,
+            itemsPerPage:           <?php echo esc_attr( $items_per_page ); ?>,
             showContentsInTreeView: <?php echo ( int ) $show_contents_in_tree_view; ?>,
-            pageNumber:             <?php echo $page_number; ?>,
-            itemsPerPage:           <?php echo $items_per_page; ?>,
-            orderby:                '<?php echo $orderby; ?>',
-            order:                  '<?php echo $order; ?>',
+            pageNumber:             <?php echo ( int ) $page_number; ?>,
+            itemsPerPage:           <?php echo (int ) $items_per_page; ?>,
+            orderby:                '<?php echo esc_attr( $orderby ); ?>',
+            order:                  '<?php echo esc_attr( $order ); ?>',
             isSearch:               <?php echo empty( $_GET['s'] ) ? 'false' : 'true'; ?>
         });
 

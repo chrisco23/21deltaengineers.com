@@ -5,6 +5,7 @@ namespace WebpConverter\Action;
 use WebpConverter\Conversion\Endpoint\PathsEndpoint;
 use WebpConverter\HookableInterface;
 use WebpConverter\PluginData;
+use WebpConverter\Repository\TokenRepository;
 
 /**
  * Initializes conversion of all image sizes in all directories.
@@ -16,8 +17,14 @@ class RegenerateAll implements HookableInterface {
 	 */
 	private $plugin_data;
 
-	public function __construct( PluginData $plugin_data ) {
-		$this->plugin_data = $plugin_data;
+	/**
+	 * @var TokenRepository
+	 */
+	private $token_repository;
+
+	public function __construct( PluginData $plugin_data, TokenRepository $token_repository ) {
+		$this->plugin_data      = $plugin_data;
+		$this->token_repository = $token_repository;
 	}
 
 	/**
@@ -34,6 +41,9 @@ class RegenerateAll implements HookableInterface {
 	 * @internal
 	 */
 	public function regenerate_all_images() {
-		do_action( 'webpc_convert_paths', ( new PathsEndpoint( $this->plugin_data ) )->get_paths( true ) );
+		do_action(
+			'webpc_convert_paths',
+			( new PathsEndpoint( $this->plugin_data, $this->token_repository ) )->get_paths( true )
+		);
 	}
 }

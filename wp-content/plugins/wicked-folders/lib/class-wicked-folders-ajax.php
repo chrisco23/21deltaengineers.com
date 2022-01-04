@@ -17,7 +17,6 @@ final class Wicked_Folders_Ajax {
 		add_action( 'wp_ajax_wicked_folders_clone_folder', 			array( $this, 'ajax_clone_folder' ) );
 		add_action( 'wp_ajax_wicked_folders_edit_folder', 			array( $this, 'ajax_edit_folder' ) );
 		add_action( 'wp_ajax_wicked_folders_delete_folder', 		array( $this, 'ajax_delete_folder' ) );
-		add_action( 'wp_ajax_wicked_folders_get_contents', 			array( $this, 'ajax_get_folder_contents' ) );
 		add_action( 'wp_ajax_wicked_folders_save_folder', 			array( $this, 'ajax_save_folder' ) );
 		add_action( 'wp_ajax_wicked_folders_save_sort_order', 		array( $this, 'ajax_save_sort_order' ) );
 		add_action( 'wp_ajax_wicked_folders_dismiss_message', 		array( $this, 'ajax_dismiss_message' ) );
@@ -44,12 +43,12 @@ final class Wicked_Folders_Ajax {
 	public function ajax_move_object() {
 
 		$result 				= array( 'error' => false, 'items' => array(), 'folders' => array() );
-		$nonce 					= isset( $_REQUEST['nonce'] ) ? $_REQUEST['nonce'] : false;
-		$object_type 			= isset( $_REQUEST['object_type'] ) ? $_REQUEST['object_type'] : false;
-		$object_id 				= isset( $_REQUEST['object_id'] ) ? $_REQUEST['object_id'] : false;
+		$nonce 					= isset( $_REQUEST['nonce'] ) ? sanitize_text_field( $_REQUEST['nonce'] ) : false;
+		$object_type 			= isset( $_REQUEST['object_type'] ) ? sanitize_text_field( $_REQUEST['object_type'] ) : false;
+		$object_id 				= isset( $_REQUEST['object_id'] ) ? array_map( 'absint', $_REQUEST['object_id'] ) : false;
 		$destination_object_id 	= isset( $_REQUEST['destination_object_id'] ) ? (int) $_REQUEST['destination_object_id'] : false;
 		$source_folder_id 		= isset( $_REQUEST['source_folder_id'] ) ? (int) $_REQUEST['source_folder_id'] : false;
-		$post_type 				= isset( $_REQUEST['post_type'] ) ? $_REQUEST['post_type'] : false;
+		$post_type 				= isset( $_REQUEST['post_type'] ) ? sanitize_text_field( $_REQUEST['post_type'] ) : false;
 
 		/*
 		if ( ! wp_verify_nonce( $nonce, 'wicked_folders_move_object' ) ) {
@@ -62,7 +61,6 @@ final class Wicked_Folders_Ajax {
 		}
 
 		if ( ! $result['error'] ) {
-			$object_id = ( array ) $object_id;
 			foreach ( $object_id as $id ) {
 				Wicked_Folders::move_object( $object_type, ( int ) $id, $destination_object_id, $source_folder_id );
 			}
@@ -84,9 +82,9 @@ final class Wicked_Folders_Ajax {
 	public function ajax_unassign_folders() {
 
 		$result 	= array( 'error' => false, 'items' => array(), 'folders' => array() );
-		$nonce 		= isset( $_REQUEST['nonce'] ) ? $_REQUEST['nonce'] : false;
-		$taxonomy 	= isset( $_REQUEST['taxonomy'] ) ? $_REQUEST['taxonomy'] : false;
-		$object_id 	= isset( $_REQUEST['object_id'] ) ? $_REQUEST['object_id'] : false;
+		$nonce 		= isset( $_REQUEST['nonce'] ) ? sanitize_text_field( $_REQUEST['nonce'] ) : false;
+		$taxonomy 	= isset( $_REQUEST['taxonomy'] ) ? sanitize_key( $_REQUEST['taxonomy'] ) : false;
+		$object_id 	= isset( $_REQUEST['object_id'] ) ? array_map( 'absint', $_REQUEST['object_id'] ) : false;
 		$post_type 	= Wicked_Folders::get_post_name_from_tax_name( $taxonomy );
 		$policy 	= false;
 		$user_id 	= get_current_user_id();
@@ -106,8 +104,6 @@ final class Wicked_Folders_Ajax {
 		}
 
 		if ( ! $result['error'] ) {
-			$object_id = ( array ) $object_id;
-
 			foreach ( $object_id as $id ) {
 				$folder_ids = array();
 
@@ -179,11 +175,11 @@ final class Wicked_Folders_Ajax {
 	public function ajax_edit_folder() {
 
 		$result 	= array( 'error' => false, 'message' => __( 'An error occurred. Please try again.', 'wicked-folders' ) );
-		$nonce  	= isset( $_REQUEST['nounce'] ) ? $_REQUEST['nounce'] : false;
-		$id 		= isset( $_REQUEST['id'] ) ? $_REQUEST['id'] : false;
-		$name 		= isset( $_REQUEST['name'] ) ? $_REQUEST['name'] : false;
-		$parent 	= isset( $_REQUEST['parent'] ) ? $_REQUEST['parent'] : false;
-		$post_type 	= isset( $_REQUEST['post_type'] ) ? $_REQUEST['post_type'] : false;
+		$nonce  	= isset( $_REQUEST['nounce'] ) ? sanitize_text_field( $_REQUEST['nounce'] ) : false;
+		$id 		= isset( $_REQUEST['id'] ) ? ( int ) $_REQUEST['id'] : false;
+		$name 		= isset( $_REQUEST['name'] ) ? sanitize_text_field( $_REQUEST['name'] ) : false;
+		$parent 	= isset( $_REQUEST['parent'] ) ? ( int ) $_REQUEST['parent'] : false;
+		$post_type 	= isset( $_REQUEST['post_type'] ) ? sanitize_key( $_REQUEST['post_type'] ) : false;
 		$tax_name 	= Wicked_Folders::get_tax_name( $post_type );
 		$url 		= admin_url( 'edit.php?post_type=' . $post_type . '&page=' . $tax_name );
 
@@ -256,10 +252,10 @@ final class Wicked_Folders_Ajax {
 
 		// TODO: check nonce
 		$result 	= array( 'error' => false );
-		$nonce  	= isset( $_REQUEST['nounce'] ) ? $_REQUEST['nounce'] : false;
-		$id 		= isset( $_REQUEST['id'] ) ? $_REQUEST['id'] : false;
-		$post_type 	= isset( $_REQUEST['post_type'] ) ? $_REQUEST['post_type'] : false;
-		$taxonomy 	= isset( $_REQUEST['taxonomy'] ) ? $_REQUEST['taxonomy'] : Wicked_Folders::get_tax_name( $post_type );
+		$nonce  	= isset( $_REQUEST['nounce'] ) ? sanitize_text_field( $_REQUEST['nounce'] ) : false;
+		$id 		= isset( $_REQUEST['id'] ) ? ( int ) $_REQUEST['id'] : false;
+		$post_type 	= isset( $_REQUEST['post_type'] ) ? sanitize_key( $_REQUEST['post_type'] ) : false;
+		$taxonomy 	= isset( $_REQUEST['taxonomy'] ) ? sanitize_key( $_REQUEST['taxonomy'] ) : Wicked_Folders::get_tax_name( $post_type );
 
 		$delete_result = wp_delete_term( $id, $taxonomy );
 
@@ -274,50 +270,19 @@ final class Wicked_Folders_Ajax {
 
 	}
 
-	public function ajax_get_folder_contents() {
-
-		//add_filter( 'manage_pages_columns', array( $this, 'page_folder_view_columns' ) );
-
-		// TODO: figure out if we can get WordPress to respect the items per
-		// page setting for the post type without this filter
-		add_filter( 'edit_posts_per_page', function( $per_page, $post_type ) {
-			if ( ! empty( $_REQUEST['items_per_page'] ) ) {
-				$per_page = ( int ) $_REQUEST['items_per_page'];
-			}
-			return $per_page;
-		}, 10, 2 );
-
-		if ( is_plugin_active( 'wicked-folders-pro/wicked-folders-pro.php' ) && 'attachment' == $post_type ) {
-			$wp_list_table = new Wicked_Folders_Pro_Media_List_Table( array(
-				//'screen' => $_GET['screen'],
-			) );
-		} else {
-			$wp_list_table = new Wicked_Folders_Posts_List_Table( array(
-				'screen' => $_GET['screen'],
-			) );
-		}
-
-		$wp_list_table->get_columns();
-		$wp_list_table->prepare_items();
-		$wp_list_table->display();
-
-		wp_die();
-
-	}
-
 	public function ajax_save_folder() {
 
 		$response 	= array( 'error' => false );
 		//$method 	= $_SERVER['REQUEST_METHOD'];
 		$method 	= isset( $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] ) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : 'POST';
-		$method 	= isset( $_REQUEST['_method_override'] ) ? $_REQUEST['_method_override'] : $method;
+		$method 	= isset( $_REQUEST['_method_override'] ) ? sanitize_text_field( $_REQUEST['_method_override'] ) : $method;
 		$folder		= json_decode( file_get_contents( 'php://input' ) );
 		$policy 	= false;
 		$user_id 	= get_current_user_id();
 
 		if ( 'DELETE' == $method ) {
-			$folder_id 	= $_REQUEST['id'];
-			$taxonomy 	= $_REQUEST['taxonomy'];
+			$folder_id 	= ( int ) $_REQUEST['id'];
+			$taxonomy 	= sanitize_key( $_REQUEST['taxonomy'] );
 		} else {
 			$folder_id 	= $folder->id;
 			$taxonomy 	= $folder->taxonomy;
@@ -398,9 +363,9 @@ final class Wicked_Folders_Ajax {
 
 		// Delete folder
 		if ( 'DELETE' == $method ) {
-			$term = wp_delete_term( ( int ) $_REQUEST['id'], $_REQUEST['taxonomy'] );
+			$term = wp_delete_term( ( int ) $_REQUEST['id'], sanitize_key( $_REQUEST['taxonomy'] ) );
 			// Delete the sort meta for the folder
-			delete_metadata( 'post', 0, '_wicked_folder_order__' . $_REQUEST['taxonomy'] . '__' . $_REQUEST['id'], false, true );
+			delete_metadata( 'post', 0, '_wicked_folder_order__' . sanitize_key( $_REQUEST['taxonomy'] ) . '__' . sanitize_text_field( $_REQUEST['id'] ), false, true );
 		}
 
 		if ( is_wp_error( $term ) ) {
@@ -423,9 +388,9 @@ final class Wicked_Folders_Ajax {
 
 	public function ajax_clone_folder() {
 		$folders 		= array();
-		$id 			= isset( $_REQUEST['id'] ) ? $_REQUEST['id'] : false;
-		$post_type 		= isset( $_REQUEST['post_type'] ) ? $_REQUEST['post_type'] : false;
-		$parent 		= isset( $_REQUEST['parent'] ) ? $_REQUEST['parent'] : false;
+		$id 			= isset( $_REQUEST['id'] ) ? ( int ) $_REQUEST['id'] : false;
+		$post_type 		= isset( $_REQUEST['post_type'] ) ? sanitize_key( $_REQUEST['post_type'] ) : false;
+		$parent 		= isset( $_REQUEST['parent'] ) ? ( int ) $_REQUEST['parent'] : false;
 		$clone_children = isset( $_REQUEST['clone_children'] ) && 'true' == $_REQUEST['clone_children'] ? true : false;
 		$taxonomy 		= Wicked_Folders::get_tax_name( $post_type );
 		$user_id 		= get_current_user_id();
@@ -450,7 +415,7 @@ final class Wicked_Folders_Ajax {
 		} catch ( Exception $e ) {
 			status_header( 400 );
 
-			echo $e->getMessage();
+			echo esc_html( $e->getMessage() );
 
 			die();
 		}
@@ -463,15 +428,15 @@ final class Wicked_Folders_Ajax {
 		global $wpdb;
 
 		$new_order 		= array();
-		$screen 		= $_REQUEST['screen'];
-		$folder_id 		= $_REQUEST['folder_id'];
-		$post_type 		= $_REQUEST['post_type'];
-		$taxonomy 		= $_REQUEST['taxonomy'];
-		$object_ids 	= $_REQUEST['object_ids'];
-		$order 			= $_REQUEST['order'];
-		$orderby 		= $_REQUEST['orderby'];
-		$page_number 	= $_REQUEST['page_number'];
-		$items_per_page = $_REQUEST['items_per_page'];
+		$screen 		= sanitize_text_field( $_REQUEST['screen'] );
+		$folder_id 		= sanitize_text_field( $_REQUEST['folder_id'] );
+		$post_type 		= sanitize_text_field( $_REQUEST['post_type'] );
+		$taxonomy 		= sanitize_text_field( $_REQUEST['taxonomy'] );
+		$object_ids 	= array_map( 'absint', $_REQUEST['object_ids'] );
+		$order 			= sanitize_text_field( $_REQUEST['order'] );
+		$orderby 		= sanitize_text_field( $_REQUEST['orderby'] );
+		$page_number 	= ( int ) $_REQUEST['page_number'];
+		$items_per_page = ( int ) $_REQUEST['items_per_page'];
 		$sort_key 		= '_wicked_folder_order__' . $taxonomy . '__' . $folder_id;
 		$before 		= $items_per_page * ( $page_number - 1 );
 		$after 			= $before + $items_per_page;
@@ -492,7 +457,7 @@ final class Wicked_Folders_Ajax {
 				array(
 					'taxonomy' 	=> $taxonomy,
 					'field' 	=> 'term_id',
-					'terms' 	=> $folder_id,
+					'terms' 	=> ( int ) $folder_id,
 				)
 			)
 		);
@@ -523,13 +488,13 @@ final class Wicked_Folders_Ajax {
 		}
 
 		// Get the current sort orders
-		$current_order = $wpdb->get_results( "SELECT post_id, meta_value FROM {$wpdb->prefix}postmeta WHERE meta_key = '{$sort_key}' ORDER BY post_id", OBJECT_K );
+		$current_order = $wpdb->get_results( $wpdb->prepare( "SELECT post_id, meta_value FROM {$wpdb->prefix}postmeta WHERE meta_key = %s ORDER BY post_id", $sort_key ), OBJECT_K );
 
 		foreach ( $new_order as $index => $post_id ) {
 			$sort = ( $n - $index ) * -1;
 			// Only update posts where the sort order has changed
 			if ( $sort != $current_order[ $post_id ]->meta_value ) {
-				$wpdb->query( "UPDATE {$wpdb->prefix}postmeta SET meta_value = {$sort} WHERE post_id = {$post_id} AND meta_key = '{$sort_key}'" );
+				$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}postmeta SET meta_value = %s WHERE post_id = %d AND meta_key = %s", $sort, $post_id, $sort_key ) );
 			}
 		}
 
@@ -551,9 +516,9 @@ final class Wicked_Folders_Ajax {
 		global $wpdb;
 
 		$folders 		= array();
-		$folder_type 	= $_REQUEST['folder_type'];
-		$folder_id 		= $_REQUEST['folder_id'];
-		$post_type 		= $_REQUEST['post_type'];
+		$folder_type 	= sanitize_text_field( $_REQUEST['folder_type'] );
+		$folder_id 		= ( int ) $_REQUEST['folder_id'];
+		$post_type 		= sanitize_key( $_REQUEST['post_type'] );
 
 		$folder = Wicked_Folders::get_dynamic_folder( $folder_type, $folder_id, $post_type );
 
@@ -571,7 +536,7 @@ final class Wicked_Folders_Ajax {
 		global $wpdb;
 
 		$result  			= array( 'error' => false );
-		$folders 			= isset( $_REQUEST['folders'] ) && is_array( $_REQUEST['folders' ] ) ? $_REQUEST['folders'] : array();
+		$folders 			= isset( $_REQUEST['folders'] ) && is_array( $_REQUEST['folders' ] ) ? array_map( array( $this, 'sanitize_folder_order_param' ), $_REQUEST['folders'] ) : array();
 		$order_field_exists = Wicked_Folders::get_instance()->term_order_field_exists();
 
 		foreach ( $folders as $folder ) {
@@ -582,7 +547,13 @@ final class Wicked_Folders_Ajax {
 			// this should ensure that the folders appear in the expected order
 			// for users who use this plugin
 			if ( $order_field_exists ) {
-				$wpdb->update( $wpdb->terms, array( 'term_order' => $folder['order'] ), array( 'term_id' => $folder['id'] ) );
+				$wpdb->update(
+					$wpdb->terms,
+					array( 'term_order' => $folder['order'] ),
+					array( 'term_id' => ( int ) $folder['id'] ),
+					array( '%d' ),
+					array( '%d' )
+				);
 			}
 		}
 
@@ -593,7 +564,7 @@ final class Wicked_Folders_Ajax {
 
 	public function ajax_fetch_folders() {
 		$folders 	= array();
-		$taxonomy 	= isset( $_GET['taxonomy'] ) ?  $_GET['taxonomy'] : false;
+		$taxonomy 	= isset( $_GET['taxonomy'] ) ?  sanitize_text_field( $_GET['taxonomy'] ) : false;
 
 		if ( $taxonomy ) {
 			$post_type = Wicked_Folders::get_post_name_from_tax_name( $taxonomy );
@@ -604,5 +575,15 @@ final class Wicked_Folders_Ajax {
 		echo json_encode( $folders );
 
 		wp_die();
+	}
+
+	/**
+	 * Sanitizes the value of an entry within a folder order array.
+	 */
+	public function sanitize_folder_order_param( $value ) {
+		return array(
+			'id' 	=> ( int ) $value['id'],
+			'order' => ( int ) $value['order'],
+		);
 	}
 }

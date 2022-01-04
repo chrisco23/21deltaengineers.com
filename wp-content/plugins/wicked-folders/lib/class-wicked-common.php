@@ -1724,7 +1724,7 @@ final class Wicked_Common {
 
         if ( defined( 'REST_REQUEST' ) && REST_REQUEST // (#1)
                 || isset( $_GET['rest_route'] ) // (#2)
-                        && strpos( trim( $_GET['rest_route'], '\\/' ), $prefix , 0 ) === 0)
+                        && strpos( trim( sanitize_text_field( $_GET['rest_route'] ), '\\/' ), $prefix , 0 ) === 0)
                 $is_rest_request = true;
 
         // (#3)

@@ -2,58 +2,43 @@
 
 namespace WebpConverter\Conversion;
 
-use WebpConverter\Conversion\Exception;
-use WebpConverter\HookableInterface;
-use WebpConverter\PluginData;
+use WebpConverter\Exception;
 use WebpConverter\Settings\Option\ExtraFeaturesOption;
 
 /**
  * Deletes output after conversion if it is larger than original.
  */
-class SkipLarger implements HookableInterface {
+class SkipLarger {
 
 	const DELETED_FILE_EXTENSION = 'deleted';
 
 	/**
-	 * @var PluginData
-	 */
-	private $plugin_data;
-
-	public function __construct( PluginData $plugin_data ) {
-		$this->plugin_data = $plugin_data;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function init_hooks() {
-		add_action( 'webpc_convert_after', [ $this, 'remove_image_if_is_larger' ], 10, 2 );
-	}
-
-	/**
 	 * Removes converted output image if it is larger than original image.
 	 *
-	 * @param string $webp_path     Server path of output image.
-	 * @param string $original_path Server path of source image.
+	 * @param string  $output_path     .
+	 * @param string  $source_path     .
+	 * @param mixed[] $plugin_settings .
 	 *
 	 * @return void
 	 * @throws Exception\LargerThanOriginalException
-	 * @internal
 	 */
-	public function remove_image_if_is_larger( string $webp_path, string $original_path ) {
-		if ( ( ! $settings = $this->plugin_data->get_plugin_settings() )
-			|| ! in_array( ExtraFeaturesOption::OPTION_VALUE_ONLY_SMALLER, $settings[ ExtraFeaturesOption::OPTION_NAME ] )
-			|| ( ! file_exists( $webp_path ) || ! file_exists( $original_path ) )
-			|| ( filesize( $webp_path ) < filesize( $original_path ) ) ) {
+	public function remove_image_if_is_larger( string $output_path, string $source_path, array $plugin_settings ) {
+		if ( file_exists( $output_path . '.' . self::DELETED_FILE_EXTENSION ) ) {
+			unlink( $output_path . '.' . self::DELETED_FILE_EXTENSION );
+		}
+
+		if ( ! in_array( ExtraFeaturesOption::OPTION_VALUE_ONLY_SMALLER, $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ] )
+			|| ( ! file_exists( $output_path ) || ! file_exists( $source_path ) )
+			|| ( filesize( $output_path ) < filesize( $source_path ) ) ) {
 			return;
 		}
 
-		$file = fopen( $webp_path . '.' . self::DELETED_FILE_EXTENSION, 'w' );
+		$file = fopen( $output_path . '.' . self::DELETED_FILE_EXTENSION, 'w' );
 		if ( $file !== false ) {
 			fclose( $file );
-			unlink( $webp_path );
+			unlink( $output_path );
 		}
 
-		throw new Exception\LargerThanOriginalException( $original_path );
+		throw new Exception\LargerThanOriginalException( [ $source_path, $output_path ] );
 	}
 }

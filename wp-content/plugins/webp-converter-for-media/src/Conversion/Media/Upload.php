@@ -5,6 +5,7 @@ namespace WebpConverter\Conversion\Media;
 use WebpConverter\HookableInterface;
 use WebpConverter\PluginData;
 use WebpConverter\Settings\Option\ExtraFeaturesOption;
+use WebpConverter\Settings\Option\SupportedExtensionsOption;
 
 /**
  * Initializes image conversion when uploading images to media library.
@@ -46,6 +47,12 @@ class Upload implements HookableInterface {
 	public function init_attachment_convert( array $data = null, int $attachment_id = null ) {
 		if ( ( $data === null ) || ( $attachment_id === null )
 			|| ! is_array( $data ) || ! isset( $data['file'] ) || ! isset( $data['sizes'] ) ) {
+			return $data;
+		}
+
+		$allowed_extensions = $this->plugin_data->get_plugin_settings()[ SupportedExtensionsOption::OPTION_NAME ];
+		$file_extension     = strtolower( pathinfo( $data['file'], PATHINFO_EXTENSION ) );
+		if ( ! in_array( $file_extension, $allowed_extensions ) ) {
 			return $data;
 		}
 

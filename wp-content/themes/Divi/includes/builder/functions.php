@@ -8,7 +8,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '4.14.0' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '4.14.4' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -1901,6 +1901,17 @@ function et_fb_process_to_shortcode( $object, $options = array(), $library_item_
 						$value = str_replace( '\\', '%92', $value );
 					}
 
+					// Encode backslash for custom date format attributes.
+					$modules_and_attr_with_custom_date = array(
+						'et_pb_blog'                 => 'meta_date',
+						'et_pb_fullwidth_post_title' => 'date_format',
+						'et_pb_post_title'           => 'date_format',
+					);
+
+					if ( ! empty( $modules_and_attr_with_custom_date[ $type ] ) && $modules_and_attr_with_custom_date[ $type ] === $attribute ) {
+						$value = str_replace( '\\', '%92', $value );
+					}
+
 					$attributes .= ' ' . esc_attr( $attribute ) . '="' . et_core_esc_previously( $value ) . '"';
 				}
 			}
@@ -2116,6 +2127,7 @@ add_action( 'wp_ajax_et_fb_ajax_drop_autosave', 'et_fb_ajax_drop_autosave' );
  * Ajax Callback :: Save layout.
  */
 function et_fb_ajax_save() {
+
 	if ( ! isset( $_POST['et_fb_save_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['et_fb_save_nonce'] ), 'et_fb_save_nonce' ) ) {
 		wp_send_json_error();
 	}
@@ -2168,7 +2180,9 @@ function et_fb_ajax_save() {
 			// Get old content and if we should return to the Default Editor.
 			$post_content = get_post_meta( $post_id, '_et_pb_old_content', true );
 		} else {
-			update_post_meta( $post_id, '_et_pb_use_builder', 'on' );
+			if ( ! $is_layout_block_preview ) {
+				update_post_meta( $post_id, '_et_pb_use_builder', 'on' );
+			}
 			$post_content = et_fb_process_to_shortcode( $shortcode_data, $options, $layout_type, true, true );
 		}
 
@@ -5447,8 +5461,9 @@ if ( ! function_exists( 'et_pb_postinfo_meta' ) ) :
 			$postinfo_meta[] = ' ' . esc_html__( 'by', 'et_builder' ) . ' <span class="author vcard">' . et_pb_get_the_author_posts_link() . '</span>';
 		}
 
+
 		if ( in_array( 'date', $postinfo, true ) ) {
-			$postinfo_meta[] = '<span class="published">' . esc_html( get_the_time( wp_unslash( $date_format ) ) ) . '</span>';
+			$postinfo_meta[] = '<span class="published">' . esc_html( get_the_time( $date_format ) ) . '</span>';
 		}
 
 		if ( in_array( 'categories', $postinfo, true ) ) {
@@ -10718,7 +10733,7 @@ function et_fb_generate_post_content_module_selector( array $array, $element_typ
  * @return array
  */
 function et_fb_generate_tb_body_area_with_post_content( $theme_builder_body_fields, $selector, $post_content_fields ) {
-	if ( isset( $selector['row'] ) && null === $selector['row'] && null === $selector['column'] ) {
+	if ( ! isset( $selector['row'] ) && ! isset( $selector['column'] ) ) {
 		$original_post_content_module = $theme_builder_body_fields[ $selector['section'] ]['content'][ $selector['module'] ];
 
 		$theme_builder_body_fields[ $selector['section'] ]['attrs']['post_content_module_attrs']        = $original_post_content_module['attrs'];
@@ -12491,6 +12506,11 @@ if ( ! function_exists( 'et_filter_wp_calculate_image_srcset' ) ) :
 			foreach ( $responsive_metadata as $max_width => $size_data ) {
 				if ( ! $size_data ) {
 					continue;
+				}
+
+				// In some SVG images, the value of `$max_width` is 0, in those cases we can set `$max_width` from `$size_array`.
+				if ( ! $max_width ) {
+					$max_width = $size_array[0];
 				}
 
 				$responsive_sources[ $max_width ] = array(

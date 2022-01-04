@@ -10,6 +10,7 @@
 </IfModule>
 <IfModule mod_headers.c>
   Header always set Cache-Control "private"
+  Header append Vary "Accept"
 </IfModule>
 # ! --- DO NOT EDIT NEXT LINE --- !
 # END WebP Converter

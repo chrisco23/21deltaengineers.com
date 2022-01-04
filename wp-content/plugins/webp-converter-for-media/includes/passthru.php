@@ -17,17 +17,31 @@ class PassthruLoader {
 	const PATH_UPLOADS_WEBP = '';
 	const MIME_TYPES        = '';
 
-	/**
-	 * PassthruLoader constructor.
-	 */
 	public function __construct() {
-		if ( ! ( $image_url = $_GET['src'] ?? null ) ) { // phpcs:ignore
+		$image_url = $_GET['src'] ?? null; // phpcs:ignore WordPress.Security
+		if ( ! $this->validate_src_param( $image_url ) ) {
 			return;
-		} elseif ( ! filter_var( $image_url, FILTER_VALIDATE_URL ) ) {
-			$this->load_image_default( $image_url );
 		}
 
 		$this->load_converted_image( $image_url );
+	}
+
+	private function validate_src_param( string $image_url = null ): bool {
+		if ( ! $image_url || ! filter_var( $image_url, FILTER_VALIDATE_URL ) ) {
+			return false;
+		}
+
+		$image_host = parse_url( $image_url, PHP_URL_HOST );
+		if ( $image_host !== ( $_SERVER['HTTP_HOST'] ?? '' ) ) { // phpcs:ignore WordPress.Security
+			return false;
+		}
+
+		$image_extension = strtolower( pathinfo( $image_url, PATHINFO_EXTENSION ) );
+		if ( ! in_array( $image_extension, [ 'jpg', 'jpeg', 'png', 'gif', 'png2' ] ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

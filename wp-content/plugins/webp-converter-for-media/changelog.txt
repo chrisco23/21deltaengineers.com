@@ -1,5 +1,26 @@
 == Changelog ==
 
+= 4.0.4 (2021-12-30) =
+* `[Changed]` opcache.revalidate_freq parameter in PHP configuration to avoid problems while updating plugin
+
+= 4.0.3 (2021-12-20) =
+* `[Fixed]` Auto-conversion images with unsupported extensions when uploading files
+* `[Fixed]` Generating directory paths when ABSPATH constant is invalid
+* `[Added]` URL validation for Pass Thru loading mode
+
+= 4.0.2 (2021-12-17) =
+* `[Fixed]` Fetching large list of files to conversion
+* `[Fixed]` Rewrites caching for some servers
+* `[Changed]` Connection when converting using remote server
+
+= 4.0.1 (2021-12-10) =
+* `[Added]` Informational banners on plugin settings page
+
+= 4.0.0 (2021-12-04) =
+* `[Added]` Converting images using remote server
+* `[Added]` Converting images to AVIF format
+* `[Added]` Error detection for invalid permalinks structure
+
 = 3.2.4 (2021-11-21) =
 * `[Fixed]` Automatic image conversion when /uploads directory is not organized into monthly and yearly folders
 * `[Fixed]` Displaying errors when converting images

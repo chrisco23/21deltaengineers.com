@@ -14,8 +14,8 @@
                         if ( ! $post_type->show_ui ) continue;
                     ?>
                     <label>
-                        <input type="checkbox" name="post_type[]" value="<?php echo $post_type->name; ?>"<?php if ( in_array( $post_type->name, $enabled_posts_types ) ) echo ' checked="checked"'; ?>/>
-                        <?php echo $post_type->label; ?>
+                        <input type="checkbox" name="post_type[]" value="<?php echo esc_attr( $post_type->name ); ?>"<?php if ( in_array( $post_type->name, $enabled_posts_types ) ) echo ' checked="checked"'; ?>/>
+                        <?php echo esc_html( $post_type->label ); ?>
                     </label>
                     <br />
                 <?php endforeach; ?>
@@ -26,8 +26,8 @@
                             if ( ! $post_type->show_ui ) continue;
                         ?>
                         <label>
-                            <input type="checkbox" name="post_type[]" value="<?php echo $post_type->name; ?>" disabled="disabled" />
-                            <?php echo $post_type->label; ?>
+                            <input type="checkbox" name="post_type[]" value="<?php echo esc_attr( $post_type->name ); ?>" disabled="disabled" />
+                            <?php echo esc_html( $post_type->label ); ?>
                         </label>
                         <br />
                     <?php endforeach; ?>
@@ -157,8 +157,8 @@
                         if ( ! $post_type->show_ui ) continue;
                     ?>
                     <label>
-                        <input type="checkbox" name="dynamic_folder_post_type[]" value="<?php echo $post_type->name; ?>"<?php if ( in_array( $post_type->name, $dynamic_folders_enabled_posts_types ) ) echo ' checked="checked"'; ?><?php //if ( ! in_array( $post_type->name, $enabled_posts_types ) ) echo ' disabled="disabled"'; ?>/>
-                        <?php echo $post_type->label; ?>
+                        <input type="checkbox" name="dynamic_folder_post_type[]" value="<?php echo esc_attr( $post_type->name ); ?>"<?php if ( in_array( $post_type->name, $dynamic_folders_enabled_posts_types ) ) echo ' checked="checked"'; ?><?php //if ( ! in_array( $post_type->name, $enabled_posts_types ) ) echo ' disabled="disabled"'; ?>/>
+                        <?php echo esc_html( $post_type->label ); ?>
                     </label>
                     <br />
                 <?php endforeach; ?>
@@ -216,13 +216,13 @@
                 </th>
                 <td>
                     <?php if ( ! apply_filters( 'wicked_folders_mask_license_key', true ) ) : ?>
-                        <p class="code"><?php echo $license_key; ?></p>
+                        <p class="code"><?php echo esc_html( $license_key ); ?></p>
                     <?php endif; ?>
                     <?php if ( ! $valid_license ) : ?>
-                        <input type="text" id="wicked-folders-pro-license-key" class="regular-text" name="wicked_folders_pro_license_key" value="<?php echo $license_key; ?>" />
+                        <input type="text" id="wicked-folders-pro-license-key" class="regular-text" name="wicked_folders_pro_license_key" value="<?php echo esc_attr( $license_key ); ?>" />
                     <?php endif; ?>
                     <?php if ( $license_status ) : ?>
-                        <div class="wicked-folders-license-status"><?php echo $license_status; ?></div>
+                        <div class="wicked-folders-license-status"><?php echo esc_html( $license_status ); ?></div>
                     <?php endif; ?>
                     <?php if ( $valid_license ) : ?>
                         <input name="deactivate_license" id="deactivate-license" class="button" value="<?php _e( 'Deactivate License', 'wicked-folders' ); ?>" type="submit" />

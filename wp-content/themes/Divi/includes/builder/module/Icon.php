@@ -58,10 +58,10 @@ class ET_Builder_Module_Icon extends ET_Builder_Module {
 		$this->advanced_fields = array(
 			'margin_padding' => array(
 				'css' => array(
-					'main'    => '%%order_class%% .et_pb_icon_wrap',
-					'hover'   => '%%order_class%% .et_pb_icon_wrap:hover',
-					'padding' => '%%order_class%% .et_pb_icon_wrap',
-					'margin'  => '%%order_class%% .et_pb_icon_wrap',
+					'main'      => '%%order_class%%',
+					'padding'   => '%%order_class%% .et_pb_icon_wrap',
+					'margin'    => '%%order_class%%',
+					'important' => 'all',
 				),
 			),
 			'borders'        => array(
@@ -267,7 +267,7 @@ class ET_Builder_Module_Icon extends ET_Builder_Module {
 	 *
 	 * @return string
 	 */
-	public function render( $attrs, $content = null, $render_slug ) {
+	public function render( $attrs, $content, $render_slug ) {
 		$multi_view       = et_pb_multi_view_options( $this );
 		$title_text       = $this->props['title_text'];
 		$url              = $this->props['url'];

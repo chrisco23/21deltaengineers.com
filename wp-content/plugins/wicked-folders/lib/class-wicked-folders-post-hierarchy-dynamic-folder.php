@@ -55,7 +55,7 @@ class Wicked_Folders_Post_Hierarchy_Dynamic_Folder extends Wicked_Folders_Dynami
 
         $folders = array();
 
-        $posts = $wpdb->get_results( "
+        $posts = $wpdb->get_results( $wpdb->prepare( "
             SELECT DISTINCT
                 parents.ID, parents.post_title
             FROM
@@ -65,16 +65,16 @@ class Wicked_Folders_Post_Hierarchy_Dynamic_Folder extends Wicked_Folders_Dynami
             ON
                 parents.ID = children.post_parent
             WHERE
-                parents.post_type = '{$this->post_type}'
+                parents.post_type = %s
             AND
                 parents.post_status IN ('publish', 'future', 'draft', 'pending', 'private')
             AND
                 children.post_status IN ('publish', 'future', 'draft', 'pending', 'private')
             AND
-                parents.post_parent = {$this->post_id}
+                parents.post_parent = %d
             ORDER BY
                 parents.menu_order ASC, parents.post_title ASC
-        " );
+        ", $this->post_type, $this->post_id ) );
 
         foreach ( $posts as $post ) {
             $folders[] = new Wicked_Folders_Post_Hierarchy_Dynamic_Folder( array(

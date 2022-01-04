@@ -22,6 +22,11 @@ interface MethodInterface {
 	public function get_label(): string;
 
 	/**
+	 * @return bool
+	 */
+	public static function is_pro_feature(): bool;
+
+	/**
 	 * Returns status of whether method is installed.
 	 *
 	 * @return bool
@@ -66,10 +71,11 @@ interface MethodInterface {
 	/**
 	 * Converts source paths to output formats.
 	 *
-	 * @param string[] $paths           Server paths of source images.
-	 * @param mixed[]  $plugin_settings .
+	 * @param string[] $paths            Server paths of source images.
+	 * @param mixed[]  $plugin_settings  .
+	 * @param bool     $regenerate_force .
 	 *
 	 * @return void
 	 */
-	public function convert_paths( array $paths, array $plugin_settings );
+	public function convert_paths( array $paths, array $plugin_settings, bool $regenerate_force );
 }

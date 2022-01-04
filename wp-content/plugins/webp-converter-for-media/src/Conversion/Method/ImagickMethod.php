@@ -2,8 +2,8 @@
 
 namespace WebpConverter\Conversion\Method;
 
-use WebpConverter\Conversion\Exception;
 use WebpConverter\Conversion\Format\WebpFormat;
+use WebpConverter\Exception;
 use WebpConverter\Settings\Option\ExtraFeaturesOption;
 use WebpConverter\Settings\Option\ImagesQualityOption;
 use WebpConverter\Settings\Option\SupportedExtensionsOption;

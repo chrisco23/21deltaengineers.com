@@ -8,6 +8,15 @@ namespace WebpConverter\Conversion\Directory;
 abstract class DirectoryAbstract implements DirectoryInterface {
 
 	/**
+	 * @var PathsGenerator
+	 */
+	protected $paths_generator;
+
+	public function __construct( PathsGenerator $paths_generator ) {
+		$this->paths_generator = $paths_generator;
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function get_label(): string {
@@ -32,9 +41,8 @@ abstract class DirectoryAbstract implements DirectoryInterface {
 	 * {@inheritdoc}
 	 */
 	public function get_server_path(): string {
-		$source_path    = apply_filters( 'webpc_site_root', realpath( ABSPATH ) );
 		$directory_name = apply_filters( 'webpc_dir_name', $this->get_relative_path(), $this->get_type() );
-		return sprintf( '%1$s/%2$s', $source_path, $directory_name );
+		return sprintf( '%1$s/%2$s', $this->paths_generator->get_wordpress_root_path(), $directory_name );
 	}
 
 	/**

@@ -7,6 +7,7 @@ use WebpConverter\Loader\LoaderAbstract;
 use WebpConverter\Loader\PassthruLoader;
 use WebpConverter\PluginData;
 use WebpConverter\PluginInfo;
+use WebpConverter\Settings\Option\LoaderTypeOption;
 
 /**
  * Checks for configuration errors about disabled file supports Pass Thru loader.
@@ -32,6 +33,11 @@ class PassthruExecutionDetector implements ErrorDetector {
 	 * {@inheritdoc}
 	 */
 	public function get_error() {
+		$plugin_settings = $this->plugin_data->get_plugin_settings();
+		if ( $plugin_settings[ LoaderTypeOption::OPTION_NAME ] !== PassthruLoader::LOADER_TYPE ) {
+			return null;
+		}
+
 		do_action( LoaderAbstract::ACTION_NAME, true, true );
 
 		$has_error = false;

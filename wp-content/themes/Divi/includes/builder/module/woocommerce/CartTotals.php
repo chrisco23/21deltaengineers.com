@@ -7,7 +7,7 @@
  *
  * @package Divi\Builder
  *
- * @since   ??
+ * @since 4.14.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -20,7 +20,7 @@ class ET_Builder_Module_Woocommerce_Cart_Totals extends ET_Builder_Module {
 	/**
 	 * Initialize.
 	 *
-	 * @since ?? Fixed PHP Warnings {@link https://github.com/elegantthemes/Divi/issues/22104}
+	 * @since 4.14.0 Fixed PHP Warnings {@link https://github.com/elegantthemes/Divi/issues/22104}
 	 */
 	public function init() {
 		$this->name        = esc_html__( 'Woo Cart Totals', 'et_builder' );
@@ -77,7 +77,13 @@ class ET_Builder_Module_Woocommerce_Cart_Totals extends ET_Builder_Module {
 				'column_label' => array(
 					'label'       => esc_html__( 'Column Label', 'et_builder' ),
 					'css'         => array(
-						'main' => '%%order_class%% table.shop_table tbody th',
+						'main' => implode(
+							',',
+							[
+								'%%order_class%% table.shop_table tbody th',
+								'%%order_class%% table.shop_table_responsive tbody td:before',
+							]
+						),
 					),
 					'font'        => array(
 						'default' => '|700|||||||',
@@ -277,7 +283,15 @@ class ET_Builder_Module_Woocommerce_Cart_Totals extends ET_Builder_Module {
 				'table_cell' => array(
 					'label'                  => esc_html__( 'Table Cell', 'et_builder' ),
 					'css'                    => array(
-						'main' => '%%order_class%% table.shop_table tr th, %%order_class%% table.shop_table tr td',
+						'main'                   => '%%order_class%% table.shop_table tr th, %%order_class%% table.shop_table tr td',
+						'important'              => [ 'background_color' ],
+						'background_color_hover' => implode(
+							',',
+							[
+								'%%order_class%% table.shop_table tr th:hover',
+								'%%order_class%% table.shop_table tr td:hover',
+							]
+						),
 					),
 					'background_color'       => array(
 						'description' => esc_html__( 'Pick a color to fill the module\'s table cell.', 'et_builder' ),
@@ -409,7 +423,7 @@ class ET_Builder_Module_Woocommerce_Cart_Totals extends ET_Builder_Module {
 								),
 							),
 							'defaults'     => array(
-								'border_radii'  => 'on|3px|3px|3px|3px',
+								'border_radii'  => 'on|0px|0px|0px|0px',
 								'border_styles' => array(
 									'width' => '0px',
 									'style' => 'solid',
@@ -439,7 +453,7 @@ class ET_Builder_Module_Woocommerce_Cart_Totals extends ET_Builder_Module {
 								),
 							),
 							'defaults'     => array(
-								'border_radii'  => 'on|3px|3px|3px|3px',
+								'border_radii'  => 'on|0px|0px|0px|0px',
 								'border_styles' => array(
 									'width' => '0px',
 									'style' => 'solid',

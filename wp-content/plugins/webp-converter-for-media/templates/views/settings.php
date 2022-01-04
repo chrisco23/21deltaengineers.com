@@ -2,14 +2,18 @@
 /**
  * Main tab of plugin settings page.
  *
- * @var string[][] $errors_messages    .
- * @var string[]   $errors_codes       .
- * @var mixed[]    $options            Options of plugin settings.
- * @var string     $submit_value       Value of submit button.
- * @var string     $settings_url       URL of plugin settings page (default view).
- * @var string     $settings_debug_url URL of plugin settings page (debug view).
- * @var string     $api_paths_url      URL of REST API endpoint.
- * @var string     $api_regenerate_url URL of REST API endpoint.
+ * @var string[][] $errors_messages         .
+ * @var string[]   $errors_codes            .
+ * @var mixed[]    $options                 Options of plugin settings.
+ * @var string     $submit_value            Value of submit button.
+ * @var string     $submit_activate_token   .
+ * @var string     $submit_deactivate_token .
+ * @var bool       $token_valid_status      .
+ * @var string     $settings_url            URL of plugin settings page (default view).
+ * @var string     $settings_debug_url      URL of plugin settings page (debug view).
+ * @var string     $api_calculate_url       URL of REST API endpoint.
+ * @var string     $api_paths_url           URL of REST API endpoint.
+ * @var string     $api_regenerate_url      URL of REST API endpoint.
  * @package WebP Converter for Media
  */
 
@@ -25,6 +29,10 @@
 						<div class="webpPage__alert">
 							<?php echo esc_html( __( 'Changes were successfully saved!', 'webp-converter-for-media' ) ); ?>
 							<?php echo esc_html( __( 'Please flush cache if you use caching plugin or caching via hosting.', 'webp-converter-for-media' ) ); ?>
+						</div>
+					<?php elseif ( isset( $_POST[ $submit_activate_token ] ) && $token_valid_status ) : // phpcs:ignore ?>
+						<div class="webpPage__alert">
+							<?php echo esc_html( __( 'The access token has been activated!', 'webp-converter-for-media' ) ); ?>
 						</div>
 					<?php endif; ?>
 					<?php

@@ -25,12 +25,12 @@ class InstalledVersions
 private static $installed = array (
   'root' => 
   array (
-    'pretty_version' => '1.0.0+no-version-set',
-    'version' => '1.0.0.0',
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => '8a5e9a69a7bd0f3538719b607dae9cc176a61795',
     'name' => 'patrickposner/simply-static',
   ),
   'versions' => 
@@ -46,21 +46,21 @@ private static $installed = array (
     ),
     'patrickposner/simply-static' => 
     array (
-      'pretty_version' => '1.0.0+no-version-set',
-      'version' => '1.0.0.0',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => '8a5e9a69a7bd0f3538719b607dae9cc176a61795',
     ),
     'symfony/css-selector' => 
     array (
-      'pretty_version' => 'v5.3.4',
-      'version' => '5.3.4.0',
+      'pretty_version' => 'v5.4.0',
+      'version' => '5.4.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '7fb120adc7f600a59027775b224c13a33530dd90',
+      'reference' => '44b933f98bb4b5220d10bed9ce5662f8c2d13dcc',
     ),
     'symfony/polyfill-iconv' => 
     array (
@@ -136,12 +136,12 @@ private static $installed = array (
     ),
     'voku/simple_html_dom' => 
     array (
-      'pretty_version' => '4.7.29',
-      'version' => '4.7.29.0',
+      'pretty_version' => '4.7.30',
+      'version' => '4.7.30.0',
       'aliases' => 
       array (
       ),
-      'reference' => '079067c704b714b7c2813971297bb340307813e7',
+      'reference' => 'f2be14b8afa7d9a8e5fbc90d93541c23a2134876',
     ),
   ),
 );

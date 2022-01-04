@@ -11,11 +11,20 @@ use WebpConverter\HookableInterface;
 class DirectoryIntegration implements HookableInterface {
 
 	/**
+	 * @var PathsGenerator
+	 */
+	private $paths_generator;
+
+	/**
 	 * Objects of supported directories.
 	 *
 	 * @var DirectoryInterface[]
 	 */
 	private $directories = [];
+
+	public function __construct( PathsGenerator $paths_generator ) {
+		$this->paths_generator = $paths_generator;
+	}
 
 	/**
 	 * {@inheritdoc}
@@ -106,8 +115,7 @@ class DirectoryIntegration implements HookableInterface {
 			}
 		}
 
-		$source_path = apply_filters( 'webpc_site_root', realpath( ABSPATH ) );
-		return sprintf( '%1$s/%2$s', $source_path, $directory_name );
+		return sprintf( '%1$s/%2$s', $this->paths_generator->get_wordpress_root_path(), $directory_name );
 	}
 
 	/**
@@ -140,10 +148,10 @@ class DirectoryIntegration implements HookableInterface {
 	 * @internal
 	 */
 	public function get_prefix_path(): string {
-		$doc_dir   = realpath( $_SERVER['DOCUMENT_ROOT'] ) ?: ''; // phpcs:ignore
-		$wp_rir    = apply_filters( 'webpc_site_root', realpath( ABSPATH ) );
-		$diff_dir  = trim( str_replace( $doc_dir, '', $wp_rir ), '\/' );
-		$diff_path = sprintf( '/%s/', $diff_dir );
+		$document_root  = realpath( $_SERVER['DOCUMENT_ROOT'] ) ?: ''; // phpcs:ignore
+		$root_directory = $this->paths_generator->get_wordpress_root_path();
+		$diff_dir       = trim( str_replace( $document_root, '', $root_directory ), '\/' );
+		$diff_path      = sprintf( '/%s/', $diff_dir );
 
 		return str_replace( '//', '/', $diff_path );
 	}

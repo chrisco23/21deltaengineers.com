@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit37614692d30f246008194d111fcdb36b
+class ComposerStaticInit80287993f128e7a857f0f2db132eda4f
 {
     public static $prefixLengthsPsr4 = array (
         'W' => 
@@ -21,7 +21,6 @@ class ComposerStaticInit37614692d30f246008194d111fcdb36b
     );
 
     public static $classMap = array (
-        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'WebpConverter\\Action\\ConvertAttachment' => __DIR__ . '/../..' . '/src/Action/ConvertAttachment.php',
         'WebpConverter\\Action\\ConvertDir' => __DIR__ . '/../..' . '/src/Action/ConvertDir.php',
         'WebpConverter\\Action\\ConvertPaths' => __DIR__ . '/../..' . '/src/Action/ConvertPaths.php',
@@ -35,6 +34,7 @@ class ComposerStaticInit37614692d30f246008194d111fcdb36b
         'WebpConverter\\Conversion\\Directory\\DirectoryIntegration' => __DIR__ . '/../..' . '/src/Conversion/Directory/DirectoryIntegration.php',
         'WebpConverter\\Conversion\\Directory\\DirectoryInterface' => __DIR__ . '/../..' . '/src/Conversion/Directory/DirectoryInterface.php',
         'WebpConverter\\Conversion\\Directory\\GalleryDirectory' => __DIR__ . '/../..' . '/src/Conversion/Directory/GalleryDirectory.php',
+        'WebpConverter\\Conversion\\Directory\\PathsGenerator' => __DIR__ . '/../..' . '/src/Conversion/Directory/PathsGenerator.php',
         'WebpConverter\\Conversion\\Directory\\PluginsDirectory' => __DIR__ . '/../..' . '/src/Conversion/Directory/PluginsDirectory.php',
         'WebpConverter\\Conversion\\Directory\\ThemesDirectory' => __DIR__ . '/../..' . '/src/Conversion/Directory/ThemesDirectory.php',
         'WebpConverter\\Conversion\\Directory\\UploadsDirectory' => __DIR__ . '/../..' . '/src/Conversion/Directory/UploadsDirectory.php',
@@ -42,21 +42,9 @@ class ComposerStaticInit37614692d30f246008194d111fcdb36b
         'WebpConverter\\Conversion\\Endpoint\\EndpointAbstract' => __DIR__ . '/../..' . '/src/Conversion/Endpoint/EndpointAbstract.php',
         'WebpConverter\\Conversion\\Endpoint\\EndpointIntegration' => __DIR__ . '/../..' . '/src/Conversion/Endpoint/EndpointIntegration.php',
         'WebpConverter\\Conversion\\Endpoint\\EndpointInterface' => __DIR__ . '/../..' . '/src/Conversion/Endpoint/EndpointInterface.php',
+        'WebpConverter\\Conversion\\Endpoint\\ImagesCounterEndpoint' => __DIR__ . '/../..' . '/src/Conversion/Endpoint/ImagesCounterEndpoint.php',
         'WebpConverter\\Conversion\\Endpoint\\PathsEndpoint' => __DIR__ . '/../..' . '/src/Conversion/Endpoint/PathsEndpoint.php',
         'WebpConverter\\Conversion\\Endpoint\\RegenerateEndpoint' => __DIR__ . '/../..' . '/src/Conversion/Endpoint/RegenerateEndpoint.php',
-        'WebpConverter\\Conversion\\Exception\\ConversionErrorException' => __DIR__ . '/../..' . '/src/Conversion/Exception/ConversionErrorException.php',
-        'WebpConverter\\Conversion\\Exception\\ExceptionAbstract' => __DIR__ . '/../..' . '/src/Conversion/Exception/ExceptionAbstract.php',
-        'WebpConverter\\Conversion\\Exception\\ExceptionInterface' => __DIR__ . '/../..' . '/src/Conversion/Exception/ExceptionInterface.php',
-        'WebpConverter\\Conversion\\Exception\\ExtensionUnsupportedException' => __DIR__ . '/../..' . '/src/Conversion/Exception/ExtensionUnsupportedException.php',
-        'WebpConverter\\Conversion\\Exception\\FunctionUnavailableException' => __DIR__ . '/../..' . '/src/Conversion/Exception/FunctionUnavailableException.php',
-        'WebpConverter\\Conversion\\Exception\\ImageInvalidException' => __DIR__ . '/../..' . '/src/Conversion/Exception/ImageInvalidException.php',
-        'WebpConverter\\Conversion\\Exception\\ImagickNotSupportWebpException' => __DIR__ . '/../..' . '/src/Conversion/Exception/ImagickNotSupportWebpException.php',
-        'WebpConverter\\Conversion\\Exception\\ImagickUnavailableException' => __DIR__ . '/../..' . '/src/Conversion/Exception/ImagickUnavailableException.php',
-        'WebpConverter\\Conversion\\Exception\\LargerThanOriginalException' => __DIR__ . '/../..' . '/src/Conversion/Exception/LargerThanOriginalException.php',
-        'WebpConverter\\Conversion\\Exception\\OutputPathException' => __DIR__ . '/../..' . '/src/Conversion/Exception/OutputPathException.php',
-        'WebpConverter\\Conversion\\Exception\\ResolutionOversizeException' => __DIR__ . '/../..' . '/src/Conversion/Exception/ResolutionOversizeException.php',
-        'WebpConverter\\Conversion\\Exception\\ServerConfigurationException' => __DIR__ . '/../..' . '/src/Conversion/Exception/ServerConfigurationException.php',
-        'WebpConverter\\Conversion\\Exception\\SourcePathException' => __DIR__ . '/../..' . '/src/Conversion/Exception/SourcePathException.php',
         'WebpConverter\\Conversion\\Format\\AvifFormat' => __DIR__ . '/../..' . '/src/Conversion/Format/AvifFormat.php',
         'WebpConverter\\Conversion\\Format\\FormatAbstract' => __DIR__ . '/../..' . '/src/Conversion/Format/FormatAbstract.php',
         'WebpConverter\\Conversion\\Format\\FormatFactory' => __DIR__ . '/../..' . '/src/Conversion/Format/FormatFactory.php',
@@ -73,6 +61,7 @@ class ComposerStaticInit37614692d30f246008194d111fcdb36b
         'WebpConverter\\Conversion\\Method\\MethodFactory' => __DIR__ . '/../..' . '/src/Conversion/Method/MethodFactory.php',
         'WebpConverter\\Conversion\\Method\\MethodIntegrator' => __DIR__ . '/../..' . '/src/Conversion/Method/MethodIntegrator.php',
         'WebpConverter\\Conversion\\Method\\MethodInterface' => __DIR__ . '/../..' . '/src/Conversion/Method/MethodInterface.php',
+        'WebpConverter\\Conversion\\Method\\RemoteMethod' => __DIR__ . '/../..' . '/src/Conversion/Method/RemoteMethod.php',
         'WebpConverter\\Conversion\\OutputPath' => __DIR__ . '/../..' . '/src/Conversion/OutputPath.php',
         'WebpConverter\\Conversion\\PathsValidator' => __DIR__ . '/../..' . '/src/Conversion/PathsValidator.php',
         'WebpConverter\\Conversion\\SkipConvertedPaths' => __DIR__ . '/../..' . '/src/Conversion/SkipConvertedPaths.php',
@@ -84,10 +73,15 @@ class ComposerStaticInit37614692d30f246008194d111fcdb36b
         'WebpConverter\\Error\\Detector\\LibsWithoutWebpSupportDetector' => __DIR__ . '/../..' . '/src/Error/Detector/LibsWithoutWebpSupportDetector.php',
         'WebpConverter\\Error\\Detector\\PassthruExecutionDetector' => __DIR__ . '/../..' . '/src/Error/Detector/PassthruExecutionDetector.php',
         'WebpConverter\\Error\\Detector\\PathsErrorsDetector' => __DIR__ . '/../..' . '/src/Error/Detector/PathsErrorsDetector.php',
+        'WebpConverter\\Error\\Detector\\PermalinksStructureDetector' => __DIR__ . '/../..' . '/src/Error/Detector/PermalinksStructureDetector.php',
         'WebpConverter\\Error\\Detector\\RestApiDisabledDetector' => __DIR__ . '/../..' . '/src/Error/Detector/RestApiDisabledDetector.php',
         'WebpConverter\\Error\\Detector\\RewritesErrorsDetector' => __DIR__ . '/../..' . '/src/Error/Detector/RewritesErrorsDetector.php',
         'WebpConverter\\Error\\Detector\\SettingsIncorrectDetector' => __DIR__ . '/../..' . '/src/Error/Detector/SettingsIncorrectDetector.php',
+        'WebpConverter\\Error\\Detector\\TokenStatusDetector' => __DIR__ . '/../..' . '/src/Error/Detector/TokenStatusDetector.php',
+        'WebpConverter\\Error\\Detector\\WebpFormatActivatedDetector' => __DIR__ . '/../..' . '/src/Error/Detector/WebpFormatActivatedDetector.php',
         'WebpConverter\\Error\\ErrorDetectorAggregator' => __DIR__ . '/../..' . '/src/Error/ErrorDetectorAggregator.php',
+        'WebpConverter\\Error\\Notice\\AccessTokenInvalidNotice' => __DIR__ . '/../..' . '/src/Error/Notice/AccessTokenInvalidNotice.php',
+        'WebpConverter\\Error\\Notice\\ApiLimitExceededNotice' => __DIR__ . '/../..' . '/src/Error/Notice/ApiLimitExceededNotice.php',
         'WebpConverter\\Error\\Notice\\BypassingApacheNotice' => __DIR__ . '/../..' . '/src/Error/Notice/BypassingApacheNotice.php',
         'WebpConverter\\Error\\Notice\\ErrorNotice' => __DIR__ . '/../..' . '/src/Error/Notice/ErrorNotice.php',
         'WebpConverter\\Error\\Notice\\LibsNotInstalledNotice' => __DIR__ . '/../..' . '/src/Error/Notice/LibsNotInstalledNotice.php',
@@ -98,17 +92,36 @@ class ComposerStaticInit37614692d30f246008194d111fcdb36b
         'WebpConverter\\Error\\Notice\\PathUploadsUnavailableNotice' => __DIR__ . '/../..' . '/src/Error/Notice/PathUploadsUnavailableNotice.php',
         'WebpConverter\\Error\\Notice\\PathWebpDuplicatedNotice' => __DIR__ . '/../..' . '/src/Error/Notice/PathWebpDuplicatedNotice.php',
         'WebpConverter\\Error\\Notice\\PathWebpNotWritableNotice' => __DIR__ . '/../..' . '/src/Error/Notice/PathWebpNotWritableNotice.php',
+        'WebpConverter\\Error\\Notice\\PermalinksStructureInvalidNotice' => __DIR__ . '/../..' . '/src/Error/Notice/PermalinksStructureInvalidNotice.php',
         'WebpConverter\\Error\\Notice\\RestApiDisabledNotice' => __DIR__ . '/../..' . '/src/Error/Notice/RestApiDisabledNotice.php',
         'WebpConverter\\Error\\Notice\\RewritesCachedNotice' => __DIR__ . '/../..' . '/src/Error/Notice/RewritesCachedNotice.php',
         'WebpConverter\\Error\\Notice\\RewritesNotExecutedNotice' => __DIR__ . '/../..' . '/src/Error/Notice/RewritesNotExecutedNotice.php',
         'WebpConverter\\Error\\Notice\\RewritesNotWorkingNotice' => __DIR__ . '/../..' . '/src/Error/Notice/RewritesNotWorkingNotice.php',
         'WebpConverter\\Error\\Notice\\SettingsIncorrectNotice' => __DIR__ . '/../..' . '/src/Error/Notice/SettingsIncorrectNotice.php',
+        'WebpConverter\\Error\\Notice\\WebpRequiredNotice' => __DIR__ . '/../..' . '/src/Error/Notice/WebpRequiredNotice.php',
+        'WebpConverter\\Exception\\ConversionErrorException' => __DIR__ . '/../..' . '/src/Exception/ConversionErrorException.php',
+        'WebpConverter\\Exception\\ExceptionAbstract' => __DIR__ . '/../..' . '/src/Exception/ExceptionAbstract.php',
+        'WebpConverter\\Exception\\ExceptionInterface' => __DIR__ . '/../..' . '/src/Exception/ExceptionInterface.php',
+        'WebpConverter\\Exception\\ExtensionUnsupportedException' => __DIR__ . '/../..' . '/src/Exception/ExtensionUnsupportedException.php',
+        'WebpConverter\\Exception\\FilesizeOversizeException' => __DIR__ . '/../..' . '/src/Exception/FilesizeOversizeException.php',
+        'WebpConverter\\Exception\\FunctionUnavailableException' => __DIR__ . '/../..' . '/src/Exception/FunctionUnavailableException.php',
+        'WebpConverter\\Exception\\ImageInvalidException' => __DIR__ . '/../..' . '/src/Exception/ImageInvalidException.php',
+        'WebpConverter\\Exception\\ImagickNotSupportWebpException' => __DIR__ . '/../..' . '/src/Exception/ImagickNotSupportWebpException.php',
+        'WebpConverter\\Exception\\ImagickUnavailableException' => __DIR__ . '/../..' . '/src/Exception/ImagickUnavailableException.php',
+        'WebpConverter\\Exception\\LargerThanOriginalException' => __DIR__ . '/../..' . '/src/Exception/LargerThanOriginalException.php',
+        'WebpConverter\\Exception\\OutputPathException' => __DIR__ . '/../..' . '/src/Exception/OutputPathException.php',
+        'WebpConverter\\Exception\\RemoteErrorResponseException' => __DIR__ . '/../..' . '/src/Exception/RemoteErrorResponseException.php',
+        'WebpConverter\\Exception\\RemoteRequestException' => __DIR__ . '/../..' . '/src/Exception/RemoteRequestException.php',
+        'WebpConverter\\Exception\\ResolutionOversizeException' => __DIR__ . '/../..' . '/src/Exception/ResolutionOversizeException.php',
+        'WebpConverter\\Exception\\ServerConfigurationException' => __DIR__ . '/../..' . '/src/Exception/ServerConfigurationException.php',
+        'WebpConverter\\Exception\\SourcePathException' => __DIR__ . '/../..' . '/src/Exception/SourcePathException.php',
         'WebpConverter\\HookableInterface' => __DIR__ . '/../..' . '/src/HookableInterface.php',
         'WebpConverter\\Loader\\HtaccessLoader' => __DIR__ . '/../..' . '/src/Loader/HtaccessLoader.php',
         'WebpConverter\\Loader\\LoaderAbstract' => __DIR__ . '/../..' . '/src/Loader/LoaderAbstract.php',
         'WebpConverter\\Loader\\LoaderIntegration' => __DIR__ . '/../..' . '/src/Loader/LoaderIntegration.php',
         'WebpConverter\\Loader\\LoaderInterface' => __DIR__ . '/../..' . '/src/Loader/LoaderInterface.php',
         'WebpConverter\\Loader\\PassthruLoader' => __DIR__ . '/../..' . '/src/Loader/PassthruLoader.php',
+        'WebpConverter\\Model\\Token' => __DIR__ . '/../..' . '/src/Model/Token.php',
         'WebpConverter\\Notice\\NoticeAbstract' => __DIR__ . '/../..' . '/src/Notice/NoticeAbstract.php',
         'WebpConverter\\Notice\\NoticeFactory' => __DIR__ . '/../..' . '/src/Notice/NoticeFactory.php',
         'WebpConverter\\Notice\\NoticeIntegration' => __DIR__ . '/../..' . '/src/Notice/NoticeIntegration.php',
@@ -132,10 +145,14 @@ class ComposerStaticInit37614692d30f246008194d111fcdb36b
         'WebpConverter\\Plugin\\Uninstall\\PluginSettings' => __DIR__ . '/../..' . '/src/Plugin/Uninstall/PluginSettings.php',
         'WebpConverter\\Plugin\\Uninstall\\WebpFiles' => __DIR__ . '/../..' . '/src/Plugin/Uninstall/WebpFiles.php',
         'WebpConverter\\Plugin\\Update' => __DIR__ . '/../..' . '/src/Plugin/Update.php',
+        'WebpConverter\\Repository\\TokenRepository' => __DIR__ . '/../..' . '/src/Repository/TokenRepository.php',
         'WebpConverter\\Service\\FileLoader' => __DIR__ . '/../..' . '/src/Service/FileLoader.php',
         'WebpConverter\\Service\\OptionsAccessManager' => __DIR__ . '/../..' . '/src/Service/OptionsAccessManager.php',
+        'WebpConverter\\Service\\ServerConfigurator' => __DIR__ . '/../..' . '/src/Service/ServerConfigurator.php',
+        'WebpConverter\\Service\\TokenValidator' => __DIR__ . '/../..' . '/src/Service/TokenValidator.php',
         'WebpConverter\\Service\\ViewLoader' => __DIR__ . '/../..' . '/src/Service/ViewLoader.php',
         'WebpConverter\\Settings\\AdminAssets' => __DIR__ . '/../..' . '/src/Settings/AdminAssets.php',
+        'WebpConverter\\Settings\\Option\\AccessTokenOption' => __DIR__ . '/../..' . '/src/Settings/Option/AccessTokenOption.php',
         'WebpConverter\\Settings\\Option\\ConversionMethodOption' => __DIR__ . '/../..' . '/src/Settings/Option/ConversionMethodOption.php',
         'WebpConverter\\Settings\\Option\\ExtraFeaturesOption' => __DIR__ . '/../..' . '/src/Settings/Option/ExtraFeaturesOption.php',
         'WebpConverter\\Settings\\Option\\ImagesQualityOption' => __DIR__ . '/../..' . '/src/Settings/Option/ImagesQualityOption.php',
@@ -155,14 +172,15 @@ class ComposerStaticInit37614692d30f246008194d111fcdb36b
         'WebpConverter\\Settings\\PluginOptions' => __DIR__ . '/../..' . '/src/Settings/PluginOptions.php',
         'WebpConverter\\Settings\\SettingsSave' => __DIR__ . '/../..' . '/src/Settings/SettingsSave.php',
         'WebpConverter\\WebpConverter' => __DIR__ . '/../..' . '/src/WebpConverter.php',
+        'WebpConverter\\WebpConverterConstants' => __DIR__ . '/../..' . '/src/WebpConverterConstants.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit37614692d30f246008194d111fcdb36b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit37614692d30f246008194d111fcdb36b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit37614692d30f246008194d111fcdb36b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit80287993f128e7a857f0f2db132eda4f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit80287993f128e7a857f0f2db132eda4f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit80287993f128e7a857f0f2db132eda4f::$classMap;
 
         }, null, ClassLoader::class);
     }

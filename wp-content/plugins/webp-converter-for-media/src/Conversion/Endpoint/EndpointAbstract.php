@@ -2,21 +2,10 @@
 
 namespace WebpConverter\Conversion\Endpoint;
 
-use WebpConverter\PluginData;
-
 /**
  * Abstract class for class that supports image conversion method.
  */
 abstract class EndpointAbstract implements EndpointInterface {
-
-	/**
-	 * @var PluginData
-	 */
-	protected $plugin_data;
-
-	public function __construct( PluginData $plugin_data ) {
-		$this->plugin_data = $plugin_data;
-	}
 
 	/**
 	 * {@inheritdoc}

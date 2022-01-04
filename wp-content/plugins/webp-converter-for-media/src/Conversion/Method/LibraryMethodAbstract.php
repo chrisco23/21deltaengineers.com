@@ -2,9 +2,10 @@
 
 namespace WebpConverter\Conversion\Method;
 
-use WebpConverter\Conversion\Exception;
 use WebpConverter\Conversion\SkipCrashed;
 use WebpConverter\Conversion\SkipLarger;
+use WebpConverter\Exception;
+use WebpConverter\Service\ServerConfigurator;
 use WebpConverter\Settings\Option\OutputFormatsOption;
 
 /**
@@ -17,22 +18,35 @@ abstract class LibraryMethodAbstract extends MethodAbstract implements LibraryMe
 	 */
 	private $skip_crashed;
 
-	public function __construct( SkipCrashed $skip_crashed ) {
-		$this->skip_crashed = $skip_crashed;
+	/**
+	 * @var SkipLarger
+	 */
+	private $skip_larger;
+
+	/**
+	 * @var ServerConfigurator
+	 */
+	private $server_configurator;
+
+	public function __construct(
+		SkipCrashed $skip_crashed,
+		SkipLarger $skip_larger,
+		ServerConfigurator $server_configurator
+	) {
+		$this->skip_crashed        = $skip_crashed;
+		$this->skip_larger         = $skip_larger;
+		$this->server_configurator = $server_configurator;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function convert_paths( array $paths, array $plugin_settings ) {
+	public function convert_paths( array $paths, array $plugin_settings, bool $regenerate_force ) {
 		$output_formats = $plugin_settings[ OutputFormatsOption::OPTION_NAME ];
 		foreach ( $output_formats as $output_format ) {
 			foreach ( $paths as $path ) {
 				try {
-					$response = $this->convert_path( $path, $output_format, $plugin_settings );
-
-					$this->size_before += $response['data']['size_before'];
-					$this->size_after  += $response['data']['size_after'];
+					$this->convert_path( $path, $output_format, $plugin_settings );
 				} catch ( \Exception $e ) {
 					$this->errors[] = $e->getMessage();
 				}
@@ -47,13 +61,15 @@ abstract class LibraryMethodAbstract extends MethodAbstract implements LibraryMe
 	 * @param string  $format          Extension of output format.
 	 * @param mixed[] $plugin_settings .
 	 *
-	 * @return mixed[] Results data of conversion.
+	 * @return void
 	 *
 	 * @throws Exception\OutputPathException
 	 * @throws Exception\SourcePathException
+	 * @throws Exception\LargerThanOriginalException
 	 */
-	private function convert_path( string $path, string $format, array $plugin_settings ): array {
-		$this->set_server_config();
+	private function convert_path( string $path, string $format, array $plugin_settings ) {
+		$this->server_configurator->set_memory_limit();
+		$this->server_configurator->set_execution_time();
 
 		try {
 			$source_path = $this->get_image_source_path( $path );
@@ -65,19 +81,10 @@ abstract class LibraryMethodAbstract extends MethodAbstract implements LibraryMe
 			$this->convert_image_to_output( $image, $source_path, $output_path, $format, $plugin_settings );
 
 			$this->skip_crashed->delete_crashed_file( $output_path );
-
-			if ( file_exists( $output_path . '.' . SkipLarger::DELETED_FILE_EXTENSION ) ) {
-				unlink( $output_path . '.' . SkipLarger::DELETED_FILE_EXTENSION );
-			}
-			do_action( 'webpc_convert_after', $output_path, $source_path );
-
-			return [
-				'success' => true,
-				'message' => null,
-				'data'    => $this->get_conversion_stats( $source_path, $output_path ),
-			];
+			$this->skip_larger->remove_image_if_is_larger( $output_path, $source_path, $plugin_settings );
+			$this->update_conversion_stats( $source_path, $output_path );
 		} catch ( \Exception $e ) {
-			$this->save_conversion_error( $e->getMessage(), $plugin_settings );
+			$this->log_conversion_error( $e->getMessage(), $plugin_settings );
 			throw $e;
 		}
 	}

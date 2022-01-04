@@ -33,7 +33,7 @@ class OutputPath {
 	 *
 	 * @return string[] Server paths for output images.
 	 */
-	public static function get_paths( string $path, bool $create_dir = false, array $file_extensions = [] ): array {
+	public static function get_paths( string $path, bool $create_dir = false, array $file_extensions = null ): array {
 		$new_path = self::get_directory_path( $path );
 		if ( $new_path && $create_dir && ! self::make_directories( self::check_directories( $new_path ) ) ) {
 			return [];
@@ -43,7 +43,7 @@ class OutputPath {
 		$paths      = [];
 		foreach ( $extensions as $extension ) {
 			$output_path = sprintf( '%1$s.%2$s', $new_path, $extension );
-			if ( in_array( $extension, $file_extensions, true ) ) {
+			if ( ( $file_extensions === null ) || in_array( $extension, $file_extensions, true ) ) {
 				$paths[] = $output_path;
 			}
 		}

@@ -94,9 +94,6 @@ final class Wicked_Folders {
 			'Wicked_Folders_Screen_State' 					=> 'lib/class-wicked-folders-screen-state.php',
 			'Wicked_Folders_Ajax' 							=> 'lib/class-wicked-folders-ajax.php',
 			'Wicked_Folders_Admin' 							=> 'lib/class-wicked-folders-admin.php',
-			'Wicked_Folders_WP_List_Table' 					=> 'lib/class-wicked-folders-wp-list-table.php',
-			'Wicked_Folders_WP_Posts_List_Table' 			=> 'lib/class-wicked-folders-wp-posts-list-table.php',
-			'Wicked_Folders_Posts_List_Table' 				=> 'lib/class-wicked-folders-posts-list-table.php',
 			'Wicked_Folders_Folder' 						=> 'lib/class-wicked-folders-folder.php',
 			'Wicked_Folders_Tree_View' 						=> 'lib/class-wicked-folders-tree-view.php',
 			'Wicked_Folders_Term_Folder' 					=> 'lib/class-wicked-folders-term-folder.php',
@@ -109,10 +106,6 @@ final class Wicked_Folders {
 			'Wicked_Folders_Post_Hierarchy_Dynamic_Folder' 	=> 'lib/class-wicked-folders-post-hierarchy-dynamic-folder.php',
 			'Wicked_Folders_Object_Collection' 				=> 'lib/class-wicked-folders-object-collection.php',
         );
-
-		if ( version_compare( get_bloginfo( 'version' ), '4.7.0', '<' ) ) {
-			$files['Wicked_Folders_WP_List_Table'] = 'lib/compat/class-wicked-folders-wp-list-table.php';
-		}
 
         if ( array_key_exists( $class, $files ) ) {
             $file = dirname( dirname( __FILE__ ) ) . '/' . $files[ $class ];
@@ -1211,18 +1204,24 @@ final class Wicked_Folders {
 
 		$meta_key = '_wicked_folder_order__' . $taxonomy . '__' . $folder_id;
 
-		$wpdb->query( "
-			INSERT INTO
-				{$wpdb->prefix}postmeta (post_id, meta_key, meta_value)
-			SELECT
-				p.ID, '{$meta_key}', 0
-			FROM
-				{$wpdb->prefix}posts p
-			INNER JOIN
-				{$wpdb->prefix}term_relationships tr ON p.ID = tr.object_id
-			WHERE
-				tr.term_taxonomy_id = {$folder_id} AND p.ID NOT IN (SELECT post_Id FROM {$wpdb->prefix}postmeta WHERE meta_key = '{$meta_key}')
-		" );
+		$wpdb->query(
+			$wpdb->prepare( "
+				INSERT INTO
+					{$wpdb->prefix}postmeta (post_id, meta_key, meta_value)
+				SELECT
+					p.ID, %s, 0
+				FROM
+					{$wpdb->prefix}posts p
+				INNER JOIN
+					{$wpdb->prefix}term_relationships tr ON p.ID = tr.object_id
+				WHERE
+					tr.term_taxonomy_id = %d AND p.ID NOT IN (SELECT post_Id FROM {$wpdb->prefix}postmeta WHERE meta_key = %s)
+			",
+			$meta_key,
+			$folder_id,
+			$meta_key
+			)
+		);
 
 	}
 

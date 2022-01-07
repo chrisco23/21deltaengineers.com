@@ -21,9 +21,9 @@ class Schedules implements HookableInterface {
 	/**
 	 * Adds new cron schedule.
 	 *
-	 * @param array[] $schedules Cron schedules.
+	 * @param mixed[] $schedules Cron schedules.
 	 *
-	 * @return array[] Cron schedules.
+	 * @return mixed[] Cron schedules.
 	 * @internal
 	 */
 	public function add_cron_interval( array $schedules ): array {

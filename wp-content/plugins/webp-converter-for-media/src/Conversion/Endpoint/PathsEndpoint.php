@@ -79,7 +79,7 @@ class PathsEndpoint extends EndpointAbstract {
 	 *
 	 * @param bool $skip_converted Skip converted images?
 	 *
-	 * @return array[] Server paths of source images.
+	 * @return string[] Server paths of source images.
 	 */
 	public function get_paths( bool $skip_converted = false ): array {
 		$settings = $this->plugin_data->get_plugin_settings();

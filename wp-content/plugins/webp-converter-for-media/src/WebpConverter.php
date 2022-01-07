@@ -11,6 +11,7 @@ use WebpConverter\Error\ErrorDetectorAggregator;
 use WebpConverter\Notice;
 use WebpConverter\Plugin;
 use WebpConverter\Repository\TokenRepository;
+use WebpConverter\Service;
 use WebpConverter\Settings\Page;
 
 /**
@@ -44,7 +45,6 @@ class WebpConverter {
 		( new Media\Upload( $plugin_data ) )->init_hooks();
 		( new Plugin\Activation( $plugin_info ) )->init_hooks();
 		( new Plugin\Deactivation( $plugin_info ) )->init_hooks();
-		( new Plugin\Deactivation\Modal( $plugin_info, $plugin_data ) )->init_hooks();
 		( new Plugin\Links( $plugin_info ) )->init_hooks();
 		( new Plugin\Uninstall( $plugin_info ) )->init_hooks();
 		( new Plugin\Update( $plugin_info ) )->init_hooks();
@@ -52,5 +52,6 @@ class WebpConverter {
 			->set_page_integration( new Page\SettingsPage( $plugin_info, $plugin_data, $token_repository ) )
 			->set_page_integration( new Page\DebugPage( $plugin_info, $plugin_data ) )
 			->init_hooks();
+		( new Service\DeactivationModalGenerator( $plugin_info, $plugin_data ) )->load_modal();
 	}
 }

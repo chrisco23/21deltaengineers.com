@@ -217,10 +217,10 @@ class RemoteMethod extends MethodAbstract {
 	}
 
 	/**
-	 * @param array[] $source_paths    .
+	 * @param mixed[] $source_paths    .
 	 * @param mixed[] $plugin_settings .
 	 *
-	 * @return array[]
+	 * @return mixed[]
 	 *
 	 * @throws Exception\RemoteErrorResponseException
 	 */

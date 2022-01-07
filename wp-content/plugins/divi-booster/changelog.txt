@@ -1,3 +1,6 @@
+= 3.6.9 =
+* Clarified wording on top header options
+
 = 3.6.8 =
 * Custom icons updated to work with Divi extended icons
 

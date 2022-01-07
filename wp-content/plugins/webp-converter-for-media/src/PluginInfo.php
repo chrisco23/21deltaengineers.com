@@ -56,6 +56,10 @@ class PluginInfo {
 		return $this->plugin_basename;
 	}
 
+	public function get_plugin_slug(): string {
+		return dirname( $this->plugin_basename );
+	}
+
 	public function get_plugin_directory_path(): string {
 		return $this->plugin_directory_path;
 	}

@@ -450,6 +450,9 @@ This is all very important to us and allows us to do even better things for you!
 
 == Changelog ==
 
+= 4.0.5 (2022-01-04) =
+* `[Changed]` Modal when deactivating plugin
+
 = 4.0.4 (2021-12-30) =
 * `[Changed]` opcache.revalidate_freq parameter in PHP configuration to avoid problems while updating plugin
 

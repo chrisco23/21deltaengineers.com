@@ -79,7 +79,7 @@ class RegenerateEndpoint extends EndpointAbstract {
 	 * @param string[] $paths            Server paths of source images.
 	 * @param bool     $regenerate_force .
 	 *
-	 * @return array[]|false Status of conversion.
+	 * @return mixed[]|false Status of conversion.
 	 */
 	public function convert_images( array $paths, bool $regenerate_force ) {
 		$response = ( new MethodIntegrator( $this->plugin_data ) )->init_conversion( $paths, $regenerate_force );

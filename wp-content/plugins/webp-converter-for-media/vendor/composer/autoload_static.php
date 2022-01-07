@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit80287993f128e7a857f0f2db132eda4f
+class ComposerStaticInit06bd0f8602a789a0b580aa412578d7f3
 {
     public static $prefixLengthsPsr4 = array (
         'W' => 
@@ -21,6 +21,20 @@ class ComposerStaticInit80287993f128e7a857f0f2db132eda4f
     );
 
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Exception\\DuplicatedFormOptionKeyException' => __DIR__ . '/../..' . '/vendor_prefixed/src/Exception/DuplicatedFormOptionKeyException.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Exception\\DuplicatedFormValueKeyException' => __DIR__ . '/../..' . '/vendor_prefixed/src/Exception/DuplicatedFormValueKeyException.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Exception\\UnknownFormOptionKeyException' => __DIR__ . '/../..' . '/vendor_prefixed/src/Exception/UnknownFormOptionKeyException.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Hookable' => __DIR__ . '/../..' . '/vendor_prefixed/src/Hookable.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Modal' => __DIR__ . '/../..' . '/vendor_prefixed/src/Modal.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Model\\FormOption' => __DIR__ . '/../..' . '/vendor_prefixed/src/Model/FormOption.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Model\\FormOptions' => __DIR__ . '/../..' . '/vendor_prefixed/src/Model/FormOptions.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Model\\FormTemplate' => __DIR__ . '/../..' . '/vendor_prefixed/src/Model/FormTemplate.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Model\\FormValue' => __DIR__ . '/../..' . '/vendor_prefixed/src/Model/FormValue.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Model\\FormValues' => __DIR__ . '/../..' . '/vendor_prefixed/src/Model/FormValues.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Model\\RequestData' => __DIR__ . '/../..' . '/vendor_prefixed/src/Model/RequestData.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Service\\AssetsPrinterService' => __DIR__ . '/../..' . '/vendor_prefixed/src/Service/AssetsPrinterService.php',
+        'WebpConverterVendor\\MattPlugins\\DeactivationModal\\Service\\TemplateGeneratorService' => __DIR__ . '/../..' . '/vendor_prefixed/src/Service/TemplateGeneratorService.php',
         'WebpConverter\\Action\\ConvertAttachment' => __DIR__ . '/../..' . '/src/Action/ConvertAttachment.php',
         'WebpConverter\\Action\\ConvertDir' => __DIR__ . '/../..' . '/src/Action/ConvertDir.php',
         'WebpConverter\\Action\\ConvertPaths' => __DIR__ . '/../..' . '/src/Action/ConvertPaths.php',
@@ -136,7 +150,6 @@ class ComposerStaticInit80287993f128e7a857f0f2db132eda4f
         'WebpConverter\\Plugin\\Activation\\WebpDirectory' => __DIR__ . '/../..' . '/src/Plugin/Activation/WebpDirectory.php',
         'WebpConverter\\Plugin\\Deactivation' => __DIR__ . '/../..' . '/src/Plugin/Deactivation.php',
         'WebpConverter\\Plugin\\Deactivation\\CronReset' => __DIR__ . '/../..' . '/src/Plugin/Deactivation/CronReset.php',
-        'WebpConverter\\Plugin\\Deactivation\\Modal' => __DIR__ . '/../..' . '/src/Plugin/Deactivation/Modal.php',
         'WebpConverter\\Plugin\\Deactivation\\RefreshLoader' => __DIR__ . '/../..' . '/src/Plugin/Deactivation/RefreshLoader.php',
         'WebpConverter\\Plugin\\Links' => __DIR__ . '/../..' . '/src/Plugin/Links.php',
         'WebpConverter\\Plugin\\Uninstall' => __DIR__ . '/../..' . '/src/Plugin/Uninstall.php',
@@ -146,6 +159,7 @@ class ComposerStaticInit80287993f128e7a857f0f2db132eda4f
         'WebpConverter\\Plugin\\Uninstall\\WebpFiles' => __DIR__ . '/../..' . '/src/Plugin/Uninstall/WebpFiles.php',
         'WebpConverter\\Plugin\\Update' => __DIR__ . '/../..' . '/src/Plugin/Update.php',
         'WebpConverter\\Repository\\TokenRepository' => __DIR__ . '/../..' . '/src/Repository/TokenRepository.php',
+        'WebpConverter\\Service\\DeactivationModalGenerator' => __DIR__ . '/../..' . '/src/Service/DeactivationModalGenerator.php',
         'WebpConverter\\Service\\FileLoader' => __DIR__ . '/../..' . '/src/Service/FileLoader.php',
         'WebpConverter\\Service\\OptionsAccessManager' => __DIR__ . '/../..' . '/src/Service/OptionsAccessManager.php',
         'WebpConverter\\Service\\ServerConfigurator' => __DIR__ . '/../..' . '/src/Service/ServerConfigurator.php',
@@ -178,9 +192,9 @@ class ComposerStaticInit80287993f128e7a857f0f2db132eda4f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit80287993f128e7a857f0f2db132eda4f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit80287993f128e7a857f0f2db132eda4f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit80287993f128e7a857f0f2db132eda4f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit06bd0f8602a789a0b580aa412578d7f3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit06bd0f8602a789a0b580aa412578d7f3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit06bd0f8602a789a0b580aa412578d7f3::$classMap;
 
         }, null, ClassLoader::class);
     }

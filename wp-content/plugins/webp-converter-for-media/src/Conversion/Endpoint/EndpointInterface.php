@@ -17,7 +17,7 @@ interface EndpointInterface {
 	/**
 	 * Returns list of params for endpoint.
 	 *
-	 * @return array[] Params of endpoint.
+	 * @return mixed[] Params of endpoint.
 	 */
 	public function get_route_args(): array;
 

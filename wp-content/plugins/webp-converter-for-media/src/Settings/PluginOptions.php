@@ -24,9 +24,9 @@ class PluginOptions {
 	 * Returns options of plugin settings.
 	 *
 	 * @param bool         $is_debug        Is debugging?
-	 * @param array[]|null $posted_settings Settings submitted in form.
+	 * @param mixed[]|null $posted_settings Settings submitted in form.
 	 *
-	 * @return array[] Options of plugin settings.
+	 * @return mixed[] Options of plugin settings.
 	 */
 	public function get_options( bool $is_debug = false, array $posted_settings = null ): array {
 		$is_save  = ( $posted_settings !== null );
@@ -43,9 +43,9 @@ class PluginOptions {
 	 * Returns values of plugin settings.
 	 *
 	 * @param bool         $is_debug        Is debugging?
-	 * @param array[]|null $posted_settings Settings submitted in form.
+	 * @param mixed[]|null $posted_settings Settings submitted in form.
 	 *
-	 * @return array[] Values of plugin settings.
+	 * @return mixed[] Values of plugin settings.
 	 */
 	public function get_values( bool $is_debug = false, array $posted_settings = null ): array {
 		$values = [];

@@ -18,6 +18,7 @@ if (!function_exists('dbdbsmsn_set_image_icon_frontend_styles')) {
 	function dbdbsmsn_set_image_icon_frontend_styles($html, $render_slug, $module) {
 		if ($render_slug === 'et_pb_social_media_follow_network' && isset($module->props['social_network'])) {
             if ($module->props['social_network'] === 'dbdb-custom-image') {
+                // [dbdb_image__hover_enabled] => on|hover [dbdb_image__hover] => http://localhost/dev/nightly/20220104/divi-booster-KOb/wordpress/wp-content/uploads/2022/01/200x200-forest.png )
                 if (!empty($module->props['dbdb_image'])) {
                     ET_Builder_Element::set_style(
                         $render_slug, 
@@ -33,6 +34,17 @@ if (!function_exists('dbdbsmsn_set_image_icon_frontend_styles')) {
                             'declaration' => 'content:"a"; visibility:hidden;' // need content so icon positioned same as font icons
                         )
                     );
+                    if (isset($module->props['dbdb_image__hover_enabled']) && $module->props['dbdb_image__hover_enabled'] === 'on|hover') {
+                        if (!empty($module->props['dbdb_image__hover'])) {
+                            ET_Builder_Element::set_style(
+                                $render_slug, 
+                                array(
+                                    'selector'    => '%%order_class%%.et-social-dbdb-custom-image a:hover',
+                                    'declaration' => "background-image: url('".esc_html($module->props['dbdb_image__hover'])."');"
+                                )
+                            );
+                        }
+                    }
                 }
             } 
 		}

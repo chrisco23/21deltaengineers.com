@@ -1,6 +1,6 @@
 <?php
 
-add_filter('DBDBCustomIcon_font_icon_symbols_priority', 'dbdb_compat_diviiconking_defer_icon_registration');
+add_filter('DBDBExtendedIcon_font_icon_symbols_priority', 'dbdb_compat_diviiconking_defer_icon_registration');
 add_action('dbdb_014-add-new-icons_after', 'dbdb_compat_diviiconking_add_icon_picker_filter_link');
 
 if (!function_exists('dbdb_compat_diviiconking_add_icon_picker_filter_link')) {

@@ -3,7 +3,7 @@ Contributors: mateuszgbiorczyk
 Donate link: https://ko-fi.com/gbiorczyk/?utm_source=webp-converter-for-media&utm_medium=readme-donate
 Tags: convert webp, webp, optimize images, compress images, webp converter
 Requires at least: 4.9
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 7.0
 Stable tag: trunk
 License: GPLv2 or later
@@ -120,7 +120,7 @@ Practically every hosting meets these requirements. You must use PHP at least 7.
 
 They are required native PHP extensions, used among others by WordPress to generate thumbnails. Your server must also have the modules `mod_mime`, `mod_rewrite` and `mod_expires` enabled.
 
-An example of the correct server configuration can be found [here](https://gbiorczyk.pl/webp-converter/serverinfo.png). Link to your current configuration can be found in the administration panel, on the management plugin page in the section **"We are waiting for your message"** *(or using the URL path: `/wp-admin/options-general.php?page=webpc_admin_page&action=server`)*.
+An example of the correct server configuration can be found [here](https://mattplugins.com/files/webp-server-config.png). Link to your current configuration can be found in the administration panel, on the management plugin page in the section **"We are waiting for your message"** *(or using the URL path: `/wp-admin/options-general.php?page=webpc_admin_page&action=server`)*.
 
 **Note the items marked in red.** If the values marked in red do not appear in your case, it means that your server does not meet the technical requirements. Pay attention to the **WebP Support** value for the GD library and **WEBP in the list of supported extensions** for the Imagick library.
 
@@ -373,63 +373,6 @@ and add below code in this file *(add these lines to very beginning of file if p
 
 After making changes, remember to restart the machine: `systemctl restart nginx`.
 
-= Configuration for Multisite Network =
-
-Multisite Network mode works fine but requires adding configuration manually.
-
-Please manually paste the following code **at the beginning of .htaccess file** in the `/wp-content` directory:
-
-`# BEGIN WebP Converter`
-`# ! --- DO NOT EDIT PREVIOUS LINE --- !`
-`<IfModule mod_rewrite.c>
-	RewriteEngine On
-	RewriteCond %{HTTP_ACCEPT} image/avif
-	RewriteCond %{DOCUMENT_ROOT}/wp-content/uploads-webpc/$1.jpg.avif -f
-	RewriteRule (.+)\.jpg$ /wp-content/uploads-webpc/$1.jpg.avif [NC,T=image/avif,L]
-	RewriteCond %{HTTP_ACCEPT} image/avif
-	RewriteCond %{DOCUMENT_ROOT}/wp-content/uploads-webpc/$1.jpeg.avif -f
-	RewriteRule (.+)\.jpeg$ /wp-content/uploads-webpc/$1.jpeg.avif [NC,T=image/avif,L]
-	RewriteCond %{HTTP_ACCEPT} image/avif
-	RewriteCond %{DOCUMENT_ROOT}/wp-content/uploads-webpc/$1.png.avif -f
-	RewriteRule (.+)\.png$ /wp-content/uploads-webpc/$1.png.avif [NC,T=image/avif,L]
-</IfModule>
-<IfModule mod_rewrite.c>
-	RewriteEngine On
-	RewriteCond %{HTTP_ACCEPT} image/webp
-	RewriteCond %{DOCUMENT_ROOT}/wp-content/uploads-webpc/$1.jpg.webp -f
-	RewriteRule (.+)\.jpg$ /wp-content/uploads-webpc/$1.jpg.webp [NC,T=image/webp,L]
-	RewriteCond %{HTTP_ACCEPT} image/webp
-	RewriteCond %{DOCUMENT_ROOT}/wp-content/uploads-webpc/$1.jpeg.webp -f
-	RewriteRule (.+)\.jpeg$ /wp-content/uploads-webpc/$1.jpeg.webp [NC,T=image/webp,L]
-	RewriteCond %{HTTP_ACCEPT} image/webp
-	RewriteCond %{DOCUMENT_ROOT}/wp-content/uploads-webpc/$1.png.webp -f
-	RewriteRule (.+)\.png$ /wp-content/uploads-webpc/$1.png.webp [NC,T=image/webp,L]
-</IfModule>
-<IfModule mod_headers.c>
-  Header Set Cache-Control "private"
-</IfModule>`
-`# ! --- DO NOT EDIT NEXT LINE --- !`
-`# END WebP Converter`
-
-And the following code **at the beginning of .htaccess file** in the `/wp-content/uploads-webpc` directory:
-
-`# BEGIN WebP Converter`
-`# ! --- DO NOT EDIT PREVIOUS LINE --- !`
-`<IfModule mod_mime.c>
-	AddType image/webp .webp
-	AddType image/avif .avif
-</IfModule>
-<IfModule mod_expires.c>
-	ExpiresActive On
-	ExpiresByType image/webp "access plus 1 year"
-	ExpiresByType image/avif "access plus 1 year"
-</IfModule>
-<IfModule mod_headers.c>
-  Header Set Cache-Control "private"
-</IfModule>`
-`# ! --- DO NOT EDIT NEXT LINE --- !`
-`# END WebP Converter`
-
 = Is the plugin completely free? =
 
 The plugin is free and you can use it without restrictions. We also offer a paid version that allows for additional functionalities
@@ -444,35 +387,24 @@ This is all very important to us and allows us to do even better things for you!
 
 == Screenshots ==
 
-1. How to start using plugin few moments?
-2. Screenshot of the options panel
-3. Screenshot when regenerating images
+1. Screenshot of the options panel
+2. Screenshot when regenerating images
 
 == Changelog ==
 
-= 4.0.5 (2022-01-04) =
-* `[Changed]` Modal when deactivating plugin
+= 4.1.1 (2022-01-19) =
+* `[Fixed]` Loading images with special character in filename using Pass Thru method
+* `[Changed]` Error messages on plugin settings page
+* `[Added]` Value hiding for access token in plugin settings
 
-= 4.0.4 (2021-12-30) =
-* `[Changed]` opcache.revalidate_freq parameter in PHP configuration to avoid problems while updating plugin
-
-= 4.0.3 (2021-12-20) =
-* `[Fixed]` Auto-conversion images with unsupported extensions when uploading files
-* `[Fixed]` Generating directory paths when ABSPATH constant is invalid
-* `[Added]` URL validation for Pass Thru loading mode
-
-= 4.0.2 (2021-12-17) =
-* `[Fixed]` Fetching large list of files to conversion
-* `[Fixed]` Rewrites caching for some servers
-* `[Changed]` Connection when converting using remote server
-
-= 4.0.1 (2021-12-10) =
-* `[Added]` Informational banners on plugin settings page
-
-= 4.0.0 (2021-12-04) =
-* `[Added]` Converting images using remote server
-* `[Added]` Converting images to AVIF format
-* `[Added]` Error detection for invalid permalinks structure
+= 4.1.0 (2022-01-12) =
+* `[Fixed]` Auto-generation of rewrite rules for Multisite Network
+* `[Fixed]` Detection of server configuration error related to non-working rewrites
+* `[Fixed]` URL validation for Pass Thru loading mode
+* `[Fixed]` Verification of supported formats by Imagick
+* `[Changed]` Error messages on plugin settings page
+* `[Changed]` Styles for plugin settings page
+* `[Added]` Debug information about PHP configuration
 
 See [changelog.txt](https://plugins.svn.wordpress.org/webp-converter-for-media/trunk/changelog.txt) for previous versions.
 

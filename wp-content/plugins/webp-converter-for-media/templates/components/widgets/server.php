@@ -44,6 +44,7 @@
 				require_once dirname( __DIR__ ) . '/server/filters.php';
 				require_once dirname( __DIR__ ) . '/server/wordpress.php';
 				require_once dirname( __DIR__ ) . '/server/debug.php';
+				require_once dirname( __DIR__ ) . '/server/php.php';
 				require_once dirname( __DIR__ ) . '/server/gd.php';
 				require_once dirname( __DIR__ ) . '/server/imagick.php';
 				?>

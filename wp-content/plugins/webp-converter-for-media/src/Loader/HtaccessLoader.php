@@ -25,10 +25,6 @@ class HtaccessLoader extends LoaderAbstract {
 	 * {@inheritdoc}
 	 */
 	public function activate_loader( bool $is_debug = false ) {
-		if ( is_multisite() ) {
-			return;
-		}
-
 		$settings = ( $is_debug ) ? $this->plugin_data->get_debug_settings() : $this->plugin_data->get_plugin_settings();
 
 		$this->add_rewrite_rules_to_wp_content( true, $settings );
@@ -40,10 +36,6 @@ class HtaccessLoader extends LoaderAbstract {
 	 * {@inheritdoc}
 	 */
 	public function deactivate_loader() {
-		if ( is_multisite() ) {
-			return;
-		}
-
 		$settings = $this->plugin_data->get_plugin_settings();
 
 		$this->add_rewrite_rules_to_wp_content( false, $settings );

@@ -14,7 +14,7 @@ class Plugin {
 	 * Plugin version
 	 * @var string
 	 */
-	const VERSION = '2.1.5.1';
+	const VERSION = '2.1.5.5';
 
 	/**
 	 * The slug of the plugin; used in actions, filters, i18n, table names, etc.
@@ -238,6 +238,7 @@ class Plugin {
 	 * @return void
 	 */
 	public function run_static_export() {
+		do_action( 'ss_before_static_export' );
 		$this->archive_creation_job->start();
 	}
 
@@ -265,6 +266,7 @@ class Plugin {
 				}
 			} else {
 				// Cron is unavaiable.
+				do_action( 'ss_before_static_export' );
 				$this->archive_creation_job->start();
 			}
 		} elseif ( $action === 'cancel' ) {

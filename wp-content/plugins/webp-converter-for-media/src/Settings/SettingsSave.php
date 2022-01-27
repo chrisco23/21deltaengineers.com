@@ -57,16 +57,19 @@ class SettingsSave {
 			return;
 		}
 
+		$saved_settings = $this->plugin_data->get_plugin_settings();
 		if ( isset( $_POST[ self::SUBMIT_VALUE ] ) ) {
 			$plugin_settings = ( new PluginOptions() )->get_values( false, $_POST );
 		} else {
-			$plugin_settings = $this->plugin_data->get_plugin_settings();
+			$plugin_settings = $saved_settings;
 		}
 
 		if ( isset( $_POST[ self::SUBMIT_TOKEN_ACTIVATE ] ) ) {
 			$plugin_settings[ AccessTokenOption::OPTION_NAME ] = sanitize_text_field( $_POST[ AccessTokenOption::OPTION_NAME ] ?: '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 		} elseif ( isset( $_POST[ self::SUBMIT_TOKEN_DEACTIVATE ] ) ) {
 			$plugin_settings[ AccessTokenOption::OPTION_NAME ] = '';
+		} elseif ( substr( $plugin_settings[ AccessTokenOption::OPTION_NAME ], -32 ) === str_repeat( '*', 32 ) ) {
+			$plugin_settings[ AccessTokenOption::OPTION_NAME ] = $saved_settings[ AccessTokenOption::OPTION_NAME ];
 		}
 
 		$token = $this->token_validator->validate_token( $plugin_settings[ AccessTokenOption::OPTION_NAME ] );

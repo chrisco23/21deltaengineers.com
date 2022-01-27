@@ -1,10 +1,24 @@
 == Changelog ==
 
+= 4.1.1 (2022-01-19) =
+* `[Fixed]` Loading images with special character in filename using Pass Thru method
+* `[Changed]` Error messages on plugin settings page
+* `[Added]` Value hiding for access token in plugin settings
+
+= 4.1.0 (2022-01-12) =
+* `[Fixed]` Auto-generation of rewrite rules for Multisite Network
+* `[Fixed]` Detection of server configuration error related to non-working rewrites
+* `[Fixed]` URL validation for Pass Thru loading mode
+* `[Fixed]` Verification of supported formats by Imagick
+* `[Changed]` Error messages on plugin settings page
+* `[Changed]` Styles for plugin settings page
+* `[Added]` Debug information about PHP configuration
+
 = 4.0.5 (2022-01-04) =
 * `[Changed]` Modal when deactivating plugin
 
 = 4.0.4 (2021-12-30) =
-* `[Changed]` opcache.revalidate_freq parameter in PHP configuration to avoid problems while updating plugin
+* `[Changed]` Message after successfully completing conversion of images
 
 = 4.0.3 (2021-12-20) =
 * `[Fixed]` Auto-conversion images with unsupported extensions when uploading files

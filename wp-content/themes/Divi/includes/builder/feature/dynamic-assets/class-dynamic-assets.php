@@ -2025,6 +2025,9 @@ class ET_Dynamic_Assets {
 	 * @since 4.10.0
 	 */
 	public function maybe_add_global_modules_content( $content ) {
+		// Ensure the $content is valid string.
+		$content = is_string( $content ) ? $content : '';
+
 		preg_match_all( '@global_module="(\d+)"@', $content, $matches );
 
 		$global_modules = $this->get_unique_array_values( $matches[1], $this->_global_modules );
@@ -2062,6 +2065,9 @@ class ET_Dynamic_Assets {
 	public function get_early_shortcodes( $content ) {
 		$shortcodes        = array_keys( $this->get_shortcode_assets_list( false ) );
 		$processed_content = $this->maybe_add_global_modules_content( $content );
+
+		// Ensure the $processed_content is valid string.
+		$processed_content = is_string( $processed_content ) ? $processed_content : '';
 
 		preg_match_all( '@\[([^<>&/\[\]\x00-\x20=]++)@', $processed_content, $matches );
 
@@ -2604,6 +2610,9 @@ class ET_Dynamic_Assets {
 	 * @since 4.10.0
 	 */
 	public function check_if_attribute_exits( $attribute, $content ) {
+		// Ensure the $content is valid string.
+		$content = is_string( $content ) ? $content : '';
+
 		$has_attribute = preg_match( '/' . $attribute . '=".+"/', $content );
 
 		if ( ! empty( $this->_presets_attributes ) ) {
@@ -2624,6 +2633,9 @@ class ET_Dynamic_Assets {
 	 * @since 4.10.5
 	 */
 	public function check_if_class_exits( $class, $content ) {
+		// Ensure the $content is valid string.
+		$content = is_string( $content ) ? $content : '';
+
 		return preg_match( '/class=".*' . preg_quote( $class, '/' ) . '/', $content );
 	}
 
@@ -2681,6 +2693,61 @@ class ET_Dynamic_Assets {
 		$all         = $this->get_global_assets_list();
 		$assets      = $all;
 		$has_btf     = ! empty( $content->btf );
+
+		global $post;
+
+		$post_id = ! empty( $post ) ? intval( $post->ID ) : 0;
+
+		if ( $post_id > 0 ) {
+			/**
+			 * Filters omit image attributes.
+			 *
+			 * @param array $img_attrs Image attributes.
+			 *
+			 * @since ??
+			 */
+			$additional_img_attrs = apply_filters( 'et_dynamic_assets_atf_omit_image_attributes', [] );
+			$default_img_attrs    = array(
+				'src',
+				'image_url',
+				'image',
+				'logo_image_url',
+				'header_image_url',
+				'logo',
+				'portrait_url',
+				'image_src',
+			);
+
+			if ( ! is_array( $additional_img_attrs ) ) {
+				$additional_img_attrs = [];
+			}
+
+			$sanitized_additional_img_attrs = [];
+			foreach ( $additional_img_attrs as $attr ) {
+				$sanitized_additional_img_attrs[] = sanitize_text_field( $attr );
+			}
+
+			$img_attrs   = array_merge( $default_img_attrs, $sanitized_additional_img_attrs );
+			$img_pattern = '';
+
+			foreach ( $img_attrs as $img_attr ) {
+				$or_conj      = ! empty( $img_pattern ) ? '|' : '';
+				$img_pattern .= "{$or_conj}({$img_attr}=)";
+			}
+
+			$result = preg_match_all( '/' . $img_pattern . '/', $content_atf, $matches );
+
+			$matched_attrs = $result ? count( $matches[0] ) : 0;
+			$skip_images   = max( $matched_attrs, 0 );
+
+			if ( $skip_images > 1 ) {
+				update_post_meta(
+					$post_id,
+					'_et_builder_dynamic_assets_loading_attr_threshold',
+					$skip_images
+				);
+			}
+		}
 
 		$atf = array_keys( $atf );
 		$all = array_keys( $all );

@@ -214,6 +214,8 @@ class ET_Builder_Block_Editor_Integration {
 			'status'      => get_site_option( 'et_account_status', 'not_active' ),
 		);
 
+		$library_i18n = require ET_BUILDER_DIR . 'frontend-builder/i18n/library.php';
+
 		// Set helpers needed by our own Gutenberg bundle.
 		$gutenberg = array(
 			'helpers'       => array(
@@ -243,6 +245,7 @@ class ET_Builder_Block_Editor_Integration {
 							'default' => esc_html__( 'Use Default Editor', 'et_builder' ),
 						),
 					),
+					'library'     => $library_i18n,
 				),
 			),
 
@@ -308,6 +311,28 @@ class ET_Builder_Block_Editor_Integration {
 
 		// Set translated strings for the scripts.
 		wp_set_script_translations( 'et-builder-gutenberg', 'et_builder', ET_BUILDER_DIR . 'languages' );
+
+		// Block Editor Styles.
+		// Divi Layout Block.
+		wp_register_style( 'et-block-divi-library-editor', ET_BUILDER_URI . '/frontend-builder/assets/css/block-editor/divi-library-editor.css', array(), ET_BUILDER_VERSION );
+		wp_register_style( 'et-block-layout-editor', ET_BUILDER_URI . '/frontend-builder/assets/css/block-editor/layout-editor.css', array( 'et-block-divi-library-editor' ), ET_BUILDER_VERSION );
+
+		register_block_type(
+			'et-block-editor/et-block-layout-editor-stylesheets',
+			array(
+				'editor_style' => 'et-block-layout-editor',
+			)
+		);
+
+		// Divi Placeholder Block.
+		wp_register_style( 'et-block-placeholder-editor', ET_BUILDER_URI . '/frontend-builder/assets/css/block-editor/placeholder-editor.css', array( 'et-core-admin' ), ET_BUILDER_VERSION );
+
+		register_block_type(
+			'et-block-editor/et-block-placeholder-editor-stylesheets',
+			array(
+				'editor_style' => 'et-block-placeholder-editor',
+			)
+		);
 	}
 
 	/**

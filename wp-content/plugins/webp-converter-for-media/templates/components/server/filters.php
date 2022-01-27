@@ -23,19 +23,19 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="e">webpc_dir_path <em>(plugins )</em></td>
+		<td class="e">webpc_dir_path <em>(plugins)</em></td>
 		<td class="v">
 			<?php echo esc_html( apply_filters( 'webpc_dir_path', '', 'plugins' ) ); ?>
 		</td>
 	</tr>
 	<tr>
-		<td class="e">webpc_dir_path <em>(themes )</em></td>
+		<td class="e">webpc_dir_path <em>(themes)</em></td>
 		<td class="v">
 			<?php echo esc_html( apply_filters( 'webpc_dir_path', '', 'themes' ) ); ?>
 		</td>
 	</tr>
 	<tr>
-		<td class="e">webpc_dir_path <em>(uploads )</em></td>
+		<td class="e">webpc_dir_path <em>(uploads)</em></td>
 		<td class="v">
 			<?php echo esc_html( apply_filters( 'webpc_dir_path', '', 'uploads' ) ); ?>
 		</td>
@@ -50,6 +50,12 @@
 		<td class="e">webpc_uploads_prefix</td>
 		<td class="v">
 			<?php echo esc_html( apply_filters( 'webpc_uploads_prefix', '/' ) ); ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="e">webpc_htaccess_prefix_rule</td>
+		<td class="v">
+			<?php echo esc_html( apply_filters( 'webpc_htaccess_prefix_rule', apply_filters( 'webpc_uploads_prefix', '/' ) ) ); ?>
 		</td>
 	</tr>
 	</tbody>

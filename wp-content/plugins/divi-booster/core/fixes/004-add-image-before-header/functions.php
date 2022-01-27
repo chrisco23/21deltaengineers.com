@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) { exit(); } // No direct access
 function db004_user_css($plugin) { ?>
 /* Change header to float correctly wherever it is in the page */
 @media only screen and ( min-width:981px ) {
-	#main-header { position:relative !important; top:0px !important; } /* inline */
+	body:not(.et_transparent_nav.et_non_fixed_nav) #main-header { position:relative !important; top:0px !important; } /* inline */
 	#main-header.et-fixed-header { position:fixed !important; margin-bottom:0px; top:0px !important; } /* floating */
 	body.admin-bar #main-header.et-fixed-header { top:32px !important; } /* adjust for WP admin bar */
 	#page-container { overflow:hidden; } /* prevent sub-menus from breaking scrolling */
@@ -64,7 +64,8 @@ add_action('wp_head.css', 'db004_user_css');
 
 function db004_user_js($plugin) { ?>
 jQuery(function($){
-	$("#wtfdivi004-page-start-img").prependTo($("body")).show();	
+	$("#wtfdivi004-page-start-img").prependTo($("body")).show();
+    $(".et_transparent_nav.et_non_fixed_nav #main-header").css('margin-top', (100*($("#wtfdivi004-page-start-img").height())/$("#wtfdivi004-page-start-img").width())+'%');
 });
 <?php 
 }

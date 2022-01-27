@@ -6,6 +6,7 @@ use WebpConverter\Error\Notice\LibsNotInstalledNotice;
 use WebpConverter\Error\Notice\LibsWithoutWebpSupportNotice;
 use WebpConverter\PluginData;
 use WebpConverter\PluginInfo;
+use WebpConverter\Settings\Option\AccessTokenOption;
 use WebpConverter\Settings\Page\PageIntegration;
 use WebpConverterVendor\MattPlugins\DeactivationModal;
 
@@ -133,7 +134,13 @@ class DeactivationModalGenerator {
 					new DeactivationModal\Model\FormValue(
 						'request_plugin_settings',
 						function () {
-							$settings_json = json_encode( $this->plugin_data->get_plugin_settings() );
+							$plugin_settings = $this->plugin_data->get_plugin_settings();
+							$access_token    = $plugin_settings[ AccessTokenOption::OPTION_NAME ] ?? '';
+							if ( $access_token ) {
+								$plugin_settings[ AccessTokenOption::OPTION_NAME ] = substr( $access_token, 0, 32 ) . str_repeat( '*', 32 );
+							}
+
+							$settings_json = json_encode( $plugin_settings );
 							return base64_encode( $settings_json ?: '' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 						}
 					)

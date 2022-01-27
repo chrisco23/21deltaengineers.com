@@ -33,10 +33,10 @@ function db014_migrate_icons_callback($matches) {
 // End: Upgrade old icons
 
 function db014_register_icons() {
-	if (!class_exists('DBDBCustomIcon')) { return; }
+	if (!class_exists('DBDBExtendedIcon')) { return; }
 	foreach(db014_get_icon_urls() as $id=>$url) {
 		if (!empty($url)) {
-			(new DBDBCustomIcon($id, $url))->init();
+			(new DBDBExtendedIcon($id, $url))->init();
 		}
 	}
 }

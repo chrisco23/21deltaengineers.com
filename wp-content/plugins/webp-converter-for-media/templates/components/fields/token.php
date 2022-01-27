@@ -11,6 +11,10 @@
  * @package WebP Converter for Media
  */
 
+$token_value = ( $token_valid_status )
+	? substr( $option['value'], 0, 32 ) . str_repeat( '*', 32 )
+	: $option['value'];
+
 ?>
 <?php if ( $option['info'] ) : ?>
 	<p><?php echo wp_kses_post( $option['info'] ); ?></p>
@@ -18,7 +22,7 @@
 <div class="webpInput">
 	<input type="text"
 		name="<?php echo esc_attr( $option['name'] ); ?>"
-		value="<?php echo esc_attr( $option['value'] ); ?>"
+		value="<?php echo esc_attr( $token_value ); ?>"
 		id="<?php echo esc_attr( $option['name'] ); ?>"
 		class="webpInput__field"
 		<?php echo ( $token_valid_status ) ? 'readonly' : ''; ?>

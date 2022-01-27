@@ -154,7 +154,7 @@ class RewritesErrorsDetector implements ErrorDetector {
 			$ver_param
 		);
 
-		return ( $file_webp < $file_size );
+		return ( ( $file_webp > 0 ) && ( $file_webp < $file_size ) );
 	}
 
 	/**

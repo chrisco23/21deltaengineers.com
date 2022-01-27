@@ -16,13 +16,13 @@
 <table>
 	<tbody>
 	<tr>
-		<td class="e">Size of PNG <em>(by server path )</em></td>
+		<td class="e">Size of PNG <em>(by server path)</em></td>
 		<td class="v">
 			<?php echo esc_html( $size_png_path ); ?>
 		</td>
 	</tr>
 	<tr>
-		<td class="e">Size of PNG2 <em>(by server path )</em></td>
+		<td class="e">Size of PNG2 <em>(by server path)</em></td>
 		<td class="v">
 			<?php echo esc_html( $size_png2_path ); ?>
 		</td>

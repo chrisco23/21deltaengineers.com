@@ -1,3 +1,16 @@
+= 3.7.2 =
+* Mobile content width setting now applies to speciality sections
+
+= 3.7.1 =
+* Fixed cannot redeclare function error
+* Fixed transparent header offset not applied when adding image above header
+
+= 3.7.0 = 
+* Added custom social media icon hover support
+* Minor improvements to custom icon feature
+* Renamed custom icon class to avoid conflict with code in related post
+* Custom icons now shown in fullwidth header module scroll down icon picker
+
 = 3.6.9 =
 * Clarified wording on top header options
 

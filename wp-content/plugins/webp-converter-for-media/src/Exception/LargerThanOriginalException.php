@@ -7,7 +7,7 @@ namespace WebpConverter\Exception;
  */
 class LargerThanOriginalException extends ExceptionAbstract {
 
-	const ERROR_MESSAGE = 'Image "%1$s" converted to .%2$s is larger than original and has been deleted.';
+	const ERROR_MESSAGE = 'Image "%1$s" converted to .%2$s is larger than original and converted .%2$s file has been deleted.';
 	const ERROR_CODE    = 'larger_than_original';
 
 	/**

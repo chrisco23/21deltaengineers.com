@@ -9,9 +9,10 @@ use WebpConverter\Service\OptionsAccessManager;
  */
 class ThanksNotice extends NoticeAbstract implements NoticeInterface {
 
-	const NOTICE_OPTION     = 'webpc_notice_thanks';
-	const NOTICE_OLD_OPTION = 'webpc_notice_hidden';
-	const NOTICE_VIEW_PATH  = 'components/notices/thanks.php';
+	const NOTICE_OPTION      = 'webpc_notice_thanks';
+	const NOTICE_OLD_OPTION  = 'webpc_notice_hidden';
+	const NOTICE_VIEW_PATH   = 'components/notices/thanks.php';
+	const NOTICE_ACTION_NAME = 'webpc_notice_thanks';
 
 	/**
 	 * {@inheritdoc}
@@ -47,7 +48,7 @@ class ThanksNotice extends NoticeAbstract implements NoticeInterface {
 	 */
 	public function get_disable_value(): string {
 		$is_permanent = ( isset( $_REQUEST['is_permanently'] ) && $_REQUEST['is_permanently'] ); // phpcs:ignore
-		return (string) strtotime( ( $is_permanent ) ? '+6 months' : '+ 1 month' );
+		return (string) strtotime( ( $is_permanent ) ? '+1 year' : '+ 1 month' );
 	}
 
 	/**
@@ -62,7 +63,8 @@ class ThanksNotice extends NoticeAbstract implements NoticeInterface {
 	 */
 	public function get_vars_for_view(): array {
 		return [
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'ajax_url'     => admin_url( 'admin-ajax.php' ),
+			'close_action' => self::NOTICE_ACTION_NAME,
 		];
 	}
 
@@ -70,6 +72,6 @@ class ThanksNotice extends NoticeAbstract implements NoticeInterface {
 	 * {@inheritdoc}
 	 */
 	public function get_ajax_action_to_disable(): string {
-		return 'webpc_notice';
+		return self::NOTICE_ACTION_NAME;
 	}
 }

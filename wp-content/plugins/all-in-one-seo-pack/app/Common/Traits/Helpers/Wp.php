@@ -66,7 +66,8 @@ trait Wp {
 		}
 	}
 
-	/** Whether or not we should enqueue a file.
+	/**
+	 * Whether or not we should enqueue a file.
 	 *
 	 * @since 4.0.0
 	 *
@@ -219,6 +220,14 @@ trait Wp {
 
 		$postStatuses = [];
 		foreach ( $allStatuses as $status => $data ) {
+			if (
+				! $data->public &&
+				! $data->protected &&
+				! $data->private
+			) {
+				continue;
+			}
+
 			if ( $statusesOnly ) {
 				$postStatuses[] = $status;
 				continue;
@@ -585,5 +594,23 @@ trait Wp {
 
 		$mofile = $domain . '-' . get_user_locale() . '.mo';
 		load_textdomain( $domain, WP_LANG_DIR . '/plugins/' . $mofile );
+	}
+
+	/**
+	 * Get the page builder the given Post ID was built with.
+	 *
+	 * @since 4.1.7
+	 *
+	 * @param  int         $postId The Post ID.
+	 * @return bool|string         The page builder or false if not built with page builders.
+	 */
+	public function getPostPageBuilderName( $postId ) {
+		foreach ( aioseo()->postSettings->integrations as $integration => $pageBuilder ) {
+			if ( $pageBuilder->isBuiltWith( $postId ) ) {
+				return $integration;
+			}
+		}
+
+		return false;
 	}
 }

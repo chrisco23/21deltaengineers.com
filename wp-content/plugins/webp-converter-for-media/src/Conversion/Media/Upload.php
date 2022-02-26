@@ -2,9 +2,10 @@
 
 namespace WebpConverter\Conversion\Media;
 
+use WebpConverter\Conversion\Cron\CronInitiator;
 use WebpConverter\HookableInterface;
 use WebpConverter\PluginData;
-use WebpConverter\Settings\Option\ExtraFeaturesOption;
+use WebpConverter\Repository\TokenRepository;
 use WebpConverter\Settings\Option\SupportedExtensionsOption;
 
 /**
@@ -18,14 +19,24 @@ class Upload implements HookableInterface {
 	private $plugin_data;
 
 	/**
+	 * @var CronInitiator
+	 */
+	private $cron_initiator;
+
+	/**
 	 * Paths of converted images.
 	 *
 	 * @var string[]
 	 */
-	private $converted_paths = [];
+	private $uploaded_paths = [];
 
-	public function __construct( PluginData $plugin_data ) {
-		$this->plugin_data = $plugin_data;
+	public function __construct(
+		PluginData $plugin_data,
+		TokenRepository $token_repository,
+		CronInitiator $cron_initiator = null
+	) {
+		$this->plugin_data    = $plugin_data;
+		$this->cron_initiator = $cron_initiator ?: new CronInitiator( $plugin_data, $token_repository );
 	}
 
 	/**
@@ -56,13 +67,11 @@ class Upload implements HookableInterface {
 			return $data;
 		}
 
-		$paths = $this->get_sizes_paths( $data );
-		$paths = apply_filters( 'webpc_attachment_paths', $paths, $attachment_id );
+		$paths                = $this->get_sizes_paths( $data );
+		$paths                = apply_filters( 'webpc_attachment_paths', $paths, $attachment_id );
+		$this->uploaded_paths = array_merge( $this->uploaded_paths, $paths );
 
-		$paths                 = array_diff( $paths, $this->converted_paths );
-		$this->converted_paths = array_merge( $this->converted_paths, $paths );
-
-		$this->init_conversion( $paths );
+		add_action( 'shutdown', [ $this, 'save_paths_to_conversion' ] );
 
 		return $data;
 	}
@@ -104,19 +113,17 @@ class Upload implements HookableInterface {
 	}
 
 	/**
-	 * Initializes conversion of attachment image sizes.
-	 *
-	 * @param string[] $paths Server paths of source images.
-	 *
 	 * @return void
+	 *
+	 * @internal
 	 */
-	private function init_conversion( array $paths ) {
-		$settings = $this->plugin_data->get_plugin_settings();
-
-		if ( in_array( ExtraFeaturesOption::OPTION_VALUE_CRON_CONVERSION, $settings[ ExtraFeaturesOption::OPTION_NAME ] ) ) {
-			wp_schedule_single_event( ( time() + 1 ), 'webpc_convert_paths', [ $paths ] );
-		} else {
-			do_action( 'webpc_convert_paths', $paths );
+	public function save_paths_to_conversion() {
+		$paths = array_unique( $this->uploaded_paths );
+		if ( ! $paths ) {
+			return;
 		}
+
+		$this->cron_initiator->add_paths_to_conversion( $paths );
+		$this->cron_initiator->init_async_conversion();
 	}
 }

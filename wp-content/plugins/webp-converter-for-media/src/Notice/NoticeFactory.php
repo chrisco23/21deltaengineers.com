@@ -25,6 +25,7 @@ class NoticeFactory implements HookableInterface {
 	public function init_hooks() {
 		$this->set_integration( new ThanksNotice() );
 		$this->set_integration( new WelcomeNotice() );
+		$this->set_integration( new CloudflareNotice() );
 	}
 
 	/**

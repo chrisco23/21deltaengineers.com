@@ -16,6 +16,12 @@
 		</td>
 	</tr>
 	<tr>
+		<td class="e">DOCUMENT_ROOT</td>
+		<td class="v">
+			<?php echo esc_html( $_SERVER['DOCUMENT_ROOT'] ?? '-' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput ?>
+		</td>
+	</tr>
+	<tr>
 		<td class="e">wp_upload_dir <em>(basedir)</em></td>
 		<td class="v">
 			<?php echo esc_html( wp_upload_dir()['basedir'] ); ?>

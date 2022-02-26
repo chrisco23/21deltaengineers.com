@@ -1,5 +1,32 @@
 == Changelog ==
 
+= 4.2.2 (2022-02-21) =
+* `[Changed]` Error message for bypassing_apache error in server configuration
+* `[Added]` Automatic continuation of conversion process after connection lost
+* `[Added]` ICC/ICM profile support for conversion using Imagick
+* `[Added]` Notification asking to clear cache for Cloudflare
+
+= 4.2.1 (2022-02-17) =
+* `[Fixed]` Cache settings for .htaccess rewrites
+* `[Added]` Limit for error messages displayed while converting
+* `[Added]` Support for plain permalink structure
+
+= 4.2.0 (2022-02-13) =
+* `[Removed]` Action `webpc_regenerate_all`
+* `[Fixed]` Issue with plugin settings after changing Gd or Imagick library configuration
+* `[Fixed]` Server configuration error detection when cURL is disabled
+* `[Fixed]` URL for the server configuration tab
+* `[Changed]` Automatically conversion of images after upload
+* `[Changed]` Automatically conversion of images from outside the Media Library
+* `[Changed]` Message for conversion error when converted file is larger than original
+* `[Added]` List of allowed file extensions for cache rules in .htaccess file
+* `[Added]` Status of automatic image conversion on the top bar in the WordPress Dashboard
+* `[Added]` Debug information about plugin settings
+
+= 4.1.2 (2022-01-29) =
+* `[Fixed]` Validation of authorization token when images regeneration
+* `[Fixed]` Validation of loaded images using Pass Thru method
+
 = 4.1.1 (2022-01-19) =
 * `[Fixed]` Loading images with special character in filename using Pass Thru method
 * `[Changed]` Error messages on plugin settings page

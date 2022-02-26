@@ -23,17 +23,16 @@ trait Vue {
 	 * @param  string $page The current page.
 	 * @return array        The data.
 	 */
-	public function getVueData( $page = null ) {
-		$postTypeObj = get_post_type_object( get_post_type( get_the_ID() ) );
-		$screen      = get_current_screen();
+	public function getVueData( $page = null, $staticPostId = null, $integration = null ) {
+		$screen = aioseo()->helpers->getCurrentScreen();
 
 		$isStaticHomePage = 'page' === get_option( 'show_on_front' );
 		$staticHomePage   = intval( get_option( 'page_on_front' ) );
 		$data = [
 			'page'             => $page,
 			'screen'           => [
-				'base'        => $screen->base,
-				'postType'    => $screen->post_type,
+				'base'        => isset( $screen->base ) ? $screen->base : '',
+				'postType'    => isset( $screen->post_type ) ? $screen->post_type : '',
 				'blockEditor' => isset( $screen->is_block_editor ) ? $screen->is_block_editor : false,
 				'new'         => isset( $screen->action ) && 'add' === $screen->action
 			],
@@ -134,7 +133,8 @@ trait Vue {
 			'helpPanel'        => json_decode( aioseo()->help->getDocs() ),
 			'scheduledActions' => [
 				'sitemaps' => []
-			]
+			],
+			'integration'      => $integration
 		];
 
 		if ( is_multisite() && ! is_network_admin() ) {
@@ -146,7 +146,8 @@ trait Vue {
 		}
 
 		if ( 'post' === $page ) {
-			$postId              = get_the_ID();
+			$postId              = $staticPostId ? $staticPostId : get_the_ID();
+			$postTypeObj         = get_post_type_object( get_post_type( $postId ) );
 			$post                = Models\Post::getPost( $postId );
 
 			$data['currentPost'] = [
@@ -161,7 +162,7 @@ trait Vue {
 				'keywords'                       => ! empty( $post->keywords ) ? $post->keywords : wp_json_encode( [] ),
 				'keyphrases'                     => ! empty( $post->keyphrases )
 					? json_decode( $post->keyphrases )
-					: json_decode( '{"focus":{},"additional":[]}' ),
+					: Models\Post::getKeyphrasesDefaults(),
 				'page_analysis'                  => ! empty( $post->page_analysis )
 					? json_decode( $post->page_analysis )
 					: Models\Post::getPageAnalysisDefaults(),
@@ -221,6 +222,10 @@ trait Vue {
 					'modalOpen' => false
 				]
 			];
+
+			if ( empty( $integration ) ) {
+				$data['integration'] = aioseo()->helpers->getPostPageBuilderName( $postId );
+			}
 
 			if ( ! $post->exists() ) {
 				$oldPostMeta = aioseo()->migration->meta->getMigratedPostMeta( $postId );

@@ -419,6 +419,9 @@ trait Strings {
 	 * @return string              The imploded array.
 	 */
 	public function implodeWhereIn( $array, $outerQuotes = false ) {
+		// Reset the keys first in case there is no 0 index.
+		$array = array_values( $array );
+
 		if ( ! isset( $array[0] ) ) {
 			return '';
 		}

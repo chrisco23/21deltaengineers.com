@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect
 // phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact
 $description           = aioseo()->helpers->encodeOutputHtml( aioseo()->meta->description->getDescription() );
-$robots                = $this->robots->meta();
+$robots                = aioseo()->meta->robots->meta();
 $keywords              = $this->keywords->getKeywords();
 $canonical             = aioseo()->helpers->canonicalUrl();
 $links                 = $this->links->getLinks();

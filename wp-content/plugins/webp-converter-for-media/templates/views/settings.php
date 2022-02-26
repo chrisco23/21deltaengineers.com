@@ -8,6 +8,8 @@
  * @var string     $submit_value            Value of submit button.
  * @var string     $submit_activate_token   .
  * @var string     $submit_deactivate_token .
+ * @var string     $nonce_input_name        .
+ * @var string     $nonce_input_value       .
  * @var bool       $token_valid_status      .
  * @var string     $settings_url            URL of plugin settings page (default view).
  * @var string     $settings_debug_url      URL of plugin settings page (debug view).

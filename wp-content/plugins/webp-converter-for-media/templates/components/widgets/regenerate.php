@@ -8,6 +8,8 @@
  * @package WebP Converter for Media
  */
 
+use WebpConverter\WebpConverterConstants;
+
 ?>
 <div class="webpPage__widget">
 	<h3 class="webpPage__widgetTitle">
@@ -20,7 +22,7 @@
 	>
 		<div class="webpPage__widgetRow">
 			<p>
-				<?php echo wp_kses_post( __( 'Convert all existing images with just one click! This tool uses the WordPress REST API by downloading addresses of all images and converting all files gradually. This is a process that may take a few or more than ten minutes depending on the number of files. During this process, please do not close your browser window.', 'webp-converter-for-media' ) ); ?>
+				<?php echo wp_kses_post( __( 'Convert all existing images with just one click! This tool uses the WordPress REST API by downloading addresses of all images and converting all files gradually. This is a process that can take anywhere from several minutes to many hours depending on the number of files. During this process, please do not close your browser window.', 'webp-converter-for-media' ) ); ?>
 			</p>
 			<p>
 				<?php echo wp_kses_post( __( 'This operation should be performed only once after installing the plugin. New images from the Media Library will be converted automatically. For other images, e.g. from the /themes or /uploads directory that are not from the Media Library, you must start manual conversion after adding new images.', 'webp-converter-for-media' ) ); ?>
@@ -67,18 +69,18 @@
 									echo wp_kses_post(
 										sprintf(
 										/* translators: %s break line tag */
-											__( 'Hello, my name is Mateusz! %sI am glad you managed to reduce the weight of your website. If you would like to support me in developing this plugin, I will be very grateful to you! If every plugin user did it, I could devote myself fully to working on this plugin.', 'webp-converter-for-media' ),
+											__( 'Hello, my name is Mateusz! %sI am glad you managed to reduce the weight of your website. If you would like to support me in developing this plugin and achieve even better image conversion results using AVIF format, check out the PRO version of my plugin.', 'webp-converter-for-media' ),
 											'<br>'
 										)
 									);
 									?>
 								</p>
 								<p>
-									<a href="https://ko-fi.com/gbiorczyk/?utm_source=webp-converter-for-media&utm_medium=notice-regenerate"
+									<a href="<?php echo esc_url( sprintf( WebpConverterConstants::UPGRADE_PRO_PREFIX_URL, 'regeneration-notice-upgrade' ) ); ?>"
 										target="_blank"
-										class="webpButton webpButton--blue dashicons-coffee"
+										class="webpButton webpButton--blue dashicons-external"
 									>
-										<?php echo wp_kses_post( __( 'Provide me a coffee', 'webp-converter-for-media' ) ); ?>
+										<?php echo wp_kses_post( __( 'Meet the PRO version', 'webp-converter-for-media' ) ); ?>
 									</a>
 								</p>
 							</div>

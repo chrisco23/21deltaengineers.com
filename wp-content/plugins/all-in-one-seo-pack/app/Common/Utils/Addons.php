@@ -657,6 +657,37 @@ class Addons {
 				'installed'          => false,
 				'isActive'           => false,
 				'canInstall'         => false
+			],
+			[
+				'sku'                => 'aioseo-index-now',
+				'name'               => 'IndexNow',
+				'version'            => '1.0.0',
+				'image'              => null,
+				'icon'               => 'svg-sitemaps-pro',
+				'levels'             => [
+					'agency',
+					'basic',
+					'plus',
+					'pro',
+					'elite'
+				],
+				'currentLevels'      => [
+					'basic',
+					'plus',
+					'pro',
+					'elite'
+				],
+				'requiresUpgrade'    => false,
+				'description'        => '<p>Add IndexNow support to instantly notify search engines when your content has changed. This helps the search engines to prioritize the changes on your website and helps you rank faster.</p>', // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+				'descriptionVersion' => 0,
+				'downloadUrl'        => '',
+				'productUrl'         => 'https://aioseo.com/index-now',
+				'learnMoreUrl'       => 'https://aioseo.com/index-now',
+				'manageUrl'          => 'https://route#aioseo-settings:webmaster-tools',
+				'basename'           => 'aioseo-index-now/aioseo-index-now.php',
+				'installed'          => false,
+				'isActive'           => false,
+				'canInstall'         => false
 			]
 		] ) );
 	}

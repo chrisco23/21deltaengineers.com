@@ -55,14 +55,21 @@ class PageIntegration implements HookableInterface {
 	/**
 	 * Returns URL of plugin settings page.
 	 *
+	 * @param string|null $action .
+	 *
 	 * @return string
 	 */
-	public static function get_settings_page_url(): string {
+	public static function get_settings_page_url( string $action = null ): string {
 		if ( ! is_multisite() ) {
-			return menu_page_url( self::ADMIN_MENU_PAGE, false );
+			$page_url = menu_page_url( self::ADMIN_MENU_PAGE, false );
 		} else {
-			return network_admin_url( 'settings.php?page=' . self::ADMIN_MENU_PAGE );
+			$page_url = network_admin_url( 'settings.php?page=' . self::ADMIN_MENU_PAGE );
 		}
+
+		if ( $action !== null ) {
+			$page_url .= '&action=' . $action;
+		}
+		return $page_url;
 	}
 
 	/**

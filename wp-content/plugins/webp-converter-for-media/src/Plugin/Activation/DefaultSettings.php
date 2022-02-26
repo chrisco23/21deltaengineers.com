@@ -2,6 +2,7 @@
 
 namespace WebpConverter\Plugin\Activation;
 
+use WebpConverter\Notice\CloudflareNotice;
 use WebpConverter\Notice\NoticeIntegration;
 use WebpConverter\Notice\ThanksNotice;
 use WebpConverter\Notice\WelcomeNotice;
@@ -26,8 +27,9 @@ class DefaultSettings {
 	 *
 	 * @return void
 	 */
-	public function add_default_options() {
+	public function add_default_notices_values() {
 		( new NoticeIntegration( $this->plugin_info, new ThanksNotice() ) )->set_default_value();
 		( new NoticeIntegration( $this->plugin_info, new WelcomeNotice() ) )->set_default_value();
+		( new NoticeIntegration( $this->plugin_info, new CloudflareNotice() ) )->set_default_value();
 	}
 }

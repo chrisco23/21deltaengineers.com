@@ -15,6 +15,15 @@ use AIOSEO\Plugin\Common\Models;
  */
 class PostSettings {
 	/**
+	 * The integration objects for our PostSettings.
+	 *
+	 * @since 4.1.7
+	 *
+	 * @var array
+	 */
+	public $integrations = [];
+
+	/**
 	 * Initialize the admin.
 	 *
 	 * @since 4.0.0
@@ -22,21 +31,41 @@ class PostSettings {
 	 * @return void
 	 */
 	public function __construct() {
-		if ( is_admin() ) {
-			// Load Vue APP.
-			add_action( 'admin_enqueue_scripts', [ $this, 'enqueuePostSettingsAssets' ] );
+		// This needs to run here before page builders use AJAX to save.
+		$this->loadIntegrations();
 
-			// Add metabox.
-			add_action( 'add_meta_boxes', [ $this, 'addPostSettingsMetabox' ] );
-
-			// Add metabox to terms on init hook.
-			add_action( 'init', [ $this, 'init' ], 1000 );
-
-			// Save metabox.
-			add_action( 'save_post', [ $this, 'saveSettingsMetabox' ] );
-			add_action( 'edit_attachment', [ $this, 'saveSettingsMetabox' ] );
-			add_action( 'add_attachment', [ $this, 'saveSettingsMetabox' ] );
+		if ( wp_doing_ajax() || wp_doing_cron() || ! is_admin() ) {
+			return;
 		}
+
+		// Load Vue APP.
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueuePostSettingsAssets' ] );
+
+		// Add metabox.
+		add_action( 'add_meta_boxes', [ $this, 'addPostSettingsMetabox' ] );
+
+		// Add metabox to terms on init hook.
+		add_action( 'init', [ $this, 'init' ], 1000 );
+
+		// Save metabox.
+		add_action( 'save_post', [ $this, 'saveSettingsMetabox' ] );
+		add_action( 'edit_attachment', [ $this, 'saveSettingsMetabox' ] );
+		add_action( 'add_attachment', [ $this, 'saveSettingsMetabox' ] );
+	}
+
+	/**
+	 * Load the Page Builder integrations.
+	 *
+	 * @since 4.1.7
+	 *
+	 * @return void
+	 */
+	public function loadIntegrations() {
+		$this->integrations = [
+			'elementor' => new Integrations\Elementor(),
+			'divi'      => new Integrations\Divi(),
+			'seedprod'  => new Integrations\SeedProd()
+		];
 	}
 
 	/**
@@ -109,16 +138,15 @@ class PostSettings {
 	}
 
 	/**
-	 * Adds a meta box to page/posts screens.
+	 * Check whether or not we can add the metabox.
 	 *
-	 * @since 4.0.0
+	 * @since 4.1.7
 	 *
-	 * @return void
+	 * @param  string  $postType The post type to check.
+	 * @return boolean           Whether or not can add the Metabox.
 	 */
-	public function addPostSettingsMetabox() {
+	public function canAddPostSettingsMetabox( $postType ) {
 		$dynamicOptions = aioseo()->dynamicOptions->noConflict();
-		$screen         = get_current_screen();
-		$postType       = $screen->post_type;
 
 		$pageAnalysisSettingsCapability = aioseo()->access->hasCapability( 'aioseo_page_analysis' );
 		$generalSettingsCapability      = aioseo()->access->hasCapability( 'aioseo_page_general_settings' );
@@ -139,6 +167,24 @@ class PostSettings {
 				empty( $advancedSettingsCapability )
 			)
 		) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Adds a meta box to page/posts screens.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @return void
+	 */
+	public function addPostSettingsMetabox() {
+		$screen   = get_current_screen();
+		$postType = $screen->post_type;
+
+		if ( $this->canAddPostSettingsMetabox( $postType ) ) {
 			// Translators: 1 - The plugin short name ("AIOSEO").
 			$aioseoMetaboxTitle = sprintf( esc_html__( '%1$s Settings', 'all-in-one-seo-pack' ), AIOSEO_PLUGIN_SHORT_NAME );
 

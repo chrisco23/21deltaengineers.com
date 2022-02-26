@@ -6,6 +6,8 @@
  * @var string  $submit_value            Value of submit button.
  * @var string  $submit_activate_token   .
  * @var string  $submit_deactivate_token .
+ * @var string  $nonce_input_name        .
+ * @var string  $nonce_input_value       .
  * @var bool    $token_valid_status      .
  * @var string  $settings_debug_url      URL of plugin settings page (debug view).
  * @var string  $api_calculate_url       URL of REST API endpoint.
@@ -38,7 +40,12 @@
 			</div>
 		<?php endforeach; ?>
 		<div class="webpPage__widgetRow">
-			<button type="submit" name="<?php echo esc_attr( $submit_value ); ?>"
+			<input type="hidden"
+				name="<?php echo esc_attr( $nonce_input_name ); ?>"
+				value="<?php echo esc_attr( $nonce_input_value ); ?>"
+			>
+			<button type="submit"
+				name="<?php echo esc_attr( $submit_value ); ?>"
 				class="webpButton webpButton--green"
 			>
 				<?php echo esc_html( __( 'Save Changes', 'webp-converter-for-media' ) ); ?>

@@ -4,22 +4,28 @@ namespace WebpConverter\Plugin;
 
 use WebpConverter\HookableInterface;
 use WebpConverter\PluginInfo;
+use WebpConverter\Repository\TokenRepository;
 use WebpConverter\Settings\Page\PageIntegration;
+use WebpConverter\WebpConverterConstants;
 
 /**
  * Adds links to plugin in list of plugins in panel.
  */
 class Links implements HookableInterface {
 
-	const DONATION_URL = 'https://ko-fi.com/gbiorczyk/?utm_source=webp-converter-for-media&utm_medium=plugin-links';
-
 	/**
 	 * @var PluginInfo
 	 */
 	private $plugin_info;
 
-	public function __construct( PluginInfo $plugin_info ) {
-		$this->plugin_info = $plugin_info;
+	/**
+	 * @var TokenRepository
+	 */
+	private $token_repository;
+
+	public function __construct( PluginInfo $plugin_info, TokenRepository $token_repository ) {
+		$this->plugin_info      = $plugin_info;
+		$this->token_repository = $token_repository;
 	}
 
 	/**
@@ -44,7 +50,7 @@ class Links implements HookableInterface {
 		}
 
 		$links = $this->add_link_to_settings( $links );
-		return $this->add_link_to_donate( $links );
+		return $this->add_link_to_pro_upgrade( $links );
 	}
 
 	/**
@@ -57,12 +63,10 @@ class Links implements HookableInterface {
 	 */
 	public function add_plugin_links_for_network( array $links ): array {
 		$links = $this->add_link_to_settings( $links );
-		return $this->add_link_to_donate( $links );
+		return $this->add_link_to_pro_upgrade( $links );
 	}
 
 	/**
-	 * Adds link to plugin settings page.
-	 *
 	 * @param string[] $links Plugin action links.
 	 *
 	 * @return string[] Plugin action links.
@@ -81,18 +85,21 @@ class Links implements HookableInterface {
 	}
 
 	/**
-	 * Adds link to donation.
-	 *
 	 * @param string[] $links Plugin action links.
 	 *
 	 * @return string[] Plugin action links.
 	 * @internal
 	 */
-	private function add_link_to_donate( array $links ): array {
-		$links[] = sprintf(
+	private function add_link_to_pro_upgrade( array $links ): array {
+		if ( $this->token_repository->get_token()->get_valid_status() ) {
+			return $links;
+		}
+
+		$upgrade_url = sprintf( WebpConverterConstants::UPGRADE_PRO_PREFIX_URL, 'plugin-links-upgrade' );
+		$links[]     = sprintf(
 		/* translators: %1$s: open anchor tag, %2$s: close anchor tag */
-			esc_html( __( '%1$sProvide us a coffee%2$s', 'webp-converter-for-media' ) ),
-			'<a href="' . self::DONATION_URL . '" target="_blank">',
+			esc_html( __( '%1$sUpgrade to PRO%2$s', 'webp-converter-for-media' ) ),
+			'<a href="' . esc_url( $upgrade_url ) . '" target="_blank" style="font-weight: bold;">',
 			'</a>'
 		);
 		return $links;

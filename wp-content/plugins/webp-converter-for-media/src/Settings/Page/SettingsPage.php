@@ -10,6 +10,7 @@ use WebpConverter\Loader\LoaderAbstract;
 use WebpConverter\PluginData;
 use WebpConverter\PluginInfo;
 use WebpConverter\Repository\TokenRepository;
+use WebpConverter\Service\NonceManager;
 use WebpConverter\Service\ViewLoader;
 use WebpConverter\Settings\PluginOptions;
 use WebpConverter\Settings\SettingsSave;
@@ -68,17 +69,11 @@ class SettingsPage extends PageAbstract {
 				'submit_value'            => SettingsSave::SUBMIT_VALUE,
 				'submit_activate_token'   => SettingsSave::SUBMIT_TOKEN_ACTIVATE,
 				'submit_deactivate_token' => SettingsSave::SUBMIT_TOKEN_DEACTIVATE,
+				'nonce_input_name'        => SettingsSave::NONCE_PARAM_KEY,
+				'nonce_input_value'       => ( new NonceManager() )->generate_nonce( SettingsSave::NONCE_PARAM_VALUE ),
 				'token_valid_status'      => $this->token_repository->get_token()->get_valid_status(),
-				'settings_url'            => sprintf(
-					'%1$s&%2$s=%3$s',
-					PageIntegration::get_settings_page_url(),
-					SettingsSave::NONCE_PARAM_KEY,
-					wp_create_nonce( SettingsSave::NONCE_PARAM_VALUE )
-				),
-				'settings_debug_url'      => sprintf(
-					'%s&action=server',
-					PageIntegration::get_settings_page_url()
-				),
+				'settings_url'            => PageIntegration::get_settings_page_url(),
+				'settings_debug_url'      => PageIntegration::get_settings_page_url( 'server' ),
 				'api_calculate_url'       => ( new ImagesCounterEndpoint( $this->plugin_data, $this->token_repository ) )->get_route_url(),
 				'api_paths_url'           => ( new PathsEndpoint( $this->plugin_data, $this->token_repository ) )->get_route_url(),
 				'api_regenerate_url'      => ( new RegenerateEndpoint( $this->plugin_data ) )->get_route_url(),

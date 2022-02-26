@@ -13,8 +13,12 @@ use WebpConverter\Settings\Option\SupportedExtensionsOption;
  */
 class ImagickMethod extends LibraryMethodAbstract {
 
-	const METHOD_NAME        = 'imagick';
-	const MAX_METHOD_QUALITY = 99.9;
+	const METHOD_NAME              = 'imagick';
+	const MAX_METHOD_QUALITY       = 99.9;
+	const PROTECTED_IMAGE_PROFILES = [
+		'icc',
+		'icm',
+	];
 
 	/**
 	 * {@inheritdoc}
@@ -106,7 +110,12 @@ class ImagickMethod extends LibraryMethodAbstract {
 
 		$image->setImageFormat( $extension );
 		if ( ! in_array( ExtraFeaturesOption::OPTION_VALUE_KEEP_METADATA, $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ] ) ) {
-			$image->stripImage();
+			$image_profiles = $image->getImageProfiles( '*', true );
+			foreach ( $image_profiles as $profile_name => $image_profile ) {
+				if ( ! in_array( $profile_name, self::PROTECTED_IMAGE_PROFILES ) ) {
+					$image->removeImageProfile( $profile_name );
+				}
+			}
 		}
 		$image->setImageCompressionQuality( $output_quality );
 		$blob = $image->getImageBlob();

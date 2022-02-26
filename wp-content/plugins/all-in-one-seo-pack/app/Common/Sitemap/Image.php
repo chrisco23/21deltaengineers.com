@@ -142,7 +142,7 @@ class Image {
 			return;
 		}
 
-		$postContent = $this->doShortcodes( $post->post_content );
+		$postContent = $this->doShortcodes( $post->post_content, $post->ID );
 		// Trim both internal and external whitespace.
 		$postContent = preg_replace( '/\s\s+/u', ' ', trim( $postContent ) );
 
@@ -304,9 +304,10 @@ class Image {
 	 * @since 4.0.0
 	 *
 	 * @param  string $content The post content.
+	 * @param  int    $postId  The post ID.
 	 * @return string          The parsed post content.
 	 */
-	private function doShortcodes( $content ) {
+	private function doShortcodes( $content, $postId = null ) {
 		$shortcodes = apply_filters( 'aioseo_image_sitemap_allowed_shortcodes', [
 			'WordPress Core' => 'gallery',
 			'NextGen #1'     => 'ngg',
@@ -314,7 +315,7 @@ class Image {
 		] );
 		$wildcards  = apply_filters( 'aioseo_image_sitemap_allowed_wildcards', [ 'image', 'img', 'gallery' ] );
 
-		return aioseo()->helpers->doAllowedShortcodes( $content, $shortcodes, $wildcards );
+		return aioseo()->helpers->doAllowedShortcodes( $content, $shortcodes, $wildcards, $postId );
 	}
 
 	/**

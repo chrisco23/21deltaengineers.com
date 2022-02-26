@@ -852,49 +852,22 @@ class Admin {
 	 * @return void
 	 */
 	public function enqueueAssets() {
-		// Scripts.
-		aioseo()->helpers->enqueueScript(
-			'aioseo-vendors',
-			'js/chunk-vendors.js'
-		);
-		aioseo()->helpers->enqueueScript(
-			'aioseo-common',
-			'js/chunk-common.js'
-		);
+		aioseo()->helpers->enqueueChunkedAssets();
 		aioseo()->helpers->enqueueScript(
 			'aioseo-' . $this->currentPage . '-script',
 			'js/' . $this->currentPage . '.js'
 			// [ 'aioseo-common', 'aioseo-venders', 'aioseo-app' ]
 		);
 
-		// Styles.
-		$rtl = is_rtl() ? '.rtl' : '';
-		aioseo()->helpers->enqueueStyle(
-			'aioseo-vendors',
-			"css/chunk-vendors$rtl.css"
-		);
-		aioseo()->helpers->enqueueStyle(
-			'aioseo-common',
-			"css/chunk-common$rtl.css"
-		);
-		// aioseo()->helpers->enqueueStyle(
-		//  'aioseo-' . $this->currentPage . '-style',
-		//  'css/' . $this->currentPage . $rtl . '.css'
-		// );
-		// aioseo()->helpers->enqueueStyle(
-		//  'aioseo-' . $this->currentPage . '-vendors-style',
-		//  'css/chunk-' . $this->currentPage . $rtl . '-vendors.css'
-		// );
-
-		if ( ! apply_filters( 'aioseo_flyout_menu_disable', false ) ) {
-			$this->enqueueFlyoutMenu();
-		}
-
 		wp_localize_script(
 			'aioseo-' . $this->currentPage . '-script',
 			'aioseo',
 			aioseo()->helpers->getVueData( $this->currentPage )
 		);
+
+		if ( ! apply_filters( 'aioseo_flyout_menu_disable', false ) ) {
+			$this->enqueueFlyoutMenu();
+		}
 	}
 
 	/**
@@ -1013,18 +986,10 @@ class Admin {
 	 * @return void
 	 */
 	public function enqueuePostsScripts() {
-		// Scripts.
+		aioseo()->helpers->enqueueChunkedAssets();
 		aioseo()->helpers->enqueueScript(
 			'aioseo-posts-table',
 			'js/posts-table.js'
-		);
-		aioseo()->helpers->enqueueScript(
-			'aioseo-vendors',
-			'js/chunk-vendors.js'
-		);
-		aioseo()->helpers->enqueueScript(
-			'aioseo-common',
-			'js/chunk-common.js'
 		);
 
 		$data          = aioseo()->helpers->getVueData();
@@ -1036,16 +1001,7 @@ class Admin {
 			$data
 		);
 
-		// Styles.
 		$rtl = is_rtl() ? '.rtl' : '';
-		aioseo()->helpers->enqueueStyle(
-			'aioseo-vendors',
-			"css/chunk-vendors$rtl.css"
-		);
-		aioseo()->helpers->enqueueStyle(
-			'aioseo-common',
-			"css/chunk-common$rtl.css"
-		);
 		aioseo()->helpers->enqueueStyle(
 			'aioseo-posts-table-style',
 			"css/posts-table$rtl.css"

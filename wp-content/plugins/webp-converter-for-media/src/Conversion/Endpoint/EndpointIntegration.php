@@ -9,7 +9,9 @@ use WebpConverter\HookableInterface;
  */
 class EndpointIntegration implements HookableInterface {
 
-	const ROUTE_NAMESPACE = 'webp-converter/v1';
+	const ROUTE_NAMESPACE    = 'webp-converter/v1';
+	const ROUTE_NONCE_PARAM  = 'nonce_token';
+	const ROUTE_NONCE_ACTION = 'webpc_rest-%s';
 
 	/**
 	 * Objects of supported REST API endpoints.
@@ -41,9 +43,8 @@ class EndpointIntegration implements HookableInterface {
 			$this->endpoint_object->get_route_name(),
 			[
 				'methods'             => \WP_REST_Server::ALLMETHODS,
-				'permission_callback' => function () {
-					return ( wp_verify_nonce( $_REQUEST['_wpnonce'] ?? '', 'wp_rest' ) // phpcs:ignore
-						&& current_user_can( 'manage_options' ) );
+				'permission_callback' => function ( \WP_REST_Request $request ) {
+					return $this->endpoint_object->is_valid_request( $request );
 				},
 				'callback'            => [ $this->endpoint_object, 'get_route_response' ],
 				'args'                => $this->endpoint_object->get_route_args(),

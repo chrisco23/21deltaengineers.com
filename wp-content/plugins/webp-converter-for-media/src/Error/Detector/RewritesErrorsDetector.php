@@ -143,7 +143,7 @@ class RewritesErrorsDetector implements ErrorDetector {
 	private function if_redirects_are_works(): bool {
 		$uploads_dir = apply_filters( 'webpc_dir_path', '', 'uploads' );
 		$uploads_url = apply_filters( 'webpc_dir_url', '', 'uploads' );
-		$ver_param   = sprintf( 'ver=%s', time() );
+		$ver_param   = time();
 
 		$file_size = $this->file_loader->get_file_size_by_path(
 			$uploads_dir . self::PATH_OUTPUT_FILE_PNG
@@ -154,7 +154,16 @@ class RewritesErrorsDetector implements ErrorDetector {
 			$ver_param
 		);
 
-		return ( ( $file_webp > 0 ) && ( $file_webp < $file_size ) );
+		if ( $file_webp === 0 ) {
+			$file_original = $this->file_loader->get_file_size_by_url(
+				$uploads_url . self::PATH_OUTPUT_FILE_PNG,
+				false,
+				$ver_param
+			);
+			return ( $file_original === 0 );
+		}
+
+		return ( $file_webp < $file_size );
 	}
 
 	/**
@@ -163,8 +172,12 @@ class RewritesErrorsDetector implements ErrorDetector {
 	 * @return bool Verification status.
 	 */
 	private function if_htaccess_can_be_overwritten(): bool {
+		$ver_param = time();
+
 		$file_size = $this->file_loader->get_file_size_by_url(
-			$this->plugin_info->get_plugin_directory_url() . self::URL_DEBUG_HTACCESS_FILE
+			$this->plugin_info->get_plugin_directory_url() . self::URL_DEBUG_HTACCESS_FILE,
+			true,
+			$ver_param
 		);
 
 		return ( $file_size === 0 );
@@ -177,7 +190,7 @@ class RewritesErrorsDetector implements ErrorDetector {
 	 */
 	private function if_bypassing_apache_is_active(): bool {
 		$uploads_url = apply_filters( 'webpc_dir_url', '', 'uploads' );
-		$ver_param   = sprintf( '&?ver=%s', time() );
+		$ver_param   = time();
 
 		$file_png  = $this->file_loader->get_file_size_by_url(
 			$uploads_url . self::PATH_OUTPUT_FILE_PNG,
@@ -200,7 +213,7 @@ class RewritesErrorsDetector implements ErrorDetector {
 	 */
 	private function if_redirects_are_cached(): bool {
 		$uploads_url = apply_filters( 'webpc_dir_url', '', 'uploads' );
-		$ver_param   = sprintf( 'ver=%s', time() );
+		$ver_param   = time();
 
 		$file_webp     = $this->file_loader->get_file_size_by_url(
 			$uploads_url . self::PATH_OUTPUT_FILE_PNG,

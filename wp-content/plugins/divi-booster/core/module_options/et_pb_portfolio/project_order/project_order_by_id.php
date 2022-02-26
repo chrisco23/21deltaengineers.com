@@ -28,6 +28,7 @@ function dbdb_portfolio_order_option_by_id_field($fields) {
 		'default' => '',
 		'description' => 'Enter a comma-separated list of project ids. '.divibooster_module_options_credit(),
 		'tab_slug' => 'advanced',
+        'dynamic_content' => 'text',
 		'toggle_slug' => 'layout',
 		'show_if' => array(
 			'db_project_order' => 'by_id',

@@ -2,6 +2,7 @@
 
 namespace WebpConverter\Conversion\Method;
 
+use WebpConverter\Conversion\SkipCrashed;
 use WebpConverter\Conversion\SkipLarger;
 use WebpConverter\Exception;
 use WebpConverter\Model\Token;
@@ -20,6 +21,11 @@ class RemoteMethod extends MethodAbstract {
 
 	const METHOD_NAME        = 'remote';
 	const MAX_FILESIZE_BYTES = ( 10 * 1024 * 1024 );
+
+	/**
+	 * @var SkipCrashed
+	 */
+	private $skip_crashed;
 
 	/**
 	 * @var SkipLarger
@@ -42,9 +48,11 @@ class RemoteMethod extends MethodAbstract {
 	private $server_configurator;
 
 	public function __construct(
+		SkipCrashed $skip_crashed,
 		SkipLarger $skip_larger,
 		TokenRepository $token_repository,
 		ServerConfigurator $server_configurator ) {
+		$this->skip_crashed        = $skip_crashed;
 		$this->skip_larger         = $skip_larger;
 		$this->token_repository    = $token_repository;
 		$this->server_configurator = $server_configurator;
@@ -133,7 +141,7 @@ class RemoteMethod extends MethodAbstract {
 		}
 
 		try {
-			$converted_files = $this->init_connections( $source_paths, $plugin_settings );
+			$converted_files = $this->init_connections( $source_paths, $plugin_settings, $output_paths );
 
 			foreach ( $converted_files as $output_format => $format_converted_files ) {
 				foreach ( $format_converted_files as $path_index => $converted_file ) {
@@ -219,12 +227,13 @@ class RemoteMethod extends MethodAbstract {
 	/**
 	 * @param mixed[] $source_paths    .
 	 * @param mixed[] $plugin_settings .
+	 * @param mixed[] $output_paths    .
 	 *
 	 * @return mixed[]
 	 *
 	 * @throws Exception\RemoteErrorResponseException
 	 */
-	private function init_connections( array $source_paths, array $plugin_settings ): array {
+	private function init_connections( array $source_paths, array $plugin_settings, array $output_paths ): array {
 		$mh_items = [];
 		$values   = [];
 
@@ -263,6 +272,7 @@ class RemoteMethod extends MethodAbstract {
 				} else {
 					$this->handle_request_error(
 						$source_paths[ $output_format ][ $resource_id ],
+						$output_paths[ $output_format ][ $resource_id ],
 						$plugin_settings,
 						$http_code,
 						$response
@@ -346,6 +356,7 @@ class RemoteMethod extends MethodAbstract {
 
 	/**
 	 * @param string      $source_path     .
+	 * @param string      $output_path     .
 	 * @param mixed[]     $plugin_settings .
 	 * @param int         $http_code       .
 	 * @param string|null $response        .
@@ -356,6 +367,7 @@ class RemoteMethod extends MethodAbstract {
 	 */
 	private function handle_request_error(
 		string $source_path,
+		string $output_path,
 		array $plugin_settings,
 		int $http_code,
 		string $response = null
@@ -368,6 +380,8 @@ class RemoteMethod extends MethodAbstract {
 			throw new Exception\RemoteErrorResponseException( $error_message );
 		} elseif ( $error_message ) {
 			$this->save_conversion_error( $error_message, $plugin_settings );
+		} elseif ( $http_code === 200 ) {
+			$this->skip_crashed->create_crashed_file( $output_path );
 		} else {
 			$this->save_conversion_error(
 				( new Exception\RemoteRequestException( [ $http_code, $source_path ] ) )->getMessage(),

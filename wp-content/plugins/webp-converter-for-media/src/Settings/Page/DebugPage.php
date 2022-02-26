@@ -9,7 +9,9 @@ use WebpConverter\Loader\LoaderAbstract;
 use WebpConverter\PluginData;
 use WebpConverter\PluginInfo;
 use WebpConverter\Service\FileLoader;
+use WebpConverter\Service\OptionsAccessManager;
 use WebpConverter\Service\ViewLoader;
+use WebpConverter\Settings\Option\AccessTokenOption;
 use WebpConverter\Settings\SettingsSave;
 
 /**
@@ -57,23 +59,15 @@ class DebugPage extends PageAbstract {
 	public function show_page_view() {
 		$uploads_url  = apply_filters( 'webpc_dir_url', '', 'uploads' );
 		$uploads_path = apply_filters( 'webpc_dir_path', '', 'uploads' );
-		$ver_param    = sprintf( 'ver=%s', time() );
+		$ver_param    = time();
 
 		do_action( LoaderAbstract::ACTION_NAME, true, true );
 
 		( new ViewLoader( $this->plugin_info ) )->load_view(
 			self::PAGE_VIEW_PATH,
 			[
-				'settings_url'          => sprintf(
-					'%1$s&%2$s=%3$s',
-					PageIntegration::get_settings_page_url(),
-					SettingsSave::NONCE_PARAM_KEY,
-					wp_create_nonce( SettingsSave::NONCE_PARAM_VALUE )
-				),
-				'settings_debug_url'    => sprintf(
-					'%s&action=server',
-					PageIntegration::get_settings_page_url()
-				),
+				'settings_url'          => PageIntegration::get_settings_page_url(),
+				'settings_debug_url'    => PageIntegration::get_settings_page_url( 'server' ),
 				'site_root_path'        => $this->paths_generator->get_wordpress_root_path(),
 				'size_png_path'         => $this->file_loader->get_file_size_by_path(
 					$uploads_path . RewritesErrorsDetector::PATH_OUTPUT_FILE_PNG
@@ -101,9 +95,23 @@ class DebugPage extends PageAbstract {
 					true,
 					$ver_param
 				),
+				'plugin_settings'       => $this->get_plugin_settings(),
 			]
 		);
 
 		do_action( LoaderAbstract::ACTION_NAME, true );
+	}
+
+	/**
+	 * @return mixed[]
+	 */
+	private function get_plugin_settings(): array {
+		$plugin_settings = OptionsAccessManager::get_option( SettingsSave::SETTINGS_OPTION, [] );
+		$access_token    = $plugin_settings[ AccessTokenOption::OPTION_NAME ] ?? '';
+		if ( $access_token ) {
+			$plugin_settings[ AccessTokenOption::OPTION_NAME ] = substr( $access_token, 0, 32 ) . str_repeat( '*', 32 );
+		}
+
+		return $plugin_settings;
 	}
 }

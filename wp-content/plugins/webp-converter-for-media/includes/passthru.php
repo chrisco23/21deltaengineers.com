@@ -18,25 +18,28 @@ class PassthruLoader {
 	const MIME_TYPES        = '';
 
 	public function __construct() {
+		if ( ( self::PATH_UPLOADS === '' ) || ( self::PATH_UPLOADS_WEBP === '' ) || ( self::MIME_TYPES === '' ) ) {
+			http_response_code( 404 );
+			exit;
+		}
+
 		$image_url = $_GET['src'] ?? null; // phpcs:ignore WordPress.Security
-		if ( ! $image_url || ! $this->validate_url( $image_url ) ) {
+		if ( ! $image_url || ! $this->validate_src_param( $image_url ) ) {
 			return;
-		} elseif ( ! $this->validate_src_param( $image_url ) ) {
-			$this->load_image_default( $image_url );
 		}
 
 		$this->load_converted_image( $image_url );
 	}
 
-	private function validate_url( string $image_url ): bool {
+	private function validate_src_param( string $image_url ): bool {
 		$url_path     = parse_url( $image_url, PHP_URL_PATH ) ?: '';
 		$encoded_path = array_map( 'urlencode', explode( '/', $url_path ) );
 		$encoded_url  = str_replace( $url_path, implode( '/', $encoded_path ), $image_url );
 
-		return ( filter_var( $encoded_url, FILTER_VALIDATE_URL ) !== false );
-	}
+		if ( filter_var( $encoded_url, FILTER_VALIDATE_URL ) === false ) {
+			return false;
+		}
 
-	private function validate_src_param( string $image_url ): bool {
 		$image_host = parse_url( $image_url, PHP_URL_HOST );
 		if ( $image_host !== ( $_SERVER['HTTP_HOST'] ?? '' ) ) { // phpcs:ignore WordPress.Security
 			return false;

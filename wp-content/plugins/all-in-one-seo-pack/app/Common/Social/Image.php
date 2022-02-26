@@ -70,6 +70,10 @@ class Image {
 			return $images[ $this->type ];
 		}
 
+		if ( 'auto' === $imageSource && aioseo()->helpers->getPostPageBuilderName( $post->ID ) ) {
+			$imageSource = 'default';
+		}
+
 		switch ( $imageSource ) {
 			case 'featured':
 				$image = $this->getFeaturedImage();

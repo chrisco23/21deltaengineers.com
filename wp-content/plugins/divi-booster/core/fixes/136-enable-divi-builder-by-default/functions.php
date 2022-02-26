@@ -35,7 +35,8 @@ if (!class_exists('DBDBOption136_EnableBuilderByDefault')) {
 		}
 		
 		protected function setPostStatusToDraft($post_id) {
-			wp_update_post(array('ID'=>$post_id, 'post_status'=>'draft'));
+            $unique_title = __('Auto Draft').' '.$post_id;
+			wp_update_post(array('ID'=>$post_id, 'post_status'=>'draft', 'post_title'=>$unique_title));
 		}
 		
 		protected function enableDiviBuilder($post_id) {

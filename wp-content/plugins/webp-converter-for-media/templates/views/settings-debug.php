@@ -2,14 +2,15 @@
 /**
  * Debug tab of plugin settings page.
  *
- * @var string $settings_url          URL of plugin settings page (default view).
- * @var string $site_root_path        Root path of WordPress installation.
- * @var string $size_png_path         Size of file.
- * @var string $size_png2_path        Size of file.
- * @var string $size_png_url          Size of file.
- * @var string $size_png2_url         Size of file.
- * @var string $size_png_as_webp_url  Size of file.
- * @var string $size_png2_as_webp_url Size of file.
+ * @var string  $settings_url          URL of plugin settings page (default view).
+ * @var string  $site_root_path        Root path of WordPress installation.
+ * @var string  $size_png_path         Size of file.
+ * @var string  $size_png2_path        Size of file.
+ * @var string  $size_png_url          Size of file.
+ * @var string  $size_png2_url         Size of file.
+ * @var string  $size_png_as_webp_url  Size of file.
+ * @var string  $size_png2_as_webp_url Size of file.
+ * @var mixed[] $plugin_settings       .
  * @package WebP Converter for Media
  */
 

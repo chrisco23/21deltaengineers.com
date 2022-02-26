@@ -341,18 +341,18 @@ namespace AIOSEO\Plugin {
 			$this->sitemap            = $this->pro ? new Pro\Sitemap\Sitemap() : new Common\Sitemap\Sitemap();
 			$this->htmlSitemap        = new Common\Sitemap\Html\Sitemap();
 			$this->templates          = new Common\Utils\Templates();
+			$this->postSettings       = $this->pro ? new Pro\Admin\PostSettings() : new Lite\Admin\PostSettings();
 
 			if ( ! wp_doing_ajax() && ! wp_doing_cron() ) {
-				$this->rss              = new Common\Rss();
-				$this->main             = $this->pro ? new Pro\Main\Main() : new Common\Main\Main();
-				$this->schema           = $this->pro ? new Pro\Schema\Schema() : new Common\Schema\Schema();
-				$this->head             = $this->pro ? new Pro\Main\Head() : new Common\Main\Head();
-				$this->filters          = $this->pro ? new Pro\Main\Filters() : new Lite\Main\Filters();
-				$this->dashboard        = $this->pro ? new Pro\Admin\Dashboard() : new Common\Admin\Dashboard();
-				$this->api              = $this->pro ? new Pro\Api\Api() : new Lite\Api\Api();
-				$this->postSettings     = $this->pro ? new Pro\Admin\PostSettings() : new Lite\Admin\PostSettings();
-				$this->filter           = new Common\Utils\Filter();
-				$this->help             = new Common\Help\Help();
+				$this->rss       = new Common\Rss();
+				$this->main      = $this->pro ? new Pro\Main\Main() : new Common\Main\Main();
+				$this->schema    = $this->pro ? new Pro\Schema\Schema() : new Common\Schema\Schema();
+				$this->head      = $this->pro ? new Pro\Main\Head() : new Common\Main\Head();
+				$this->filters   = $this->pro ? new Pro\Main\Filters() : new Lite\Main\Filters();
+				$this->dashboard = $this->pro ? new Pro\Admin\Dashboard() : new Common\Admin\Dashboard();
+				$this->api       = $this->pro ? new Pro\Api\Api() : new Lite\Api\Api();
+				$this->filter    = new Common\Utils\Filter();
+				$this->help      = new Common\Help\Help();
 			}
 
 			if ( wp_doing_ajax() || wp_doing_cron() ) {

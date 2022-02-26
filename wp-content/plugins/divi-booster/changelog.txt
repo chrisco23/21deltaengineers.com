@@ -1,3 +1,18 @@
+= 3.7.6 =
+* Fixed WP Rocket preventing accordion from loading fully closed
+* Fixed htaccess overwritten when content read fails
+
+= 3.7.5 =
+* Added dynamic content support to portfolio module order by ID option
+* Fixed toggle content briefly visible while loading fully closed accordion
+
+= 3.7.4 =
+* Added additional gallery sort options
+
+= 3.7.3 =
+* Fixed closeable accordion icon not inheriting individual toggle color and font size
+* Enable Divi Builder by default now appends post ID to names to prevent duplicate slug issue
+
 = 3.7.2 =
 * Mobile content width setting now applies to speciality sections
 

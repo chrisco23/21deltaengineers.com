@@ -13,9 +13,5 @@
   RewriteCond %{DOCUMENT_ROOT}/wp-content/uploads-webpc/uploads/$1.png.webp -f
   RewriteRule (.+)\.png$ /wp-content/uploads-webpc/uploads/$1.png.webp [NC,T=image/webp,L]
 </IfModule>
-<IfModule mod_headers.c>
-  Header always set Cache-Control "private"
-  Header append Vary "Accept"
-</IfModule>
 # ! --- DO NOT EDIT NEXT LINE --- !
 # END WebP Converter

@@ -15,7 +15,6 @@ class ExtraFeaturesOption extends OptionAbstract {
 	const OPTION_VALUE_MOD_EXPIRES      = 'mod_expires';
 	const OPTION_VALUE_KEEP_METADATA    = 'keep_metadata';
 	const OPTION_VALUE_CRON_ENABLED     = 'cron_enabled';
-	const OPTION_VALUE_CRON_CONVERSION  = 'cron_conversion';
 	const OPTION_VALUE_REFERER_DISABLED = 'referer_disabled';
 	const OPTION_VALUE_DEBUG_ENABLED    = 'debug_enabled';
 
@@ -77,10 +76,6 @@ class ExtraFeaturesOption extends OptionAbstract {
 				'Enable cron to automatically convert images from outside Media Library (images from Media Library are converted immediately after upload)',
 				'webp-converter-for-media'
 			),
-			self::OPTION_VALUE_CRON_CONVERSION  => __(
-				'Enable cron to convert images uploaded to Media Library to speed up process of adding images (deactivate this option if images added to Media Library are not automatically converted)',
-				'webp-converter-for-media'
-			),
 			self::OPTION_VALUE_REFERER_DISABLED => __(
 				'Force redirections to output formats for all domains (by default, images in output formats are loaded only in domain of your website - when image is displayed via URL on another domain that original file is loaded)',
 				'webp-converter-for-media'
@@ -117,7 +112,6 @@ class ExtraFeaturesOption extends OptionAbstract {
 		return [
 			self::OPTION_VALUE_ONLY_SMALLER,
 			self::OPTION_VALUE_MOD_EXPIRES,
-			self::OPTION_VALUE_CRON_CONVERSION,
 			self::OPTION_VALUE_REFERER_DISABLED,
 			self::OPTION_VALUE_DEBUG_ENABLED,
 		];

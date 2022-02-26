@@ -43,12 +43,14 @@ function db_pb_accordion_add_initial_state_code_to_content($content, $args, $mod
 		
 		if ($args['db_initial_state'] === 'all_closed') {
 			$js .= db_pb_accordion_js_all_closed($order_class);
+            $hide_flash_of_toggle_content = "<style>.{$order_class} .et_pb_toggle_content { display: none; }</style>";
+            $content = $hide_flash_of_toggle_content.$content;
 		} elseif ($args['db_initial_state'] === 'all_open') {
 			$js .= db_pb_accordion_js_all_open($order_class);
 		}
 	}
 	
-	if (!empty($js)) { $content.="<script>$js</script>"; }
+	if (!empty($js)) { $content.='<script data-name="dbdb-accordion-initial-state">'.$js.'</script>'; }
 	
 	return $content;
 }
@@ -83,3 +85,4 @@ jQuery(function($){
 });
 END;
 }
+

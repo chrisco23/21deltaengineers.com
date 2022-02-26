@@ -2,6 +2,7 @@
 
 namespace WebpConverter\Conversion\Endpoint;
 
+use WebpConverter\Conversion\Cron\CronStatusManager;
 use WebpConverter\Conversion\Method\RemoteMethod;
 use WebpConverter\PluginData;
 use WebpConverter\Repository\TokenRepository;
@@ -30,9 +31,15 @@ class PathsEndpoint extends EndpointAbstract {
 	 */
 	private $token_repository;
 
-	public function __construct( PluginData $plugin_data, TokenRepository $token_repository ) {
-		$this->plugin_data      = $plugin_data;
-		$this->token_repository = $token_repository;
+	/**
+	 * @var CronStatusManager
+	 */
+	private $cron_status_manager;
+
+	public function __construct( PluginData $plugin_data, TokenRepository $token_repository, CronStatusManager $cron_status_manager = null ) {
+		$this->plugin_data         = $plugin_data;
+		$this->token_repository    = $token_repository;
+		$this->cron_status_manager = $cron_status_manager ?: new CronStatusManager();
 	}
 
 	/**
@@ -62,11 +69,17 @@ class PathsEndpoint extends EndpointAbstract {
 	 * {@inheritdoc}
 	 */
 	public function get_route_response( \WP_REST_Request $request ) {
+		$this->cron_status_manager->set_conversion_status_locked( true, true );
+
 		$params         = $request->get_params();
 		$skip_converted = ( $params['regenerate_force'] !== true );
 
 		$paths = $this->get_paths( $skip_converted );
 		$paths = array_chunk( $paths, $this->get_paths_chunk_size( count( $paths ) ) );
+
+		if ( ! $paths ) {
+			$this->cron_status_manager->set_conversion_status_locked( false );
+		}
 
 		return new \WP_REST_Response(
 			$paths,

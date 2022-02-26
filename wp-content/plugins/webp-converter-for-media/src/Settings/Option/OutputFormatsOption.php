@@ -89,9 +89,10 @@ class OutputFormatsOption extends OptionAbstract {
 	 * @return string[]
 	 */
 	public function get_default_value( array $settings = null ): array {
-		$method  = ( isset( $settings[ ConversionMethodOption::OPTION_NAME ] ) && $settings[ ConversionMethodOption::OPTION_NAME ] )
-			? $settings[ ConversionMethodOption::OPTION_NAME ]
-			: $this->conversion_method_option->get_default_value( $settings );
+		$method = $settings[ ConversionMethodOption::OPTION_NAME ] ?? null;
+		if ( ! $method ) {
+			$method = $this->conversion_method_option->get_default_value( $settings );
+		}
 		$formats = array_keys( $this->formats_integration->get_available_formats( $method ) );
 
 		return ( in_array( WebpFormat::FORMAT_EXTENSION, $formats ) ) ? [ WebpFormat::FORMAT_EXTENSION ] : [];
@@ -103,9 +104,10 @@ class OutputFormatsOption extends OptionAbstract {
 	 * @return string[]
 	 */
 	public function get_disabled_values( array $settings ): array {
-		$method            = ( isset( $settings[ ConversionMethodOption::OPTION_NAME ] ) && $settings[ ConversionMethodOption::OPTION_NAME ] )
-			? $settings[ ConversionMethodOption::OPTION_NAME ]
-			: $this->conversion_method_option->get_default_value( $settings );
+		$method = $settings[ ConversionMethodOption::OPTION_NAME ] ?? null;
+		if ( ! $method || in_array( $method, $this->conversion_method_option->get_disabled_values( $settings ) ) ) {
+			$method = $this->conversion_method_option->get_default_value( $settings );
+		}
 		$formats           = $this->formats_integration->get_formats();
 		$formats_available = $this->formats_integration->get_available_formats( $method );
 

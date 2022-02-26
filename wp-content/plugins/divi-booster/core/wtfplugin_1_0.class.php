@@ -195,7 +195,7 @@ class wtfplugin_1_0 {
 		$wp_htaccess_file = get_home_path().'/.htaccess';
 		if (@is_readable($wp_htaccess_file) && @is_writeable($wp_htaccess_file)) {
 			$htaccess =@file_get_contents($wp_htaccess_file); 
-			if ($htaccess !== false) {
+			if (!empty($htaccess)) {
 				$rules = file_get_contents($this->cachedir.'htaccess.txt');
 				if (strpos($htaccess, '# BEGIN '.$this->slug)!==false) { 
 					$htaccess = preg_replace(

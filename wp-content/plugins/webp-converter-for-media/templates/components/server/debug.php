@@ -2,12 +2,13 @@
 /**
  * Information about debugging displayed in server configuration widget.
  *
- * @var string $size_png_path         Size of file.
- * @var string $size_png2_path        Size of file.
- * @var string $size_png_url          Size of file.
- * @var string $size_png2_url         Size of file.
- * @var string $size_png_as_webp_url  Size of file.
- * @var string $size_png2_as_webp_url Size of file.
+ * @var string  $size_png_path         Size of file.
+ * @var string  $size_png2_path        Size of file.
+ * @var string  $size_png_url          Size of file.
+ * @var string  $size_png2_url         Size of file.
+ * @var string  $size_png_as_webp_url  Size of file.
+ * @var string  $size_png2_as_webp_url Size of file.
+ * @var mixed[] $plugin_settings       .
  * @package WebP Converter for Media
  */
 
@@ -49,6 +50,12 @@
 		<td class="e">Size of PNG2 as PNG2 <em>(by URL)</em></td>
 		<td class="v">
 			<?php echo esc_html( $size_png2_url ); ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="e">Plugin settings</td>
+		<td class="v">
+			<?php echo esc_html( json_encode( $plugin_settings ) ?: '-' ); ?>
 		</td>
 	</tr>
 	</tbody>

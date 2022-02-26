@@ -267,7 +267,7 @@ trait WpContext {
 			$postContent = $this->theContent( $postContent );
 		}
 
-		$postContent          = wp_trim_words( $postContent, 55, apply_filters( 'excerpt_more', ' ' . '[&hellip;]' ) );
+		$postContent          = wp_trim_words( $postContent, 55, '' );
 		$postContent          = str_replace( ']]>', ']]&gt;', $postContent );
 		$postContent          = preg_replace( '#(<figure.*\/figure>|<img.*\/>)#', '', $postContent );
 		$content[ $post->ID ] = trim( wp_strip_all_tags( strip_shortcodes( $postContent ) ) );

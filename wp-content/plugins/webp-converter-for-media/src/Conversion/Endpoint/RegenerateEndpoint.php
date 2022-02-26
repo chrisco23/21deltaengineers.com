@@ -2,6 +2,7 @@
 
 namespace WebpConverter\Conversion\Endpoint;
 
+use WebpConverter\Conversion\Cron\CronStatusManager;
 use WebpConverter\Conversion\Method\MethodIntegrator;
 use WebpConverter\PluginData;
 
@@ -15,8 +16,14 @@ class RegenerateEndpoint extends EndpointAbstract {
 	 */
 	private $plugin_data;
 
-	public function __construct( PluginData $plugin_data ) {
-		$this->plugin_data = $plugin_data;
+	/**
+	 * @var CronStatusManager
+	 */
+	private $cron_status_manager;
+
+	public function __construct( PluginData $plugin_data, CronStatusManager $cron_status_manager = null ) {
+		$this->plugin_data         = $plugin_data;
+		$this->cron_status_manager = $cron_status_manager ?: new CronStatusManager();
 	}
 
 	/**
@@ -24,6 +31,13 @@ class RegenerateEndpoint extends EndpointAbstract {
 	 */
 	public function get_route_name(): string {
 		return 'regenerate';
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function get_url_lifetime(): int {
+		return ( 7 * 24 * 60 * 60 );
 	}
 
 	/**
@@ -54,6 +68,8 @@ class RegenerateEndpoint extends EndpointAbstract {
 	 * {@inheritdoc}
 	 */
 	public function get_route_response( \WP_REST_Request $request ) {
+		$this->cron_status_manager->set_conversion_status_locked();
+
 		$params = $request->get_params();
 		$data   = $this->convert_images( $params['paths'], $params['regenerate_force'] );
 

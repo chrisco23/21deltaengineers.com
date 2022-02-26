@@ -1,8 +1,10 @@
 <?php 
 
-add_filter('dbmo_et_pb_countdown_timer_whitelisted_fields', 'dbmo_et_pb_countdown_timer_register_fields');
-add_filter('dbmo_et_pb_countdown_timer_fields', 'dbmo_et_pb_countdown_timer_add_fields');
-add_filter('db_pb_countdown_timer_content', 'db_pb_countdown_timer_filter_content', 10, 2);
+if (function_exists('add_filter')) {
+    add_filter('dbmo_et_pb_countdown_timer_whitelisted_fields', 'dbmo_et_pb_countdown_timer_register_fields');
+    add_filter('dbmo_et_pb_countdown_timer_fields', 'dbmo_et_pb_countdown_timer_add_fields');
+    add_filter('db_pb_countdown_timer_content', 'db_pb_countdown_timer_filter_content', 10, 2);
+}
 
 // Define the label fields
 function dbmo_et_pb_countdown_timer_get_label_fields() {

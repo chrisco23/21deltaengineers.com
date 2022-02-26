@@ -152,10 +152,6 @@ class ErrorDetectorAggregator implements HookableInterface {
 			$this->cached_errors[] = $new_error;
 		}
 
-		if ( $new_error = ( new PermalinksStructureDetector() )->get_error() ) {
-			$this->cached_errors[] = $new_error;
-		}
-
 		if ( $new_error = ( new RestApiDisabledDetector() )->get_error() ) {
 			$this->cached_errors[] = $new_error;
 		}

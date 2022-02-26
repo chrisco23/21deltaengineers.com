@@ -77,6 +77,8 @@ class Post extends Model {
 		if ( ! $post->exists() ) {
 			$post->post_id = $postId;
 			$post          = self::setDynamicDefaults( $post, $postId );
+		} else {
+			$post = self::runDynamicMigrations( $post );
 		}
 
 		return $post;
@@ -109,6 +111,35 @@ class Post extends Model {
 		}
 
 		$post->twitter_use_og = aioseo()->options->social->twitter->general->useOgData;
+
+		return $post;
+	}
+
+	/**
+	 * Runs dynamic migrations whenever the post object is loaded.
+	 *
+	 * @since 4.1.7
+	 *
+	 * @param  Post $post The Post object.
+	 * @return Post       The modified Post object.
+	 */
+	private static function runDynamicMigrations( $post ) {
+		$pageBuilder = aioseo()->helpers->getPostPageBuilderName( $post->post_id );
+		if ( ! $pageBuilder ) {
+			return $post;
+		}
+
+		$deprecatedImageSources = 'seedprod' === strtolower( $pageBuilder )
+			? [ 'auto', 'custom', 'featured' ]
+			: [ 'auto' ];
+
+		if ( ! empty( $post->og_image_type ) && in_array( $post->og_image_type, $deprecatedImageSources, true ) ) {
+			$post->og_image_type = 'default';
+		}
+
+		if ( ! empty( $post->twitter_image_type ) && in_array( $post->twitter_image_type, $deprecatedImageSources, true ) ) {
+			$post->twitter_image_type = 'default';
+		}
 
 		return $post;
 	}
@@ -241,6 +272,9 @@ class Post extends Model {
 		$thePost->local_seo                   = ! empty( $data['local_seo'] ) ? wp_json_encode( $data['local_seo'] ) : null;
 		$thePost->updated                     = gmdate( 'Y-m-d H:i:s' );
 
+		// Before we determine the OG/Twitter image, we need to set the meta data cache manually because the changes haven't been saved yet.
+		aioseo()->meta->metaData->bustPostCache( $thePost->post_id, $thePost );
+
 		// Set the OG/Twitter image data.
 		$thePost = self::setOgTwitterImageData( $thePost );
 
@@ -274,7 +308,7 @@ class Post extends Model {
 			aioseo()->social->image->useCache = false;
 
 			// Set the image details.
-			$ogImage                  = aioseo()->social->facebook->getImage();
+			$ogImage                  = aioseo()->social->facebook->getImage( $thePost->post_id );
 			$thePost->og_image_url    = is_array( $ogImage ) ? $ogImage[0] : $ogImage;
 			$thePost->og_image_width  = aioseo()->social->facebook->getImageWidth();
 			$thePost->og_image_height = aioseo()->social->facebook->getImageHeight();
@@ -298,7 +332,7 @@ class Post extends Model {
 			aioseo()->social->image->useCache = false;
 
 			// Set the image details.
-			$ogImage                    = aioseo()->social->twitter->getImage();
+			$ogImage                    = aioseo()->social->twitter->getImage( $thePost->post_id );
 			$thePost->twitter_image_url = is_array( $ogImage ) ? $ogImage[0] : $ogImage;
 
 			// Reset the cache property.
@@ -371,6 +405,32 @@ class Post extends Model {
 					],
 				]
 			]
+		];
+
+		return json_decode( wp_json_encode( $defaults ) );
+	}
+
+	/**
+	 * Returns the defaults for the keyphrases column.
+	 *
+	 * @since 4.1.7
+	 *
+	 * @return array The defaults.
+	 */
+	public static function getKeyphrasesDefaults() {
+		$defaults = [
+			'focus'      => [
+				'keyphrase' => '',
+				'score'     => 0,
+				'analysis'  => [
+					'keyphraseInTitle' => [
+						'score'    => 0,
+						'maxScore' => 9,
+						'error'    => 1
+					]
+				]
+			],
+			'additional' => []
 		];
 
 		return json_decode( wp_json_encode( $defaults ) );

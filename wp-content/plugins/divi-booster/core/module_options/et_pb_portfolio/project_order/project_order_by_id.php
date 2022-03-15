@@ -39,7 +39,8 @@ function dbdb_portfolio_order_option_by_id_field($fields) {
 
 // === Apply option ===
 
-(new DBDB_portfolio_by_id())->add_filters();
+$option = (new DBDB_portfolio_by_id());
+$option->add_filters();
 
 class DBDB_portfolio_by_id {
 	
@@ -50,7 +51,7 @@ class DBDB_portfolio_by_id {
 	}
 	
 	function add_filters() {
-		add_filter('et_pb_module_shortcode_attributes', array($this, 'add_pre_get_posts_filter'), 10, 3);
+		add_filter('dbdb_et_pb_module_shortcode_attributes', array($this, 'add_pre_get_posts_filter'), 10, 3);
 		add_filter('et_module_shortcode_output', array($this, 'remove_pre_get_posts_filter'));
 	}
 	

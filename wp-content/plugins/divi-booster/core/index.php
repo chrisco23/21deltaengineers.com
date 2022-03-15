@@ -18,7 +18,6 @@ include(dirname(__FILE__).'/compat/compat.php');
 include(dirname(__FILE__).'/wtfplugin_1_0.class.php');
 
 // === Load the update checker ===
-//include(dirname(__FILE__).'/updates/plugin-update-checker.php');
 if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
 	require dirname(__FILE__).'/plugin-update-checker/plugin-update-checker.php';
 }

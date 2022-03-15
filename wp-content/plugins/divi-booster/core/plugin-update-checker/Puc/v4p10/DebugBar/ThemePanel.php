@@ -10,7 +10,7 @@ if ( !class_exists('\DiviBooster\Puc_v4p10_DebugBar_ThemePanel', false) ):
 		protected $updateChecker;
 
 		protected function displayConfigHeader() {
-			$this->row('Theme directory', htmlentities($this->updateChecker->directoryName));
+			$this->row('Theme directory', esc_html($this->updateChecker->directoryName));
 			parent::displayConfigHeader();
 		}
 

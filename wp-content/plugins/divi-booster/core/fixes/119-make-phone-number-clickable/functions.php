@@ -6,7 +6,7 @@ function db119_user_js($plugin) {
 	?>
 	jQuery(function($){
 		$('#et-info-phone').wrap(function(){
-			var num = <?php echo (empty($option['phonenum']))?'$(this).text()':"'".htmlentities(addslashes($option['phonenum']))."'"?>;
+			var num = <?php echo (empty($option['phonenum']))?'$(this).text()':"'".esc_html(addslashes($option['phonenum']))."'"?>;
 			num = num.replace(/[^0-9+]+/g, '-'); // sanitize
 			num = num.replace(/^[-]|[-]$/g, ''); // trim
 			return '<a href="tel:'+num+'"></a>';

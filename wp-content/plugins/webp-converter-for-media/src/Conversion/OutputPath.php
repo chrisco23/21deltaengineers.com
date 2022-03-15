@@ -58,10 +58,14 @@ class OutputPath {
 	 * @return string|null Server paths for output directory.
 	 */
 	public static function get_directory_path( string $path ) {
-		$webp_root    = apply_filters( 'webpc_dir_path', '', 'webp' );
-		$uploads_root = dirname( $webp_root );
-		$output_path  = str_replace( realpath( $uploads_root ) ?: '', '', realpath( $path ) ?: '' );
-		$output_path  = trim( $output_path, '\/' );
+		$webp_root   = apply_filters( 'webpc_dir_path', '', 'webp' );
+		$wp_content  = dirname( apply_filters( 'webpc_dir_path', '', 'uploads' ) );
+		$output_path = str_replace(
+			preg_replace( '/(\/|\\\\)/', DIRECTORY_SEPARATOR, $wp_content ) ?: '',
+			'',
+			preg_replace( '/(\/|\\\\)/', DIRECTORY_SEPARATOR, $path ) ?: ''
+		);
+		$output_path = trim( $output_path, '\/' );
 
 		if ( ! $output_path ) {
 			return null;

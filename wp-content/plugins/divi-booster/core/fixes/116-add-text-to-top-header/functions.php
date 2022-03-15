@@ -47,6 +47,9 @@ function db116_header_text() {
 function db116_add_top_header_text_css() {
 	?>
 	#db-info-text { margin:0 10px; }
+	#et-info-phone {
+		white-space: nowrap !important;
+	}
 	<?php
 }
 

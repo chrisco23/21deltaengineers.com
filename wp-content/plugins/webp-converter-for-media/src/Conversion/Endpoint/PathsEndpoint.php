@@ -6,6 +6,7 @@ use WebpConverter\Conversion\Cron\CronStatusManager;
 use WebpConverter\Conversion\Method\RemoteMethod;
 use WebpConverter\PluginData;
 use WebpConverter\Repository\TokenRepository;
+use WebpConverter\Service\StatsManager;
 use WebpConverter\Settings\Option\ConversionMethodOption;
 use WebpConverter\Settings\Option\OutputFormatsOption;
 use WebpConverter\Settings\Option\SupportedDirectoriesOption;
@@ -36,10 +37,21 @@ class PathsEndpoint extends EndpointAbstract {
 	 */
 	private $cron_status_manager;
 
-	public function __construct( PluginData $plugin_data, TokenRepository $token_repository, CronStatusManager $cron_status_manager = null ) {
+	/**
+	 * @var StatsManager
+	 */
+	private $stats_manager;
+
+	public function __construct(
+		PluginData $plugin_data,
+		TokenRepository $token_repository,
+		CronStatusManager $cron_status_manager = null,
+		StatsManager $stats_manager = null
+	) {
 		$this->plugin_data         = $plugin_data;
 		$this->token_repository    = $token_repository;
 		$this->cron_status_manager = $cron_status_manager ?: new CronStatusManager();
+		$this->stats_manager       = $stats_manager ?: new StatsManager();
 	}
 
 	/**
@@ -74,8 +86,11 @@ class PathsEndpoint extends EndpointAbstract {
 		$params         = $request->get_params();
 		$skip_converted = ( $params['regenerate_force'] !== true );
 
-		$paths = $this->get_paths( $skip_converted );
-		$paths = array_chunk( $paths, $this->get_paths_chunk_size( count( $paths ) ) );
+		$paths       = $this->get_paths( $skip_converted );
+		$paths_count = count( $paths );
+
+		$this->stats_manager->set_regeneration_images_count( $paths_count );
+		$paths = array_chunk( $paths, $this->get_paths_chunk_size( $paths_count ) );
 
 		if ( ! $paths ) {
 			$this->cron_status_manager->set_conversion_status_locked( false );

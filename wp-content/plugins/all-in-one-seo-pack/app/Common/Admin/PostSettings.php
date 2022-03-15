@@ -153,6 +153,7 @@ class PostSettings {
 		$socialSettingsCapability       = aioseo()->access->hasCapability( 'aioseo_page_social_settings' );
 		$schemaSettingsCapability       = aioseo()->access->hasCapability( 'aioseo_page_schema_settings' );
 		$linkAssistantCapability        = aioseo()->access->hasCapability( 'aioseo_page_link_assistant_settings' );
+		$redirectsCapability            = aioseo()->access->hasCapability( 'aioseo_page_redirects_manage' );
 		$advancedSettingsCapability     = aioseo()->access->hasCapability( 'aioseo_page_advanced_settings' );
 
 		if (
@@ -164,6 +165,7 @@ class PostSettings {
 				empty( $socialSettingsCapability ) &&
 				empty( $schemaSettingsCapability ) &&
 				empty( $linkAssistantCapability ) &&
+				empty( $redirectsCapability ) &&
 				empty( $advancedSettingsCapability )
 			)
 		) {
@@ -245,12 +247,12 @@ class PostSettings {
 	 * @return void
 	 */
 	public function saveSettingsMetabox( $postId ) {
-		// Ignore auto saving
+		// Ignore auto saving.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
 
-		// Security check
+		// Security check.
 		if ( ! isset( $_POST['PostSettingsNonce'] ) || ! wp_verify_nonce( $_POST['PostSettingsNonce'], 'aioseoPostSettingsNonce' ) ) {
 			return;
 		}
@@ -260,7 +262,7 @@ class PostSettings {
 			return;
 		}
 
-		// Check user permissions
+		// Check user permissions.
 		if ( ! current_user_can( 'edit_post', $postId ) ) {
 			return;
 		}
@@ -274,6 +276,5 @@ class PostSettings {
 		}
 
 		Models\Post::savePost( $postId, $currentPost );
-
 	}
 }

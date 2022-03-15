@@ -389,7 +389,7 @@ class wtfplugin_1_0 {
 	
 	function hiddenfield($file, $field='') { 
 		list($name, $option) = $this->get_setting_bases($file); ?>
-		<input type="hidden" name="<?php echo $name; ?><?php echo empty($field)?'':htmlentities("[$field]"); ?>" value="<?php esc_html_e(@$option[$field]); ?>"/>
+		<input type="hidden" name="<?php echo $name; ?><?php echo empty($field)?'':esc_attr("[$field]"); ?>" value="<?php esc_html_e(@$option[$field]); ?>"/>
 		<?php
 	}
 	

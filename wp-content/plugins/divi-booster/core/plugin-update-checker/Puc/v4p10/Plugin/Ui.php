@@ -222,7 +222,7 @@ if ( !class_exists('\DiviBooster\Puc_v4p10_Plugin_Ui', false) ):
 					$details = $this->formatManualCheckErrors(get_site_transient($this->manualCheckErrorTransient));
 					delete_site_transient($this->manualCheckErrorTransient);
 				} else {
-					$message = sprintf(__('Unknown update checker status "%s"', 'plugin-update-checker'), htmlentities($status));
+					$message = sprintf(__('Unknown update checker status "%s"', 'plugin-update-checker'), esc_html($status));
 					$noticeClass = 'error notice-error';
 				}
 				printf(

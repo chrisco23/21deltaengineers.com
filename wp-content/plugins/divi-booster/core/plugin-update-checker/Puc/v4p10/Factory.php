@@ -82,7 +82,7 @@ if ( !class_exists('\DiviBooster\Puc_v4p10_Factory', false) ):
 				throw new \RuntimeException(sprintf(
 					'The update checker cannot determine if "%s" is a plugin or a theme. ' .
 					'This is a bug. Please contact the PUC developer.',
-					htmlentities($fullPath)
+					esc_html($fullPath)
 				));
 			}
 
@@ -104,9 +104,9 @@ if ( !class_exists('\DiviBooster\Puc_v4p10_Factory', false) ):
 				trigger_error(
 					sprintf(
 						'PUC %s does not support updates for %ss %s',
-						htmlentities(self::$latestCompatibleVersion),
+						esc_html(self::$latestCompatibleVersion),
 						strtolower($type),
-						$service ? ('hosted on ' . htmlentities($service)) : 'using JSON metadata'
+						$service ? ('hosted on ' . esc_html($service)) : 'using JSON metadata'
 					),
 					E_USER_ERROR
 				);
@@ -235,7 +235,7 @@ if ( !class_exists('\DiviBooster\Puc_v4p10_Factory', false) ):
 
 			//URI was not found so throw an error.
 			throw new \RuntimeException(
-				sprintf('Unable to locate URI in header of "%s"', htmlentities($fullPath))
+				sprintf('Unable to locate URI in header of "%s"', esc_html($fullPath))
 			);
 		}
 

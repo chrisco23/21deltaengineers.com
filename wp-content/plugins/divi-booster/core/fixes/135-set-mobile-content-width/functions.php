@@ -22,7 +22,7 @@ function db135_user_css($plugin) {
 add_action('wp_head.css', 'db135_user_css');
 
 
-add_filter('et_pb_module_shortcode_attributes', 'db135_maybe_add_custom_width_class', 10, 3);
+add_filter('dbdb_et_pb_module_shortcode_attributes', 'db135_maybe_add_custom_width_class', 10, 3);
 add_filter("et_pb_row_shortcode_output", 'db135_remove_default_row_class_filter');
 add_filter("et_pb_section_shortcode_output", 'db135_remove_default_section_class_filter');
 

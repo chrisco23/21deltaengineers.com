@@ -23,7 +23,7 @@ This will be a profit both for your users who will not have to download so much 
 
 #### AVIF support
 
-Now in the PRO version you can use AVIF as the output format for your images. The AVIF format is a new extension - is the successor to WebP. It allows you to achieve even higher levels of image compression, and the quality of the converted images is better than in WebP.
+Now in [the PRO version](https://mattplugins.com/products/webp-converter-for-media-pro/?utm_source=webp-converter-for-media&utm_campaign=upgrade-to-pro&utm_medium=readme-avif-support) you can use AVIF as the output format for your images. The AVIF format is a new extension - is the successor to WebP. It allows you to achieve even higher levels of image compression, and the quality of the converted images is better than in WebP.
 
 #### How does this work?
 
@@ -50,7 +50,7 @@ You can convert WebP and optimize images not only from `/uploads` directory but 
 
 We spend hours working on the development of this plugin. Technical support also requires a lot of time, but we do it because we want to offer you the best plugin. We enjoy every new plugin installation.
 
-If you would like to appreciate it, you can [provide us a coffee](https://ko-fi.com/gbiorczyk/?utm_source=webp-converter-for-media&utm_medium=readme-content). **If every user bought at least one, we could work on the plugin 24 hours a day!**
+If you would like to appreciate it, you can try [the PRO version](https://mattplugins.com/products/webp-converter-for-media-pro/?utm_source=webp-converter-for-media&utm_campaign=upgrade-to-pro&utm_medium=readme-plugin-development). In addition, you will gain access to extra functionalities that will allow you to achieve **even better image conversion results**.
 
 #### Please also read the FAQ below. Thank you for being with us!
 
@@ -363,24 +363,18 @@ and add below code in this file *(add these lines to very beginning of file if p
 
 After making changes, remember to restart the machine: `systemctl restart nginx`.
 
-= Is the plugin completely free? =
-
-The plugin is free and you can use it without restrictions. We also offer a paid version that allows for additional functionalities
-
-However, working on plugins and technical support requires many hours of work. If you are using the free version of the plugin and if you want to appreciate us, you can [provide us a coffee](https://ko-fi.com/gbiorczyk/?utm_source=webp-converter-for-media&utm_medium=readme-faq). Thanks everyone!
-
-Thank you for all the ratings and reviews.
-
-If you are satisfied with this plugin, please recommend it to your friends. Every new person using our plugin is valuable to us.
-
-This is all very important to us and allows us to do even better things for you!
-
 == Screenshots ==
 
 1. Screenshot of the options panel
 2. Screenshot when regenerating images
 
 == Changelog ==
+
+= 4.2.4 (2022-03-01) =
+* `[Fixed]` Generating paths for via .htaccess loading mode
+
+= 4.2.3 (2022-02-27) =
+* `[Fixed]` Closing of admin notice
 
 = 4.2.2 (2022-02-21) =
 * `[Changed]` Error message for bypassing_apache error in server configuration

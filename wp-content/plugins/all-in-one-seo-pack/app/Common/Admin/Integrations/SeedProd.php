@@ -47,7 +47,9 @@ class SeedProd extends Integration {
 			return;
 		}
 
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
+		// SeedProd de-enqueues and de-register scripts/styles on priority PHP_INT_MAX.
+		// Thus, we need to enqueue our scripts at the same priority for more compatibility.
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ], PHP_INT_MAX );
 		add_filter( 'style_loader_tag', [ $this, 'replaceStyleTag' ], 10, 2 );
 	}
 

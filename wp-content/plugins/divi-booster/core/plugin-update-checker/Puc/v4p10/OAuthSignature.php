@@ -85,8 +85,8 @@ if ( !class_exists('\DiviBooster\Puc_v4p10_OAuthSignature', false) ):
 			$rand = null;
 			if ( is_callable('random_bytes') ) {
 				try {
-					$rand = random_bytes(16);
-				} catch (Exception $ex) {
+					$rand = random_bytes(16); //phpcs:ignore -- not available in PHP <= 5.6, but feature detected
+				} catch (\Exception $ex) {
 					//Fall back to mt_rand (below).
 				}
 			}

@@ -1,5 +1,12 @@
 <?php // Divi / theme functions
 
+if (!function_exists('dbdb_et_pb_module_shortcode_attributes')) {
+    function dbdb_et_pb_module_shortcode_attributes($props, $attrs, $render_slug) {
+        return apply_filters('dbdb_et_pb_module_shortcode_attributes', $props, $attrs, $render_slug);
+    }
+    add_filter('et_pb_module_shortcode_attributes', 'dbdb_et_pb_module_shortcode_attributes', 10, 3);
+}
+
 if (!function_exists('dbdb_css_selector')) {
 	function dbdb_css_selector($key) {
 		$selectors = array(

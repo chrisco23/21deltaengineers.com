@@ -7,7 +7,7 @@ function dbmo_et_pb_portfolio_project_order_option_random($options) {
 	return $options;
 }
 
-add_filter('et_pb_module_shortcode_attributes', 'db_add_pre_get_portfolio_projects_random', 10, 3);
+add_filter('dbdb_et_pb_module_shortcode_attributes', 'db_add_pre_get_portfolio_projects_random', 10, 3);
 add_filter('et_module_shortcode_output', 'db_remove_pre_get_portfolio_projects_random');
 
 function db_add_pre_get_portfolio_projects_random($props, $atts, $slug) {

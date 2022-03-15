@@ -9,4 +9,5 @@ function db146_add_setting($plugin) {
 	esc_html_e($option->title());
 	$plugin->setting_end(); 
 } 
-$wtfdivi->add_setting((new DBDBOption146_StopSearchBoxOverlappingLogo())->settingsPageSubsection(), 'db146_add_setting');
+$option = (new DBDBOption146_StopSearchBoxOverlappingLogo());
+$wtfdivi->add_setting($option->settingsPageSubsection(), 'db146_add_setting');

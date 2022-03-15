@@ -31,10 +31,11 @@ class Api {
 	protected $routes = [
 		// phpcs:disable WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
 		'GET'    => [
-			'options' => [ 'callback' => [ 'Settings', 'getOptions' ], 'access' => 'everyone' ],
-			'ping'    => [ 'callback' => [ 'Ping', 'ping' ], 'access' => 'everyone' ],
-			'post'    => [ 'callback' => [ 'PostsTerms', 'getPostData' ], 'access' => 'everyone' ],
-			'tags'    => [ 'callback' => [ 'Tags', 'getTags' ], 'access' => 'everyone' ]
+			'options'                                     => [ 'callback' => [ 'Settings', 'getOptions' ], 'access' => 'everyone' ],
+			'ping'                                        => [ 'callback' => [ 'Ping', 'ping' ], 'access' => 'everyone' ],
+			'post'                                        => [ 'callback' => [ 'PostsTerms', 'getPostData' ], 'access' => 'everyone' ],
+			'post/(?P<postId>[\d]+)/first-attached-image' => [ 'callback' => [ 'PostsTerms', 'getFirstAttachedImage' ], 'access' => 'aioseo_page_social_settings' ],
+			'tags'                                        => [ 'callback' => [ 'Tags', 'getTags' ], 'access' => 'everyone' ]
 		],
 		'POST'   => [
 			'htaccess'                                            => [ 'callback' => [ 'Tools', 'saveHtaccess' ], 'access' => 'aioseo_tools_settings' ],

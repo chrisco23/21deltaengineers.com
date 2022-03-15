@@ -16,3 +16,11 @@ function dbdb_wp_rocket_delay_js_exclusions($excluded) {
 
     return $excluded;
 }
+
+add_filter( 'rocket_exclude_defer_js', 'dbdb_wp_rocket_defer_js_exclusions');
+
+function dbdb_wp_rocket_defer_js_exclusions($excluded) {
+    if (!is_array($excluded)) { return $excluded; }
+	$excluded[] = '/includes/builder/feature/dynamic-assets/assets/js/magnific-popup\.js';
+	return $excluded;
+}

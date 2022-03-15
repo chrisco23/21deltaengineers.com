@@ -232,15 +232,17 @@ class HeadlineAnalyzer {
 	public function matchWords( $headline, $explodedHeadline, $words ) {
 		$foundMatches = [];
 		foreach ( $words as $word ) {
+			$strippedWord = preg_replace( '/[^A-Za-z0-9 ]/', '', $word );
+
 			// Check if word is a phrase.
 			if ( strpos( $word, ' ' ) !== false ) {
-				if ( strpos( $headline, $word ) !== false ) {
+				if ( strpos( $headline, $strippedWord ) !== false ) {
 					$foundMatches[] = $word;
 				}
 				continue;
 			}
 			// Check if it is a single word.
-			if ( in_array( $word, $explodedHeadline, true ) ) {
+			if ( in_array( $strippedWord, $explodedHeadline, true ) ) {
 				$foundMatches[] = $word;
 			}
 		}

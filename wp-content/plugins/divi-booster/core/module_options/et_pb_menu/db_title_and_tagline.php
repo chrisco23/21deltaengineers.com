@@ -26,6 +26,22 @@ function dbmo_et_pb_menu_add_title_and_tagline_field($fields) {
 			'tab_slug'          => 'general',
 			'toggle_slug'       => 'elements',
 		),
+		'db_title_use_link' => array(
+			'label' => 'Link Site Title to Homepage',
+			'type' => 'yes_no_button',
+			'options' => array(
+				'off' => esc_html__( 'No', 'et_builder' ),
+				'on'  => esc_html__( 'yes', 'et_builder' ),
+			),
+			'option_category' => 'basic_option',
+			'description' => 'Make the site title into a link to the site homepage. '.divibooster_module_options_credit(),
+			'default' => 'off',
+			'tab_slug'          => 'general',
+			'toggle_slug'       => 'elements',
+            'show_if' => array(
+				'db_title' => 'on',
+			)
+		),
 		'db_tagline' => array(
 			'label' => 'Show Site Tagline',
 			'type' => 'yes_no_button',
@@ -38,6 +54,22 @@ function dbmo_et_pb_menu_add_title_and_tagline_field($fields) {
 			'default' => 'off',
 			'tab_slug'          => 'general',
 			'toggle_slug'       => 'elements',
+		),
+		'db_tagline_below_title' => array(
+			'label' => 'Place Site Tagline Below Title',
+			'type' => 'yes_no_button',
+			'options' => array(
+				'off' => esc_html__( 'No', 'et_builder' ),
+				'on'  => esc_html__( 'yes', 'et_builder' ),
+			),
+			'option_category' => 'basic_option',
+			'description' => 'Place the tagline below the title (if shown). '.divibooster_module_options_credit(),
+			'default' => 'off',
+			'tab_slug'          => 'general',
+			'toggle_slug'       => 'elements',
+            'show_if' => array(
+				'db_tagline' => 'on',
+			)
 		)
 	);
 	return $new_fields + $fields;
@@ -45,26 +77,65 @@ function dbmo_et_pb_menu_add_title_and_tagline_field($fields) {
 
 // Process added options
 function dbdbMenuModule_add_title_and_tagline_code_to_content($content, $args) {	
-	// Get the class
-	$order_class = divibooster_get_order_class_from_content('et_pb_menu', $content);
-	
-	if (!$order_class) { return $content; }
 
-	$css = '';
-    if (isset($args['db_title']) && $args['db_title'] === 'on') {
-        $title = get_bloginfo('name');
-        $content = str_replace('<div class="et_pb_menu__wrap', '<div class="db_title">'.esc_html($title).'</div><div class="et_pb_menu__wrap', $content);
-        $css.= ".{$order_class} .db_title { display: flex; align-items: center; margin-right: 30px }";
+    $args = wp_parse_args(
+        $args, 
+        array(
+            'db_title' => 'off',
+            'db_title_use_link' => 'off',
+            'db_tagline' => 'off',
+            'db_tagline_below_title' => 'off'
+        )
+    );
+
+    $classes = array(
+        'db_title_'.$args['db_title'],
+        'db_title_use_link_'.$args['db_title_use_link'],
+        'db_tagline_'.$args['db_tagline'],
+        'db_tagline_below_title_'.$args['db_tagline_below_title']
+    );
+
+    $content = divibooster_add_module_classes_to_content($content, $classes);
+
+    $title_div = '';
+    if ($args['db_title'] === 'on') {
+        $title = esc_html(get_bloginfo('name'));
+        if ($args['db_title_use_link'] === 'on') {
+            $title = '<a href="'.esc_attr(esc_url(home_url())).'">'.$title.'</a>';
+        }
+        $title_div = '<div class="db_title">'.$title.'</div>';
     }
-    if (isset($args['db_tagline']) && $args['db_tagline'] === 'on') {
-        $tagline = get_bloginfo('description');
-        $content = str_replace('<div class="et_pb_menu__wrap', '<div class="db_tagline">'.esc_html($tagline).'</div><div class="et_pb_menu__wrap', $content);
-        $css.= ".{$order_class} .db_tagline { display: flex; align-items: center; margin-right: 30px }";
-    }    
-	
-	if (!empty($css)) { $content.="<style>$css</style>"; }
+    $tagline = ($args['db_tagline'] === 'on')?'<div class="db_tagline">'.esc_html(get_bloginfo('description')).'</div>':'';   
+
+    if ($args['db_title'] === 'on' || $args['db_tagline'] === 'on') {
+        $title_and_tagline = sprintf(
+            '<div class="db_title_and_tagline">%s%s</div>',
+            $title_div,
+            $tagline
+        );
+        $content = str_replace('<div class="et_pb_menu__wrap', $title_and_tagline.'<div class="et_pb_menu__wrap', $content);
+    }
 	
 	return $content;
+}
+
+add_action('wp_head', 'dbdbMenuModule_print_styles');
+
+function dbdbMenuModule_print_styles() { ?>
+<style>
+.db_title, .db_tagline { 
+    margin-right: 30px;
+    margin-top: 8px;
+    line-height: 1em;
+}
+.db_title_and_tagline {
+    display: flex;
+}
+.db_tagline_below_title_on .db_title_and_tagline {
+    flex-direction: column;
+}
+</style>
+    <?php
 }
 
 
@@ -77,15 +148,19 @@ function dbdbMenuModule_add_title_and_tagline_font_options($fields, $slug, $main
     }
     $fields['fonts']['db_title'] = array(
         'css'   => array(
-            'main' => "{$main_css_element} .db_title"
+            'main' => "{$main_css_element} .db_title, {$main_css_element} .db_title a",
+            'important' => 'all'
         ),
         'label' => esc_html__('Site Title', 'divi-booster'),
+        'font_size' => array(
+			'default' => '14px',
+        ),
     );
     $fields['fonts']['db_tagline'] = array(
         'css'   => array(
             'main' => "{$main_css_element} .db_tagline"
         ),
-        'label' => esc_html__('Site Tagline', 'divi-booster'),
+        'label' => esc_html__('Site Tagline', 'divi-booster')
     );
     return $fields;
 }

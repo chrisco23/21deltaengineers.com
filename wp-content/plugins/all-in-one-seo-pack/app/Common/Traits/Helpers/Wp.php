@@ -394,7 +394,7 @@ trait Wp {
 
 		foreach ( $dbUsers as $dbUser ) {
 			$users[] = [
-				'id'          => intval( $dbUser->ID ),
+				'id'          => (int) $dbUser->ID,
 				'displayName' => $dbUser->display_name,
 				'niceName'    => $dbUser->user_nicename,
 				'email'       => $dbUser->user_email,
@@ -403,6 +403,44 @@ trait Wp {
 		}
 
 		return $users;
+	}
+
+	/**
+	 * Retrieve a list of site authors.
+	 *
+	 * @since 4.1.8
+	 *
+	 * @return array An array of user data.
+	 */
+	public function getSiteAuthors() {
+		$authors = aioseo()->cache->get( 'site_authors' );
+		if ( null === $authors ) {
+			// phpcs:disable WordPress.DB.SlowDBQuery, HM.Performance.SlowMetaQuery
+			global $wpdb;
+			$users = get_users(
+				[
+					'meta_key'     => $wpdb->prefix . 'user_level',
+					'meta_value'   => '0',
+					'meta_compare' => '!=',
+					'blog_id'      => 0
+				]
+			);
+			// phpcs:enable WordPress.DB.SlowDBQuery, HM.Performance.SlowMetaQuery
+
+			$authors = [];
+			foreach ( $users as $user ) {
+				$authors[] = [
+					'id'          => (int) $user->ID,
+					'displayName' => $user->display_name,
+					'niceName'    => $user->user_nicename,
+					'email'       => $user->user_email,
+					'gravatar'    => get_avatar_url( $user->user_email )
+				];
+			}
+			aioseo()->cache->update( 'site_authors', $authors, 12 * HOUR_IN_SECONDS );
+		}
+
+		return $authors;
 	}
 
 	/**

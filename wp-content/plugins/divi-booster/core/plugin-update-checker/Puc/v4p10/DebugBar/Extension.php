@@ -66,7 +66,7 @@ if ( !class_exists('\DiviBooster\Puc_v4p10_DebugBar_Extension', false) ):
 			$update = $this->updateChecker->checkForUpdates();
 			if ( $update !== null ) {
 				echo "An update is available:";
-				echo '<pre>', htmlentities(print_r($update, true)), '</pre>';
+				echo '<pre>', esc_html(print_r($update, true)), '</pre>';
 			} else {
 				echo 'No updates found.';
 			}

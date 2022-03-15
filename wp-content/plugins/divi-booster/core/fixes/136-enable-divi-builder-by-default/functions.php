@@ -69,5 +69,6 @@ if (!class_exists('DBDBOption136_EnableBuilderByDefault')) {
 		}
 	}
 	
-	(new DBDBOption136_EnableBuilderByDefault)->init();
+	$option = (new DBDBOption136_EnableBuilderByDefault);
+    $option->init();
 }

@@ -36,7 +36,7 @@ if (!class_exists('DBDBExtendedIcon')) {
                     "search_terms"=>"divi-booster custom-icon",
                     "unicode"=>$this->unicode(),
                     "name"=>"Divi Booster Custom Icon",
-                    "styles"=>["divi","solid"],
+                    "styles"=>array("divi","solid"),
                     "is_divi_icon"=>true,
                     "font_weight"=>400
                 )
@@ -63,7 +63,7 @@ if (!class_exists('DBDBExtendedIcon')) {
 			$id = $this->id();
 			$url = $this->url;
 			$icon = '.et_pb_custom_button_icon[data-icon="'.esc_html($id).'"]';
-            $extended_icon = '.et_pb_button[data-icon="'.html_entity_decode($this->unicode()).'"]';
+            $extended_icon = '.et_pb_button[data-icon="'.html_entity_decode($this->unicode(), ENT_QUOTES, 'UTF-8').'"]';
 			$bg_img = empty($url)?'none':"url('".esc_html($url)."')";
 			echo <<<END
 			<style>
@@ -101,7 +101,7 @@ END;
 		public function outputIconUpdateJs() { 
             $encoded_id = json_encode($this->id());
             $encoded_url = json_encode($this->url);
-            $encoded_unicode = json_encode(html_entity_decode($this->unicode()));
+            $encoded_unicode = json_encode(html_entity_decode($this->unicode(), ENT_QUOTES, 'UTF-8'));
             ?>
 			<script>
 			jQuery(function($){

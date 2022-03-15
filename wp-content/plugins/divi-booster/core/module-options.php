@@ -92,6 +92,18 @@ function db_add_module_field_filter() {
 	}
 }
 
+// === Fix missing props when cached ===
+add_filter('dbdb_et_pb_module_shortcode_attributes', 'dbdb_module_options_fix_missing_props', 10, 3);
+
+function dbdb_module_options_fix_missing_props($props, $attrs, $render_slug) {
+    foreach(apply_filters("dbmo_{$render_slug}_whitelisted_fields", array()) as $field) {
+        if (!isset($props[$field]) && isset($attrs[$field])) {
+            $props[$field] = $attrs[$field];
+        }
+    }
+    return $props;
+}
+
 
 // === Shortcode wrapping ===
 
@@ -222,6 +234,13 @@ function divibooster_filter_global_modules($posts) {
 }
 
 // === Shortcode content functions ===
+
+// add classes to the module
+function divibooster_add_module_classes_to_content($content, $classes) {
+    $classes = implode(' ', $classes);
+	$content = preg_replace('#(<div class="[^"]*?et_pb_module [^"]*?)(">)#', '\\1 '.$classes.'\\2', $content);
+	return $content;
+}
 
 // get the classes assigned to the module
 function divibooster_get_classes_from_content($content) {

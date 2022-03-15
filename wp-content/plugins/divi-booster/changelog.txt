@@ -1,3 +1,17 @@
+= 3.7.9 =
+* Fixed custom icon not working correctly with Divi Breadcrumbs Module
+* Added option to place site tagline below title in menu module
+
+= 3.7.8 =
+* Improved compatibility with older PHP versions
+* Added option to link menu module site title to homepage
+* Fixed phone number wrapping on mobile when top header text set
+* Fixed custom icon path wrong on Divi Builder plugin
+
+= 3.7.7 =
+* Fixed WP Rocket affecting open image in lightbox feature
+* Fixed site title not showing in menu module
+
 = 3.7.6 =
 * Fixed WP Rocket preventing accordion from loading fully closed
 * Fixed htaccess overwritten when content read fails

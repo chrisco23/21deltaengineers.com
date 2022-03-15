@@ -2,14 +2,16 @@
 /**
  * Notice displayed in admin panel.
  *
- * @var string $ajax_url URL of admin-ajax.
+ * @var string $ajax_url     URL of admin-ajax.
+ * @var string $close_action Action using in WP Ajax.
  * @package WebP Converter for Media
  */
 
 ?>
 <div class="notice notice-success is-dismissible"
 	data-notice="webp-converter-for-media"
-	data-url="<?php echo esc_url( $ajax_url ); ?>"
+	data-notice-action="<?php echo esc_attr( $close_action ); ?>"
+	data-notice-url="<?php echo esc_url( $ajax_url ); ?>"
 >
 	<div class="webpContent webpContent--notice">
 		<h4>

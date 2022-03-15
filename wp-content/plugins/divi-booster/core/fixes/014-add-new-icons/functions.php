@@ -36,7 +36,8 @@ function db014_register_icons() {
 	if (!class_exists('DBDBExtendedIcon')) { return; }
 	foreach(db014_get_icon_urls() as $id=>$url) {
 		if (!empty($url)) {
-			(new DBDBExtendedIcon($id, $url))->init();
+            $icon = (new DBDBExtendedIcon($id, $url));
+            $icon->init();
 		}
 	}
 }
@@ -142,8 +143,8 @@ function db014_shared_css() { ?>
 .et_pb_gallery .et_pb_gallery_image .et_pb_inline_icon[data-icon^="wtfdivi014-url"]:before,
 .et_pb_blog_grid .et_pb_inline_icon[data-icon^="wtfdivi014-url"]:before,
 .et_pb_image .et_pb_image_wrap .et_pb_inline_icon[data-icon^="wtfdivi014-url"]:before,
-.et_pb_dmb_breadcrumbs > ol > li > a:first-child[data-icon^="wtfdivi014-url"]:before,
-.et_pb_dmb_breadcrumbs > ol > li[data-icon^="wtfdivi014-url"]:before,
+.et_pb_dmb_breadcrumbs ol > li > a:first-child[data-icon^="wtfdivi014-url"]:before,
+.et_pb_dmb_breadcrumbs ol > li[data-icon^="wtfdivi014-url"]:before,
 .et_pb_module.et_pb_dmb_breadcrumbs li.db014_breadcrumb_with_custom_icon:before
 { 
     display:none !important; 

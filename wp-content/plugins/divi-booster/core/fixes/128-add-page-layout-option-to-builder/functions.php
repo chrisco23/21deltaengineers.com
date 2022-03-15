@@ -97,29 +97,30 @@ if (dbdb_is_divi()) {
 			
 			function et_pb_is_pagebuilder_used( $page_id = 0 ) {
 				
+				try {
+					// Get the function caller
+					$bt = debug_backtrace(2); // 2 = DEBUG_BACKTRACE_IGNORE_ARGS
+					$caller = array_shift($bt);
+				} catch (Exception $e) {}
+
+                
 				if ( 0 === $page_id && function_exists('et_core_page_resource_get_the_ID')) {
 					$page_id = et_core_page_resource_get_the_ID();
 				}
-				
-				try {
-					// Get the function caller
-					$bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-					$caller = array_shift($bt);
-					
-					// If called from within page.php template, 
-					if (isset($caller['file']) and basename($caller['file'])==='page.php') {
-						
-						$layout = dbdb128_get_page_layout($page_id);
-						
-						// and we are using a sidebar
-						if ($layout!=='et_full_width_page') {
-							
-							// pretend that this isn't pagebuilder
-							return false;
-						}
-					}
-				} catch (Exception $e) {}
-				
+
+                // If called from within page.php template, 
+                if (isset($caller['file']) and basename($caller['file'])==='page.php') {
+                    
+                    $layout = dbdb128_get_page_layout($page_id);
+                    
+                    // and we are using a sidebar
+                    if ($layout!=='et_full_width_page') {
+                        
+                        // pretend that this isn't pagebuilder
+                        return false;
+                    }
+                }
+            
 				// Otherwise, return normal result
 				return ('on' === get_post_meta($page_id, '_et_pb_use_builder', true));
 			}

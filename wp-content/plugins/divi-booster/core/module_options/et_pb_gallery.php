@@ -187,7 +187,7 @@ function dbmo_et_pb_gallery_add_fields($fields) {
 }
 
 // Add "edited with" booster version attribute
-add_filter('et_pb_module_shortcode_attributes', 'db_pb_gallery_add_booster_version', 10, 3);
+add_filter('dbdb_et_pb_module_shortcode_attributes', 'db_pb_gallery_add_booster_version', 10, 3);
 
 function db_pb_gallery_add_booster_version($props, $attrs, $render_slug) {
 	if ($render_slug === 'et_pb_gallery' && is_array($props) && isset($_GET['et_fb']) && $_GET['et_fb']==='1') {

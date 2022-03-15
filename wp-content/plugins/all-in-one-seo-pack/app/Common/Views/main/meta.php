@@ -56,6 +56,8 @@ endif;
 // This adds the miscellaneous verification to the head tag inside our comments.
 // @TODO: [V4+] Maybe move this out of meta? Better idea would be to have a global wp_head where meta gets
 // attached as well as other things like this:
-if ( aioseo()->options->webmasterTools->miscellaneousVerification ) {
-	echo "\n\t\t" . aioseo()->helpers->decodeHtmlEntities( aioseo()->options->webmasterTools->miscellaneousVerification ) . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+$miscellaneous = aioseo()->helpers->decodeHtmlEntities( aioseo()->options->webmasterTools->miscellaneousVerification );
+$miscellaneous = trim( $miscellaneous );
+if ( ! empty( $miscellaneous ) ) {
+	echo "\n\t\t$miscellaneous\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }

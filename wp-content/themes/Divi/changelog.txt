@@ -1,3 +1,24 @@
+version 4.14.9 ( updated 03-10-2022 )
+- Fixed a compatibility issue with WP Offload Media where one of the plugin's methods was renamed causing a fatal error in our products.
+- Exposed hasValue helper for third-party extensions.
+- Fixed search module input placeholder hidden with field text alignment set to right.
+- Fixed a bug which were causing Background Settings on Responsive mode to not display properly on some cases.
+- PHP 7.4 or higher is now recommended for performance and security reasons. Divi Help & Support Center's System Status card has been updated to reflect this.
+- Fixed Presets pop-up window overflow issue when items exceeded viewport height.
+- Changed 'Improve Google Fonts Loading' option default to 'off'.
+	* core/components/Portability.php
+	* core/components/SupportCenter.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/feature/dynamic-assets/assets/js/search.js
+	* includes/builder/feature/dynamic-assets/class-dynamic-assets.php
+	* includes/builder/feature/gutenberg/blocks/Layout.php
+	* includes/builder/feature/gutenberg/utils/Editor.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/module/woocommerce/CheckoutBilling.php
+	* includes/builder/plugin-compat/amazon-s3-and-cloudfront.php
+	* includes/builder/scripts/frontend/scripts.js
+	* options_divi.php
+
 version 4.14.8 ( updated 02-17-2022 )
 - Fixed issue where the google maps are not loading in the Map Module in the VB.
 - Performance improved by preventing unnecessary re-renderings of some components.

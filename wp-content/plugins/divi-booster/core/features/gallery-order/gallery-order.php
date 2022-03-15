@@ -8,7 +8,7 @@ if (function_exists('add_filter')) {
 class GalleryOrderFeature {
 
     public function init() {
-        add_filter('et_pb_module_shortcode_attributes', array($this, 'db_reverse_gallery_ids'), 10, 3);
+        add_filter('dbdb_et_pb_module_shortcode_attributes', array($this, 'db_reverse_gallery_ids'), 10, 3);
         add_filter('et_pb_all_fields_unprocessed_et_pb_gallery', array($this, 'add_fields'));
         add_action('wp_ajax_et_pb_process_computed_property', array($this, 'apply_to_vb_preview'), 9);
     }

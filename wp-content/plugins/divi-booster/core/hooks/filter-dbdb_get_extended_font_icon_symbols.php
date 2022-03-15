@@ -9,7 +9,7 @@ if (!function_exists('et_pb_get_extended_font_icon_symbols')) {
     function et_pb_get_extended_font_icon_symbols() {
         $cache_key = 'et_pb_get_extended_font_icon_symbols';
         if ( ! et_core_cache_has( $cache_key ) ) {
-            $full_icons_list_path = get_template_directory() . '/includes/builder/feature/icon-manager/full_icons_list.json';
+            $full_icons_list_path = dbdb_divi_font_icons_path();
             if ( file_exists( $full_icons_list_path ) ) {
                 // phpcs:disable WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Can't use wp_remote_get() for local file
                 $icons_data = json_decode( file_get_contents( $full_icons_list_path ), true );
@@ -25,4 +25,18 @@ if (!function_exists('et_pb_get_extended_font_icon_symbols')) {
             return et_core_cache_get( $cache_key );
         }
     }
+}
+
+function dbdb_divi_font_icons_path() {
+    $plugin_active = (defined('ET_BUILDER_PLUGIN_ACTIVE') && ET_BUILDER_PLUGIN_ACTIVE);
+    if ($plugin_active) {
+        if (defined('WP_PLUGIN_DIR')) {
+            return WP_PLUGIN_DIR.'/divi-builder/includes/builder/feature/icon-manager/full_icons_list.json';
+        }
+    } else {
+        if (function_exists('get_template_directory')) {
+            return get_template_directory() . '/includes/builder/feature/icon-manager/full_icons_list.json';
+        }
+    }
+    return false;
 }

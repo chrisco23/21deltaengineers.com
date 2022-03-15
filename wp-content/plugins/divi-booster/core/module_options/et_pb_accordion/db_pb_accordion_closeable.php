@@ -3,7 +3,7 @@
 add_filter('dbmo_et_pb_accordion_whitelisted_fields', 'dbmo_et_pb_accordion_register_closeable_field');
 add_filter('dbmo_et_pb_accordion_fields', 'dbmo_et_pb_accordion_add_closeable_field');
 add_filter('db_pb_accordion_content', 'db_pb_accordion_add_closeable_code_to_content', 10, 2);
-add_filter('et_pb_module_shortcode_attributes', 'dbmo_et_pb_accordion_item_inherit_closed_icon_styles', 10, 3);
+add_filter('dbdb_et_pb_module_shortcode_attributes', 'dbmo_et_pb_accordion_item_inherit_closed_icon_styles', 10, 3);
 
 function dbmo_et_pb_accordion_item_inherit_closed_icon_styles($props, $attrs, $render_slug) {
     if ($render_slug !== 'et_pb_accordion_item' || !is_array($props)) { return $props; }

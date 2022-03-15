@@ -152,6 +152,7 @@ return array(
     'WebpConverter\\Service\\NonceManager' => $baseDir . '/src/Service/NonceManager.php',
     'WebpConverter\\Service\\OptionsAccessManager' => $baseDir . '/src/Service/OptionsAccessManager.php',
     'WebpConverter\\Service\\ServerConfigurator' => $baseDir . '/src/Service/ServerConfigurator.php',
+    'WebpConverter\\Service\\StatsManager' => $baseDir . '/src/Service/StatsManager.php',
     'WebpConverter\\Service\\TokenValidator' => $baseDir . '/src/Service/TokenValidator.php',
     'WebpConverter\\Service\\ViewLoader' => $baseDir . '/src/Service/ViewLoader.php',
     'WebpConverter\\Settings\\AdminAssets' => $baseDir . '/src/Settings/AdminAssets.php',

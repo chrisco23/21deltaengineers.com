@@ -28,8 +28,7 @@ class DBDBDivi implements DBDBAnyDivi
         return defined('ET_CORE_VERSION')?ET_CORE_VERSION:false;
     }
 
-    public function isThemeBuilderLayout()
-    {
+    public function isThemeBuilderLayout() {
         return (is_callable('ET_Builder_Element::is_theme_builder_layout') && ET_Builder_Element::is_theme_builder_layout());
     }
 }

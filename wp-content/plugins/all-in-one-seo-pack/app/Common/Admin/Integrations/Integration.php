@@ -93,7 +93,7 @@ abstract class Integration {
 	 *
 	 * @return boolean Whether or not the plugin is active.
 	 */
-	private function isPluginActive() {
+	public function isPluginActive() {
 		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 		foreach ( $this->plugins as $basename ) {
@@ -112,7 +112,7 @@ abstract class Integration {
 	 *
 	 * @return boolean Whether or not the theme is active.
 	 */
-	private function isThemeActive() {
+	public function isThemeActive() {
 		$theme = wp_get_theme();
 		foreach ( $this->themes as $name ) {
 			if ( $name === $theme->stylesheet || $name === $theme->template ) {

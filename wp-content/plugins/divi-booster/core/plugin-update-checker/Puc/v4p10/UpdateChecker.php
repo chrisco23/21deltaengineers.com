@@ -907,7 +907,7 @@ if ( !class_exists('\DiviBooster\Puc_v4p10_UpdateChecker', false) ):
 						sprintf(
 							'The directory structure of the update is incorrect. All files should be inside ' .
 							'a directory named <span class="code">%s</span>, not at the root of the ZIP archive.',
-							htmlentities($this->slug)
+							esc_html($this->slug)
 						)
 					);
 				}

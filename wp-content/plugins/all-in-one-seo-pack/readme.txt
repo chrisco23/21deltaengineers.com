@@ -2,8 +2,8 @@
 Contributors: aioseo, smub, benjaminprojas
 Tags: SEO, Google Search Console, XML Sitemap, meta description, schema, meta title, rich snippets, woocommerce seo, local seo, open graph, google news sitemap, video sitemap, robots.txt, seo audit, content analysis, seo plugin, redirection
 Requires at least: 4.9
-Tested up to: 5.9
-Stable tag: 4.1.7
+Tested up to: 5.9.1
+Stable tag: 4.1.8
 License: GPLv2 or later
 Requires PHP: 5.4
 
@@ -207,6 +207,34 @@ Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeg
 
 
 == Changelog ==
+
+**New in Version 4.1.8**
+
+* New: Manage redirects directly from any post/page to temporarily redirect to another post/page.
+* New: Prevent updating the modified date on a page or post when making changes that you don't need search engines to re-index.
+* Updated: Image sitemap now includes images from Divi.
+* Updated: Smart tags now add a space in front of them if there isn't one yet.
+* Updated: Post editor social tab now displays an alert when Facebook/Twitter is disabled in the settings.
+* Updated: Additional link format options no longer displayed for ACF link fields since they aren't supported there.
+* Updated: Added aioseo_multisite_subdomain filter to allow users to indicate which type of configuration their multisite uses.
+* Updated: Disabling "Show in Search Results" option sets robots meta back to default settings if no other robots settings were previously changed.
+* Updated: Removed QAPage graph in favour of FAQPage graph.
+* Updated: Updated score description for the SEO Analyzer to better reflect SEO recommendations.
+* Fixed: Facebook/Twitter previews now always display the right image for the active image source.
+* Fixed: Link Format styles have been readded after they were removed in WP 5.9.
+* Fixed: Local SEO metabox missing some styles.
+* Fixed: Canonical URL of the latest post sometimes used for the homepage.
+* Fixed: Canonical URL and OG:URL missing from attachment pages.
+* Fixed: Custom canonical URL no longer alters the schema of the OG:URL.
+* Fixed: Headline Analyzer sometimes not correctly identifying some uncommon words, power words, etc.
+* Fixed: Image sitemap now includes the correct amount of images if the post content contains an invalid post gallery shortcode.
+* Fixed: Image sitemap scan sometimes interferes with the V3 post meta migration.
+* Fixed: Miscellaneous Webmaster Verification field is now trimmed before being output into the HEAD, preventing blank spaces.
+* Fixed: PHP error after deleting a post from a post type that does not support trashing.
+* Fixed: SEO Title field no longer has extra trailing spaces.
+* Fixed: Meta Description field no longer has an extra trailing new line.
+* Fixed: TruSEO now runs correctly if the visual editor in the Classic Editor is disabled.
+* Fixed: Sitemap Priority/Frequency dropdowns now correctly display in the sidebar.
 
 **New in Version 4.1.7**
 
@@ -787,6 +815,6 @@ AIOSEO is the original WordPress SEO plugin, and it's trusted by over 3 million 
 
 == Upgrade Notice ==
 
-= 4.1.7 =
+= 4.1.8 =
 
 This update adds major improvements and bugfixes.

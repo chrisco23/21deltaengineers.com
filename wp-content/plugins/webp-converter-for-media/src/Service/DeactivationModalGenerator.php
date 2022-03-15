@@ -27,9 +27,19 @@ class DeactivationModalGenerator {
 	 */
 	protected $plugin_data;
 
-	public function __construct( PluginInfo $plugin_info, PluginData $plugin_data ) {
-		$this->plugin_info = $plugin_info;
-		$this->plugin_data = $plugin_data;
+	/**
+	 * @var StatsManager
+	 */
+	private $stats_manager;
+
+	public function __construct(
+		PluginInfo $plugin_info,
+		PluginData $plugin_data,
+		StatsManager $stats_manager = null
+	) {
+		$this->plugin_info   = $plugin_info;
+		$this->plugin_data   = $plugin_data;
+		$this->stats_manager = $stats_manager ?: new StatsManager();
 	}
 
 	/**
@@ -142,6 +152,22 @@ class DeactivationModalGenerator {
 
 							$settings_json = json_encode( $plugin_settings );
 							return base64_encode( $settings_json ?: '' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
+						}
+					)
+				)
+				->set_value(
+					new DeactivationModal\Model\FormValue(
+						'request_plugin_stats',
+						function () {
+							$stats_data = [
+								'usage_time'          => $this->stats_manager->get_plugin_usage_time(),
+								'first_version'       => $this->stats_manager->get_plugin_first_version(),
+								'regeneration_images' => $this->stats_manager->get_regeneration_images_count(),
+								'calculation_images'  => $this->stats_manager->get_calculation_images_count(),
+							];
+
+							$stats_json = json_encode( $stats_data );
+							return base64_encode( $stats_json ?: '' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 						}
 					)
 				)

@@ -1,6 +1,7 @@
 <?php 
 
-(new DBDBFilterablePortfolioTabsTermsFilter())->init();
+$filter = (new DBDBFilterablePortfolioTabsTermsFilter());
+$filter->init();
 
 class DBDBFilterablePortfolioTabsTermsFilter {
 
@@ -8,7 +9,7 @@ class DBDBFilterablePortfolioTabsTermsFilter {
     private $atts;
 
     public function init() {
-        add_filter('et_pb_module_shortcode_attributes', array($this, 'add_terms_filter'), 10, 3);
+        add_filter('dbdb_et_pb_module_shortcode_attributes', array($this, 'add_terms_filter'), 10, 3);
         add_filter('et_module_shortcode_output', array($this, 'remove_terms_filter'));
     }
     

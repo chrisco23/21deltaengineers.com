@@ -373,13 +373,8 @@ class ET_Builder_Module_Woocommerce_Checkout_Payment_Info extends ET_Builder_Mod
 			),
 			'background'     => array(
 				'css'     => array(
-					'main' => implode(
-						',',
-						array(
-							'%%order_class%% .woocommerce-checkout #payment',
-							'%%order_class%% .woocommerce-order',
-						)
-					),
+					// Backgrounds need to be applied to module wrapper.
+					'main' => '%%order_class%%.et_pb_wc_checkout_payment_info',
 				),
 				'options' => array(
 					'background_color' => array(
@@ -570,18 +565,18 @@ class ET_Builder_Module_Woocommerce_Checkout_Payment_Info extends ET_Builder_Mod
 		self::maybe_handle_hooks();
 
 		$is_cart_empty = function_exists( 'WC' ) && isset( WC()->cart ) && WC()->cart->is_empty();
-		$is_pb_mode    = et_fb_is_computed_callback_ajax();
+		$is_pb_mode    = et_fb_is_computed_callback_ajax() || is_et_pb_preview();
 		$class         = 'ET_Builder_Module_Helper_Woocommerce_Modules';
 
 		// Set dummy cart contents to output Billing when no product is in cart.
-		if ( $is_cart_empty && $is_pb_mode ) {
+		if ( ( $is_cart_empty && $is_pb_mode ) || is_et_pb_preview() ) {
 			add_filter(
 				'woocommerce_get_cart_contents',
 				array( $class, 'set_dummy_cart_contents' )
 			);
 		}
 
-		if ( et_fb_is_computed_callback_ajax() || $is_tb ) {
+		if ( et_fb_is_computed_callback_ajax() || $is_tb || is_et_pb_preview() ) {
 			/*
 			 * Show Login form in VB.
 			 *
@@ -602,10 +597,17 @@ class ET_Builder_Module_Woocommerce_Checkout_Payment_Info extends ET_Builder_Mod
 		}
 
 		ob_start();
-		WC_Shortcode_Checkout::output( array() );
+		if ( is_et_pb_preview() ) {
+			printf(
+				'<div className="et_pb_wc_inactive__message">%s</div>',
+				esc_html__( 'Woo Checkout Payment module can be used on a page and cannot be previewd.', 'et_builder' )
+			);
+		} else {
+			WC_Shortcode_Checkout::output( array() );
+		}
 		$markup = ob_get_clean();
 
-		if ( et_fb_is_computed_callback_ajax() || $is_tb ) {
+		if ( et_fb_is_computed_callback_ajax() || $is_tb || is_et_pb_preview() ) {
 			remove_filter(
 				'wc_get_template',
 				[
@@ -617,7 +619,7 @@ class ET_Builder_Module_Woocommerce_Checkout_Payment_Info extends ET_Builder_Mod
 			);
 		}
 
-		if ( $is_cart_empty && $is_pb_mode ) {
+		if ( ( $is_cart_empty && $is_pb_mode ) || is_et_pb_preview() ) {
 			remove_filter(
 				'woocommerce_get_cart_contents',
 				array( $class, 'set_dummy_cart_contents' )
@@ -648,9 +650,44 @@ class ET_Builder_Module_Woocommerce_Checkout_Payment_Info extends ET_Builder_Mod
 		// Module classname.
 		$this->add_classname( $this->get_text_orientation_classname() );
 
+		if ( $this->_module_has_background() ) {
+			ET_Builder_Element::set_style(
+				$render_slug,
+				array(
+					'selector'    => '%%order_class%% .woocommerce-checkout #payment, %%order_class%% .woocommerce-order',
+					'declaration' => 'background: transparent !important;',
+				)
+			);
+		}
+
 		$output = self::get_checkout_payment_info( $attrs );
 
 		return $this->_render_module_wrapper( $output, $render_slug );
+	}
+
+	/**
+	 * Checks if module has background.
+	 *
+	 * @since 4.15.0
+	 *
+	 * @return bool
+	 */
+	protected function _module_has_background() {
+		$has_background_color      = ! empty( $this->props['background_color'] );
+		$has_background_gradient   = isset( $this->props['use_background_color_gradient'] ) && 'on' === $this->props['use_background_color_gradient'];
+		$has_background_image      = ! empty( $this->props['background_image'] );
+		$has_background_video_mp4  = ! empty( $this->props['background_video_mp4'] );
+		$has_background_video_webm = ! empty( $this->props['background_video_webm'] );
+		$has_background_pattern    = isset( $this->props['background_enable_pattern_style'] ) && 'on' === $this->props['background_enable_pattern_style'] && ! empty( $this->props['background_pattern_style'] );
+		$has_background_mask       = isset( $this->props['background_enable_pattern_style'] ) && 'on' === $this->props['background_enable_mask_style'] && ! empty( $this->props['background_mask_style'] );
+
+		return $has_background_color
+			|| $has_background_gradient
+			|| $has_background_image
+			|| $has_background_video_mp4
+			|| $has_background_video_webm
+			|| $has_background_pattern
+			|| $has_background_mask;
 	}
 }
 

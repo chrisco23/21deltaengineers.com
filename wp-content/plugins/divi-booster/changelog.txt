@@ -1,3 +1,10 @@
+= 3.8.1 =
+* Removed slide background link url option - same effect can now be achieved with the built-in slide module link field
+
+= 3.8.0 =
+* Extended contact form blacklist to work with custom email fields
+* Fixed second slide button preview not working
+
 = 3.7.9 =
 * Fixed custom icon not working correctly with Divi Breadcrumbs Module
 * Added option to place site tagline below title in menu module

@@ -1,5 +1,16 @@
 == Changelog ==
 
+= 4.3.1 (2022-04-05) =
+* `[Fixed]` Generating rewrite rules for via .htaccess loading mode
+
+= 4.3.0 (2022-04-01) =
+* `[Fixed]` Authorization of access to REST API
+* `[Changed]` Description of plugin operation in plugin settings
+* `[Added]` Command "wp webp-converter calculate" for WP-CLI
+* `[Added]` Command "wp webp-converter regenerate" for WP-CLI
+* `[Added]` Converting .webp files to AVIF format
+* `[Added]` Support for environments where DOCUMENT_ROOT is different from WordPress installation directory
+
 = 4.2.4 (2022-03-01) =
 * `[Fixed]` Generating paths for via .htaccess loading mode
 

@@ -4,16 +4,12 @@ namespace WebpConverter\Conversion\Directory;
 
 use WebpConverter\Conversion\OutputPath;
 use WebpConverter\HookableInterface;
+use WebpConverter\Service\PathsGenerator;
 
 /**
  * Returns various types of paths for directories.
  */
 class DirectoryIntegration implements HookableInterface {
-
-	/**
-	 * @var PathsGenerator
-	 */
-	private $paths_generator;
 
 	/**
 	 * Objects of supported directories.
@@ -22,10 +18,6 @@ class DirectoryIntegration implements HookableInterface {
 	 */
 	private $directories = [];
 
-	public function __construct( PathsGenerator $paths_generator ) {
-		$this->paths_generator = $paths_generator;
-	}
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -33,7 +25,6 @@ class DirectoryIntegration implements HookableInterface {
 		add_filter( 'webpc_dir_name', [ $this, 'get_dir_as_name' ], 0, 2 );
 		add_filter( 'webpc_dir_path', [ $this, 'get_dir_as_path' ], 0, 2 );
 		add_filter( 'webpc_dir_url', [ $this, 'get_dir_as_url' ], 0, 2 );
-		add_filter( 'webpc_uploads_prefix', [ $this, 'get_prefix_path' ], 0 );
 	}
 
 	/**
@@ -115,7 +106,7 @@ class DirectoryIntegration implements HookableInterface {
 			}
 		}
 
-		return sprintf( '%1$s/%2$s', $this->paths_generator->get_wordpress_root_path(), $directory_name );
+		return sprintf( '%1$s/%2$s', PathsGenerator::get_wordpress_root_path(), $directory_name );
 	}
 
 	/**
@@ -139,26 +130,5 @@ class DirectoryIntegration implements HookableInterface {
 
 		$source_url = apply_filters( 'webpc_site_url', get_site_url() );
 		return sprintf( '%1$s/%2$s', $source_url, $directory_name );
-	}
-
-	/**
-	 * Returns prefix for wp-content directory for rules in .htaccess file.
-	 *
-	 * @return string Prefix for wp-content directory.
-	 * @internal
-	 */
-	public function get_prefix_path(): string {
-		$document_root  = rtrim(
-			preg_replace( '/(\/|\\\\)/', DIRECTORY_SEPARATOR, realpath( $_SERVER['DOCUMENT_ROOT'] ) ?: '' ) ?: '', // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-			'\/'
-		);
-		$root_directory = rtrim(
-			$this->paths_generator->get_wordpress_root_path(),
-			'\/'
-		);
-		$diff_dir       = trim( str_replace( $document_root, '', $root_directory ), '\/' );
-		$diff_path      = sprintf( '/%s/', $diff_dir );
-
-		return str_replace( '//', '/', $diff_path );
 	}
 }

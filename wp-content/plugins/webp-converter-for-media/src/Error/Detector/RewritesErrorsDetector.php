@@ -91,7 +91,7 @@ class RewritesErrorsDetector implements ErrorDetector {
 					return new RewritesNotExecutedNotice();
 				}
 
-				return new RewritesNotWorkingNotice();
+				return new RewritesNotWorkingNotice( $this->plugin_data );
 			case PassthruLoader::LOADER_TYPE:
 				if ( $this->if_redirects_are_works() === true ) {
 					break;

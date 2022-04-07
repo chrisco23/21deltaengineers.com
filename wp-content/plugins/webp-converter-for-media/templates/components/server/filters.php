@@ -2,7 +2,6 @@
 /**
  * Information about using filters displayed in server configuration widget.
  *
- * @var string $site_root_path Root path of WordPress installation.
  * @package WebP Converter for Media
  */
 
@@ -13,7 +12,7 @@
 	<tr>
 		<td class="e">webpc_site_root</td>
 		<td class="v">
-			<?php echo esc_html( apply_filters( 'webpc_site_root', $site_root_path ) ); ?>
+			<?php echo esc_html( apply_filters( 'webpc_site_root', '-' ) ); ?>
 		</td>
 	</tr>
 	<tr>
@@ -47,15 +46,21 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="e">webpc_uploads_prefix</td>
+		<td class="e">webpc_htaccess_rewrite_root</td>
 		<td class="v">
-			<?php echo esc_html( apply_filters( 'webpc_uploads_prefix', '/' ) ); ?>
+			<?php echo esc_html( apply_filters( 'webpc_htaccess_rewrite_root', '-' ) ); ?>
 		</td>
 	</tr>
 	<tr>
-		<td class="e">webpc_htaccess_prefix_rule</td>
+		<td class="e">webpc_htaccess_rewrite_path</td>
 		<td class="v">
-			<?php echo esc_html( apply_filters( 'webpc_htaccess_prefix_rule', apply_filters( 'webpc_uploads_prefix', '/' ) ) ); ?>
+			<?php echo esc_html( apply_filters( 'webpc_htaccess_rewrite_path', '-' ) ); ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="e">webpc_uploads_prefix</td>
+		<td class="v">
+			<?php echo esc_html( apply_filters( 'webpc_uploads_prefix', '-' ) ); ?>
 		</td>
 	</tr>
 	</tbody>

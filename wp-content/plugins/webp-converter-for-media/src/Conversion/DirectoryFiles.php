@@ -52,7 +52,7 @@ class DirectoryFiles implements HookableInterface {
 		}
 
 		$this->server_configurator->set_memory_limit();
-		$this->server_configurator->set_execution_time();
+		$this->server_configurator->set_execution_time( 900 );
 
 		$settings = $this->plugin_data->get_plugin_settings();
 		return $this->find_files_in_directory( $dir_path, $settings[ SupportedExtensionsOption::OPTION_NAME ], $skip_converted );

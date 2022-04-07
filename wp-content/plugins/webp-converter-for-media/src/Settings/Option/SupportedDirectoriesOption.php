@@ -43,7 +43,7 @@ class SupportedDirectoriesOption extends OptionAbstract {
 	 * {@inheritdoc}
 	 */
 	public function get_info(): string {
-		return __( 'Files from these directories will be supported in output formats.', 'webp-converter-for-media' );
+		return __( 'Files from these directories will be converted to output formats.', 'webp-converter-for-media' );
 	}
 
 	/**

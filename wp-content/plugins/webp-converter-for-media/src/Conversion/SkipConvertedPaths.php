@@ -18,6 +18,11 @@ class SkipConvertedPaths implements HookableInterface {
 	 */
 	private $plugin_data;
 
+	/**
+	 * @var string[]
+	 */
+	private $extensions;
+
 	public function __construct( PluginData $plugin_data ) {
 		$this->plugin_data = $plugin_data;
 	}
@@ -41,9 +46,9 @@ class SkipConvertedPaths implements HookableInterface {
 	 * @internal
 	 */
 	public function skip_converted_path( bool $path_status, string $filename, string $server_path, bool $skip_converted ): bool {
-		$directory    = new OutputPath();
-		$extensions   = $this->get_output_extensions();
-		$output_paths = $directory->get_paths( urldecode( $server_path ), false, $extensions );
+		$this->extensions = $this->extensions ?: $this->get_output_extensions();
+		$directory        = new OutputPath();
+		$output_paths     = $directory->get_paths( urldecode( $server_path ), false, $this->extensions );
 
 		if ( $this->has_crashed_paths( $output_paths )
 			|| ( $skip_converted && $this->has_converted_paths( $output_paths ) ) ) {

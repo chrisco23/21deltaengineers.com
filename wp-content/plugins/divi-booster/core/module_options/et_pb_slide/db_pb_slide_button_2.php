@@ -107,16 +107,44 @@ function db_pb_slide_add_second_more_button_class($classes, $args) {
 add_action('db_vb_jquery_ready', 'db_pb_slide_button_2_vb_jquery');
 
 function db_pb_slide_button_2_vb_jquery() { ?>
-    function slideModuleProps(node) {
-        for (var key in node) {
-            if (key.startsWith("__reactInternalInstance$")) {
-                var elem = (((node[key]||{}).memoizedProps||{}).children||{})[6];
-                var attrs = ((((elem||{}).props||{}).module||{}).props||{}).attrs;
-                return (attrs||{});
+
+	jQuery(window).on('dbdb_slide_updated', function(event, target) {
+		var slider = jQuery(target).closest('.et_pb_slider').get(0);
+		var index = jQuery(target).closest('.et_pb_slider').find('.et_pb_slide').index(target);
+        var props = slideModuleProps(slider, index);
+		add_second_button_to_slide(target, props);
+	});
+
+	function slideModuleProps(slider, slide_num) {
+        for (var property in slider) {
+            if (property.startsWith("__reactInternalInstance$")) {
+				try {
+					return slider[property].memoizedProps.children[1].props.children[slide_num].props.attrs;
+				} catch(e) {
+					return {};
+				}
             }
         }
-        return null;
+        return {};
     }
+	
+	function add_second_button_to_slide(target, props) {
+		if (props && props.button_text_2) {
+			jQuery(target).addClass('db_second_more_button');
+			if (jQuery(target).find('.db_pb_button_2').length === 0) {
+				jQuery(target).find('.et_pb_button_wrapper').append('<a class="et_pb_button et_pb_more_button db_pb_button_2" href="#"></a>');
+			}
+			
+			jQuery(target).find('.db_pb_button_2').text(props.button_text_2);
+			if (props.button_link_2) { 
+				jQuery(target).find('.db_pb_button_2').attr('href', props.button_link_2);
+			}
+		} else {
+			jQuery(target).removeClass('db_second_more_button');
+			jQuery(target).find('.db_pb_button_2').remove();
+		}
+	}
+	
     setTimeout(
         function(){
             if (typeof MutationObserver === 'function') {
@@ -124,23 +152,8 @@ function db_pb_slide_button_2_vb_jquery() { ?>
                     mutations.forEach(function(mutation) {
                         var target = (mutation||{}).target;
                         var classList = (target||{}).classList;
-                        
                         if (classList && classList.contains('et_pb_slide')) {
-                            var props = slideModuleProps(target);
-                            if (props && props.button_text_2) {
-                                jQuery(target).addClass('db_second_more_button');
-                                if (jQuery(target).find('.db_pb_button_2').length === 0) {
-                                    jQuery(target).find('.et_pb_button_wrapper').append('<a class="et_pb_button et_pb_more_button db_pb_button_2" href="#"></a>');
-                                }
-                                
-                                jQuery(target).find('.db_pb_button_2').text(props.button_text_2);
-                                if (props.button_link_2) { 
-                                    jQuery(target).find('.db_pb_button_2').attr('href', props.button_link_2);
-                                }
-                            } else {
-                                jQuery(target).removeClass('db_second_more_button');
-                                jQuery(target).find('.db_pb_button_2').remove();
-                            }
+							$(window).trigger('dbdb_slide_updated', [target]);
                         }
                     });
                 });
@@ -156,6 +169,7 @@ function db_pb_slide_button_2_vb_jquery() { ?>
         },
         200
     );
+
 
     <?php
 }

@@ -82,14 +82,6 @@ When adding a thread, follow these steps and reply to each of them:
 
 **5.** Please do the test, which is described in the FAQ in question `How to check if plugin works?`. Please send a screenshot of Devtools with test results.
 
-**6.** Enable [debugging to the file](https://wordpress.org/support/article/debugging-in-wordpress/#wp_debug_log) and check if any errors are generated in the debug.log file when the works. Provide their content.
-
-**7.** Do you use any plugin filters or actions from this FAQ? If so, list them all.
-
-**8.** What plugin version are you using? If it is not the latest then update and check everything again.
-
-**9.** A list of all the plugins you use. Have you tried checking the plugin operation by turning off all others and activating the default theme? If not, please try whenever possible. **This is very important because other plugins or themes can cause problems.** Therefore, we recommend disabling all necessary plugins and enabling the default theme.
-
 Please remember to include the answers for all questions by adding a thread. It is much easier and accelerate the solution of your problem.
 
 = Error on plugin settings screen? =
@@ -164,7 +156,7 @@ Directory path with converted WebP files *(relative to the root directory)*:
 
 Prefix in URL of `/wp-content/` directory or equivalent *(used in .htaccess)*:
 
-`add_filter( 'webpc_uploads_prefix', function( $prefix ) {
+`add_filter( 'webpc_htaccess_rewrite_path', function( $prefix ) {
 	return '/';
 } );`
 
@@ -198,7 +190,7 @@ add_filter( 'webpc_dir_name', function( $path, $directory ) {
 	}
 	return 'app/uploads-webpc';
 }, 10, 2 );`
-`add_filter( 'webpc_uploads_prefix', function( $prefix ) {
+`add_filter( 'webpc_htaccess_rewrite_path', function( $prefix ) {
 	return '/';
 } );`
 
@@ -300,6 +292,22 @@ All rules from the files `/wp-content/.htaccess`, `/wp-content/uploads/.htaccess
 
 Argument `$path` is absolute server path for `.htaccess` file.
 
+= Support for WP-CLI =
+
+The plugin supports WP-CLI, which enables faster image conversion from the server level. More information on how to get started with WP-CLI can be found in [the Handbook](https://make.wordpress.org/cli/handbook/guides/quick-start/). The supported commands are described below.
+
+Checking how many maximum images for conversion are on website:
+
+`wp webp-converter calculate`
+
+Converting all images:
+
+`wp webp-converter regenerate`
+
+Converting all images (with "Force convert all images again" option):
+
+`wp webp-converter regenerate -force`
+
 = Does plugin support CDN? =
 
 Unfortunately not. This is due to the logic of the plugin's operation. Plugins that enable integration with the CDN servers modify the HTML of the website, changing URLs for media files. This plugin does not modify URLs. Replacing URLs in the HTML code is not an optimal solution.
@@ -344,20 +352,29 @@ Then find the configuration file in one of the paths *(remember to select config
 
 and add below code in this file *(add these lines to very beginning of file if possible)*:
 
-`map $http_accept $load_avif {`
-`	~image/avif "/wp-content/uploads-webpc/$path.$ext.avif";`
-`}`
-`map $http_accept $load_webp {`
-`	~image/webp "/wp-content/uploads-webpc/$path.$ext.webp";`
-`}`
-``
 `server {`
-`	location ~ /wp-content/(?<path>.+)\.(?<ext>jpe?g|png|gif)$ {`
+`	# BEGIN WebP Converter`
+`	set $ext_avif ".avif";`
+`	if ($http_accept !~* "image/avif") {`
+`		set $ext_avif "";`
+`	}`
+``
+`	set $ext_webp ".webp";`
+`	if ($http_accept !~* "image/webp") {`
+`		set $ext_webp "";`
+`	}`
+``
+`	location ~ /wp-content/(?<path>.+)\.(?<ext>jpe?g|png|gif|webp)$ {`
 `		add_header Vary Accept;`
 `		add_header Cache-Control "private" always;`
 `		expires 365d;`
-`		try_files $load_avif $load_webp $uri =404;`
+`		try_files`
+`			/wp-content/uploads-webpc/$path.$ext$ext_avif`
+`			/wp-content/uploads-webpc/$path.$ext$ext_webp`
+`			$uri =404;`
 `	}`
+`	# END WebP Converter`
+``
 `	# ...`
 `}`
 
@@ -369,6 +386,17 @@ After making changes, remember to restart the machine: `systemctl restart nginx`
 2. Screenshot when regenerating images
 
 == Changelog ==
+
+= 4.3.1 (2022-04-05) =
+* `[Fixed]` Generating rewrite rules for via .htaccess loading mode
+
+= 4.3.0 (2022-04-01) =
+* `[Fixed]` Authorization of access to REST API
+* `[Changed]` Description of plugin operation in plugin settings
+* `[Added]` Command "wp webp-converter calculate" for WP-CLI
+* `[Added]` Command "wp webp-converter regenerate" for WP-CLI
+* `[Added]` Converting .webp files to AVIF format
+* `[Added]` Support for environments where DOCUMENT_ROOT is different from WordPress installation directory
 
 = 4.2.4 (2022-03-01) =
 * `[Fixed]` Generating paths for via .htaccess loading mode

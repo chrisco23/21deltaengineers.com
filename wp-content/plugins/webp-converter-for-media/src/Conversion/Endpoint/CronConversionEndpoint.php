@@ -60,10 +60,9 @@ class CronConversionEndpoint extends EndpointAbstract {
 		return get_rest_url(
 			null,
 			sprintf(
-				'%1$s/%2$s?%3$s=%4$s',
+				'%1$s/%2$s-%3$s',
 				EndpointIntegration::ROUTE_NAMESPACE,
 				$this->get_route_name(),
-				EndpointIntegration::ROUTE_NONCE_PARAM,
 				$nonce_value
 			)
 		);

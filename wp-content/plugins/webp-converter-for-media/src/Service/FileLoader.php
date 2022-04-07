@@ -45,6 +45,7 @@ class FileLoader {
 		if ( $ver_param !== null ) {
 			$image_url = add_query_arg( 'ver', $ver_param, $image_url );
 		}
+		$image_url = apply_filters( 'webpc_debug_image_url', $image_url );
 
 		return self::get_file_size_for_loaded_file( $image_url, ( $set_headers ) ? $headers : [] );
 	}

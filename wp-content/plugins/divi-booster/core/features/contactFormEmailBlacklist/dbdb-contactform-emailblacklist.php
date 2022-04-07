@@ -15,6 +15,7 @@ class DBDB_ContactForm_EmailBlacklist {
         }
         if (function_exists('add_filter')) {
             add_filter('dbdb_et_pb_module_shortcode_attributes', array($this, 'filter_blacklisted_email'), 10, 3);
+            add_filter('dbdb_et_pb_module_shortcode_attributes', array($this, 'register_email_fields'), 10, 3);
             add_filter('et_pb_contact_form_shortcode_output', array($this, 'remove_is_email_filter'));
             add_filter('et_pb_all_fields_unprocessed_et_pb_contact_form', array($this, 'add_fields'));
         }
@@ -31,6 +32,22 @@ class DBDB_ContactForm_EmailBlacklist {
 		<?php
 	}
 
+	public function register_email_fields($props, $atts, $slug) {
+        if ($slug === 'et_pb_contact_field') { 
+            if (isset($props['field_type']) && $props['field_type'] === 'email') { 
+                if (isset($props['field_id']) && isset($this->current_blacklist)) {
+                    foreach($this->current_blacklist as $str) {
+                        if (strpos($this->submitted_email($props['field_id'], $this->current_contact_form), $str) !== false) {
+                            add_filter('is_email', 'dbdb_return_false');
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return $props;
+    }
+
 	public function filter_blacklisted_email($props, $atts, $slug) {
 		
 		if ($slug !== 'et_pb_contact_form') { 
@@ -42,31 +59,34 @@ class DBDB_ContactForm_EmailBlacklist {
 		$contact_form_num++;
 		
 		$submitted = !empty($_POST['et_pb_contactform_submit_'.$this_contact_form_num]); 
-		
+        
+        $this->current_blacklist = $this->email_blacklist($props);
+        $this->current_contact_form = $this_contact_form_num;
+
 		if (!$submitted || !$this->use_email_blacklist($props)) { 
 			return $props; 
 		}
 		
 		foreach($this->email_blacklist($props) as $str) {
-			if (strpos($this->submitted_email($this_contact_form_num), $str) !== false) {
-				add_filter('is_email', 'dbdb_return_false');
-				break;
-			}
+            if (strpos($this->submitted_email('email', $this_contact_form_num), $str) !== false) {
+                add_filter('is_email', 'dbdb_return_false');
+                break;
+            }
 		}
 		
 		return $props;
 	}
 	
-	protected function submitted_email($contact_form_num) {
-		$email_key = $this->email_field_name($contact_form_num);
+	protected function submitted_email($id, $contact_form_num) {
+		$email_key = $this->email_field_name($id, $contact_form_num);
 		return !empty($_POST[$email_key])?$_POST[$email_key]:'';
 	}
 	
-	protected function email_field_name($contact_form_num) {
+	protected function email_field_name($id, $contact_form_num) {
 		if ($this->divi_has_duplicate_contact_form_id_bug()) {
 			$contact_form_num = max(1, $contact_form_num); 
 		}
-		return 'et_pb_contact_email_'.$contact_form_num;
+		return 'et_pb_contact_'.$id.'_'.$contact_form_num;
 	}
 	
 	protected function divi_has_duplicate_contact_form_id_bug() {

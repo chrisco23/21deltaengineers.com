@@ -1,9 +1,5 @@
 <?php
 
-if ( ! defined( 'ET_BUILDER_DIVI_LIBRARY_URL' ) ) {
-	define( 'ET_BUILDER_DIVI_LIBRARY_URL', 'https://www.elegantthemes.com/layouts' );
-}
-
 if ( ! defined( 'ET_BUILDER_CSS_WRAPPER_PREFIX' ) ) {
 	define( 'ET_BUILDER_CSS_WRAPPER_PREFIX', '.et-db' );
 }
@@ -170,10 +166,14 @@ require_once ET_BUILDER_DIR . 'frontend-builder/theme-builder/theme-builder.php'
 require_once ET_BUILDER_DIR . 'feature/global-presets/Settings.php';
 require_once ET_BUILDER_DIR . 'feature/global-presets/History.php';
 require_once ET_BUILDER_DIR . 'feature/window.php';
+require_once ET_BUILDER_DIR . 'feature/et-server-frame.php';
 require_once ET_BUILDER_DIR . 'feature/ajax-data/AjaxData.php';
 require_once ET_BUILDER_DIR . 'feature/display-conditions/DisplayConditions.php';
 require_once ET_BUILDER_DIR . 'feature/BlockTemplates.php';
 require_once ET_BUILDER_DIR . 'feature/icon-manager/ExtendedFontIcons.php';
+require_once ET_BUILDER_DIR . 'feature/background-masks/Functions.php';
+require_once ET_BUILDER_DIR . 'feature/background-masks/PatternFields.php';
+require_once ET_BUILDER_DIR . 'feature/background-masks/MaskFields.php';
 
 // Conditional Includes.
 if ( et_is_woocommerce_plugin_active() ) {
@@ -211,6 +211,7 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'et_fb_ajax_drop_autosave',
 			'et_fb_get_saved_layouts',
 			'et_fb_save_layout',
+			'et_fb_get_cloud_item_content',
 			'et_fb_update_layout',
 			'et_pb_execute_content_shortcodes',
 			'et_pb_ab_builder_data',
@@ -230,6 +231,13 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'et_builder_save_settings',         // builder plugin dashboard (global builder settings)
 			'save_epanel',                      // ePanel (global builder settings)
 			'et_builder_library_get_layout',
+			'et_builder_library_update_terms',
+			'et_builder_library_save_temp_layout',
+			'et_builder_library_remove_temp_layout',
+			'et_builder_library_clear_temp_presets',
+			'et_builder_library_update_item',
+			'et_builder_library_upload_thumbnail',
+			'et_builder_library_get_cloud_token',
 			'et_builder_library_get_layouts_data',
 			'et_fb_fetch_attachments',
 			'et_pb_get_saved_templates',
@@ -251,6 +259,7 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'et_builder_get_woocommerce_tabs',
 			'et_builder_global_colors_save',
 			'et_builder_default_colors_update',
+			'et_builder_ajax_save_domain_token',
 			'et_fb_fetch_before_after_components',
 		),
 	);
@@ -308,6 +317,10 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 	// If current request's query string exists on list of possible values, load builder
 	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 	foreach ( $builder_load_requests as $query_string => $possible_values ) {
+		if ( ! is_array( $possible_values ) ) {
+			continue;
+		}
+
 		if ( isset( $_REQUEST[ $query_string ] ) && in_array( $_REQUEST[ $query_string ], $possible_values ) ) {
 			$load_builder_on_ajax = true;
 
@@ -457,6 +470,20 @@ function et_builder_load_modules_styles() {
 		'is_cache_plugin_active' => false === et_pb_detect_cache_plugins() ? 'no' : 'yes',
 		'is_shortcode_tracking'  => get_post_meta( $current_page_id, '_et_pb_enable_shortcode_tracking', true ),
 		'tinymce_uri'            => defined( 'ET_FB_ASSETS_URI' ) ? ET_FB_ASSETS_URI . '/vendors' : '',
+		/**
+		 * Filters Waypoints options for client side rendering.
+		 *
+		 * @since 4.15.0
+		 *
+		 * @param array $options {
+		 *     Filtered Waypoints options. Only support `context` at this moment because
+		 *     there is no test case for other properties.
+		 *
+		 *     @type string[] $context List of container selectors for the Waypoint. The
+		 *                             element will iterate and looking for the closest
+		 *                             parent element matches the given selectors.
+		 */
+		'waypoints_options'      => apply_filters( 'et_builder_waypoints_options', array() ),
 	);
 
 	wp_localize_script( et_get_combined_script_handle(), 'et_pb_custom', $pb_custom_data );
@@ -709,10 +736,6 @@ add_action( 'wp_print_styles', 'et_builder_dequeue_minifieds_styles', 99999999 )
 function et_is_ignore_waypoints() {
 	// WPBakery Visual Composer plugin conflicts with waypoints
 	if ( class_exists( 'Vc_Manager' ) ) {
-		return true;
-	}
-
-	if ( class_exists( 'PUM_Shortcode_Popup' ) ) {
 		return true;
 	}
 
@@ -1228,25 +1251,3 @@ function et_builder_enqueue_assets_main() {
 	wp_enqueue_style( 'et-frontend-builder-failure-modal', "{$assets}/css/failure_modal.css", array(), $ver );
 	wp_enqueue_style( 'et-frontend-builder-notification-modal', "{$root}/styles/notification_popup_styles.css", array(), $ver );
 }
-
-if ( ! function_exists( 'et_fb_enqueue_react' ) ) :
-	function et_fb_enqueue_react() {
-		$DEBUG         = defined( 'ET_DEBUG' ) && ET_DEBUG;
-		$core_scripts  = ET_CORE_URL . 'admin/js';
-		$react_version = '16.12.0';
-
-		wp_dequeue_script( 'react' );
-		wp_dequeue_script( 'react-dom' );
-		wp_deregister_script( 'react' );
-		wp_deregister_script( 'react-dom' );
-
-		if ( $DEBUG || DiviExtensions::is_debugging_extension() ) {
-			wp_enqueue_script( 'react', "https://cdn.jsdelivr.net/npm/react@{$react_version}/umd/react.development.js", array(), $react_version, true );
-			wp_enqueue_script( 'react-dom', "https://cdn.jsdelivr.net/npm/react-dom@{$react_version}/umd/react-dom.development.js", array( 'react' ), $react_version, true );
-			add_filter( 'script_loader_tag', 'et_core_add_crossorigin_attribute', 10, 3 );
-		} else {
-			wp_enqueue_script( 'react', "{$core_scripts}/react.production.min.js", array(), $react_version, true );
-			wp_enqueue_script( 'react-dom', "{$core_scripts}/react-dom.production.min.js", array( 'react' ), $react_version, true );
-		}
-	}
-endif;

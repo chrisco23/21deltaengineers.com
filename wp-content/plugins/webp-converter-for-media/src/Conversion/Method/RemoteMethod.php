@@ -2,6 +2,7 @@
 
 namespace WebpConverter\Conversion\Method;
 
+use WebpConverter\Conversion\Format\WebpFormat;
 use WebpConverter\Conversion\SkipCrashed;
 use WebpConverter\Conversion\SkipLarger;
 use WebpConverter\Exception;
@@ -125,8 +126,9 @@ class RemoteMethod extends MethodAbstract {
 		$this->token  = $this->token_repository->get_token();
 
 		foreach ( $output_formats as $output_format ) {
-			$source_paths[ $output_format ] = $file_paths;
-			$output_paths[ $output_format ] = $this->get_output_paths( $file_paths, $output_format );
+			$valid_file_paths               = $this->skip_invalid_paths( $file_paths, $output_format );
+			$source_paths[ $output_format ] = $valid_file_paths;
+			$output_paths[ $output_format ] = $this->get_output_paths( $valid_file_paths, $output_format );
 		}
 
 		if ( ! $regenerate_force ) {
@@ -163,6 +165,28 @@ class RemoteMethod extends MethodAbstract {
 		}
 
 		$this->token_repository->update_token( $this->token );
+	}
+
+	/**
+	 * @param string[] $file_paths    .
+	 * @param string   $output_format .
+	 *
+	 * @return string[]
+	 */
+	private function skip_invalid_paths( array $file_paths, string $output_format ): array {
+		switch ( $output_format ) {
+			case WebpFormat::FORMAT_EXTENSION:
+				$valid_paths = [];
+				foreach ( $file_paths as $file_path ) {
+					$source_format = strtolower( pathinfo( $file_path, PATHINFO_EXTENSION ) );
+					if ( $source_format !== WebpFormat::FORMAT_EXTENSION ) {
+						$valid_paths[] = $file_path;
+					}
+				}
+				return $valid_paths;
+			default:
+				return $file_paths;
+		}
 	}
 
 	/**

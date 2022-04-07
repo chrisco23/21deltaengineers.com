@@ -38,10 +38,7 @@ function dbdbMenuModule_add_separators_code_to_content($content, $args) {
 	
 	if (!$order_class) { return $content; }
 	
-	//$css = '';
-	
 	if (isset($args['db_separators']) && $args['db_separators'] === 'on') {
-		//$css .= dbdbMenuModule_separators_css($order_class);
         if (!empty($args['db_link_spacing']) && $args['db_link_spacing'] !== '22px') {
             $padding = esc_html(intval($args['db_link_spacing'])/2);
         } 
@@ -61,19 +58,5 @@ function dbdbMenuModule_add_separators_code_to_content($content, $args) {
 END;
 	}
 	
-	//if (!empty($css)) { $content.="<style>$css</style>"; }
-	
 	return $content;
 }
-
-// function dbdbMenuModule_separators_css($order_class) {
-// 	return <<<END
-// .{$order_class} .et-menu.nav > li + li > a:before {
-// 	position: absolute;
-// 	left:-11px;
-// 	transform: translateX(-50%);
-// 	content: '|';
-// 	font-size: smaller;
-// }
-// END;
-// }

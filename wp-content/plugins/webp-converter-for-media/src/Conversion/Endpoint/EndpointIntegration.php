@@ -40,7 +40,7 @@ class EndpointIntegration implements HookableInterface {
 	public function register_rest_route() {
 		register_rest_route(
 			self::ROUTE_NAMESPACE,
-			$this->endpoint_object->get_route_name(),
+			$this->endpoint_object->get_route_name() . '-(?P<nonce_token>[a-zA-Z0-9.]+)',
 			[
 				'methods'             => \WP_REST_Server::ALLMETHODS,
 				'permission_callback' => function ( \WP_REST_Request $request ) {

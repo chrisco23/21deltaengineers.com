@@ -1,13 +1,12 @@
 === Head, Footer and Post Injections ===
-Tags: header, footer, blog, page, single, post, head, tracking, facebook, og meta tag, open graph, ads, adsense, injections, analytics, amp, pixel
-Requires at least: 4.0
-Tested up to: 5.7
-Stable tag: 3.2.2
+Tags: header, footer, ads, analytics, facebook pixel, amp
+Tested up to: 5.9.2
+Stable tag: 3.2.3
 Donate link: http://www.satollo.net/donations
 Contributors: satollo
-Requires PHP: 5.6
 
-Header and Footer plugin let you to add html code to the head and footer sections of your blog... and more!
+
+Header and Footer plugin let you to add html code to the head and footer sections of your blog page, inside posts... and more!
 
 == Description ==
 
@@ -89,6 +88,10 @@ FAQs are answered on [Header and Footer](http://www.satollo.net/plugins/header-f
 
 
 == Changelog ==
+
+= 3.2.3 =
+
+* Updated meta information
 
 = 3.2.2 =
 

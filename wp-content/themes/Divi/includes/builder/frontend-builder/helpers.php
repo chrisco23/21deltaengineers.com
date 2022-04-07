@@ -10,21 +10,28 @@ function et_fb_shortcode_tags() {
 	return implode( '|', $shortcode_tag_names );
 }
 
-function et_fb_prepare_library_cats() {
-	$raw_categories_array   = apply_filters( 'et_pb_new_layout_cats_array', get_terms( 'layout_category', array( 'hide_empty' => false ) ) );
-	$clean_categories_array = array();
+/**
+ * Prepare Library Categories or Tags List.
+ *
+ * @param string $taxonomy Name of the taxonomy.
+ *
+ * @return array Clean Categories/Tags array.
+ **/
+function et_fb_prepare_library_terms( $taxonomy = 'layout_category' ) {
+	$raw_terms_array   = apply_filters( 'et_pb_new_layout_cats_array', get_terms( $taxonomy, array( 'hide_empty' => false ) ) );
+	$clean_terms_array = array();
 
-	if ( is_array( $raw_categories_array ) && ! empty( $raw_categories_array ) ) {
-		foreach ( $raw_categories_array as $category ) {
-			$clean_categories_array[] = array(
-				'name' => html_entity_decode( $category->name ),
-				'id'   => $category->term_id,
-				'slug' => $category->slug,
+	if ( is_array( $raw_terms_array ) && ! empty( $raw_terms_array ) ) {
+		foreach ( $raw_terms_array as $term ) {
+			$clean_terms_array[] = array(
+				'name' => html_entity_decode( $term->name ),
+				'id'   => $term->term_id,
+				'slug' => $term->slug,
 			);
 		}
 	}
 
-	return $clean_categories_array;
+	return $clean_terms_array;
 }
 
 function et_fb_get_layout_type( $post_id ) {
@@ -33,7 +40,12 @@ function et_fb_get_layout_type( $post_id ) {
 
 function et_fb_get_layout_term_slug( $post_id, $term_name ) {
 	$post_terms = wp_get_post_terms( $post_id, $term_name );
-	$slug       = $post_terms[0]->slug;
+
+	if ( empty( $post_terms[0] ) ) {
+		return '';
+	}
+
+	$slug = $post_terms[0]->slug;
 
 	return $slug;
 }
@@ -203,7 +215,9 @@ function et_fb_get_dynamic_backend_helpers() {
 
 	$layout_type      = '';
 	$layout_scope     = '';
+	$layout_location  = '';
 	$layout_built_for = '';
+	$remote_item_id   = '';
 
 	// Override $post data if current visual builder is rendering layout block; This is needed
 	// because block editor might be used in CPT that has no frontend such as reusable block's
@@ -247,7 +261,14 @@ function et_fb_get_dynamic_backend_helpers() {
 	if ( 'et_pb_layout' === $post_type ) {
 		$layout_type      = et_fb_get_layout_type( $post_id );
 		$layout_scope     = et_fb_get_layout_term_slug( $post_id, 'scope' );
+		$layout_location  = 'local';
 		$layout_built_for = get_post_meta( $post_id, '_et_pb_built_for_post_type', 'page' );
+
+		// Only set the remote_item_id if temp post still exists.
+		if ( ! empty( $_GET['cloudItem'] ) && get_post_status( $post_id ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
+			$remote_item_id  = (int) sanitize_text_field( $_GET['cloudItem'] ); // phpcs:ignore WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
+			$layout_location = 'cloud';
+		}
 	}
 
 	$host        = isset( $_SERVER['HTTP_HOST'] ) ? esc_url( $_SERVER['HTTP_HOST'] ) : '';
@@ -281,9 +302,13 @@ function et_fb_get_dynamic_backend_helpers() {
 
 	$all_subjects_raw = get_post_meta( $post_id, '_et_pb_ab_subjects', true );
 
+	$home_url = wp_parse_url( get_site_url() );
+
 	$helpers = array(
 		'site_url'                     => get_site_url(),
+		'site_domain'                  => isset( $home_url['host'] ) ? untrailingslashit( $home_url['host'] ) : '/',
 		'locale'                       => get_user_locale(),
+		'domainToken'                  => get_option( 'et_server_domain_token', '' ),
 		'debug'                        => defined( 'ET_DEBUG' ) && ET_DEBUG,
 		'postId'                       => $post_id,
 		'postTitle'                    => $post_title,
@@ -296,8 +321,10 @@ function et_fb_get_dynamic_backend_helpers() {
 		'isCustomPostType'             => et_builder_is_post_type_custom( $post_type ) ? 'yes' : 'no',
 		'layoutType'                   => $layout_type,
 		'layoutScope'                  => $layout_scope,
+		'layoutLocation'               => $layout_location,
 		'layoutBuiltFor'               => $layout_built_for,
 		'hasPredefinedContent'         => $has_predefined_content,
+		'remoteItemId'                 => $remote_item_id,
 		'publishCapability'            => ( is_page() && ! current_user_can( 'publish_pages' ) ) || ( ! is_page() && ! current_user_can( 'publish_posts' ) ) ? 'no_publish' : 'publish',
 		'ajaxUrl'                      => is_ssl() ? admin_url( 'admin-ajax.php' ) : admin_url( 'admin-ajax.php', 'http' ),
 		'et_account'                   => et_core_get_et_account(),
@@ -388,7 +415,7 @@ function et_fb_get_dynamic_backend_helpers() {
 				),
 				'postContent' => array(
 					'placeholder' =>
-						'<div class="et_pb_section"><div class="et_pb_row"><div class="et_pb_column et_pb_column_4_4">
+						'<div class="et_pb_section et_section_transparent"><div class="et_pb_row"><div class="et_pb_column et_pb_column_4_4"><div class="et_pb_text">
 						<h1>Post Content Heading 1</h1>
 						<p>Post Content Paragraph Text. Lorem ipsum dolor sit amet, <a href="#">consectetur adipiscing elit</a>. Ut vitae congue libero, nec finibus purus. Vestibulum egestas orci vel ornare venenatis. Sed et ultricies turpis. Donec sit amet rhoncus erat. Phasellus volutpat vitae mi eu aliquam.</p>
 						<h2>Post Content Heading 2</h2>
@@ -412,7 +439,7 @@ function et_fb_get_dynamic_backend_helpers() {
 						</ol>
 						<h6>Post Content Heading 6</h6>
 						<p>posuere nec lectus sit amet, pulvinar dapibus sapien. Donec placerat erat ac fermentum accumsan. Nunc in scelerisque dui. Etiam vitae purus velit. Proin dictum auctor mi, eu congue odio tempus et. Curabitur ac semper ligula. Praesent purus ligula, ultricies vel porta ac, elementum et lacus. Nullam vitae augue aliquet, condimentum est ut, vehicula sapien. Donec euismod, sem et elementum finibus, lacus mauris pulvinar enim, nec faucibus sapien neque quis sem. Vivamus suscipit tortor eget felis porttitor volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-						</div></div></div>',
+						</div></div></div></div>',
 				),
 			),
 			'modals'  => array(
@@ -531,7 +558,6 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 	// phpcs:disable WordPress.Arrays.MultipleStatementAlignment.LongIndexSpaceBeforeDoubleArrow -- Invalid warning.
 	$helpers = array(
 		'blog_id'                          => get_current_blog_id(),
-		'diviLibraryUrl'                   => ET_BUILDER_DIVI_LIBRARY_URL,
 		'autosaveInterval'                 => et_builder_autosave_interval(),
 		'shortcodeObject'                  => array(),
 		'autosaveShortcodeObject'          => array(),
@@ -707,11 +733,15 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 				'fa'    => esc_html__( 'Font Awesome', 'et_builder' ),
 			),
 		),
+		'backgroundPatternOptions'         => et_pb_background_pattern_options()->settings(),
+		'backgroundMaskOptions'            => et_pb_background_mask_options()->settings(),
 		'backgroundTabs'                   => array(
 			'color',
 			'gradient',
 			'image',
 			'video',
+			'pattern',
+			'mask',
 		),
 		'defaults'                     => array(
 			'et_pb_accordion_item'              => array(
@@ -823,14 +853,17 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			),
 			'contactFormInputs'                 => array(),
 			'backgroundOptions'                 => array(
+				'repeat'          => ET_Global_Settings::get_value( 'all_background_gradient_repeat' ),
 				'type'            => ET_Global_Settings::get_value( 'all_background_gradient_type' ),
 				'direction'       => ET_Global_Settings::get_value( 'all_background_gradient_direction' ),
 				'radialDirection' => ET_Global_Settings::get_value( 'all_background_gradient_direction_radial' ),
-				'colorStart'      => ET_Global_Settings::get_value( 'all_background_gradient_start' ),
-				'colorEnd'        => ET_Global_Settings::get_value( 'all_background_gradient_end' ),
-				'startPosition'   => ET_Global_Settings::get_value( 'all_background_gradient_start_position' ),
-				'endPosition'     => ET_Global_Settings::get_value( 'all_background_gradient_end_position' ),
+				'stops'           => ET_Global_Settings::get_value( 'all_background_gradient_stops' ),
+				'unit'            => ET_Global_Settings::get_value( 'all_background_gradient_unit' ),
 				'overlaysImage'   => ET_Global_Settings::get_value( 'all_background_gradient_overlays_image' ),
+				'colorStart'      => ET_Global_Settings::get_value( 'all_background_gradient_start' ),
+				'startPosition'   => ET_Global_Settings::get_value( 'all_background_gradient_start_position' ),
+				'colorEnd'        => ET_Global_Settings::get_value( 'all_background_gradient_end' ),
+				'endPosition'     => ET_Global_Settings::get_value( 'all_background_gradient_end_position' ),
 			),
 			'filterOptions'                     => array(
 				'hue_rotate'     => ET_Global_Settings::get_value( 'all_filter_hue_rotate' ),
@@ -844,7 +877,8 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 				'mix_blend_mode' => ET_Global_Settings::get_value( 'all_mix_blend_mode' ),
 			),
 		),
-		'saveModuleLibraryCategories'  => et_fb_prepare_library_cats(),
+		'saveModuleLibraryCategories'      => et_fb_prepare_library_terms(),
+		'saveModuleLibraryTags'            => et_fb_prepare_library_terms( 'layout_tag' ),
 		'emailNameFieldOnlyProviders'  => array_keys( ET_Builder_Module_Signup::providers()->names_by_slug( 'all', 'name_field_only' ) ),
 		'emailPredefinedCustomFields'  => ET_Core_API_Email_Providers::instance()->custom_fields_data(),
 		'emailCustomFieldProviders'    => array_keys( ET_Builder_Module_Signup::providers()->names_by_slug( 'all', 'custom_fields' ) ),
@@ -923,16 +957,81 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 						'type'            => 'select',
 						'option_category' => 'layout',
 						'options'         => array(
-							'cover'   => esc_html__( 'Cover', 'et_builder' ),
-							'contain' => esc_html__( 'Fit', 'et_builder' ),
-							'initial' => esc_html__( 'Actual Size', 'et_builder' ),
+							'cover'   => et_builder_i18n( 'Cover' ),
+							'contain' => et_builder_i18n( 'Fit' ),
+							'initial' => et_builder_i18n( 'Actual Size' ),
+							'stretch' => et_builder_i18n( 'Stretch to Fill' ),
+							'custom'  => et_builder_i18n( 'Custom Size' ),
 						),
 						'default'         => 'cover',
 						'show_if'         => array(
 							'parallax_%s' => 'off',
 						),
-						'toggle_slug'     => 'background',
 						'sub_toggle'      => 'column_%s',
+					)
+				),
+				'background_image_width_%s'              => ET_Builder_Element::background_field_template(
+					'image_width',
+					array(
+						'allow_empty'      => true,
+						'allowed_units'    => et_pb_get_background_field_allowed_units(),
+						'allowed_values'   => et_builder_get_acceptable_css_string_values( 'background-size' ),
+						'default'          => 'auto',
+						'default_unit'     => '%',
+						'default_on_child' => true,
+						'fixed_range'      => true,
+						'hover'            => 'tabs',
+						'label'            => esc_html__( 'Column %s Background Image Width', 'et_builder' ),
+						'mobile_options'   => true,
+						'option_category'  => 'layout',
+						'range_settings'   => array(
+							'min'       => 0,
+							'min_limit' => 0,
+							'max'       => 100,
+							'step'      => 1,
+						),
+						'show_if'          => array(
+							'background_size_%s' => 'custom',
+						),
+						'show_if_not'      => array(
+							'parallax_%s' => 'on',
+						),
+						'sticky'           => true,
+						'sub_toggle'       => 'column_%s',
+						'type'             => 'range',
+						'validate_unit'    => true,
+					)
+				),
+				'background_image_height_%s'             => ET_Builder_Element::background_field_template(
+					'image_height',
+					array(
+						'allow_empty'     => true,
+						'allowed_units'   => et_pb_get_background_field_allowed_units(),
+						'allowed_values'  => et_builder_get_acceptable_css_string_values( 'background-size' ),
+						'default'         => 'auto',
+						'default_unit'    => '%',
+						'field_template'  => 'image_height',
+						'fixed_range'     => true,
+						'hover'           => 'tabs',
+						'label'           => esc_html__( 'Column %s Background Image Height', 'et_builder' ),
+						'mobile_options'  => true,
+						'option_category' => 'layout',
+						'range_settings'  => array(
+							'min'       => 0,
+							'min_limit' => 0,
+							'max'       => 100,
+							'step'      => 1,
+						),
+						'show_if'         => array(
+							'background_size_%s' => 'custom',
+						),
+						'show_if_not'     => array(
+							'parallax_%s' => 'on',
+						),
+						'sticky'          => true,
+						'sub_toggle'      => 'column_%s',
+						'type'            => 'range',
+						'validate_unit'   => true,
 					)
 				),
 				'background_position_%s'                 => ET_Builder_Element::background_field_template(
@@ -941,23 +1040,84 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 						'label'           => esc_html__( 'Column %s Background Image Position', 'et_builder' ),
 						'type'            => 'select',
 						'option_category' => 'layout',
-						'options'         => array(
-							'top_left'      => et_builder_i18n( 'Top Left' ),
-							'top_center'    => et_builder_i18n( 'Top Center' ),
-							'top_right'     => et_builder_i18n( 'Top Right' ),
-							'center_left'   => et_builder_i18n( 'Center Left' ),
-							'center'        => et_builder_i18n( 'Center' ),
-							'center_right'  => et_builder_i18n( 'Center Right' ),
-							'bottom_left'   => et_builder_i18n( 'Bottom Left' ),
-							'bottom_center' => et_builder_i18n( 'Bottom Center' ),
-							'bottom_right'  => et_builder_i18n( 'Bottom Right' ),
-						),
+						'options'         => et_pb_get_background_position_options(),
 						'default'         => 'center',
-						'show_if'         => array(
-							'parallax_%s' => 'off',
+						'show_if_not'     => array(
+							'parallax_%s' => 'on',
 						),
-						'toggle_slug'     => 'background',
 						'sub_toggle'      => 'column_%s',
+					)
+				),
+				'background_horizontal_offset_%s'        => ET_Builder_Element::background_field_template(
+					'horizontal_offset',
+					array(
+						'allowed_units'   => et_pb_get_background_field_allowed_units(),
+						'default'         => '0',
+						'default_unit'    => '%',
+						'field_template'  => 'horizontal_offset',
+						'fixed_range'     => true,
+						'hover'           => 'tabs',
+						'label'           => esc_html__( 'Column %s Background Image Horizontal Offset', 'et_builder' ),
+						'mobile_options'  => true,
+						'option_category' => 'layout',
+						'range_settings'  => array(
+							'min'  => - 100,
+							'max'  => 100,
+							'step' => 1,
+						),
+						'sticky'          => true,
+						'show_if'         => array(
+							'background_position_%s' => array(
+								'top_left',
+								'top_right',
+								'center_left',
+								'center_right',
+								'bottom_left',
+								'bottom_right',
+							),
+						),
+						'show_if_not'     => array(
+							'parallax_%s' => 'on',
+						),
+						'sub_toggle'      => 'column_%s',
+						'type'            => 'range',
+						'validate_unit'   => true,
+					)
+				),
+				'background_vertical_offset_%s'          => ET_Builder_Element::background_field_template(
+					'vertical_offset',
+					array(
+						'allowed_units'   => et_pb_get_background_field_allowed_units(),
+						'default'         => '0',
+						'default_unit'    => '%',
+						'field_template'  => 'vertical_offset',
+						'fixed_range'     => true,
+						'hover'           => 'tabs',
+						'label'           => esc_html__( 'Column %s Background Image Vertical Offset', 'et_builder' ),
+						'mobile_options'  => true,
+						'option_category' => 'layout',
+						'range_settings'  => array(
+							'min'  => - 100,
+							'max'  => 100,
+							'step' => 1,
+						),
+						'show_if'         => array(
+							'background_position_%s' => array(
+								'top_left',
+								'top_center',
+								'top_right',
+								'bottom_left',
+								'bottom_center',
+								'bottom_right',
+							),
+						),
+						'show_if_not'     => array(
+							'parallax_%s' => 'on',
+						),
+						'sticky'          => true,
+						'sub_toggle'      => 'column_%s',
+						'type'            => 'range',
+						'validate_unit'   => true,
 					)
 				),
 				'background_repeat_%s'                   => ET_Builder_Element::background_field_template(
@@ -966,19 +1126,19 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 						'label'           => esc_html__( 'Column %s Background Image Repeat', 'et_builder' ),
 						'type'            => 'select',
 						'option_category' => 'layout',
-						'options'         => array(
-							'repeat'    => esc_html__( 'Repeat', 'et_builder' ),
-							'repeat-x'  => esc_html__( 'Repeat X (horizontal)', 'et_builder' ),
-							'repeat-y'  => esc_html__( 'Repeat Y (vertical)', 'et_builder' ),
-							'space'     => et_builder_i18n( 'Space' ),
-							'round'     => esc_html__( 'Round', 'et_builder' ),
-							'no-repeat' => esc_html__( 'No Repeat', 'et_builder' ),
-						),
-						'default'         => 'repeat',
+						'options'         => et_pb_get_background_repeat_options(),
+						'default'         => 'no-repeat',
 						'show_if'         => array(
-							'parallax_%s' => 'off',
+							'background_size_%s' => array(
+								'cover',
+								'contain',
+								'initial',
+								'custom',
+							),
 						),
-						'toggle_slug'     => 'background',
+						'show_if_not'     => array(
+							'parallax_%s' => 'on',
+						),
 						'sub_toggle'      => 'column_%s',
 					)
 				),
@@ -988,29 +1148,8 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 						'label'           => esc_html__( 'Column %s Background Image Blend', 'et_builder' ),
 						'type'            => 'select',
 						'option_category' => 'layout',
-						'options'         => array(
-							'normal'      => et_builder_i18n( 'Normal' ),
-							'multiply'    => et_builder_i18n( 'Multiply' ),
-							'screen'      => et_builder_i18n( 'Screen' ),
-							'overlay'     => et_builder_i18n( 'Overlay' ),
-							'darken'      => et_builder_i18n( 'Darken' ),
-							'lighten'     => et_builder_i18n( 'Lighten' ),
-							'color-dodge' => et_builder_i18n( 'Color Dodge' ),
-							'color-burn'  => et_builder_i18n( 'Color Burn' ),
-							'hard-light'  => et_builder_i18n( 'Hard Light' ),
-							'soft-light'  => et_builder_i18n( 'Soft Light' ),
-							'difference'  => et_builder_i18n( 'Difference' ),
-							'exclusion'   => et_builder_i18n( 'Exclusion' ),
-							'hue'         => et_builder_i18n( 'Hue' ),
-							'saturation'  => et_builder_i18n( 'Saturation' ),
-							'color'       => et_builder_i18n( 'Color' ),
-							'luminosity'  => et_builder_i18n( 'Luminosity' ),
-						),
+						'options'         => et_pb_get_background_blend_mode_options(),
 						'default'         => 'normal',
-						'show_if'         => array(
-							'parallax_%s' => 'off',
-						),
-						'toggle_slug'     => 'background',
 						'sub_toggle'      => 'column_%s',
 					)
 				),
@@ -1031,31 +1170,15 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 						'sub_toggle'      => 'column_%s',
 					)
 				),
-				'background_color_gradient_start_%s'     => ET_Builder_Element::background_field_template(
-					'color_gradient_start',
+				'background_color_gradient_stops_%s'     => ET_Builder_Element::background_field_template(
+					'color_gradient_stops',
 					array(
-						'label'           => esc_html__( 'Column %s Gradient Start', 'et_builder' ),
-						'type'            => 'color-alpha',
+						'label'           => esc_html__( 'Column %s Gradient Stops', 'et_builder' ),
+						'type'            => 'gradient-stops',
 						'option_category' => 'configuration',
-						'description'     => '',
-						'default'         => ET_Global_Settings::get_value( 'all_background_gradient_start' ),
-						'show_if'         => array(
-							'use_background_color_gradient_%s' => 'on',
-						),
-						'tab_slug'        => 'general',
-						'toggle_slug'     => 'background',
-						'sub_toggle'      => 'column_%s',
-					)
-				),
-				'background_color_gradient_end_%s'       => ET_Builder_Element::background_field_template(
-					'color_gradient_end',
-					array(
-						'label'           => esc_html__( 'Column %s Gradient End', 'et_builder' ),
-						'type'            => 'color-alpha',
-						'option_category' => 'configuration',
-						'description'     => '',
-						'default'         => ET_Global_Settings::get_value( 'all_background_gradient_end' ),
-						'show_if'         => array(
+						'description'     => esc_html__( 'Add two or more color stops to your gradient background. Each stop can be dragged to any position on the gradient bar. From each color stop to the next the color is interpolated into a smooth gradient.', 'et_builder' ),
+						'default'         => ET_Global_Settings::get_value( 'all_background_gradient_stops' ),
+						'show_if'      => array(
 							'use_background_color_gradient_%s' => 'on',
 						),
 						'tab_slug'        => 'general',
@@ -1070,8 +1193,10 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 						'type'            => 'select',
 						'option_category' => 'configuration',
 						'options'         => array(
-							'linear' => et_builder_i18n( 'Linear' ),
-							'radial' => et_builder_i18n( 'Radial' ),
+							'linear'     => et_builder_i18n( 'Linear' ),
+							'circular'   => et_builder_i18n( 'Circular' ),
+							'elliptical' => et_builder_i18n( 'Elliptical' ),
+							'conic'      => et_builder_i18n( 'Conical' ),
 						),
 						'default'         => ET_Global_Settings::get_value( 'all_background_gradient_type' ),
 						'description'     => '',
@@ -1101,6 +1226,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 						'show_if'         => array(
 							'background_color_gradient_type_%s' => array(
 								'linear',
+								'conic',
 							),
 						),
 						'tab_slug'        => 'general',
@@ -1111,7 +1237,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 				'background_color_gradient_direction_radial_%s' => ET_Builder_Element::background_field_template(
 					'color_gradient_direction_radial',
 					array(
-						'label'           => esc_html__( 'Column %s Radial Direction', 'et_builder' ),
+						'label'           => esc_html__( 'Column %s Gradient Position', 'et_builder' ),
 						'type'            => 'select',
 						'option_category' => 'configuration',
 						'options'         => array(
@@ -1130,6 +1256,9 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 						'show_if'         => array(
 							'background_color_gradient_type_%s' => array(
 								'radial',
+								'circular',
+								'elliptical',
+								'conic',
 							),
 						),
 						'tab_slug'        => 'general',
@@ -1137,6 +1266,121 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 						'sub_toggle'      => 'column_%s',
 					)
 				),
+				'background_color_gradient_repeat_%s' => ET_Builder_Element::background_field_template(
+					'color_gradient_repeat',
+					array(
+						'label'           => esc_html__( 'Column %s Repeat Gradient', 'et_builder' ),
+						'type'            => 'yes_no_button',
+						'option_category' => 'configuration',
+						'options'         => array(
+							'off'     => et_builder_i18n( 'No' ),
+							'on'      => et_builder_i18n( 'Yes' ),
+							'default' => intval( ET_Global_Settings::get_value( 'all_background_gradient_repeat' ) ),
+						),
+						'description'     => '',
+						'show_if'         => array(
+							'use_background_color_gradient_%s' => 'on',
+						),
+						'tab_slug'        => 'general',
+						'toggle_slug'     => 'background',
+						'sub_toggle'      => 'column_%s',
+					)
+				),
+				'background_color_gradient_unit_%s'      => ET_Builder_Element::background_field_template(
+					'color_gradient_unit',
+					array(
+						'label'           => esc_html__( 'Column %s Gradient Unit', 'et_builder' ),
+						'type'            => 'select',
+						'option_category' => 'configuration',
+						'options'          => array(
+							'%'    => et_builder_i18n( 'Percent' ),
+							'px'   => et_builder_i18n( 'Pixels' ),
+							'em'   => et_builder_i18n( 'Font Size (em)' ),
+							'rem'  => et_builder_i18n( 'Root-level Font Size (rem)' ),
+							'ex'   => et_builder_i18n( 'X-Height (ex)' ),
+							'ch'   => et_builder_i18n( 'Zero-width (ch)' ),
+							'pc'   => et_builder_i18n( 'Picas (pc)' ),
+							'pt'   => et_builder_i18n( 'Points (pt)' ),
+							'cm'   => et_builder_i18n( 'Centimeters (cm)' ),
+							'mm'   => et_builder_i18n( 'Millimeters (mm)' ),
+							'in'   => et_builder_i18n( 'Inches (in)' ),
+							'vh'   => et_builder_i18n( 'Viewport Height (vh)' ),
+							'vw'   => et_builder_i18n( 'Viewport Width (vw)' ),
+							'vmin' => et_builder_i18n( 'Viewport Minimum (vmin)' ),
+							'vmax' => et_builder_i18n( 'Viewport Maximum (vmax)' ),
+						),
+						'default'         => ET_Global_Settings::get_value( 'all_background_gradient_unit' ),
+						'description'     => '',
+						'show_if'          => array(
+							// Do not render this control for conic gradients.
+							'background_color_gradient_type_%s' => array(
+								'linear',
+								'radial',
+								'circular',
+								'elliptical',
+							),
+						),
+						'tab_slug'        => 'general',
+						'toggle_slug'     => 'background',
+						'sub_toggle'      => 'column_%s',
+					)
+				),
+				'background_color_gradient_overlays_image_%s' => ET_Builder_Element::background_field_template(
+					'color_gradient_overlays_image',
+					array(
+						'label'           => esc_html__( 'Column %s Place Gradient Above Background Image', 'et_builder' ),
+						'type'            => 'yes_no_button',
+						'option_category' => 'configuration',
+						'options'         => array(
+							'off'     => et_builder_i18n( 'No' ),
+							'on'      => et_builder_i18n( 'Yes' ),
+							'default' => intval( ET_Global_Settings::get_value( 'all_background_gradient_overlays_image' ) ),
+						),
+						'description'     => '',
+						'show_if'         => array(
+							'use_background_color_gradient_%s' => 'on',
+						),
+						'tab_slug'        => 'general',
+						'toggle_slug'     => 'background',
+						'sub_toggle'      => 'column_%s',
+					)
+				),
+
+				// Deprecated.
+				'background_color_gradient_start_%s'     => ET_Builder_Element::background_field_template(
+					'color_gradient_start',
+					array(
+						'label'           => esc_html__( 'Column %s Gradient Start', 'et_builder' ),
+						'type'            => 'color-alpha',
+						'option_category' => 'configuration',
+						'description'     => '',
+						'default'         => ET_Global_Settings::get_value( 'all_background_gradient_start' ),
+						'show_if'         => array(
+							'use_background_color_gradient_%s' => 'on',
+						),
+						'tab_slug'        => 'general',
+						'toggle_slug'     => 'background',
+						'sub_toggle'      => 'column_%s',
+					)
+				),
+				// Deprecated.
+				'background_color_gradient_end_%s'       => ET_Builder_Element::background_field_template(
+					'color_gradient_end',
+					array(
+						'label'           => esc_html__( 'Column %s Gradient End', 'et_builder' ),
+						'type'            => 'color-alpha',
+						'option_category' => 'configuration',
+						'description'     => '',
+						'default'         => ET_Global_Settings::get_value( 'all_background_gradient_end' ),
+						'show_if'         => array(
+							'use_background_color_gradient_%s' => 'on',
+						),
+						'tab_slug'        => 'general',
+						'toggle_slug'     => 'background',
+						'sub_toggle'      => 'column_%s',
+					)
+				),
+				// Deprecated.
 				'background_color_gradient_start_position_%s' => ET_Builder_Element::background_field_template(
 					'color_gradient_start_position',
 					array(
@@ -1161,6 +1405,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 						'sub_toggle'      => 'column_%s',
 					)
 				),
+				// Deprecated.
 				'background_color_gradient_end_position_%s' => ET_Builder_Element::background_field_template(
 					'color_gradient_end_position',
 					array(
@@ -1177,27 +1422,6 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 						'allowed_units'   => array( '%', 'em', 'rem', 'px', 'cm', 'mm', 'in', 'pc', 'ex', 'vh', 'vw' ),
 						'default_unit'    => '%',
 						'fixed_range'     => true,
-						'show_if'         => array(
-							'use_background_color_gradient_%s' => 'on',
-						),
-						'tab_slug'        => 'general',
-						'toggle_slug'     => 'background',
-						'sub_toggle'      => 'column_%s',
-					)
-				),
-				'background_color_gradient_overlays_image_%s' => ET_Builder_Element::background_field_template(
-					'color_gradient_overlays_image',
-					array(
-						'label'           => esc_html__( 'Column %s Place Gradient Above Background Image', 'et_builder' ),
-						'type'            => 'yes_no_button',
-						'option_category' => 'configuration',
-						'options'         => array(
-							'off'     => et_builder_i18n( 'No' ),
-							'on'      => et_builder_i18n( 'Yes' ),
-
-							'default' => intval( ET_Global_Settings::get_value( 'all_background_gradient_overlays_image' ) ),
-						),
-						'description'     => '',
 						'show_if'         => array(
 							'use_background_color_gradient_%s' => 'on',
 						),
@@ -1398,6 +1622,18 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 	// phpcs:enable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 	// phpcs:enable WordPress.Arrays.MultipleStatementAlignment.LongIndexSpaceBeforeDoubleArrow
 
+	// Include Pattern/Mask fields for Specialty Section Column Background Settings.
+	$column_general_fields = $helpers['columnSettingFields']['general'];
+	$column_pattern_fields = et_pb_get_pattern_fields( 'background', true );
+	$column_mask_fields    = et_pb_get_mask_fields( 'background', true );
+
+	$helpers['columnSettingFields']['general'] = array_merge( $column_general_fields, $column_pattern_fields, $column_mask_fields );
+
+	// Cleanup.
+	$column_general_fields = null;
+	$column_pattern_fields = null;
+	$column_mask_fields    = null;
+
 	if ( function_exists( 'WC' ) ) {
 		$helpers['wooCommerce'] = array();
 
@@ -1437,7 +1673,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 		),
 		'background'          => array(
 			'label'       => __( 'Background', 'et_builder' ),
-			'description' => esc_html__( 'Adjust the background style of this element by customizing the background color, gradient, image and video.', 'et_builder' ),
+			'description' => esc_html__( 'Adjust the background style of this element by customizing the background color, gradient, image, video, pattern and mask.', 'et_builder' ),
 		),
 		'column'              => array(
 			'backgroundColor' => esc_html__( 'Column %s Background', 'et_builder' ),
@@ -1590,6 +1826,10 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 					'id'   => 'boNZZ0MYU0E',
 					'name' => esc_html__( ' Saving and loading from the library', 'et_builder' ),
 				),
+				array(
+					'id'   => 'pR8b4i4E2e4',
+					'name' => esc_html__( ' Using Divi Cloud', 'et_builder' ),
+				),
 			),
 			'et_pb_portability'     => array(
 				array(
@@ -1607,6 +1847,10 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 				array(
 					'id'   => 'boNZZ0MYU0E',
 					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+				array(
+					'id'   => 'pR8b4i4E2e4',
+					'name' => esc_html__( 'Using Divi Cloud', 'et_builder' ),
 				),
 				array(
 					'id'   => 'TQnPBXzTSGY',
@@ -1643,6 +1887,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 		'saveButtonText'            => esc_attr__( 'Save', 'et_builder' ),
 		'saveDraftButtonText'       => esc_attr__( 'Save Draft', 'et_builder' ),
 		'saveLayoutBlockButtonText' => esc_attr__( 'Save & Exit', 'et_builder' ),
+		'saveCloudItemText'         => esc_attr__( 'Save Cloud Item', 'et_builder' ),
 		'publishButtonText'         => ( is_page() && ! current_user_can( 'publish_pages' ) ) || ( ! is_page() && ! current_user_can( 'publish_posts' ) ) ? esc_attr__( 'Submit', 'et_builder' ) : esc_attr__( 'Publish', 'et_builder' ),
 		'controls'                  => array(
 			'tinymce'          => array(
@@ -1740,10 +1985,14 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 				'addGradient'    => esc_html__( 'Add Background Gradient', 'et_builder' ),
 				'addImage'       => esc_html__( 'Add Background Image', 'et_builder' ),
 				'addVideo'       => esc_html__( 'Add Background Video', 'et_builder' ),
+				'addPattern'     => esc_html__( 'Add Background Pattern', 'et_builder' ),
+				'addMask'        => esc_html__( 'Add Background Mask', 'et_builder' ),
 				'color'          => esc_html__( 'Background Color', 'et_builder' ),
 				'gradient'       => esc_html__( 'Background Gradient', 'et_builder' ),
 				'gradientColors' => esc_html__( 'Background Gradient Colors', 'et_builder' ),
 				'image'          => esc_html__( 'Background Image', 'et_builder' ),
+				'pattern'        => esc_html__( 'Background Pattern', 'et_builder' ),
+				'mask'           => esc_html__( 'Background Mask', 'et_builder' ),
 				'video'          => esc_html__( 'Background Video', 'et_builder' ),
 			),
 			'responsiveTabs'   => array(
@@ -1777,7 +2026,8 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'disable'                   => esc_html__( 'Disable', 'et_builder' ),
 			'disable_items'             => esc_html__( 'Disable', 'et_builder' ),
 			'enable'                    => esc_html__( 'Enable', 'et_builder' ),
-			'save'                      => esc_html__( 'Save to Library', 'et_builder' ),
+			'save'                      => esc_html__( 'Save To Library', 'et_builder' ),
+			'saveCloud'                 => esc_html__( 'Save To Divi Cloud', 'et_builder' ),
 			'startABTesting'            => esc_html__( 'Split Test', 'et_builder' ),
 			'endABTesting'              => esc_html__( 'End Split Test', 'et_builder' ),
 			'moduleType'                => array(
@@ -1815,7 +2065,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'modifyDefaultValue'        => esc_html__( 'Modify Default Value', 'et_builder' ),
 			'modifyDefaultValues'       => esc_html__( 'Modify Default Values', 'et_builder' ),
 			'detachFromGlobal'          => esc_html__( 'Detach From Global', 'et_builder' ),
-			'convertToGlobal'           => esc_html__( 'Convert to Global', 'et_builder' ),
+			'convertToGlobal'           => esc_html__( 'Convert To Global', 'et_builder' ),
 			'makeGlobalColor'           => esc_html__( 'Make Global Color', 'et_builder' ),
 			'editSavedColor'            => esc_html__( 'Edit Saved Color', 'et_builder' ),
 			'editGlobalColor'           => esc_html__( 'Edit Global Color', 'et_builder' ),
@@ -1826,6 +2076,10 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'applyStylesToActivePreset' => esc_html__( 'Apply Styles To Active Preset', 'et_builder' ),
 			'editPresetStyle'           => esc_html__( 'Edit Preset Style', 'et_builder' ),
 			'goToLayer'                 => esc_html__( 'Go To Layer', 'et_builder' ),
+			'gradientStops'             => array(
+				'findReplace' => esc_html__( 'Find & Replace Color', 'et_builder' ),
+				'remove'      => esc_html__( 'Remove Gradient Stop', 'et_builder' ),
+			),
 		),
 		'tooltips'                  => array(
 			'insertModule'         => esc_html__( 'Insert Module', 'et_builder' ),
@@ -1836,7 +2090,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'newRow'               => esc_html__( 'New Row', 'et_builder' ),
 			'newSection'           => esc_html__( 'New Section', 'et_builder' ),
 			'addFromLibrary'       => esc_html__( 'Add From Library', 'et_builder' ),
-			'addToLibrary'         => esc_html__( 'Add to Library', 'et_builder' ),
+			'addToLibrary'         => esc_html__( 'Add To Library', 'et_builder' ),
 			'loading'              => esc_html__( 'loading...', 'et_builder' ),
 			'regular'              => esc_html__( 'Regular', 'et_builder' ),
 			'fullwidth'            => esc_html__( 'Fullwidth', 'et_builder' ),
@@ -1848,8 +2102,9 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'yes'                  => et_builder_i18n( 'Yes' ),
 			'loadLayout'           => esc_html__( 'Load From Library', 'et_builder' ),
 			'layoutDetails'        => esc_html__( 'Layout Details', 'et_builder' ),
+			'Enable Divi Cloud'    => esc_html__( 'Enable Divi Cloud', 'et_builder' ),
 			'layoutName'           => esc_html__( 'Layout Name', 'et_builder' ),
-			'replaceLayout'        => esc_html__( 'Replace existing content.', 'et_builder' ),
+			'replaceLayout'        => esc_html__( 'Replace Existing Content', 'et_builder' ),
 			'search'               => esc_html__( 'Search', 'et_builder' ) . '...',
 			'portability'          => esc_html__( 'Portability', 'et_builder' ),
 			'export'               => esc_html__( 'Export', 'et_builder' ),
@@ -1859,13 +2114,14 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'exportButton'         => esc_html__( 'Export Divi Builder Layout', 'et_builder' ),
 			'importText'           => esc_html__( 'Importing a previously-exported Divi Builder Layout file will overwrite all content currently on this page.', 'et_builder' ),
 			'importField'          => esc_html__( 'Select File To Import', 'et_builder' ),
-			'importBackUp'         => esc_html__( 'Download backup before importing', 'et_builder' ),
+			'importBackUp'         => esc_html__( 'Download Backup Before Importing', 'et_builder' ),
 			'importButton'         => esc_html__( 'Import Divi Builder Layout', 'et_builder' ),
 			'noFile'               => esc_html__( 'No File Selected', 'et_builder' ),
 			'chooseFile'           => esc_html__( 'Choose File', 'et_builder' ),
-			'portabilityOptions'   => esc_html__( 'Options:', 'et_builder' ),
+			'portabilityOptions'   => esc_html__( 'Options', 'et_builder' ),
 			'includeGlobalPresets' => esc_html__( 'Include Presets', 'et_builder' ),
 			'applyGlobalPresets'   => esc_html__( 'Apply To Exported Layout', 'et_builder' ),
+			'importContextFail'    => esc_html__( 'This file should not be imported in this context.', 'et_builder' ),
 			'globalPresets'        => array(
 				'title'            => esc_html__( 'Are You Sure?', 'et_builder' ),
 				'text'             => array(
@@ -1898,31 +2154,40 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'finishGlobalEdit'     => esc_html__( 'Finish Editing Global Colors', 'et_builder' ),
 			'portabilityTabs'      => array(
 				'import' => array(
-					'replaceLayout'        => esc_html__( 'Replace existing content.', 'et_builder' ),
-					'importBackUp'         => esc_html__( 'Download backup before importing', 'et_builder' ),
-					'addToLibrary'         => esc_html__( 'Add to Library', 'et_builder' ),
+					'replaceLayout'        => esc_html__( 'Replace Existing Content', 'et_builder' ),
+					'importBackUp'         => esc_html__( 'Download Backup Before Importing', 'et_builder' ),
+					'addToLibrary'         => esc_html__( 'Add To Library', 'et_builder' ),
 					'includeGlobalPresets' => esc_html__( 'Import Presets', 'et_builder' ),
 					'imported'             => esc_html__( 'imported', 'et_builder' ),
+					'ImportToCloud'        => esc_html__( 'Import To Cloud', 'et_builder' ),
 				),
 				'export' => array(
 					'applyGlobalPresets' => esc_html__( 'Apply Presets To Exported Layout' ),
 				),
 			),
+			'favoritesAdd'         => esc_html__( 'Add To Favorites', 'et_builder' ),
+			'favoritesRemove'      => esc_html__( 'Remove From Favorites', 'et_builder' ),
 		),
 		'saveModuleLibraryAttrs'    => array(
+			'cancel'                => et_builder_i18n( 'Cancel' ),
 			'general'               => esc_html__( 'Include General Settings', 'et_builder' ),
 			'advanced'              => esc_html__( 'Include Advanced Design Settings', 'et_builder' ),
 			'css'                   => esc_html__( 'Include Custom CSS', 'et_builder' ),
 			'selectCategoriesText'  => esc_html__( 'Select category(ies) for new template or type a new name ( optional )', 'et_builder' ),
-			'templateName'          => esc_html__( 'Layout Name', 'et_builder' ),
+			'template_name'         => esc_html__( 'Layout Name', 'et_builder' ),
 			'selectiveError'        => esc_html__( 'Please select at least 1 tab to save', 'et_builder' ),
 			'globalTitle'           => esc_html__( 'Save as Global', 'et_builder' ),
+			'cloudTitle'            => esc_html__( 'Save To Divi Cloud', 'et_builder' ),
+			'cloudSavingTitle'      => esc_html__( 'Saving To Divi Cloud', 'et_builder' ),
 			'globalText'            => esc_html__( 'Make this a global item', 'et_builder' ),
-			'createCatText'         => esc_html__( 'Create New Category', 'et_builder' ),
+			'createCatText'         => esc_html__( 'Create New Category/Categories', 'et_builder' ),
+			'createTagText'         => esc_html__( 'Create New Tag(s)', 'et_builder' ),
 			'addToCatText'          => esc_html__( 'Add To Categories', 'et_builder' ),
+			'addToTagText'          => esc_html__( 'Add To Tags', 'et_builder' ),
 			'descriptionText'       => esc_html__( 'Here you can add the current item to your Divi Library for later use.', 'et_builder' ),
 			'descriptionTextLayout' => esc_html__( 'Save your current page to the Divi Library for later use.', 'et_builder' ),
-			'saveText'              => esc_html__( 'Save to Library', 'et_builder' ),
+			'saveText'              => esc_html__( 'Save To Library', 'et_builder' ),
+			'saveToCloudText'       => esc_html__( 'Save To Divi Cloud', 'et_builder' ),
 			'allCategoriesText'     => esc_html__( 'All Categories', 'et_builder' ),
 		),
 		'alertModal'                => array(
@@ -2148,7 +2413,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'fontWeight'     => esc_html__( 'Font Weight', 'et_builder' ),
 			'fontStyle'      => esc_html__( 'Font Style', 'et_builder' ),
 			'delete'         => esc_html__( 'Delete', 'et_builder' ),
-			'deleteConfirm'  => esc_html__( 'Are You Sure Want to Delete', 'et_builder' ),
+			'deleteConfirm'  => esc_html__( 'Are You Sure Want To Delete', 'et_builder' ),
 			'confirmAction'  => esc_html__( 'Are You Sure?', 'et_builder' ),
 			'cancel'         => et_builder_i18n( 'Cancel' ),
 			'upload'         => esc_html__( 'Upload', 'et_builder' ),
@@ -2275,7 +2540,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 		),
 		'video'                     => array(
 			'active'  => esc_html__( 'Video Overlay is Currently Active.', 'et_builder' ),
-			'offline' => esc_html__( 'Unable to Establish Internet Connection.', 'et_builder' ),
+			'offline' => esc_html__( 'Unable To Establish Internet Connection.', 'et_builder' ),
 		),
 
 		/**
@@ -2344,8 +2609,8 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 				'expandModal'    => esc_html__( 'Expand Modal', 'et_builder' ),
 				'contractModal'  => esc_html__( 'Contract Modal', 'et_builder' ),
 				'resize'         => esc_html__( 'Resize Modal', 'et_builder' ),
-				'snapModal'      => esc_html__( 'Snap to Left', 'et_builder' ),
-				'snapModalRight' => esc_html__( 'Snap to Right', 'et_builder' ),
+				'snapModal'      => esc_html__( 'Snap To Left', 'et_builder' ),
+				'snapModalRight' => esc_html__( 'Snap To Right', 'et_builder' ),
 				'separateModal'  => esc_html__( 'Separate Modal', 'et_builder' ),
 				'redo'           => esc_html__( 'Redo', 'et_builder' ),
 				'undo'           => esc_html__( 'Undo', 'et_builder' ),

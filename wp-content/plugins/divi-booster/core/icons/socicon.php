@@ -1,9 +1,29 @@
 <?php
 add_action('wp_enqueue_scripts', 'dbdb_icons_socicon_register_css');
+add_action('dbdb_font_icons_enqueue_fonts', 'dbdb_socicon_enqueue_fonts');
+
+add_filter('dbdb_font_icon_names', 'dbdb_icons_socicon_network_names');
+add_filter('dbdb_font_icon_data', 'dbdb_icons_socicon_network_data');
+
 add_filter('dbdb_icons_socicon_data', 'dbdb_icons_socicon_correct_slugs');
 add_filter('dbdb_icons_socicon_data', 'dbdb_icons_socicon_correct_names');
 add_filter('dbdb_icons_socicon_data', 'dbdb_icons_socicon_remove_defunct_networks');
 add_filter('dbdb_icons_socicon_data', 'dbdb_icons_socicon_sort_networks_by_name');
+
+
+if (!function_exists('dbdb_icons_socicon_register_css')) {
+	function dbdb_icons_socicon_register_css() { 
+		wp_register_style('dbdb-icons-socicon', plugin_dir_url(__FILE__).'socicon/style.css', array(), BOOSTER_VERSION);
+	}
+}
+
+if (!function_exists('dbdb_socicon_enqueue_fonts')) {
+    function dbdb_socicon_enqueue_fonts() {  
+        wp_enqueue_style('dbdb-icons-socicon'); // Socicon font
+        $location = did_action('wp_head')?'wp_footer':'wp_head';
+        add_action($location, 'dbdb_icons_socicon_inline_css');
+    }
+}
 
 if (!function_exists('dbdb_icons_socicon_inline_css')) {
 	function dbdb_icons_socicon_inline_css() {
@@ -28,16 +48,17 @@ if (!function_exists('dbdb_icons_socicon_inline_css')) {
 	}
 }
 
-if (!function_exists('dbdb_icons_socicon_register_css')) {
-	function dbdb_icons_socicon_register_css() { 
-		wp_register_style('dbdb-icons-socicon', plugin_dir_url(__FILE__).'socicon/style.css', array(), BOOSTER_VERSION);
+if (!function_exists('dbdb_icons_socicon_network_names')) {
+	function dbdb_icons_socicon_network_names($names) {
+		$networks = dbdb_icons_socicon_data();
+		$socicon_names = is_array($networks)?wp_list_pluck($networks, 'name'):array();
+        return $names + $socicon_names;
 	}
 }
 
-if (!function_exists('dbdb_icons_socicon_network_names')) {
-	function dbdb_icons_socicon_network_names() {
-		$networks = dbdb_icons_socicon_data();
-		return is_array($networks)?wp_list_pluck($networks, 'name'):array();
+if (!function_exists('dbdb_icons_socicon_network_data')) {
+	function dbdb_icons_socicon_network_data($icons) {
+        return $icons + dbdb_icons_socicon_data();
 	}
 }
 

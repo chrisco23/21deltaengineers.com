@@ -106,7 +106,11 @@ class DirectoryIntegration implements HookableInterface {
 			}
 		}
 
-		return sprintf( '%1$s/%2$s', PathsGenerator::get_wordpress_root_path(), $directory_name );
+		return sprintf(
+			'%1$s/%2$s',
+			rtrim( PathsGenerator::get_wordpress_root_path(), DIRECTORY_SEPARATOR ),
+			$directory_name
+		);
 	}
 
 	/**

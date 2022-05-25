@@ -46,6 +46,7 @@ abstract class LibraryMethodAbstract extends MethodAbstract implements LibraryMe
 		foreach ( $output_formats as $output_format ) {
 			foreach ( $paths as $path ) {
 				try {
+					$this->files_to_conversion++;
 					$this->convert_path( $path, $output_format, $plugin_settings );
 				} catch ( \Exception $e ) {
 					$this->errors[] = $e->getMessage();

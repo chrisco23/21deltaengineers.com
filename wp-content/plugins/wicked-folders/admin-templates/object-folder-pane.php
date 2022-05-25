@@ -210,7 +210,7 @@ var wickedFolderPane;
             }) );
         });
 
-        var activeFolder = folders.get( '<?php echo ( int ) $active_folder_id; ?>' );
+        var activeFolder = folders.get( '<?php echo esc_js( $active_folder_id ); ?>' );
 
         // In case we can't find the specified folder, fallback to the root folder
         if ( ! activeFolder ) activeFolder = folders.get( '0' );

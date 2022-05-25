@@ -32,12 +32,28 @@ use WebpConverter\WebpConverterConstants;
 					<div class="webpLoader__barProgress" data-percent="0">
 						<div class="webpLoader__barCount"></div>
 					</div>
-					<div class="webpLoader__size">
+					<div class="webpLoader__progress">
 						<?php
 						echo sprintf(
 						/* translators: %s progress value */
 							wp_kses_post( __( 'Saving the weight of your images: %s', 'webp-converter-for-media' ) ),
-							'<span class="webpLoader__sizeProgress">0 kB</span>'
+							'<span class="webpLoader__progressValue webpLoader__progressValue--size">0 kB</span>'
+						);
+						?>
+						<br>
+						<?php
+						echo sprintf(
+						/* translators: %s images count */
+							wp_kses_post( __( 'Successfully converted files: %s', 'webp-converter-for-media' ) ),
+							'<span class="webpLoader__progressValue webpLoader__progressValue--successful">0</span>'
+						);
+						?>
+						<br>
+						<?php
+						echo sprintf(
+						/* translators: %s images count */
+							wp_kses_post( __( 'Failed or skipped file conversion attempts: %s', 'webp-converter-for-media' ) ),
+							'<span class="webpLoader__progressValue webpLoader__progressValue--failed">0 </span>'
 						);
 						?>
 					</div>

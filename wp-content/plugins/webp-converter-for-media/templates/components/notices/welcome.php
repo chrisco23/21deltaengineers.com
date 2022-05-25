@@ -7,7 +7,9 @@
  */
 
 ?>
-<div class="notice notice-success">
+<div class="notice notice-success"
+	data-notice="webp-converter-for-media"
+>
 	<div class="webpContent webpContent--notice">
 		<h4>
 			<?php echo esc_html( __( 'Thank you for installing our plugin WebP Converter for Media!', 'webp-converter-for-media' ) ); ?>

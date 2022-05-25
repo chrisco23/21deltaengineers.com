@@ -64,11 +64,12 @@ class PathsFinder {
 	/**
 	 * Returns list of server paths of source images to be converted.
 	 *
-	 * @param bool $skip_converted Skip converted images?
+	 * @param bool          $skip_converted         Skip converted images?
+	 * @param string[]|null $allowed_output_formats List of extensions or use selected in plugin settings.
 	 *
 	 * @return string[] Server paths of source images.
 	 */
-	public function get_paths( bool $skip_converted = false ): array {
+	public function get_paths( bool $skip_converted = false, array $allowed_output_formats = null ): array {
 		$settings = $this->plugin_data->get_plugin_settings();
 		$dirs     = array_filter(
 			array_map(
@@ -81,7 +82,7 @@ class PathsFinder {
 
 		$list = [];
 		foreach ( $dirs as $dir_path ) {
-			$paths = apply_filters( 'webpc_dir_files', [], $dir_path, $skip_converted );
+			$paths = apply_filters( 'webpc_dir_files', [], $dir_path, $skip_converted, $allowed_output_formats );
 			$list  = array_merge( $list, $paths );
 		}
 

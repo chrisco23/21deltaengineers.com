@@ -28,11 +28,6 @@ class CronInitiator {
 	 */
 	private $cron_status_manager;
 
-	/**
-	 * @var bool
-	 */
-	private $cron_enabled;
-
 	public function __construct(
 		PluginData $plugin_data,
 		TokenRepository $token_repository,
@@ -41,9 +36,6 @@ class CronInitiator {
 		$this->plugin_data         = $plugin_data;
 		$this->token_repository    = $token_repository;
 		$this->cron_status_manager = $cron_status_manager ?: new CronStatusManager();
-
-		$plugin_settings    = $this->plugin_data->get_plugin_settings();
-		$this->cron_enabled = in_array( ExtraFeaturesOption::OPTION_VALUE_CRON_ENABLED, $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ] );
 	}
 
 	public function refresh_paths_to_conversion( bool $force_init = false ): bool {
@@ -53,11 +45,14 @@ class CronInitiator {
 			return false;
 		}
 
+		$plugin_settings = $this->plugin_data->get_plugin_settings();
+		$cron_enabled    = in_array( ExtraFeaturesOption::OPTION_VALUE_CRON_ENABLED, $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ] );
+
 		$this->cron_status_manager->set_conversion_status_locked( true, true );
 
 		$paths = ( new PathsFinder( $this->plugin_data, $this->token_repository ) )->get_paths( true );
-		$this->cron_status_manager->set_paths_to_conversion( $paths, $this->cron_enabled );
-		$this->cron_status_manager->set_paths_skipped( ( $this->cron_enabled ) ? $paths : [] );
+		$this->cron_status_manager->set_paths_to_conversion( $paths, $cron_enabled );
+		$this->cron_status_manager->set_paths_skipped( ( $cron_enabled ) ? $paths : [] );
 
 		$this->cron_status_manager->set_conversion_status_locked( false );
 
@@ -116,8 +111,11 @@ class CronInitiator {
 	 * @return void
 	 */
 	private function try_restart_conversion() {
+		$plugin_settings = $this->plugin_data->get_plugin_settings();
+		$cron_enabled    = in_array( ExtraFeaturesOption::OPTION_VALUE_CRON_ENABLED, $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ] );
+
 		$this->cron_status_manager->reset_conversion_request_id();
-		if ( ! $this->cron_enabled || ! $this->cron_status_manager->get_paths_counter() ) {
+		if ( ! $cron_enabled || ! $this->cron_status_manager->get_paths_counter() ) {
 			return;
 		}
 

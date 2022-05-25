@@ -282,8 +282,8 @@ class wtfplugin_1_0 {
 		update_option(BOOSTER_OPTION_LAST_ERROR, ''); // clear last error
 		
 		// updates
-		$plugins_url = is_network_admin()?network_admin_url('plugins.php'):admin_url('plugins.php');
-		$update_link = wp_nonce_url(add_query_arg(array('puc_check_for_updates'=>1,'puc_slug' => urlencode($this->package_slug)),$plugins_url),'puc_check_for_updates');
+		//$plugins_url = is_network_admin()?network_admin_url('plugins.php'):admin_url('plugins.php');
+		//$update_link = wp_nonce_url(add_query_arg(array('puc_check_for_updates'=>1,'puc_slug' => urlencode($this->package_slug)),$plugins_url),'puc_check_for_updates');
 		
 		?>
 		
@@ -296,9 +296,6 @@ class wtfplugin_1_0 {
 			<h2><?php echo $this->config['plugin']['name']; ?> Settings</h2>
 			</div>
 			<div id="db-header-right">
-				<div class="wtf-form-license-area">
-					Plugin active. <a href="<?php esc_attr_e(esc_url($update_link));?>">Check for updates</a>.<br><i>License keys are no longer required</i>
-				</div>
 			<?php submit_button(); ?>
 			</div>
 		</div>

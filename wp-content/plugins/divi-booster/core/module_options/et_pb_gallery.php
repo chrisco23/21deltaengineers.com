@@ -37,7 +37,10 @@ function dbmo_et_pb_gallery_add_fields($fields) {
 				'default' => '',
 				'mobile_options'  => true,
 				'tab_slug'        => 'advanced',
-				'toggle_slug'        => 'layout'
+				'toggle_slug'        => 'layout',
+                'show_if' => array(
+                    'fullwidth' => 'off'
+                )
 				
 			);
 			$new_fields['db_images_per_row_tablet'] = array(
@@ -66,7 +69,10 @@ function dbmo_et_pb_gallery_add_fields($fields) {
 				'default_unit' => '%',
 				'mobile_options'  => true,
 				'tab_slug' => 'advanced',
-				'toggle_slug' => 'layout'
+				'toggle_slug' => 'layout',
+                'show_if' => array(
+                    'fullwidth' => 'off'
+                )
 				
 			);
 			$new_fields['db_image_max_width_tablet'] = array(
@@ -96,7 +102,10 @@ function dbmo_et_pb_gallery_add_fields($fields) {
 				'default_unit' => '%',
 				'mobile_options'  => true,
 				'tab_slug'        => 'advanced',
-				'toggle_slug'        => 'layout'
+				'toggle_slug'        => 'layout',
+                'show_if' => array(
+                    'fullwidth' => 'off'
+                )
 				
 			);
 			$new_fields['db_image_max_height_tablet'] = array(
@@ -126,7 +135,10 @@ function dbmo_et_pb_gallery_add_fields($fields) {
 				'default_unit' => '%',
 				'mobile_options'  => true,
 				'tab_slug'        => 'advanced',
-				'toggle_slug'        => 'layout'
+				'toggle_slug'        => 'layout',
+                'show_if' => array(
+                    'fullwidth' => 'off'
+                )
 				
 			);
 			$new_fields['db_image_row_spacing_tablet'] = array(
@@ -172,7 +184,10 @@ function dbmo_et_pb_gallery_add_fields($fields) {
 				'description' => 'Choose how the image fills its bounding box. '.divibooster_module_options_credit(),
 				'default' => '',
 				'tab_slug' => 'advanced',
-				'toggle_slug'        => 'layout'
+				'toggle_slug'        => 'layout',
+                'show_if' => array(
+                    'fullwidth' => 'off'
+                )
 			);
 			
 			$new_fields['dbdb_version'] = array(

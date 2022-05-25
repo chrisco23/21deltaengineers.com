@@ -11,8 +11,9 @@ DBDBMagnificPopup::create()->init();
 DBDBETModulesFont::create()->load_full_font();
 DBDBDynamicAsset::socialMediaFollowCss()->init();
 
-// === Load plugin compatibity files ===
+// === Load plugin compatibity / deprecation files ===
 include(dirname(__FILE__).'/compat/compat.php');
+include(dirname(__FILE__).'/deprecated/deprecated-icons/deprecated-icons.php');
 
 // === Load the core plugin class ===
 include(dirname(__FILE__).'/wtfplugin_1_0.class.php');
@@ -30,6 +31,9 @@ include(dirname(__FILE__).'/module-options.php'); // Load the module options
 
 // === Load the icon sets ===
 include(dirname(__FILE__).'/icons/socicon.php'); 
+if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+    include(dirname(__FILE__).'/icons/divi-booster-icons/divi-booster-icons.php');
+} 
 
 // === Load additional features ===
 include(dirname(__FILE__).'/features/features.php');

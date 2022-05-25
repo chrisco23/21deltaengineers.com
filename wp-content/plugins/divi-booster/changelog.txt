@@ -1,3 +1,22 @@
+= 3.8.6 =
+* Improves to the licensing system
+
+= 3.8.5 =
+* Implemented licensing system
+* Minimum required PHP version now 5.3
+
+= 3.8.4 =
+* Fixed slider "run once" option not working when continue on hover enabled
+
+= 3.8.3 =
+* Now hides added gallery module settings when not applicable
+* Fixed array_values() expects parameter 1 to be array error in deprecated icons
+
+= 3.8.2 =
+* Removed Google+ from header / footer icons
+* Added Linktree icon to header / footer and social media module icons
+* Added Eventbrite icon to header / footer and social media module icons
+
 = 3.8.1 =
 * Removed slide background link url option - same effect can now be achieved with the built-in slide module link field
 

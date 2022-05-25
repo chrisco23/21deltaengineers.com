@@ -41,6 +41,7 @@ class FullwidthSliderRunOnceFeature {
                 function() {
                     if($slider.find(".et_pb_slide:last-child").is(":visible")) {
                         clearInterval(id);
+                        $slider.removeClass("et_slider_auto_ignore_hover");
                         $slider.trigger("mouseenter");
                         $slider.off("mouseenter mouseleave");
                     } 
@@ -65,6 +66,7 @@ class FullwidthSliderRunOnceFeature {
                 function() {
                     if($slider.find(".et_pb_slide:last-child").is(":visible")) {
                         clearInterval(id);
+                        $slider.removeClass("et_slider_auto_ignore_hover");
                         $slider.trigger("mouseenter");
                         $slider.off("mouseenter mouseleave");
                     } 

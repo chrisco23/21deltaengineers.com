@@ -5,6 +5,7 @@ namespace WebpConverter\Loader;
 use WebpConverter\Service\PathsGenerator;
 use WebpConverter\Settings\Option\ExtraFeaturesOption;
 use WebpConverter\Settings\Option\LoaderTypeOption;
+use WebpConverter\Settings\Option\OutputFormatsOption;
 use WebpConverter\Settings\Option\SupportedExtensionsOption;
 
 /**
@@ -26,7 +27,7 @@ class HtaccessLoader extends LoaderAbstract {
 	 * {@inheritdoc}
 	 */
 	public function activate_loader( bool $is_debug = false ) {
-		$settings = ( $is_debug ) ? $this->plugin_data->get_debug_settings() : $this->plugin_data->get_plugin_settings();
+		$settings = ( ! $is_debug ) ? $this->plugin_data->get_plugin_settings() : $this->plugin_data->get_debug_settings();
 
 		$this->deactivate_loader();
 
@@ -138,18 +139,18 @@ class HtaccessLoader extends LoaderAbstract {
 			return $content;
 		}
 
-		$root_document     = preg_replace( '/(\/|\\\\)/', '/', rtrim( realpath( $_SERVER['DOCUMENT_ROOT'] ) ?: '', '\/' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-		$root_wordpress    = preg_replace( '/(\/|\\\\)/', '/', rtrim( PathsGenerator::get_wordpress_root_path(), '\/' ) );
-		$is_force_document = ( in_array( ExtraFeaturesOption::OPTION_VALUE_FORCE_DOCUMENT_ROOT, $settings[ ExtraFeaturesOption::OPTION_NAME ] ) );
+		$root_document      = preg_replace( '/(\/|\\\\)/', '/', rtrim( $_SERVER['DOCUMENT_ROOT'], '\/' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$root_document_real = preg_replace( '/(\/|\\\\)/', '/', rtrim( realpath( $_SERVER['DOCUMENT_ROOT'] ) ?: '', '\/' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$root_wordpress     = preg_replace( '/(\/|\\\\)/', '/', rtrim( PathsGenerator::get_wordpress_root_path(), '\/' ) );
 
-		$root_path     = trim( str_replace( $root_document ?: '', '', $root_wordpress ?: '' ), '\/' );
+		$root_path     = trim( str_replace( $root_document_real ?: '', '', $root_wordpress ?: '' ), '\/' );
 		$root_suffix   = apply_filters(
 			'webpc_htaccess_rewrite_path',
 			apply_filters( 'webpc_uploads_prefix', str_replace( '//', '/', sprintf( '/%s/', $root_path ) ) )
 		);
 		$document_root = apply_filters(
 			'webpc_htaccess_rewrite_root',
-			( $is_force_document ) ? ( $root_wordpress . '/' ) : ( '%{DOCUMENT_ROOT}' . $root_suffix )
+			( $root_document !== $root_document_real ) ? ( $root_wordpress . '/' ) : ( '%{DOCUMENT_ROOT}' . $root_suffix )
 		);
 
 		$output_path = apply_filters( 'webpc_dir_name', '', 'webp' );
@@ -157,7 +158,7 @@ class HtaccessLoader extends LoaderAbstract {
 			$output_path .= '/' . $output_path_suffix;
 		}
 
-		foreach ( $this->get_mime_types() as $format => $mime_type ) {
+		foreach ( $this->format_factory->get_mime_types( $settings[ OutputFormatsOption::OPTION_NAME ] ) as $format => $mime_type ) {
 			$content .= '<IfModule mod_rewrite.c>' . PHP_EOL;
 			$content .= '  RewriteEngine On' . PHP_EOL;
 			foreach ( $settings[ SupportedExtensionsOption::OPTION_NAME ] as $ext ) {
@@ -214,7 +215,7 @@ class HtaccessLoader extends LoaderAbstract {
 
 		$content .= '<IfModule mod_expires.c>' . PHP_EOL;
 		$content .= '  ExpiresActive On' . PHP_EOL;
-		foreach ( $this->get_mime_types() as $format => $mime_type ) {
+		foreach ( $this->format_factory->get_mime_types( $settings[ OutputFormatsOption::OPTION_NAME ] ) as $format => $mime_type ) {
 			$content .= "  ExpiresByType ${mime_type} \"access plus 1 year\"" . PHP_EOL;
 		}
 		$content .= '</IfModule>';
@@ -236,7 +237,7 @@ class HtaccessLoader extends LoaderAbstract {
 		}
 
 		$content .= '<IfModule mod_mime.c>' . PHP_EOL;
-		foreach ( $this->get_mime_types() as $format => $mime_type ) {
+		foreach ( $this->format_factory->get_mime_types( $settings[ OutputFormatsOption::OPTION_NAME ] ) as $format => $mime_type ) {
 			$content .= "  AddType ${mime_type} .${format}" . PHP_EOL;
 		}
 		$content .= '</IfModule>';

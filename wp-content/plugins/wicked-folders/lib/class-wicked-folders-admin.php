@@ -141,10 +141,6 @@ final class Wicked_Folders_Admin {
 				if ( $is_woocommerce_active && 'shop_order' == $typenow ) {
 					$after_ajax_scripts[] = plugins_url( 'woocommerce/assets/js/admin/wc-enhanced-select.min.js' );
 				}
-
-				if ( $is_woocommerce_active && 'product' == $typenow ) {
-					$after_ajax_scripts[] = plugins_url( 'woocommerce/assets/js/admin/quick-edit.min.js' );
-				}
 			}
 
 			if ( $is_tablepress_active && isset( $_GET['page'] ) && 'tablepress' == $_GET['page'] ) {
@@ -684,6 +680,7 @@ final class Wicked_Folders_Admin {
 		$show_item_counts 					= get_option( 'wicked_folders_show_item_counts', true );
 		$show_breadcrumbs 					= get_option( 'wicked_folders_show_breadcrumbs', true );
 		$enable_ajax_nav 					= get_option( 'wicked_folders_enable_ajax_nav', true );
+		$unsupported_types 					= array( 'shop_webhook', 'wf_collection_policy', 'nf_sub', 'wp_navigation' );
 		$attachment_post_type 				= get_post_type_object( 'attachment' );
 		$post_types 						= get_post_types( array(
 			'show_ui' => true,
@@ -735,11 +732,10 @@ final class Wicked_Folders_Admin {
 			$post_types[] = $tablepress_post_type;
 		}
 
-		// Folders don't work with WooCommerce webhooks
-		unset( $post_types['shop_webhook'] );
-
-		// ...or folder collection policies
-		unset( $post_types['wf_collection_policy'] );
+		// Exclude unsupported types
+		foreach ( $unsupported_types as $type ) {
+			unset( $post_types[ $type ] );
+		}
 
 		if ( isset( $post_types['elementor_library'] ) ) {
 			$post_types['elementor_library']->label = __( 'Elementor Templates', 'wicked-folders' );
@@ -899,7 +895,6 @@ final class Wicked_Folders_Admin {
 
 				// Dynamic folders
 				if ( $folder && $folder_type && 'Wicked_Folders_Term_Folder' != $folder_type && class_exists( $folder_type ) ) {
-
 					// Folder tax queries won't work with dynamic folders so remove
 					Wicked_Folders::remove_tax_query( $query, 'wf_attachment_folders' );
 

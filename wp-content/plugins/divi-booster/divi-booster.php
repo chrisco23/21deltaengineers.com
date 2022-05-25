@@ -4,12 +4,13 @@ Plugin Name: Divi Booster
 Plugin URI: 
 Description: Bug fixes and enhancements for Elegant Themes' Divi Theme.
 Author: Dan Mossop
-Version: 3.8.1
+Version: 3.8.6
+Requires PHP: 5.3
 Author URI: https://divibooster.com
 */	
 
 if (!defined('BOOSTER_VERSION')) {
-    define('BOOSTER_VERSION', '3.8.1');
+    define('BOOSTER_VERSION', '3.8.6');
 }
 
 if (!function_exists('dbdb_file')) {
@@ -81,7 +82,44 @@ if (!defined('BOOSTER_DIR_FIXES')) {
 
 // === Setup ===		
 include_once(BOOSTER_CORE.'/index.php'); // Load the plugin framework
-booster_enable_updates(dbdb_file()); // Enable auto-updates for this plugin
+
+
+
+
+// === Start updates === 
+
+$config = array(
+    'plugin_slug' => 'divi-booster',
+    'plugin_name' => __('Divi Booster', 'divi-booster'),
+    'plugin_url' => 'https://divibooster.com/divi-booster-the-easy-way-to-customize-divi/',
+    'edd_store_url' => 'https://divibooster.com',
+    'edd_item_id' => 733, 
+    'update_url' => 'https://d3mraia2v9t5x8.cloudfront.net',
+    'plugin_file' => __FILE__
+);
+
+if (version_compare(phpversion(), '5.3', '>=')) {
+    include_once(dirname(__FILE__).'/core/NO_EDIT_shared/licensing.php');
+    if (get_option($config['plugin_slug'].'-license_status') === 'valid') {
+        //include_once(dirname(__FILE__).'/core/NO_EDIT_shared/updates.php');
+        booster_enable_updates(dbdb_file()); // Enable auto-updates for this plugin
+    }
+    //include_once(dirname(__FILE__).'/core/plugin-main.php');
+}
+else {
+    add_action('admin_notices', 'dbdb_php_version_notice');
+}
+
+function dbdb_php_version_notice() { ?>
+<div class="notice notice-warning">
+    <p><?php esc_html_e('Important: Divi Booster requires PHP version 5.3 or higher.'); ?></p>
+</div>
+<?php
+}
+
+// === END updates ===
+
+
 
 include_once(BOOSTER_CORE.'/update_patches.php'); // Apply update patches
 

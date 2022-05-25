@@ -1027,6 +1027,11 @@ ul.wicked-tree.highlight-assignable .wicked-folder-leaf:not(.assignable) > .wick
 	clear: both;
 }
 
+.gform-settings-panel__content.form-list .wicked-folders-breadcrumbs,
+.gform-settings-panel__content--entry-list .wicked-folders-breadcrumbs {
+	width: 100%;
+}
+
 body.branch-5-0 .wicked-folders-breadcrumbs,
 body.branch-5-1 .wicked-folders-breadcrumbs,
 body.branch-5-2 .wicked-folders-breadcrumbs {

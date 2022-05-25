@@ -1,5 +1,18 @@
 == Changelog ==
 
+= 4.3.4 (2022-05-10) =
+* `[Changed]` Generating rewrite rules for via .htaccess loading mode (applies to rewrites_not_working server configuration error)
+* `[Changed]` Message about rewrites_not_executed server configuration error
+
+= 4.3.3 (2022-05-08) =
+* `[Fixed]` Calculation of number of images to be converted
+* `[Added]` Filter `webpc_option_quality_levels` to change conversion quality levels
+
+= 4.3.2 (2022-04-20) =
+* `[Added]` Added conversion skip for animated GIF images
+* `[Added]` Added new information about status of image conversion
+* `[Added]` Added ability to convert only to AVIF format
+
 = 4.3.1 (2022-04-05) =
 * `[Fixed]` Generating rewrite rules for via .htaccess loading mode
 

@@ -6,6 +6,10 @@
 .et-social-icon a.socicon:before { 
 	font-family: "socicon" !important; 
 }
+.et-social-icon a.divi-booster-icons:before { 
+	font-family: "divi-booster-icons" !important; 
+    color: inherit;
+}
 
 /* Icon positioning */
 .et-social-icon a.socicon { top: 1px; }

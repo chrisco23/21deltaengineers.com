@@ -58,11 +58,10 @@ class ConversionMethodOption extends OptionAbstract {
 		return [
 			__( 'The Remote server allows you to reduce the server load, because your images are converted by our server. This option is also useful when the server does not meet all of the plugin\'s technical requirements.', 'webp-converter-for-media' ),
 			sprintf(
-			/* translators: %1$s: open anchor tag, %2$s: arrow icon, %3$s: close anchor tag */
-				__( '%1$sRead more %2$s%3$s', 'webp-converter-for-media' ),
+			/* translators: %1$s: open anchor tag, %2$s: close anchor tag */
+				__( '%1$sUpgrade to PRO%2$s', 'webp-converter-for-media' ),
 				'<a href="' . esc_url( sprintf( WebpConverterConstants::UPGRADE_PRO_PREFIX_URL, 'field-conversion-method-info' ) ) . '" target="_blank">',
-				'<span class="dashicons dashicons-arrow-right-alt"></span>',
-				'</a>'
+				'<span class="dashicons dashicons-arrow-right-alt"></span></a>'
 			),
 		];
 	}

@@ -2,7 +2,6 @@
 
 namespace WebpConverter\Conversion\Method;
 
-use WebpConverter\Conversion\Format\WebpFormat;
 use WebpConverter\Conversion\SkipCrashed;
 use WebpConverter\Conversion\SkipLarger;
 use WebpConverter\Exception;
@@ -117,6 +116,7 @@ class RemoteMethod extends MethodAbstract {
 		$output_formats = $plugin_settings[ OutputFormatsOption::OPTION_NAME ];
 		$file_paths     = $this->get_source_paths( $paths, $plugin_settings );
 
+		$this->files_to_conversion += ( count( $paths ) * count( $output_formats ) );
 		if ( ! $file_paths ) {
 			return;
 		}
@@ -174,19 +174,17 @@ class RemoteMethod extends MethodAbstract {
 	 * @return string[]
 	 */
 	private function skip_invalid_paths( array $file_paths, string $output_format ): array {
-		switch ( $output_format ) {
-			case WebpFormat::FORMAT_EXTENSION:
-				$valid_paths = [];
-				foreach ( $file_paths as $file_path ) {
-					$source_format = strtolower( pathinfo( $file_path, PATHINFO_EXTENSION ) );
-					if ( $source_format !== WebpFormat::FORMAT_EXTENSION ) {
-						$valid_paths[] = $file_path;
-					}
-				}
-				return $valid_paths;
-			default:
-				return $file_paths;
+		$valid_paths = [];
+		foreach ( $file_paths as $file_path ) {
+			$source_format = strtolower( pathinfo( $file_path, PATHINFO_EXTENSION ) );
+
+			if ( $source_format === $output_format ) {
+				continue;
+			}
+			$valid_paths[] = $file_path;
 		}
+
+		return $valid_paths;
 	}
 
 	/**

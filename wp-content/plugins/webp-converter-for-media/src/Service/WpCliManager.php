@@ -2,6 +2,8 @@
 
 namespace WebpConverter\Service;
 
+use WebpConverter\Conversion\Format\AvifFormat;
+use WebpConverter\Conversion\Format\WebpFormat;
 use WebpConverter\Conversion\Method\MethodIntegrator;
 use WebpConverter\Conversion\PathsFinder;
 use WebpConverter\HookableInterface;
@@ -47,11 +49,12 @@ class WpCliManager implements HookableInterface {
 	 */
 	public function calculate_images() {
 		\WP_Cli::log(
-			__( 'How many maximum images for conversion are on my website?', 'webp-converter-for-media' )
+			__( 'How many maximum images for conversion are left on my website?', 'webp-converter-for-media' )
 		);
 
 		$images_count = count(
-			( new PathsFinder( $this->plugin_data, $this->token_repository ) )->get_paths( false )
+			( new PathsFinder( $this->plugin_data, $this->token_repository ) )
+				->get_paths( true, [ AvifFormat::FORMAT_EXTENSION, WebpFormat::FORMAT_EXTENSION ] )
 		);
 
 		\WP_CLI::success(
@@ -74,12 +77,14 @@ class WpCliManager implements HookableInterface {
 			->get_paths_by_chunks( $skip_converted );
 		$conversion_method = ( new MethodIntegrator( $this->plugin_data ) );
 
-		$progress    = \WP_CLI\Utils\make_progress_bar(
+		$progress        = \WP_CLI\Utils\make_progress_bar(
 			__( 'Regenerate images', 'webp-converter-for-media' ),
 			count( $paths_chunks )
 		);
-		$size_before = 0;
-		$size_after  = 0;
+		$size_before     = 0;
+		$size_after      = 0;
+		$files_all       = 0;
+		$files_converted = 0;
 
 		foreach ( $paths_chunks as $images_paths ) {
 			$response = $conversion_method->init_conversion( $images_paths, ! $skip_converted );
@@ -97,8 +102,10 @@ class WpCliManager implements HookableInterface {
 					return;
 				}
 
-				$size_before += $response['size']['before'];
-				$size_after  += $response['size']['after'];
+				$size_before     += $response['size']['before'];
+				$size_after      += $response['size']['after'];
+				$files_all       += $response['files']['all'];
+				$files_converted += $response['files']['converted'];
 			}
 
 			$progress->tick();
@@ -118,6 +125,20 @@ class WpCliManager implements HookableInterface {
 				)
 			);
 		}
+		\WP_CLI::log(
+			sprintf(
+			/* translators: %s images count */
+				__( 'Successfully converted files: %s', 'webp-converter-for-media' ),
+				$files_converted
+			)
+		);
+		\WP_CLI::log(
+			sprintf(
+			/* translators: %s images count */
+				__( 'Failed or skipped file conversion attempts: %s', 'webp-converter-for-media' ),
+				( $files_all - $files_converted )
+			)
+		);
 	}
 
 	private function format_bytes( int $size ): string {

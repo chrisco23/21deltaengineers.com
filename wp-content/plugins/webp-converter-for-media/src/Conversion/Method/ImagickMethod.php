@@ -76,6 +76,7 @@ class ImagickMethod extends LibraryMethodAbstract {
 	 * @throws Exception\ExtensionUnsupportedException
 	 * @throws Exception\ImagickUnavailableException
 	 * @throws Exception\ImageInvalidException
+	 * @throws Exception\ImageAnimatedException
 	 */
 	public function create_image_by_path( string $source_path, array $plugin_settings ) {
 		$extension = strtolower( pathinfo( $source_path, PATHINFO_EXTENSION ) );
@@ -87,7 +88,11 @@ class ImagickMethod extends LibraryMethodAbstract {
 		}
 
 		try {
-			return new \Imagick( $source_path );
+			$imagick = new \Imagick( $source_path );
+			if ( ( $extension === 'gif' ) && ( $imagick->identifyFormat( '%n' ) > 1 ) ) {
+				throw new Exception\ImageAnimatedException( $source_path );
+			}
+			return $imagick;
 		} catch ( \ImagickException $e ) {
 			throw new Exception\ImageInvalidException( $source_path );
 		}

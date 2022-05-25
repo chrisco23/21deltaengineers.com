@@ -1,24 +1,30 @@
 <?php
 if (!defined('ABSPATH')) { exit(); } // No direct access
 
-// Register the icon styles
+// === Add 'dbdb_customizer_social_icons' filter to the icons configured for the site ===
+
+add_filter('option_wtfdivi', 'db121_add_icon_option_filter');
+
+function db121_add_icon_option_filter($option) {
+    if (!empty($option['fixes']['126-customizer-social-icons']['icons'])) {
+        $icons = json_decode($option['fixes']['126-customizer-social-icons']['icons'], true);
+        $icons = apply_filters('dbdb_customizer_social_icons', $icons);
+        $option['fixes']['126-customizer-social-icons']['icons'] = json_encode($icons);
+    } 
+    return $option;
+}
+
+// === Register the icon styles ===
+
 function db121_enqueue_scripts() { 
 	$icons = db121_get_icons();
 	if (empty($icons)) { return; }
-	
 	wp_register_style('db121_socicons', plugin_dir_url(__FILE__).'icons.css', array(), BOOSTER_VERSION);
+    wp_enqueue_style('db121_socicons'); 
+    do_action('dbdb_font_icons_enqueue_fonts');
 	
-	// Load the icon styles
-	wp_enqueue_style('db121_socicons'); // Divi-specific socicon CSS
-	wp_enqueue_style('dbdb-icons-socicon'); // Socicon font
-	add_action('wp_head', 'dbdb_icons_socicon_inline_css');
 }
 add_action('wp_enqueue_scripts', 'db121_enqueue_scripts');
-
-// === Define supported networks 
-function db121_get_networks() {
-	return array(''=>'--- Select Icon ---') + dbdb_icons_socicon_network_names();
-}
 
 // Convert json string to an array
 // - returns an empty array on error
@@ -113,17 +119,19 @@ function db121_icon_js() {
 		<?php 
 		foreach($icons as $k=>$icon) { 
 			$id = empty($icon['id'])?false:$icon['id'];
+            $font = apply_filters('dbdb_font_icon_set', 'socicon', $id);
+            $class = "{$font}-{$id}";
 			if ($id) {
 				?>
-				if ($('#top-header .socicon-<?php esc_attr_e($id); ?>').length === 0) {
+				if ($('#top-header .<?php esc_attr_e($class); ?>').length === 0) {
 					$('#top-header .et-social-icons').append(<?php echo json_encode(db126_icon_html_divi($icon)); ?>);
 					$('#top-header .et-extra-social-icons').append(<?php echo json_encode(db126_icon_html_extra($icon)); ?>);
 				}
-				if ($('#footer-bottom .socicon-<?php esc_attr_e($id); ?>').length === 0) {
+				if ($('#footer-bottom .<?php esc_attr_e($class); ?>').length === 0) {
 					$('#footer-bottom .et-social-icons').append(<?php echo json_encode(db126_icon_html_divi($icon)); ?>);
 					$('#footer-bottom .et-extra-social-icons').append(<?php echo json_encode(db126_icon_html_extra($icon)); ?>);
 				}
-				if ($('.et_slide_in_menu_container .socicon-<?php esc_attr_e($id); ?>').length === 0) {
+				if ($('.et_slide_in_menu_container .<?php esc_attr_e($class); ?>').length === 0) {
 					$('.et_slide_in_menu_container .et-social-icons').append(<?php echo json_encode(db126_icon_html_divi($icon)); ?>);
 					$('.et_slide_in_menu_container .et-extra-social-icons').append(<?php echo json_encode(db126_icon_html_extra($icon)); ?>);
 				}
@@ -140,7 +148,6 @@ function db121_get_icons() {
 	$option = get_option('wtfdivi');
 	if (empty($option['fixes']['126-customizer-social-icons']['icons'])) { return array(); }
 	$icons = json_decode($option['fixes']['126-customizer-social-icons']['icons'], true); // decode json to php array
-	// Exits
 	if (empty($icons) || !is_array($icons)) { return array(); } // Icons not set
 	if (count($icons) == 1) { return array(); } // Only have the icon template, no actual icons
 	return $icons;
@@ -148,15 +155,25 @@ function db121_get_icons() {
 
 function db126_icon_html_divi($icon) {
 	$id = empty($icon['id'])?false:$icon['id'];
+    $font = apply_filters('dbdb_font_icon_set', 'socicon', $id);
+    $class = "{$font}-{$id}";
 	$networks = db121_get_networks();
     $name = isset($networks[$id])?$networks[$id]:'';
 	$span = isset($networks[$id])?'<span>'.esc_html($networks[$id]).'</span>':'';
-	return '<li class="et-social-icon"><a href="'.esc_attr(db126_get_icon_url($icon)).'" class="icon socicon socicon-'.esc_attr($id).'" alt="'.esc_attr($name).'" aria-label="'.esc_attr($name).'">'.$span.'</a></li>';
+	return '<li class="et-social-icon"><a href="'.esc_attr(db126_get_icon_url($icon)).'" class="icon '.esc_attr($font).' '.esc_attr($class).'" alt="'.esc_attr($name).'" aria-label="'.esc_attr($name).'">'.$span.'</a></li>';
+}
+
+function db121_get_networks() {
+    $networks = apply_filters('dbdb_font_icon_names', array());
+    natcasesort($networks);
+	return array(''=>'--- Select Icon ---') + $networks;
 }
 
 function db126_icon_html_extra($icon) {
 	$id = empty($icon['id'])?false:$icon['id'];
-	return '<li class="et-extra-social-icon"><a href="'.esc_attr(db126_get_icon_url($icon)).'" class="et-extra-icon et-extra-icon-background-hover socicon socicon-'.esc_attr($id).'"></a></li>';
+    $font = apply_filters('dbdb_font_icon_set', 'socicon', $id);
+    $class = "{$font}-{$id}";
+	return '<li class="et-extra-social-icon"><a href="'.esc_attr(db126_get_icon_url($icon)).'" class="et-extra-icon et-extra-icon-background-hover '.esc_attr($font).' '.esc_attr($class).'"></a></li>';
 }
 
 function db126_get_icon_url($icon) {
@@ -186,3 +203,4 @@ function db121_improve_customizer_warning() {
 	}
 }
 add_action('wp_head', 'db121_improve_customizer_warning');
+

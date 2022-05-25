@@ -38,6 +38,16 @@ abstract class MethodAbstract implements MethodInterface {
 	protected $size_after = 0;
 
 	/**
+	 * @var int
+	 */
+	protected $files_to_conversion = 0;
+
+	/**
+	 * @var int
+	 */
+	protected $files_converted = 0;
+
+	/**
 	 * @return bool
 	 */
 	public static function is_pro_feature(): bool {
@@ -63,6 +73,20 @@ abstract class MethodAbstract implements MethodInterface {
 	 */
 	public function get_size_before(): int {
 		return $this->size_before;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function get_files_to_conversion(): int {
+		return $this->files_to_conversion;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function get_files_converted(): int {
+		return $this->files_converted;
 	}
 
 	/**
@@ -115,11 +139,15 @@ abstract class MethodAbstract implements MethodInterface {
 	 * @return void
 	 */
 	protected function update_conversion_stats( string $source_path, string $output_path ) {
-		$size_before = filesize( $source_path );
-		$size_after  = ( file_exists( $output_path ) ) ? filesize( $output_path ) : $size_before;
+		$output_exist = file_exists( $output_path );
+		$size_before  = filesize( $source_path );
+		$size_after   = ( $output_exist ) ? filesize( $output_path ) : $size_before;
 
 		$this->size_before += $size_before ?: 0;
 		$this->size_after  += $size_after ?: 0;
+		if ( $output_exist ) {
+			$this->files_converted++;
+		}
 	}
 
 	/**

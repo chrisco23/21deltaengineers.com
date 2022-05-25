@@ -2,8 +2,8 @@
 Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
-Tested up to: 5.8
-Stable tag: 2.18.10
+Tested up to: 6.0
+Stable tag: 2.18.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,17 @@ The folder toggle arrow is greyed out when a folder doesn't have any child folde
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 2.18.12 (May 24, 2022) =
+* Tested with WordPress 6.0 and updated tested-up-to flag
+
+= 2.18.11 (April 8, 2022) =
+* Fix Toggle Folders menu item doesn't work when moved to a submenu
+* Fix folder pane incorrectly showing 'All Folders' as selected folder when a dynamic folder was previously selected
+* Fix Quick Edit button not working after changing folders when viewing WooCommerce products (Wicked Folders Pro)
+* Fix plugins remain filtered by folder after disabling folders for plugins (Wicked Folders Pro)
+* Fix Gravity Forms forms and entries remain filtered by folder after disabling folders for forms or entries (Wicked Folders Pro)
+* Fix display issues with breadcrumbs bar on Gravity Forms pages (Wicked Folders Pro)
 
 = 2.18.10 (December 30, 2021) =
 * Fix database queries that were not properly protected

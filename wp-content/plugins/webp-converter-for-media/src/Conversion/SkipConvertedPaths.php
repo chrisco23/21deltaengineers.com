@@ -31,24 +31,35 @@ class SkipConvertedPaths implements HookableInterface {
 	 * {@inheritdoc}
 	 */
 	public function init_hooks() {
-		add_filter( 'webpc_supported_source_file', [ $this, 'skip_converted_path' ], 0, 4 );
+		add_filter( 'webpc_supported_source_file', [ $this, 'skip_converted_path' ], 0, 5 );
 	}
 
 	/**
 	 * Returns the status if the given file path should be converted.
 	 *
-	 * @param bool   $path_status    .
-	 * @param string $filename       .
-	 * @param string $server_path    .
-	 * @param bool   $skip_converted Skip images already converted?
+	 * @param bool          $path_status            .
+	 * @param string        $filename               .
+	 * @param string        $server_path            .
+	 * @param bool          $skip_converted         Skip images already converted?
+	 * @param string[]|null $allowed_output_formats List of extensions or use selected in plugin settings.
 	 *
 	 * @return bool Status if the given path should be converted.
 	 * @internal
 	 */
-	public function skip_converted_path( bool $path_status, string $filename, string $server_path, bool $skip_converted ): bool {
+	public function skip_converted_path(
+		bool $path_status,
+		string $filename,
+		string $server_path,
+		bool $skip_converted,
+		array $allowed_output_formats = null
+	): bool {
 		$this->extensions = $this->extensions ?: $this->get_output_extensions();
 		$directory        = new OutputPath();
-		$output_paths     = $directory->get_paths( urldecode( $server_path ), false, $this->extensions );
+		$output_paths     = $directory->get_paths(
+			urldecode( $server_path ),
+			false,
+			( $allowed_output_formats === null ) ? $this->extensions : $allowed_output_formats
+		);
 
 		if ( $this->has_crashed_paths( $output_paths )
 			|| ( $skip_converted && $this->has_converted_paths( $output_paths ) ) ) {

@@ -50,14 +50,20 @@ class ImagesQualityOption extends OptionAbstract {
 	 * @return string[]
 	 */
 	public function get_values( array $settings ): array {
-		return [
-			'75'  => '75%',
-			'80'  => '80%',
-			'85'  => '85%',
-			'90'  => '90%',
-			'95'  => '95%',
-			'100' => '100%',
-		];
+		$levels = apply_filters(
+			'webpc_option_quality_levels',
+			[ '75', '80', '85', '90', '95', '100' ]
+		);
+
+		$values = [];
+		foreach ( $levels as $level ) {
+			$level_value = (int) $level;
+			if ( ( $level_value > 0 ) && ( $level_value <= 100 ) ) {
+				$values[ $level_value ] = sprintf( '%s%%', $level_value );
+			}
+		}
+		ksort( $values );
+		return $values;
 	}
 
 	/**

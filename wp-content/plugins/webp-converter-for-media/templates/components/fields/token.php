@@ -43,7 +43,7 @@ $token_value = ( $token_valid_status )
 </div>
 <p data-calculate-widget data-calculate-widget-api="<?php echo esc_url( $api_calculate_url ); ?>">
 	<?php
-	echo esc_html( __( 'How many maximum images for conversion are on my website?', 'webp-converter-for-media' ) );
+	echo esc_html( __( 'How many maximum images for conversion are left on my website?', 'webp-converter-for-media' ) );
 	echo ' ';
 	echo wp_kses_post(
 		sprintf(

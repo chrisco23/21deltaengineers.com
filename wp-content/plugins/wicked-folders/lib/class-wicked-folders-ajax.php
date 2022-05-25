@@ -284,7 +284,7 @@ final class Wicked_Folders_Ajax {
 			$folder_id 	= ( int ) $_REQUEST['id'];
 			$taxonomy 	= sanitize_key( $_REQUEST['taxonomy'] );
 		} else {
-			$folder_id 	= $folder->id;
+			$folder_id 	= isset( $folder->id ) ? $folder->id : null;
 			$taxonomy 	= $folder->taxonomy;
 		}
 

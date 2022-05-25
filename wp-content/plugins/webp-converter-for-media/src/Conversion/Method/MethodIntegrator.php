@@ -36,6 +36,10 @@ class MethodIntegrator {
 		return [
 			'is_fatal_error' => $method->is_fatal_error(),
 			'errors'         => apply_filters( 'webpc_convert_errors', $method->get_errors() ),
+			'files'          => [
+				'all'       => $method->get_files_to_conversion(),
+				'converted' => $method->get_files_converted(),
+			],
 			'size'           => [
 				'before' => $method->get_size_before(),
 				'after'  => $method->get_size_after(),

@@ -159,10 +159,10 @@ final class Wicked_Folders {
 			update_option( 'wicked_folders_db_version', '2.17.5' );
 		}
 
-		if ( version_compare( $db_version, '2.18.0', '<' ) ) {
+		if ( version_compare( $db_version, '2.18.13', '<' ) ) {
 			// Clear dynamic folder cache
 			Wicked_Common::delete_transients_with_prefix( 'wicked_folders_dynamic' );
-			update_option( 'wicked_folders_db_version', '2.18.0' );
+			update_option( 'wicked_folders_db_version', '2.18.13' );
 		}
     }
 
@@ -950,7 +950,9 @@ final class Wicked_Folders {
 					if ( false !== ( $cached_folders = get_transient( $cache_key ) ) ) {
 						$folders = array_merge( $folders, $cached_folders );
 					} else {
-						$folders[] = new Wicked_Folders_Term_Dynamic_Folder( array(
+						$term_folders = array();
+
+						$term_folders[] = new Wicked_Folders_Term_Dynamic_Folder( array(
 								'id' 		=> 'dynamic_term_' . $taxonomy->name,
 								'name' 		=> $taxonomy->labels->name,
 								'parent' 	=> 'dynamic_root',
@@ -967,7 +969,7 @@ final class Wicked_Folders {
 								$parent .=  '__id__' . $term->parent;
 							}
 
-							$folders[] = new Wicked_Folders_Term_Dynamic_Folder( array(
+							$term_folders[] = new Wicked_Folders_Term_Dynamic_Folder( array(
 								'id' 			=> $id,
 								'name' 			=> $term->name,
 								'parent' 		=> $parent,
@@ -979,7 +981,9 @@ final class Wicked_Folders {
 							) );
 						}
 
-						set_transient( $cache_key, $folders, DAY_IN_SECONDS );
+						set_transient( $cache_key, $term_folders, DAY_IN_SECONDS );
+
+						$folders = array_merge( $folders, $term_folders );
 					}
 				}
 			}

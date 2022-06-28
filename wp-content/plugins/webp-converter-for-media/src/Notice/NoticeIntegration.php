@@ -52,9 +52,9 @@ class NoticeIntegration implements HookableInterface {
 
 		( new AdminAssets( $this->plugin_info ) )->init_hooks();
 		if ( ! is_multisite() ) {
-			add_action( 'admin_notices', [ $this, 'load_notice' ] );
+			add_action( 'admin_notices', [ $this, 'load_notice' ], 0 );
 		} else {
-			add_action( 'network_admin_notices', [ $this, 'load_notice' ] );
+			add_action( 'network_admin_notices', [ $this, 'load_notice' ], 0 );
 		}
 	}
 

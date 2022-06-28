@@ -4,7 +4,7 @@
   Plugin Name: Head, Footer and Post Injections
   Plugin URI: https://www.satollo.net/plugins/header-footer
   Description: Header and Footer lets to add html/javascript code to the head and footer and posts of your blog. Some examples are provided on the <a href="http://www.satollo.net/plugins/header-footer">official page</a>.
-  Version: 3.2.3
+  Version: 3.2.5
   Requires PHP: 5.6
   Requires at least: 4.6
   Author: Stefano Lissa

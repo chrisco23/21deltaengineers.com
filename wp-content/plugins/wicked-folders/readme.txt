@@ -3,7 +3,7 @@ Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
 Tested up to: 6.0
-Stable tag: 2.18.12
+Stable tag: 2.18.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,9 @@ The folder toggle arrow is greyed out when a folder doesn't have any child folde
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 2.18.13 (June 9, 2022) =
+* Fix taxonomy dynamic folders caching folders for earlier taxonomies
 
 = 2.18.12 (May 24, 2022) =
 * Tested with WordPress 6.0 and updated tested-up-to flag

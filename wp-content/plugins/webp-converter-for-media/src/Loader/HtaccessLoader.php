@@ -18,6 +18,13 @@ class HtaccessLoader extends LoaderAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
+	public function init_hooks() {
+		add_action( 'webpc_htaccess_rewrite_root', [ $this, 'modify_document_root_path' ] );
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function is_active_loader(): bool {
 		$settings = $this->plugin_data->get_plugin_settings();
 		return ( ( $settings[ LoaderTypeOption::OPTION_NAME ] ?? '' ) === self::LOADER_TYPE );
@@ -45,6 +52,20 @@ class HtaccessLoader extends LoaderAbstract {
 		$this->add_rewrite_rules_to_wp_content( false, $settings );
 		$this->add_rewrite_rules_to_uploads( false, $settings );
 		$this->add_rewrite_rules_to_uploads_webp( false, $settings );
+	}
+
+	/**
+	 * @param string $original_path .
+	 *
+	 * @return string
+	 * @internal
+	 */
+	public function modify_document_root_path( string $original_path ): string {
+		if ( isset( $_SERVER['SERVER_ADMIN'] ) && strpos( $_SERVER['SERVER_ADMIN'], '.home.pl' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+			return '%{DOCUMENT_ROOT}' . ABSPATH;
+		}
+
+		return $original_path;
 	}
 
 	/**
@@ -163,7 +184,13 @@ class HtaccessLoader extends LoaderAbstract {
 			$content .= '  RewriteEngine On' . PHP_EOL;
 			foreach ( $settings[ SupportedExtensionsOption::OPTION_NAME ] as $ext ) {
 				$content .= "  RewriteCond %{HTTP_ACCEPT} ${mime_type}" . PHP_EOL;
-				$content .= "  RewriteCond ${document_root}${output_path}/$1.${ext}.${format} -f" . PHP_EOL;
+				$content .= "  RewriteCond %{REQUEST_FILENAME} -f" . PHP_EOL;
+				if ( $document_root === '%{DOCUMENT_ROOT}' ) {
+					$content .= "  RewriteCond ${document_root}${output_path}/$1.${ext}.${format} -f" . PHP_EOL;
+				} else {
+					$content .= "  RewriteCond ${document_root}${output_path}/$1.${ext}.${format} -f [OR]" . PHP_EOL;
+					$content .= "  RewriteCond %{DOCUMENT_ROOT}${root_suffix}${output_path}/$1.${ext}.${format} -f" . PHP_EOL;
+				}
 				if ( ! in_array( ExtraFeaturesOption::OPTION_VALUE_REFERER_DISABLED, $settings[ ExtraFeaturesOption::OPTION_NAME ] ) ) {
 					$content .= "  RewriteCond %{HTTP_HOST}@@%{HTTP_REFERER} ^([^@]*)@@https?://\\1/.*" . PHP_EOL;
 				}

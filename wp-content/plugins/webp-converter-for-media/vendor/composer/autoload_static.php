@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit024f0a84246706a5ce089d47fa9fe20c
+class ComposerStaticInit74037c5a08f9b99adcf3f4137c88ddde
 {
     public static $prefixLengthsPsr4 = array (
         'W' => 
@@ -80,8 +80,6 @@ class ComposerStaticInit024f0a84246706a5ce089d47fa9fe20c
         'WebpConverter\\Conversion\\Method\\RemoteMethod' => __DIR__ . '/../..' . '/src/Conversion/Method/RemoteMethod.php',
         'WebpConverter\\Conversion\\OutputPath' => __DIR__ . '/../..' . '/src/Conversion/OutputPath.php',
         'WebpConverter\\Conversion\\PathsFinder' => __DIR__ . '/../..' . '/src/Conversion/PathsFinder.php',
-        'WebpConverter\\Conversion\\PathsValidator' => __DIR__ . '/../..' . '/src/Conversion/PathsValidator.php',
-        'WebpConverter\\Conversion\\SkipConvertedPaths' => __DIR__ . '/../..' . '/src/Conversion/SkipConvertedPaths.php',
         'WebpConverter\\Conversion\\SkipCrashed' => __DIR__ . '/../..' . '/src/Conversion/SkipCrashed.php',
         'WebpConverter\\Conversion\\SkipExcludedPaths' => __DIR__ . '/../..' . '/src/Conversion/SkipExcludedPaths.php',
         'WebpConverter\\Conversion\\SkipLarger' => __DIR__ . '/../..' . '/src/Conversion/SkipLarger.php',
@@ -140,6 +138,7 @@ class ComposerStaticInit024f0a84246706a5ce089d47fa9fe20c
         'WebpConverter\\Model\\Token' => __DIR__ . '/../..' . '/src/Model/Token.php',
         'WebpConverter\\Notice\\AvifSupportNotice' => __DIR__ . '/../..' . '/src/Notice/AvifSupportNotice.php',
         'WebpConverter\\Notice\\CloudflareNotice' => __DIR__ . '/../..' . '/src/Notice/CloudflareNotice.php',
+        'WebpConverter\\Notice\\LitespeedNotice' => __DIR__ . '/../..' . '/src/Notice/LitespeedNotice.php',
         'WebpConverter\\Notice\\NoticeAbstract' => __DIR__ . '/../..' . '/src/Notice/NoticeAbstract.php',
         'WebpConverter\\Notice\\NoticeIntegration' => __DIR__ . '/../..' . '/src/Notice/NoticeIntegration.php',
         'WebpConverter\\Notice\\NoticeInterface' => __DIR__ . '/../..' . '/src/Notice/NoticeInterface.php',
@@ -177,6 +176,7 @@ class ComposerStaticInit024f0a84246706a5ce089d47fa9fe20c
         'WebpConverter\\Settings\\Option\\AccessTokenOption' => __DIR__ . '/../..' . '/src/Settings/Option/AccessTokenOption.php',
         'WebpConverter\\Settings\\Option\\ConversionMethodOption' => __DIR__ . '/../..' . '/src/Settings/Option/ConversionMethodOption.php',
         'WebpConverter\\Settings\\Option\\ExtraFeaturesOption' => __DIR__ . '/../..' . '/src/Settings/Option/ExtraFeaturesOption.php',
+        'WebpConverter\\Settings\\Option\\ImageResizeOption' => __DIR__ . '/../..' . '/src/Settings/Option/ImageResizeOption.php',
         'WebpConverter\\Settings\\Option\\ImagesQualityOption' => __DIR__ . '/../..' . '/src/Settings/Option/ImagesQualityOption.php',
         'WebpConverter\\Settings\\Option\\LoaderTypeOption' => __DIR__ . '/../..' . '/src/Settings/Option/LoaderTypeOption.php',
         'WebpConverter\\Settings\\Option\\OptionAbstract' => __DIR__ . '/../..' . '/src/Settings/Option/OptionAbstract.php',
@@ -200,9 +200,9 @@ class ComposerStaticInit024f0a84246706a5ce089d47fa9fe20c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit024f0a84246706a5ce089d47fa9fe20c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit024f0a84246706a5ce089d47fa9fe20c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit024f0a84246706a5ce089d47fa9fe20c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit74037c5a08f9b99adcf3f4137c88ddde::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit74037c5a08f9b99adcf3f4137c88ddde::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit74037c5a08f9b99adcf3f4137c88ddde::$classMap;
 
         }, null, ClassLoader::class);
     }

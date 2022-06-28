@@ -10,8 +10,9 @@ class WebpConverterConstants {
 	/**
 	 * URLs.
 	 */
-	const UPGRADE_PRO_PREFIX_URL      = 'https://mattplugins.com/products/webp-converter-for-media-pro/?utm_source=webp-converter-for-media&utm_campaign=upgrade-to-pro&utm_medium=%s';
-	const SUBSCRIPTION_MANAGEMENT_URL = 'https://panel.mattplugins.com';
+	const UPGRADE_PRO_PREFIX_URL       = 'https://mattplugins.com/products/webp-converter-for-media-pro/?utm_source=webp-converter-for-media&utm_campaign=upgrade-to-pro&utm_medium=%s';
+	const OPTIMIZATION_TEST_PREFIX_URL = 'https://mattplugins.com/image-optimization-test/?utm_source=webp-converter-for-media&utm_campaign=upgrade-to-pro&utm_medium=%s';
+	const SUBSCRIPTION_MANAGEMENT_URL  = 'https://panel.mattplugins.com';
 
 	/**
 	 * API.

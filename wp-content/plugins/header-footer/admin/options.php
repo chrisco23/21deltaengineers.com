@@ -1,4 +1,12 @@
 <?php
+
+defined('ABSPATH') || exit;
+
+// Quick security patch, to be better integrated
+if (!current_user_can('administrator')) {
+    die();
+}
+
 if (function_exists('load_plugin_textdomain')) {
     load_plugin_textdomain('header-footer', false, 'header-footer/languages');
 }
@@ -87,15 +95,15 @@ if (isset($_POST['save'])) {
     <div style="padding: 15px; background-color: #fff; border: 1px solid #eee; font-size: 16px; line-height: 22px">
 <?php
             if (apply_filters('hefo_php_exec', true)) {
-                _e('PHP is allowed in your code.','header-footer');
+                esc_html_e('PHP is allowed in your code.','header-footer');
             } else {
-                _e('PHP is NOT allowed in your code (disabled by your theme or a plugin)', 'header-footer');
+                esc_html_e('PHP is NOT allowed in your code (disabled by your theme or a plugin)', 'header-footer');
             }
             ?>
         <br>
         
-            <?php _e('Mobile configuration is <strong>now deprecated</strong>', 'header-footer'); ?>. 
-            <a href="https://www.satollo.net/plugins/header-footer" target="_blank" class="readmore"><?php _e('Read more', 'header-footer'); ?></a>
+            <?php esc_html_e('Mobile configuration is <strong>now deprecated</strong>', 'header-footer'); ?>. 
+            <a href="https://www.satollo.net/plugins/header-footer" target="_blank" class="readmore"><?php esc_html_e('Read more', 'header-footer'); ?></a>
         
     </div>
 
@@ -104,21 +112,21 @@ if (isset($_POST['save'])) {
         <?php wp_nonce_field('save') ?>
 
         <p>
-            <input type="submit" class="button-primary" name="save" value="<?php _e('save', 'header-footer'); ?>">
+            <input type="submit" class="button-primary" name="save" value="<?php esc_attr_e('save', 'header-footer'); ?>">
         </p>
 
         <div id="hefo-tabs">
             <ul>
-                <li><a href="#tabs-first"><?php _e('Head and footer', 'header-footer'); ?></a></li>
-                <li><a href="#tabs-post"><?php _e('Posts', 'header-footer'); ?></a></li>
-                <li><a href="#tabs-post-inner"><?php _e('Inside posts', 'header-footer'); ?></a></li>
-                <li><a href="#tabs-page"><?php _e('Pages', 'header-footer'); ?></a></li>
-                <li><a href="#tabs-excerpt"><?php _e('Excerpts', 'header-footer'); ?></a></li>
-                <li><a href="#tabs-5"><?php _e('Snippets', 'header-footer'); ?></a></li>
-                <li><a href="#tabs-amp"><?php _e('AMP', 'header-footer'); ?></a></li>
-                <li><a href="#tabs-generics"><?php _e('Generics', 'header-footer'); ?></a></li>
-                <li><a href="#tabs-8"><?php _e('Advanced', 'header-footer'); ?></a></li>
-                <li><a href="#tabs-7"><?php _e('Notes and...', 'header-footer'); ?></a></li>
+                <li><a href="#tabs-first"><?php esc_html_e('Head and footer', 'header-footer'); ?></a></li>
+                <li><a href="#tabs-post"><?php esc_html_e('Posts', 'header-footer'); ?></a></li>
+                <li><a href="#tabs-post-inner"><?php esc_html_e('Inside posts', 'header-footer'); ?></a></li>
+                <li><a href="#tabs-page"><?php esc_html_e('Pages', 'header-footer'); ?></a></li>
+                <li><a href="#tabs-excerpt"><?php esc_html_e('Excerpts', 'header-footer'); ?></a></li>
+                <li><a href="#tabs-5"><?php esc_html_e('Snippets', 'header-footer'); ?></a></li>
+                <li><a href="#tabs-amp"><?php esc_html_e('AMP', 'header-footer'); ?></a></li>
+                <li><a href="#tabs-generics"><?php esc_html_e('Generics', 'header-footer'); ?></a></li>
+                <li><a href="#tabs-8"><?php esc_html_e('Advanced', 'header-footer'); ?></a></li>
+                <li><a href="#tabs-7"><?php esc_html_e('Notes and...', 'header-footer'); ?></a></li>
             </ul>
 
 
@@ -141,7 +149,7 @@ if (isset($_POST['save'])) {
                 <div class="row">
 
                     <div class="col-2">
-                        <label><?php _e('Desktop', 'header-footer') ?>*</label>
+                        <label><?php esc_html_e('Desktop', 'header-footer') ?>*</label>
                         <?php hefo_base_textarea_cm('body'); ?>
                     </div>
                     <div class="col-2">
@@ -153,7 +161,7 @@ if (isset($_POST['save'])) {
                 <h3><?php esc_html_e('Before the &lt;/BODY&gt; closing tag (footer)', 'header-footer') ?></h3>
                 <div class="row">
                     <div class="col-2">
-                        <label><?php _e('Desktop', 'header-footer') ?>*</label>
+                        <label><?php esc_html_e('Desktop', 'header-footer') ?>*</label>
                         <?php hefo_base_textarea_cm('footer'); ?>
                     </div>
                     <div class="col-2">
@@ -173,7 +181,7 @@ if (isset($_POST['save'])) {
                     <p>Inject before the <?php hefo_base_text('generic_tag_' . $i); ?> marker</p>
                     <div class="row">
                         <div class="col-2">
-                            <label><?php _e('Desktop', 'header-footer') ?>*</label>
+                            <label><?php esc_html_e('Desktop', 'header-footer') ?>*</label>
                             <?php hefo_base_textarea_cm('generic_' . $i); ?>
                         </div>
                         <div class="col-2">
@@ -198,7 +206,7 @@ if (isset($_POST['save'])) {
                 <div class="row">
 
                     <div class="col-2">
-                        <label><?php _e('Desktop', 'header-footer') ?>*</label>
+                        <label><?php esc_html_e('Desktop', 'header-footer') ?>*</label>
                         <?php hefo_base_textarea_cm('before'); ?>
                     </div>
                     <div class="col-2">
@@ -213,7 +221,7 @@ if (isset($_POST['save'])) {
                 <div class="row">
 
                     <div class="col-2">
-                        <label><?php _e('Desktop', 'header-footer') ?>*</label>
+                        <label><?php esc_html_e('Desktop', 'header-footer') ?>*</label>
                         <?php hefo_base_textarea_cm('after'); ?>
                     </div>
                     <div class="col-2">
@@ -221,14 +229,6 @@ if (isset($_POST['save'])) {
                         <?php hefo_base_textarea_cm('mobile_after'); ?>
                     </div>
                 </div>
-
-                <!--<h3>Posts and pages</h3>-->
-                <table class="form-table">
-                    <!--<tr valign="top"><?php hefo_field_checkbox('category', __('Enable injection on category pages', 'header-footer')); ?></tr>-->
-                    <tr valign="top"><?php //hefo_field_textarea('before', __('Code to be inserted before each post', 'header-footer'), '', 'rows="10"');              ?></tr>
-                    <tr valign="top"><?php //hefo_field_textarea('after', __('Code to be inserted after each post', 'header-footer'), '', 'rows="10"');              ?></tr>
-                </table>
-
 
                 <div class="clearfix"></div>
             </div>
@@ -241,7 +241,7 @@ if (isset($_POST['save'])) {
                     <?php hefo_rule($i); ?>
                     <div class="row">
                         <div class="col-2">
-                            <label><?php _e('Desktop', 'header-footer') ?>*</label>
+                            <label><?php esc_html_e('Desktop', 'header-footer') ?>*</label>
                             <?php hefo_base_textarea_cm('inner_' . $i); ?>
                         </div>
                         <div class="col-2">
@@ -260,7 +260,7 @@ if (isset($_POST['save'])) {
                 <?php hefo_base_checkbox('page_add_tags', __('Let pages to have tags', 'header-footer')); ?><br>
                 <?php hefo_base_checkbox('page_add_categories', __('Let pages to have categories', 'header-footer')); ?>
 
-                <h3><?php _e('Before the page content', 'header-footer') ?></h3>
+                <h3><?php esc_html_e('Before the page content', 'header-footer') ?></h3>
                 <div class="row">
 
                     <div class="col-2">
@@ -294,10 +294,10 @@ if (isset($_POST['save'])) {
 
             <div id="tabs-excerpt">
 
-                <p><?php _e('It works only on category and tag pages.', 'header-footer'); ?></p>
+                <p><?php esc_html_e('It works only on category and tag pages.', 'header-footer'); ?></p>
                 <table class="form-table">
-                    <tr valign="top"><?php hefo_field_textarea('excerpt_before', __('Code to be inserted before each post excerpt', 'header-footer'), '', 'rows="10"'); ?></tr>
-                    <tr valign="top"><?php hefo_field_textarea('excerpt_after', __('Code to be inserted after each post excerpt', 'header-footer'), '', 'rows="10"'); ?></tr>
+                    <tr valign="top"><?php hefo_field_textarea('excerpt_before', __('Code to be inserted before each post excerpt', 'header-footer'), ''); ?></tr>
+                    <tr valign="top"><?php hefo_field_textarea('excerpt_after', __('Code to be inserted after each post excerpt', 'header-footer'), ''); ?></tr>
                 </table>
             </div>
 
@@ -374,13 +374,13 @@ if (isset($_POST['save'])) {
 
             <div id="tabs-5">
                 <p>
-                    <?php _e('Common snippets that can be used in any header or footer area referring them as [snippet_N] where N is the snippet number
+                    <?php esc_html_e('Common snippets that can be used in any header or footer area referring them as [snippet_N] where N is the snippet number
             from 1 to 5. Snippets are inserted before PHP evaluation.', 'header-footer'); ?><br />
-                    <?php _e('Useful for social button to be placed before and after the post or in posts and pages.', 'header-footer'); ?>
+                    <?php esc_html_e('Useful for social button to be placed before and after the post or in posts and pages.', 'header-footer'); ?>
                 </p>
                 <table class="form-table">
                     <? for ($i=1; $i<=5; $i++) { ?>
-                    <tr valign="top"><?php hefo_field_textarea('snippet_' . $i, __('Snippet ' . $i, 'header-footer'), '', 'rows="10"'); ?></tr>
+                    <tr valign="top"><?php hefo_field_textarea('snippet_' . $i, __('Snippet ' . $i, 'header-footer'), ''); ?></tr>
                     <? } ?>
                 </table>
                 <div class="clearfix"></div>
@@ -392,7 +392,7 @@ if (isset($_POST['save'])) {
                         <?php
                         hefo_field_textarea('mobile_user_agents', __('Mobile user agent strings', 'header-footer'), 'For coders: a regular expression is built with those values and the resulting code will be<br>'
                                 . '<code>preg_match(\'/' . $options['mobile_user_agents_parsed'] . '/\', ...);</code><br>' .
-                                '<a href="http://www.satollo.net/plugins/header-footer" target="_blank">Read this page</a> for more.', 'rows="10"');
+                                '<a href="http://www.satollo.net/plugins/header-footer" target="_blank">Read this page</a> for more.');
                         ?>
 
                     </tr>
@@ -439,7 +439,7 @@ if (isset($_POST['save'])) {
 
             <div id="tabs-7">
                 <table class="form-table">
-                    <tr valign="top"><?php hefo_field_textarea('notes', __('Notes and parked codes', 'header-footer'), '', 'rows="10"'); ?></tr>
+                    <tr valign="top"><?php hefo_field_textarea('notes', __('Notes and parked codes', 'header-footer'), ''); ?></tr>
                 </table>
                 <div class="clearfix"></div>
             </div>
@@ -449,7 +449,7 @@ if (isset($_POST['save'])) {
 
         </div>
         <p>* if no mobile alternative is activated</p>
-        <p class="submit"><input type="submit" class="button-primary" name="save" value="<?php _e('save', 'header-footer'); ?>"></p>
+        <p class="submit"><input type="submit" class="button-primary" name="save" value="<?php esc_attr_e('save', 'header-footer'); ?>"></p>
 
     </form>
 </div>

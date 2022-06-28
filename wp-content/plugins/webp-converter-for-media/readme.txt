@@ -58,7 +58,7 @@ If you would like to appreciate it, you can try [the PRO version](https://mattpl
 
 1. Upload the plugin files to `/wp-content/plugins/webp-converter-for-media` directory, or install plugin through the WordPress plugins screen directly.
 2. Activate plugin through `Plugins` screen in WordPress Admin Panel.
-3. Use `Settings -> Settings -> WebP Converter` screen to configure the plugin.
+3. Use `Settings -> Settings -> Converter for Media` screen to configure the plugin.
 4. Click on the button `Regenerate All`.
 5. Check if everything works fine.
 
@@ -194,7 +194,7 @@ add_filter( 'webpc_dir_name', function( $path, $directory ) {
 	return '/';
 } );`
 
-After setting the filters go to `Settings -> WebP Converter` in the admin panel and click the `Save Changes` button. `.htaccess` files with appropriate rules should be created in the directories `/uploads` and `/uploads-webpc`.
+After setting the filters go to `Settings -> Converter for Media` in the admin panel and click the `Save Changes` button. `.htaccess` files with appropriate rules should be created in the directories `/uploads` and `/uploads-webpc`.
 
 = How to exclude paths from converting? =
 
@@ -328,6 +328,18 @@ After making changes, remember to restart the machine:
 2. Screenshot when regenerating images
 
 == Changelog ==
+
+= 4.4.0 (2022-06-19) =
+* `[Changed]` Calculation of number of images to be converted
+* `[Added]` Resizing of images before conversion
+* `[Added]` Notification asking to clear cache for LiteSpeed
+
+= 4.3.6 (2022-06-03) =
+* `[Fixed]` Notification about Cloudflare cache
+
+= 4.3.5 (2022-06-02) =
+* `[Changed]` Generating rewrite rules for via .htaccess loading mode (applies to rewrites_not_working server configuration error)
+* `[Added]` Support for Hide My WP plugin
 
 = 4.3.4 (2022-05-10) =
 * `[Changed]` Generating rewrite rules for via .htaccess loading mode (applies to rewrites_not_working server configuration error)

@@ -50,12 +50,12 @@ function hefo_meta_boxes_callback($post) {
     $after = get_post_meta($post->ID, 'hefo_after', true);
     echo '<label>';
     echo '<input type="checkbox" id="hefo_before" name="hefo_before" ' . (empty($before) ? "" : "checked") . '> ';
-    _e("Disable top injection", 'header-footer');
+    esc_html_e("Disable top injection", 'header-footer');
     echo '</label> ';
     echo '<br>';
     echo '<label>';
     echo '<input type="checkbox" id="hefo_after" name="hefo_after]" ' . (empty($after) ? "" : "checked") . '> ';
-    _e("Disable bottom injection", 'header-footer');
+    esc_html_e("Disable bottom injection", 'header-footer');
     echo '</label> ';
 }
 

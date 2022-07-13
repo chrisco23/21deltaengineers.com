@@ -90,3 +90,22 @@ if (!function_exists('dbdb_get_current_post_id')) {
 		return false;
 	}
 }
+
+// Get the order class from a list of module classes
+// Return false if no order class found
+function divibooster_get_order_class_from_content($module_slug, $content) {
+	$classes = divibooster_get_classes_from_content($content);
+	foreach($classes as $class) {
+		if (preg_match("#^{$module_slug}_\d+$#", $class)) { return $class; }
+		if (preg_match("#^{$module_slug}_\d_tb_header$#", $class)) { return $class; }
+		if (preg_match("#^{$module_slug}_\d_tb_footer$#", $class)) { return $class; }
+	}
+	return false;
+}
+
+// get the classes assigned to the module
+function divibooster_get_classes_from_content($content) {
+	preg_match('#<div [^>]*class="([^"]*?et_pb_module [^"]*?)">#', $content, $m);
+	$classes = empty($m[1])?array():explode(' ', $m[1]);
+	return $classes;
+}

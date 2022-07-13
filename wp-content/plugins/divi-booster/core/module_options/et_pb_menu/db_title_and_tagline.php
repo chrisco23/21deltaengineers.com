@@ -69,7 +69,35 @@ function dbmo_et_pb_menu_add_title_and_tagline_field($fields) {
 			'toggle_slug'       => 'elements',
             'show_if' => array(
 				'db_tagline' => 'on',
+                'db_title' => 'on'
 			)
+		),
+		'db_title_and_tagline_valign' => array(
+			'label' => 'Title & Tagline Vertical Align',
+			'type' => 'select',
+			'options' => array(
+				'top' => esc_html__('Top', 'divi-booster'),
+				'middle'  => esc_html__('Middle', 'divi-booster'),
+				'bottom'  => esc_html__('Bottom', 'divi-booster'),
+			),
+			'option_category' => 'basic_option',
+			'description' => 'Specify the vertical alignment for the site title / tagline. '.divibooster_module_options_credit(),
+			'default' => 'top',
+			'tab_slug' => 'general',
+			'toggle_slug' => 'elements',
+		),
+		'db_title_and_tagline_below_logo' => array(
+			'label' => 'Place Title & Tagline Below Logo',
+			'type' => 'yes_no_button',
+			'options' => array(
+				'off' => esc_html__( 'No', 'et_builder' ),
+				'on'  => esc_html__( 'yes', 'et_builder' ),
+			),
+			'option_category' => 'basic_option',
+			'description' => 'Place the title and tagline below the logo. '.divibooster_module_options_credit(),
+			'default' => 'off',
+			'tab_slug'          => 'general',
+			'toggle_slug'       => 'elements'
 		)
 	);
 	return $new_fields + $fields;
@@ -84,7 +112,9 @@ function dbdbMenuModule_add_title_and_tagline_code_to_content($content, $args) {
             'db_title' => 'off',
             'db_title_use_link' => 'off',
             'db_tagline' => 'off',
-            'db_tagline_below_title' => 'off'
+            'db_tagline_below_title' => 'off',
+            'db_title_and_tagline_valign' => 'top',
+            'db_title_and_tagline_below_logo' => 'off'
         )
     );
 
@@ -92,7 +122,9 @@ function dbdbMenuModule_add_title_and_tagline_code_to_content($content, $args) {
         'db_title_'.$args['db_title'],
         'db_title_use_link_'.$args['db_title_use_link'],
         'db_tagline_'.$args['db_tagline'],
-        'db_tagline_below_title_'.$args['db_tagline_below_title']
+        'db_tagline_below_title_'.$args['db_tagline_below_title'],
+        'db_title_and_tagline_valign_'.$args['db_title_and_tagline_valign'],
+        'db_title_and_tagline_below_logo_'.$args['db_title_and_tagline_below_logo']
     );
 
     $content = divibooster_add_module_classes_to_content($content, $classes);
@@ -125,14 +157,30 @@ function dbdbMenuModule_print_styles() { ?>
 <style>
 .db_title, .db_tagline { 
     margin-right: 30px;
-    margin-top: 8px;
+    margin-top: 0px;
     line-height: 1em;
 }
 .db_title_and_tagline {
     display: flex;
+    align-items: flex-start;
 }
 .db_tagline_below_title_on .db_title_and_tagline {
     flex-direction: column;
+}
+.db_tagline_below_title_on .db_tagline {
+    margin-top: 8px;
+}
+.db_title_and_tagline_valign_middle .db_title_and_tagline {
+    align-items: center;
+}
+.db_title_and_tagline_valign_bottom .db_title_and_tagline {
+    align-items: flex-end;
+}
+.db_title_and_tagline_below_logo_on .db_title_and_tagline {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    transform: translateY(100%);
 }
 </style>
     <?php

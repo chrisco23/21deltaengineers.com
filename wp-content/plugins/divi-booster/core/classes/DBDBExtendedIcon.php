@@ -103,7 +103,7 @@ END;
             $encoded_url = json_encode($this->url);
             $encoded_unicode = json_encode(html_entity_decode($this->unicode(), ENT_QUOTES, 'UTF-8'));
             ?>
-			<script>
+			<script data-name="dbdb-update-custom-icons">
 			jQuery(function($){
                 
                 function db014_update_all_icons() {

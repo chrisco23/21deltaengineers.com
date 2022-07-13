@@ -3,6 +3,7 @@ if (!defined('ABSPATH')) { exit(); } // No direct access
 
 $color_code = dbdb_option('046-slider-text-transparent-background', 'bgcol', '#000');
 $opacity_percentage = dbdb_option('046-slider-text-transparent-background', 'opacity', 100);
+$border_radius = intval(dbdb_option('046-slider-text-transparent-background', 'border-radius', '15'));
 $color = (new DBDB_color($color_code, $opacity_percentage/100));
 ?>
 
@@ -35,12 +36,12 @@ $color = (new DBDB_color($color_code, $opacity_percentage/100));
 
 /* Rounded borders */
 .et_pb_slide_description:before { 
-	border-top-left-radius: 15px; 
-	border-top-right-radius: 15px; 
+	border-top-left-radius: <?php esc_html_e($border_radius); ?>px; 
+	border-top-right-radius: <?php esc_html_e($border_radius); ?>px; 
 }
 .et_pb_slide_description:after { 
-	border-bottom-left-radius: 15px; 
-	border-bottom-right-radius: 15px; 
+	border-bottom-left-radius: <?php esc_html_e($border_radius); ?>px; 
+	border-bottom-right-radius: <?php esc_html_e($border_radius); ?>px; 
 }
 
 /* Layout adjustments */

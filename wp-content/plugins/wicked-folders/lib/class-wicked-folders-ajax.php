@@ -517,7 +517,7 @@ final class Wicked_Folders_Ajax {
 
 		$folders 		= array();
 		$folder_type 	= sanitize_text_field( $_REQUEST['folder_type'] );
-		$folder_id 		= ( int ) $_REQUEST['folder_id'];
+		$folder_id 		= sanitize_key( $_REQUEST['folder_id'] );
 		$post_type 		= sanitize_key( $_REQUEST['post_type'] );
 
 		$folder = Wicked_Folders::get_dynamic_folder( $folder_type, $folder_id, $post_type );

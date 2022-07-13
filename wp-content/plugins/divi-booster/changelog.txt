@@ -1,3 +1,20 @@
+= 3.9.1 =
+* Fixed accordion open by default option not working when ID set
+
+= 3.9.0 =
+* Updated description of portfolio project order feature
+* Added option to set border radius in slider text background feature
+
+= 3.8.9 =
+* Added vertical align option to menu module site title & tagline feature
+* Added option to place the site title below the logo
+
+= 3.8.8 =
+* Fixed WP Rocket affecting custom icon feature
+
+= 3.8.7 =
+* Fixed option to vertically center header links hiding page content
+
 = 3.8.6 =
 * Improves to the licensing system
 

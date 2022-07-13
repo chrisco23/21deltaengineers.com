@@ -1,7 +1,7 @@
 <?php 
 
 function db_head_js() { ?>
-	<script>
+	<script data-name="dbdb-head-js">
 	<?php do_action('db_head_js'); ?> 
 	</script>
 <?php	

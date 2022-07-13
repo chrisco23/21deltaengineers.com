@@ -10,9 +10,9 @@ function db008_user_css($plugin) { ?>
 	   vertical-align: middle; 
 	   float:none !important;
 	}
-	.et_header_style_left .container { 
-	   display:table; 
-	}
+	.et_header_style_left #main-header .container {
+        display: table;
+    }
 
 	/* Right align the contents of the top navigation area */
 	.et_header_style_left #et-top-navigation { text-align:right; }

@@ -242,25 +242,6 @@ function divibooster_add_module_classes_to_content($content, $classes) {
 	return $content;
 }
 
-// get the classes assigned to the module
-function divibooster_get_classes_from_content($content) {
-	preg_match('#<div class="([^"]*?et_pb_module [^"]*?)">#', $content, $m);
-	$classes = empty($m[1])?array():explode(' ', $m[1]);
-	return $classes;
-}
-
-// Get the order class from a list of module classes
-// Return false if no order class found
-function divibooster_get_order_class_from_content($module_slug, $content) {
-	$classes = divibooster_get_classes_from_content($content);
-	foreach($classes as $class) {
-		if (preg_match("#^{$module_slug}_\d+$#", $class)) { return $class; }
-		if (preg_match("#^{$module_slug}_\d_tb_header$#", $class)) { return $class; }
-		if (preg_match("#^{$module_slug}_\d_tb_footer$#", $class)) { return $class; }
-	}
-	return false;
-}
-
 function divibooster_module_options_credit() {
     return trim((string) DBDBModuleFieldDescription::create(DBDBWp::create(), ''));
 	//return apply_filters('divibooster_module_options_credit', 'Added by Divi Booster');

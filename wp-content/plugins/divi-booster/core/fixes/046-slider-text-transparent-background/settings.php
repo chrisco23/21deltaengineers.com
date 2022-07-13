@@ -8,6 +8,7 @@ function db046_add_setting($plugin) {
 <table style="margin-left:50px">
 <tr><td>Background color:</td><td><?php $plugin->colorpicker(__FILE__, 'bgcol', '#000'); ?></td></tr>
 <tr><td>Opacity:</td><td><?php $plugin->numberpicker(__FILE__, 'opacity', 50); ?>%</td></tr>
+<tr><td>Border radius:</td><td><?php $plugin->numberpicker(__FILE__, 'border-radius', 15); ?>px</td></tr>
 </table>
 	<?php
 	$plugin->setting_end(); 

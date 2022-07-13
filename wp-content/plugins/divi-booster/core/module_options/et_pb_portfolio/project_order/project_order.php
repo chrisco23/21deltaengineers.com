@@ -24,7 +24,7 @@ function dbmo_et_pb_portfolio_add_fields($fields) {
 		'option_category' => 'layout',
 		'options' => dbdb_portfolio_order_options(),
 		'default' => 'default',
-		'description' => 'Adjust the order in which projects are displayed. '.divibooster_module_options_credit(),
+		'description' => 'Adjust the order in which projects are displayed. Note that this feature is not previewable in the visual builder, but will take effect on the live page. '.divibooster_module_options_credit(),
 		'tab_slug' => 'advanced',
 		'toggle_slug' => 'layout'
 	);

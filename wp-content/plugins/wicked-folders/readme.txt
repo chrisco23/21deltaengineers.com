@@ -3,7 +3,7 @@ Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
 Tested up to: 6.0
-Stable tag: 2.18.14
+Stable tag: 2.18.15
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,9 @@ The folder toggle arrow is greyed out when a folder doesn't have any child folde
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 2.18.15 (September 15, 2022) =
+* Add support for Wider Admin Menu plugin
 
 = 2.18.14 (July 2, 2022) =
 * Fix variable sanitization issue causing PHP warnings and preventing page hierarchy dynamic folder from loading child folders

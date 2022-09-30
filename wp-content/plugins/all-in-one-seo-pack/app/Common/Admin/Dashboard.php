@@ -46,7 +46,11 @@ class Dashboard {
 				[
 					$this,
 					'outputSeoSetup',
-				]
+				],
+				null,
+				null,
+				'normal',
+				'high'
 			);
 		}
 
@@ -143,7 +147,7 @@ class Dashboard {
 	public function getAioseoRssFeed() {
 		include_once( ABSPATH . WPINC . '/feed.php' );
 
-		$rssItems = aioseo()->core->cache->get( 'rss_feed' );
+		$rssItems = aioseo()->core->networkCache->get( 'rss_feed' );
 		if ( null === $rssItems ) {
 			$rss = fetch_feed( 'https://aioseo.com/feed/' );
 			if ( is_wp_error( $rss ) ) {
@@ -164,7 +168,7 @@ class Dashboard {
 			}
 			$rssItems = $cached;
 
-			aioseo()->core->cache->update( 'rss_feed', $cached, 12 * HOUR_IN_SECONDS );
+			aioseo()->core->networkCache->update( 'rss_feed', $cached, 12 * HOUR_IN_SECONDS );
 		}
 
 		return $rssItems;

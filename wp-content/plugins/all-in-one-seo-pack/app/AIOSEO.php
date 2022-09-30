@@ -266,7 +266,7 @@ namespace AIOSEO\Plugin {
 				return;
 			}
 
-			$dotenv = \Dotenv\Dotenv::create( AIOSEO_DIR, '/build/.env' );
+			$dotenv = \Dotenv\Dotenv::createUnsafeImmutable( AIOSEO_DIR, '/build/.env' );
 			$dotenv->load();
 
 			$version = strtolower( getenv( 'VITE_VERSION' ) );
@@ -319,7 +319,9 @@ namespace AIOSEO\Plugin {
 			$this->backwardsCompatibility();
 
 			// Internal Options.
-			$this->internalOptions = $this->pro ? new Pro\Options\InternalOptions() : new Lite\Options\InternalOptions();
+			$this->helpers                = $this->pro ? new Pro\Utils\Helpers() : new Lite\Utils\Helpers();
+			$this->internalNetworkOptions = ( $this->pro && is_multisite() ) ? new Pro\Options\InternalNetworkOptions() : new Common\Options\InternalNetworkOptions();
+			$this->internalOptions        = $this->pro ? new Pro\Options\InternalOptions() : new Lite\Options\InternalOptions();
 
 			// Run pre-updates.
 			$this->preUpdates = $this->pro ? new Pro\Main\PreUpdates() : new Common\Main\PreUpdates();
@@ -378,7 +380,7 @@ namespace AIOSEO\Plugin {
 				$translations->init();
 			}
 
-			$this->helpers            = $this->pro ? new Pro\Utils\Helpers() : new Common\Utils\Helpers();
+			$this->thirdParty         = new Common\ThirdParty\ThirdParty();
 			$this->addons             = $this->pro ? new Pro\Utils\Addons() : new Common\Utils\Addons();
 			$this->tags               = $this->pro ? new Pro\Utils\Tags() : new Common\Utils\Tags();
 			$this->blocks             = new Common\Utils\Blocks();
@@ -386,11 +388,13 @@ namespace AIOSEO\Plugin {
 			$this->breadcrumbs        = $this->pro ? new Pro\Breadcrumbs\Breadcrumbs() : new Common\Breadcrumbs\Breadcrumbs();
 			$this->dynamicBackup      = $this->pro ? new Pro\Options\DynamicBackup() : new Common\Options\DynamicBackup();
 			$this->options            = $this->pro ? new Pro\Options\Options() : new Lite\Options\Options();
+			$this->networkOptions     = ( $this->pro && is_multisite() ) ? new Pro\Options\NetworkOptions() : new Common\Options\NetworkOptions();
 			$this->dynamicOptions     = $this->pro ? new Pro\Options\DynamicOptions() : new Common\Options\DynamicOptions();
 			$this->backup             = new Common\Utils\Backup();
 			$this->access             = $this->pro ? new Pro\Utils\Access() : new Common\Utils\Access();
 			$this->usage              = $this->pro ? new Pro\Admin\Usage() : new Lite\Admin\Usage();
 			$this->siteHealth         = $this->pro ? new Pro\Admin\SiteHealth() : new Common\Admin\SiteHealth();
+			$this->networkLicense     = $this->pro && is_multisite() ? new Pro\Admin\NetworkLicense() : null;
 			$this->license            = $this->pro ? new Pro\Admin\License() : null;
 			$this->autoUpdates        = $this->pro ? new Pro\Admin\AutoUpdates() : null;
 			$this->updates            = $this->pro ? new Pro\Main\Updates() : new Common\Main\Updates();
@@ -400,22 +404,25 @@ namespace AIOSEO\Plugin {
 			$this->htaccess           = new Common\Tools\Htaccess();
 			$this->term               = $this->pro ? new Pro\Admin\Term() : null;
 			$this->notices            = $this->pro ? new Pro\Admin\Notices\Notices() : new Lite\Admin\Notices\Notices();
+			$this->wpNotices          = new Common\Admin\Notices\WpNotices();
 			$this->admin              = $this->pro ? new Pro\Admin\Admin() : new Lite\Admin\Admin();
+			$this->networkAdmin       = is_multisite() ? ( $this->pro ? new Pro\Admin\NetworkAdmin() : new Common\Admin\NetworkAdmin() ) : null;
 			$this->activate           = $this->pro ? new Pro\Main\Activate() : new Common\Main\Activate();
 			$this->conflictingPlugins = $this->pro ? new Pro\Admin\ConflictingPlugins() : new Common\Admin\ConflictingPlugins();
 			$this->migration          = $this->pro ? new Pro\Migration\Migration() : new Common\Migration\Migration();
 			$this->importExport       = $this->pro ? new Pro\ImportExport\ImportExport() : new Common\ImportExport\ImportExport();
 			$this->sitemap            = $this->pro ? new Pro\Sitemap\Sitemap() : new Common\Sitemap\Sitemap();
 			$this->htmlSitemap        = new Common\Sitemap\Html\Sitemap();
-			$this->templates          = new Common\Utils\Templates();
+			$this->templates          = $this->pro ? new Pro\Utils\Templates() : new Common\Utils\Templates();
 			$this->categoryBase       = $this->pro ? new Pro\Main\CategoryBase() : null;
 			$this->postSettings       = $this->pro ? new Pro\Admin\PostSettings() : new Lite\Admin\PostSettings();
-			$this->standalone         = new Common\Standalone\Standalone;
+			$this->standalone         = new Common\Standalone\Standalone();
+			$this->slugMonitor        = new Common\Admin\SlugMonitor();
+			$this->schema             = $this->pro ? new Pro\Schema\Schema() : new Common\Schema\Schema();
 
 			if ( ! wp_doing_ajax() && ! wp_doing_cron() ) {
 				$this->rss       = new Common\Rss();
 				$this->main      = $this->pro ? new Pro\Main\Main() : new Common\Main\Main();
-				$this->schema    = $this->pro ? new Pro\Schema\Schema() : new Common\Schema\Schema();
 				$this->head      = $this->pro ? new Pro\Main\Head() : new Common\Main\Head();
 				$this->filters   = $this->pro ? new Pro\Main\Filters() : new Lite\Main\Filters();
 				$this->dashboard = $this->pro ? new Pro\Admin\Dashboard() : new Common\Admin\Dashboard();
@@ -425,11 +432,28 @@ namespace AIOSEO\Plugin {
 
 			$this->backwardsCompatibilityLoad();
 
-			if ( wp_doing_ajax() || wp_doing_cron() ) {
+			if ( wp_doing_ajax() ) {
+				add_action( 'init', [ $this, 'loadAjaxInit' ], 999 );
+
+				return;
+			}
+
+			if ( wp_doing_cron() ) {
 				return;
 			}
 
 			add_action( 'init', [ $this, 'loadInit' ], 999 );
+		}
+
+		/**
+		 * Things that need to load after init, on AJAX requests.
+		 *
+		 * @since 4.2.4
+		 *
+		 * @return void
+		 */
+		public function loadAjaxInit() {
+			$this->addons->registerUpdateCheck();
 		}
 
 		/**

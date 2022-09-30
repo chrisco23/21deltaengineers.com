@@ -16,7 +16,7 @@ use AIOSEO\Vendor\Monolog\Formatter\WildfireFormatter;
  *
  * @author Eric Clemmons (@ericclemmons) <eric@uxdriven.com>
  */
-class FirePHPHandler extends \AIOSEO\Vendor\Monolog\Handler\AbstractProcessingHandler
+class FirePHPHandler extends AbstractProcessingHandler
 {
     /**
      * WildFire JSON header message format
@@ -74,7 +74,7 @@ class FirePHPHandler extends \AIOSEO\Vendor\Monolog\Handler\AbstractProcessingHa
      */
     protected function getDefaultFormatter()
     {
-        return new \AIOSEO\Vendor\Monolog\Formatter\WildfireFormatter();
+        return new WildfireFormatter();
     }
     /**
      * Wildfire initialization headers to enable message parsing

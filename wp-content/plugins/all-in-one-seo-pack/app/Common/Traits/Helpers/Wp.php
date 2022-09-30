@@ -614,15 +614,16 @@ trait Wp {
 			return $capabilities[ $postType ];
 		}
 
-		if ( ! is_array( $postTypeObject->capability_type ) ) {
-			$postTypeObject->capability_type = [
-				$postTypeObject->capability_type,
-				$postTypeObject->capability_type . 's'
+		$capabilityType = $postTypeObject->capability_type;
+		if ( ! is_array( $capabilityType ) ) {
+			$capabilityType = [
+				$capabilityType,
+				$capabilityType . 's'
 			];
 		}
 
 		// Singular base for meta capabilities, plural base for primitive capabilities.
-		list( $singularBase, $pluralBase ) = $postTypeObject->capability_type;
+		list( $singularBase, $pluralBase ) = $capabilityType;
 
 		$capabilities[ $postType ] = [
 			'edit_post'          => 'edit_' . $singularBase,
@@ -676,5 +677,24 @@ trait Wp {
 		$capabilities[ $taxonomy ] = (array) $taxonomyObject->cap;
 
 		return $capabilities[ $taxonomy ];
+	}
+
+	/**
+	 * Returns the charset for the site.
+	 *
+	 * @since 4.2.3
+	 *
+	 * @return string The name of the charset.
+	 */
+	public function getCharset() {
+		static $charset = null;
+		if ( null !== $charset ) {
+			return $charset;
+		}
+
+		$charset = get_option( 'blog_charset' );
+		$charset = $charset ? $charset : 'UTF-8';
+
+		return $charset;
 	}
 }

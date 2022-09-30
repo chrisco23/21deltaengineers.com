@@ -120,16 +120,18 @@ if ( ! function_exists( 'et_builder_should_load_framework' ) ) :
 		$is_bfb       = et_pb_is_allowed( 'use_visual_builder' ) && isset( $bfb_settings['enable_bfb'] ) && 'on' === $bfb_settings['enable_bfb'];
 		$is_bfb_used  = 'on' === get_post_meta( $post_id, '_et_pb_use_builder', true ) && $is_bfb;
 
-		$is_edit_library_page         = in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ), true ) && ( ( isset( $_GET['post_type'] ) && 'et_pb_layout' === $_GET['post_type'] ) || ( $post_id && 'et_pb_layout' === get_post_type( $post_id ) ) );
-		$is_extra_builder             = $post_id && 'layout' === get_post_type( $post_id );
-		$is_edit_page_not_bfb         = in_array( $pagenow, array( 'post-new.php', 'post.php' ), true ) && ! $is_bfb_used;
-		$is_role_editor_page          = 'admin.php' === $pagenow && isset( $_GET['page'] ) && apply_filters( 'et_divi_role_editor_page', 'et_divi_role_editor' ) === $_GET['page'];
+		$is_edit_library_page  = in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ), true ) && ( ( isset( $_GET['post_type'] ) && 'et_pb_layout' === $_GET['post_type'] ) || ( $post_id && 'et_pb_layout' === get_post_type( $post_id ) ) );
+		$is_extra_builder      = $post_id && 'layout' === get_post_type( $post_id );
+		$is_edit_page_not_bfb  = in_array( $pagenow, array( 'post-new.php', 'post.php' ), true ) && ! $is_bfb_used;
+		$is_role_editor_page   = 'admin.php' === $pagenow && isset( $_GET['page'] ) && apply_filters( 'et_divi_role_editor_page', 'et_divi_role_editor' ) === $_GET['page'];
+		$is_theme_builder_page = 'admin.php' === $pagenow && isset( $_GET['page'] ) && 'et_theme_builder' === $_GET['page'];
+
 		// phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled -- `$_GET['import']` variable does not contain the 'WordPress' string.
 		$is_import_page               = 'admin.php' === $pagenow && isset( $_GET['import'] ) && 'wordpress' === $_GET['import']; // Page Builder files should be loaded on import page as well to register the et_pb_layout post type properly.
 		$is_wpml_page                 = 'admin.php' === $pagenow && isset( $_GET['page'] ) && 'sitepress-multilingual-cms/menu/languages.php' === $_GET['page']; // Page Builder files should be loaded on WPML clone page as well to register the custom taxonomies properly.
-		$is_edit_layout_category_page = 'edit-tags.php' === $pagenow && isset( $_GET['taxonomy'] ) && ( 'layout_category' === $_GET['taxonomy'] || 'layout_pack' === $_GET['taxonomy'] );
+		$is_edit_layout_category_page = 'edit-tags.php' === $pagenow && isset( $_GET['taxonomy'] ) && in_array( $_GET['taxonomy'], array( 'layout_category', 'layout_tag', 'layout_pack' ), true );
 
-		if ( ! $is_admin || ( $is_admin && in_array( $pagenow, $required_admin_pages, true ) && ( ! in_array( $pagenow, $specific_filter_pages, true ) || $is_edit_library_page || $is_role_editor_page || $is_edit_layout_category_page || $is_import_page || $is_wpml_page || $is_edit_page_not_bfb || $is_extra_builder ) ) ) {
+		if ( ! $is_admin || ( $is_admin && in_array( $pagenow, $required_admin_pages, true ) && ( ! in_array( $pagenow, $specific_filter_pages, true ) || $is_edit_library_page || $is_role_editor_page || $is_edit_layout_category_page || $is_import_page || $is_wpml_page || $is_edit_page_not_bfb || $is_extra_builder || $is_theme_builder_page ) ) ) {
 			$should_load = true;
 		} else {
 			$should_load = false;
@@ -4643,15 +4645,6 @@ function et_pb_register_builder_portabilities() {
 			'view'   => ( isset( $_GET['page'] ) && "et_{$_shortname}_role_editor" === $_GET['page'] ),
 		);
 		et_core_portability_register( 'et_pb_roles', $pb_roles );
-
-		// Register the Builder Layouts Post Type portability.
-		$layouts = array(
-			'name'   => esc_html__( 'Divi Builder Layouts', 'et_builder' ),
-			'type'   => 'post_type',
-			'target' => ET_BUILDER_LAYOUT_POST_TYPE,
-			'view'   => ( isset( $_GET['post_type'] ) && ET_BUILDER_LAYOUT_POST_TYPE === $_GET['post_type'] ),
-		);
-		et_core_portability_register( 'et_builder_layouts', $layouts );
 		// phpcs:enable
 	}
 
@@ -4663,6 +4656,17 @@ function et_pb_register_builder_portabilities() {
 			'view' => ( function_exists( 'et_builder_should_load_framework' ) && et_builder_should_load_framework() ),
 		);
 		et_core_portability_register( 'et_builder', $args );
+
+		// phpcs:disable WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
+		// Register the Builder Layouts Post Type portability.
+		$layouts = array(
+			'name'   => esc_html__( 'Divi Builder Layouts', 'et_builder' ),
+			'type'   => 'post_type',
+			'target' => ET_BUILDER_LAYOUT_POST_TYPE,
+			'view'   => ( isset( $_GET['post_type'] ) && ET_BUILDER_LAYOUT_POST_TYPE === $_GET['post_type'] ),
+		);
+		et_core_portability_register( 'et_builder_layouts', $layouts );
+		// phpcs:enable
 	}
 }
 add_action( 'admin_init', 'et_pb_register_builder_portabilities' );
@@ -6495,8 +6499,8 @@ function et_builder_get_builder_content_opening_wrapper() {
  *
  * @return string
  */
-function et_builder_get_layout_opening_wrapper() {
-	$post_type    = get_post_type();
+function et_builder_get_layout_opening_wrapper( $post_type = '' ) {
+	$post_type    = ! empty( $post_type ) ? $post_type : get_post_type();
 	$layout_class = array( 'et-l' );
 	$el           = 'div';
 	$layout_id    = '';
@@ -6546,8 +6550,8 @@ function et_builder_get_layout_opening_wrapper() {
  *
  * @return string
  */
-function et_builder_get_layout_closing_wrapper() {
-	$post_type = get_post_type();
+function et_builder_get_layout_closing_wrapper( $post_type = '' ) {
+	$post_type = ! empty( $post_type ) ? $post_type : get_post_type();
 	$el        = 'div';
 
 	switch ( $post_type ) {

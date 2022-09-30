@@ -2,7 +2,7 @@
 /**
  * Information about PHP configuration displayed in server configuration widget.
  *
- * @package WebP Converter for Media
+ * @package Converter for Media
  */
 
 ?>
@@ -25,6 +25,12 @@
 		<td class="e">max_execution_time</td>
 		<td class="v">
 			<?php echo esc_html( ini_get( 'max_execution_time' ) ?: '-' ); ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="e">disable_functions</td>
+		<td class="v">
+			<?php echo esc_html( ini_get( 'disable_functions' ) ?: '-' ); ?>
 		</td>
 	</tr>
 	</tbody>

@@ -41,13 +41,24 @@ class ImagesCounterEndpoint extends EndpointAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
+	public function get_http_methods(): string {
+		return \WP_REST_Server::READABLE;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function get_route_response( \WP_REST_Request $request ) {
 		$images_count = ( new PathsFinder( $this->plugin_data, $this->token_repository ) )
 			->get_paths_count( [ AvifFormat::FORMAT_EXTENSION, WebpFormat::FORMAT_EXTENSION ] );
 
 		return new \WP_REST_Response(
 			[
-				'value_output' => sprintf(
+				'value_webp_left' => $images_count[ WebpFormat::FORMAT_EXTENSION ],
+				'value_webp_all'  => $images_count[ 'all_' . WebpFormat::FORMAT_EXTENSION ],
+				'value_avif_left' => $images_count[ AvifFormat::FORMAT_EXTENSION ],
+				'value_avif_all'  => $images_count[ 'all_' . AvifFormat::FORMAT_EXTENSION ],
+				'value_output'    => sprintf(
 				/* translators: %1$s: images count */
 					__( '%1$s for AVIF and %2$s for WebP', 'webp-converter-for-media' ),
 					number_format( $images_count[ AvifFormat::FORMAT_EXTENSION ] ?? 0, 0, '', ' ' ),

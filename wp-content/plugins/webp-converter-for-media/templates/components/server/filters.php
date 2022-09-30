@@ -2,8 +2,10 @@
 /**
  * Information about using filters displayed in server configuration widget.
  *
- * @package WebP Converter for Media
+ * @package Converter for Media
  */
+
+use WebpConverter\Service\PathsGenerator;
 
 ?>
 <h4>Filters</h4>
@@ -12,13 +14,13 @@
 	<tr>
 		<td class="e">webpc_site_root</td>
 		<td class="v">
-			<?php echo esc_html( apply_filters( 'webpc_site_root', '-' ) ); ?>
+			<?php echo esc_html( PathsGenerator::get_wordpress_root_path() ); ?>
 		</td>
 	</tr>
 	<tr>
 		<td class="e">webpc_site_url</td>
 		<td class="v">
-			<?php echo esc_html( apply_filters( 'webpc_site_url', get_home_url() ) ); ?>
+			<?php echo esc_html( apply_filters( 'webpc_site_url', get_site_url() ) ); ?>
 		</td>
 	</tr>
 	<tr>
@@ -46,21 +48,21 @@
 		</td>
 	</tr>
 	<tr>
+		<td class="e">webpc_source_directories</td>
+		<td class="v">
+			<?php echo esc_html( json_encode( apply_filters( 'webpc_source_directories', [] ) ) ?: '-' ); ?>
+		</td>
+	</tr>
+	<tr>
 		<td class="e">webpc_htaccess_rewrite_root</td>
 		<td class="v">
-			<?php echo esc_html( apply_filters( 'webpc_htaccess_rewrite_root', '-' ) ); ?>
+			<?php echo esc_html( PathsGenerator::get_rewrite_root() ); ?>
 		</td>
 	</tr>
 	<tr>
 		<td class="e">webpc_htaccess_rewrite_path</td>
 		<td class="v">
-			<?php echo esc_html( apply_filters( 'webpc_htaccess_rewrite_path', '-' ) ); ?>
-		</td>
-	</tr>
-	<tr>
-		<td class="e">webpc_uploads_prefix</td>
-		<td class="v">
-			<?php echo esc_html( apply_filters( 'webpc_uploads_prefix', '-' ) ); ?>
+			<?php echo esc_html( PathsGenerator::get_rewrite_path() ); ?>
 		</td>
 	</tr>
 	</tbody>

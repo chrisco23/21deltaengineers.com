@@ -170,7 +170,7 @@ class QueryArgs {
 			header_remove( 'Last-Modified' );
 			header_remove( 'X-Pingback' );
 
-			wp_safe_redirect( add_query_arg( $recognizedQueryArgs, $newUrl ), 301, AIOSEO_PLUGIN_SHORT_NAME );
+			wp_safe_redirect( add_query_arg( $recognizedQueryArgs, $newUrl ), 301, AIOSEO_PLUGIN_SHORT_NAME . ' Crawl Cleanup' );
 			exit;
 		}
 	}
@@ -482,7 +482,10 @@ class QueryArgs {
 			'add_coupon',
 			'item',
 			'_wcsnonce',
-			'post_type'
+			'post_type',
+			'product',
+			'product_cat',
+			'reset-link-sent'
 		];
 	}
 }

@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'a50a2b2579958f78e91e0cbe8aadabdd9d155ef8',
+    'reference' => '96ba0cdf2c89f47597249af4bb74155dbf1900db',
     'name' => 'patrickposner/simply-static',
   ),
   'versions' => 
@@ -27,7 +27,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'a50a2b2579958f78e91e0cbe8aadabdd9d155ef8',
+      'reference' => '96ba0cdf2c89f47597249af4bb74155dbf1900db',
     ),
     'symfony/css-selector' => 
     array (
@@ -112,12 +112,12 @@
     ),
     'voku/simple_html_dom' => 
     array (
-      'pretty_version' => '4.8.3',
-      'version' => '4.8.3.0',
+      'pretty_version' => '4.8.4',
+      'version' => '4.8.4.0',
       'aliases' => 
       array (
       ),
-      'reference' => '3636fe85b0bdc96fc397a4718942455b86d8f986',
+      'reference' => '9a54495dfa8cfa16266c606d30cb008395cf1498',
     ),
   ),
 );

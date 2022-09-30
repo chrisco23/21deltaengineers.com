@@ -28,7 +28,16 @@ class Post extends Model {
 	 *
 	 * @var array
 	 */
-	protected $jsonFields = [ 'images', 'videos', 'options' ]; // TODO: Update this.
+	protected $jsonFields = [
+		// 'keywords',
+		// 'keyphrases',
+		// 'page_analysis',
+		'schema',
+		// 'schema_type_options',
+		'images',
+		'videos',
+		'options'
+	];
 
 	/**
 	 * Fields that should be hidden when serialized.
@@ -104,16 +113,16 @@ class Post extends Model {
 	 * @return Post         The modified Post object.
 	 */
 	private static function setDynamicDefaults( $post, $postId ) {
-		if (
-			'page' === get_post_type( $postId ) && // This check cannot be deleted and is required to prevent errors after WordPress cleans up the attachment it creates when a plugin is updated.
-			(
-				aioseo()->helpers->isWooCommerceCheckoutPage( $postId ) ||
+		if ( 'page' === get_post_type( $postId ) ) { // This check cannot be deleted and is required to prevent errors after WordPress cleans up the attachment it creates when a plugin is updated.
+			$isWooCommerceCheckoutPage = aioseo()->helpers->isWooCommerceCheckoutPage( $postId );
+			if (
+				$isWooCommerceCheckoutPage ||
 				aioseo()->helpers->isWooCommerceCartPage( $postId ) ||
 				aioseo()->helpers->isWooCommerceAccountPage( $postId )
-			)
-		) {
-			$post->robots_default = false;
-			$post->robots_noindex = true;
+			) {
+				$post->robots_default = false;
+				$post->robots_noindex = true;
+			}
 		}
 
 		if ( aioseo()->helpers->isStaticHomePage( $postId ) ) {
@@ -134,7 +143,7 @@ class Post extends Model {
 	 * @return Post             The modified post object.
 	 */
 	private static function migrateRemovedQaSchema( $aioseoPost ) {
-		if ( 'webpage' !== strtolower( $aioseoPost->schema_type ) ) {
+		if ( ! $aioseoPost->schema_type || 'webpage' !== strtolower( $aioseoPost->schema_type ) ) {
 			return $aioseoPost;
 		}
 
@@ -159,6 +168,38 @@ class Post extends Model {
 	 * @return Post       The modified Post object.
 	 */
 	private static function runDynamicMigrations( $post ) {
+		$post = self::migrateImageTypes( $post );
+		$post = self::runDynamicSchemaMigration( $post );
+
+		return $post;
+	}
+
+
+	/**
+	 * Migrates the post's schema data when it is loaded.
+	 *
+	 * @since 4.2.5
+	 *
+	 * @param  Post $post The Post object.
+	 * @return Post       The modified Post object.
+	 */
+	private static function runDynamicSchemaMigration( $post ) {
+		if ( null === $post->schema ) {
+			$post = aioseo()->updates->migratePostSchemaHelper( $post );
+		}
+
+		return $post;
+	}
+
+	/**
+	 * Migrates the post's image types when it is loaded.
+	 *
+	 * @since 4.2.5
+	 *
+	 * @param  Post $post The Post object.
+	 * @return Post       The modified Post object.
+	 */
+	private static function migrateImageTypes( $post ) {
 		$pageBuilder = aioseo()->helpers->getPostPageBuilderName( $post->post_id );
 		if ( ! $pageBuilder ) {
 			return $post;
@@ -301,11 +342,9 @@ class Post extends Model {
 		$thePost->twitter_image_custom_url    = ! empty( $data['twitter_image_custom_url'] ) ? esc_url_raw( $data['twitter_image_custom_url'] ) : null;
 		$thePost->twitter_image_custom_fields = ! empty( $data['twitter_image_custom_fields'] ) ? sanitize_text_field( $data['twitter_image_custom_fields'] ) : null;
 		// Schema
-		$thePost->schema_type                 = ! empty( $data['schema_type'] ) ? sanitize_text_field( $data['schema_type'] ) : 'default';
-		$thePost->schema_type_options         = ! empty( $data['schema_type_options'] )
-			? parent::getDefaultSchemaOptions( wp_json_encode( $data['schema_type_options'] ) )
-			: parent::getDefaultSchemaOptions();
-		// Miscellaneous
+		$thePost->schema                      = ! empty( $data['schema'] )
+			? self::getDefaultSchemaOptions( $data['schema'] )
+			: self::getDefaultSchemaOptions();
 		$thePost->local_seo                   = ! empty( $data['local_seo'] ) ? wp_json_encode( $data['local_seo'] ) : null;
 		$thePost->limit_modified_date         = isset( $data['limit_modified_date'] ) ? rest_sanitize_boolean( $data['limit_modified_date'] ) : 0;
 		$thePost->updated                     = gmdate( 'Y-m-d H:i:s' );
@@ -446,6 +485,48 @@ class Post extends Model {
 		];
 
 		return json_decode( wp_json_encode( $defaults ) );
+	}
+
+	/**
+	 * Returns a JSON object with default schema options.
+	 *
+	 * @since 4.2.5
+	 *
+	 * @param  string $existingOptions The existing options in JSON.
+	 * @return string                  The existing options with defaults added in JSON.
+	 */
+	public static function getDefaultSchemaOptions( $existingOptions = '' ) {
+		$defaultGraph = aioseo()->schema->getDefaultPostGraph();
+
+		$defaults = [
+			'blockGraphs'          => [],
+			'customGraphs'         => [],
+			'defaultGraph'         => $defaultGraph,
+			'defaultPostTypeGraph' => $defaultGraph, // This prop is immutable and can be used to restore the default graph in case user removed it before.
+			'graphs'               => []
+		];
+
+		if ( empty( $existingOptions ) ) {
+			return wp_json_encode( $defaults );
+		}
+
+		$existingOptions = array_replace_recursive( $defaults, (array) $existingOptions );
+
+		// Check if the default schema type changed.
+		if (
+			! empty( $existingOptions['defaultGraph'] ) &&
+			'none' !== $existingOptions['defaultGraph'] &&
+			$defaultGraph !== $existingOptions['defaultGraph']
+		) {
+			$existingOptions['defaultGraph'] = $defaultGraph;
+		}
+
+		// If the default post type graph is empty for whatever reason, reset it.
+		if ( empty( $existingOptions['defaultPostTypeGraph'] ) ) {
+			$existingOptions['defaultPostTypeGraph'] = $defaultGraph;
+		}
+
+		return wp_json_encode( $existingOptions );
 	}
 
 	/**

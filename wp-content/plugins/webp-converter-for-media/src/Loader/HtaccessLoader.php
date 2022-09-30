@@ -3,9 +3,7 @@
 namespace WebpConverter\Loader;
 
 use WebpConverter\Service\PathsGenerator;
-use WebpConverter\Settings\Option\ExtraFeaturesOption;
 use WebpConverter\Settings\Option\LoaderTypeOption;
-use WebpConverter\Settings\Option\OutputFormatsOption;
 use WebpConverter\Settings\Option\SupportedExtensionsOption;
 
 /**
@@ -138,7 +136,7 @@ class HtaccessLoader extends LoaderAbstract {
 		$content = $this->add_comments_to_rules(
 			[
 				$this->get_mod_mime_rules( $settings ),
-				$this->get_mod_expires_rules( $settings ),
+				$this->get_mod_expires_rules(),
 			]
 		);
 
@@ -160,29 +158,20 @@ class HtaccessLoader extends LoaderAbstract {
 			return $content;
 		}
 
-		$root_document      = preg_replace( '/(\/|\\\\)/', '/', rtrim( $_SERVER['DOCUMENT_ROOT'], '\/' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-		$root_document_real = preg_replace( '/(\/|\\\\)/', '/', rtrim( realpath( $_SERVER['DOCUMENT_ROOT'] ) ?: '', '\/' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-		$root_wordpress     = preg_replace( '/(\/|\\\\)/', '/', rtrim( PathsGenerator::get_wordpress_root_path(), '\/' ) );
-
-		$root_path     = trim( str_replace( $root_document_real ?: '', '', $root_wordpress ?: '' ), '\/' );
-		$root_suffix   = apply_filters(
-			'webpc_htaccess_rewrite_path',
-			apply_filters( 'webpc_uploads_prefix', str_replace( '//', '/', sprintf( '/%s/', $root_path ) ) )
-		);
-		$document_root = apply_filters(
-			'webpc_htaccess_rewrite_root',
-			( $root_document !== $root_document_real ) ? ( $root_wordpress . '/' ) : ( '%{DOCUMENT_ROOT}' . $root_suffix )
-		);
-
-		$output_path = apply_filters( 'webpc_dir_name', '', 'webp' );
+		$document_root = PathsGenerator::get_rewrite_root();
+		$root_suffix   = PathsGenerator::get_rewrite_path();
+		$output_path   = apply_filters( 'webpc_dir_name', '', 'webp' );
 		if ( $output_path_suffix !== null ) {
 			$output_path .= '/' . $output_path_suffix;
 		}
 
-		foreach ( $this->format_factory->get_mime_types( $settings[ OutputFormatsOption::OPTION_NAME ] ) as $format => $mime_type ) {
+		foreach ( $this->format_factory->get_mime_types() as $format => $mime_type ) {
 			$content .= '<IfModule mod_rewrite.c>' . PHP_EOL;
 			$content .= '  RewriteEngine On' . PHP_EOL;
-			$content .= '  RewriteOptions Inherit' . PHP_EOL;
+			if ( apply_filters( 'webpc_htaccess_mod_rewrite_inherit', true ) === true ) {
+				$content .= '  RewriteOptions Inherit' . PHP_EOL;
+			}
+
 			foreach ( $settings[ SupportedExtensionsOption::OPTION_NAME ] as $ext ) {
 				$content .= "  RewriteCond %{HTTP_ACCEPT} ${mime_type}" . PHP_EOL;
 				$content .= "  RewriteCond %{REQUEST_FILENAME} -f" . PHP_EOL;
@@ -192,7 +181,7 @@ class HtaccessLoader extends LoaderAbstract {
 					$content .= "  RewriteCond ${document_root}${output_path}/$1.${ext}.${format} -f [OR]" . PHP_EOL;
 					$content .= "  RewriteCond %{DOCUMENT_ROOT}${root_suffix}${output_path}/$1.${ext}.${format} -f" . PHP_EOL;
 				}
-				if ( ! in_array( ExtraFeaturesOption::OPTION_VALUE_REFERER_DISABLED, $settings[ ExtraFeaturesOption::OPTION_NAME ] ) ) {
+				if ( apply_filters( 'webpc_htaccess_mod_rewrite_referer', false ) === true ) {
 					$content .= "  RewriteCond %{HTTP_HOST}@@%{HTTP_REFERER} ^([^@]*)@@https?://\\1/.*" . PHP_EOL;
 				}
 				$content .= "  RewriteRule (.+)\.${ext}$ ${root_suffix}${output_path}/$1.${ext}.${format} [NC,T=${mime_type},L]" . PHP_EOL;
@@ -211,14 +200,18 @@ class HtaccessLoader extends LoaderAbstract {
 	 * @return string Rules for .htaccess file.
 	 */
 	private function get_mod_headers_rules( array $settings ): string {
-		$content    = '';
-		$extensions = implode( '|', $settings[ SupportedExtensionsOption::OPTION_NAME ] );
+		$content       = '';
+		$extensions    = implode( '|', $settings[ SupportedExtensionsOption::OPTION_NAME ] );
+		$cache_control = apply_filters(
+			'webpc_htaccess_cache_control_private',
+			( ( ( $_SERVER['X-LSCACHE'] ?? '' ) !== 'on' ) || isset( $_SERVER['HTTP_CDN_LOOP'] ) ) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		);
 
 		$content .= '<IfModule mod_headers.c>' . PHP_EOL;
 		if ( $extensions ) {
 			$content .= '  <FilesMatch "(?i)\.(' . $extensions . ')(\.(webp|avif))?$">' . PHP_EOL;
 		}
-		if ( ( ( $_SERVER['X-LSCACHE'] ?? '' ) !== 'on' ) || isset( $_SERVER['HTTP_CDN_LOOP'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		if ( $cache_control ) {
 			$content .= '    Header always set Cache-Control "private"' . PHP_EOL;
 		}
 		$content .= '    Header append Vary "Accept"' . PHP_EOL;
@@ -233,19 +226,14 @@ class HtaccessLoader extends LoaderAbstract {
 	/**
 	 * Generates rules for mod_expires.
 	 *
-	 * @param mixed[] $settings Plugin settings.
-	 *
 	 * @return string Rules for .htaccess file.
 	 */
-	private function get_mod_expires_rules( array $settings ): string {
+	private function get_mod_expires_rules(): string {
 		$content = '';
-		if ( ! in_array( ExtraFeaturesOption::OPTION_VALUE_MOD_EXPIRES, $settings[ ExtraFeaturesOption::OPTION_NAME ] ) ) {
-			return $content;
-		}
 
 		$content .= '<IfModule mod_expires.c>' . PHP_EOL;
 		$content .= '  ExpiresActive On' . PHP_EOL;
-		foreach ( $this->format_factory->get_mime_types( $settings[ OutputFormatsOption::OPTION_NAME ] ) as $format => $mime_type ) {
+		foreach ( $this->format_factory->get_mime_types() as $format => $mime_type ) {
 			$content .= "  ExpiresByType ${mime_type} \"access plus 1 year\"" . PHP_EOL;
 		}
 		$content .= '</IfModule>';
@@ -267,7 +255,7 @@ class HtaccessLoader extends LoaderAbstract {
 		}
 
 		$content .= '<IfModule mod_mime.c>' . PHP_EOL;
-		foreach ( $this->format_factory->get_mime_types( $settings[ OutputFormatsOption::OPTION_NAME ] ) as $format => $mime_type ) {
+		foreach ( $this->format_factory->get_mime_types() as $format => $mime_type ) {
 			$content .= "  AddType ${mime_type} .${format}" . PHP_EOL;
 		}
 		$content .= '</IfModule>';
@@ -289,11 +277,11 @@ class HtaccessLoader extends LoaderAbstract {
 
 		$rows   = [];
 		$rows[] = '';
-		$rows[] = '# BEGIN WebP Converter';
+		$rows[] = '# BEGIN Converter for Media';
 		$rows[] = '# ! --- DO NOT EDIT PREVIOUS LINE --- !';
 		$rows   = array_merge( $rows, array_filter( $rules ) );
 		$rows[] = '# ! --- DO NOT EDIT NEXT LINE --- !';
-		$rows[] = '# END WebP Converter';
+		$rows[] = '# END Converter for Media';
 		$rows[] = '';
 
 		return implode( PHP_EOL, $rows );
@@ -311,7 +299,11 @@ class HtaccessLoader extends LoaderAbstract {
 		$path_file = $path_dir . '/.htaccess';
 
 		$code = ( is_readable( $path_file ) ) ? file_get_contents( $path_file ) ?: '' : '';
-		$code = preg_replace( '/((:?[\r\n|\r|\n]?)# BEGIN WebP Converter(.*?)# END WebP Converter(:?(:?[\r\n|\r|\n]+)?))/s', '', $code );
+		$code = preg_replace(
+			'/((:?[\r\n|\r|\n]?)# BEGIN (Converter for Media|WebP Converter)(.*?)# END (Converter for Media|WebP Converter)(:?(:?[\r\n|\r|\n]+)?))/s',
+			'',
+			$code
+		);
 		if ( $rules && $code ) {
 			$code = PHP_EOL . $code;
 		}

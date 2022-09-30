@@ -120,16 +120,18 @@ final class Wicked_Folders_Admin {
 
 		global $typenow;
 
-		$after_ajax_scripts 	= array();
-		$is_woocommerce_active 	= false;
-		$is_wpml_active 		= false;
-		$is_tablepress_active 	= false;
-		$in_footer 				= false;
+		$after_ajax_scripts 		= array();
+		$is_woocommerce_active 		= false;
+		$is_wpml_active 			= false;
+		$is_tablepress_active 		= false;
+		$is_wider_admin_menu_active = false;
+		$in_footer 					= false;
 
 		if ( function_exists( 'is_plugin_active' ) ) {
-			$is_woocommerce_active 	= is_plugin_active( 'woocommerce/woocommerce.php' );
-			$is_wpml_active 		= is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' );
-			$is_tablepress_active 	= is_plugin_active( 'tablepress/tablepress.php' );
+			$is_woocommerce_active 		= is_plugin_active( 'woocommerce/woocommerce.php' );
+			$is_wpml_active 			= is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' );
+			$is_tablepress_active 		= is_plugin_active( 'tablepress/tablepress.php' );
+			$is_wider_admin_menu_active = is_plugin_active( 'wider-admin-menu/wider-admin-menu.php' );
 		}
 
 		if ( function_exists( 'plugins_url' ) ) {
@@ -234,6 +236,20 @@ final class Wicked_Folders_Admin {
 				body.rtl.wp-admin.wicked-object-folder-pane #wpcontent {padding-left: 0; padding-right: " . ( int ) ( $state->tree_pane_width + 11 ) . "px;}
 				body.rtl.wp-admin.wicked-object-folder-pane #wpfooter {left: 0; right: " . ( int ) ( $state->tree_pane_width - 6 ) . "px;}
 			";
+
+			if ( $is_wider_admin_menu_active ) {
+				$wider_admin_menu_settings = get_option( 'wpmwam_options' );
+
+				if ( isset( $wider_admin_menu_settings['wpmwam_width'] ) ) {
+					$menu_width = $wider_admin_menu_settings['wpmwam_width'];
+
+					$css .= "
+						#wicked-object-folder-pane .wicked-content,
+						#wicked-object-folder-pane .wicked-resizer {left: " . ( int ) $menu_width . "px;}
+					";
+				}
+			}
+			
 			wp_add_inline_style( 'wicked-folders-admin', $css );
 		}
 

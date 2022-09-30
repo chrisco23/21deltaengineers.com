@@ -8,7 +8,7 @@ if (function_exists('add_filter')) {
 class GalleryOrderFeature {
 
     public function init() {
-        add_filter('dbdb_et_pb_module_shortcode_attributes', array($this, 'db_reverse_gallery_ids'), 10, 3);
+        add_filter('dbdb_et_pb_module_shortcode_attributes', array($this, 'db_sort_gallery_ids'), 10, 3);
         add_filter('et_pb_all_fields_unprocessed_et_pb_gallery', array($this, 'add_fields'));
         add_action('wp_ajax_et_pb_process_computed_property', array($this, 'apply_to_vb_preview'), 9);
     }
@@ -31,35 +31,74 @@ class GalleryOrderFeature {
             $gallery_ids_arr = explode(',', $gallery_ids);
             rsort($gallery_ids_arr);
             $_POST['depends_on']['gallery_ids'] = implode(',', $gallery_ids_arr);
+        } 
+        elseif ($_POST['depends_on']['gallery_orderby'] === 'dbdb_alphabetical') { 
+            $gallery_ids = $_POST['depends_on']['gallery_ids'];
+            $gallery_ids_arr = explode(',', $gallery_ids);
+            $media_titles = array();
+            foreach ($gallery_ids_arr as $media_id) {
+                $media_titles[$media_id] = get_the_title($media_id);
+            }
+            asort($media_titles);
+            $sorted_media_ids = array_keys($media_titles);
+            $_POST['depends_on']['gallery_ids'] = implode(',', $sorted_media_ids);
+        }
+        elseif ($_POST['depends_on']['gallery_orderby'] === 'dbdb_alphabetical_reverse') { 
+            $gallery_ids = $_POST['depends_on']['gallery_ids'];
+            $gallery_ids_arr = explode(',', $gallery_ids);
+            $media_titles = array();
+            foreach ($gallery_ids_arr as $media_id) {
+                $media_titles[$media_id] = get_the_title($media_id);
+            }
+            arsort($media_titles);
+            $sorted_media_ids = array_keys($media_titles);
+            $_POST['depends_on']['gallery_ids'] = implode(',', $sorted_media_ids);
         }
     }
     
-    public function db_reverse_gallery_ids($props, $attrs, $render_slug) {
+    public function db_sort_gallery_ids($props, $attrs, $render_slug) {
         if (isset($_GET['et_fb'])) { return $props; }
         if ($render_slug !== 'et_pb_gallery') { return $props; }
-        if (!isset($props['gallery_orderby'])) { return $props; }
-        if ($props['gallery_orderby'] === 'dbdb_reverse') { 
-            $gallery_ids = empty($props['gallery_ids'])?'':$props['gallery_ids'];
-            $props['gallery_ids'] = implode(',', array_reverse(explode(',', $gallery_ids)));
+        if (empty($props['gallery_orderby']) || empty($props['gallery_ids'])) { return $props; }
+        $gallery_ids_arr = explode(',', $props['gallery_ids']);
+        if ($props['gallery_orderby'] === 'dbdb_reverse') {  
+            $props['gallery_ids'] = implode(',', array_reverse($gallery_ids_arr));
         } 
-        elseif ($props['gallery_orderby'] === 'dbdb_by_id') { 
-            $gallery_ids = empty($props['gallery_ids'])?'':$props['gallery_ids'];
-            $gallery_ids_arr = explode(',', $gallery_ids);
+        elseif ($props['gallery_orderby'] === 'dbdb_by_id') {
             sort($gallery_ids_arr);
             $props['gallery_ids'] = implode(',', $gallery_ids_arr);
         } 
         elseif ($props['gallery_orderby'] === 'dbdb_by_id_reverse') { 
-            $gallery_ids = empty($props['gallery_ids'])?'':$props['gallery_ids'];
-            $gallery_ids_arr = explode(',', $gallery_ids);
             rsort($gallery_ids_arr);
             $props['gallery_ids'] = implode(',', $gallery_ids_arr);
         } 
+        elseif ($props['gallery_orderby'] === 'dbdb_alphabetical') { 
+            $media_titles = array();
+            foreach ($gallery_ids_arr as $media_id) {
+                $media_titles[$media_id] = get_the_title($media_id);
+            }
+            asort($media_titles);
+            $sorted_media_ids = array_keys($media_titles);
+            $props['gallery_ids'] = implode(',', $sorted_media_ids);
+        } 
+        elseif ($props['gallery_orderby'] === 'dbdb_alphabetical_reverse') { 
+            $media_titles = array();
+            foreach ($gallery_ids_arr as $media_id) {
+                $media_titles[$media_id] = get_the_title($media_id);
+            }
+            arsort($media_titles);
+            $sorted_media_ids = array_keys($media_titles);
+            $props['gallery_ids'] = implode(',', $sorted_media_ids);
+        } 
+
         return $props;
     }
 
     public function add_fields($fields) {
         if (isset($fields['gallery_orderby']['options']) && is_array($fields['gallery_orderby']['options'])) {
             $fields['gallery_orderby']['options']['dbdb_reverse'] = esc_html__('Reverse', 'divi-booster');
+            $fields['gallery_orderby']['options']['dbdb_alphabetical'] = esc_html__('Alphabetical', 'divi-booster');
+            $fields['gallery_orderby']['options']['dbdb_alphabetical_reverse'] = esc_html__('Alphabetical (Reverse)', 'divi-booster');
             $fields['gallery_orderby']['options']['dbdb_by_id'] = esc_html__('By ID', 'divi-booster');
             $fields['gallery_orderby']['options']['dbdb_by_id_reverse'] = esc_html__('By ID (Reverse)', 'divi-booster');
         }

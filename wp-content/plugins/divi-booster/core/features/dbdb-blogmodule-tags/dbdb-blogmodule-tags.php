@@ -32,7 +32,17 @@ class BlogModuleTagsFeature {
         preg_match('/<article id="post-(\d*)"/', $html, $match);
         $id = isset($match[1])?intval($match[1]):false;
         if (!$id) { return $html; }
-        $tags = get_the_tag_list('', ', ', '', $id);
+
+        // get the post type from the class attribute
+        $post_type = 'post';
+        preg_match('/class="[^"]*type-(\w*)/', $html, $post_type);
+        $post_type = isset($post_type[1])?$post_type[1]:false;
+
+        // get the term list for the post_type
+        $tags = get_the_term_list($id, $post_type . '_tag', '', ', ', '');
+
+
+        //$tags = get_the_tag_list('', ', ', '', $id);
         if (empty($tags)) { return $html; }
         $tags = '<span class="dbdb-post-tags">'.$tags.'</span>';
         if (strpos($html, '<p class="post-meta">') !== false) {

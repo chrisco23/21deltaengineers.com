@@ -74,6 +74,7 @@ class PostSettings {
 
 			aioseo()->core->assets->load( 'src/vue/standalone/post-settings/main.js', [], aioseo()->helpers->getVueData( $page ) );
 			aioseo()->core->assets->load( 'src/vue/standalone/link-format/main.js', [], aioseo()->helpers->getVueData( $page ) );
+			aioseo()->admin->enqueueAioseoModalPortal();
 		}
 
 		$screen = get_current_screen();
@@ -236,7 +237,7 @@ class PostSettings {
 			return;
 		}
 
-		aioseo()->cache->delete( $postType . '_overview_data' );
+		aioseo()->core->cache->delete( $postType . '_overview_data' );
 	}
 
 	/**
@@ -275,7 +276,7 @@ class PostSettings {
 	 * @return array           The overview for the given post type.
 	 */
 	public function getPostTypeOverview( $postType ) {
-		$overview = aioseo()->cache->get( $postType . '_overview_data' );
+		$overview = aioseo()->core->cache->get( $postType . '_overview_data' );
 		if ( null !== $overview ) {
 			return $overview;
 		}
@@ -319,7 +320,7 @@ class PostSettings {
 			}
 		}
 
-		aioseo()->cache->update( $postType . '_overview_data', $overview, WEEK_IN_SECONDS );
+		aioseo()->core->cache->update( $postType . '_overview_data', $overview, WEEK_IN_SECONDS );
 
 		return $overview;
 	}
@@ -359,8 +360,8 @@ class PostSettings {
 				break;
 		}
 
-		$prefix            = aioseo()->db->prefix;
-		$postsTable        = aioseo()->db->db->posts;
+		$prefix            = aioseo()->core->db->prefix;
+		$postsTable        = aioseo()->core->db->db->posts;
 		$clauses['join']  .= " LEFT JOIN {$prefix}aioseo_posts AS aioseo_p ON ({$postsTable}.ID = aioseo_p.post_id) ";
 		$clauses['where'] .= $whereClause;
 

@@ -81,7 +81,7 @@ class Frontend {
 
 		if ( is_search() ) {
 			$type      = 'search';
-			$reference = get_search_query();
+			$reference = sanitize_text_field( get_search_query() );
 		}
 
 		if ( is_404() ) {

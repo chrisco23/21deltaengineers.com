@@ -2,11 +2,11 @@
 
 namespace WebpConverter\Plugin\Activation;
 
-use WebpConverter\Notice\AvifSupportNotice;
 use WebpConverter\Notice\CloudflareNotice;
 use WebpConverter\Notice\LitespeedNotice;
 use WebpConverter\Notice\NoticeIntegration;
 use WebpConverter\Notice\ThanksNotice;
+use WebpConverter\Notice\UpgradeNotice;
 use WebpConverter\Notice\WelcomeNotice;
 use WebpConverter\PluginInfo;
 use WebpConverter\Service\StatsManager;
@@ -35,11 +35,11 @@ class DefaultSettings {
 	 * @return void
 	 */
 	public function add_default_notices_values() {
-		( new NoticeIntegration( $this->plugin_info, new WelcomeNotice() ) )->set_default_value();
-		( new NoticeIntegration( $this->plugin_info, new ThanksNotice() ) )->set_default_value();
-		( new NoticeIntegration( $this->plugin_info, new AvifSupportNotice() ) )->set_default_value();
-		( new NoticeIntegration( $this->plugin_info, new CloudflareNotice() ) )->set_default_value();
-		( new NoticeIntegration( $this->plugin_info, new LitespeedNotice() ) )->set_default_value();
+		NoticeIntegration::set_default_value( WelcomeNotice::NOTICE_OPTION, WelcomeNotice::get_default_value() );
+		NoticeIntegration::set_default_value( ThanksNotice::NOTICE_OPTION, ThanksNotice::get_default_value() );
+		NoticeIntegration::set_default_value( CloudflareNotice::NOTICE_OPTION, CloudflareNotice::get_default_value() );
+		NoticeIntegration::set_default_value( LitespeedNotice::NOTICE_OPTION, LitespeedNotice::get_default_value() );
+		NoticeIntegration::set_default_value( UpgradeNotice::NOTICE_OPTION, UpgradeNotice::get_default_value() );
 	}
 
 	/**

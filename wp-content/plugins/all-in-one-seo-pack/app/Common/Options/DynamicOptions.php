@@ -54,7 +54,7 @@ class DynamicOptions {
 	 * @param string $optionsName The options name.
 	 */
 	public function __construct( $optionsName = 'aioseo_options_dynamic' ) {
-		$this->optionsName = is_network_admin() ? $optionsName . '_network' : $optionsName;
+		$this->optionsName = $optionsName;
 
 		// Load defaults in case this is a complete fresh install.
 		$this->init();
@@ -119,18 +119,30 @@ class DynamicOptions {
 
 		aioseo()->dynamicBackup->maybeBackup( $cachedOptions );
 
-		// Refactor options.
-		$dbOptions = array_replace_recursive(
+		// First, recursively replace the new options into the cached state.
+		// It's important we use the helper method since we want to replace populated arrays with empty ones if needed (when a setting was cleared out).
+		$dbOptions = aioseo()->helpers->arrayReplaceRecursive(
 			$cachedOptions,
-			$this->addValueToValuesArray( $cachedOptions, $options, [], true )
+			$this->addValueToValuesArray( $cachedOptions, $options, [], true ),
+			true
 		);
 
+		// Now, we must also intersect both arrays to delete any individual keys that were unset.
+		// We must do this because, while arrayReplaceRecursive will update the values for keys or empty them out,
+		// it will keys that aren't present in the replacement array unaffected in the target array.
+		$dbOptions = aioseo()->helpers->arrayIntersectRecursive(
+			$dbOptions,
+			$this->addValueToValuesArray( $cachedOptions, $options, [], true ),
+			'value'
+		);
+
+		// Update the cache state.
 		aioseo()->core->optionsCache->setOptions( $this->optionsName, $dbOptions );
 
 		// Update localized options.
 		update_option( $this->optionsName . '_localized', $this->localized );
 
-		// Update values.
+		// Finally, save the new values to the DB.
 		$this->save( true );
 	}
 

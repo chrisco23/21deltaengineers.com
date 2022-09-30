@@ -1,8 +1,8 @@
 <?php
 if (!defined('ABSPATH')) { exit(); } // No direct access
 
-// Add to wp_footer as doesn't work when set in wp_footer.js hook for some reason
-add_action('wp_footer', 'db140_configure_image_links_to_open_in_lightbox'); 
+add_action('wp_footer', 'db140_configure_image_links_to_open_in_lightbox'); // Add to wp_footer as doesn't work when set in wp_footer.js hook for some reason
+add_filter('dbdb-load-magnific-popup-assets', '__return_true');
 
 function db140_configure_image_links_to_open_in_lightbox($plugin) { 
 	?>
@@ -42,11 +42,4 @@ function db140_configure_image_links_to_open_in_lightbox($plugin) {
 	);
 	</script>
 	<?php 
-}
-
-// Load magnific popup
-add_action('wp_head', 'db140_enqueue_magnific_popup');
-
-function db140_enqueue_magnific_popup() {
-	DBDBMagnificPopup::create()->enqueue();
 }

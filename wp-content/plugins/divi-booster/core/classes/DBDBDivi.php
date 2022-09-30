@@ -12,12 +12,8 @@ class DBDBDivi implements DBDBAnyDivi
     public function __construct() {
     }
 
-    public function dynamic_assets_url($path='') {
-        return $this->builder_url('/feature/dynamic-assets/assets'.$path);
-    }
-
-    public function builder_url($path='') {
-        return defined('ET_BUILDER_URI')?ET_BUILDER_URI.$path:false;
+    public function url($path='') {
+        return get_template_directory_uri().$path;
     }
 
     public function supports_dynamic_assets() {

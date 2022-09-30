@@ -38,6 +38,7 @@ class Sitemap {
 
 	/**
 	 * Adds our hooks.
+	 * Note: This runs init and is triggered in the main AIOSEO class.
 	 *
 	 * @since 4.0.0
 	 *
@@ -51,6 +52,8 @@ class Sitemap {
 		add_action( 'edited_term', [ $this, 'regenerateStaticSitemap' ] );
 
 		add_action( 'admin_init', [ $this, 'detectStatic' ] );
+
+		$this->maybeAddHtaccessRewriteRules();
 	}
 
 	/**
@@ -67,6 +70,43 @@ class Sitemap {
 
 		remove_action( 'init', 'wp_sitemaps_get_server' );
 		add_filter( 'wp_sitemaps_enabled', '__return_false' );
+	}
+
+	/**
+	 * Check if the .htaccess rewrite rules are present if the user is using Apache. If not, add them.
+	 *
+	 * @since 4.2.5
+	 *
+	 * @return void
+	 */
+	private function maybeAddHtaccessRewriteRules() {
+		if ( ! aioseo()->helpers->isApache() ) {
+			return;
+		}
+
+		ob_start();
+		aioseo()->templates->getTemplate( 'sitemap/htaccess-rewrite-rules.php' );
+		$rewriteRules = ob_get_clean();
+
+		$escapedRewriteRules = aioseo()->helpers->escapeRegex( $rewriteRules );
+
+		$contents = aioseo()->helpers->decodeHtmlEntities( aioseo()->htaccess->getContents() );
+		if ( get_option( 'permalink_structure' ) ) {
+			if ( preg_match( '/All in One SEO Sitemap Rewrite Rules/i', $contents ) ) {
+				$contents = preg_replace( "/$escapedRewriteRules/i", '', $contents );
+				aioseo()->htaccess->saveContents( $contents );
+			}
+
+			return;
+		}
+
+		if ( preg_match( '/All in One SEO Sitemap Rewrite Rules/i', $contents ) ) {
+			return;
+		}
+
+		$contents .= $rewriteRules;
+
+		aioseo()->htaccess->saveContents( $contents );
 	}
 
 	/**
@@ -250,9 +290,8 @@ class Sitemap {
 			status_header( 404 );
 		}
 
-		global $wp;
 		$this->xsl->saveXslData(
-			$wp->request,
+			aioseo()->sitemap->requestParser->slug,
 			$entries,
 			$total
 		);
@@ -264,7 +303,8 @@ class Sitemap {
 				$loadedAddon->output->output( $entries );
 			}
 		}
-		exit();
+
+		exit;
 	}
 
 	/**
@@ -306,7 +346,7 @@ class Sitemap {
 	 * @return void
 	 */
 	public function headers() {
-		$charset = get_option( 'blog_charset' );
+		$charset = aioseo()->helpers->getCharset();
 		header( "Content-Type: text/xml; charset=$charset", true );
 		header( 'X-Robots-Tag: noindex, follow', true );
 	}
@@ -323,7 +363,7 @@ class Sitemap {
 		$wp_query->set_404();
 		status_header( 404 );
 		include( get_404_template() );
-		exit();
+		exit;
 	}
 
 	/**

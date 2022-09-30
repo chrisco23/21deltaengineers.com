@@ -20,6 +20,8 @@ class Updates {
 	 * @since 4.0.0
 	 */
 	public function __construct() {
+		add_action( 'aioseo_v4_migrate_post_schema', [ $this, 'migratePostSchema' ] );
+
 		if ( wp_doing_ajax() || wp_doing_cron() ) {
 			return;
 		}
@@ -45,11 +47,6 @@ class Updates {
 		aioseo()->access->addCapabilities();
 
 		$oldOptions = get_option( 'aioseop_options' );
-		if ( empty( $oldOptions ) && ! is_network_admin() && ! isset( $_GET['activate-multi'] ) ) {
-			// Sets 30 second transient for welcome screen redirect on activation.
-			aioseo()->core->cache->update( 'activation_redirect', true, 30 );
-		}
-
 		if ( ! empty( $oldOptions['last_active_version'] ) ) {
 			aioseo()->internalOptions->internal->lastActiveVersion = $oldOptions['last_active_version'];
 		}
@@ -124,9 +121,6 @@ class Updates {
 		}
 
 		if ( version_compare( $lastActiveVersion, '4.1.6', '<' ) ) {
-			// Clear the cache so addons get reset.
-			aioseo()->core->cache->clear();
-
 			// Remove the recurring scheduled action for notifications.
 			aioseo()->helpers->unscheduleAction( 'aioseo_admin_notifications_update' );
 
@@ -171,7 +165,22 @@ class Updates {
 			aioseo()->helpers->unscheduleAction( 'aioseo_static_sitemap_regeneration' );
 		}
 
+		if ( version_compare( $lastActiveVersion, '4.2.4', '<' ) ) {
+			$this->migrateContactTypes();
+			$this->addNotificationsAddonColumn();
+		}
+
+		if ( version_compare( $lastActiveVersion, '4.2.5', '<' ) ) {
+			$this->addSchemaColumn();
+			$this->schedulePostSchemaMigration();
+		}
+
 		do_action( 'aioseo_run_updates', $lastActiveVersion );
+
+		// Always clear the cache if the last active version is different from our current.
+		if ( version_compare( $lastActiveVersion, AIOSEO_VERSION, '<' ) ) {
+			aioseo()->core->cache->clear();
+		}
 	}
 
 	/**
@@ -796,9 +805,9 @@ class Updates {
 	 * @return void
 	 */
 	private function removeRevisionRecords() {
-		$postsTableName       = aioseo()->db->prefix . 'posts';
-		$aioseoPostsTableName = aioseo()->db->prefix . 'aioseo_posts';
-		aioseo()->db->execute(
+		$postsTableName       = aioseo()->core->db->prefix . 'posts';
+		$aioseoPostsTableName = aioseo()->core->db->prefix . 'aioseo_posts';
+		aioseo()->core->db->execute(
 			"DELETE FROM `$aioseoPostsTableName`
 			WHERE `post_id` IN (
 				SELECT `ID`
@@ -873,18 +882,400 @@ class Updates {
 	 * @return void
 	 */
 	private function migrateUserContactMethods() {
-		$userMetaTableName = aioseo()->db->prefix . 'usermeta';
+		$userMetaTableName = aioseo()->core->db->prefix . 'usermeta';
 
-		aioseo()->db->execute(
+		aioseo()->core->db->execute(
 			"UPDATE `$userMetaTableName`
 			SET `meta_key` = 'aioseo_facebook_page_url'
 			WHERE `meta_key` = 'aioseo_facebook'"
 		);
 
-		aioseo()->db->execute(
+		aioseo()->core->db->execute(
 			"UPDATE `$userMetaTableName`
 			SET `meta_key` = 'aioseo_twitter_url'
 			WHERE `meta_key` = 'aioseo_twitter'"
 		);
+	}
+
+	/**
+	 * Migrates some older values in the Knowledge Panel contact type setting that were removed.
+	 *
+	 * @since 4.2.4
+	 *
+	 * @return void
+	 */
+	public function migrateContactTypes() {
+		$oldValue          = aioseo()->options->searchAppearance->global->schema->contactType;
+		$oldValueLowerCase = strtolower( $oldValue );
+
+		// Return if there is no value set or manual input is being used.
+		if ( ! $oldValue || 'manual' === $oldValueLowerCase ) {
+			return;
+		}
+
+		switch ( $oldValueLowerCase ) {
+			case 'billing support':
+			case 'customer support':
+			case 'reservations':
+			case 'sales':
+			case 'technical support':
+				// If we still support the value, do nothing.
+				return;
+			default:
+				// Otherwise, migrate the existing value to the manual input field.
+				if ( 'bagage tracking' === $oldValueLowerCase ) {
+					// Let's also fix this old typo.
+					$oldValue = 'Baggage Tracking';
+				}
+
+				aioseo()->options->searchAppearance->global->schema->contactType       = 'manual';
+				aioseo()->options->searchAppearance->global->schema->contactTypeManual = $oldValue;
+		}
+	}
+
+	/**
+	 * Add an addon column to the notifications table.
+	 *
+	 * @since 4.2.4
+	 *
+	 * @return void
+	 */
+	private function addNotificationsAddonColumn() {
+		if ( ! aioseo()->core->db->columnExists( 'aioseo_notifications', 'addon' ) ) {
+			$tableName = aioseo()->core->db->db->prefix . 'aioseo_notifications';
+			aioseo()->core->db->execute(
+				"ALTER TABLE {$tableName}
+				ADD `addon` varchar(64) DEFAULT NULL AFTER `slug`"
+			);
+
+			// Reset the cache for the installed tables.
+			aioseo()->internalOptions->database->installedTables = '';
+		}
+	}
+
+	/**
+	 * Adds the schema column.
+	 *
+	 * @since 4.2.5
+	 *
+	 * @return void
+	 */
+	private function addSchemaColumn() {
+		if ( ! aioseo()->core->db->columnExists( 'aioseo_posts', 'schema' ) ) {
+			$tableName = aioseo()->core->db->db->prefix . 'aioseo_posts';
+			aioseo()->core->db->execute(
+				"ALTER TABLE {$tableName}
+				ADD `schema` longtext DEFAULT NULL AFTER `seo_score`"
+			);
+		}
+	}
+
+	/**
+	 * Schedules the post schema migration.
+	 *
+	 * @since 4.2.5
+	 *
+	 * @return void
+	 */
+	private function schedulePostSchemaMigration() {
+		aioseo()->helpers->scheduleSingleAction( 'aioseo_v4_migrate_post_schema', 10 );
+	}
+
+	/**
+	 * Migrates then post schema to the new JSON column.
+	 *
+	 * @since 4.2.5
+	 *
+	 * @return void
+	 */
+	public function migratePostSchema() {
+		$posts = aioseo()->core->db->start( 'aioseo_posts' )
+			->select( '*' )
+			->whereRaw( '`schema` IS NULL' )
+			->limit( 40 )
+			->run()
+			->models( 'AIOSEO\\Plugin\\Common\\Models\\Post' );
+
+		if ( empty( $posts ) ) {
+			return;
+		}
+
+		foreach ( $posts as $post ) {
+			$this->migratePostSchemaHelper( $post );
+		}
+
+		// Once done, schedule the next action.
+		aioseo()->helpers->scheduleSingleAction( 'aioseo_v4_migrate_post_schema', 30 );
+	}
+
+	/**
+	 * Helper function for the schema migration/
+	 *
+	 * @since 4.2.5
+	 *
+	 * @param  Post $aioseoPost The AIOSEO post object.
+	 * @return Post             The modified AIOSEO post object.
+	 */
+	public function migratePostSchemaHelper( $aioseoPost ) {
+		$post              = aioseo()->helpers->getPost( $aioseoPost->post_id );
+		$schemaType        = $aioseoPost->schema_type;
+		$schemaTypeOptions = json_decode( $aioseoPost->schema_type_options );
+		$schemaOptions     = json_decode( Models\Post::getDefaultSchemaOptions() );
+
+		if ( empty( $schemaTypeOptions ) ) {
+			$aioseoPost->schema = $schemaOptions;
+			$aioseoPost->save();
+
+			return $aioseoPost;
+		}
+
+		$graph = [];
+		switch ( $schemaType ) {
+			case 'Article':
+				$graph = [
+					'id'         => 'aioseo-article-' . uniqid(),
+					'slug'       => 'article',
+					'graphName'  => 'Article',
+					'label'      => __( 'Article', 'all-in-one-seo-pack' ),
+					'properties' => [
+						'type'        => $schemaTypeOptions->article->articleType,
+						'name'        => '#post_title',
+						'headline'    => '#post_title',
+						'description' => '#post_excerpt',
+						'image'       => '',
+						'keywords'    => '',
+						'author'      => [
+							'name' => '#author_name',
+							'url'  => '#author_url'
+						],
+						'dates'       => [
+							'include'       => true,
+							'datePublished' => '',
+							'dateModified'  => ''
+						]
+					]
+				];
+				break;
+			case 'Course':
+				$graph = [
+					'id'         => 'aioseo-course-' . uniqid(),
+					'slug'       => 'course',
+					'graphName'  => 'Course',
+					'label'      => __( 'Course', 'all-in-one-seo-pack' ),
+					'properties' => [
+						'name'        => $schemaTypeOptions->course->name,
+						'description' => $schemaTypeOptions->course->description,
+						'provider'    => [
+							'name'  => $schemaTypeOptions->course->provider,
+							'url'   => '',
+							'image' => ''
+						]
+					]
+				];
+				break;
+			case 'Product':
+				$graph = [
+					'id'         => 'aioseo-product-' . uniqid(),
+					'slug'       => 'product',
+					'graphName'  => 'Product',
+					'label'      => __( 'Product', 'all-in-one-seo-pack' ),
+					'properties' => [
+						'autogenerate' => true,
+						'name'         => '',
+						'description'  => $schemaTypeOptions->product->description,
+						'brand'        => $schemaTypeOptions->product->brand,
+						'image'        => '',
+						'identifiers'  => [
+							'sku'  => $schemaTypeOptions->product->sku,
+							'gtin' => '',
+							'mpn'  => ''
+						],
+						'offer'        => [
+							'price'        => $schemaTypeOptions->product->price,
+							'currency'     => $schemaTypeOptions->product->currency,
+							'availability' => $schemaTypeOptions->product->availability,
+							'validUntil'   => $schemaTypeOptions->product->priceValidUntil
+						],
+						'rating'       => [
+							'minimum' => 1,
+							'maximum' => 5
+						],
+						'reviews'      => []
+					]
+				];
+
+				$identifierType = $schemaTypeOptions->product->identifierType;
+				if ( preg_match( '/gtin/i', $identifierType ) ) {
+					$graph['properties']['identifiers']['gtin'] = $schemaTypeOptions->product->identifier;
+				}
+
+				if ( preg_match( '/mpn/i', $identifierType ) ) {
+					$graph['properties']['identifiers']['mpn'] = $schemaTypeOptions->product->identifier;
+				}
+
+				$reviews = $schemaTypeOptions->product->reviews;
+				if ( ! empty( $reviews ) ) {
+					foreach ( $reviews as $reviewData ) {
+						$reviewData = json_decode( $reviewData );
+						if ( empty( $reviewData ) ) {
+							continue;
+						}
+
+						$graph['properties']['reviews'][] = [
+							'rating'   => $reviewData->rating,
+							'headline' => $reviewData->headline,
+							'content'  => $reviewData->content,
+							'author'   => $reviewData->author
+						];
+					}
+				}
+				break;
+			case 'Recipe':
+				$graph = [
+					'id'         => 'aioseo-recipe-' . uniqid(),
+					'slug'       => 'recipe',
+					'graphName'  => 'Recipe',
+					'label'      => __( 'Recipe', 'all-in-one-seo-pack' ),
+					'properties' => [
+						'name'         => $schemaTypeOptions->recipe->name,
+						'description'  => $schemaTypeOptions->recipe->description,
+						'author'       => $schemaTypeOptions->recipe->author,
+						'ingredients'  => $schemaTypeOptions->recipe->ingredients,
+						'dishType'     => $schemaTypeOptions->recipe->dishType,
+						'cuisineType'  => $schemaTypeOptions->recipe->cuisineType,
+						'keywords'     => $schemaTypeOptions->recipe->keywords,
+						'image'        => $schemaTypeOptions->recipe->image,
+						'nutrition'    => [
+							'servings' => $schemaTypeOptions->recipe->servings,
+							'calories' => $schemaTypeOptions->recipe->calories
+						],
+						'timeRequired' => [
+							'preparation' => $schemaTypeOptions->recipe->preparationTime,
+							'cooking'     => $schemaTypeOptions->recipe->cookingTime
+						],
+						'instructions' => []
+					]
+				];
+
+				$instructions = $schemaTypeOptions->recipe->instructions;
+				if ( ! empty( $instructions ) ) {
+					foreach ( $instructions as $instructionData ) {
+						$instructionData = json_decode( $instructionData );
+						if ( empty( $instructionData ) ) {
+							continue;
+						}
+
+						$graph['properties']['instructions'][] = [
+							'name'  => '',
+							'text'  => $instructionData->content,
+							'image' => ''
+						];
+					}
+				}
+				break;
+			case 'SoftwareApplication':
+				$graph = [
+					'id'         => 'aioseo-software-application-' . uniqid(),
+					'slug'       => 'software-application',
+					'graphName'  => 'SoftwareApplication',
+					'label'      => __( 'Software', 'all-in-one-seo-pack' ),
+					'properties' => [
+						'name'            => $schemaTypeOptions->software->name,
+						'description'     => '',
+						'price'           => $schemaTypeOptions->software->price,
+						'currency'        => $schemaTypeOptions->software->currency,
+						'operatingSystem' => $schemaTypeOptions->software->operatingSystems,
+						'category'        => $schemaTypeOptions->software->category,
+						'rating'          => [
+							'value'   => '',
+							'minimum' => 1,
+							'maximum' => 5
+						],
+						'review'          => [
+							'headline' => '',
+							'content'  => '',
+							'author'   => ''
+						]
+					]
+				];
+
+				$reviews = $schemaTypeOptions->software->reviews;
+				if ( ! empty( $reviews[0] ) ) {
+					$reviewData = json_decode( $reviews[0] );
+					if ( empty( $reviewData ) ) {
+						break;
+					}
+
+					$graph['properties']['rating']['value'] = $reviewData->rating;
+					$graph['properties']['review'] = [
+						'headline' => $reviewData->headline,
+						'content'  => $reviewData->content,
+						'author'   => $reviewData->author
+					];
+				}
+				break;
+			case 'WebPage':
+				if ( 'FAQPage' === $schemaTypeOptions->webPage->webPageType ) {
+					$graph = [
+						'id'         => 'aioseo-faq-page-' . uniqid(),
+						'slug'       => 'faq-page',
+						'graphName'  => 'FAQPage',
+						'label'      => __( 'FAQ Page', 'all-in-one-seo-pack' ),
+						'properties' => [
+							'type'        => $schemaTypeOptions->webPage->webPageType,
+							'name'        => '#post_title',
+							'description' => '#post_excerpt',
+							'questions'   => []
+						]
+					];
+
+					$faqs = $schemaTypeOptions->faq->pages;
+					if ( ! empty( $faqs ) ) {
+						foreach ( $faqs as $faqData ) {
+							$faqData = json_decode( $faqData );
+							if ( empty( $faqData ) ) {
+								continue;
+							}
+
+							$graph['properties']['questions'][] = [
+								'question' => $faqData->question,
+								'answer'   => $faqData->answer
+							];
+						}
+					}
+				} else {
+					$graph = [
+						'id'         => 'aioseo-web-page-' . uniqid(),
+						'slug'       => 'web-page',
+						'graphName'  => 'WebPage',
+						'label'      => __( 'Web Page', 'all-in-one-seo-pack' ),
+						'properties' => [
+							'type'        => $schemaTypeOptions->webPage->webPageType,
+							'name'        => '',
+							'description' => ''
+						]
+					];
+				}
+				break;
+			case 'default':
+				$dynamicOptions = aioseo()->dynamicOptions->noConflict();
+				if ( $dynamicOptions->searchAppearance->postTypes->has( $post->post_type ) ) {
+					$schemaOptions->defaultGraph = $dynamicOptions->searchAppearance->postTypes->{$post->post_type}->schemaType;
+				}
+				break;
+			case 'none':
+				// If "none', we simply don't have to migrate anything.
+			default:
+				break;
+		}
+
+		if ( ! empty( $graph ) ) {
+			$schemaOptions->graphs[] = $graph;
+		}
+
+		$aioseoPost->schema = $schemaOptions;
+		$aioseoPost->save();
+
+		return $aioseoPost;
 	}
 }

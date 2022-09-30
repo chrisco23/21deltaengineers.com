@@ -41,12 +41,9 @@ class RobotsTxt {
 		$original      = explode( "\n", $original );
 		$originalRules = $this->extractRules( $original );
 		$networkRules  = [];
+
 		if ( is_multisite() ) {
-			switch_to_blog( aioseo()->helpers->getNetworkId() );
-			$options = aioseo()->options->noConflict();
-			$options->initNetwork();
-			$networkRules = $options->tools->robots->enable ? $options->tools->robots->rules : [];
-			restore_current_blog();
+			$networkRules = aioseo()->networkOptions->tools->robots->enable ? aioseo()->networkOptions->tools->robots->rules : [];
 		}
 
 		if ( ! aioseo()->options->tools->robots->enable ) {
@@ -402,14 +399,15 @@ class RobotsTxt {
 
 		$allRules = $this->extractRules( $lines );
 
+		$options = aioseo()->options;
 		if ( $network ) {
-			aioseo()->options->initNetwork();
+			$options = aioseo()->networkOptions;
 		}
 
-		$currentRules = $this->parseRules( aioseo()->options->tools->robots->rules );
+		$currentRules = $this->parseRules( $options->tools->robots->rules );
 		$allRules     = $this->mergeRules( $currentRules, $allRules, false, true );
 
-		aioseo()->options->tools->robots->rules = aioseo()->robotsTxt->prepareRobotsTxt( $allRules );
+		$options->tools->robots->rules = aioseo()->robotsTxt->prepareRobotsTxt( $allRules );
 
 		return true;
 	}
@@ -563,11 +561,6 @@ class RobotsTxt {
 	 * @return boolean Whether the rewrite rules are set or not.
 	 */
 	public function rewriteRulesExist() {
-		// We don't want to check if a migration is being restarted.
-		if ( isset( $_GET['aioseo-v3-migration'] ) && 'i-want-to-migrate' === wp_unslash( $_GET['aioseo-v3-migration'] ) ) { // phpcs:ignore HM.Security.ValidatedSanitizedInput.InputNotSanitized
-			return true;
-		}
-
 		// If we have a physical file, it's almost impossible to tell if the rewrite rules are set.
 		// The only scenario is if we still get a 404.
 		if ( $this->hasPhysicalRobotsTxt() ) {

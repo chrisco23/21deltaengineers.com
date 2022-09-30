@@ -83,7 +83,7 @@ class DirectoryIntegration implements HookableInterface {
 	/**
 	 * Returns server path of directory relative to WordPress root directory.
 	 *
-	 * @param mixed  $value          Default value.
+	 * @param string $value          Default value.
 	 * @param string $directory_type Type of directory.
 	 *
 	 * @return string Relative server path of directory.
@@ -99,7 +99,7 @@ class DirectoryIntegration implements HookableInterface {
 	/**
 	 * Returns server path of directory.
 	 *
-	 * @param mixed  $value          Default value.
+	 * @param string $value          Default value.
 	 * @param string $directory_type Type of directory.
 	 *
 	 * @return string Server path of directory.
@@ -125,7 +125,7 @@ class DirectoryIntegration implements HookableInterface {
 	/**
 	 * Returns URL of directory.
 	 *
-	 * @param mixed  $value          Default value.
+	 * @param string $value          Default value.
 	 * @param string $directory_type Type of directory.
 	 *
 	 * @return string URL of directory.
@@ -141,7 +141,7 @@ class DirectoryIntegration implements HookableInterface {
 			}
 		}
 
-		$source_url = apply_filters( 'webpc_site_url', get_home_url() );
+		$source_url = apply_filters( 'webpc_site_url', get_site_url() );
 		return sprintf( '%1$s/%2$s', $source_url, $directory_name );
 	}
 }

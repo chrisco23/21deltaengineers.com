@@ -201,11 +201,16 @@ class PostMeta {
 						$meta['schema_type_options'] = wp_json_encode( $options );
 						break;
 					case '_yoast_wpseo_focuskw':
-						$keyphrase = [
-							'focus'      => [ 'keyphrase' => aioseo()->helpers->sanitizeOption( $value ) ],
-							'additional' => []
+						$focusKeyphrase = [
+							'focus' => [ 'keyphrase' => aioseo()->helpers->sanitizeOption( $value ) ]
 						];
-						$meta['keyphrases'] = $keyphrase;
+
+						// Merge with existing keyphrases if the array key already exists.
+						if ( ! empty( $meta['keyphrases'] ) ) {
+							$meta['keyphrases'] = array_merge( $meta['keyphrases'], $focusKeyphrase );
+						} else {
+							$meta['keyphrases'] = $focusKeyphrase;
+						}
 						break;
 					case '_yoast_wpseo_focuskeywords':
 						$keyphrases = [];
@@ -216,11 +221,16 @@ class PostMeta {
 						$yoastKeyphrases = json_decode( $value );
 						for ( $i = 0; $i < count( $yoastKeyphrases ); $i++ ) {
 							$keyphrase = [ 'keyphrase' => aioseo()->helpers->sanitizeOption( $yoastKeyphrases[ $i ]->keyword ) ];
+
+							if ( ! isset( $keyphrases['additional'] ) ) {
+								$keyphrases['additional'] = [];
+							}
+
 							$keyphrases['additional'][ $i ] = $keyphrase;
 						}
 
 						if ( ! empty( $keyphrases ) ) {
-							// Merge previous 'keyphrases' with the focus keyword.
+							// Merge with existing keyphrases if the array key already exists.
 							if ( ! empty( $meta['keyphrases'] ) ) {
 								$meta['keyphrases'] = array_merge( $meta['keyphrases'], $keyphrases );
 							} else {

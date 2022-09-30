@@ -43,7 +43,7 @@ class Notices {
 		$this->import              = new Import();
 		$this->deprecatedWordPress = new DeprecatedWordPress();
 
-		add_action( 'admin_notices', [ $this, 'notice' ] );
+		add_action( 'admin_notices', [ $this, 'notices' ] );
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Notices {
 	 * @return void
 	 */
 	private function maybeUpdate() {
-		$nextRun = aioseo()->core->cache->get( 'admin_notifications_update' );
+		$nextRun = aioseo()->core->networkCache->get( 'admin_notifications_update' );
 		if ( null !== $nextRun && time() < $nextRun ) {
 			return;
 		}
@@ -81,7 +81,7 @@ class Notices {
 		aioseo()->helpers->scheduleAsyncAction( 'aioseo_admin_notifications_update' );
 
 		// Update the cache.
-		aioseo()->core->cache->update( 'admin_notifications_update', time() + DAY_IN_SECONDS );
+		aioseo()->core->networkCache->update( 'admin_notifications_update', time() + DAY_IN_SECONDS );
 	}
 
 	/**
@@ -157,7 +157,7 @@ class Notices {
 	 * @return array An array of notifications.
 	 */
 	private function fetch() {
-		$response = wp_remote_get( $this->getUrl() . '?' . time() );
+		$response = aioseo()->helpers->wpRemoteGet( $this->getUrl() );
 
 		if ( is_wp_error( $response ) ) {
 			return [];
@@ -322,7 +322,7 @@ class Notices {
 	 *
 	 * @return void
 	 */
-	public function notice() {
+	public function notices() {
 		$this->review->maybeShowNotice();
 		$this->migration->maybeShowNotice();
 		$this->import->maybeShowNotice();

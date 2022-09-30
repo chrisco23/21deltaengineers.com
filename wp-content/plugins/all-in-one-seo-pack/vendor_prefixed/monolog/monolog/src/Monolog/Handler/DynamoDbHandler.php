@@ -21,7 +21,7 @@ use AIOSEO\Vendor\Monolog\Logger;
  * @link https://github.com/aws/aws-sdk-php/
  * @author Andrew Lawson <adlawson@gmail.com>
  */
-class DynamoDbHandler extends \AIOSEO\Vendor\Monolog\Handler\AbstractProcessingHandler
+class DynamoDbHandler extends AbstractProcessingHandler
 {
     const DATE_FORMAT = 'Y-m-d\\TH:i:s.uO';
     /**
@@ -46,11 +46,11 @@ class DynamoDbHandler extends \AIOSEO\Vendor\Monolog\Handler\AbstractProcessingH
      * @param int            $level
      * @param bool           $bubble
      */
-    public function __construct(\AIOSEO\Vendor\Aws\DynamoDb\DynamoDbClient $client, $table, $level = \AIOSEO\Vendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct(DynamoDbClient $client, $table, $level = Logger::DEBUG, $bubble = \true)
     {
-        if (\defined('Aws\\Sdk::VERSION') && \version_compare(\AIOSEO\Vendor\Aws\Sdk::VERSION, '3.0', '>=')) {
+        if (\defined('Aws\\Sdk::VERSION') && \version_compare(Sdk::VERSION, '3.0', '>=')) {
             $this->version = 3;
-            $this->marshaler = new \AIOSEO\Vendor\Aws\DynamoDb\Marshaler();
+            $this->marshaler = new Marshaler();
         } else {
             $this->version = 2;
         }
@@ -86,6 +86,6 @@ class DynamoDbHandler extends \AIOSEO\Vendor\Monolog\Handler\AbstractProcessingH
      */
     protected function getDefaultFormatter()
     {
-        return new \AIOSEO\Vendor\Monolog\Formatter\ScalarFormatter(self::DATE_FORMAT);
+        return new ScalarFormatter(self::DATE_FORMAT);
     }
 }

@@ -26,7 +26,7 @@ class Output {
 		}
 
 		// phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-		$charset       = get_option( 'blog_charset' );
+		$charset       = aioseo()->helpers->getCharset();
 		$excludeImages = aioseo()->sitemap->helpers->excludeImages();
 		$generation    = ! isset( aioseo()->sitemap->isStatic ) || aioseo()->sitemap->isStatic ? __( 'statically', 'all-in-one-seo-pack' ) : __( 'dynamically', 'all-in-one-seo-pack' );
 
@@ -119,7 +119,7 @@ class Output {
 			$safeText
 		);
 
-		if ( ! $wrap || isset( $_GET['aioseo-dev'] ) ) {
+		if ( ! $wrap ) {
 			return print( $safeText ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		printf( '<![CDATA[%1$s]]>', $safeText ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

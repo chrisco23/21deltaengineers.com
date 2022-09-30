@@ -721,6 +721,7 @@ class ET_Core_Portability {
 			$import['data']   = $this->replace_images_urls( $result['images'], $import['data'] );
 			$post_type        = self::$_->array_get( $import, 'post_type', 'post' );
 			$post_title       = self::$_->array_get( $import, 'post_title', '' );
+			$post_status      = self::$_->array_get( $import, 'post_status', 'publish' );
 			$post_meta        = self::$_->array_get( $import, 'post_meta', array() );
 			$post_type_object = get_post_type_object( $post_type );
 
@@ -731,6 +732,7 @@ class ET_Core_Portability {
 			$content = array_values( $import['data'] );
 			$content = $content[0];
 			$args    = array(
+				'post_status'  => $post_status,
 				'post_type'    => $post_type,
 				'post_content' => current_user_can( 'unfiltered_html' ) ? $content : wp_kses_post( $content ),
 			);
@@ -2531,6 +2533,61 @@ class ET_Core_Portability {
 	}
 
 	/**
+	 * Returns Global Colors used for a given theme builder shortcode.
+	 *
+	 * @since ??
+	 *
+	 * @param array $shortcode_object - The multidimensional array representing a page structure.
+	 *
+	 * @return array The list of the Global Colors
+	 */
+	public function get_theme_builder_library_used_global_colors( $shortcode_object ) {
+		return $this->_get_used_global_colors( $shortcode_object );
+	}
+
+	/**
+	 * Returns Global Presets used for a given theme builder shortcode.
+	 *
+	 * @since ??
+	 *
+	 * @param array $shortcode_object - The multidimensional array representing a page structure.
+	 *
+	 * @return array The list of the Global Presets
+	 */
+	public function get_theme_builder_library_used_global_presets( $shortcode_object ) {
+		return $this->get_used_global_presets( $shortcode_object );
+	}
+
+	/**
+	 * Returns images used for a given theme builder shortcode.
+	 *
+	 * @since ??
+	 *
+	 * @param array $data - ID and Post content.
+	 *
+	 * @return array The list of the encoded images
+	 */
+	public function get_theme_builder_library_images( $data ) {
+		$timestamp = $this->get_timestamp();
+		$images    = $this->get_data_images( $data );
+
+		return $this->maybe_paginate_images( $images, 'encode_images', $timestamp );
+	}
+
+	/**
+	 * Returns thumbnails used for a given theme builder shortcode.
+	 *
+	 * @since ??
+	 *
+	 * @param array $data - ID and Post content.
+	 *
+	 * @return array The list of the thumbnails
+	 */
+	public function get_theme_builder_library_thumbnail_images( $data ) {
+		return $this->_get_thumbnail_images( $data );
+	}
+
+	/**
 	 * Enqueue assets.
 	 *
 	 * @since ?.? Script `et-core-portability` now loads in footer along with `et-core-admin`.
@@ -2830,17 +2887,20 @@ if ( ! function_exists( 'et_core_portability_ajax_export' ) ) :
  */
 function et_core_portability_ajax_export() {
 	if ( ! isset( $_POST['context'] ) ) {
-		et_core_die();
+			wp_send_json_error();
+			return;
 	}
 
 	$context = sanitize_text_field( $_POST['context'] );
 
 	if ( ! $capability = et_core_portability_cap( $context ) ) {
-		et_core_die();
+			wp_send_json_error();
+			return;
 	}
 
 	if ( ! et_core_security_check_passed( $capability, 'et_core_portability_export', 'nonce' ) ) {
-		et_core_die();
+			wp_send_json_error();
+			return;
 	}
 
 	et_core_portability_load( $context )->export();
@@ -2915,7 +2975,6 @@ function et_core_portability_cap( $context ) {
 	$capability       = '';
 	$options_contexts = array(
 		'et_pb_roles',
-		'et_builder_layouts',
 		'epanel',
 		'et_divi_mods',
 		'et_extra_mods',
@@ -2923,6 +2982,7 @@ function et_core_portability_cap( $context ) {
 	$post_contexts    = array(
 		'et_builder',
 		'et_theme_builder',
+		'et_builder_layouts',
 	);
 
 	if ( in_array( $context, $options_contexts, true ) ) {

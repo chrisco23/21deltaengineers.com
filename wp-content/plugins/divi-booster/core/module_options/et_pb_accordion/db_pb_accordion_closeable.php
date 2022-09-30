@@ -78,7 +78,7 @@ jQuery(function($){
       var accordion = toggle.closest('.et_pb_accordion');
       if (toggle.hasClass('et_pb_toggle_open')) {
         accordion.addClass('et_pb_accordion_toggling');
-        toggle.find('.et_pb_toggle_content').slideToggle(700, function() { 
+        toggle.find('.et_pb_toggle_content').slideUp(700, function() { 
           toggle.toggleClass('et_pb_toggle_open et_pb_toggle_close'); 
         });
       }

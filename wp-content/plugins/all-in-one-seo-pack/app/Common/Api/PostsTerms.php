@@ -237,7 +237,6 @@ class PostsTerms {
 		$body['twitter_title']       = ! empty( $body['twitter_title'] ) ? sanitize_text_field( $body['twitter_title'] ) : null;
 		$body['twitter_description'] = ! empty( $body['twitter_description'] ) ? sanitize_text_field( $body['twitter_description'] ) : null;
 
-		// @TODO: Refactor this as it's not the best way to look for errors.
 		$error = Models\Post::savePost( $postId, $body );
 
 		if ( ! empty( $error ) ) {

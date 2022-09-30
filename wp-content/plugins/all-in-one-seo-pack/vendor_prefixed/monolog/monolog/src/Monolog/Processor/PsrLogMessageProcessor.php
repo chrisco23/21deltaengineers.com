@@ -18,7 +18,7 @@ use AIOSEO\Vendor\Monolog\Utils;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class PsrLogMessageProcessor implements \AIOSEO\Vendor\Monolog\Processor\ProcessorInterface
+class PsrLogMessageProcessor implements ProcessorInterface
 {
     /**
      * @param  array $record
@@ -34,7 +34,7 @@ class PsrLogMessageProcessor implements \AIOSEO\Vendor\Monolog\Processor\Process
             if (\is_null($val) || \is_scalar($val) || \is_object($val) && \method_exists($val, "__toString")) {
                 $replacements['{' . $key . '}'] = $val;
             } elseif (\is_object($val)) {
-                $replacements['{' . $key . '}'] = '[object ' . \AIOSEO\Vendor\Monolog\Utils::getClass($val) . ']';
+                $replacements['{' . $key . '}'] = '[object ' . Utils::getClass($val) . ']';
             } else {
                 $replacements['{' . $key . '}'] = '[' . \gettype($val) . ']';
             }

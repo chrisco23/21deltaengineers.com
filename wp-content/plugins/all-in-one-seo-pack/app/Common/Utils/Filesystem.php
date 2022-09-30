@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Load our manifest to use throughout the app. TODO: Fill out other methods and docblocks.
+ * Load our manifest to use throughout the app.
  *
  * @since 4.1.9
  */

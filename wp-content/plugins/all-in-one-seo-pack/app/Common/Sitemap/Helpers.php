@@ -188,7 +188,6 @@ class Helpers {
 		$memory    = $this->performance['memory'];
 		$type      = aioseo()->sitemap->type;
 		$indexName = aioseo()->sitemap->indexName;
-		// @TODO: [V4+] Use dedicated logger class once available.
 		error_log( wp_json_encode( "$indexName index of $type sitemap generated in $time seconds using a maximum of $memory mb of memory." ) );
 	}
 
@@ -378,7 +377,7 @@ class Helpers {
 	 */
 	private function excludedObjects( $option ) {
 		$type = aioseo()->sitemap->type;
-		// The RSS Sitemap needs to exclude whatever's excluded in the general sitemap.
+		// The RSS Sitemap needs to exclude whatever is excluded in the general sitemap.
 		if ( 'rss' === $type ) {
 			$type = 'general';
 		}

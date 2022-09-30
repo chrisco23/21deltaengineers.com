@@ -18,6 +18,7 @@ class PluginSettings {
 	 * @return void
 	 */
 	public function remove_plugin_settings() {
+		OptionsAccessManager::delete_option( 'webpc_notice_cloudways' );
 		OptionsAccessManager::delete_option( CloudflareNotice::NOTICE_OPTION );
 		OptionsAccessManager::delete_option( LitespeedNotice::NOTICE_OPTION );
 

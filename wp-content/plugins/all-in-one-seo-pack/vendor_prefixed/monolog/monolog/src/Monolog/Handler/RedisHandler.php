@@ -23,7 +23,7 @@ use AIOSEO\Vendor\Monolog\Logger;
  *
  * @author Thomas Tourlourat <thomas@tourlourat.com>
  */
-class RedisHandler extends \AIOSEO\Vendor\Monolog\Handler\AbstractProcessingHandler
+class RedisHandler extends AbstractProcessingHandler
 {
     private $redisClient;
     private $redisKey;
@@ -35,7 +35,7 @@ class RedisHandler extends \AIOSEO\Vendor\Monolog\Handler\AbstractProcessingHand
      * @param bool                  $bubble  Whether the messages that are handled can bubble up the stack or not
      * @param int                   $capSize Number of entries to limit list size to
      */
-    public function __construct($redis, $key, $level = \AIOSEO\Vendor\Monolog\Logger::DEBUG, $bubble = \true, $capSize = \false)
+    public function __construct($redis, $key, $level = Logger::DEBUG, $bubble = \true, $capSize = \false)
     {
         if (!($redis instanceof \AIOSEO\Vendor\Predis\Client || $redis instanceof \Redis)) {
             throw new \InvalidArgumentException('Predis\\Client or Redis instance required');
@@ -82,6 +82,6 @@ class RedisHandler extends \AIOSEO\Vendor\Monolog\Handler\AbstractProcessingHand
      */
     protected function getDefaultFormatter()
     {
-        return new \AIOSEO\Vendor\Monolog\Formatter\LineFormatter();
+        return new LineFormatter();
     }
 }

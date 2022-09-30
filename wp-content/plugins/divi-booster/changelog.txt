@@ -1,3 +1,21 @@
+= 3.9.7 =
+* Updated accordion closeable code to avoid conflict with manually added code
+
+= 3.9.6 =
+* Fixed top header text setting incorrectly overriding header text background color
+
+= 3.9.5 =
+* Fixed top header styles not loaded by top header text feature
+
+= 3.9.4 =
+* Added option to blog module to show posts for a specific author
+
+= 3.9.3 =
+* Added option to sort gallery images alphabetically
+
+= 3.9.2 =
+* Blog module tags feature now supports custom post types such as projects
+
 = 3.9.1 =
 * Fixed accordion open by default option not working when ID set
 

@@ -118,6 +118,7 @@ class Addons {
 			'addons'  => [],
 			// Translators: 1 - Opening bold tag, 2 - Plugin short name ("AIOSEO"), 3 - "Pro", 4 - Closing bold tag.
 			'message' => sprintf(
+				// Translators: 1 - Opening HTML strong tag, 2 - The short plugin name ("AIOSEO"), 3 - "Pro", 4 - Closing HTML strong tag.
 				__( 'The following addons cannot be used, because they require %1$s%2$s %3$s%4$s to work:', 'all-in-one-seo-pack' ),
 				'<strong>',
 				AIOSEO_PLUGIN_SHORT_NAME,

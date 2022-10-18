@@ -62,7 +62,7 @@ namespace AIOSEO\Plugin {
 		 *
 		 * @since 4.1.4
 		 *
-		 * @var array
+		 * @var DynamicOptions
 		 */
 		public $dynamicOptions = [];
 

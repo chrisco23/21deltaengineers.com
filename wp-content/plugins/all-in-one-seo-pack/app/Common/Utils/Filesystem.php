@@ -46,6 +46,27 @@ class Filesystem {
 	 */
 	public function init( $args = [] ) {
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			require_once( ABSPATH . 'wp-includes/pluggable.php' );
+
+			// Prepare variables.
+			$url = esc_url_raw(
+				add_query_arg(
+					[
+						'page' => 'aioseo-settings',
+					],
+					admin_url( 'admin.php' )
+				)
+			);
+
+			if ( empty( $args ) ) {
+				// Using output buffering to prevent the FTP form from being displayed in the screen.
+				ob_start();
+				$args = request_filesystem_credentials( $url, '', false, false, null );
+				ob_end_clean();
+			}
+		}
+
 		WP_Filesystem( $args );
 
 		global $wp_filesystem;

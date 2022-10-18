@@ -21,6 +21,7 @@ class Updates {
 	 */
 	public function __construct() {
 		add_action( 'aioseo_v4_migrate_post_schema', [ $this, 'migratePostSchema' ] );
+		add_action( 'aioseo_v4_migrate_post_schema_default', [ $this, 'migratePostSchemaDefault' ] );
 
 		if ( wp_doing_ajax() || wp_doing_cron() ) {
 			return;
@@ -173,6 +174,11 @@ class Updates {
 		if ( version_compare( $lastActiveVersion, '4.2.5', '<' ) ) {
 			$this->addSchemaColumn();
 			$this->schedulePostSchemaMigration();
+		}
+
+		if ( version_compare( $lastActiveVersion, '4.2.4.2', '>' ) && version_compare( $lastActiveVersion, '4.2.6', '<' ) ) {
+			// The default graphs only need to be remigrated if the user was on 4.2.5 or 4.2.5.1.
+			$this->schedulePostSchemaDefaultMigration();
 		}
 
 		do_action( 'aioseo_run_updates', $lastActiveVersion );
@@ -1009,9 +1015,60 @@ class Updates {
 	}
 
 	/**
-	 * Helper function for the schema migration/
+	 * Schedules the post schema migration to fix the default graphs.
 	 *
-	 * @since 4.2.5
+	 * @since 4.2.6
+	 *
+	 * @return void
+	 */
+	private function schedulePostSchemaDefaultMigration() {
+		aioseo()->helpers->scheduleSingleAction( 'aioseo_v4_migrate_post_schema_default', 10 );
+
+		if ( ! aioseo()->cache->get( 'v4_migrate_post_schema_default_date' ) ) {
+			aioseo()->cache->update( 'v4_migrate_post_schema_default_date', gmdate( 'Y-m-d H:i:s' ), 3 * MONTH_IN_SECONDS );
+		}
+	}
+
+	/**
+	 * Migrates the post schema to the new JSON column again for posts using the default.
+	 * This is needed to fix an oversight because in 4.2.5 we didn't migrate any properties set to the default graph.
+	 *
+	 * @since 4.2.6
+	 *
+	 * @return void
+	 */
+	public function migratePostSchemaDefault() {
+		$migrationStartDate = aioseo()->cache->get( 'v4_migrate_post_schema_default_date' );
+		if ( ! $migrationStartDate ) {
+			return;
+		}
+
+		$posts = aioseo()->core->db->start( 'aioseo_posts' )
+			->select( '*' )
+			->where( 'schema_type =', 'default' )
+			->whereRaw( "updated < '$migrationStartDate'" )
+			->limit( 40 )
+			->run()
+			->models( 'AIOSEO\\Plugin\\Common\\Models\\Post' );
+
+		if ( empty( $posts ) ) {
+			aioseo()->cache->delete( 'v4_migrate_post_schema_default_date' );
+
+			return;
+		}
+
+		foreach ( $posts as $post ) {
+			$this->migratePostSchemaHelper( $post );
+		}
+
+		// Once done, schedule the next action.
+		aioseo()->helpers->scheduleSingleAction( 'aioseo_v4_migrate_post_schema_default', 30 );
+	}
+
+	/**
+	 * Helper function for the schema migration.
+	 *
+	 * @since  4.2.5
 	 *
 	 * @param  Post $aioseoPost The AIOSEO post object.
 	 * @return Post             The modified AIOSEO post object.
@@ -1019,14 +1076,24 @@ class Updates {
 	public function migratePostSchemaHelper( $aioseoPost ) {
 		$post              = aioseo()->helpers->getPost( $aioseoPost->post_id );
 		$schemaType        = $aioseoPost->schema_type;
-		$schemaTypeOptions = json_decode( $aioseoPost->schema_type_options );
-		$schemaOptions     = json_decode( Models\Post::getDefaultSchemaOptions() );
+		$schemaTypeOptions = json_decode( (string) $aioseoPost->schema_type_options );
+		$schemaOptions     = Models\Post::getDefaultSchemaOptions();
 
 		if ( empty( $schemaTypeOptions ) ) {
 			$aioseoPost->schema = $schemaOptions;
 			$aioseoPost->save();
 
 			return $aioseoPost;
+		}
+
+		// If the post is set to the default schema type, set the default for post type but then also get the properties.
+		$isDefault = 'default' === $schemaType;
+		if ( $isDefault ) {
+			$dynamicOptions = aioseo()->dynamicOptions->noConflict();
+			if ( ! empty( $post->post_type ) && $dynamicOptions->searchAppearance->postTypes->has( $post->post_type ) ) {
+				$schemaOptions->default->graphName = $dynamicOptions->searchAppearance->postTypes->{$post->post_type}->schemaType;
+				$schemaType                        = $dynamicOptions->searchAppearance->postTypes->{$post->post_type}->schemaType;
+			}
 		}
 
 		$graph = [];
@@ -1038,7 +1105,7 @@ class Updates {
 					'graphName'  => 'Article',
 					'label'      => __( 'Article', 'all-in-one-seo-pack' ),
 					'properties' => [
-						'type'        => $schemaTypeOptions->article->articleType,
+						'type'        => ! empty( $schemaTypeOptions->article->articleType ) ? $schemaTypeOptions->article->articleType : 'Article',
 						'name'        => '#post_title',
 						'headline'    => '#post_title',
 						'description' => '#post_excerpt',
@@ -1063,10 +1130,10 @@ class Updates {
 					'graphName'  => 'Course',
 					'label'      => __( 'Course', 'all-in-one-seo-pack' ),
 					'properties' => [
-						'name'        => $schemaTypeOptions->course->name,
-						'description' => $schemaTypeOptions->course->description,
+						'name'        => ! empty( $schemaTypeOptions->course->name ) ? $schemaTypeOptions->course->name : '#post_title',
+						'description' => ! empty( $schemaTypeOptions->course->description ) ? $schemaTypeOptions->course->description : '#post_excerpt',
 						'provider'    => [
-							'name'  => $schemaTypeOptions->course->provider,
+							'name'  => ! empty( $schemaTypeOptions->course->provider ) ? $schemaTypeOptions->course->provider : '',
 							'url'   => '',
 							'image' => ''
 						]
@@ -1081,20 +1148,20 @@ class Updates {
 					'label'      => __( 'Product', 'all-in-one-seo-pack' ),
 					'properties' => [
 						'autogenerate' => true,
-						'name'         => '',
-						'description'  => $schemaTypeOptions->product->description,
-						'brand'        => $schemaTypeOptions->product->brand,
+						'name'         => '#post_title',
+						'description'  => ! empty( $schemaTypeOptions->product->description ) ? $schemaTypeOptions->product->description : '#post_excerpt',
+						'brand'        => ! empty( $schemaTypeOptions->product->brand ) ? $schemaTypeOptions->product->brand : '',
 						'image'        => '',
 						'identifiers'  => [
-							'sku'  => $schemaTypeOptions->product->sku,
+							'sku'  => ! empty( $schemaTypeOptions->product->sku ) ? $schemaTypeOptions->product->sku : '',
 							'gtin' => '',
 							'mpn'  => ''
 						],
 						'offer'        => [
-							'price'        => $schemaTypeOptions->product->price,
-							'currency'     => $schemaTypeOptions->product->currency,
-							'availability' => $schemaTypeOptions->product->availability,
-							'validUntil'   => $schemaTypeOptions->product->priceValidUntil
+							'price'        => ! empty( $schemaTypeOptions->product->price ) ? $schemaTypeOptions->product->price : '',
+							'currency'     => ! empty( $schemaTypeOptions->product->currency ) ? $schemaTypeOptions->product->currency : '',
+							'availability' => ! empty( $schemaTypeOptions->product->availability ) ? $schemaTypeOptions->product->availability : '',
+							'validUntil'   => ! empty( $schemaTypeOptions->product->priceValidUntil ) ? $schemaTypeOptions->product->priceValidUntil : ''
 						],
 						'rating'       => [
 							'minimum' => 1,
@@ -1104,16 +1171,16 @@ class Updates {
 					]
 				];
 
-				$identifierType = $schemaTypeOptions->product->identifierType;
+				$identifierType = ! empty( $schemaTypeOptions->product->identifierType ) ? $schemaTypeOptions->product->identifierType : '';
 				if ( preg_match( '/gtin/i', $identifierType ) ) {
-					$graph['properties']['identifiers']['gtin'] = $schemaTypeOptions->product->identifier;
+					$graph['properties']['identifiers']['gtin'] = $identifierType;
 				}
 
 				if ( preg_match( '/mpn/i', $identifierType ) ) {
-					$graph['properties']['identifiers']['mpn'] = $schemaTypeOptions->product->identifier;
+					$graph['properties']['identifiers']['mpn'] = $identifierType;
 				}
 
-				$reviews = $schemaTypeOptions->product->reviews;
+				$reviews = ! empty( $schemaTypeOptions->product->reviews ) ? $schemaTypeOptions->product->reviews : [];
 				if ( ! empty( $reviews ) ) {
 					foreach ( $reviews as $reviewData ) {
 						$reviewData = json_decode( $reviewData );
@@ -1137,27 +1204,27 @@ class Updates {
 					'graphName'  => 'Recipe',
 					'label'      => __( 'Recipe', 'all-in-one-seo-pack' ),
 					'properties' => [
-						'name'         => $schemaTypeOptions->recipe->name,
-						'description'  => $schemaTypeOptions->recipe->description,
-						'author'       => $schemaTypeOptions->recipe->author,
-						'ingredients'  => $schemaTypeOptions->recipe->ingredients,
-						'dishType'     => $schemaTypeOptions->recipe->dishType,
-						'cuisineType'  => $schemaTypeOptions->recipe->cuisineType,
-						'keywords'     => $schemaTypeOptions->recipe->keywords,
-						'image'        => $schemaTypeOptions->recipe->image,
+						'name'         => ! empty( $schemaTypeOptions->recipe->name ) ? $schemaTypeOptions->recipe->name : '#post_title',
+						'description'  => ! empty( $schemaTypeOptions->recipe->description ) ? $schemaTypeOptions->recipe->description : '#post_excerpt',
+						'author'       => ! empty( $schemaTypeOptions->recipe->author ) ? $schemaTypeOptions->recipe->author : '#author_name',
+						'ingredients'  => ! empty( $schemaTypeOptions->recipe->ingredients ) ? $schemaTypeOptions->recipe->ingredients : '',
+						'dishType'     => ! empty( $schemaTypeOptions->recipe->dishType ) ? $schemaTypeOptions->recipe->dishType : '',
+						'cuisineType'  => ! empty( $schemaTypeOptions->recipe->cuisineType ) ? $schemaTypeOptions->recipe->cuisineType : '',
+						'keywords'     => ! empty( $schemaTypeOptions->recipe->keywords ) ? $schemaTypeOptions->recipe->keywords : '',
+						'image'        => ! empty( $schemaTypeOptions->recipe->image ) ? $schemaTypeOptions->recipe->image : '',
 						'nutrition'    => [
-							'servings' => $schemaTypeOptions->recipe->servings,
-							'calories' => $schemaTypeOptions->recipe->calories
+							'servings' => ! empty( $schemaTypeOptions->recipe->servings ) ? $schemaTypeOptions->recipe->servings : '',
+							'calories' => ! empty( $schemaTypeOptions->recipe->calories ) ? $schemaTypeOptions->recipe->calories : ''
 						],
 						'timeRequired' => [
-							'preparation' => $schemaTypeOptions->recipe->preparationTime,
-							'cooking'     => $schemaTypeOptions->recipe->cookingTime
+							'preparation' => ! empty( $schemaTypeOptions->recipe->preparationTime ) ? $schemaTypeOptions->recipe->preparationTime : '',
+							'cooking'     => ! empty( $schemaTypeOptions->recipe->cookingTime ) ? $schemaTypeOptions->recipe->cookingTime : ''
 						],
 						'instructions' => []
 					]
 				];
 
-				$instructions = $schemaTypeOptions->recipe->instructions;
+				$instructions = ! empty( $schemaTypeOptions->recipe->instructions ) ? $schemaTypeOptions->recipe->instructions : [];
 				if ( ! empty( $instructions ) ) {
 					foreach ( $instructions as $instructionData ) {
 						$instructionData = json_decode( $instructionData );
@@ -1180,12 +1247,12 @@ class Updates {
 					'graphName'  => 'SoftwareApplication',
 					'label'      => __( 'Software', 'all-in-one-seo-pack' ),
 					'properties' => [
-						'name'            => $schemaTypeOptions->software->name,
-						'description'     => '',
-						'price'           => $schemaTypeOptions->software->price,
-						'currency'        => $schemaTypeOptions->software->currency,
-						'operatingSystem' => $schemaTypeOptions->software->operatingSystems,
-						'category'        => $schemaTypeOptions->software->category,
+						'name'            => ! empty( $schemaTypeOptions->software->name ) ? $schemaTypeOptions->software->name : '#post_title',
+						'description'     => '#post_excerpt',
+						'price'           => ! empty( $schemaTypeOptions->software->price ) ? $schemaTypeOptions->software->price : '',
+						'currency'        => ! empty( $schemaTypeOptions->software->currency ) ? $schemaTypeOptions->software->currency : '',
+						'operatingSystem' => ! empty( $schemaTypeOptions->software->operatingSystems ) ? $schemaTypeOptions->software->operatingSystems : '',
+						'category'        => ! empty( $schemaTypeOptions->software->category ) ? $schemaTypeOptions->software->category : '',
 						'rating'          => [
 							'value'   => '',
 							'minimum' => 1,
@@ -1199,7 +1266,7 @@ class Updates {
 					]
 				];
 
-				$reviews = $schemaTypeOptions->software->reviews;
+				$reviews = ! empty( $schemaTypeOptions->software->reviews ) ? $schemaTypeOptions->software->reviews : [];
 				if ( ! empty( $reviews[0] ) ) {
 					$reviewData = json_decode( $reviews[0] );
 					if ( empty( $reviewData ) ) {
@@ -1259,7 +1326,7 @@ class Updates {
 				break;
 			case 'default':
 				$dynamicOptions = aioseo()->dynamicOptions->noConflict();
-				if ( $dynamicOptions->searchAppearance->postTypes->has( $post->post_type ) ) {
+				if ( ! empty( $post->post_type ) && $dynamicOptions->searchAppearance->postTypes->has( $post->post_type ) ) {
 					$schemaOptions->defaultGraph = $dynamicOptions->searchAppearance->postTypes->{$post->post_type}->schemaType;
 				}
 				break;
@@ -1270,7 +1337,11 @@ class Updates {
 		}
 
 		if ( ! empty( $graph ) ) {
-			$schemaOptions->graphs[] = $graph;
+			if ( $isDefault ) {
+				$schemaOptions->default->data->{$schemaType} = $graph;
+			} else {
+				$schemaOptions->graphs[] = $graph;
+			}
 		}
 
 		$aioseoPost->schema = $schemaOptions;

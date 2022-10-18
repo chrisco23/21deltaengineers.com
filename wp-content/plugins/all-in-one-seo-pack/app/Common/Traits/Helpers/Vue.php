@@ -238,8 +238,8 @@ trait Vue {
 				'twitter_title'                  => $post->twitter_title,
 				'twitter_description'            => $post->twitter_description,
 				'schema'                         => ( ! empty( $post->schema ) )
-					? json_decode( Models\Post::getDefaultSchemaOptions( $post->schema ) )
-					: json_decode( Models\Post::getDefaultSchemaOptions() ),
+					? Models\Post::getDefaultSchemaOptions( $post->schema )
+					: Models\Post::getDefaultSchemaOptions(),
 				'metaDefaults'                   => [
 					'title'       => aioseo()->meta->title->getPostTypeTitle( $postTypeObj->name ),
 					'description' => aioseo()->meta->description->getPostTypeDescription( $postTypeObj->name )

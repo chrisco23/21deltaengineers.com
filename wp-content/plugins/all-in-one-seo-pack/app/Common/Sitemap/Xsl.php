@@ -24,7 +24,7 @@ class Xsl {
 
 		$charset     = aioseo()->helpers->getCharset();
 		$sitemapUrl  = wp_get_referer();
-		$sitemapPath = wp_parse_url( $sitemapUrl, PHP_URL_PATH );
+		$sitemapPath = aioseo()->helpers->getPermalinkPath( $sitemapUrl );
 		$sitemapName = strtoupper( pathinfo( $sitemapPath, PATHINFO_EXTENSION ) );
 
 		// Get Sitemap info by URL.

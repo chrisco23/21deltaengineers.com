@@ -73,9 +73,11 @@ trait WpMultisite {
 	 * @param  int         $offset     The offset to start at.
 	 * @param  null|string $searchTerm The search term to look for.
 	 * @param  null|string $filter     A filter to look up sites by.
+	 * @param  null|string $orderBy    The column to order results by. Defaults to null.
+	 * @param  string      $orderDir   The direction to order results by. Defaults to 'DESC'.
 	 * @return array                   An array of sites.
 	 */
-	public function getSites( $limit = 'all', $offset = 0, $searchTerm = null, $filter = 'all' ) {
+	public function getSites( $limit = 'all', $offset = 0, $searchTerm = null, $filter = 'all', $orderBy = null, $orderDir = 'DESC' ) {
 		$countSites = wp_count_sites();
 		$sites      = get_sites( [
 			'network_id' => get_current_network_id(),
@@ -130,6 +132,19 @@ trait WpMultisite {
 					unset( $allSites[ $key ] );
 				}
 			}
+		}
+
+		// Ordering the sites.
+		if ( ! empty( $orderBy ) ) {
+			usort( $allSites, function( $site1, $site2 ) use ( $orderBy, $orderDir ) {
+				if ( empty( $site1->{ $orderBy } ) ) {
+					return 0;
+				}
+
+				return 'ASC' === strtoupper( $orderDir )
+					? ( $site1->{ $orderBy } > $site2->{ $orderBy } ? 1 : 0 )
+					: ( $site1->{ $orderBy } < $site2->{ $orderBy } ? 1 : 0 );
+			} );
 		}
 
 		return [

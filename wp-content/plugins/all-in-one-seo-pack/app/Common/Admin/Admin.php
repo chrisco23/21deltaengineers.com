@@ -78,6 +78,8 @@ class Admin {
 	 * @since 4.0.0
 	 */
 	public function __construct() {
+		new SeoAnalysis;
+
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		if (
 			is_network_admin() &&
@@ -810,6 +812,7 @@ class Admin {
 			// We don't want any plugin adding notices to our screens. Let's clear them out here.
 			remove_all_actions( 'admin_notices' );
 			remove_all_actions( 'all_admin_notices' );
+			remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 
 			$this->currentPage = $page;
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueueAssets' ], 11 );

@@ -30,7 +30,9 @@ class NewsArticle extends Article {
 		$data['@id']      = ! empty( $graphData->id ) ? aioseo()->schema->context['url'] . $graphData->id : aioseo()->schema->context['url'] . '#newsarticle';
 		// Translators: 1 - The date the article was published on.
 		$data['dateline'] = ! empty( $graphData->properties->datePublished )
+			// Translators: 1 - A data (e.g. September 2, 2022).
 			? sprintf( __( 'Published on %1$s.', 'all-in-one-seo-pack' ), mysql2date( 'F j, Y', $graphData->properties->datePublished, false ) )
+			// Translators: 1 - A data (e.g. September 2, 2022).
 			: sprintf( __( 'Published on %1$s.', 'all-in-one-seo-pack' ), get_the_date( 'F j, Y' ) );
 
 		return $data;

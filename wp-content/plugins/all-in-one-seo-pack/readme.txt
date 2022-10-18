@@ -3,7 +3,7 @@ Contributors: aioseo, smub, benjaminprojas
 Tags: SEO, Google Search Console, XML Sitemap, meta description, schema, meta title, rich snippets, woocommerce seo, local seo, open graph, google news sitemap, video sitemap, robots.txt, seo audit, content analysis, seo plugin, redirection
 Requires at least: 4.9
 Tested up to: 6.0.2
-Stable tag: 4.2.5.1
+Stable tag: 4.2.6.1
 License: GPLv2 or later
 Requires PHP: 5.6
 
@@ -68,13 +68,13 @@ This helps you easily measure your SEO results and progress.
 
 = Smart XML Sitemaps and Rich Snippets (SEO Schema Markup) =
 
-Proper website SEO markup plays an important role in improving SEO rankings. That's why smart SEO experts use AIOSEO for on-page SEO optimization.
+Proper website SEO markup plays an important role in improving SEO rankings. That's why smart SEO experts use AIOSEO for on-page SEO optimization. An XML sitemap is a list of all the content on your website. The sitemap helps search engine bots to easily see all the content on your site in one place, The XML sitemap file is hidden from your human visitors, however search engines like Google can see it. Without an XML sitemap, some of your web pages may never be included in Google search results, and won't get any traffic. XML Sitemaps also help you tell Google which pages you DON'T want included in search results.
 
 Aside from the comprehensive WordPress XML sitemap feature, we also offer News SEO sitemap and Video SEO sitemap to help you improve your website's SEO ranking and get more traffic.
 
 AIOSEO comes with built-in smart SEO schema markup feature to help you get more traffic through SEO rich snippets, Google featured snippets, breadcrumb site links in SEO, and image SEO search results.
 
-We also include an easy to use Schema Generator to output tons of custom schema for events, job postings, recipes, how-tos, software applications, products and so much more!
+We also include an easy to use Next-Gen Schema Generator to output tons of custom schema for events, job postings, recipes, how-tos, software applications, products and so much more!
 
 > The best SEO plugin. All in One SEO is the best SEO Plugin. I personally find it better than Yoast. This plugin offers so much freedom in configuration.<br>
 > hanapupu
@@ -143,6 +143,7 @@ Since redirect speed is important for SEO, we built in both Apache / NGINX serve
 * Microsoft Clarity Integration - Better understand how users interact with your website through heatmaps and session recordings.
 * WordPress REST API Integration - Manage your post and term SEO meta via the WordPress REST API for seamless integration with headless WordPress installations.
 * Crawl Quota Management - Use our Crawl Cleanup feature to manage your search engine crawl quota and index your important content faster.
+* Slack-style Emoji Picker - Include Emoji ❤️ in your meta titles and descriptions to stand out in search results and increase your rankings. 🎉🚀
 
 = WordPress SEO Integrations =
 
@@ -222,6 +223,45 @@ Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeg
 
 
 == Changelog ==
+
+**New in Version 4.2.6.1**
+
+* Fixed: PHP error sometimes thrown when accessing admin in multisite installations.
+
+**New in Version 4.2.6**
+
+* New: 🎉 Emoji Picker - Choose from a multitude of curated emojis to add to the title, meta description and other fields! 🎉
+* New: Redirects and Link Assistant tables now allow you to select how many items you want to display per page.
+* Updated: SEO Analysis cache for the static homepage after updating the page, allowing for more accurate results.
+* Updated: Added support to Product schema for Merchant Listings and EDD variable products.
+* Updated: Product schema now automatically pulls the GTIN from the WooCommerce UPC, EAN and ISBN plugin.
+* Updated: Schema Generator UI improvements to improve the UX when adding multiple items like Product Reviews, Book Editions or FAQ Questions.
+* Updated: Redirect Slug Monitor notices no longer appear in the dashboard.
+* Updated: HTML Sitemap dedicated page field now only allows internal URLs to be entered.
+* Updated: Image SEO now also strips words from the filename if the word boundary is a number or underscore.
+* Updated: Facebook's and Twitter's image upload now have size descriptions to help choosing an image.
+* Updated: SEO Analysis for internal/external links now explicitly mentions internal links.
+* Updated: Smart Tags now have an icon to help remove the tag and a documentation link.
+* Updated: Optimized the Local SEO search query for better performance.
+* Updated: Removed deprecated SEO Analysis for keywords in title.
+* Updated: Access Control descriptions for Editor, SEO Manager and SEO Editor roles have been updated to better reflect their access to our addon plugins.
+* Fixed: AIOSEO no longer outputs a duplicate canonical URL on AMP pages in some cases.
+* Fixed: New posts no longer have an "Auto Draft" post title.
+* Fixed: Tooltips no longer clip at the viewport or parent element in our modals.
+* Fixed: Person graph for the author sometimes not output for posts with Article schema or author pages.
+* Fixed: Default schema  properties are now correctly migrated to the Schema Generator for posts that use the default.
+* Fixed: Link title no longer bleeds over when editing one link and then another in the Block Editor.
+* Fixed: PHP warning when installing addons on sites using the WP VIP Filesystem class.
+* Fixed: FAQ Schema no longer outputs duplicate schema when using the FAQ schema from the Schema Generator in conjunction with FAQ blocks in the content.
+* Fixed: Sitemap stylesheets for sites installed in subdirectories.
+* Fixed: Removing the default schema graph inside a post no longer makes the Schema Generator fall back to the global default schema, allowing it to be blank.
+* Fixed: Automatically generated description no longer include the URLs from oEmbedded videos.
+* Fixed: Smart tags can now be removed on mobile devices.
+* Fixed: Image SEO compatibility with the Divi Builder plugin.
+* Fixed: Redirect test now shows the correct message when the test passes or fails.
+* Fixed: Admin notices can no longer accidentally display on the frontend of the site.
+* Fixed: After adding a new redirect the defaults for the next redirect will reflect the defaults from the Redirect settings.
+* Fixed: Redirects imported from "301 Redirects" plugin now have the correct target URL when the target is a page ID.
 
 **New in Version 4.2.5.1**
 
@@ -1083,6 +1123,6 @@ As part of your SEO strategy, an XML sitemap can help you to improve your domain
 
 == Upgrade Notice ==
 
-= 4.2.5.1 =
+= 4.2.6.1 =
 
 This update adds major improvements and bugfixes.

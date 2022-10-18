@@ -167,6 +167,11 @@ class Schema {
 		$schema['@graph'] = apply_filters( 'aioseo_schema_output', $schema['@graph'] );
 		$schema['@graph'] = $this->helpers->cleanAndParseData( $schema['@graph'] );
 
+		// Sort the graphs alphabetically.
+		usort( $schema['@graph'], function ( $a, $b ) {
+			return strcmp( $a['@type'], $b['@type'] );
+		} );
+
 		return isset( $_GET['aioseo-dev'] )
 			? wp_json_encode( $schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE )
 			: wp_json_encode( $schema );
@@ -224,20 +229,7 @@ class Schema {
 		}
 
 		if ( is_singular() ) {
-			// Check if we're on a BuddyPress member page.
-			if ( function_exists( 'bp_is_user' ) && bp_is_user() ) {
-				$this->graphs[] = 'ProfilePage';
-			}
-
-			// If the current request is for the validator, we can't include the default graph here.
-			// We need to include the default graph that the validator sent.
-			if ( ! $isValidator ) {
-				$this->graphs[] = $this->getDefaultPostGraph();
-			}
-
-			$this->context = $contextInstance->post();
-
-			return;
+			$this->determineContextSingular( $contextInstance, $isValidator );
 		}
 
 		if ( is_category() || is_tag() || is_tax() ) {
@@ -280,13 +272,49 @@ class Schema {
 	}
 
 	/**
-	 * Returns the default graph for the current post.
+	 * Determines the smart graphs and context for singular pages.
+	 *
+	 * @since 4.2.6
+	 *
+	 * @param  Context $contextInstance The Context class instance.
+	 * @param  bool    $isValidator     Whether we're getting the output for the validator.
+	 * @return void
+	 */
+	protected function determineContextSingular( $contextInstance, $isValidator ) {
+		// Check if we're on a BuddyPress member page.
+		if ( function_exists( 'bp_is_user' ) && bp_is_user() ) {
+			$this->graphs[] = 'ProfilePage';
+		}
+
+		// If the current request is for the validator, we can't include the default graph here.
+		// We need to include the default graph that the validator sent.
+		// Don't do this if we're in Pro since we then need to get it from the post meta.
+		if ( ! $isValidator ) {
+			$this->graphs[] = $this->getDefaultPostGraph();
+		}
+
+		$this->context = $contextInstance->post();
+	}
+
+	/**
+	 * Returns the default graph for the post type.
+	 *
+	 * @since 4.2.6
+	 *
+	 * @return string The default graph.
+	 */
+	protected function getDefaultPostGraph() {
+		return $this->getDefaultPostTypeGraph();
+	}
+
+	/**
+	 * Returns the default graph for the current post type.
 	 *
 	 * @since 4.2.5
 	 *
 	 * @return string The default graph.
 	 */
-	public function getDefaultPostGraph() {
+	public function getDefaultPostTypeGraph() {
 		$post = aioseo()->helpers->getPost();
 		if ( ! is_a( $post, 'WP_Post' ) ) {
 			return '';

@@ -33,7 +33,7 @@ class Article extends Graphs\Graph {
 			'@id'              => ! empty( $graphData->id ) ? aioseo()->schema->context['url'] . $graphData->id : aioseo()->schema->context['url'] . '#article',
 			'name'             => ! empty( $graphData->properties->name ) ? $graphData->properties->name : aioseo()->schema->context['name'],
 			'headline'         => ! empty( $graphData->properties->headline ) ? $graphData->properties->headline : get_the_title(),
-			'description'      => ! empty( $graphData->properties->description ) ? $graphData->properties->description : aioseo()->schema->context['description'],
+			'description'      => ! empty( $graphData->properties->description ) ? $graphData->properties->description : '',
 			'author'           => [
 				'@type' => 'Person',
 				'name'  => ! empty( $graphData->properties->author->name ) ? $graphData->properties->author->name : get_the_author_meta( 'display_name' ),

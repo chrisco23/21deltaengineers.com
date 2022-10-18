@@ -3,7 +3,7 @@ Contributors: ninjateam
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
 Tested up to: 6.0.2
-Stable tag: 5.0.6
+Stable tag: 5.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -191,6 +191,15 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Oct 10, 2022 – Version 5.0.8 =
+- Improved: Review notice (display after 3 days when activated the first time)
+- Added: Hook for not create folder when uploading
+- Added: Open folder tree view for CPT UI plugin
+- Fixed: Small CSS
+
+= Sep 16, 2022 – Version 5.0.7 =
+- Updated: New algorithm 
 
 = Sep 12, 2022 – Version 5.0.6 =
 - Fixed: SVG Icon in Safari

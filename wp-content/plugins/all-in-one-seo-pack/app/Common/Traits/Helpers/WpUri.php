@@ -84,13 +84,15 @@ trait WpUri {
 	 * @return string $url The canonical URL.
 	 */
 	public function canonicalUrl() {
-		static $canonicalUrl = '';
-		if ( $canonicalUrl ) {
-			return $canonicalUrl;
+		static $url = null;
+		if ( null !== $url ) {
+			return apply_filters( 'aioseo_canonical_url', $url );
 		}
 
 		if ( is_404() || is_search() ) {
-			return apply_filters( 'aioseo_canonical_url', '' );
+			$url = apply_filters( 'aioseo_canonical_url', '' );
+
+			return $url;
 		}
 
 		$metaData = [];
@@ -104,7 +106,9 @@ trait WpUri {
 		}
 
 		if ( $metaData && ! empty( $metaData->canonical_url ) ) {
-			return apply_filters( 'aioseo_canonical_url', $this->makeUrlAbsolute( $metaData->canonical_url ) );
+			$url = apply_filters( 'aioseo_canonical_url', $this->makeUrlAbsolute( $metaData->canonical_url ) );
+
+			return $url;
 		}
 
 		$url                      = $this->getUrl( true );
@@ -136,7 +140,9 @@ trait WpUri {
 			$url = preg_replace( '/\/amp\/$/', '/', $url );
 		}
 
-		return apply_filters( 'aioseo_canonical_url', $url );
+		$url = apply_filters( 'aioseo_canonical_url', $url );
+
+		return $url;
 	}
 
 	/**
@@ -229,32 +235,6 @@ trait WpUri {
 		$info = wp_get_upload_dir();
 
 		return isset( $info['baseurl'] ) ? $info['baseurl'] : '';
-	}
-
-	/**
-	 * Checks whether the given path is unique or not.
-	 *
-	 * @since 4.1.4
-	 *
-	 * @param  string  $path The path.
-	 * @return boolean       Whether the path exists.
-	 */
-	public function pathExists( $path ) {
-		$url = $this->isUrl( $path )
-			? $path
-			: trailingslashit( home_url() ) . trim( $path, '/' );
-
-		$status = wp_remote_retrieve_response_code( wp_remote_get( $url ) );
-		if ( ! $status ) {
-			// If there is no status code, we might be in a local environment with CURL misconfigured.
-			// In that case we can still check if a post exists for the path by quering the DB.
-			// TODO: Add support for terms here.
-			$post = $this->getPostbyPath( $path, OBJECT, $this->getPublicPostTypes( true ) );
-
-			return is_object( $post );
-		}
-
-		return 200 === $status;
 	}
 
 	/**
@@ -382,7 +362,7 @@ trait WpUri {
 
 	/**
 	 * Returns the path from a permalink.
-	 * This function will help get the correct path from WP instalations in subfolders.
+	 * This function will help get the correct path from WP installations in subfolders.
 	 *
 	 * @since 4.1.8
 	 *
@@ -424,5 +404,22 @@ trait WpUri {
 		$path = wp_parse_url( get_home_url(), PHP_URL_PATH );
 
 		return $path ? trailingslashit( $path ) : '/';
+	}
+
+	/**
+	 * Checks if the given URL is an internal URL for the current site.
+	 *
+	 * @since 4.2.6
+	 *
+	 * @param  string $urlToCheck The URL to check.
+	 * @return bool               Whether the given URL is an internal one.
+	 */
+	public function isInternalUrl( $urlToCheck ) {
+		$parsedHomeUrl    = wp_parse_url( home_url() );
+		$parsedUrlToCheck = wp_parse_url( $urlToCheck );
+
+		return ! empty( $parsedHomeUrl['host'] ) && ! empty( $parsedUrlToCheck['host'] )
+			? $parsedHomeUrl['host'] === $parsedUrlToCheck['host']
+			: false;
 	}
 }

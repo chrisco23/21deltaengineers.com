@@ -61,7 +61,6 @@ abstract class Filters {
 		add_action( 'dp_duplicate_page', [ $this, 'duplicatePost' ], 10, 2 );
 		add_action( 'woocommerce_product_duplicate_before_save', [ $this, 'scheduleDuplicateProduct' ], 10, 2 );
 
-		add_action( 'admin_init', [ $this, 'removeEmojiScript' ] );
 		add_action( 'init', [ $this, 'resetUserBBPress' ], -1 );
 
 		// Bypass the JWT Auth plugin's unnecessary restrictions. https://wordpress.org/plugins/jwt-auth/
@@ -238,19 +237,6 @@ abstract class Filters {
 		}
 
 		return $actions;
-	}
-
-	/**
-	 * Prevents the Classic Editor from enqueuing a script that breaks emoji in our metabox.
-	 *
-	 * @since 4.1.1
-	 *
-	 * @return void
-	 */
-	public function removeEmojiScript() {
-		if ( apply_filters( 'aioseo_classic_editor_disable_emoji_script', false ) ) {
-			remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
-		}
 	}
 
 	/**

@@ -323,6 +323,11 @@ class Notices {
 	 * @return void
 	 */
 	public function notices() {
+		// Double check we're actually in the admin before outputting anything.
+		if ( ! is_admin() ) {
+			return;
+		}
+
 		$this->review->maybeShowNotice();
 		$this->migration->maybeShowNotice();
 		$this->import->maybeShowNotice();

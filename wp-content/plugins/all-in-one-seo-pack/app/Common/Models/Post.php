@@ -131,6 +131,10 @@ class Post extends Model {
 
 		$post->twitter_use_og = aioseo()->options->social->twitter->general->useOgData;
 
+		if ( property_exists( $post, 'schema' ) && null === $post->schema ) {
+			$post->schema = self::getDefaultSchemaOptions();
+		}
+
 		return $post;
 	}
 
@@ -184,8 +188,16 @@ class Post extends Model {
 	 * @return Post       The modified Post object.
 	 */
 	private static function runDynamicSchemaMigration( $post ) {
+		if ( ! property_exists( $post, 'schema' ) ) {
+			return $post;
+		}
+
 		if ( null === $post->schema ) {
 			$post = aioseo()->updates->migratePostSchemaHelper( $post );
+		}
+
+		if ( ! property_exists( $post->schema, 'default' ) ) {
+			$post->schema = self::getDefaultSchemaOptions( $post->schema );
 		}
 
 		return $post;
@@ -343,8 +355,8 @@ class Post extends Model {
 		$thePost->twitter_image_custom_fields = ! empty( $data['twitter_image_custom_fields'] ) ? sanitize_text_field( $data['twitter_image_custom_fields'] ) : null;
 		// Schema
 		$thePost->schema                      = ! empty( $data['schema'] )
-			? self::getDefaultSchemaOptions( $data['schema'] )
-			: self::getDefaultSchemaOptions();
+			? wp_json_encode( self::getDefaultSchemaOptions( $data['schema'] ) )
+			: wp_json_encode( self::getDefaultSchemaOptions() );
 		$thePost->local_seo                   = ! empty( $data['local_seo'] ) ? wp_json_encode( $data['local_seo'] ) : null;
 		$thePost->limit_modified_date         = isset( $data['limit_modified_date'] ) ? rest_sanitize_boolean( $data['limit_modified_date'] ) : 0;
 		$thePost->updated                     = gmdate( 'Y-m-d H:i:s' );
@@ -496,37 +508,48 @@ class Post extends Model {
 	 * @return string                  The existing options with defaults added in JSON.
 	 */
 	public static function getDefaultSchemaOptions( $existingOptions = '' ) {
-		$defaultGraph = aioseo()->schema->getDefaultPostGraph();
+		$defaultGraphName = aioseo()->schema->getDefaultPostTypeGraph();
 
 		$defaults = [
-			'blockGraphs'          => [],
-			'customGraphs'         => [],
-			'defaultGraph'         => $defaultGraph,
-			'defaultPostTypeGraph' => $defaultGraph, // This prop is immutable and can be used to restore the default graph in case user removed it before.
-			'graphs'               => []
+			'blockGraphs'  => [],
+			'customGraphs' => [],
+			'default'      => [
+				'data'      => [
+					'Article'             => [],
+					'Course'              => [],
+					'Dataset'             => [],
+					'Movie'               => [],
+					'Person'              => [],
+					'Product'             => [],
+					'Recipe'              => [],
+					'Service'             => [],
+					'SoftwareApplication' => [],
+					'WebPage'             => []
+				],
+				'graphName' => $defaultGraphName,
+				'isEnabled' => true,
+			],
+			'graphs'       => []
 		];
 
 		if ( empty( $existingOptions ) ) {
-			return wp_json_encode( $defaults );
+			return json_decode( wp_json_encode( $defaults ) );
 		}
 
-		$existingOptions = array_replace_recursive( $defaults, (array) $existingOptions );
+		$existingOptions = json_decode( wp_json_encode( $existingOptions ), true );
+		$existingOptions = array_replace_recursive( $defaults, $existingOptions );
 
-		// Check if the default schema type changed.
-		if (
-			! empty( $existingOptions['defaultGraph'] ) &&
-			'none' !== $existingOptions['defaultGraph'] &&
-			$defaultGraph !== $existingOptions['defaultGraph']
-		) {
-			$existingOptions['defaultGraph'] = $defaultGraph;
+		if ( isset( $existingOptions['defaultGraph'] ) && ! empty( $existingOptions['defaultPostTypeGraph'] ) ) {
+			$existingOptions['default']['isEnabled'] = ! empty( $existingOptions['defaultGraph'] );
+
+			unset( $existingOptions['defaultGraph'] );
+			unset( $existingOptions['defaultPostTypeGraph'] );
 		}
 
-		// If the default post type graph is empty for whatever reason, reset it.
-		if ( empty( $existingOptions['defaultPostTypeGraph'] ) ) {
-			$existingOptions['defaultPostTypeGraph'] = $defaultGraph;
-		}
+		// Reset the default graph type to make sure it's accurate.
+		$existingOptions['default']['graphName'] = $defaultGraphName;
 
-		return wp_json_encode( $existingOptions );
+		return json_decode( wp_json_encode( $existingOptions ) );
 	}
 
 	/**
@@ -538,7 +561,7 @@ class Post extends Model {
 	 * @return array              The defaults.
 	 */
 	public static function getKeyphrasesDefaults( $keyphrases = '' ) {
-		$keyphrases = json_decode( $keyphrases );
+		$keyphrases = json_decode( (string) $keyphrases );
 		$defaults   = [
 			'focus'      => [
 				'keyphrase' => '',

@@ -75,10 +75,10 @@ class WpNotices {
 	 * @return array Notices array
 	 */
 	public function apiGetNotices() {
-		$notices = $this->getNotices();
+		$notices = $this->getNoticesInContext();
 
 		// Notices show only one time.
-		$this->clearNotices();
+		$this->removeNotices( $notices );
 
 		return $notices;
 	}
@@ -96,6 +96,55 @@ class WpNotices {
 		}
 
 		return ! empty( $this->notices ) ? $this->notices : [];
+	}
+
+	/**
+	 * Get all notices in the current context.
+	 *
+	 * @since 4.2.6
+	 *
+	 * @return array Notices array
+	 */
+	public function getNoticesInContext() {
+		$contextNotices = $this->getNotices();
+		foreach ( $contextNotices as $key => $notice ) {
+			if ( empty( $notice['allowedContexts'] ) ) {
+				continue;
+			}
+
+			$allowed = false;
+			foreach ( $notice['allowedContexts'] as $allowedContext ) {
+				if ( $this->isAllowedContext( $allowedContext ) ) {
+					$allowed = true;
+					break;
+				}
+			}
+
+			if ( ! $allowed ) {
+				unset( $contextNotices[ $key ] );
+			}
+		}
+
+		return $contextNotices;
+	}
+
+	/**
+	 * Test if we are in the current context.
+	 *
+	 * @since 4.2.6
+	 *
+	 * @param  string $context The context to test. (posts)
+	 * @return bool            Is the required context.
+	 */
+	private function isAllowedContext( $context ) {
+		switch ( $context ) {
+			case 'posts':
+				return aioseo()->helpers->isScreenPostList() ||
+						aioseo()->helpers->isScreenPostEdit() ||
+						aioseo()->helpers->isAjaxCronRestRequest();
+		}
+
+		return false;
 	}
 
 	/**
@@ -138,7 +187,22 @@ class WpNotices {
 	 */
 	public function clearNotices() {
 		$this->notices = [];
-		aioseo()->core->cache->delete( $this->cacheKey );
+		$this->updateCache();
+	}
+
+	/**
+	 * Remove certain notices.
+	 *
+	 * @since 4.2.6
+	 *
+	 * @param  array $notices A list of notices to remove.
+	 * @return void
+	 */
+	public function removeNotices( $notices ) {
+		foreach ( array_keys( $notices ) as $noticeKey ) {
+			unset( $this->notices[ $noticeKey ] );
+		}
+		$this->updateCache();
 	}
 
 	/**
@@ -146,12 +210,13 @@ class WpNotices {
 	 *
 	 * @since 4.2.3
 	 *
-	 * @param  string $message The message.
-	 * @param  string $status  The message status [success, info, warning, error]
-	 * @param  array  $options Options for the message. https://developer.wordpress.org/block-editor/reference-guides/data/data-core-notices/#createnotice
+	 * @param  string $message         The message.
+	 * @param  string $status          The message status [success, info, warning, error]
+	 * @param  array  $options         Options for the message. https://developer.wordpress.org/block-editor/reference-guides/data/data-core-notices/#createnotice
+	 * @param  array  $allowedContexts The contexts where this notice will show.
 	 * @return void
 	 */
-	public function addNotice( $message, $status = 'warning', $options = [] ) {
+	public function addNotice( $message, $status = 'warning', $options = [], $allowedContexts = [] ) {
 		$type = ! empty( $options['type'] ) ? $options['type'] : '';
 		$foundNotice = $this->getNotice( $message, $type );
 		if ( empty( $message ) || ! empty( $foundNotice ) ) {
@@ -159,16 +224,17 @@ class WpNotices {
 		}
 
 		$notice = [
-			'message' => $message,
-			'status'  => $status,
-			'options' => wp_parse_args( $options, [
+			'message'         => $message,
+			'status'          => $status,
+			'options'         => wp_parse_args( $options, [
 				'id'            => $this->getNoticeId( $message, $type ),
 				'isDismissible' => true
-			] )
+			] ),
+			'allowedContexts' => $allowedContexts
 		];
 
 		$this->notices[] = $notice;
-		aioseo()->core->cache->update( $this->cacheKey, $this->notices );
+		$this->updateCache();
 	}
 
 	/**
@@ -179,8 +245,14 @@ class WpNotices {
 	 * @return void
 	 */
 	public function adminNotices() {
-		$notices = $this->getNotices();
-		foreach ( $notices as $notice ) {// Hide snackbar notices on classic editor.
+		// Double check we're actually in the admin before outputting anything.
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$notices = $this->getNoticesInContext();
+		foreach ( $notices as $notice ) {
+			// Hide snackbar notices on classic editor.
 			if ( ! empty( $notice['options']['type'] ) && 'snackbar' === $notice['options']['type'] ) {
 				continue;
 			}
@@ -217,6 +289,17 @@ class WpNotices {
 		}
 
 		// Notices show only one time.
-		$this->clearNotices();
+		$this->removeNotices( $notices );
+	}
+
+	/**
+	 * Helper to update the cache with the current notices array.
+	 *
+	 * @since 4.2.6
+	 *
+	 * @return void
+	 */
+	private function updateCache() {
+		aioseo()->core->cache->update( $this->cacheKey, $this->notices );
 	}
 }

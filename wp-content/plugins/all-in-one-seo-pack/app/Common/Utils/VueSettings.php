@@ -131,7 +131,14 @@ class VueSettings {
 			'seoAuditChecklist' => 'all-items'
 		],
 		'tablePagination' => [
-			'networkDomains' => 20
+			'networkDomains'             => 20,
+			'redirects'                  => 20,
+			'redirectLogs'               => 20,
+			'redirect404Logs'            => 20,
+			'sitemapAdditionalPages'     => 20,
+			'linkAssistantLinksReport'   => 20,
+			'linkAssistantPostsReport'   => 20,
+			'linkAssistantDomainsReport' => 20
 		]
 	];
 

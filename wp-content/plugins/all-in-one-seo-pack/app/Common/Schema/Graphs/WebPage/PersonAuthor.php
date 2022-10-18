@@ -23,12 +23,17 @@ class PersonAuthor extends Graphs\Graph {
 	 * @return array $data The graph data.
 	 */
 	public function get() {
-		$post = aioseo()->helpers->getPost();
-		if ( ! $post ) {
+		$post         = aioseo()->helpers->getPost();
+		$user         = get_queried_object();
+		$isAuthorPage = is_author() && is_a( $user, 'WP_User' );
+		if (
+			( is_singular() && ! $post ) &&
+			! $isAuthorPage
+		) {
 			return [];
 		}
 
-		$userId = $post->post_author;
+		$userId = $isAuthorPage ? $user->ID : $post->post_author;
 		if ( function_exists( 'bp_is_user' ) && bp_is_user() ) {
 			$userId = intval( wp_get_current_user()->ID );
 		}
@@ -37,7 +42,7 @@ class PersonAuthor extends Graphs\Graph {
 			return [];
 		}
 
-		$authorUrl = get_author_posts_url( $post->post_author );
+		$authorUrl = get_author_posts_url( $userId );
 
 		$data = [
 			'@type' => 'Person',

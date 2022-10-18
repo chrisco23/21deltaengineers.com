@@ -131,7 +131,7 @@ class SlugMonitor {
 			unset( $action['target'] );
 		}
 
-		aioseo()->wpNotices->addNotice( $message, 'warning', [ 'actions' => [ $action ] ] );
+		aioseo()->wpNotices->addNotice( $message, 'warning', [ 'actions' => [ $action ] ], [ 'posts' ] );
 	}
 
 	/**
@@ -151,6 +151,11 @@ class SlugMonitor {
 
 		// Don't do anything if we're not published.
 		if ( 'publish' !== $post->post_status || 'publish' !== $postBefore->post_status ) {
+			return false;
+		}
+
+		// Don't do anything is the post type is not public.
+		if ( ! is_post_type_viewable( $post->post_type ) ) {
 			return false;
 		}
 

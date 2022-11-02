@@ -6,6 +6,14 @@ add_action('wp_head.css', 'db116_add_top_header_text_css');
 add_filter('divibooster_setting_116-add-text-to-top-header_topheadertext', 'db116_do_shortcodes_in_top_header_text');
 
 add_filter('dbdb-load-secondary-nav-assets', '__return_true');
+add_filter('body_class', 'db116_top_header_enabled_body_class');
+
+function db116_top_header_enabled_body_class($classes) {
+    if (is_array($classes)) {
+        $classes[] = 'et_secondary_nav_enabled';
+    }
+    return $classes;
+}
 
 function db116_add_top_header_text($html) {
 

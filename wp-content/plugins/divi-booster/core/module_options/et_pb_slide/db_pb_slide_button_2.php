@@ -21,6 +21,7 @@ function db_pb_slide_button_2_content_content($content, $args) {
 	
 	$button_2_text = empty($args['button_text_2'])?'':$args['button_text_2'];
 	$button_2_url = empty($args['button_link_2'])?'':$args['button_link_2'];
+    $button_2_text = str_replace('$', '&#36;', $button_2_text);
 	
 	if (!empty($args['button_text_2'])) {
 		
@@ -29,18 +30,16 @@ function db_pb_slide_button_2_content_content($content, $args) {
 			'selector'    => '%%order_class%%.db_second_more_button .et_pb_more_button',
 			'declaration' => 'margin-left: 15px; margin-right: 15px;'
 		));
-		
 		// Add button - old Divi markup
 		$content = preg_replace(
 			'#(<a href=".*?" class="(et_pb_more_button[^"]+et_pb_button[^"]*)"([^>]*)>.*?</a>)#', 
 			'\\1<a href="'.esc_attr($button_2_url).'" class="\\2 db_pb_button_2"\\3>'.esc_html($button_2_text).'</a>', 
 			$content); 
-			
 		// Add button - new Divi markup	
 		$content = preg_replace(
 			'#(<a class="(et_pb_button[^"]+et_pb_more_button[^"]*)" href=".*?"([^>]*)>.*?</a>)#', 
 			'\\1<a class="\\2 db_pb_button_2" href="'.esc_attr($button_2_url).'"\\3>'.esc_html($button_2_text).'</a>',
-			$content); 		
+			$content); 
 	}
 	
 	return $content;

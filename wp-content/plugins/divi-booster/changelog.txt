@@ -1,3 +1,10 @@
+= 4.0.1 =
+* Fixed top header styles not loaded by top header text feature in latest Divi
+* Fixed dollar values not showing in slider second button text
+
+= 4.0.0 =
+* Improved error handling in blog module tags and post title tags features
+
 = 3.9.9 =
 * Added option to set custom redirect URL in login module
 

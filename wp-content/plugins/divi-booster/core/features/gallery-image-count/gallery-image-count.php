@@ -1,12 +1,13 @@
 <?php
 namespace DiviBooster\DiviBooster;
 
-if (function_exists('add_filter')) {
-    add_filter('et_pb_all_fields_unprocessed_et_pb_gallery', __NAMESPACE__.'\\add_gallery_image_count_field');
-
+if (function_exists('add_filter') && function_exists('add_action')) {
+    \add_filter('et_pb_all_fields_unprocessed_et_pb_gallery', __NAMESPACE__.'\\add_gallery_image_count_field');
+    \add_filter('et_pb_gallery_advanced_fields', __NAMESPACE__.'\\add_advanced_fields', 10, 3);
+    \add_filter('et_module_shortcode_output', __NAMESPACE__.'\\add_gallery_image_count', 10, 3);
+    \add_action('wp_footer', __NAMESPACE__.'\\update_gallery_image_count');
 }
 
-add_filter('et_pb_gallery_advanced_fields', __NAMESPACE__.'\\add_advanced_fields', 10, 3);
 
 function add_advanced_fields($fields, $slug, $main_css_element) {
     if (!is_array($fields) || !isset($fields['fonts'])) { return $fields; }
@@ -45,7 +46,6 @@ function add_gallery_image_count_field($fields) {
     );
 }
 
-add_filter('et_module_shortcode_output', __NAMESPACE__.'\\add_gallery_image_count', 10, 3);
 
 function add_gallery_image_count($output, $render_slug, $module) {
     if (!is_string($output)) { return $output; }
@@ -60,7 +60,6 @@ function add_gallery_image_count($output, $render_slug, $module) {
 	return $output;
 }
 
-add_action('wp_footer', __NAMESPACE__.'\\update_gallery_image_count');
 
 function update_gallery_image_count() { ?>
 <script>

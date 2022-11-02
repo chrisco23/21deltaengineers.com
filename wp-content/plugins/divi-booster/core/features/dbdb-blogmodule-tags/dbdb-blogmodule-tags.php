@@ -2,6 +2,8 @@
 
 namespace DiviBooster\DiviBooster;
 
+use WP_Error;
+
 if (function_exists('add_filter')) {
     add_filter('init', array(new BlogModuleTagsFeature, 'init'));
 }
@@ -40,9 +42,8 @@ class BlogModuleTagsFeature {
 
         // get the term list for the post_type
         $tags = get_the_term_list($id, $post_type . '_tag', '', ', ', '');
+        if (is_wp_error($tags)) { return $html; }
 
-
-        //$tags = get_the_tag_list('', ', ', '', $id);
         if (empty($tags)) { return $html; }
         $tags = '<span class="dbdb-post-tags">'.$tags.'</span>';
         if (strpos($html, '<p class="post-meta">') !== false) {

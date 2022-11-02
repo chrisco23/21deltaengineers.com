@@ -4,13 +4,13 @@ Plugin Name: Divi Booster
 Plugin URI: 
 Description: Bug fixes and enhancements for Elegant Themes' Divi Theme.
 Author: Dan Mossop
-Version: 3.9.9
+Version: 4.0.1
 Requires PHP: 5.3
 Author URI: https://divibooster.com
 */	
 
 if (!defined('BOOSTER_VERSION')) {
-    define('BOOSTER_VERSION', '3.9.9');
+    define('BOOSTER_VERSION', '4.0.1');
 }
 
 if (!function_exists('dbdb_file')) {

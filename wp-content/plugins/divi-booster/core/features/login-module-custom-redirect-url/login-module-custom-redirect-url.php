@@ -2,7 +2,8 @@
 namespace DiviBooster\DiviBooster;
 
 if (function_exists('add_filter')) {
-    add_filter('et_pb_all_fields_unprocessed_et_pb_login', __NAMESPACE__.'\\add_login_custom_redirect_field');
+    \add_filter('et_pb_all_fields_unprocessed_et_pb_login', __NAMESPACE__.'\\add_login_custom_redirect_field');
+    \add_filter('et_module_shortcode_output', __NAMESPACE__.'\\add_custom_redirect_url', 10, 3);
 
 }
 
@@ -23,7 +24,6 @@ function add_login_custom_redirect_field($fields) {
     );
 }
 
-add_filter('et_module_shortcode_output', __NAMESPACE__.'\\add_custom_redirect_url', 10, 3);
 
 function add_custom_redirect_url($output, $render_slug, $module) {
 

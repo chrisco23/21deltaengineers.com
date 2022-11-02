@@ -81,7 +81,7 @@ if (!function_exists('dbdb_posttitle_add_tags_to_meta')) {
 		if (is_array($match) && isset($match[1]) && isset($match[2]) && isset($match[3])) {
 			$taxonomy = (get_post_type() === 'project')?'project_tag':'post_tag';
 			$tags = get_the_term_list(get_the_id(), $taxonomy, '', ' ', '');
-			if ($tags) {
+			if ($tags && !is_wp_error($tags)) {
 				return $match[1].$match[2].'<span class="dbdb_posttitle_tags_separator"> | </span><span class="dbdb_posttitle_tags">'.$tags.'</span>'.$match[3];
 			}
 		}

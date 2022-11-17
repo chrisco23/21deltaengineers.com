@@ -41,8 +41,8 @@ class ComposerStaticInite77ac517040d77040f555799a318ee7f
         ),
         'voku\\' => 
         array (
-            0 => __DIR__ . '/..' . '/voku/portable-utf8/src/voku',
-            1 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
+            0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
+            1 => __DIR__ . '/..' . '/voku/portable-utf8/src/voku',
         ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (
@@ -78,6 +78,7 @@ class ComposerStaticInite77ac517040d77040f555799a318ee7f
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+        'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',

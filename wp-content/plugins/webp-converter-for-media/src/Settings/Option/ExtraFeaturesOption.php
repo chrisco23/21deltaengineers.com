@@ -14,6 +14,7 @@ class ExtraFeaturesOption extends OptionAbstract {
 	const OPTION_VALUE_KEEP_METADATA = 'keep_metadata';
 	const OPTION_VALUE_CRON_ENABLED  = 'cron_enabled';
 	const OPTION_VALUE_DEBUG_ENABLED = 'debug_enabled';
+	const OPTION_VALUE_SERVICE_MODE  = 'service_mode';
 
 	/**
 	 * {@inheritdoc}
@@ -71,6 +72,10 @@ class ExtraFeaturesOption extends OptionAbstract {
 			),
 			self::OPTION_VALUE_DEBUG_ENABLED => __(
 				'Log errors while converting to debug.log file (when debugging in WordPress is active)',
+				'webp-converter-for-media'
+			),
+			self::OPTION_VALUE_SERVICE_MODE  => __(
+				'Enable the service mode (only upon request from technical support of plugin)',
 				'webp-converter-for-media'
 			),
 		];

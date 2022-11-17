@@ -58,7 +58,7 @@ class Folder extends Controller {
 		$this->userSettings = UserSettings::getInstance();
 
 		// MailPoet plugin support
-		SizeMeta::getInstance();
+		SizeMeta::getInstance()->doHooks();
 		new Exclude();
 		new Api();
 		new FolderUser();
@@ -175,6 +175,15 @@ class Folder extends Controller {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'ajaxSetFolder' ),
+				'permission_callback' => array( $this, 'resPermissionsCheck' ),
+			)
+		);
+		register_rest_route(
+			NJFB_REST_URL,
+			'generate-attachment-size',
+			array(
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => array( SizeMeta::getInstance(), 'apiCallback' ),
 				'permission_callback' => array( $this, 'resPermissionsCheck' ),
 			)
 		);
@@ -340,7 +349,14 @@ class Folder extends Controller {
 		}
 
 		// $isFolderUserEnabled = has_filter('fbv_in_not_in_created_by');
+		$sizeMeta    = SizeMeta::getInstance()->meta_key;
 		$fbvPropery = $query->get( 'fbv' );
+
+		if ( $query->get( 'orderby' ) === $sizeMeta ) {
+			$clauses['join']   .= " LEFT JOIN {$wpdb->postmeta} AS fbmt ON ({$wpdb->posts}.ID = fbmt.post_id AND fbmt.meta_key = '{$sizeMeta}') ";
+			$clauses['orderby'] = " fbmt.meta_value + 0 {$query->query['order']} ";
+		}
+
 		if ( isset( $_GET['fbv'] ) || $fbvPropery !== '' ) {
 			$fbv = isset( $_GET['fbv'] ) ? (int) sanitize_text_field( $_GET['fbv'] ) : (int) $fbvPropery;
 

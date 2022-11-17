@@ -15,6 +15,8 @@ class SkipExcludedPaths implements HookableInterface {
 		'.git',
 		'.svn',
 		'node_modules',
+		'wpmc-trash',
+		'__MACOSX',
 	];
 
 	/**

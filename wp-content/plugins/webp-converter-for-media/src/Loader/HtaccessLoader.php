@@ -3,6 +3,7 @@
 namespace WebpConverter\Loader;
 
 use WebpConverter\Service\PathsGenerator;
+use WebpConverter\Settings\Option\ExtraFeaturesOption;
 use WebpConverter\Settings\Option\LoaderTypeOption;
 use WebpConverter\Settings\Option\SupportedExtensionsOption;
 
@@ -174,7 +175,9 @@ class HtaccessLoader extends LoaderAbstract {
 
 			foreach ( $settings[ SupportedExtensionsOption::OPTION_NAME ] as $ext ) {
 				$content .= "  RewriteCond %{HTTP_ACCEPT} ${mime_type}" . PHP_EOL;
-				$content .= "  RewriteCond %{REQUEST_FILENAME} -f" . PHP_EOL;
+				if ( in_array( ExtraFeaturesOption::OPTION_VALUE_ONLY_SMALLER, $settings[ ExtraFeaturesOption::OPTION_NAME ] ) ) {
+					$content .= "  RewriteCond %{REQUEST_FILENAME} -f" . PHP_EOL;
+				}
 				if ( strpos( $document_root, '%{DOCUMENT_ROOT}' ) !== false ) {
 					$content .= "  RewriteCond ${document_root}${output_path}/$1.${ext}.${format} -f" . PHP_EOL;
 				} else {

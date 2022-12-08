@@ -507,11 +507,19 @@ function et_theme_builder_get_template( $template_id ) {
  * @return void
  */
 function et_theme_builder_trash_draft_and_unused_posts() {
-	$mark_meta_key = '_et_theme_builder_marked_as_unused';
-	$live_id       = et_theme_builder_get_theme_builder_post_id( true, false );
-	$draft_id      = et_theme_builder_get_theme_builder_post_id( false, false );
+	$mark_meta_key  = '_et_theme_builder_marked_as_unused';
+	$live_id        = et_theme_builder_get_theme_builder_post_id( true, false );
+	$draft_id       = et_theme_builder_get_theme_builder_post_id( false, false );
+	$post_types     = array(
+		ET_THEME_BUILDER_TEMPLATE_POST_TYPE,
+		ET_THEME_BUILDER_THEME_BUILDER_POST_TYPE,
+		ET_THEME_BUILDER_HEADER_LAYOUT_POST_TYPE,
+		ET_THEME_BUILDER_BODY_LAYOUT_POST_TYPE,
+		ET_THEME_BUILDER_FOOTER_LAYOUT_POST_TYPE,
+	);
+	$has_permission = current_user_can( 'delete_post', $draft_id ) && in_array( get_post_type( $draft_id ), $post_types, true );
 
-	if ( $draft_id > 0 ) {
+	if ( $draft_id > 0 && $has_permission ) {
 		wp_trash_post( $draft_id );
 	}
 
@@ -536,12 +544,7 @@ function et_theme_builder_trash_draft_and_unused_posts() {
 	// Mark unreferenced layouts for trashing.
 	$posts_to_mark = new WP_Query(
 		array(
-			'post_type'              => array(
-				ET_THEME_BUILDER_TEMPLATE_POST_TYPE,
-				ET_THEME_BUILDER_HEADER_LAYOUT_POST_TYPE,
-				ET_THEME_BUILDER_BODY_LAYOUT_POST_TYPE,
-				ET_THEME_BUILDER_FOOTER_LAYOUT_POST_TYPE,
-			),
+			'post_type'              => $post_types,
 			'post__not_in'           => $used_posts,
 			'posts_per_page'         => -1,
 			'fields'                 => 'ids',
@@ -567,12 +570,7 @@ function et_theme_builder_trash_draft_and_unused_posts() {
 	// Any leftover posts will be cleaned up eventually whenever this is called again.
 	$posts_to_trash = new WP_Query(
 		array(
-			'post_type'              => array(
-				ET_THEME_BUILDER_TEMPLATE_POST_TYPE,
-				ET_THEME_BUILDER_HEADER_LAYOUT_POST_TYPE,
-				ET_THEME_BUILDER_BODY_LAYOUT_POST_TYPE,
-				ET_THEME_BUILDER_FOOTER_LAYOUT_POST_TYPE,
-			),
+			'post_type'              => $post_types,
 			'posts_per_page'         => 50,
 			'fields'                 => 'ids',
 			'meta_query'             => array(
@@ -590,7 +588,11 @@ function et_theme_builder_trash_draft_and_unused_posts() {
 	);
 
 	foreach ( $posts_to_trash->posts as $post_id ) {
-		wp_trash_post( $post_id );
+		$has_permission = current_user_can( 'delete_post', $post_id ) && in_array( get_post_type( $post_id ), $post_types, true );
+
+		if ( $has_permission ) {
+			wp_trash_post( $post_id );
+		}
 	}
 }
 
@@ -1378,6 +1380,10 @@ function et_theme_builder_layout_has_post_content( $layout ) {
  * @return (integer|false) Return false on failure.
  */
 function et_theme_builder_store_template( $theme_builder_id, $template, $allow_default ) {
+	if ( ! current_user_can( 'edit_others_posts' ) ) {
+		wp_die();
+	}
+
 	$_                   = et_();
 	$raw_post_id         = $_->array_get( $template, 'id', 0 );
 	$post_id             = is_numeric( $raw_post_id ) ? (int) $raw_post_id : 0;
@@ -1533,6 +1539,10 @@ function et_theme_builder_sanitize_template( $template ) {
  * @return integer|WP_Error
  */
 function et_theme_builder_insert_layout( $options ) {
+	if ( ! current_user_can( 'edit_others_posts' ) ) {
+		wp_die();
+	}
+
 	$post_id = wp_insert_post(
 		array_merge(
 			array(
@@ -1803,6 +1813,10 @@ add_action( 'et_save_post', 'et_theme_builder_clear_wp_post_cache' );
  * @param array $template Theme Builder Template.
  */
 function et_theme_builder_update_layout_title( $template ) {
+	if ( ! current_user_can( 'edit_others_posts' ) ) {
+		wp_die();
+	}
+
 	if ( empty( $template['layouts'] ) ) {
 		return;
 	}

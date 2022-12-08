@@ -299,7 +299,7 @@ function et_theme_builder_api_reset() {
 
 	$live_id = et_theme_builder_get_theme_builder_post_id( true, false );
 
-	if ( $live_id > 0 ) {
+	if ( $live_id > 0 && current_user_can( 'delete_others_posts' ) ) {
 		wp_trash_post( $live_id );
 		// Reset cache when theme builder is reset.
 		ET_Core_PageResource::remove_static_resources( 'all', 'all', true );
@@ -519,6 +519,10 @@ add_action( 'wp_ajax_et_theme_builder_api_export_theme_builder_download', 'et_th
  * @param string              $temp_group  Temporary Group.
  */
 function et_theme_builder_api_import_theme_builder_save_layout( $portability, $template_id, $layout_id, $layout, $temp_id, $temp_group ) {
+	if ( ! current_user_can( 'edit_others_posts' ) ) {
+		wp_send_json_error();
+	}
+
 	if ( ! empty( $layout['images'] ) ) {
 		// Split up images into individual temporary files
 		// to avoid hitting the memory limit.
@@ -561,6 +565,10 @@ function et_theme_builder_api_import_theme_builder_save_layout( $portability, $t
  * @return array
  */
 function et_theme_builder_api_import_theme_builder_load_layout( $portability, $temp_id, $temp_group ) {
+	if ( ! current_user_can( 'edit_others_posts' ) ) {
+		wp_send_json_error();
+	}
+
 	$import = $portability->get_temp_file_contents( $temp_id, $temp_group );
 	$import = ! empty( $import ) ? json_decode( $import, true ) : array();
 	$images = et_()->array_get( $import, array( 'data', 'images' ), array() );
@@ -574,6 +582,10 @@ function et_theme_builder_api_import_theme_builder_load_layout( $portability, $t
 }
 
 function et_theme_builder_api_import_theme_builder() {
+	if ( ! current_user_can( 'edit_others_posts' ) ) {
+		wp_send_json_error();
+	}
+
 	$i18n = array_merge(
 		require ET_BUILDER_DIR . 'frontend-builder/i18n/generic.php',
 		require ET_BUILDER_DIR . 'frontend-builder/i18n/portability.php',
@@ -999,6 +1011,7 @@ add_action( 'wp_ajax_et_theme_builder_api_save_preset_to_library', 'et_theme_bui
  */
 function et_theme_builder_api_get_terms() {
 	et_builder_security_check( 'theme_builder', 'edit_others_posts', 'et_theme_builder_api_get_terms', 'nonce' );
+
 	$_   = et_();
 	$tax = sanitize_text_field( $_->array_get( $_POST, 'tax', '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in `et_builder_security_check`.
 
@@ -1119,12 +1132,16 @@ function et_theme_builder_trash_theme_builder() {
 
 	$used_posts = array_map( 'intval', $used_posts );
 	foreach ( $used_posts as $used_post ) {
-		wp_trash_post( $used_post );
+		if ( current_user_can( 'delete_others_posts' ) ) {
+			wp_trash_post( $used_post );
+		}
 	}
 
 	// Delete local library item.
 	if ( $cloud_item_id ) {
-		wp_delete_post( $item_id );
+		if ( current_user_can( 'delete_others_posts' ) ) {
+			wp_delete_post( $item_id );
+		}
 	}
 }
 
@@ -1134,7 +1151,11 @@ add_action( 'wp_ajax_et_theme_builder_trash_theme_builder', 'et_theme_builder_tr
  * AJAX action: Gets items data for the theme builder's library UI.
  */
 function et_theme_builder_library_get_items_data() {
-	et_core_security_check( 'edit_posts', 'et_theme_builder_library_get_items_data', 'nonce' );
+	if ( ! et_pb_is_allowed( 'theme_builder' ) ) {
+		wp_send_json_error();
+	}
+
+	et_builder_security_check( 'theme_builder', 'edit_others_posts', 'et_theme_builder_library_get_items_data', 'nonce' );
 
 	$item_type = isset( $_POST['et_item_type'] ) ? (string) sanitize_text_field( $_POST['et_item_type'] ) : 'template';
 
@@ -1154,7 +1175,8 @@ add_action( 'wp_ajax_et_theme_builder_library_get_items_data', 'et_theme_builder
  * AJAX action: Add/Remove/Rename Library terms for taxonomies.
  */
 function et_theme_builder_library_update_terms() {
-	et_core_security_check( 'edit_posts', 'et_theme_builder_library_update_terms', 'nonce' );
+	et_builder_security_check( 'theme_builder', 'manage_categories', 'et_theme_builder_library_update_terms', 'nonce' );
+
 	$payload = isset( $_POST['payload'] ) ? (array) $_POST['payload'] : array(); // phpcs:ignore ET.Sniffs.ValidatedSanitizedInput -- $_POST['payload'] is an array, it's value sanitization is done at the time of accessing value.
 
 	$et_library_taxonomy = isset( $_POST['et_library_taxonomy'] ) ? (string) $_POST['et_library_taxonomy'] : ''; // phpcs:ignore ET.Sniffs.ValidatedSanitizedInput -- $_POST['et_library_taxonomy'] is a string, it's value sanitization is done at the time of accessing value.
@@ -1174,7 +1196,12 @@ add_action( 'wp_ajax_et_theme_builder_library_update_terms', 'et_theme_builder_l
  * AJAX action: Update the theme builder library item.
  */
 function et_theme_builder_library_update_item() {
-	et_core_security_check( 'edit_posts', 'et_theme_builder_library_update_item', 'nonce' );
+	if ( ! et_pb_is_allowed( 'theme_builder' ) ) {
+		wp_send_json_error();
+	}
+
+	et_builder_security_check( 'theme_builder', 'edit_others_posts', 'et_theme_builder_library_update_item', 'nonce' );
+
 	$payload = isset( $_POST['payload'] ) ? (array) $_POST['payload'] : array(); // phpcs:ignore ET.Sniffs.ValidatedSanitizedInput -- $_POST['payload'] is an array, it's value sanitization is done  at the time of accessing value.
 
 	if ( empty( $payload ) ) {
@@ -1270,7 +1297,7 @@ add_action( 'wp_ajax_et_theme_builder_library_save_temp_layout', 'et_theme_build
  * AJAX action: Remove the theme builder library temporary item.
  */
 function et_theme_builder_library_remove_temp_layout() {
-	et_core_security_check( 'edit_posts', 'et_theme_builder_library_remove_temp_layout', 'nonce' );
+	et_builder_security_check( 'theme_builder', 'edit_others_posts', 'et_theme_builder_library_remove_temp_layout', 'nonce' );
 
 	$payload = isset( $_POST['payload'] ) ? (array) $_POST['payload'] : array(); // phpcs:ignore ET.Sniffs.ValidatedSanitizedInput -- $_POST['payload'] is an array, it's value sanitization is done  at the time of accessing value.
 
@@ -1287,7 +1314,7 @@ add_action( 'wp_ajax_et_theme_builder_library_remove_temp_layout', 'et_theme_bui
  * AJAX action: Gets an item by ID.
  */
 function et_theme_builder_library_get_item() {
-	et_core_security_check( 'edit_posts', 'et_theme_builder_library_get_item', 'nonce' );
+	et_builder_security_check( 'theme_builder', 'edit_others_posts', 'et_theme_builder_library_get_item', 'nonce' );
 
 	$id        = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
 	$item_type = isset( $_POST['itemType'] ) ? (string) sanitize_text_field( $_POST['itemType'] ) : 'template';
@@ -1362,7 +1389,7 @@ add_action( 'wp_ajax_et_theme_builder_library_get_item', 'et_theme_builder_libra
  * AJAX action: Get the theme builder library preset items.
  */
 function et_theme_builder_library_get_set_items() {
-	et_core_security_check( 'edit_posts', 'et_theme_builder_library_get_set_items', 'nonce' );
+	et_builder_security_check( 'theme_builder', 'edit_others_posts', 'et_theme_builder_library_get_set_items', 'nonce' );
 
 	$item_id = isset( $_POST['itemId'] ) ? intval( $_POST['itemId'] ) : 0;
 
@@ -1402,13 +1429,19 @@ add_action( 'wp_ajax_et_theme_builder_get_preset_default_template_id', 'et_theme
 function et_theme_builder_library_toggle_cloud_status() {
 	et_builder_security_check( 'theme_builder', 'edit_others_posts', 'et_theme_builder_library_toggle_cloud_status', 'nonce' );
 
-	$item_id = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in `et_builder_security_check`.
+	$post_id = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in `et_builder_security_check`.
 
-	if ( ! $item_id ) {
+	if ( ! $post_id ) {
 		wp_send_json_error( 'Error: ID is required.' );
 	}
 
-	wp_send_json_success( wp_delete_post( $item_id, true ) );
+	$post_type = get_post_type( $post_id );
+
+	if ( ! current_user_can( 'edit_post', $post_id ) || ET_TB_ITEM_POST_TYPE !== $post_type ) {
+		wp_send_json_error( 'You do not have permission.' );
+	}
+
+	wp_send_json_success( wp_delete_post( $post_id, true ) );
 }
 
 add_action( 'wp_ajax_et_theme_builder_library_toggle_cloud_status', 'et_theme_builder_library_toggle_cloud_status' );
@@ -1431,8 +1464,12 @@ function et_theme_builder_library_clear_temp_data() {
 
 	$draft_query = new WP_Query( $args );
 
-	foreach ( $draft_query->posts as $draft_post ) {
-		wp_delete_post( $draft_post );
+	foreach ( $draft_query->posts as $draft_post_id ) {
+		$post_type = get_post_type( $draft_post_id );
+
+		if ( current_user_can( 'edit_post', $draft_post_id ) && ET_TB_ITEM_POST_TYPE === $post_type ) {
+			wp_delete_post( $draft_post_id );
+		}
 	}
 
 	wp_send_json_success();

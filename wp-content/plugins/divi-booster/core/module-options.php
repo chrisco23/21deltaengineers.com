@@ -43,9 +43,7 @@ add_filter('db_filter_et_pb_layout', 'dbmo_wrap_global_module_shortcodes');
 
 // Remove excess <p> tags which get added around slides
 add_filter('the_content', 'dbmo_unautop_slides', 12);
-function dbmo_unautop_slides($content) {
-	return preg_replace('%<p>\s*(<div class="et_pb_slide .*?</div> <!-- .et_pb_slide -->\s*)</p>%s', '\\1', $content);
-}
+
 
 // === Load the module options ===
 $MODULE_OPTIONS_DIR = dbdb_path('core/module_options/');

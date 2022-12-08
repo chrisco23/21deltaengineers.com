@@ -1,3 +1,19 @@
+= 4.0.5 =
+* Fixed default mobile width feature not applying to some post sections
+
+= 4.0.4 =
+* Fixed second slide button missing padding when slide image border set
+* Improved alignment of second slide button when slide has image
+
+= 4.0.3 =
+* Added option to set custom blog module tag separator
+* Fixed jQuery error in top header text when SiteGround Optimizer active
+* Fixed slider module hidden in some cases due to added p tags
+
+= 4.0.2 =
+* Added design options for second slide button
+* Fixed shortcodes not updating in top header text
+
 = 4.0.1 =
 * Fixed top header styles not loaded by top header text feature in latest Divi
 * Fixed dollar values not showing in slider second button text

@@ -9,12 +9,12 @@ class GalleryOrderFeature {
 
     public function init() {
         add_filter('dbdb_et_pb_module_shortcode_attributes', array($this, 'db_sort_gallery_ids'), 10, 3);
-        add_filter('et_pb_all_fields_unprocessed_et_pb_gallery', array($this, 'add_fields'));
-        add_action('wp_ajax_et_pb_process_computed_property', array($this, 'apply_to_vb_preview'), 9);
+        add_filter('dbdb_gallery_fields', array($this, 'add_fields'));
+        add_action('dbdb_preprocess_computed_property', array($this, 'apply_to_vb_preview'));
     }
     
     public function apply_to_vb_preview() {
-        if (empty($_POST['module_type']) || $_POST['module_type'] !== 'et_pb_gallery') { return; }
+        if (empty($_POST['module_type']) || !dbdb_is_gallery_module_slug($_POST['module_type'])) { return; }
         if (empty($_POST['depends_on']['gallery_ids'])) { return; }
         if (empty($_POST['depends_on']['gallery_orderby'])) { return; }
         if ($_POST['depends_on']['gallery_orderby'] === 'dbdb_reverse') {
@@ -57,8 +57,8 @@ class GalleryOrderFeature {
     }
     
     public function db_sort_gallery_ids($props, $attrs, $render_slug) {
-        if (isset($_GET['et_fb'])) { return $props; }
-        if ($render_slug !== 'et_pb_gallery') { return $props; }
+        if (dbdb_is_vb()) { return $props; }
+        if (!dbdb_is_gallery_module_slug($render_slug)) { return $props; }
         if (empty($props['gallery_orderby']) || empty($props['gallery_ids'])) { return $props; }
         $gallery_ids_arr = explode(',', $props['gallery_ids']);
         if ($props['gallery_orderby'] === 'dbdb_reverse') {  

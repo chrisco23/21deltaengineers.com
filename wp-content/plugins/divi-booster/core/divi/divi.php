@@ -1,5 +1,23 @@
 <?php // Divi / theme functions
 
+function dbdb_is_vb() {
+    return isset($_GET['et_fb']);
+}
+
+function dbdb_preprocess_computed_property() {
+    do_action('dbdb_preprocess_computed_property');
+}
+add_action('wp_ajax_et_pb_process_computed_property', 'dbdb_preprocess_computed_property', 9);
+
+function dbdb_gallery_fields($fields) {
+    return apply_filters('dbdb_gallery_fields', $fields);
+}
+add_filter('et_pb_all_fields_unprocessed_et_pb_gallery', 'dbdb_gallery_fields');
+
+function dbdb_is_gallery_module_slug($slug) {
+    return ($slug === 'et_pb_gallery');
+}
+
 if (!function_exists('dbdb_et_pb_module_shortcode_attributes')) {
     function dbdb_et_pb_module_shortcode_attributes($props, $attrs, $render_slug) {
         return apply_filters('dbdb_et_pb_module_shortcode_attributes', $props, $attrs, $render_slug);

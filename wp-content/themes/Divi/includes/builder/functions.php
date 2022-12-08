@@ -8,7 +8,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '4.18.1' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '4.19.2' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -3675,9 +3675,8 @@ function et_builder_print_font() {
 			'display' => 'swap',
 		);
 
-		$google_fonts_url = add_query_arg( $google_fonts_url_args, 'https://fonts.googleapis.com/css' );
-		$google_fonts_url = esc_url_raw( $google_fonts_url );
 		$feature_manager  = ET_Builder_Google_Fonts_Feature::instance();
+		$google_fonts_url = $feature_manager->get_google_fonts_url( $google_fonts_url_args );
 		$output_inline    = $feature_manager->is_option_enabled( 'google_fonts_inline' );
 
 		if ( $output_inline ) {
@@ -3778,9 +3777,8 @@ function et_builder_preprint_font() {
 		'display' => 'swap',
 	);
 
-	$google_fonts_url = add_query_arg( $google_fonts_url_args, 'https://fonts.googleapis.com/css' );
-	$google_fonts_url = esc_url_raw( $google_fonts_url );
 	$feature_manager  = ET_Builder_Google_Fonts_Feature::instance();
+	$google_fonts_url = $feature_manager->get_google_fonts_url( $google_fonts_url_args );
 	$output_inline    = $feature_manager->is_option_enabled( 'google_fonts_inline' );
 
 	if ( $output_inline ) {
@@ -13269,6 +13267,21 @@ add_action( 'wp_ajax_et_builder_global_colors_save', 'et_builder_global_colors_a
 function et_builder_get_all_global_colors() {
 	return et_get_option( 'et_global_colors' );
 }
+
+if ( ! function_exists( 'et_builder_global_colors_ajax_get_handler' ) ) :
+	/**
+	 * Global colors AJAX get handler.
+	 *
+	 * @since 4.19.2
+	 */
+	function et_builder_global_colors_ajax_get_handler() {
+		// Get nonce from $_GET.
+		et_core_security_check( 'edit_posts', 'et_builder_global_colors_get', 'et_builder_global_colors_get_nonce', '_GET' );
+		wp_send_json_success( [ 'global_colors' => et_builder_get_all_global_colors() ] );
+	}
+endif;
+
+add_action( 'wp_ajax_et_builder_global_colors_get', 'et_builder_global_colors_ajax_get_handler' );
 
 /**
  * Get a global color info by id.

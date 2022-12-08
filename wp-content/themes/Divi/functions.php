@@ -26,6 +26,7 @@ function et_setup_theme() {
 	}
 
 	require_once $template_directory . '/epanel/custom_functions.php';
+	require_once $template_directory . '/core/code-snippets/code-snippets.php';
 
 	require_once $template_directory . '/includes/functions/choices.php';
 
@@ -5567,12 +5568,12 @@ function et_divi_add_customizer_css() {
 			<?php echo $css( '.nav li ul' ); ?> { border-color: <?php echo esc_html( $primary_nav_dropdown_line_color ); ?>; }
 		<?php } ?>
 		<?php if ( '#2ea3f2' === $secondary_nav_bg && '#2ea3f2' !== $accent_color ) { ?>
-			#page-container #top-header,
-			#et-secondary-nav li ul { background-color: <?php echo esc_html( $accent_color ) . ' !important'; ?>; }
+			#page-container #top-header { background-color: <?php echo esc_html( $accent_color ) . ' !important'; ?>; }
+			#et-secondary-nav li ul { background-color: <?php echo esc_html( $accent_color ); ?>; }
 		<?php } ?>
 		<?php if ( '#2ea3f2' !== $secondary_nav_bg ) { ?>
-			.et_secondary_nav_enabled #page-container #top-header,
-			#et-secondary-nav li ul { background-color: <?php echo esc_html( $secondary_nav_bg ) . ' !important'; ?>; }
+			.et_secondary_nav_enabled #page-container #top-header { background-color: <?php echo esc_html( $secondary_nav_bg ) . ' !important'; ?>; }
+			#et-secondary-nav li ul { background-color: <?php echo esc_html( $secondary_nav_bg ); ?>; }
 		<?php } ?>
 		<?php if ( $secondary_nav_dropdown_bg !== $secondary_nav_bg ) { ?>
 			#et-secondary-nav li ul { background-color: <?php echo esc_html( $secondary_nav_dropdown_bg ); ?>; }
@@ -6230,7 +6231,8 @@ function et_divi_add_customizer_css() {
 
 			<?php } ?>
 			<?php if ( $fixed_secondary_nav_bg !== '#2ea3f2' ) { ?>
-				.et-fixed-header#top-header, .et-fixed-header#top-header #et-secondary-nav li ul { background-color: <?php echo esc_html( $fixed_secondary_nav_bg ); ?>; }
+				.et_fixed_nav #page-container .et-fixed-header#top-header { background-color: <?php echo esc_html( $fixed_secondary_nav_bg ); ?> !important; }
+				.et_fixed_nav #page-container .et-fixed-header#top-header #et-secondary-nav li ul { background-color: <?php echo esc_html( $fixed_secondary_nav_bg ); ?>; }
 			<?php } ?>
 			<?php if ( $fixed_primary_nav_bg !== $primary_nav_bg ) { ?>
 				.et-fixed-header#main-header, .et-fixed-header#main-header .nav li ul, .et-fixed-header .et-search-form { background-color: <?php echo esc_html( $fixed_primary_nav_bg ); ?>; }
@@ -8391,7 +8393,7 @@ function et_divi_maybe_change_frontend_locale( $locale ) {
 
 	return $locale;
 }
-add_filter( 'locale', 'et_divi_maybe_change_frontend_locale' );
+add_filter( 'theme_locale', 'et_divi_maybe_change_frontend_locale' );
 
 /**
  * Enable Divi gallery override if user activates it
@@ -8439,6 +8441,7 @@ function et_divi_register_customizer_portability() {
 
 	// Register the portability.
 	et_core_portability_register( 'et_divi_mods', array(
+		'title'   => esc_html__( 'Import & Export Customizer', 'Divi' ),
 		'name'    => esc_html__( 'Divi Customizer Settings', 'Divi' ),
 		'type'    => 'options',
 		'target'  => 'et_divi',

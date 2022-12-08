@@ -100,6 +100,9 @@ class Post extends Model {
 			$post = self::runDynamicMigrations( $post );
 		}
 
+		// Set options object.
+		$post->options = self::getOptionsDefaults( $post->options );
+
 		return apply_filters( 'aioseo_get_post', $post );
 	}
 
@@ -295,6 +298,47 @@ class Post extends Model {
 	}
 
 	/**
+	 * Sanitize the keyphrases posted data.
+	 *
+	 * @since 4.2.8
+	 *
+	 * @param  array $data An array containing the keyphrases field data.
+	 * @return array       The sanitized data.
+	 */
+	private static function sanitizeKeyphrases( $data ) {
+		if (
+			! empty( $data['focus']['analysis'] ) &&
+			is_array( $data['focus']['analysis'] )
+		) {
+			foreach ( $data['focus']['analysis'] as &$analysis ) {
+				// Remove unnecessary 'title' and 'description'.
+				unset( $analysis['title'] );
+				unset( $analysis['description'] );
+			}
+		}
+
+		if (
+			! empty( $data['additional'] ) &&
+			is_array( $data['additional'] )
+		) {
+			foreach ( $data['additional'] as &$additional ) {
+				if (
+					! empty( $additional['analysis'] ) &&
+					is_array( $additional['analysis'] )
+				) {
+					foreach ( $additional['analysis'] as &$additionalAnalysis ) {
+						// Remove unnecessary 'title' and 'description'.
+						unset( $additionalAnalysis['title'] );
+						unset( $additionalAnalysis['description'] );
+					}
+				}
+			}
+		}
+
+		return $data;
+	}
+
+	/**
 	 * Sanitize the page_analysis posted data.
 	 *
 	 * @since 4.2.7
@@ -304,8 +348,8 @@ class Post extends Model {
 	 */
 	private static function sanitizePageAnalysis( $data ) {
 		if (
-			empty( $data['analysis'] )
-			|| ! is_array( $data['analysis'] )
+			empty( $data['analysis'] ) ||
+			! is_array( $data['analysis'] )
 		) {
 			return $data;
 		}
@@ -343,7 +387,7 @@ class Post extends Model {
 		$thePost->keywords                    = ! empty( $data['keywords'] ) ? sanitize_text_field( $data['keywords'] ) : null;
 		$thePost->pillar_content              = isset( $data['pillar_content'] ) ? rest_sanitize_boolean( $data['pillar_content'] ) : 0;
 		// TruSEO
-		$thePost->keyphrases                  = ! empty( $data['keyphrases'] ) ? wp_json_encode( $data['keyphrases'] ) : null;
+		$thePost->keyphrases                  = ! empty( $data['keyphrases'] ) ? wp_json_encode( self::sanitizeKeyphrases( $data['keyphrases'] ) ) : null;
 		$thePost->page_analysis               = ! empty( $data['page_analysis'] ) ? wp_json_encode( self::sanitizePageAnalysis( $data['page_analysis'] ) ) : null;
 		$thePost->seo_score                   = ! empty( $data['seo_score'] ) ? sanitize_text_field( $data['seo_score'] ) : 0;
 		// Sitemap
@@ -528,11 +572,12 @@ class Post extends Model {
 	 *
 	 * @since 4.2.5
 	 *
-	 * @param  string $existingOptions The existing options in JSON.
-	 * @return string                  The existing options with defaults added in JSON.
+	 * @param  string       $existingOptions The existing options in JSON.
+	 * @param  null|WP_Post $post            The post object.
+	 * @return string                        The existing options with defaults added in JSON.
 	 */
-	public static function getDefaultSchemaOptions( $existingOptions = '' ) {
-		$defaultGraphName = aioseo()->schema->getDefaultPostTypeGraph();
+	public static function getDefaultSchemaOptions( $existingOptions = '', $post = null ) {
+		$defaultGraphName = aioseo()->schema->getDefaultPostTypeGraph( $post );
 
 		$defaults = [
 			'blockGraphs'  => [],
@@ -618,12 +663,12 @@ class Post extends Model {
 	}
 
 	/**
-	 * Returns the defaults for the keyphrases column.
+	 * Returns the defaults for the options column.
 	 *
 	 * @since 4.2.2
 	 *
-	 * @param  string $options The database keyphrases.
-	 * @return array           The defaults.
+	 * @param  string $options The options.
+	 * @return array           The options with defaults.
 	 */
 	public static function getOptionsDefaults( $options = '' ) {
 		$defaults = [
@@ -637,6 +682,9 @@ class Post extends Model {
 			return json_decode( wp_json_encode( $defaults ) );
 		}
 
-		return $options;
+		$options = json_decode( wp_json_encode( $options ), true );
+		$options = array_replace_recursive( $defaults, $options );
+
+		return json_decode( wp_json_encode( $options ) );
 	}
 }

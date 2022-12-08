@@ -186,9 +186,9 @@ trait Vue {
 				'priority'                       => ! empty( $post->priority ) ? $post->priority : 'default',
 				'frequency'                      => ! empty( $post->frequency ) ? $post->frequency : 'default',
 				'permalink'                      => get_permalink( $postId ),
-				'permalinkPath'                  => aioseo()->helpers->leadingSlashIt( aioseo()->helpers->getPermalinkPath( get_permalink( $postId ) ) ),
 				'title'                          => ! empty( $post->title ) ? $post->title : aioseo()->meta->title->getPostTypeTitle( $postTypeObj->name ),
 				'description'                    => ! empty( $post->description ) ? $post->description : aioseo()->meta->description->getPostTypeDescription( $postTypeObj->name ),
+				'descriptionIncludeCustomFields' => apply_filters( 'aioseo_description_include_custom_fields', true, $post ),
 				'keywords'                       => ! empty( $post->keywords ) ? $post->keywords : wp_json_encode( [] ),
 				'keyphrases'                     => Models\Post::getKeyphrasesDefaults( $post->keyphrases ),
 				'page_analysis'                  => ! empty( $post->page_analysis )
@@ -254,8 +254,6 @@ trait Vue {
 				'options'                        => Models\Post::getOptionsDefaults( $post->options )
 			];
 
-			$data['user']['siteAuthors'] = $this->getSiteAuthors();
-
 			if ( empty( $integration ) ) {
 				$data['integration'] = aioseo()->helpers->getPostPageBuilderName( $postId );
 			}
@@ -277,7 +275,6 @@ trait Vue {
 
 		if ( 'dashboard' === $page ) {
 			$data['setupWizard']['isCompleted'] = aioseo()->standalone->setupWizard->isCompleted();
-			$data['rssFeed']                    = aioseo()->dashboard->getAioseoRssFeed();
 			$data['seoOverview']                = aioseo()->postSettings->getPostTypesOverview();
 			$data['importers']                  = aioseo()->importExport->plugins();
 		}

@@ -15,7 +15,7 @@ class Plugin {
 	 * Plugin version
 	 * @var string
 	 */
-	const VERSION = '2.1.8';
+	const VERSION = '2.1.9';
 
 	/**
 	 * The slug of the plugin; used in actions, filters, i18n, table names, etc.
@@ -267,7 +267,7 @@ class Plugin {
 			Util::delete_debug_log();
 			Util::debug_log( "Received request to start generating a static archive" );
 
-			if ( 'on' === $this->options->get( 'use_cron' ) && ! defined( 'DISABLE_WP_CRON' ) ) {
+			if ( 'on' === $this->options->get( 'use_cron' ) && ! defined( 'DISABLE_WP_CRON' ) || 'on' === $this->options->get( 'use_cron' ) && defined( 'SS_CRON' ) ) {
 				if ( ! wp_next_scheduled( 'simply_static_site_export_cron' ) ) {
 					wp_schedule_single_event( time(), 'simply_static_site_export_cron' );
 				}

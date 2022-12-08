@@ -20,3 +20,7 @@ if ( ! defined( 'ET_THEME_BUILDER_ITEM_TEMPLATE' ) ) {
 if ( ! defined( 'ET_THEME_BUILDER_EDITOR_STANDARD' ) ) {
 	define( 'ET_THEME_BUILDER_EDITOR_STANDARD', 'standard' );
 }
+
+if ( ! defined( 'ET_THEME_BUILDER_TAXONOMY_TYPE' ) ) {
+	define( 'ET_THEME_BUILDER_TAXONOMY_TYPE', 'et_tb_item_type' );
+}

@@ -27,4 +27,7 @@ return array(
 	'Portability'                                       => esc_html__( 'Portability', 'et_builder' ),
 	'$invalid_file'                                     => esc_html__( 'Invalid file format. You should be uploading a JSON file.', 'et_builder' ),
 	'Import To Cloud'                                   => esc_html__( 'Import To Cloud', 'et_builder' ),
+	'Import Templates'                                  => esc_html__( 'Import Templates', 'et_builder' ),
+	'Export Templates'                                  => esc_html__( 'Export Templates', 'et_builder' ),
+	'Import & Export Templates'                         => esc_html__( 'Import & Export Templates', 'et_builder' ),
 );

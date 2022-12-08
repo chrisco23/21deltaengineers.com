@@ -1,3 +1,131 @@
+version 4.19.2 ( updated 11-29-2022 )
+- Fixed issue where presets where not importing when tb library item is duplicated from cloud to local.
+- Fixed divider view always being 100% in phone view in VB.
+- Fixed issue with image border styles in Blog module images that were not applying properly in some cases.
+- Fixed bug where backup exists popup shows every time when opening Theme Builder.
+- Fixed Replace Existing Content option in Layouts Library.
+- Fixed server error when deleting items too quickly from Divi Cloud.
+- Fixed issue where the code snippet library was not closing on ESC keyboard shortcut.
+- Fixed JS error that occurs on saving empty content to the cloud from code snippet editor modal.
+	* core/code-snippets/app/store/code-snippets-library/sequences.js
+	* core/code-snippets/app/store/edit/sequences.js
+	* includes/builder/class-et-builder-google-fonts-feature.php
+	* includes/builder/core.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/theme-builder/theme-builder-library.php
+	* includes/builder/frontend-builder/theme-builder/theme-builder.php
+	* includes/builder/functions.php
+	* includes/builder/module/Blog.php
+
+version 4.19.1 ( updated 11-17-2022 )
+- Fixed the issue when user cannot drag and drop files into Code Snippets Import Modal in some cases.
+- Fixed the issue when user could exceed the free items limit on the Cloud during bulk upload.
+- Show disabled cursor on save snippet button when save action is not allowed.
+- Introduced new filters 'et_builder_google_fonts_is_enabled', 'et_builder_google_fonts_fetch_url' and 'et_builder_google_fonts_fetch' to manage Google Fonts.
+- Hardened divi cloud library visual builder security checks.
+- Fixed content contains HTML image tag is not rendered on the front end.
+- Fixed js error which may potentially appear in console.log when Snippets screenshot is updating.
+- Fixed clearing trash that gets stuck for Divi cloud library items.
+- Improved Edit Tags And Categories label by replacing "And" with "&".
+- Fixed blank sceen from showing when the Cloud login modal is closed.
+- Added Cancel button to the Save To Library modal.
+- Fixed misaligned label in Code Snippets Portability modal.
+- Added line break when appending code from Snippets Library.
+- Fixed unwanted back button after logging into the Cloud from Code Snippets Library.
+- Fixed Code Snippets portability modal title.
+- Added spinner when preloading code snippets on details page.
+- Fixed Global Colors exporting from the Divi Library page.
+- Fixed PHP Fatal error when trying to activate Divi Builder plugin with Divi theme at the same time.
+- Fixed a compatibility issue with WordPress 6.1 that may cause the performance to degrade in some cases when various languages were used.
+	* cloud/i18n/library.php
+	* core/code-snippets/app/store/code-snippets-library/actions.js
+	* core/code-snippets/app/store/code-snippets-library/sequences.js
+	* core/code-snippets/code-snippets.php
+	* core/components/Portability.php
+	* core/i18n/library.php
+	* epanel/css/panel.css
+	* functions.php
+	* includes/builder/class-et-builder-google-fonts-feature.php
+	* includes/builder/core.php
+	* includes/builder/feature/Library.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/theme-builder/api.php
+	* includes/builder/frontend-builder/theme-builder/local-library.php
+	* includes/builder/frontend-builder/theme-builder/theme-builder-library.php
+	* includes/builder/frontend-builder/theme-builder/theme-builder.php
+	* includes/builder/functions.php
+
+version 4.19 ( updated 11-03-2022 )
+- Added Divi Code Snippets Library with Divi Cloud support.
+- Fixed issue with Theme Builder templates not working when The Events Calendar plugin is active.
+- Fixed some issues related to Secondary Navigation menu in Customizer and Frontend.
+- Fixed Global Colors import and export in Theme Builder.
+	* cloud/cloud-app.php
+	* cloud/i18n/library.php
+	* common/admin.php
+	* common/i18n/library.php
+	* common/init.php
+	* common/lib/config.js
+	* common/lib/i18n.js
+	* common/lib/local-library.js
+	* common/lib/request.js
+	* core/admin/css/core.css
+	* core/admin/fonts/epanel/code-snippet.svg
+	* core/admin/fonts/epanel/code-snippet.ttf
+	* core/admin/fonts/epanel/code-snippet.woff
+	* core/code-snippets/CodeSnippetsLibrary.php
+	* core/code-snippets/api.php
+	* core/code-snippets/app/boot.js
+	* core/code-snippets/app/lib/capabilities.js
+	* core/code-snippets/app/lib/code-snippets-library.js
+	* core/code-snippets/app/lib/config.js
+	* core/code-snippets/app/lib/constants.js
+	* core/code-snippets/app/lib/i18n.js
+	* core/code-snippets/app/lib/request.js
+	* core/code-snippets/app/store/code-snippets-library/actions.js
+	* core/code-snippets/app/store/code-snippets-library/computed.js
+	* core/code-snippets/app/store/code-snippets-library/factories.js
+	* core/code-snippets/app/store/code-snippets-library/module.js
+	* core/code-snippets/app/store/code-snippets-library/providers.js
+	* core/code-snippets/app/store/code-snippets-library/sequences.js
+	* core/code-snippets/app/store/edit/actions.js
+	* core/code-snippets/app/store/edit/module.js
+	* core/code-snippets/app/store/edit/sequences.js
+	* core/code-snippets/app/store/index.js
+	* core/code-snippets/code-snippets-app.php
+	* core/code-snippets/code-snippets-library.php
+	* core/code-snippets/code-snippets.php
+	* core/code-snippets/constants.php
+	* core/code-snippets/post/taxonomy/CodeSnippetType.php
+	* core/code-snippets/post/type/CodeSnippet.php
+	* core/components/Portability.php
+	* core/components/api/email/HubSpot.php
+	* core/components/cache/Directory.php
+	* core/functions.php
+	* core/i18n/library.php
+	* core/init.php
+	* core/webpack.config.js
+	* epanel/core_functions.php
+	* epanel/css/panel.css
+	* epanel/js/functions-init.js
+	* functions.php
+	* includes/builder/core.php
+	* includes/builder/feature/dynamic-assets/class-dynamic-assets.php
+	* includes/builder/feature/gutenberg/blocks/Layout.php
+	* includes/builder/feature/local-library.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/assets.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/i18n/portability.php
+	* includes/builder/frontend-builder/i18n/theme-builder.php
+	* includes/builder/frontend-builder/theme-builder/constants.php
+	* includes/builder/frontend-builder/theme-builder/local-library.php
+	* includes/builder/plugin-compat/the-events-calendar.php
+	* includes/builder/plugin-compat/yith-woocommerce-dynamic-pricing-and-discounts-premium.php
+	* js/src/theme-customizer.js
+
 version 4.18.1 ( updated 10-27-2022 )
 - Introduced confirmation modal before user clear Divi Layout block content.
 - Fixed errors on Divi Layout block when opening Site Editor page.

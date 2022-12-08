@@ -439,6 +439,14 @@ function et_fb_get_dynamic_backend_helpers() {
 		'globalPresets'                => ET_Builder_Element::get_global_presets(),
 		'module_cache_filename_id'     => ET_Builder_Element::get_cache_filename_id( $post_type ),
 		'registeredPostTypeOptions'    => et_get_registered_post_type_options(),
+		'codeSnippets'                 => [
+			'config' => [
+				'api'    => admin_url( 'admin-ajax.php' ),
+				'nonces' => [
+					'et_code_snippets_library_get_items' => wp_create_nonce( 'et_code_snippets_library_get_items' ),
+				],
+			],
+		],
 	);
 
 	// `class_exists` check avoids https://github.com/elegantthemes/Divi/issues/23662 error.
@@ -1862,6 +1870,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 		ET_Builder_Element::get_help_videos()
 	);
 
+	// phpcs:disable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- Invalid warning.
 	// Internationalization.
 	$helpers['i18n'] = array(
 		'modules'                   => array_merge( $modules_i10n, $additional_i10n ),
@@ -2090,7 +2099,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'layoutName'           => esc_html__( 'Layout Name', 'et_builder' ),
 			'replaceLayout'        => esc_html__( 'Replace Existing Content', 'et_builder' ),
 			'search'               => esc_html__( 'Search', 'et_builder' ) . '...',
-			'portability'          => esc_html__( 'Portability', 'et_builder' ),
+			'portability'          => esc_html__( 'Import & Export Page Content', 'et_builder' ),
 			'export'               => esc_html__( 'Export', 'et_builder' ),
 			'import'               => esc_html__( 'Import', 'et_builder' ),
 			'exportText'           => esc_html__( 'Exporting your Divi Builder Layout will create a JSON file that can be imported into a different website.', 'et_builder' ),
@@ -2770,6 +2779,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'preset_custom'  => esc_html__( 'Custom View', 'et_builder' ),
 		),
 	);
+	// phpcs:enable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 
 	$helpers['i18n'] = array_merge(
 		$helpers['i18n'],

@@ -222,6 +222,9 @@ class Twitter {
 
 		$data = [];
 		$post = aioseo()->helpers->getPost();
+		if ( ! is_a( $post, 'WP_Post' ) ) {
+			return $data;
+		}
 
 		if ( $post->post_author ) {
 			$data[] = [

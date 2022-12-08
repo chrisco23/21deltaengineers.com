@@ -31,7 +31,7 @@ class WebpConverter {
 		( new Endpoint\EndpointIntegration( new Endpoint\FilesStatsEndpoint( $plugin_data ) ) )->init_hooks();
 		( new Endpoint\EndpointIntegration( new Endpoint\PathsEndpoint( $plugin_data, $token_repository ) ) )->init_hooks();
 		( new Endpoint\EndpointIntegration( new Endpoint\RegenerateEndpoint( $plugin_data ) ) )->init_hooks();
-		( new Conversion\SkipExcludedPaths() )->init_hooks();
+		( new Conversion\SkipExcludedPaths( $plugin_data ) )->init_hooks();
 		( new Cron\CronEventGenerator( $plugin_data, $token_repository ) )->init_hooks();
 		( new Cron\CronSchedulesGenerator() )->init_hooks();
 		( new Cron\CronStatusViewer() )->init_hooks();

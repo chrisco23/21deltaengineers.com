@@ -35,10 +35,12 @@ add_filter( 'et_builder_render_layout', 'shortcode_unautop' );
 add_filter( 'et_builder_render_layout', 'prepend_attachment' );
 add_filter( 'et_builder_render_layout', 'do_shortcode', 11 ); // AFTER wpautop().
 
-// Run et_builder_filter_content_image_tags() after do_shortcode() to fill any
+// Temporarily remove wp_filter_content_tags() from the_content, then call it again by
+// running et_builder_filter_content_image_tags() after do_shortcode() to fill any
 // missing height and width attributes on the image. Those attributes are required
 // to add loading "lazy" attribute on the image. In this case, we set the order as
 // 12 because TB runs do_shortcode() on order 11.
+remove_filter( 'the_content', 'wp_filter_content_tags' );
 add_filter( 'the_content', 'et_builder_filter_content_image_tags', 12 );
 add_filter( 'et_builder_render_layout', 'et_builder_filter_content_image_tags', 12 );
 
@@ -2601,6 +2603,7 @@ function et_fb_get_nonces() {
 		'getDisplayConditionsStatus'      => wp_create_nonce( 'et_builder_ajax_get_display_conditions_status' ),
 		'getPostMetaFields'               => wp_create_nonce( 'et_builder_ajax_get_post_meta_fields' ),
 		'globalColorsSave'                => wp_create_nonce( 'et_builder_global_colors_save' ),
+		'globalColorsGet'                 => wp_create_nonce( 'et_builder_global_colors_get' ),
 		'defaultColorsUpdate'             => wp_create_nonce( 'et_builder_default_colors_update' ),
 		'saveDomainToken'                 => wp_create_nonce( 'et_builder_ajax_save_domain_token' ),
 		'beforeAfterComponents'           => wp_create_nonce( 'et_fb_fetch_before_after_components_nonce' ),
@@ -4669,6 +4672,7 @@ function et_pb_register_builder_portabilities() {
 		// phpcs:disable WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
 		// Register the Roles Editor portability.
 		$pb_roles = array(
+			'title'  => esc_html__( 'Import & Export Roles', 'et_builder' ),
 			'name'   => esc_html__( 'Divi Role Editor Settings', 'et_builder' ),
 			'type'   => 'options',
 			'target' => 'et_pb_role_settings',
@@ -4681,15 +4685,17 @@ function et_pb_register_builder_portabilities() {
 	if ( current_user_can( 'edit_posts' ) ) {
 		// Register the Builder individual layouts portability.
 		$args = array(
-			'name' => esc_html__( 'Divi Builder Layout', 'et_builder' ),
-			'type' => 'post',
-			'view' => ( function_exists( 'et_builder_should_load_framework' ) && et_builder_should_load_framework() ),
+			'title' => esc_html__( 'Import & Export Layouts', 'et_builder' ),
+			'name'  => esc_html__( 'Divi Builder Layout', 'et_builder' ),
+			'type'  => 'post',
+			'view'  => ( function_exists( 'et_builder_should_load_framework' ) && et_builder_should_load_framework() ),
 		);
 		et_core_portability_register( 'et_builder', $args );
 
 		// phpcs:disable WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
 		// Register the Builder Layouts Post Type portability.
 		$layouts = array(
+			'title'  => esc_html__( 'Import & Export Layouts', 'et_builder' ),
 			'name'   => esc_html__( 'Divi Builder Layouts', 'et_builder' ),
 			'type'   => 'post_type',
 			'target' => ET_BUILDER_LAYOUT_POST_TYPE,

@@ -120,7 +120,7 @@ class ET_Core_Cache_Directory {
 		/**
 		 * Filters the WP_Filesystem args.
 		 *
-		 * @since ??
+		 * @since 4.18.1
 		 *
 		 * @param  $wpfs_args  Arguments to use when initializing WP_Filesystem
 		 *

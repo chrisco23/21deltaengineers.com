@@ -141,6 +141,7 @@ return array(
 	'Import Divi Builder Templates'                        => esc_html__( 'Import Divi Builder Templates', 'et_builder' ),
 	'Import Presets'                                       => esc_html__( 'Import Presets', 'et_builder' ),
 	'Import Templates'                                     => esc_html__( 'Import Templates', 'et_builder' ),
+	'Export Templates'                                     => esc_html__( 'Export Templates', 'et_builder' ),
 	'Options'                                              => esc_html__( 'Options', 'et_builder' ),
 	'Override Existing Default Website Template'           => esc_html__( 'Override Existing Default Website Template', 'et_builder' ),
 	'Loaded Template'                                      => esc_html__( 'Loaded Template', 'et_builder' ),

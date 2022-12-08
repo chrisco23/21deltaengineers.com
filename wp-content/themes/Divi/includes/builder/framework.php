@@ -174,6 +174,7 @@ require_once ET_BUILDER_DIR . 'feature/background-masks/Functions.php';
 require_once ET_BUILDER_DIR . 'feature/background-masks/PatternFields.php';
 require_once ET_BUILDER_DIR . 'feature/background-masks/MaskFields.php';
 require_once ET_BUILDER_DIR . 'feature/gutenberg/BlockTemplates.php';
+require_once ET_BUILDER_DIR . 'feature/local-library.php';
 
 // Conditional Includes.
 if ( et_is_woocommerce_plugin_active() ) {
@@ -264,6 +265,7 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'et_builder_migrate_module_customizer_phase_two',
 			'et_builder_save_global_presets_history',
 			'et_builder_retrieve_global_presets_history',
+			'et_theme_builder_api_export_theme_builder_step',
 			'et_theme_builder_api_import_theme_builder_step',
 			'et_pb_submit_subscribe_form',
 			'et_builder_get_woocommerce_tabs',
@@ -271,6 +273,8 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'et_builder_default_colors_update',
 			'et_builder_ajax_save_domain_token',
 			'et_fb_fetch_before_after_components',
+			'et_code_snippets_library_get_items',
+			'et_builder_global_colors_get',
 		),
 	);
 

@@ -181,6 +181,10 @@ class Updates {
 			$this->schedulePostSchemaDefaultMigration();
 		}
 
+		if ( version_compare( $lastActiveVersion, '4.2.8', '<' ) ) {
+			$this->migrateDashboardWidgetsOptions();
+		}
+
 		do_action( 'aioseo_run_updates', $lastActiveVersion );
 
 		// Always clear the cache if the last active version is different from our current.
@@ -1029,6 +1033,31 @@ class Updates {
 	}
 
 	/**
+	 * Updates the dashboardWidgets with the new array format.
+	 *
+	 * @since 4.2.8
+	 *
+	 * @return void
+	 */
+	private function migrateDashboardWidgetsOptions() {
+		$rawOptions = $this->getRawOptions();
+
+		if ( empty( $rawOptions ) || ! is_bool( $rawOptions['advanced']['dashboardWidgets'] ) ) {
+			return;
+		}
+
+		$widgets = [ 'seoNews' ];
+
+		// If the dashboardWidgets was activated, let's turn on the other widgets.
+		if ( $rawOptions['advanced']['dashboardWidgets'] ) {
+			$widgets[] = 'seoOverview';
+			$widgets[] = 'seoSetup';
+		}
+
+		aioseo()->options->advanced->dashboardWidgets = $widgets;
+	}
+
+	/**
 	 * Migrates the post schema to the new JSON column again for posts using the default.
 	 * This is needed to fix an oversight because in 4.2.5 we didn't migrate any properties set to the default graph.
 	 *
@@ -1076,7 +1105,7 @@ class Updates {
 		$post              = aioseo()->helpers->getPost( $aioseoPost->post_id );
 		$schemaType        = $aioseoPost->schema_type;
 		$schemaTypeOptions = json_decode( (string) $aioseoPost->schema_type_options );
-		$schemaOptions     = Models\Post::getDefaultSchemaOptions();
+		$schemaOptions     = Models\Post::getDefaultSchemaOptions( '', $post );
 
 		if ( empty( $schemaTypeOptions ) ) {
 			$aioseoPost->schema = $schemaOptions;
@@ -1339,7 +1368,8 @@ class Updates {
 			if ( $isDefault ) {
 				$schemaOptions->default->data->{$schemaType} = $graph;
 			} else {
-				$schemaOptions->graphs[] = $graph;
+				$schemaOptions->graphs[]           = $graph;
+				$schemaOptions->default->isEnabled = false;
 			}
 		}
 

@@ -30,6 +30,18 @@ function db_pb_slide_button_2_content_content($content, $args) {
 			'selector'    => '%%order_class%%.db_second_more_button .et_pb_more_button',
 			'declaration' => 'margin-left: 15px; margin-right: 15px;'
 		));
+        // Don't apply outer margin when slide has image as buttons should align to the edge of the description area (desktop only)
+		dbdb_set_module_style('et_pb_slide', array(
+			'selector'    => '%%order_class%%.db_second_more_button.et_pb_slide_with_image .et_pb_more_button:first-child',
+			'declaration' => 'margin-left: 0px;',
+            'media_query' => '@media only screen and ( min-width: 981px )'
+		));
+		dbdb_set_module_style('et_pb_slide', array(
+			'selector'    => '%%order_class%%.db_second_more_button.et_pb_slide_with_image .et_pb_more_button:last-child',
+			'declaration' => 'margin-right: 0px;',
+            'media_query' => '@media only screen and ( min-width: 981px )'
+		));
+
 		// Add button - old Divi markup
 		$content = preg_replace(
 			'#(<a href=".*?" class="(et_pb_more_button[^"]+et_pb_button[^"]*)"([^>]*)>.*?</a>)#', 
@@ -183,3 +195,38 @@ function db_pb_slide_button_2_vb_css() { ?>
 }
 
 // === End Enable VB Preview ===
+
+add_filter('et_pb_slide_advanced_fields', 'db_pb_slide_button_2_styles', 10, 3);
+add_filter('et_pb_slider_advanced_fields', 'db_pb_slider_button_2_styles', 10, 3);
+
+function db_pb_slide_button_2_styles($fields, $slug, $main_css_element) {
+    if (!is_array($fields)) return $fields;
+    if (!isset($fields['button']) || !is_array($fields['button'])) {
+        $fields['button'] = array();
+    }
+    $fields['button']['db_slide_button_2'] = array(
+        'css' => array(
+            'main' => "div.et_pb_slides div.et_pb_slide{$main_css_element} a.et_pb_more_button.db_pb_button_2",
+            'important' => 'all'
+        ),
+        'label' => esc_html__( 'Button 2', 'divi-booster' ),
+        'use_alignment' => false
+    );
+    return $fields;
+}
+
+function db_pb_slider_button_2_styles($fields, $slug, $main_css_element) {
+    if (!is_array($fields)) return $fields;
+    if (!isset($fields['button']) || !is_array($fields['button'])) {
+        $fields['button'] = array();
+    }
+    $fields['button']['db_slide_button_2'] = array(
+        'css' => array(
+            'main' => "{$main_css_element} a.et_pb_more_button.db_pb_button_2",
+            'important' => 'all'
+        ),
+        'label' => esc_html__( 'Button 2', 'divi-booster' ),
+        'use_alignment' => false
+    );
+    return $fields;
+}

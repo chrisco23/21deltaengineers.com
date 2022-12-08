@@ -105,7 +105,7 @@ class ET_Core_API_Email_HubSpot extends ET_Core_API_Email_Provider {
 	 *
 	 * It's needed to check existing API Key implementation when no Access Token presents.
 	 *
-	 * @since ??
+	 * @since 4.18.1
 	 *
 	 * @return boolean API Key status.
 	 */
@@ -123,7 +123,7 @@ class ET_Core_API_Email_HubSpot extends ET_Core_API_Email_Provider {
 	 * Get list add contact URL.
 	 *
 	 * @since 3.0.72
-	 * @since ?? Replaces hapikey query string with authentication on headers.
+	 * @since 4.18.1 Replaces hapikey query string with authentication on headers.
 	 *
 	 * @param string $list_id List ID.
 	 *
@@ -142,7 +142,7 @@ class ET_Core_API_Email_HubSpot extends ET_Core_API_Email_Provider {
 	/**
 	 * Maybe need to set custom headers.
 	 *
-	 * @since ??
+	 * @since 4.18.1
 	 */
 	protected function _maybe_set_custom_headers() {
 		if ( ! empty( $this->custom_headers ) ) {
@@ -160,7 +160,7 @@ class ET_Core_API_Email_HubSpot extends ET_Core_API_Email_Provider {
 	 * Maybe set URLs.
 	 *
 	 * @since 3.0.72
-	 * @since ?? Replaces hapikey query string with access token headers.
+	 * @since 4.18.1 Replaces hapikey query string with access token headers.
 	 *
 	 * @param string $email Contact email.
 	 */
@@ -219,7 +219,7 @@ class ET_Core_API_Email_HubSpot extends ET_Core_API_Email_Provider {
 	/**
 	 * @inheritDoc
 	 *
-	 * @since ?? Replaces api_key field with token.
+	 * @since 4.18.1 Replaces api_key field with token.
 	 */
 	public function get_account_fields() {
 		return array(
@@ -279,7 +279,7 @@ class ET_Core_API_Email_HubSpot extends ET_Core_API_Email_Provider {
 	/**
 	 * @inheritDoc
 	 *
-	 * @since ?? Replaces API Key usage with Access Token.
+	 * @since 4.18.1 Replaces API Key usage with Access Token.
 	 */
 	public function fetch_subscriber_lists() {
 		if ( empty( $this->data['token'] ) && empty( $this->data['api_key'] ) ) {
@@ -308,7 +308,7 @@ class ET_Core_API_Email_HubSpot extends ET_Core_API_Email_Provider {
 	/**
 	 * @inheritDoc
 	 *
-	 * @since ?? Replaces API Key usage with Access Token.
+	 * @since 4.18.1 Replaces API Key usage with Access Token.
 	 */
 	public function subscribe( $args, $url = '' ) {
 		if ( empty( $this->data['token'] ) && empty( $this->data['api_key'] ) ) {

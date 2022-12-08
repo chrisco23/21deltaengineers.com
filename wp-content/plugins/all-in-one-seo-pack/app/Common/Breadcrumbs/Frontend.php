@@ -153,6 +153,11 @@ class Frontend {
 			return;
 		}
 
+		// We can only run after this action because we need all post types loaded.
+		if ( ! did_action( 'init' ) ) {
+			return;
+		}
+
 		$breadcrumbs = $this->getBreadcrumbs();
 		if ( empty( $breadcrumbs ) ) {
 			return;

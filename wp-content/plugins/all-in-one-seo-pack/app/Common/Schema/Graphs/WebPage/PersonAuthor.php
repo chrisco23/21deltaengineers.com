@@ -27,8 +27,8 @@ class PersonAuthor extends Graphs\Graph {
 		$user         = get_queried_object();
 		$isAuthorPage = is_author() && is_a( $user, 'WP_User' );
 		if (
-			( is_singular() && ! $post ) &&
-			! $isAuthorPage
+			( ! is_singular() && ! $isAuthorPage ) ||
+			( is_singular() && ! is_a( $post, 'WP_Post' ) )
 		) {
 			return [];
 		}
@@ -56,7 +56,7 @@ class PersonAuthor extends Graphs\Graph {
 			$data['image'] = $avatar;
 		}
 
-		$socialUrls = $this->socialUrls( $userId );
+		$socialUrls = $this->getUserProfiles( $userId );
 		if ( $socialUrls ) {
 			$data['sameAs'] = $socialUrls;
 		}

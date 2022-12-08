@@ -312,10 +312,11 @@ class Schema {
 	 *
 	 * @since 4.2.5
 	 *
-	 * @return string The default graph.
+	 * @param  null|WP_Post $post The post object.
+	 * @return string             The default graph.
 	 */
-	public function getDefaultPostTypeGraph() {
-		$post = aioseo()->helpers->getPost();
+	public function getDefaultPostTypeGraph( $post = null ) {
+		$post = $post ? $post : aioseo()->helpers->getPost();
 		if ( ! is_a( $post, 'WP_Post' ) ) {
 			return '';
 		}

@@ -294,6 +294,24 @@ trait ThirdParty {
 	}
 
 	/**
+	 * Check if is a BBpress post type.
+	 *
+	 * @since 4.2.8
+	 *
+	 * @param  string $postType The post type to check.
+	 * @return bool             Whether this is a bbPress post type.
+	 */
+	public function isBBPressPostType( $postType ) {
+		if ( ! class_exists( 'bbPress' ) ) {
+			return false;
+		}
+
+		$bbPressPostTypes = [ 'forum', 'topic', 'reply' ];
+
+		return in_array( $postType, $bbPressPostTypes, true );
+	}
+
+	/**
 	 * Returns ACF fields as an array of meta keys and values.
 	 *
 	 * @since 4.0.6
@@ -479,6 +497,39 @@ trait ThirdParty {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Returns the WPML url format.
+	 *
+	 * @since 4.2.8
+	 *
+	 * @return string The format.
+	 */
+	public function getWpmlUrlFormat() {
+		global $sitepress;
+
+		if (
+			! $this->isWpmlActive() ||
+			empty( $sitepress ) ||
+			! method_exists( $sitepress, 'get_setting' )
+		) {
+			return '';
+		}
+
+		switch ( $sitepress->get_setting( 'language_negotiation_type' ) ) {
+			case WPML_LANGUAGE_NEGOTIATION_TYPE_DIRECTORY:
+			case 1:
+				return 'directory';
+			case WPML_LANGUAGE_NEGOTIATION_TYPE_DOMAIN:
+			case 2:
+				return 'domain';
+			case WPML_LANGUAGE_NEGOTIATION_TYPE_PARAMETER:
+			case 3:
+				return 'parameter';
+			default:
+				return '';
+		}
 	}
 
 	/**

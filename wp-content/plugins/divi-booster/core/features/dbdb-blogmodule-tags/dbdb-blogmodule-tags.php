@@ -2,13 +2,13 @@
 
 namespace DiviBooster\DiviBooster;
 
-use WP_Error;
-
 if (function_exists('add_filter')) {
     add_filter('init', array(new BlogModuleTagsFeature, 'init'));
 }
 
 class BlogModuleTagsFeature {
+
+    private $props = array();
 
     function init() {
         add_filter('dbdb_et_pb_blog_shortcode_output', array($this, 'add_article_filter'), 10, 2);
@@ -19,6 +19,7 @@ class BlogModuleTagsFeature {
         if (!isset($props['dbdb_show_tags']) || $props['dbdb_show_tags'] !== 'on') { 
             return $content; 
         }
+        $this->props = $props;
         return preg_replace_callback('/<article.*?<\/article>/s', array($this, 'apply_article_filter'), $content);
     }
 
@@ -41,7 +42,8 @@ class BlogModuleTagsFeature {
         $post_type = isset($post_type[1])?$post_type[1]:false;
 
         // get the term list for the post_type
-        $tags = get_the_term_list($id, $post_type . '_tag', '', ', ', '');
+        $sep = isset($this->props['dbdb_tags_separator'])?$this->props['dbdb_tags_separator']:', ';
+        $tags = get_the_term_list($id, $post_type . '_tag', '', $sep, '');
         if (is_wp_error($tags)) { return $html; }
 
         if (empty($tags)) { return $html; }
@@ -71,6 +73,17 @@ class BlogModuleTagsFeature {
                 'mobile_options'    => true,
                 'hover'             => 'tabs',
             ),
+            'dbdb_tags_separator' => array(
+                'label'             => esc_html__( 'Tag Separator', 'et_builder' ),
+                'type'              => 'text',
+                'option_category'   => 'configuration',
+                'show_if' => array(
+                    'dbdb_show_tags' => 'on',
+                ),
+                'default' => ', ', 
+                'toggle_slug'       => 'elements',
+                'description'      => esc_html__( 'The text to use between the tags.', 'et_builder' )
+            )
         );
     }
 }

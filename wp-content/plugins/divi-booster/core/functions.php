@@ -1,33 +1,10 @@
 <?php // functions.php
 
-
-// if (!function_exists('dbdb_save_mod_rewrite_rules')) {
-//     function dbdb_save_mod_rewrite_rules() {
-//         if ( is_multisite() ) {
-//             return;
-//         }
-    
-//         // Ensure get_home_path() is declared.
-//         require_once ABSPATH . 'wp-admin/includes/file.php';
-    
-//         $home_path     = get_home_path();
-//         $htaccess_file = $home_path . '.htaccess';
-    
-//         /*
-//         * If the file doesn't already exist check for write access to the directory
-//         * and whether we have some rules. Else check for write access to the file.
-//         */
-//         if ( ( ! file_exists( $htaccess_file ) && is_writable( $home_path )  ) || is_writable( $htaccess_file ) ) {
-//             if (function_exists('got_mod_rewrite') && got_mod_rewrite()) {
-//                 $rules = explode("\n", apply_filters('dbdb_mod_rewrite_rules', ''));
-//                 return insert_with_markers( $htaccess_file, 'Divi Booster', $rules );
-//             }
-//         }
-    
-//         return false;
-//     }
-// }
-
+function dbmo_unautop_slides($content) {
+	$content = preg_replace('%<p>\s*(<div class="et_pb_slide .*?</div> <!-- .et_pb_slide -->\s*)</p>%s', '\\1', $content);
+	$content = preg_replace('%<p>\s*(<div class="et_pb_slide .*?</div>\s*)</p>%s', '\\1', $content);
+    return $content;
+}
 
 // === Builder detection === //
 

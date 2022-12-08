@@ -4,6 +4,7 @@ include_once(dirname(__FILE__).'/DBDB_color.php');
 include_once(dirname(__FILE__).'/DBDB_module_slug.php');
 include_once(dirname(__FILE__).'/DBDB_url.php');
 include_once(dirname(__FILE__).'/DBDBCssManagerOption.php');
+include_once(dirname(__FILE__).'/DBDBElement.php');
 include_once(dirname(__FILE__).'/DBDBExtendedIcon.php');
 include_once(dirname(__FILE__).'/DBDBCustomCssBoxes.php');
 include_once(dirname(__FILE__).'/DBDBDivi.php');

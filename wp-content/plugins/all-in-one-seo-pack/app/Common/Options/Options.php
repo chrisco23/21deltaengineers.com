@@ -64,7 +64,7 @@ TEMPLATE
 			'truSeo'           => [ 'type' => 'boolean', 'default' => true ],
 			'headlineAnalyzer' => [ 'type' => 'boolean', 'default' => true ],
 			'seoAnalysis'      => [ 'type' => 'boolean', 'default' => true ],
-			'dashboardWidgets' => [ 'type' => 'boolean', 'default' => true ],
+			'dashboardWidgets' => [ 'type' => 'array', 'default' => [ 'seoSetup', 'seoOverview', 'seoNews' ] ],
 			'announcements'    => [ 'type' => 'boolean', 'default' => true ],
 			'postTypes'        => [
 				'all'      => [ 'type' => 'boolean', 'default' => true ],

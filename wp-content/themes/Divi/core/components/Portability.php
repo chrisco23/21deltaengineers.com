@@ -126,13 +126,13 @@ class ET_Core_Portability {
 				$et_google_api_settings = $import['data']['et_google_api_settings'];
 			}
 
-			$import['data'] = $this->apply_query( $import['data'], 'set' );
-
 			if ( ! isset( $import['context'] ) || ( isset( $import['context'] ) && $import['context'] !== $this->instance->context ) ) {
 				$this->delete_temp_files( 'et_core_import', [ $temp_file_id => $temp_file ] );
 
 				return array( 'message' => 'importContextFail' );
 			}
+
+			$import['data'] = $this->apply_query( $import['data'], 'set' );
 
 			$filesystem->put_contents( $upload['file'], wp_json_encode( (array) $import ) );
 		}
@@ -414,21 +414,21 @@ class ET_Core_Portability {
 					$shortcode_object = et_fb_process_shortcode( $post->post_content );
 
 					if ( $apply_global_presets ) {
-						$post->post_content = et_fb_process_to_shortcode( $shortcode_object, $options, '', false );
+						$shortcode_object   = et_fb_process_to_shortcode( $shortcode_object, $options, '', false );
+						$post->post_content = $shortcode_object;
 					} else {
-						$used_global_presets = array_merge(
-							$this->get_used_global_presets( $shortcode_object, $used_global_presets ),
+						$global_presets_from_post = $this->get_used_global_presets( $shortcode_object, $used_global_presets );
+						$used_global_presets      = array_merge(
+							$global_presets_from_post,
 							$used_global_presets
 						);
 					}
+
+					$used_global_colors = $this->_get_used_global_colors( $shortcode_object, $used_global_colors, $global_presets_from_post );
 				}
 
 				if ( ! empty ( $used_global_presets ) ) {
 					$global_presets = (object) $used_global_presets;
-				}
-
-				if ( 'post_type' === $this->instance->type ) {
-					$used_global_colors = $this->_get_used_global_colors( $shortcode_object, $used_global_colors, $global_presets );
 				}
 
 				if ( ! empty( $used_global_colors ) ) {
@@ -496,18 +496,27 @@ class ET_Core_Portability {
 			'ID'           => $post_id,
 		);
 
-		$post_data = $this->validate( $post_data, $fields_validatation );
-		$data      = array( $post_data['ID'] => $post_data['post_content'] );
-		$data      = $this->apply_query( $data, 'set' );
-		$images    = $this->get_data_images( $data );
-		$images    = $this->chunk_images( $images, 'encode_images', $id, $chunk );
-		$data      = array(
+		$shortcode_object   = et_fb_process_shortcode( $post_data['post_content'] );
+		$used_global_colors = $this->get_theme_builder_library_used_global_colors( $shortcode_object );
+		$post_data          = $this->validate( $post_data, $fields_validatation );
+		$data               = array( $post_data['ID'] => $post_data['post_content'] );
+		$data               = $this->apply_query( $data, 'set' );
+		$images             = $this->get_data_images( $data );
+		$images             = $this->chunk_images( $images, 'encode_images', $id, $chunk );
+
+		// Generate list of used global colors.
+		if ( ! empty( $used_global_colors ) ) {
+			$global_colors = $this->_get_global_colors_data( $used_global_colors );
+		}
+
+		$data   = array(
 			'context'       => 'et_builder',
 			'data'          => $data,
 			'images'        => $images['images'],
 			'post_title'    => get_post_field( 'post_title', $post_id ),
 			'post_type'     => get_post_type( $post_id ),
 			'theme_builder' => $theme_builder_meta,
+			'global_colors' => $global_colors,
 		);
 		$chunks    = $images['chunks'];
 		$ready     = $images['ready'];
@@ -749,6 +758,11 @@ class ET_Core_Portability {
 
 			foreach ( $post_meta as $entry ) {
 				update_post_meta( $post_id, $entry['key'], $entry['value'] );
+			}
+
+			// Import Global Colors for each layout.
+			if ( ! empty( $import['global_colors'] ) ) {
+				$this->import_global_colors( $import['global_colors'] );
 			}
 		}
 
@@ -2655,7 +2669,7 @@ class ET_Core_Portability {
 		<div class="et-core-modal-overlay et-core-form" data-et-core-portability="<?php echo esc_attr( $this->instance->context ); ?>">
 			<div class="et-core-modal">
 				<div class="et-core-modal-header">
-					<h3 class="et-core-modal-title"><?php esc_html_e( 'Portability', ET_CORE_TEXTDOMAIN ); ?></h3><a href="#" class="et-core-modal-close" data-et-core-modal="close"></a>
+					<h3 class="et-core-modal-title"><?php echo esc_html( $this->instance->title ); ?></h3><a href="#" class="et-core-modal-close" data-et-core-modal="close"></a>
 				</div>
 				<div data-et-core-tabs class="et-core-modal-tabs-enabled">
 					<ul class="et-core-tabs">
@@ -2740,6 +2754,7 @@ if ( ! function_exists( 'et_core_portability_register' ) ) :
 function et_core_portability_register( $context, $args ) {
 	$defaults = array(
 		'context' => $context,
+		'title'   => esc_html__( 'Portability', ET_CORE_TEXTDOMAIN ), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain -- intentional use of ET_CORE_TEXTDOMAIN
 		'name'    => false,
 		'view'    => false,
 		'type'    => false,
@@ -2982,6 +2997,7 @@ function et_core_portability_cap( $context ) {
 	$post_contexts    = array(
 		'et_builder',
 		'et_theme_builder',
+		'et_code_snippets',
 		'et_builder_layouts',
 	);
 

@@ -10,14 +10,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @class   ET_Builder_Plugin_Compat_Yith_Dynamic_Pricing_Discounts
  * @package Divi
  * @subpackage Builder
- * @since ??
+ * @since 4.18.1
  * @link https://yithemes.com/themes/plugins/yith-woocommerce-dynamic-pricing-and-discounts/
  */
 class ET_Builder_Plugin_Compat_Yith_Dynamic_Pricing_Discounts extends ET_Builder_Plugin_Compat_Base {
 	/**
 	 * Constructor.
 	 *
-	 * @since ??
+	 * @since 4.18.1
 	 */
 	public function __construct() {
 		$this->plugin_id = 'yith-woocommerce-dynamic-pricing-and-discounts-premium/init.php';
@@ -27,7 +27,7 @@ class ET_Builder_Plugin_Compat_Yith_Dynamic_Pricing_Discounts extends ET_Builder
 	/**
 	 * Hook methods to WordPress.
 	 *
-	 * @since ??
+	 * @since 4.18.1
 	 *
 	 * @return void
 	 */

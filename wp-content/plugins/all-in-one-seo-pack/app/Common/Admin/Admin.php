@@ -412,6 +412,8 @@ class Admin {
 			];
 		}
 
+		$this->adminBarMenuItems[] = aioseo()->standalone->seoPreview->getAdminBarMenuItemNode();
+
 		$htmlSitemapRequested = aioseo()->htmlSitemap->isDedicatedPage;
 		if ( ! is_admin() && ! $htmlSitemapRequested ) {
 			$this->addPageAnalyzerMenuItems();

@@ -127,12 +127,12 @@ private static $installed = array (
     ),
     'voku/portable-utf8' => 
     array (
-      'pretty_version' => '6.0.10',
-      'version' => '6.0.10.0',
+      'pretty_version' => '6.0.11',
+      'version' => '6.0.11.0',
       'aliases' => 
       array (
       ),
-      'reference' => '35b21539c309cbc4697266591f3a4ae9ce4e029c',
+      'reference' => 'a768656da0b8e42d236b325a4ebfc56ad6d0e111',
     ),
     'voku/simple_html_dom' => 
     array (

@@ -21,12 +21,13 @@ function db135_user_css($plugin) {
 
 <?php 
 }
-add_action('wp_head.css', 'db135_user_css');
 
-
-add_filter('dbdb_et_pb_module_shortcode_attributes', 'db135_maybe_add_custom_width_class', 10, 3);
-add_filter("et_pb_row_shortcode_output", 'db135_remove_default_row_class_filter');
-add_filter("et_pb_section_shortcode_output", 'db135_remove_default_section_class_filter');
+if (function_exists('add_action') && function_exists('add_filter')) {
+    add_action('wp_head.css', 'db135_user_css');
+    add_filter('dbdb_et_pb_module_shortcode_attributes', 'db135_maybe_add_custom_width_class', 10, 3);
+    add_filter("et_pb_row_shortcode_output", 'db135_remove_default_row_class_filter');
+    add_filter("et_pb_section_shortcode_output", 'db135_remove_default_section_class_filter');
+}
 
 function db135_remove_default_row_class_filter($output) {
     remove_filter('et_builder_row_classes', 'db135_add_default_width_class');
@@ -40,7 +41,7 @@ function db135_remove_default_section_class_filter($output) {
 
 function db135_maybe_add_custom_width_class($props, $attrs, $render_slug) {
     if ($render_slug === 'et_pb_row') {
-        $has_custom_mobile_width = (isset($props['width']) && $props['width'] !== '80%') || !empty($props['width_phone']);
+        $has_custom_mobile_width = db135_has_custom_mobile_width($props);
         if (!$has_custom_mobile_width) { 
             add_filter('et_builder_row_classes', 'db135_add_default_width_class');
         }
@@ -52,6 +53,10 @@ function db135_maybe_add_custom_width_class($props, $attrs, $render_slug) {
         }
     }
     return $props;
+}
+
+function db135_has_custom_mobile_width($props) {
+    return (isset($props['width']) && $props['width'] !== '80%') || !empty($props['width_phone']);
 }
 
 function db135_add_default_width_class($classes) {

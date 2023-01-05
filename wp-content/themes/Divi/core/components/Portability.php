@@ -1192,7 +1192,8 @@ class ET_Core_Portability {
 			}
 		}
 
-		et_update_option( ET_Builder_Global_Presets_Settings::GLOBAL_PRESETS_OPTION, $global_presets );
+		// Update option for product setting (last attr in args list).
+		et_update_option( ET_Builder_Global_Presets_Settings::GLOBAL_PRESETS_OPTION, $global_presets, false, '', '', true );
 
 		if ( ! $is_temp_presets ) {
 			$global_presets_history = ET_Builder_Global_Presets_History::instance();

@@ -12,6 +12,7 @@ use WebpConverter\Notice\UpgradeNotice;
 use WebpConverter\Notice\WelcomeNotice;
 use WebpConverter\Plugin\Update;
 use WebpConverter\Repository\TokenRepository;
+use WebpConverter\Service\CloudflareConfigurator;
 use WebpConverter\Service\OptionsAccessManager;
 use WebpConverter\Service\StatsManager;
 use WebpConverter\Service\TokenValidator;
@@ -43,6 +44,8 @@ class PluginSettings {
 		OptionsAccessManager::delete_option( Update::VERSION_OPTION );
 		OptionsAccessManager::delete_option( TokenRepository::TOKEN_OPTION );
 		OptionsAccessManager::delete_option( TokenValidator::REQUEST_INFO_OPTION );
+		OptionsAccessManager::delete_option( CloudflareConfigurator::REQUEST_CACHE_CONFIG_OPTION );
+		OptionsAccessManager::delete_option( CloudflareConfigurator::REQUEST_CACHE_PURGE_OPTION );
 
 		OptionsAccessManager::delete_option( StatsManager::STATS_INSTALLATION_DATE_OPTION );
 		OptionsAccessManager::delete_option( StatsManager::STATS_FIRST_VERSION_OPTION );
@@ -57,5 +60,6 @@ class PluginSettings {
 		delete_site_transient( CronStatusManager::CRON_PATHS_SKIPPED_TRANSIENT );
 		delete_site_transient( CronStatusManager::CRON_STATUS_LOCKED_TRANSIENT );
 		delete_site_transient( CronStatusManager::CRON_REQUEST_ID_TRANSIENT );
+		delete_site_transient( CronStatusManager::CRON_REQUEST_RESPONSE_TRANSIENT );
 	}
 }

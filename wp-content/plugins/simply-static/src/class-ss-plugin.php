@@ -15,7 +15,7 @@ class Plugin {
 	 * Plugin version
 	 * @var string
 	 */
-	const VERSION = '2.1.9';
+	const VERSION = '2.2.1.1';
 
 	/**
 	 * The slug of the plugin; used in actions, filters, i18n, table names, etc.
@@ -93,6 +93,9 @@ class Plugin {
 			add_action( 'admin_menu', array( self::$instance, 'add_plugin_admin_menu' ), 2 );
 			// Add admin info links.
 			add_action( 'simply_static_admin_info_links', array( self::$instance, 'add_info_links' ) );
+
+			// Maybe clear local directory.
+			add_action( 'ss_after_setup_task', array( self::$instance, 'maybe_clear_directory' ) );
 
 			// Handle AJAX requests
 			add_action( 'wp_ajax_static_archive_action', array( self::$instance, 'static_archive_action' ) );
@@ -842,5 +845,25 @@ class Plugin {
 		<?php
 		$info_text = apply_filters( 'simply_static_info_links', ob_get_clean() );
 		echo $info_text;
+	}
+
+	/**
+	 * Maybe clear local directory before export.
+	 *
+	 * @return void
+	 */
+	public function maybe_clear_directory() {
+		// Clear out the local directory before copying files.
+		if ( 'on' === $this->options->get( 'clear_directory_before_export' ) && 'local' === $this->options->get( 'delivery_method' ) ) {
+			$local_dir = apply_filters( 'ss_local_dir', $this->options->get( 'local_dir' ) );
+
+			// Make sure the directory exists and is not empty.
+			$iterator = new \FilesystemIterator( $local_dir );
+
+			if ( is_dir( $local_dir ) && $iterator->valid() ) {
+				Transfer_Files_Locally_Task::delete_local_directory_static_files( $local_dir, $this->options );
+			}
+		}
+
 	}
 }

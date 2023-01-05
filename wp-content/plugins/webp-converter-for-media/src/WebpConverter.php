@@ -53,12 +53,14 @@ class WebpConverter {
 		( new Page\PageIntegration( $plugin_info ) )
 			->set_page_integration( new Page\GeneralSettingsPage( $plugin_info, $plugin_data, $token_repository ) )
 			->set_page_integration( new Page\AdvancedSettingsPage( $plugin_info, $plugin_data, $token_repository ) )
+			->set_page_integration( new Page\CdnSettingsPage( $plugin_info, $plugin_data, $token_repository ) )
 			->set_page_integration( new Page\DebugPage( $plugin_info, $plugin_data ) )
 			->set_page_integration( new Page\BulkOptimizationPage( $plugin_info, $plugin_data, $token_repository ) )
 			->init_hooks();
-		( new Service\BackupExcluder() )->init_hooks();
+		( new Service\BackupExcluder( $plugin_data ) )->init_hooks();
 		( new Service\DeactivationModalGenerator( $plugin_info, $plugin_data ) )->load_modal();
 		( new Service\MediaStatusViewer( $plugin_data, $token_repository ) )->init_hooks();
+		( new Service\RestApiUnlocker() )->init_hooks();
 		( new Service\WpCliManager( $plugin_data, $token_repository ) )->init_hooks();
 		( new Settings\AdminAssets( $plugin_info ) )->init_hooks();
 	}

@@ -1,3 +1,21 @@
+version 4.19.4 ( updated 12-16-2022 )
+- Fixed a bug that was causing Theme Builder Templates to be deleted unintentionally.
+	* includes/builder/frontend-builder/theme-builder/theme-builder.php
+
+version 4.19.3 ( updated 12-13-2022 )
+- Improved Presets storage and performance.
+- Fixed issue where you could not remove or restore items from Local VB Library.
+- Fixed server errors when uploading items to the Cloud Server in some cases.
+- Fixed a PHP fatal error that occurred on GoDaddy websites due to a change in the GD System plugin's cache class.
+	* core/components/Portability.php
+	* core/components/init.php
+	* epanel/custom_functions.php
+	* includes/builder/feature/Library.php
+	* includes/builder/feature/dynamic-assets/class-dynamic-assets.php
+	* includes/builder/feature/global-presets/History.php
+	* includes/builder/feature/global-presets/Settings.php
+	* includes/builder/frontend-builder/bundle.js
+
 version 4.19.2 ( updated 11-29-2022 )
 - Fixed issue where presets where not importing when tb library item is duplicated from cloud to local.
 - Fixed divider view always being 100% in phone view in VB.

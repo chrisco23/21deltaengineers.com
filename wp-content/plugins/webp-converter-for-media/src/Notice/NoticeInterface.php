@@ -52,9 +52,9 @@ interface NoticeInterface {
 	/**
 	 * Returns variables with values using in view template.
 	 *
-	 * @return string[]|mixed[] Args extract in view template.
+	 * @return mixed[]|null Args extract in view template.
 	 */
-	public function get_vars_for_view(): array;
+	public function get_vars_for_view();
 
 	/**
 	 * Returns name of action using in WP Ajax.

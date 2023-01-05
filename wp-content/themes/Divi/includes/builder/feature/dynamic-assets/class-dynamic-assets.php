@@ -2621,7 +2621,7 @@ class ET_Dynamic_Assets {
 	 * @since 4.10.0
 	 */
 	public function get_preset_attributes( $content ) {
-		$all_builder_presets = et_get_option( 'builder_global_presets', (object) array(), '', true );
+		$all_builder_presets = et_get_option( 'builder_global_presets_ng', (object) array(), '', true, false, '', '', true );
 		$presets_attributes  = array();
 
 		foreach ( $all_builder_presets as $module => $module_presets ) {

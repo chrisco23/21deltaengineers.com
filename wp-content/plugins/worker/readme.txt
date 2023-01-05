@@ -55,6 +55,9 @@ Check out the [ManageWP promo video](https://vimeo.com/220647227).
 https://vimeo.com/220647227
 
 == Changelog ==
+= 4.9.16 =
+- Fix: PHP 8.0+ compatibility update
+
 = 4.9.15 =
 - Fix: WordPress 6.1 compatibility
 

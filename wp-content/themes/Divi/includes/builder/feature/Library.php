@@ -1541,7 +1541,7 @@ class ET_Builder_Library {
 			'ID' => $item_id,
 		);
 
-		$is_library_post_type = in_array( get_post_type( $item_id ), et_builder_get_enabled_builder_post_types(), true );
+		$is_library_post_type = 'et_pb_layout' === get_post_type( $item_id );
 
 		if ( ! empty( $update_details['newCategoryName'] ) && current_user_can( 'manage_categories' ) ) {
 			$new_names_array = explode( ',', $update_details['newCategoryName'] );

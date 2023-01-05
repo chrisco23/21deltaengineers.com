@@ -151,6 +151,10 @@ class Setup_Task extends Task {
 		} elseif ( stripos( $path, get_home_path() ) === 0 ) {
 			$url = str_replace( untrailingslashit( get_home_path() ), Util::origin_url(), $path );
 		}
+		
+		// Windows support
+		$url = Util::normalize_slashes( $url );
+
 		return $url;
 	}
 

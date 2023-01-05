@@ -17,7 +17,7 @@ abstract class NoticeAbstract implements NoticeInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_vars_for_view(): array {
+	public function get_vars_for_view() {
 		return [];
 	}
 }

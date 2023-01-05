@@ -512,12 +512,11 @@ function et_theme_builder_trash_draft_and_unused_posts() {
 	$draft_id       = et_theme_builder_get_theme_builder_post_id( false, false );
 	$post_types     = array(
 		ET_THEME_BUILDER_TEMPLATE_POST_TYPE,
-		ET_THEME_BUILDER_THEME_BUILDER_POST_TYPE,
 		ET_THEME_BUILDER_HEADER_LAYOUT_POST_TYPE,
 		ET_THEME_BUILDER_BODY_LAYOUT_POST_TYPE,
 		ET_THEME_BUILDER_FOOTER_LAYOUT_POST_TYPE,
 	);
-	$has_permission = current_user_can( 'delete_post', $draft_id ) && in_array( get_post_type( $draft_id ), $post_types, true );
+	$has_permission = current_user_can( 'delete_post', $draft_id );
 
 	if ( $draft_id > 0 && $has_permission ) {
 		wp_trash_post( $draft_id );

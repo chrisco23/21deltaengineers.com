@@ -21,7 +21,8 @@ class BlogModuleAuthorFilterFeature {
             return $attrs;
         }
         add_filter('pre_get_posts', array($this, 'filter_the_posts'), 10, 2);
-        $this->author = $attrs['dbdb_author_id'];
+        //$this->author = $attrs['dbdb_author_id'];
+        $this->author = isset($attrs['dbdb_author_id'])?$attrs['dbdb_author_id']:'';
         return $attrs;
     }
 
@@ -39,31 +40,15 @@ class BlogModuleAuthorFilterFeature {
     
     function add_fields($fields) {
         if (!is_array($fields)) { return $fields; }
-        // get all author ids and names
-        $args = array(
-            'orderby'    => 'post_count',
-            'order'      => 'DESC',
-            'capability' => array( 'edit_posts' ),
-        );
-        if ( version_compare( $GLOBALS['wp_version'], '5.9', '<' ) ) {
-            $args['who'] = 'authors';
-            unset( $args['capability'] );
-        }
-        $authors = get_users( $args );
-        $author_options = array();
-        $author_options['all'] = esc_html__('All Authors', 'divi-booster');
-        foreach ($authors as $author) {
-            $author_options[$author->ID] = esc_html__($author->display_name, 'divi-booster');
-        }
+
         $fields['dbdb_author_id'] = array(
-            'label' => 'Author(s)',
-            'type' => 'select',
-            'options' => $author_options,
+            'label' => 'Author ID',
+            'type' => 'text',
             'option_category' => 'basic_option',
-            'description' => esc_html__('Choose the author to show in the blog module.', 'divi-booster'),
+            'description' => esc_html__('Enter the user ID of an author to show only their posts in the module, or leave blank to show posts by all authors.', 'divi-booster'),
             'toggle_slug' => 'main_content',
             'tab_slug' => 'general',
-            'default' => 'all',
+            'default' => '',
         );
 
         return $fields;

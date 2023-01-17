@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf93474aac0e4c44ceebb45c027d023b5
+class ComposerStaticInitae800bac13071aa62389abde6c4d4902
 {
     public static $prefixLengthsPsr4 = array (
         'W' => 
@@ -142,6 +142,7 @@ class ComposerStaticInitf93474aac0e4c44ceebb45c027d023b5
         'WebpConverter\\Notice\\NoticeIntegration' => __DIR__ . '/../..' . '/src/Notice/NoticeIntegration.php',
         'WebpConverter\\Notice\\NoticeInterface' => __DIR__ . '/../..' . '/src/Notice/NoticeInterface.php',
         'WebpConverter\\Notice\\ThanksNotice' => __DIR__ . '/../..' . '/src/Notice/ThanksNotice.php',
+        'WebpConverter\\Notice\\TokenInactiveNotice' => __DIR__ . '/../..' . '/src/Notice/TokenInactiveNotice.php',
         'WebpConverter\\Notice\\UpgradeNotice' => __DIR__ . '/../..' . '/src/Notice/UpgradeNotice.php',
         'WebpConverter\\Notice\\WelcomeNotice' => __DIR__ . '/../..' . '/src/Notice/WelcomeNotice.php',
         'WebpConverter\\PluginData' => __DIR__ . '/../..' . '/src/PluginData.php',
@@ -210,9 +211,9 @@ class ComposerStaticInitf93474aac0e4c44ceebb45c027d023b5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf93474aac0e4c44ceebb45c027d023b5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf93474aac0e4c44ceebb45c027d023b5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf93474aac0e4c44ceebb45c027d023b5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitae800bac13071aa62389abde6c4d4902::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitae800bac13071aa62389abde6c4d4902::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitae800bac13071aa62389abde6c4d4902::$classMap;
 
         }, null, ClassLoader::class);
     }

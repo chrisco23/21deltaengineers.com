@@ -54,7 +54,7 @@ class DeactivationModalGenerator {
 				sprintf( self::API_URL, $this->plugin_info->get_plugin_slug() ),
 				sprintf(
 				/* translators: %s: plugin name */
-					__( 'We are sorry that you are leaving our plugin %s', 'webp-converter-for-media' ),
+					__( 'We are sorry that you are leaving our %s plugin', 'webp-converter-for-media' ),
 					'Converter for Media'
 				),
 				__( 'Can you please take a moment to tell us why you are deactivating this plugin (anonymous answer)?', 'webp-converter-for-media' ),
@@ -210,7 +210,7 @@ class DeactivationModalGenerator {
 
 		$images_all  = $this->stats_manager->get_images_webp_all() ?: 0;
 		$images_left = $this->stats_manager->get_images_webp_unconverted() ?: 0;
-		if ( ( $images_all !== $images_left ) || ( $images_all === 0 ) ) {
+		if ( ( $images_all === 0 ) || ( $images_left === 0 ) ) {
 			return null;
 		}
 

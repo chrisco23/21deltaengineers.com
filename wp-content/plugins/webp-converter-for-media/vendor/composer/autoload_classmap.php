@@ -127,6 +127,7 @@ return array(
     'WebpConverter\\Notice\\NoticeIntegration' => $baseDir . '/src/Notice/NoticeIntegration.php',
     'WebpConverter\\Notice\\NoticeInterface' => $baseDir . '/src/Notice/NoticeInterface.php',
     'WebpConverter\\Notice\\ThanksNotice' => $baseDir . '/src/Notice/ThanksNotice.php',
+    'WebpConverter\\Notice\\TokenInactiveNotice' => $baseDir . '/src/Notice/TokenInactiveNotice.php',
     'WebpConverter\\Notice\\UpgradeNotice' => $baseDir . '/src/Notice/UpgradeNotice.php',
     'WebpConverter\\Notice\\WelcomeNotice' => $baseDir . '/src/Notice/WelcomeNotice.php',
     'WebpConverter\\PluginData' => $baseDir . '/src/PluginData.php',

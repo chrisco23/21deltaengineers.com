@@ -167,8 +167,10 @@ class Schema {
 			'@graph'   => []
 		];
 
-		foreach ( $this->graphs as $graph ) {
-			$namespace = $this->getGraphNamespace( $graph );
+		// By determining the length of the array after every iteration, we are able to add additional graphs during runtime.
+		// e.g. The Article graph may require a Person graph to be output for the author.
+		for ( $i = 0; $i < count( $this->graphs ); $i++ ) {
+			$namespace = $this->getGraphNamespace( $this->graphs[ $i ] );
 			if ( $namespace ) {
 				$schema['@graph'][] = ( new $namespace )->get();
 			}

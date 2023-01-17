@@ -15,7 +15,7 @@ class Plugin {
 	 * Plugin version
 	 * @var string
 	 */
-	const VERSION = '2.2.1.1';
+	const VERSION = '2.2.3';
 
 	/**
 	 * The slug of the plugin; used in actions, filters, i18n, table names, etc.
@@ -52,6 +52,11 @@ class Plugin {
 	 * @var string
 	 */
 	protected $current_page = '';
+
+    /**
+     * @var null|\Simply_Static\Page_Handlers
+     */
+    protected $page_handlers = null;
 
 	/**
 	 * Disable usage of "new"
@@ -117,11 +122,14 @@ class Plugin {
 			self::$instance->options              = Options::instance();
 			self::$instance->view                 = new View();
 			self::$instance->archive_creation_job = new Archive_Creation_Job();
+            self::$instance->page_handlers        = new Page_Handlers();
 
 			$page                         = isset( $_GET['page'] ) ? $_GET['page'] : '';
 			self::$instance->current_page = $page;
 
 			Upgrade_Handler::run();
+            $integrations = new Integrations();
+            $integrations->load();
 
 			// Exclude pages if not set.
 			$urls_to_exclude = self::$instance->options->get( 'urls_to_exclude' );
@@ -172,6 +180,8 @@ class Plugin {
 		require_once $path . 'src/class-ss-sql-permissions.php';
 		require_once $path . 'src/class-ss-upgrade-handler.php';
 		require_once $path . 'src/class-ss-util.php';
+        require_once $path . 'src/class-page-handlers.php';
+        require_once $path . 'src/class-integrations.php';
 	}
 
 	/**
@@ -208,7 +218,7 @@ class Plugin {
 		add_menu_page(
 			__( 'Simply Static', 'simply-static' ),
 			__( 'Simply Static', 'simply-static' ),
-			'edit_posts',
+			apply_filters( 'ss_settings_capability', 'edit_posts' ),
 			self::SLUG,
 			array( self::$instance, 'display_generate_page' ),
 			'dashicons-text-page'
@@ -218,7 +228,7 @@ class Plugin {
 			self::SLUG,
 			__( 'Generate Static Site', 'simply-static' ),
 			__( 'Generate', 'simply-static' ),
-			'edit_posts',
+			apply_filters( 'ss_settings_capability', 'edit_posts' ),
 			self::SLUG,
 			array( self::$instance, 'display_generate_page' )
 		);
@@ -227,7 +237,7 @@ class Plugin {
 			self::SLUG,
 			__( 'Simply Static Settings', 'simply-static' ),
 			__( 'Settings', 'simply-static' ),
-			'manage_options',
+			apply_filters( 'ss_settings_capability', 'manage_options' ),
 			self::SLUG . '_settings',
 			array( self::$instance, 'display_settings_page' )
 		);
@@ -236,7 +246,7 @@ class Plugin {
 			self::SLUG,
 			__( 'Simply Static Diagnostics', 'simply-static' ),
 			__( 'Diagnostics', 'simply-static' ),
-			'manage_options',
+			apply_filters( 'ss_settings_capability', 'manage_options' ),
 			self::SLUG . '_diagnostics',
 			array( self::$instance, 'display_diagnostics_page' )
 		);

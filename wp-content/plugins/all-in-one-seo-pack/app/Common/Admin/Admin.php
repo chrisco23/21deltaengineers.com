@@ -482,7 +482,7 @@ class Admin {
 			],
 			[
 				'id'    => 'aioseo-analyze-page-structureddata',
-				'title' => esc_html__( 'Google Structured Data Test', 'all-in-one-seo-pack' ),
+				'title' => esc_html__( 'Google Rich Results Test', 'all-in-one-seo-pack' ),
 				'href'  => 'https://search.google.com/test/rich-results?url=' . $url,
 			],
 			[

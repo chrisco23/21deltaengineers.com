@@ -81,7 +81,7 @@ class Frontend {
 
 		if ( is_search() ) {
 			$type      = 'search';
-			$reference = sanitize_text_field( get_search_query() );
+			$reference = htmlspecialchars( sanitize_text_field( get_search_query() ) );
 		}
 
 		if ( is_404() ) {
@@ -208,7 +208,6 @@ class Frontend {
 	 */
 	protected function breadcrumbToDisplay( $item ) {
 		$templateItem = $this->getCrumbTemplate( $item );
-
 		if ( empty( $templateItem['template'] ) ) {
 			return;
 		}

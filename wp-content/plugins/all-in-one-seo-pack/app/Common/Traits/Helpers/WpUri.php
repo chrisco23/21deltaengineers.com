@@ -86,7 +86,7 @@ trait WpUri {
 	public function canonicalUrl() {
 		static $url = null;
 		if ( null !== $url ) {
-			return apply_filters( 'aioseo_canonical_url', $url );
+			return $url;
 		}
 
 		if ( is_404() || is_search() ) {

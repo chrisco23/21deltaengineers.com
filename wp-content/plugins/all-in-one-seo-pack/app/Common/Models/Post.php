@@ -101,7 +101,7 @@ class Post extends Model {
 		}
 
 		// Set options object.
-		$post->options = self::getOptionsDefaults( $post->options );
+		$post = self::setOptionsDefaults( $post );
 
 		return apply_filters( 'aioseo_get_post', $post );
 	}
@@ -665,12 +665,13 @@ class Post extends Model {
 	/**
 	 * Returns the defaults for the options column.
 	 *
-	 * @since 4.2.2
+	 * @since   4.2.2
+	 * @version 4.2.9
 	 *
-	 * @param  string $options The options.
-	 * @return array           The options with defaults.
+	 * @param  Post $post   The Post object.
+	 * @return Post         The modified Post object.
 	 */
-	public static function getOptionsDefaults( $options = '' ) {
+	public static function setOptionsDefaults( $post ) {
 		$defaults = [
 			'linkFormat' => [
 				'internalLinkCount'      => 0,
@@ -678,13 +679,16 @@ class Post extends Model {
 			]
 		];
 
-		if ( empty( $options ) ) {
-			return json_decode( wp_json_encode( $defaults ) );
+		if ( empty( $post->options ) ) {
+			$post->options = json_decode( wp_json_encode( $defaults ) );
+
+			return $post;
 		}
 
-		$options = json_decode( wp_json_encode( $options ), true );
-		$options = array_replace_recursive( $defaults, $options );
+		$post->options = json_decode( wp_json_encode( $post->options ), true );
+		$post->options = array_replace_recursive( $defaults, $post->options );
+		$post->options = json_decode( wp_json_encode( $post->options ) );
 
-		return json_decode( wp_json_encode( $options ) );
+		return $post;
 	}
 }

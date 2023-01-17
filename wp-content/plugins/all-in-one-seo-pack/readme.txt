@@ -3,7 +3,7 @@ Contributors: aioseo, smub, benjaminprojas
 Tags: SEO, Google Search Console, XML Sitemap, meta description, schema, meta title, rich snippets, woocommerce seo, local seo, open graph, google news sitemap, video sitemap, robots.txt, seo audit, content analysis, seo plugin, redirection
 Requires at least: 4.9
 Tested up to: 6.1.1
-Stable tag: 4.2.8
+Stable tag: 4.2.9
 License: GPLv2 or later
 Requires PHP: 5.6
 
@@ -229,6 +229,28 @@ Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeg
 
 
 == Changelog ==
+
+**New in Version 4.2.9**
+
+* New: You can now add redirects for draft posts, which will be activated as soon as the posts are published.
+* Updated: Added `orderby` as a default WooCommerce query arg exception to Crawl Cleanup.
+* Updated: Rich Results Test in the admin menu now uses Google's new structured data validation tool.
+* Fixed: Article schema now correctly also includes its Author schema if the graph is set as the default for the post.
+* Fixed: WebPage schema now includes the creator/author in the right format.
+* Fixed: Schema Validator now correctly includes FAQ schema if an FAQ graph has been added to the post.
+* Fixed: Emoji picker should now always open correctly on the first click.
+* Fixed: Breadcrumbs trail sometimes containing encoded characters on search archive pages.
+* Fixed: Post Report in Link Assistant sometimes showed a blank page rather than actual results.
+* Fixed: Links table now correctly refreshes after adding a link suggestion in the Block Editor/Classic Editor.
+* Fixed: Image SEO now correctly applies casing/punctuation settings when title/alt tag/caption/description does not contain a smart tag.
+* Fixed: Image SEO no longer incorrectly encodes quotation marks in the image caption/description.
+* Fixed: Redirects can now include consecutive space characters.
+* Fixed: Redirects modal is now correctly styled and padded in Elementor.
+* Fixed: PHP notice when ACF image field returns a previously unexpected value format.
+* Fixed: Removed smart tags delete button while searching for a smart tag.
+* Fixed: Model close button is now visible again when using Elementor's dark mode.
+* Fixed: Resolved a few deprecation console warnings for the Link Format in the Block Editor.
+* Fixed: aioseo_canonical_hook running consecutive times.
 
 **New in Version 4.2.8**
 
@@ -1190,6 +1212,6 @@ As part of your SEO strategy, an XML sitemap can help you to improve your domain
 
 == Upgrade Notice ==
 
-= 4.2.8 =
+= 4.2.9 =
 
 This update adds major improvements and bugfixes.

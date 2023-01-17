@@ -17,9 +17,9 @@ interface NoticeInterface {
 	/**
 	 * Returns default value for option that specifies whether to display notice.
 	 *
-	 * @return string Default value.
+	 * @return string|null Default value.
 	 */
-	public static function get_default_value(): string;
+	public static function get_default_value();
 
 	/**
 	 * Returns status if notice is available.

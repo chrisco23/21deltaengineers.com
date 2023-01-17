@@ -2,8 +2,8 @@
 Contributors: ninjateam
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
-Tested up to: 6.1
-Stable tag: 5.1
+Tested up to: 6.1.1
+Stable tag: 5.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -191,6 +191,18 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Jan 9, 2023 – Version 5.1.4 =
+- Fixed: Special symbol in image alt in gallery
+
+= Jan 4, 2023 – Version 5.1.3 =
+- Fixed: Conflict with PHP <7.4
+
+= Jan 3, 2023 – Version 5.1.2 =
+- Fixed: Download folder error (PRO)
+
+= Dec 28, 2022 – Version 5.1.1 =
+- Fixed and improved: Sort by file name (PRO)
 
 = Nov 15, 2022 - Version 5.1 =
 - Fixed: Import folders from WP Media Folders (by Damien Barrère)

@@ -63,7 +63,7 @@ class PersonAuthor extends Graphs\Graph {
 
 		if ( is_author() ) {
 			$data['mainEntityOfPage'] = [
-				'#id' => aioseo()->schema->context['url'] . '#profilepage'
+				'@id' => aioseo()->schema->context['url'] . '#profilepage'
 			];
 		}
 

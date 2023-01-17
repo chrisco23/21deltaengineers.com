@@ -251,7 +251,7 @@ trait Vue {
 				'redirects'                      => [
 					'modalOpen' => false
 				],
-				'options'                        => Models\Post::getOptionsDefaults( $post->options )
+				'options'                        => $post->options
 			];
 
 			if ( empty( $integration ) ) {

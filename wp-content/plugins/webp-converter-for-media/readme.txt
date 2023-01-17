@@ -5,7 +5,7 @@ Tags: convert webp, webp, optimize images, image optimization, compress images
 Requires at least: 4.9
 Tested up to: 6.1
 Requires PHP: 7.0
-Stable tag: 5.6.2
+Stable tag: 5.6.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -349,6 +349,14 @@ In case of problems, please contact us in [the support forum](https://url.mattpl
 4. Optimization statistics of Media Library
 
 == Changelog ==
+
+= 5.6.3 (2023-01-10) =
+* `[Changed]` Error message for bypassing_apache error in server configuration
+* `[Changed]` Error message for rewrites_not_executed error in server configuration
+* `[Changed]` Error message for rewrites_cached error in server configuration
+* `[Changed]` Error message for rewrites_not_working error in server configuration
+* `[Changed]` Error message for token_invalid error in server configuration
+* `[Changed]` Error message for token_limit error in server configuration
 
 = 5.6.2 (2023-01-05) =
 * `[Changed]` List of extra features in Advanced settings

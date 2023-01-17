@@ -23,13 +23,6 @@ class LitespeedNotice extends NoticeAbstract implements NoticeInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function get_default_value(): string {
-		return '';
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function is_available(): bool {
 		return ( ( $_GET['page'] ?? '' ) === PageIntegration::SETTINGS_MENU_PAGE ); // phpcs:ignore WordPress.Security
 	}

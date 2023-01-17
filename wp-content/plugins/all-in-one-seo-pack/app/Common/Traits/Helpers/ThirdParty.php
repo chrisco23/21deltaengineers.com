@@ -344,37 +344,44 @@ trait ThirdParty {
 			// 'taxonomy',
 		];
 
-		$types     = wp_parse_args( $types, $allowedTypes );
-		$acfFields = [];
-
+		$types        = wp_parse_args( $types, $allowedTypes );
 		$fieldObjects = get_field_objects( $post->ID );
-		if ( ! empty( $fieldObjects ) ) {
-			foreach ( $fieldObjects as $field ) {
-				if ( empty( $field['value'] ) ) {
-					continue;
-				}
 
-				if ( ! in_array( $field['type'], $types, true ) ) {
-					continue;
-				}
+		if ( empty( $fieldObjects ) ) {
+			return [];
+		}
 
-				if ( 'url' === $field['type'] ) {
-					// Url field
-					$value = "<a href='{$field['value']}'>{$field['value']}</a>";
-				} elseif ( 'image' === $field['type'] ) {
-					// Image field
-					$value = "<img src='{$field['value']['url']}'>";
-				} elseif ( 'gallery' === $field['type'] ) {
-					// Image field
-					$value = "<img src='{$field['value'][0]['url']}'>";
-				} else {
-					// Other fields
-					$value = $field['value'];
-				}
+		// Filter out any fields that are not in our allowed types.
+		$fields = array_filter( $fieldObjects, function( $object ) use ( $types ) {
+			return ! empty( $object['value'] ) && in_array( $object['type'], $types, true );
+		});
 
-				if ( $value ) {
-					$acfFields[ $field['name'] ] = $value;
-				}
+		// Create an array with the field names and values with added HTML markup.
+		$acfFields = [];
+		foreach ( $fields as $field ) {
+			if ( 'url' === $field['type'] ) {
+
+				// Url field
+				$value = "<a href='{$field['value']}'>{$field['value']}</a>";
+			} elseif ( 'image' === $field['type'] ) {
+
+				// Image format options are array, URL (string), id (int).
+				$imageUrl = is_array( $field['value'] ) ? $field['value']['url'] : $field['value'];
+				$imageUrl = is_numeric( $imageUrl ) ? wp_get_attachment_image_url( $imageUrl ) : $imageUrl;
+
+				$value = "<img src='{$imageUrl}'>";
+			} elseif ( 'gallery' === $field['type'] ) {
+
+				// Image field
+				$value = "<img src='{$field['value'][0]['url']}'>";
+			} else {
+
+				// Other fields
+				$value = $field['value'];
+			}
+
+			if ( $value ) {
+				$acfFields[ $field['name'] ] = $value;
 			}
 		}
 

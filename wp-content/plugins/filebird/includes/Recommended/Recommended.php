@@ -79,7 +79,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'slug'              => 'yaypricing',
 					'name'              => 'YayPricing – WooCommerce Dynamic Pricing & Discounts',
 					'short_description' => 'Offer automatic pricing and discounts to design a powerful marketing strategy for your WooCommerce store.',
-					'icon'              => 'https://yaycommerce.com/wp-content/uploads/2022/03/YayPricing.png',
+					'icon'              => 'https://yaycommerce.com/wp-content/uploads/2022/11/yaypricing-256x256-1.png',
 					'download_link'     => 'https://yaycommerce.com/yaypricing-woocommerce-dynamic-pricing-and-discounts/',
 					'type'              => array( 'woocommerce' ),
 					'version'           => 0,

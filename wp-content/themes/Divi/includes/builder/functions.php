@@ -8,7 +8,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '4.19.4' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '4.19.5' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -11675,6 +11675,7 @@ if ( ! function_exists( 'et_strip_shortcodes' ) ) :
 		$strip_content_shortcodes = array(
 			'et_pb_code',
 			'et_pb_fullwidth_code',
+			'et_pb_social_media_follow_network',
 		);
 
 		// list of post-based shortcodes.

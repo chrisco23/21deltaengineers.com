@@ -180,6 +180,11 @@ class Twitter {
 	 * @return string             Full Twitter username.
 	 */
 	public function prepareUsername( $profile, $includeAt = true ) {
+		if ( ! $profile ) {
+			return $profile;
+		}
+
+		$profile = (string) $profile;
 		if ( preg_match( '/^(\@)?[A-Za-z0-9_]+$/', $profile ) ) {
 			if ( '@' !== $profile[0] && $includeAt ) {
 				$profile = '@' . $profile;

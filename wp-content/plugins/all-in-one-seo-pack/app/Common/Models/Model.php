@@ -452,9 +452,12 @@ class Model implements \JsonSerializable {
 
 			// Let's set the columns that are available by default.
 			$table   = aioseo()->core->db->prefix . $this->table;
-			$results = aioseo()->core->db->execute( 'SHOW COLUMNS FROM `' . $table . '`', true );
+			$results = aioseo()->core->db
+				->output( 'OBJECT' )
+				->execute( 'SHOW COLUMNS FROM `' . $table . '`', true )
+				->result();
 
-			foreach ( $results->result() as $col ) {
+			foreach ( $results as $col ) {
 				self::$columns[ get_called_class() ][ $col->Field ] = $col->Default;
 			}
 

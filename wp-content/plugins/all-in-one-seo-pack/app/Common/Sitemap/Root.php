@@ -198,7 +198,7 @@ class Root {
 		$shouldIncludeHomepage = 'posts' === get_option( 'show_on_front' ) || ! in_array( 'page', $postTypes, true );
 
 		if ( $shouldIncludeHomepage ) {
-			$homePageEntry               = new \stdClass;
+			$homePageEntry               = new \stdClass();
 			$homePageEntry->lastModified = aioseo()->sitemap->helpers->lastModifiedPostTime();
 			array_unshift( $entries, $homePageEntry );
 		}

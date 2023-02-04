@@ -80,10 +80,18 @@ class ET_Builder_Global_Presets_History {
 			);
 		}
 
-		$history = json_decode( stripslashes( $_POST['history'] ) );
+		$history = self::_get_global_presets_history();
 
-		if ( empty( $history->history ) ) {
+		$history_update = empty( $_POST['history'] ) ? (object) array() : json_decode( stripslashes( $_POST['history'] ) ); // phpcs:ignore ET.Sniffs.ValidatedSanitizedInput.InputNotSanitized -- self::sanitize_and_validate function does sanitization.
+
+		if ( empty( $history_update->current_state ) ) {
 			et_core_die( esc_html__( 'Global History data is empty.', 'et_builder' ) );
+		}
+
+		$history->index = $history_update->index;
+
+		if ( $history_update->is_new_record ) {
+			$history->history[ $history->index ] = $history_update->current_state;
 		}
 
 		if ( self::sanitize_and_validate( $history ) ) {

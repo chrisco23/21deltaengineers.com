@@ -1,3 +1,34 @@
+version 4.19.5 ( updated 01-25-2023 )
+- Fixed order of icon font loading as .woff should be loaded before .ttf as it's a better format and is supported across modern browsers.
+- Fixed unexpected behavior of Global Colors when using undo/redo buttons in Visual Builder.
+- Fixed Global Colors rendering for Specialty Columns in Visual Builder.
+- Fixed issue where global colors not working in VB for button.
+- Fixed Global Colors usage in fields borders settings.
+- Fixed Social Media Follow module text being shown in the excerpt inside Blog Module, when excerpt is empty and Blog module is using content as excerpt.
+- Fixed issue where countdown timer title margin remains visible when the title is empty.
+- Fixed an issue where sticky elements would not work due to a JavaScript error that occurred in some rare cases.
+- Fixed nested list bullets styling issue for ol and ul list types.
+- Improved presets saving performance in Visual Builder.
+- Fixed modal not closing after clicking use this layout on Theme Builder.
+- Fixed Global Colors preview in Edit mode.
+- Fixed bug where backup exists popup shows every time when opening Theme Builder.
+- Fixed an issue where the canonical link would get duplicated in some cases.
+- Fixed illegal string offset user and API key when saving on the Updates tab.
+- Fixed Global Colors not properly exporting from the Divi Library in some cases.
+- Fixed BOM character included file can not be imported.
+- Fixed an issue where the Divi parent style would not be correctly enqueued in some cases when child themes were used.
+	* core/components/Portability.php
+	* epanel/core_functions.php
+	* epanel/custom_functions.php
+	* functions.php
+	* includes/builder/feature/dynamic-assets/assets/js/src/sticky-element.js
+	* includes/builder/feature/global-presets/History.php
+	* includes/builder/feature/global-presets/Settings.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/theme-builder/theme-builder.php
+	* includes/builder/functions.php
+	* includes/builder/scripts/utils/sticky.js
+
 version 4.19.4 ( updated 12-16-2022 )
 - Fixed a bug that was causing Theme Builder Templates to be deleted unintentionally.
 	* includes/builder/frontend-builder/theme-builder/theme-builder.php

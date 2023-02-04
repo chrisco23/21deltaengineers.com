@@ -82,7 +82,7 @@ class Post extends Model {
 		// WordPress deletes the attachment .zip file for the new plugin version after installing it, which triggers the "delete_post" hook.
 		// In-between the 4.1.8 to 4.1.9 update, the new Core class does not exist yet, causing the PHP error.
 		// TODO: Delete this in a future release.
-		$post = new self;
+		$post = new self();
 		if ( ! property_exists( aioseo(), 'core' ) ) {
 			return $post;
 		}
@@ -628,7 +628,7 @@ class Post extends Model {
 	 * @since 4.1.7
 	 *
 	 * @param  string $keyphrases The database keyphrases.
-	 * @return array              The defaults.
+	 * @return object             The defaults.
 	 */
 	public static function getKeyphrasesDefaults( $keyphrases = '' ) {
 		$keyphrases = json_decode( (string) $keyphrases );

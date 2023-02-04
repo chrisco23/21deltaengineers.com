@@ -75,7 +75,7 @@ class Divi extends Base {
 		add_action( 'wp_footer', [ $this, 'addContainers' ] );
 		add_action( 'wp_footer', [ $this, 'addIframeWatcher' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue' ] );
-		add_filter( 'script_loader_tag', [ $this, 'addEtTag' ], 10, 3 );
+		add_filter( 'script_loader_tag', [ $this, 'addEtTag' ], 10, 2 );
 	}
 
 	/**

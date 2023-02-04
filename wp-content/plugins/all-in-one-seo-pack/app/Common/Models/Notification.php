@@ -307,7 +307,7 @@ class Notification extends Model {
 		// Set the dismissed status to false.
 		$fields['dismissed'] = 0;
 
-		$notification = new self;
+		$notification = new self();
 		$notification->set( $fields );
 		$notification->save();
 

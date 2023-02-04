@@ -78,7 +78,7 @@ class Admin {
 	 * @since 4.0.0
 	 */
 	public function __construct() {
-		new SeoAnalysis;
+		new SeoAnalysis();
 
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		if (
@@ -187,8 +187,7 @@ class Admin {
 				'parent'     => $this->pageSlug
 			],
 			'aioseo-link-assistant'    => [
-				'menu_title' => esc_html__( 'Link Assistant', 'all-in-one-seo-pack' ) . $newIndicator,
-				'page_title' => esc_html__( 'Link Assistant', 'all-in-one-seo-pack' ),
+				'menu_title' => esc_html__( 'Link Assistant', 'all-in-one-seo-pack' ),
 				'capability' => 'aioseo_link_assistant_settings',
 				'parent'     => $this->pageSlug
 			],
@@ -202,6 +201,11 @@ class Admin {
 			],
 			'aioseo-seo-analysis'      => [
 				'menu_title' => esc_html__( 'SEO Analysis', 'all-in-one-seo-pack' ),
+				'parent'     => $this->pageSlug
+			],
+			'aioseo-search-statistics' => [
+				'menu_title' => esc_html__( 'Search Statistics', 'all-in-one-seo-pack' ) . $newIndicator,
+				'page_title' => esc_html__( 'Search Statistics', 'all-in-one-seo-pack' ),
 				'parent'     => $this->pageSlug
 			],
 			'aioseo-tools'             => [
@@ -747,6 +751,7 @@ class Admin {
 			'redirects',
 			'local-seo',
 			'seo-analysis',
+			'search-statistics',
 			'tools',
 			'feature-manager',
 			'monsterinsights',
@@ -877,7 +882,7 @@ class Admin {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @return void
+	 * @return string The footer text.
 	 */
 	public function addFooterText() {
 		$linkText = esc_html__( 'Give us a 5-star rating!', 'all-in-one-seo-pack' );
@@ -916,6 +921,8 @@ class Admin {
 		);
 
 		remove_filter( 'update_footer', 'core_update_footer' );
+
+		return '';
 	}
 
 	/**

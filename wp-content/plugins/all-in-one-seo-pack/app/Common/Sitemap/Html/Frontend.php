@@ -36,7 +36,7 @@ class Frontend {
 	 * @since 4.1.3
 	 */
 	public function __construct() {
-		$this->query = new Query;
+		$this->query = new Query();
 	}
 
 	/**

@@ -400,7 +400,7 @@ class ET_Builder_Global_Presets_Settings {
 		foreach ( $gc_info as $color_id => $option_names ) {
 			foreach ( $option_names as $option_name ) {
 				// Get the CSS color value assiciated with this GCID.
-				if ( ! empty( $all_global_colors_info[ $color_id ]['color'] ) ) {
+				if ( ! empty( $all_global_colors_info[ $color_id ]['color'] ) && isset( $attrs[ $option_name ] ) ) {
 					$gcid_color_value = $all_global_colors_info[ $color_id ]['color'];
 				} else {
 					// We can't inject the CSS color value if we don't have record of it.

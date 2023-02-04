@@ -167,7 +167,7 @@ class Frontend {
 
 		$display = '<div class="aioseo-breadcrumbs">';
 		foreach ( $breadcrumbs as $breadcrumb ) {
-			-- $breadcrumbsCount;
+			--$breadcrumbsCount;
 
 			$breadcrumbDisplay = $this->breadcrumbToDisplay( $breadcrumb );
 

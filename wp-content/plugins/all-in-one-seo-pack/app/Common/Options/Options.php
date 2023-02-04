@@ -387,6 +387,12 @@ TEMPLATE
 				]
 			]
 		],
+		'searchStatistics' => [
+			'postTypes' => [
+				'all'      => [ 'type' => 'boolean', 'default' => true ],
+				'included' => [ 'type' => 'array', 'default' => [ 'post', 'page' ] ],
+			]
+		],
 		'tools'            => [
 			'robots'       => [
 				'enable'         => [ 'type' => 'boolean', 'default' => false ],

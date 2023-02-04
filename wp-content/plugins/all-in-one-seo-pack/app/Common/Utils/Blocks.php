@@ -104,7 +104,7 @@ class Blocks {
 		}
 
 		aioseo()->core->assets->registerJs( 'src/vue/standalone/blocks/main.js', $dependencies );
-		aioseo()->core->assets->registerCss( 'src/vue/assets/scss/blocks-editor.scss', [], 'src/vue/assets/scss/blocks-editor.scss' );
+		aioseo()->core->assets->registerCss( 'src/vue/assets/scss/blocks-editor.scss' );
 	}
 
 	/**

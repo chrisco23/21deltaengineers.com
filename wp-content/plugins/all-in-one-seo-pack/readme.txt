@@ -3,7 +3,7 @@ Contributors: aioseo, smub, benjaminprojas
 Tags: SEO, Google Search Console, XML Sitemap, meta description, schema, meta title, rich snippets, woocommerce seo, local seo, open graph, google news sitemap, video sitemap, robots.txt, seo audit, content analysis, seo plugin, redirection
 Requires at least: 4.9
 Tested up to: 6.1.1
-Stable tag: 4.2.9
+Stable tag: 4.3.0
 License: GPLv2 or later
 Requires PHP: 5.6
 
@@ -125,7 +125,7 @@ Since redirect speed is important for SEO, we built in both Apache / NGINX serve
 * Google Site Links - Our SEO markup can help you get sitelinks for your brand.
 * Robots.txt Editor - Control what SEO robots can see with our easy SEO robots.txt editor.
 * SEO Audit Checklist - Improve your website's SEO ranking with our SEO audit checklist.
-* Google Search Console - Connect your WordPress site with Google webmaster tools to see additional SEO insights.
+* Google Search Console - Connect your WordPress site with Google webmaster tools to see additional SEO insights (like content rankings, keyword rankings, keyword tracking, page speed insights and more) directly in your WordPress dashboard.
 * Search Engine Verification Tools - Easily integrate with other popular SEO webmaster tools to improve search visibility.
 * Google AMP SEO - Improve your mobile SEO rankings with Google AMP SEO.
 * Advanced SEO Canonical URLs - Prevent duplicate content in SEO with automatic canonical URLs and boost your SEO rankings.
@@ -229,6 +229,14 @@ Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeg
 
 
 == Changelog ==
+
+**New in Version 4.3.0**
+
+* New: Google Search Console Integration – Connect your site with Google Search Console to track how your site is performing in search results and generate reports with actionable insights.
+* Updated: Improved PHP 8.1 compatibility.
+* Updated: Additional security hardening.
+* Fixed: Link Assistant suggestions scan is now automatically reset when it gets stuck in a loop.
+* Fixed: PHP notice in rare cases when context data isn’t set for the schema generator.
 
 **New in Version 4.2.9**
 
@@ -1062,7 +1070,7 @@ Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeg
 * Fixed: Invalid help docs URL
 * Fixed: Scheduled actions not always completing when importing from other SEO plugins
 * Fixed: Incorrect TruSEO test logic
-* Fixed: WooCommerce Products page only showing the shop page title/desc for all Products
+* Fixed: WooCommerce Products page only showing the shop page title/description for all Products
 * Fixed: PHP errors on home page when no images are set
 * Fixed: GTM script not always being output in the source code
 * Fixed: Parsing of meta tag in the Pinterest section of the social networks page
@@ -1173,7 +1181,7 @@ This is why experts rate AIOSEO as the best WordPress SEO plugin.
 
 = Does AIOSEO help with SEO Verification? =
 
-Yes. AIOSEO can help you with website SEO verification with various webmaster tools such as Google Search Console, Bing Webmaster Tools, Yandex, Baidu, Pinterst, and just about every other site verification you need.
+Yes. AIOSEO can help you with website SEO verification with various webmaster tools such as Google Search Console, Bing Webmaster Tools, Yandex, Baidu, Pinterest, and just about every other site verification you need.
 
 = Why is AIOSEO better than other SEO plugins? =
 
@@ -1192,6 +1200,12 @@ Without an XML sitemap, some of your web pages may never be included in Google s
 XML Sitemaps also help you tell Google which pages you DON'T want included in search results. This can help your SEO to prevent keyword cannibalization and duplicate content issues.
 
 As part of your SEO strategy, an XML sitemap can help you to improve your domain authority and unlock more traffic from Google, Bing and other search engines.
+
+= Does AIOSEO integrate directly with Google Search Console? =
+
+Absolutely! Our integration with Google Search Console allows you to monitor and maintain your website's presence on Google. With our direct integration, you can easily view important information about your website, such as the number of clicks, impressions, and the average position for each keyword that your website's content appears for in Google search results. You can also track your contents page speed using Google's Page Speed Insights directly inside your WordPress dashboard.
+
+Additionally, AIOSEO can also provide you with data on the most frequently used keywords, the most popular pages on your website, and any crawl errors or security issues that may arise. By integrating with Google Search Console, AIOSEO provides website owners with valuable insights that can help to improve SEO and overall online visibility. With this integration, you can track your site's progress over time and make data-driven decisions that will help you achieve your SEO goals.
 
 == Screenshots ==
 
@@ -1212,6 +1226,6 @@ As part of your SEO strategy, an XML sitemap can help you to improve your domain
 
 == Upgrade Notice ==
 
-= 4.2.9 =
+= 4.3.0 =
 
 This update adds major improvements and bugfixes.

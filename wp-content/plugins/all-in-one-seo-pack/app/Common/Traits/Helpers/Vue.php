@@ -92,6 +92,7 @@ trait Vue {
 					'monsterinsights'  => admin_url( 'admin.php?page=aioseo-monsterinsights' ),
 					'redirects'        => admin_url( 'admin.php?page=aioseo-redirects' ),
 					'searchAppearance' => admin_url( 'admin.php?page=aioseo-search-appearance' ),
+					'searchStatistics' => admin_url( 'admin.php?page=aioseo-search-statistics' ),
 					'seoAnalysis'      => admin_url( 'admin.php?page=aioseo-seo-analysis' ),
 					'settings'         => admin_url( 'admin.php?page=aioseo-settings' ),
 					'sitemaps'         => admin_url( 'admin.php?page=aioseo-sitemaps' ),
@@ -138,7 +139,9 @@ trait Vue {
 				'isDev'               => $this->isDev(),
 				'isSsl'               => is_ssl(),
 				'hasUrlTrailingSlash' => '/' === user_trailingslashit( '' ),
-				'permalinkStructure'  => get_option( 'permalink_structure' )
+				'permalinkStructure'  => get_option( 'permalink_structure' ),
+				'dateFormat'          => get_option( 'date_format' ),
+				'timeFormat'          => get_option( 'time_format' )
 			],
 			'user'              => [
 				'canManage'      => aioseo()->access->canManage(),
@@ -160,6 +163,7 @@ trait Vue {
 				'force' => $showNotificationsDrawer ? true : false
 			] ),
 			'addons'            => aioseo()->addons->getAddons(),
+			'features'          => aioseo()->features->getFeatures(),
 			'version'           => AIOSEO_VERSION,
 			'wpVersion'         => $wp_version,
 			'helpPanel'         => aioseo()->help->getDocs(),
@@ -277,6 +281,11 @@ trait Vue {
 			$data['setupWizard']['isCompleted'] = aioseo()->standalone->setupWizard->isCompleted();
 			$data['seoOverview']                = aioseo()->postSettings->getPostTypesOverview();
 			$data['importers']                  = aioseo()->importExport->plugins();
+		}
+
+		if ( 'search-statistics' === $page ) {
+			$data['seoOverview']      = aioseo()->postSettings->getPostTypesOverview();
+			$data['searchStatistics'] = aioseo()->searchStatistics->getVueData();
 		}
 
 		if ( 'sitemaps' === $page ) {
@@ -417,7 +426,7 @@ trait Vue {
 		// First, we need to remove our filter, so that it doesn't run unintentionally.
 		remove_filter( 'robots_txt', [ aioseo()->robotsTxt, 'buildRules' ], 10000 );
 		$robotsTxt = apply_filters( 'robots_txt', '', true );
-		add_filter( 'robots_txt', [ aioseo()->robotsTxt, 'buildRules' ], 10000, 2 );
+		add_filter( 'robots_txt', [ aioseo()->robotsTxt, 'buildRules' ], 10000 );
 
 		if ( ! $robotsTxt ) {
 			return [];

@@ -1338,6 +1338,11 @@ if ( ! function_exists( 'elegant_keywords' ) ) {
 if ( ! function_exists( 'elegant_canonical' ) ) {
 
 	function elegant_canonical() {
+		// Don't use ePanel SEO if 'rel_canonical' is registered for `wp_head`.
+		if ( has_action( 'embed_head', 'rel_canonical' ) && is_singular() ) {
+			return;
+		}
+
 		// Don't use ePanel SEO if a SEO plugin is active.
 		if ( et_is_seo_plugin_active() ) {
 			return;

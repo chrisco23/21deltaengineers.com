@@ -108,7 +108,7 @@ class Schema {
 			return;
 		}
 
-		$this->helpers = new Helpers;
+		$this->helpers = new Helpers();
 	}
 
 	/**
@@ -172,7 +172,7 @@ class Schema {
 		for ( $i = 0; $i < count( $this->graphs ); $i++ ) {
 			$namespace = $this->getGraphNamespace( $this->graphs[ $i ] );
 			if ( $namespace ) {
-				$schema['@graph'][] = ( new $namespace )->get();
+				$schema['@graph'][] = ( new $namespace() )->get();
 			}
 		}
 
@@ -213,8 +213,10 @@ class Schema {
 	 * @return void
 	 */
 	protected function determineSmartGraphsAndContext( $isValidator = false ) {
-		$contextInstance = new Context;
-		$this->graphs    = array_merge( $this->graphs, $this->getDefaultGraphs() );
+		$this->graphs = array_merge( $this->graphs, $this->getDefaultGraphs() );
+
+		$contextInstance = new Context();
+		$this->context   = $contextInstance->defaults();
 
 		if ( aioseo()->helpers->isDynamicHomePage() ) {
 			$this->graphs[] = 'CollectionPage';

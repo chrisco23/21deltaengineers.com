@@ -316,7 +316,6 @@ class Url_Extractor {
 	 */
 	private function extract_and_replace_urls_in_html() {
 		$html_string = $this->get_body();
-        $html_string = stripslashes( $html_string );
 		$match_tags  = apply_filters( 'ss_match_tags', self::$match_tags );
 
 		$dom = HtmlDomParser::str_get_html( $html_string );
@@ -422,9 +421,6 @@ class Url_Extractor {
 	}
 
 	private function extract_and_replace_urls_in_script( $text ) {
-
-        // Fix URLs in script JSON and HTML in script templates.
-        $text = stripslashes( $text );
 
 		$text = preg_replace( '/(https?:)?\/\/' . addcslashes( Util::origin_host(), '/' ) . '/i', $this->options->get_destination_url(), html_entity_decode( $text ) );
 
@@ -536,7 +532,12 @@ class Url_Extractor {
 
 		if ( $url && Util::is_local_url( $url ) ) {
 			// add to extracted urls queue
-			$this->extracted_urls[] = Util::remove_params_and_fragment( $url );
+			$this->extracted_urls[] = apply_filters(
+                'simply_static_extracted_url',
+                Util::remove_params_and_fragment( $url ),
+                $url,
+                $this->static_page
+            );
 
 			$url = $this->convert_url( $url );
 		}
@@ -552,6 +553,9 @@ class Url_Extractor {
 	 * @return string      Converted URL
 	 */
 	private function convert_url( $url ) {
+
+        $url = apply_filters( 'simply_static_pre_converted_url', $url, $this->static_page, $this );
+
 		if ( $this->options->get( 'destination_url_type' ) == 'absolute' ) {
 			$url = $this->convert_absolute_url( $url );
 		} else if ( $this->options->get( 'destination_url_type' ) == 'relative' ) {
@@ -560,7 +564,9 @@ class Url_Extractor {
 			$url = $this->convert_offline_url( $url );
 		}
 
-		return $url;
+        $url = remove_query_arg( 'simply_static_page', $url );
+
+		return apply_filters( 'simply_static_converted_url', $url, $this->static_page, $this );
 	}
 
 	/**

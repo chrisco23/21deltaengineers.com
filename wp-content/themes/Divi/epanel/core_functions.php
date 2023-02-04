@@ -361,8 +361,11 @@ if ( ! function_exists( 'et_build_epanel' ) ) {
 														<?php
 
 															if ( 'et_automatic_updates_options' === $global_setting_main_name ) {
-																if ( ! $setting = get_site_option( $global_setting_main_name ) ) {
-																	$setting = get_option( $global_setting_main_name, array() );
+																$setting = array();
+
+																// phpcs:ignore Generic.WhiteSpace.ScopeIndent.IncorrectExact -- Indentation is correct.
+																if ( is_array( get_site_option( $global_setting_main_name ) ) ) {
+																	$setting = get_option( $global_setting_main_name );
 																}
 
 																$et_input_value = isset( $setting[ $global_setting_sub_name ] ) ? $setting[ $global_setting_sub_name ] : '';
@@ -813,8 +816,10 @@ if ( ! function_exists( 'epanel_save_data' ) ) {
 			if ( 'save_epanel' === $_POST['action'] ) {
 				if ( 'ajax' !== $source ) check_admin_referer( 'epanel_nonce' );
 
-				if ( ! $updates_options = get_site_option( 'et_automatic_updates_options' ) ) {
-					$updates_options = get_option( 'et_automatic_updates_options', array() );
+				$updates_options = array();
+
+				if ( is_array( get_site_option( 'et_automatic_updates_options' ) ) ) {
+					$updates_options = get_option( 'et_automatic_updates_options' );
 				}
 
 				// Network Admins can edit options like Super Admins but content will be filtered

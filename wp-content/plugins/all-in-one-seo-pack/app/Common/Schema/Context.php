@@ -31,6 +31,22 @@ class Context {
 	}
 
 	/**
+	 * Returns the default context data.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return array The context data.
+	 */
+	public function defaults() {
+		return [
+			'name'        => aioseo()->meta->title->getTitle(),
+			'description' => aioseo()->meta->description->getDescription(),
+			'url'         => aioseo()->helpers->getUrl(),
+			'breadcrumb'  => []
+		];
+	}
+
+	/**
 	 * Returns the context data for the homepage.
 	 *
 	 * @since 4.0.0

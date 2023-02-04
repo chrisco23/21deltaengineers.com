@@ -14,6 +14,24 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 trait WpContext {
 	/**
+	 * The original main query.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @var WP_Query
+	 */
+	public $originalQuery;
+
+	/**
+	 * The original main post variable.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @var WP_Post
+	 */
+	public $originalPost;
+
+	/**
 	 * Get the home page object.
 	 *
 	 * @since 4.1.1
@@ -721,5 +739,86 @@ trait WpContext {
 		}
 
 		return $type;
+	}
+
+	/**
+	 * Sets the given post as the queried object of the main query.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param  \WP_Post $post The post object.
+	 * @return void
+	 */
+	public function setWpQueryPost( $wpPost ) {
+		global $wp_query, $post;
+		$this->originalQuery = clone $wp_query;
+		$this->originalPost  = $post;
+
+		$wp_query->posts                 = [ $wpPost ];
+		$wp_query->post                  = $wpPost;
+		$wp_query->post_count            = 1;
+		$wp_query->get_queried_object_id = (int) $wpPost->ID;
+		$wp_query->queried_object        = $wpPost;
+		$wp_query->is_single             = true;
+		$wp_query->is_singular           = true;
+
+		if ( 'page' === $wpPost->post_type ) {
+			$wp_query->is_page = true;
+		}
+
+		$post = $wpPost;
+	}
+
+	/**
+	 * Sets the given term as the queried object of the main query.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param  \WP_Term $term The term object.
+	 * @return void
+	 */
+	public function setWpQueryTerm( $term ) {
+		global $wp_query;
+		$this->originalQuery = clone $wp_query;
+
+		$term->term_id = $term->id;
+
+		$wp_query->get_queried_object_id = (int) $term->id;
+		$wp_query->queried_object        = $term;
+		$wp_query->is_tax                = true;
+
+		switch ( $term->taxonomy ) {
+			case 'category':
+				$wp_query->is_category = true;
+				break;
+			case 'post_tag':
+				$wp_query->is_tag = true;
+				break;
+			default:
+				break;
+		}
+	}
+
+	/**
+	 * Restores the main query back to the original query.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return void
+	 */
+	public function restoreWpQuery() {
+		if ( null === $this->originalQuery ) {
+			return;
+		}
+
+		global $wp_query, $post;
+		$wp_query = clone $this->originalQuery;
+
+		if ( null !== $this->originalPost ) {
+			$post = $this->originalPost;
+		}
+
+		$this->originalQuery = null;
+		$this->originalPost = null;
 	}
 }

@@ -22,8 +22,12 @@ function db004_user_css($plugin) { ?>
 	div#page-container[style] { padding-top:0 !important; } 
 	
 	/* Remove gap between heading and menu caused by line height */
-	body { line-height:0 !important; }
-	body * { line-height:1.7em }
+    html body {
+        line-height: 0;
+    }
+    html body * {
+        line-height: 1.7em
+    }
 }
 
 /* Style the image for box layout */

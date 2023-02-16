@@ -222,7 +222,7 @@ var wickedFolderPane;
             folder:                 activeFolder,
             folders:                folders,
             screen:                 '<?php echo esc_attr( $screen->id ); ?>',
-            nonce:                  '<?php echo wp_create_nonce( 'wicked_folders_save_state' ); ?>',
+            nonce:                  '<?php echo wp_create_nonce( 'wicked_folders_ajax_action' ); ?>',
             treePaneWidth:          <?php echo ( int ) $state->tree_pane_width; ?>,
             //hideAssignedItems:      <?php echo ( int ) $state->hide_assigned_items; ?>,
             isSearch:               <?php echo empty( $_GET['s'] ) ? 'false' : 'true'; ?>,

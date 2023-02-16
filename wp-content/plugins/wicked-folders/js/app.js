@@ -52,7 +52,8 @@
             deletable:      true,
             assignable:     true,
             ownerId:        0,
-            ownerName:      ''
+            ownerName:      '',
+            nonce:          false
         },
 
         initialize: function(){
@@ -61,6 +62,7 @@
                 this.set( 'posts', new wickedfolders.collections.Posts() );
             }
 
+            this.set( 'nonce', wickedFoldersSettings.saveFolderNonce );
         },
 
         parse: function( response, options ){
@@ -75,10 +77,11 @@
             var id = this.id ? this.id : '',
                 taxonomy = this.get( 'taxonomy' ),
                 action = this.get( '_actionOverride' ) || 'wicked_folders_save_folder',
-                methodOverride = this.get( '_methodOverride' ) || false;
+                methodOverride = this.get( '_methodOverride' ) || false,
+                nonce = this.get( 'nonce' );
 
             // We need the ID and taxonomy attributes when deleting
-            var url = wickedFoldersSettings.ajaxURL + '?action=' + action + '&id=' + id + '&taxonomy=' + taxonomy;
+            var url = wickedFoldersSettings.ajaxURL + '?action=' + action + '&id=' + id + '&taxonomy=' + taxonomy + '&nonce=' + nonce;
 
             // Assume we're updating if we have an ID
             if ( false === methodOverride && id ) methodOverride = 'PUT';
@@ -101,6 +104,7 @@
                 {
                     data: {
                         'action':           'wicked_folders_clone_folder',
+                        'nonce':            this.get( 'nonce' ),
                         'id':               this.id,
                         'post_type':        this.get( 'postType' ),
                         'clone_children':   options.cloneChildren,
@@ -354,6 +358,7 @@
                 {
                     data: {
                         'action':   'wicked_folders_save_folder_order',
+                        'nonce':    wickedFoldersSettings.saveFolderNonce,
                         'folders':  folders
                     },
                     method: 'POST',
@@ -891,7 +896,8 @@
             showContentsInTreeView: false,
             hideAssignedItems:      true,
             orderby:                'title',
-            order:                  'asc'
+            order:                  'asc',
+            nonce:                  false
         },
 
         initialize: function(){
@@ -925,7 +931,7 @@
                 {
                     data: {
                         'action':                   'wicked_folders_move_object',
-                        //'nonce': WickedFolderSettings.moveObjectNonce,
+                        'nonce':                    model.get( 'nonce' ),
                         'object_type':              objectType,
                         'object_id':                objectId,
                         'destination_object_id':    destinationObjectId,
@@ -952,6 +958,7 @@
                 {
                     data: {
                         'action':       'wicked_folders_unassign_folders',
+                        'nonce':        model.get( 'nonce' ),
                         'object_id':    objectId,
                         'taxonomy':     model.get( 'taxonomy' )
                     },
@@ -1001,7 +1008,8 @@
             sortMode:               'custom',
             showItemCount:          true,
             enableCreate:           true,
-            enableAssign:           true
+            enableAssign:           true,
+            nonce:                  false
         },
 
         initialize: function(){
@@ -2993,7 +3001,7 @@
 
                         var posts = view.model.get( 'postsToMove' ),
                             objectIds = posts.pluck( 'id' ),
-                            controller = new wickedfolders.models.FolderBrowserController(),
+                            controller = new wickedfolders.models.FolderBrowserController( { nonce: view.model.get( 'nonce' ) } ),
                             taxonomy = view.folder().get('taxonomy' ),
                             folder = view.folder(),
                             destinationFolder = view.folders().get( destinationFolderId ),
@@ -3073,7 +3081,7 @@
                             folders = view.folders(),
                             changedFolders = new wickedfolders.collections.Folders();
 
-                            var controller = new wickedfolders.models.FolderBrowserController();
+                            var controller = new wickedfolders.models.FolderBrowserController( { nonce: view.model.get( 'nonce' ) } );
 
                         items.each( function( index, item ){
                             var folderId = $( item ).attr( 'data-folder-id' ),

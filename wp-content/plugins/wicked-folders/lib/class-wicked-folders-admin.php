@@ -80,8 +80,9 @@ final class Wicked_Folders_Admin {
 
 	public function admin_notices() {
 		$dismissed_messages = ( array ) get_user_option( 'wicked_folders_dismissed_messages' );
+		$nonce = wp_create_nonce( 'wicked_folders_dismiss_message_ajax_action' );
 		if ( $this->is_folder_pane_enabled_page() && ! in_array( 'toggle_folder_pane_hint', $dismissed_messages ) ) {
-			$this->add_admin_notice( __( "Hint: The folders pane can be toggled on or off.  To hide the folder pane, click the 'Toggle folders' link in the admin menu on the side of the screen.", 'wicked-folders' ) . '<a class="wicked-dismiss" href="#" data-key="toggle_folder_pane_hint">' . __( 'Dismiss', 'wicked-folders' ) . '</a>', 'notice notice-success wicked-dismissable' );
+			$this->add_admin_notice( __( "Hint: The folders pane can be toggled on or off.  To hide the folder pane, click the 'Toggle folders' link in the admin menu on the side of the screen.", 'wicked-folders' ) . '<a class="wicked-dismiss" href="#" data-key="toggle_folder_pane_hint" data-nonce="' . $nonce . '">' . __( 'Dismiss', 'wicked-folders' ) . '</a>', 'notice notice-success wicked-dismissable' );
 		}
 		foreach ( Wicked_Folders_Admin::$admin_notices as $notice ) {
 			printf( '<div class="%1$s"><p>%2$s</p></div>', $notice['class'], $notice['message'] );
@@ -204,6 +205,7 @@ final class Wicked_Folders_Admin {
 			'enableAjaxNav' 	=> ( bool ) get_option( 'wicked_folders_enable_ajax_nav', true ),
 			'afterAjaxScripts' 	=> apply_filters( 'wicked_folders_after_ajax_scripts', $after_ajax_scripts ),
 			'isElementorActive' => isset( $_GET['action'] ) && 'elementor' == $_GET['action'] ? true : false,
+			'saveFolderNonce' 	=> wp_create_nonce( 'wicked_folders_save_folder_ajax_action' ),
 		) );
 
 		wp_register_style( 'wicked-folders-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'css/admin.css', array(), Wicked_Folders::plugin_version() );

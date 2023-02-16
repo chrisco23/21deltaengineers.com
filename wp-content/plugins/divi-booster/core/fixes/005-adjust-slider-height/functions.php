@@ -17,11 +17,8 @@ function db005_user_css($plugin) {
 				max-height: <?php esc_html_e($height); ?>px; 
 			}
 			.et_pb_slider:not(.et_pb_gallery) .et_pb_slide_description { 
-				position: relative; 
-				top:25%; 
 				padding-top: 15px !important;
 				padding-bottom: 15px !important;
-				margin-top: -15px !important;
 				height:auto !important; 
 			}
 		}

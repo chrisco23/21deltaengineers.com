@@ -7,6 +7,8 @@ class DBDB_ContactForm_EmailBlacklist {
 	
 	protected $use_email_blacklist_key = 'dbdb_use_email_blacklist';
 	protected $email_blacklist_key = 'dbdb_email_blacklist';
+    private $current_blacklist;
+    private $current_contact_form;
 	
 	public function init() {
         if (function_exists('add_action')) {
@@ -17,6 +19,7 @@ class DBDB_ContactForm_EmailBlacklist {
             add_filter('dbdb_et_pb_module_shortcode_attributes', array($this, 'filter_blacklisted_email'), 10, 3);
             add_filter('dbdb_et_pb_module_shortcode_attributes', array($this, 'register_email_fields'), 10, 3);
             add_filter('et_pb_contact_form_shortcode_output', array($this, 'remove_is_email_filter'));
+            add_filter('et_module_shortcode_output', array($this, 'add_custom_error_message_filter'), 10, 3);
             add_filter('et_pb_all_fields_unprocessed_et_pb_contact_form', array($this, 'add_fields'));
         }
 	}
@@ -26,11 +29,30 @@ class DBDB_ContactForm_EmailBlacklist {
 	public function suppress_vb_support_notices() {
 		?>
 		<?php echo $this->emailblacklist_toggle_selector(); ?> .et-fb-option--yes-no_button .et-fb-no-vb-support-warning,
-		<?php echo $this->emailblacklist_toggle_selector(); ?> .et-fb-option--textarea .et-fb-no-vb-support-warning { 
+		<?php echo $this->emailblacklist_toggle_selector(); ?> .et-fb-option--textarea .et-fb-no-vb-support-warning,
+		<?php echo $this->emailblacklist_toggle_selector(); ?> .et-fb-option--text .et-fb-no-vb-support-warning { 
 			display: none !important; 
 		}
 		<?php
 	}
+
+    public function add_custom_error_message_filter($output, $render_slug, $module) {
+        if (!is_string($output)) { 
+            return $output; 
+        }
+        if ($render_slug !== 'et_pb_contact_form') { 
+            return $output; 
+        }
+        if (!isset($module->props)) { 
+            return $output; 
+        }
+        $props = $module->props;
+        preg_match('/<div class="et-pb-contact-message">(.*?)<\/div>/', $output, $matches);
+        if (!empty($matches[0]) && !empty($matches[1])) {
+            $output = str_replace($matches[0], '<div class="et-pb-contact-message">'.apply_filters('dbdb_et_pb_contact_form_error_text', $matches[1], $props).'</div>', $output);
+        }
+        return $output;
+    }
 
 	public function register_email_fields($props, $atts, $slug) {
         if ($slug === 'et_pb_contact_field') { 
@@ -39,6 +61,7 @@ class DBDB_ContactForm_EmailBlacklist {
                     foreach($this->current_blacklist as $str) {
                         if (strpos($this->submitted_email($props['field_id'], $this->current_contact_form), $str) !== false) {
                             add_filter('is_email', 'dbdb_return_false');
+                            add_filter('dbdb_et_pb_contact_form_error_text', array($this, 'set_custom_error_message'), 10, 2);
                             break;
                         }
                     }
@@ -70,6 +93,7 @@ class DBDB_ContactForm_EmailBlacklist {
 		foreach($this->email_blacklist($props) as $str) {
             if (strpos($this->submitted_email('email', $this_contact_form_num), $str) !== false) {
                 add_filter('is_email', 'dbdb_return_false');
+                add_filter('dbdb_et_pb_contact_form_error_text', array($this, 'set_custom_error_message'), 10, 2);
                 break;
             }
 		}
@@ -117,8 +141,16 @@ class DBDB_ContactForm_EmailBlacklist {
 		return trim(strip_tags($line));
 	}
 
+    public function set_custom_error_message($msg, $props) {
+        if (!empty($msg) && $this->use_email_blacklist($props) && !empty($props['dbdb_email_blacklist_error_msg'])) {
+            $msg = '<p class="et_pb_contact_error_text">'.esc_html($props['dbdb_email_blacklist_error_msg']).'</p>';
+        }
+        return $msg;
+    }
+
 	public function remove_is_email_filter($output) {
 		remove_filter('is_email', 'dbdb_return_false');
+        remove_filter('dbdb_et_pb_contact_form_error_text', array($this, 'set_custom_error_message'));
 		return $output;
 	}
 
@@ -142,6 +174,17 @@ class DBDB_ContactForm_EmailBlacklist {
 				'option_category'   => 'configuration',
 				'toggle_slug'       => $this->toggleSlug(),
 				'description'       => esc_html__('When the sender\'s email address contains any of these strings, it will be rejected. One string per line. It will match inside words, so "example.com" will match "test@example.com", "mail@example.com" and "mail@anotherexample.com".', 'divi_booster'),
+				'show_if' => array(
+					$this->use_email_blacklist_key => 'on',
+				),
+			),
+            'dbdb_email_blacklist_error_msg' => array(
+				'label'             => esc_html__('Email Blacklisted Message', 'divi-booster'),
+				'type'              => 'text',
+				'option_category'   => 'configuration',
+				'toggle_slug'       => $this->toggleSlug(),
+				'description'       => esc_html__('The message to display when a blacklisted email is submitted.".', 'divi-booster'),
+                'default' => esc_html__( 'Invalid Email.', 'et_builder' ),
 				'show_if' => array(
 					$this->use_email_blacklist_key => 'on',
 				),

@@ -1,3 +1,12 @@
+= 4.1.1 =
+* Fixed line height on post slider description set to 0 when image added above header
+
+= 4.1.0 =
+* Fixed slide semi-transparent background too low when slider below a certain height
+
+= 4.0.9 =
+* Added option to customize email blacklist error text
+
 = 4.0.8 =
 * Fixed certain features not working when WP-Optimize configured to process jQuery library
 

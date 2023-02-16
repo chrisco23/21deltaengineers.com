@@ -3,7 +3,7 @@ Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
 Tested up to: 6.1
-Stable tag: 2.18.16
+Stable tag: 2.18.17
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,10 @@ The folder toggle arrow is greyed out when a folder doesn't have any child folde
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 2.18.17 (February 6, 2023) =
+* Add nonce validation to AJAX functions to address cross-site request forgery vulnerability
+* Add capability check to AJAX functions to address authorization bypass vulnerability
 
 = 2.18.16 (October 26, 2022) =
 * Tested with WordPress 6.1 and updated tested-up-to flag

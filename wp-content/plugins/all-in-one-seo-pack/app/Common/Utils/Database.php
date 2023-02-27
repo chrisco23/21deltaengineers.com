@@ -1640,11 +1640,11 @@ class Database {
 	 * @param  string $cacheTableName The table name to check against.
 	 * @return string                 The cache key table name.
 	 */
-	private function getCacheTableName( $cacheTableName = null ) {
+	private function getCacheTableName( $cacheTableName = '' ) {
 		$cacheTableName = empty( $cacheTableName ) ? $this->table : $cacheTableName;
 
 		foreach ( $this->customTables as $tableName ) {
-			if ( false !== stripos( $cacheTableName, $this->prefix . $tableName ) ) {
+			if ( false !== stripos( (string) $cacheTableName, $this->prefix . $tableName ) ) {
 				$cacheTableName = $tableName;
 				break;
 			}

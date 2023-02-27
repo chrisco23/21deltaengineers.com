@@ -237,7 +237,8 @@ const importSnippetToCloud = sequence('Import code snippet to cloud', [
       };
 
       const resource = getContextByItemType(importFile.type);
-      doApiRequest({ type: 'post', resource, accessToken }, newCloudItem).then(callback);
+      const providedBaseUrl = window.ETCloudApp.getActiveFolderEndpoint();
+      doApiRequest({ type: 'post', resource, accessToken, providedBaseUrl }, newCloudItem).then(callback);
     } else {
       set(state`importState`, STATE_IDLE),
       store.set(state`cloudStatus`, { error: 'auth_error' });

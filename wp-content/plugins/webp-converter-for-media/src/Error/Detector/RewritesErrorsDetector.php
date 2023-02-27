@@ -11,6 +11,7 @@ use WebpConverter\Error\Notice\RewritesCachedNotice;
 use WebpConverter\Error\Notice\RewritesNotExecutedNotice;
 use WebpConverter\Error\Notice\RewritesNotWorkingNotice;
 use WebpConverter\Error\Notice\RewritesUploadsBlockedNotice;
+use WebpConverter\Loader\HtaccessBypassingLoader;
 use WebpConverter\Loader\HtaccessLoader;
 use WebpConverter\Loader\LoaderAbstract;
 use WebpConverter\Loader\PassthruLoader;
@@ -66,7 +67,7 @@ class RewritesErrorsDetector implements ErrorDetector {
 	) {
 		$this->plugin_info  = $plugin_info;
 		$this->plugin_data  = $plugin_data;
-		$this->file_loader  = $file_loader ?: new FileLoader( $plugin_info, $plugin_data );
+		$this->file_loader  = $file_loader ?: new FileLoader();
 		$this->output_path  = $output_path ?: new OutputPath();
 		$this->test_version = uniqid();
 	}
@@ -77,8 +78,7 @@ class RewritesErrorsDetector implements ErrorDetector {
 	public function get_error() {
 		$plugin_settings = $this->plugin_data->get_plugin_settings();
 		if ( ! $plugin_settings[ SupportedDirectoriesOption::OPTION_NAME ]
-			|| ! $plugin_settings[ OutputFormatsOption::OPTION_NAME ]
-			|| ! in_array( WebpFormat::FORMAT_EXTENSION, $plugin_settings[ OutputFormatsOption::OPTION_NAME ] ) ) {
+			|| ! $plugin_settings[ OutputFormatsOption::OPTION_NAME ] ) {
 			return null;
 		}
 
@@ -100,6 +100,7 @@ class RewritesErrorsDetector implements ErrorDetector {
 
 		switch ( $loader_type ) {
 			case HtaccessLoader::LOADER_TYPE:
+			case HtaccessBypassingLoader::LOADER_TYPE:
 				if ( $this->if_redirects_are_works() === true ) {
 					break;
 				}
@@ -182,12 +183,12 @@ class RewritesErrorsDetector implements ErrorDetector {
 		);
 
 		if ( $file_webp === 0 ) {
-			$file_original = $this->file_loader->get_file_size_by_url(
+			$file_status = $this->file_loader->get_file_status_by_url(
 				$uploads_url . self::PATH_OUTPUT_FILE_PNG,
 				false,
 				$this->test_version
 			);
-			return ( $file_original === 0 );
+			return ( ! in_array( $file_status, [ 404, 500 ] ) );
 		}
 
 		return ( $file_webp < $file_size );
@@ -248,7 +249,7 @@ class RewritesErrorsDetector implements ErrorDetector {
 			$this->test_version
 		);
 
-		return ( $file_webp < $file_size );
+		return ( ( $file_webp < $file_size ) && ( $file_webp !== 0 ) );
 	}
 
 	/**

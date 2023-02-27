@@ -1,3 +1,7 @@
+= 4.1.2 =
+* Fixed social icons not showing in header / footer social icon font not available
+* Fixed custom icons not showing when "Add Button Icon" disabled in customizer button styles
+
 = 4.1.1 =
 * Fixed line height on post slider description set to 0 when image added above header
 

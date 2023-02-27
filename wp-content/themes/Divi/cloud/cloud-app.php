@@ -196,7 +196,8 @@ class ET_Cloud_App {
 
 		// We shouldn't save the full token, so user cannot use this token in other browser.
 		if ( ! $save_session ) {
-			$token_parts = str_split( $refresh_token, 400 );
+			$token_length  = (int) strlen( $refresh_token );
+			$token_parts   = str_split( $refresh_token, ceil( $token_length / 2 ) );
 			$token_to_save = $token_parts[0];
 			$token_part    = $token_parts[1];
 		}
@@ -219,7 +220,50 @@ class ET_Cloud_App {
 			'accessToken'      => $decoded_body['access_token'],
 			'refreshTokenPart' => $token_part,
 			'domainToken'      => get_option( 'et_server_domain_token', '' ),
+			'sharedFolders'    => self::normalize_shared_cloud_array( $decoded_body['clouds'] ),
 		) );
+	}
+
+	/**
+	 * Normalize shared cloud array from the server response.
+	 *
+	 * @param array $shared_cloud_array Raw shared clouds array.
+	 *
+	 * @return array
+	 */
+	public static function normalize_shared_cloud_array( $shared_cloud_array ) {
+		if ( empty( $shared_cloud_array ) ) {
+			return array();
+		}
+
+		$normalized_array = array();
+
+		foreach ( $shared_cloud_array as $cloud_id => $shared_cloud ) {
+			$use_permission    = isset( $shared_cloud['permissions']['use_items'] ) ? $shared_cloud['permissions']['use_items'] : false;
+			$add_permission    = isset( $shared_cloud['permissions']['add_items'] ) ? $shared_cloud['permissions']['add_items'] : false;
+			$edit_permission   = isset( $shared_cloud['permissions']['edit_items'] ) ? $shared_cloud['permissions']['edit_items'] : false;
+			$delete_permission = isset( $shared_cloud['permissions']['delete_items'] ) ? $shared_cloud['permissions']['delete_items'] : false;
+
+			// No permission to use this cloud.
+			if ( ! $use_permission && ! $add_permission && ! $edit_permission && ! $delete_permission ) {
+				continue;
+			}
+
+			$normalized_array[] = array(
+				'id'          => $cloud_id,
+				'name'        => $shared_cloud['owner'],
+				'count'       => $shared_cloud['item_counts'],
+				'endpoint'    => $shared_cloud['endpoint'],
+				'permissions' => array(
+					'use'    => $shared_cloud['permissions']['use_items'],
+					'add'    => $shared_cloud['permissions']['add_items'],
+					'edit'   => $shared_cloud['permissions']['edit_items'],
+					'delete' => $shared_cloud['permissions']['delete_items'],
+				),
+			);
+		}
+
+		return $normalized_array;
 	}
 
 	public static function hasRefreshToken() {

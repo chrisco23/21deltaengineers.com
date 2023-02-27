@@ -99,7 +99,7 @@ abstract class AIOSEOAbstract {
 	 *
 	 * @since 4.2.7
 	 *
-	 * @var \AIOSEO\Plugin\Lite\Admin\PostSettings|\AIOSEO\Plugin\Pro\Admin\PostSettings
+	 * @var AIOSEO\Plugin\Common\Standalone
 	 */
 	public $standalone = null;
 

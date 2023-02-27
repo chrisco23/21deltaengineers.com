@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-01-31T01:30:33+00:00\n"
+"POT-Creation-Date: 2023-02-16T16:33:11+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: all-in-one-seo-pack\n"
@@ -440,8 +440,8 @@ msgstr ""
 
 #. Translators: 1 - The plugin name ("All in One SEO").
 #: app/Common/Admin/Notices/Review.php:99
-#: languages/aioseo-lite.php:6673
-#: languages/aioseo-pro.php:9734
+#: languages/aioseo-lite.php:6677
+#: languages/aioseo-pro.php:9738
 msgid "We're sorry to hear you aren't enjoying %1$s. We would love a chance to improve. Could you take a minute and let us know what we can do better?"
 msgstr ""
 
@@ -782,7 +782,7 @@ msgstr ""
 #. Translators: This refers to the homepage of the site.
 #: app/Common/Breadcrumbs/Breadcrumbs.php:499
 #: app/Common/Options/Options.php:569
-#: app/Common/Schema/Breadcrumb.php:306
+#: app/Common/Schema/Breadcrumb.php:311
 #: app/Common/Views/sitemap/xsl/partials/breadcrumb.php:24
 #: languages/aioseo-lite.php:2822
 #: languages/aioseo-pro.php:4061
@@ -900,7 +900,7 @@ msgid "The 404 error format."
 msgstr ""
 
 #: app/Common/Breadcrumbs/Tags.php:177
-#: languages/aioseo-pro.php:9950
+#: languages/aioseo-pro.php:9954
 msgid "Year"
 msgstr ""
 
@@ -1017,37 +1017,37 @@ msgid ""
 "\t\t\t\t\tAs it needs to be internationally formatted, please enter it (%1$s) with the country code, e.g. +1 (555) 555-1234."
 msgstr ""
 
-#: app/Common/Main/Updates.php:1132
+#: app/Common/Main/Updates.php:1147
 #: languages/aioseo-lite.php:851
 msgid "Article"
 msgstr ""
 
-#: app/Common/Main/Updates.php:1157
+#: app/Common/Main/Updates.php:1172
 #: languages/aioseo-lite.php:1534
 msgid "Course"
 msgstr ""
 
-#: app/Common/Main/Updates.php:1174
+#: app/Common/Main/Updates.php:1189
 #: languages/aioseo-lite.php:4423
 msgid "Product"
 msgstr ""
 
-#: app/Common/Main/Updates.php:1231
+#: app/Common/Main/Updates.php:1246
 #: languages/aioseo-lite.php:4509
 msgid "Recipe"
 msgstr ""
 
-#: app/Common/Main/Updates.php:1274
+#: app/Common/Main/Updates.php:1289
 #: languages/aioseo-lite.php:5214
 msgid "Software"
 msgstr ""
 
-#: app/Common/Main/Updates.php:1316
+#: app/Common/Main/Updates.php:1331
 msgid "FAQ Page"
 msgstr ""
 
-#: app/Common/Main/Updates.php:1344
-#: languages/aioseo-lite.php:6684
+#: app/Common/Main/Updates.php:1359
+#: languages/aioseo-lite.php:6688
 msgid "Web Page"
 msgstr ""
 
@@ -3703,22 +3703,22 @@ msgid "AIOSEO"
 msgstr ""
 
 #. Translators: 1 - The singular label for the current post type.
-#: app/Common/Standalone/SeoPreview.php:107
+#: app/Common/Standalone/SeoPreview.php:145
 #: languages/aioseo-lite.php:1966
 msgid "Edit %1$s"
 msgstr ""
 
-#: app/Common/Standalone/SeoPreview.php:119
+#: app/Common/Standalone/SeoPreview.php:158
 msgid "Edit User"
 msgstr ""
 
-#: app/Common/Standalone/SeoPreview.php:226
+#: app/Common/Standalone/SeoPreview.php:264
 #: languages/aioseo-lite.php:4982
 #: languages/aioseo-pro.php:7261
 msgid "SEO Preview"
 msgstr ""
 
-#: app/Common/Standalone/SeoPreview.php:230
+#: app/Common/Standalone/SeoPreview.php:268
 msgid "NEW"
 msgstr ""
 
@@ -3829,8 +3829,8 @@ msgstr ""
 #: app/Common/Tools/SystemStatus.php:226
 #: app/Common/Tools/SystemStatus.php:230
 #: app/Common/Tools/SystemStatus.php:234
-#: languages/aioseo-lite.php:6857
-#: languages/aioseo-pro.php:9960
+#: languages/aioseo-lite.php:6861
+#: languages/aioseo-pro.php:9964
 msgid "Yes"
 msgstr ""
 
@@ -3925,7 +3925,7 @@ msgid "Operating System"
 msgstr ""
 
 #: app/Common/Tools/SystemStatus.php:189
-#: languages/aioseo-pro.php:9756
+#: languages/aioseo-pro.php:9760
 msgid "Web Server"
 msgstr ""
 
@@ -4804,11 +4804,11 @@ msgid "Add License Key"
 msgstr ""
 
 #. Translators: 1 - "AIOSEO Pro"
-#: app/Pro/Admin/AutoUpdates.php:176
+#: app/Pro/Admin/AutoUpdates.php:180
 msgid "Enable the %1$s plugin to manage auto-updates"
 msgstr ""
 
-#: app/Pro/Admin/AutoUpdates.php:182
+#: app/Pro/Admin/AutoUpdates.php:186
 msgid "Manage auto-updates"
 msgstr ""
 
@@ -4914,8 +4914,8 @@ msgstr ""
 
 #. Translators: 1 - Focus Keyphrase or Keyphrase.
 #: app/Pro/Api/SearchStatistics.php:1113
-#: languages/aioseo-lite.php:7020
-#: languages/aioseo-pro.php:10259
+#: languages/aioseo-lite.php:7024
+#: languages/aioseo-pro.php:10263
 msgid "Your %1$s does not appear in the first paragraph. Make sure the topic is clear immediately."
 msgstr ""
 
@@ -4998,8 +4998,8 @@ msgid "Your title may not display correctly in search results."
 msgstr ""
 
 #: app/Pro/Api/SearchStatistics.php:1159
-#: languages/aioseo-lite.php:6898
-#: languages/aioseo-pro.php:10071
+#: languages/aioseo-lite.php:6902
+#: languages/aioseo-pro.php:10075
 msgid "You are not using rich media like images or videos."
 msgstr ""
 
@@ -5032,8 +5032,8 @@ msgid "Add subheadings to improve readability."
 msgstr ""
 
 #: app/Pro/Api/SearchStatistics.php:1185
-#: languages/aioseo-lite.php:6892
-#: languages/aioseo-pro.php:10065
+#: languages/aioseo-lite.php:6896
+#: languages/aioseo-pro.php:10069
 msgid "You are not using any subheadings, although your text is rather long. Try and add some subheadings."
 msgstr ""
 
@@ -11577,6 +11577,7 @@ msgid "Schema Generator is only available for licensed %1$s %2$s users."
 msgstr ""
 
 #: languages/aioseo-lite.php:4728
+#: languages/aioseo-pro.php:6908
 msgid "Schema In Use"
 msgstr ""
 
@@ -14208,901 +14209,907 @@ msgstr ""
 msgid "We have detected other SEO plugins installed on your website. Select which plugins you would like to import data to %1$s."
 msgstr ""
 
-#: languages/aioseo-lite.php:6647
+#. Translators: 1 - The Page Builder name, 2 - HTML code opening tag, 3 - HTML code closing tag.
+#: languages/aioseo-lite.php:6648
 #: languages/aioseo-pro.php:9702
+msgid "We have detected that you are currently using the %1$s Page Builder. Please click %2$shere%3$s to use the %1$s editor for a most accurate result."
+msgstr ""
+
+#: languages/aioseo-lite.php:6651
+#: languages/aioseo-pro.php:9706
 msgid "We recommend setting the amount of URLs per sitemap index to 1,000 or less. The more links, the longer it will take for the sitemap to load."
 msgstr ""
 
-#: languages/aioseo-lite.php:6650
-#: languages/aioseo-pro.php:9705
+#: languages/aioseo-lite.php:6654
+#: languages/aioseo-pro.php:9709
 msgid "We recommend tracking down where the un-minified CSS files come from."
 msgstr ""
 
-#: languages/aioseo-lite.php:6653
-#: languages/aioseo-pro.php:9708
-msgid "We recommend tracking down where the un-minified JavaScript files come from"
-msgstr ""
-
-#. Translators: 1 - Opening HTML bold tag, 2 - Closing HTML bold tag.
 #: languages/aioseo-lite.php:6657
 #: languages/aioseo-pro.php:9712
-msgid "We recommend using the %1$sFree ExactMetrics%2$s plugin to get the most out of Google Analytics."
+msgid "We recommend tracking down where the un-minified JavaScript files come from"
 msgstr ""
 
 #. Translators: 1 - Opening HTML bold tag, 2 - Closing HTML bold tag.
 #: languages/aioseo-lite.php:6661
 #: languages/aioseo-pro.php:9716
+msgid "We recommend using the %1$sFree ExactMetrics%2$s plugin to get the most out of Google Analytics."
+msgstr ""
+
+#. Translators: 1 - Opening HTML bold tag, 2 - Closing HTML bold tag.
+#: languages/aioseo-lite.php:6665
+#: languages/aioseo-pro.php:9720
 msgid "We recommend using the %1$sFree MonsterInsights%2$s plugin to get the most out of Google Analytics."
 msgstr ""
 
-#: languages/aioseo-lite.php:6664
-#: languages/aioseo-pro.php:9719
+#: languages/aioseo-lite.php:6668
+#: languages/aioseo-pro.php:9723
 msgid "We recommended redirecting attachment URLs back to the attachment since the default WordPress attachment pages have little SEO value."
 msgstr ""
 
-#: languages/aioseo-lite.php:6669
-#: languages/aioseo-pro.php:9727
+#: languages/aioseo-lite.php:6673
+#: languages/aioseo-pro.php:9731
 msgid "We were unable to parse the content for this site."
 msgstr ""
 
 #. Translators: 1 - HTML Line break tag.
-#: languages/aioseo-lite.php:6679
-#: languages/aioseo-pro.php:9740
+#: languages/aioseo-lite.php:6683
+#: languages/aioseo-pro.php:9744
 msgid "We've got some%1$swork to do!"
 msgstr ""
 
-#: languages/aioseo-lite.php:6688
-#: languages/aioseo-pro.php:9761
+#: languages/aioseo-lite.php:6692
+#: languages/aioseo-pro.php:9765
 msgid "Webmaster Tools"
 msgstr ""
 
-#: languages/aioseo-lite.php:6691
-#: languages/aioseo-pro.php:9764
+#: languages/aioseo-lite.php:6695
+#: languages/aioseo-pro.php:9768
 msgid "Webmaster Tools Verification"
 msgstr ""
 
-#: languages/aioseo-lite.php:6694
-#: languages/aioseo-pro.php:9768
+#: languages/aioseo-lite.php:6698
+#: languages/aioseo-pro.php:9772
 msgid "Website"
 msgstr ""
 
-#: languages/aioseo-lite.php:6697
-#: languages/aioseo-pro.php:9771
+#: languages/aioseo-lite.php:6701
+#: languages/aioseo-pro.php:9775
 msgid "Website Name"
 msgstr ""
 
-#: languages/aioseo-lite.php:6700
-#: languages/aioseo-pro.php:9774
+#: languages/aioseo-lite.php:6704
+#: languages/aioseo-pro.php:9778
 msgid "Website URL"
 msgstr ""
 
-#: languages/aioseo-lite.php:6703
-#: languages/aioseo-pro.php:9777
+#: languages/aioseo-lite.php:6707
+#: languages/aioseo-pro.php:9781
 msgid "Website URL:"
 msgstr ""
 
-#: languages/aioseo-lite.php:6706
-#: languages/aioseo-pro.php:9780
+#: languages/aioseo-lite.php:6710
+#: languages/aioseo-pro.php:9784
 msgid "Websites"
 msgstr ""
 
-#: languages/aioseo-lite.php:6711
-#: languages/aioseo-pro.php:9786
+#: languages/aioseo-lite.php:6715
+#: languages/aioseo-pro.php:9790
 msgid "Wednesday"
 msgstr ""
 
-#: languages/aioseo-lite.php:6715
-#: languages/aioseo-pro.php:9793
+#: languages/aioseo-lite.php:6719
+#: languages/aioseo-pro.php:9797
 msgid "weekly"
 msgstr ""
 
-#: languages/aioseo-lite.php:6718
-#: languages/aioseo-pro.php:9796
+#: languages/aioseo-lite.php:6722
+#: languages/aioseo-pro.php:9800
 msgid "Welcome"
 msgstr ""
 
 #. Translators: 1 - The plugin name ("All in One SEO").
-#: languages/aioseo-lite.php:6722
-#: languages/aioseo-pro.php:9800
+#: languages/aioseo-lite.php:6726
+#: languages/aioseo-pro.php:9804
 msgid "Welcome to %1$s"
 msgstr ""
 
 #. Translators: 1 - The plugin name ("All in One SEO"), 2 - The plugin name ("All in One SEO").
-#: languages/aioseo-lite.php:6726
-#: languages/aioseo-pro.php:9804
+#: languages/aioseo-lite.php:6730
+#: languages/aioseo-pro.php:9808
 msgid "Welcome to %1$s, the original SEO plugin for WordPress. At %2$s, we build software that helps you rank your website in search results and gain organic traffic."
 msgstr ""
 
 #. Translators: 1 - The plugin short name ("AIOSEO").
-#: languages/aioseo-lite.php:6730
-#: languages/aioseo-pro.php:9808
+#: languages/aioseo-lite.php:6734
+#: languages/aioseo-pro.php:9812
 msgid "Welcome to the %1$s Setup Wizard!"
 msgstr ""
 
-#: languages/aioseo-lite.php:6735
-#: languages/aioseo-pro.php:9813
+#: languages/aioseo-lite.php:6739
+#: languages/aioseo-pro.php:9817
 msgid "Well done!"
 msgstr ""
 
-#: languages/aioseo-lite.php:6738
-#: languages/aioseo-pro.php:9816
+#: languages/aioseo-lite.php:6742
+#: languages/aioseo-pro.php:9820
 msgid "what's this?"
 msgstr ""
 
 #. Translators: 1 - The default value.
-#: languages/aioseo-lite.php:6742
-#: languages/aioseo-pro.php:9820
+#: languages/aioseo-lite.php:6746
+#: languages/aioseo-pro.php:9824
 msgid "Whether the labels should be shown or not. Defaults to %1$s."
 msgstr ""
 
-#: languages/aioseo-lite.php:6745
-#: languages/aioseo-pro.php:9826
+#: languages/aioseo-lite.php:6749
+#: languages/aioseo-pro.php:9830
 msgid "Whether the publication date of posts should be shown."
 msgstr ""
 
-#: languages/aioseo-lite.php:6748
-#: languages/aioseo-pro.php:9829
+#: languages/aioseo-lite.php:6752
+#: languages/aioseo-pro.php:9833
 msgid "Whether the regular sitemap or compact date archive sitemap is output."
 msgstr ""
 
 #. Translators: 1 - The plugin short name ("AIOSEO").
-#: languages/aioseo-lite.php:6752
-#: languages/aioseo-pro.php:9834
+#: languages/aioseo-lite.php:6756
+#: languages/aioseo-pro.php:9838
 msgid "Whether your business has multiple locations, or just one, %1$s makes it easy to configure and display relevant information about your local business. You can use the custom-built tools below, or you can use the Locations custom post type (multiple locations only) to generate relevant and necessary information for search engines or for your customers."
 msgstr ""
 
-#: languages/aioseo-lite.php:6755
-#: languages/aioseo-pro.php:9837
+#: languages/aioseo-lite.php:6759
+#: languages/aioseo-pro.php:9841
 msgid "Which category best describes your website?"
 msgstr ""
 
-#: languages/aioseo-lite.php:6758
-#: languages/aioseo-pro.php:9840
+#: languages/aioseo-lite.php:6762
+#: languages/aioseo-pro.php:9844
 msgid "Which SEO features do you want to enable?"
 msgstr ""
 
-#: languages/aioseo-lite.php:6761
-#: languages/aioseo-pro.php:9843
+#: languages/aioseo-lite.php:6765
+#: languages/aioseo-pro.php:9847
 msgid "Who should use AIOSEO?"
 msgstr ""
 
-#: languages/aioseo-lite.php:6764
-#: languages/aioseo-pro.php:9850
+#: languages/aioseo-lite.php:6768
+#: languages/aioseo-pro.php:9854
 msgid "Widget"
 msgstr ""
 
-#: languages/aioseo-lite.php:6770
-#: languages/aioseo-pro.php:9856
+#: languages/aioseo-lite.php:6774
+#: languages/aioseo-pro.php:9860
 msgid "Width"
 msgstr ""
 
-#: languages/aioseo-lite.php:6773
-#: languages/aioseo-pro.php:9859
+#: languages/aioseo-lite.php:6777
+#: languages/aioseo-pro.php:9863
 msgid "Will be overriden if the Facebook author URL is present in the individual User Profile."
 msgstr ""
 
-#: languages/aioseo-lite.php:6776
-#: languages/aioseo-pro.php:9862
+#: languages/aioseo-lite.php:6780
+#: languages/aioseo-pro.php:9866
 msgid "Will default opening hours set globally"
 msgstr ""
 
-#: languages/aioseo-lite.php:6779
-#: languages/aioseo-pro.php:9866
+#: languages/aioseo-lite.php:6783
+#: languages/aioseo-pro.php:9870
 msgid "Winning / Losing"
 msgstr ""
 
-#: languages/aioseo-lite.php:6782
-#: languages/aioseo-pro.php:9875
+#: languages/aioseo-lite.php:6786
+#: languages/aioseo-pro.php:9879
 msgid "Without a Focus Keyphrase"
 msgstr ""
 
-#: languages/aioseo-lite.php:6785
+#: languages/aioseo-lite.php:6789
 msgid "WooCommerce Integration"
 msgstr ""
 
-#: languages/aioseo-lite.php:6788
+#: languages/aioseo-lite.php:6792
 msgid "WooCommerce Products only"
 msgstr ""
 
-#: languages/aioseo-lite.php:6791
+#: languages/aioseo-lite.php:6795
 msgid "WooCommerce Products, Product Categories, Product Tags, Product Attributes + WooCommerce smart tags (price, brand, etc.)"
 msgstr ""
 
-#: languages/aioseo-lite.php:6794
-#: languages/aioseo-pro.php:9887
+#: languages/aioseo-lite.php:6798
+#: languages/aioseo-pro.php:9891
 msgid "Word balance"
-msgstr ""
-
-#: languages/aioseo-lite.php:6797
-#: languages/aioseo-pro.php:9890
-msgid "Word Balance"
 msgstr ""
 
 #: languages/aioseo-lite.php:6801
 #: languages/aioseo-pro.php:9894
+msgid "Word Balance"
+msgstr ""
+
+#: languages/aioseo-lite.php:6805
+#: languages/aioseo-pro.php:9898
 msgid "Word Count"
 msgstr ""
 
-#: languages/aioseo-lite.php:6804
-#: languages/aioseo-pro.php:9897
+#: languages/aioseo-lite.php:6808
+#: languages/aioseo-pro.php:9901
 msgid "WordPress"
 msgstr ""
 
-#: languages/aioseo-lite.php:6807
-#: languages/aioseo-pro.php:9900
+#: languages/aioseo-lite.php:6811
+#: languages/aioseo-pro.php:9904
 msgid "WordPress Filter"
 msgstr ""
 
-#: languages/aioseo-lite.php:6810
-#: languages/aioseo-pro.php:9903
+#: languages/aioseo-lite.php:6814
+#: languages/aioseo-pro.php:9907
 msgid "WordPress sites usually insert the page or post title as an H1 tag (although custom themes can change this behavior)."
 msgstr ""
 
-#: languages/aioseo-lite.php:6813
-#: languages/aioseo-pro.php:9906
+#: languages/aioseo-lite.php:6817
+#: languages/aioseo-pro.php:9910
 msgid "WordPress User Roles"
 msgstr ""
 
-#: languages/aioseo-lite.php:6816
-#: languages/aioseo-pro.php:9913
+#: languages/aioseo-lite.php:6820
+#: languages/aioseo-pro.php:9917
 msgid "Words to Strip"
 msgstr ""
 
-#: languages/aioseo-lite.php:6819
-#: languages/aioseo-pro.php:9919
+#: languages/aioseo-lite.php:6823
+#: languages/aioseo-pro.php:9923
 msgid "Would you like to purchase and install the following features now?"
 msgstr ""
 
-#: languages/aioseo-lite.php:6822
-#: languages/aioseo-pro.php:9925
+#: languages/aioseo-lite.php:6826
+#: languages/aioseo-pro.php:9929
 msgid "WP Roles (Editor, Author)"
 msgstr ""
 
-#: languages/aioseo-lite.php:6825
-#: languages/aioseo-pro.php:9928
+#: languages/aioseo-lite.php:6829
+#: languages/aioseo-pro.php:9932
 msgid "Write a meta description for your page. Use your target keywords (in a natural way) and write with human readers in mind. Summarize the content - describe the topics your article discusses."
 msgstr ""
 
-#: languages/aioseo-lite.php:6828
-#: languages/aioseo-pro.php:9931
+#: languages/aioseo-lite.php:6832
+#: languages/aioseo-pro.php:9935
 msgid "Write a question..."
 msgstr ""
 
-#: languages/aioseo-lite.php:6831
-#: languages/aioseo-pro.php:9934
+#: languages/aioseo-lite.php:6835
+#: languages/aioseo-pro.php:9938
 msgid "Write an answer..."
 msgstr ""
 
-#: languages/aioseo-lite.php:6834
-#: languages/aioseo-pro.php:9937
+#: languages/aioseo-lite.php:6838
+#: languages/aioseo-pro.php:9941
 msgid "Write your post title to see the analyzer data. This Headline Analyzer tool enables you to write irresistible SEO headlines that drive traffic, shares, and rank better in search results."
 msgstr ""
 
-#: languages/aioseo-lite.php:6837
-#: languages/aioseo-pro.php:9940
+#: languages/aioseo-lite.php:6841
+#: languages/aioseo-pro.php:9944
 msgid "Writing compelling titles is both a science and an art. There are automated tools that can analyze your title against known metrics for readability and click-worthiness. You also need to understand the psychology of your target audience."
 msgstr ""
 
-#: languages/aioseo-lite.php:6840
+#: languages/aioseo-lite.php:6844
 msgid "XML Sitemap"
-msgstr ""
-
-#: languages/aioseo-lite.php:6843
-#: languages/aioseo-pro.php:9943
-msgid "Yandex Verification Code"
 msgstr ""
 
 #: languages/aioseo-lite.php:6847
 #: languages/aioseo-pro.php:9947
+msgid "Yandex Verification Code"
+msgstr ""
+
+#: languages/aioseo-lite.php:6851
+#: languages/aioseo-pro.php:9951
 msgid "Yandex Webmaster Tools"
 msgstr ""
 
-#: languages/aioseo-lite.php:6850
-#: languages/aioseo-pro.php:9953
+#: languages/aioseo-lite.php:6854
+#: languages/aioseo-pro.php:9957
 msgid "yearly"
 msgstr ""
 
 #. Translators: A number will be prepended to this string, e.g. "2 years ago".
-#: languages/aioseo-lite.php:6854
-#: languages/aioseo-pro.php:9957
+#: languages/aioseo-lite.php:6858
+#: languages/aioseo-pro.php:9961
 msgid "years ago"
 msgstr ""
 
-#: languages/aioseo-lite.php:6860
-#: languages/aioseo-pro.php:9963
+#: languages/aioseo-lite.php:6864
+#: languages/aioseo-pro.php:9967
 msgid "Yes, count me in"
 msgstr ""
 
-#: languages/aioseo-lite.php:6863
-#: languages/aioseo-pro.php:9966
+#: languages/aioseo-lite.php:6867
+#: languages/aioseo-pro.php:9970
 msgid "Yes, count me in!"
-msgstr ""
-
-#: languages/aioseo-lite.php:6866
-#: languages/aioseo-pro.php:9969
-msgid "Yes, I have a backup and want to reset the settings"
 msgstr ""
 
 #: languages/aioseo-lite.php:6870
 #: languages/aioseo-pro.php:9973
+msgid "Yes, I have a backup and want to reset the settings"
+msgstr ""
+
+#: languages/aioseo-lite.php:6874
+#: languages/aioseo-pro.php:9977
 msgid "Yes, I love it!"
 msgstr ""
 
-#: languages/aioseo-lite.php:6873
-#: languages/aioseo-pro.php:10003
+#: languages/aioseo-lite.php:6877
+#: languages/aioseo-pro.php:10007
 msgid "Yes, I want to delete this backup"
 msgstr ""
 
-#: languages/aioseo-lite.php:6876
-#: languages/aioseo-pro.php:10042
+#: languages/aioseo-lite.php:6880
+#: languages/aioseo-pro.php:10046
 msgid "Yes, I want to restore this backup"
 msgstr ""
 
-#: languages/aioseo-lite.php:6880
-#: languages/aioseo-pro.php:10049
+#: languages/aioseo-lite.php:6884
+#: languages/aioseo-pro.php:10053
 msgid "Yes, process this network change"
 msgstr ""
 
-#: languages/aioseo-lite.php:6883
-#: languages/aioseo-pro.php:10056
+#: languages/aioseo-lite.php:6887
+#: languages/aioseo-pro.php:10060
 msgid "You are getting bugfixes and security updates, but not major features."
 msgstr ""
 
-#: languages/aioseo-lite.php:6886
-#: languages/aioseo-pro.php:10059
+#: languages/aioseo-lite.php:6890
+#: languages/aioseo-pro.php:10063
 msgid "You are getting the latest features, bugfixes, and security updates as they are released."
 msgstr ""
 
-#: languages/aioseo-lite.php:6889
-#: languages/aioseo-pro.php:10062
+#: languages/aioseo-lite.php:6893
+#: languages/aioseo-pro.php:10066
 msgid "You are linking to other resources on your website which is great."
 msgstr ""
 
-#: languages/aioseo-lite.php:6895
-#: languages/aioseo-pro.php:10068
+#: languages/aioseo-lite.php:6899
+#: languages/aioseo-pro.php:10072
 msgid "You are not using any subheadings, but your text is short enough and probably doesn't need them."
 msgstr ""
 
 #. Translators: 1 - Opening HTML link tag, 2 - Closing HTML link tag.
-#: languages/aioseo-lite.php:6902
-#: languages/aioseo-pro.php:10083
+#: languages/aioseo-lite.php:6906
+#: languages/aioseo-pro.php:10087
 msgid "You are using a static home page which is found under Pages. You can %1$sedit your home page settings%2$s directly to change the title and description."
 msgstr ""
 
 #. Translators: 1 - Opening HTML link tag, 2 - Closing HTML link tag.
-#: languages/aioseo-lite.php:6907
-#: languages/aioseo-pro.php:10088
+#: languages/aioseo-lite.php:6911
+#: languages/aioseo-pro.php:10092
 msgid "You are using a static home page which is found under Pages. You can %1$sedit your home page settings%2$s directly to change the title, meta and image."
 msgstr ""
 
-#: languages/aioseo-lite.php:6910
-#: languages/aioseo-pro.php:10091
+#: languages/aioseo-lite.php:6914
+#: languages/aioseo-pro.php:10095
 msgid "You are using short paragraphs."
 msgstr ""
 
-#: languages/aioseo-lite.php:6913
-#: languages/aioseo-pro.php:10094
+#: languages/aioseo-lite.php:6917
+#: languages/aioseo-pro.php:10098
 msgid "You can add additional social profile URLs here, separated by a new line."
 msgstr ""
 
-#: languages/aioseo-lite.php:6916
-#: languages/aioseo-pro.php:10097
+#: languages/aioseo-lite.php:6920
+#: languages/aioseo-pro.php:10101
 msgid "You can choose to hide this block on the front-end of your site so that visitors won't see it but search engines will still see it."
 msgstr ""
 
-#: languages/aioseo-lite.php:6919
-#: languages/aioseo-pro.php:10103
+#: languages/aioseo-lite.php:6923
+#: languages/aioseo-pro.php:10107
 msgid "You can get an even greater boost in speed with a content delivery network service. These services host a copy of your content on multiple servers spread out across the globe. A user's request is handled by the edge server that's closest to their physical location, so the content arrives incredibly fast."
 msgstr ""
 
 #. Translators: 1 - Opening HTML strong tag, 2 - Closing HTML strong tag.
-#: languages/aioseo-lite.php:6923
-#: languages/aioseo-pro.php:10107
+#: languages/aioseo-lite.php:6927
+#: languages/aioseo-pro.php:10111
 msgid "You can import additional page URL's to your sitemap using a CSV file. The following 4 columns are required: %1$sPage URL, Priority, Frequency, Date Modified.%2$s"
 msgstr ""
 
-#: languages/aioseo-lite.php:6926
-#: languages/aioseo-pro.php:10110
+#: languages/aioseo-lite.php:6930
+#: languages/aioseo-pro.php:10114
 msgid "You can manually create a robots.txt file and upload it to your site's web root. A simpler option is to use a plugin for your CMS platform."
 msgstr ""
 
 #. Translators: 1 - Learn more link.
-#: languages/aioseo-lite.php:6930
-#: languages/aioseo-pro.php:10114
+#: languages/aioseo-lite.php:6934
+#: languages/aioseo-pro.php:10118
 msgid "You can manually set an API key here, but if left blank a new one will be auto-generated. %1$s"
 msgstr ""
 
 #. Translators: 1 - The plugin name ("All in One SEO"), 2 - The Elementor plugin name ("Elementor").
-#: languages/aioseo-lite.php:6934
-#: languages/aioseo-pro.php:10118
+#: languages/aioseo-lite.php:6938
+#: languages/aioseo-pro.php:10122
 msgid "You can now manage your SEO settings inside of %1$s via %2$s before you publish your post!"
 msgstr ""
 
-#: languages/aioseo-lite.php:6937
-#: languages/aioseo-pro.php:10121
+#: languages/aioseo-lite.php:6941
+#: languages/aioseo-pro.php:10125
 msgid "You can reduce CSS repetition with HTML class and ID attributes. Often the same rules will be repeated across many page elements, embedded in each tag's \"style\" attribute. You can extract them into a single \"style\" tag and use classes and ID's to target each element."
 msgstr ""
 
-#: languages/aioseo-lite.php:6940
-#: languages/aioseo-pro.php:10128
+#: languages/aioseo-lite.php:6944
+#: languages/aioseo-pro.php:10132
 msgid "You can use these quicklinks to quickly access our settings pages to adjust your site's SEO settings."
 msgstr ""
 
-#: languages/aioseo-lite.php:6943
-#: languages/aioseo-pro.php:10131
+#: languages/aioseo-lite.php:6947
+#: languages/aioseo-pro.php:10135
 msgid "You can use this section to add any URLs to your sitemap which aren't a part of your WordPress installation. For example, if you have a contact form that you would like to be included on your sitemap you can enter the information manually."
 msgstr ""
 
-#: languages/aioseo-lite.php:6946
-#: languages/aioseo-pro.php:10157
+#: languages/aioseo-lite.php:6950
+#: languages/aioseo-pro.php:10161
 msgid "You currently don't have permission to update this addon. Please ask a site administrator to update."
 msgstr ""
 
-#: languages/aioseo-lite.php:6949
-#: languages/aioseo-pro.php:10160
+#: languages/aioseo-lite.php:6953
+#: languages/aioseo-pro.php:10164
 msgid "You don't have any keywords yet."
 msgstr ""
 
 #. Translators: 1 - A number representing the remaining notifications.
-#: languages/aioseo-lite.php:6953
-#: languages/aioseo-pro.php:10170
+#: languages/aioseo-lite.php:6957
+#: languages/aioseo-pro.php:10174
 msgid "You have %1$s more notifications"
 msgstr ""
 
-#: languages/aioseo-lite.php:6956
-#: languages/aioseo-pro.php:10173
+#: languages/aioseo-lite.php:6960
+#: languages/aioseo-pro.php:10177
 msgid "You have exceeded the limit for requests. Please try again later."
 msgstr ""
 
 #. Translators: 1 - Semrush.
-#: languages/aioseo-lite.php:6960
-#: languages/aioseo-pro.php:10177
+#: languages/aioseo-lite.php:6964
+#: languages/aioseo-pro.php:10181
 msgid "You have exceeded the number of requests allowed by your %1$s plan."
 msgstr ""
 
-#: languages/aioseo-lite.php:6963
-#: languages/aioseo-pro.php:10180
+#: languages/aioseo-lite.php:6967
+#: languages/aioseo-pro.php:10184
 msgid "You have new notifications!"
 msgstr ""
 
-#: languages/aioseo-lite.php:6966
-#: languages/aioseo-pro.php:10183
+#: languages/aioseo-lite.php:6970
+#: languages/aioseo-pro.php:10187
 msgid "You have no new notifications."
 msgstr ""
 
-#: languages/aioseo-lite.php:6969
-#: languages/aioseo-pro.php:10186
+#: languages/aioseo-lite.php:6973
+#: languages/aioseo-pro.php:10190
 msgid "You have no saved backups."
 msgstr ""
 
-#: languages/aioseo-lite.php:6972
-#: languages/aioseo-pro.php:10189
+#: languages/aioseo-lite.php:6976
+#: languages/aioseo-pro.php:10193
 msgid "You have no visible plugins!"
 msgstr ""
 
-#: languages/aioseo-lite.php:6975
-#: languages/aioseo-pro.php:10193
+#: languages/aioseo-lite.php:6979
+#: languages/aioseo-pro.php:10197
 msgid "You have not added any schema yet. You can add any schema graphs you like via the Schema Generator below."
-msgstr ""
-
-#: languages/aioseo-lite.php:6978
-#: languages/aioseo-pro.php:10196
-msgid "You have not yet added a license key."
 msgstr ""
 
 #: languages/aioseo-lite.php:6982
 #: languages/aioseo-pro.php:10200
+msgid "You have not yet added a license key."
+msgstr ""
+
+#: languages/aioseo-lite.php:6986
+#: languages/aioseo-pro.php:10204
 msgid "You have space to add more keywords and power words to boost your rankings and click-through rate."
 msgstr ""
 
-#: languages/aioseo-lite.php:6985
-#: languages/aioseo-pro.php:10210
+#: languages/aioseo-lite.php:6989
+#: languages/aioseo-pro.php:10214
 msgid "You should use HTTP redirections (301 permanant redirects) to pass PageRank from the \"wrong\" URLs to the standard (canonical) ones. That way, your content will still benefit from backlinks if someone makes a mistake and uses the wrong URL."
 msgstr ""
 
-#: languages/aioseo-lite.php:6988
-#: languages/aioseo-pro.php:10213
+#: languages/aioseo-lite.php:6992
+#: languages/aioseo-pro.php:10217
 msgid "You should write as if your readers are selfish people with short attention spans (because that describes a large percentage of the world's population). Readers visit websites for selfish reasons - they're not there to make you happy."
 msgstr ""
 
-#: languages/aioseo-lite.php:6991
-#: languages/aioseo-pro.php:10216
+#: languages/aioseo-lite.php:6995
+#: languages/aioseo-pro.php:10220
 msgid "You will need to manually update everything."
 msgstr ""
 
-#: languages/aioseo-lite.php:6994
-#: languages/aioseo-pro.php:10219
+#: languages/aioseo-lite.php:6998
+#: languages/aioseo-pro.php:10223
 msgid "You won't have access to this functionality until the extensions have been purchased and installed."
 msgstr ""
 
-#: languages/aioseo-lite.php:6997
-#: languages/aioseo-pro.php:10226
+#: languages/aioseo-lite.php:7001
+#: languages/aioseo-pro.php:10230
 msgid "You're almost there! Once you complete the SEO setup your site will be optimized to rank in search engine results!"
 msgstr ""
 
-#: languages/aioseo-lite.php:7000
-#: languages/aioseo-pro.php:10229
+#: languages/aioseo-lite.php:7004
+#: languages/aioseo-pro.php:10233
 msgid "You're good to go!"
 msgstr ""
 
 #. Translators: 1 - The plugin name ("All in One SEO").
-#: languages/aioseo-lite.php:7005
-#: languages/aioseo-pro.php:10233
+#: languages/aioseo-lite.php:7009
+#: languages/aioseo-pro.php:10237
 msgid "You're using %1$s - no license needed. Enjoy!"
 msgstr ""
 
 #. Translators: 1 - The plugin name ("All in One SEO"), 2 - "upgrading to Pro".
-#: languages/aioseo-lite.php:7009
-#: languages/aioseo-pro.php:10245
+#: languages/aioseo-lite.php:7013
+#: languages/aioseo-pro.php:10249
 msgid "You're using %1$s. To unlock more features, consider %2$s"
 msgstr ""
 
-#: languages/aioseo-lite.php:7012
-#: languages/aioseo-pro.php:10248
+#: languages/aioseo-lite.php:7016
+#: languages/aioseo-pro.php:10252
 msgid "You're using enough active voice. That's great!"
 msgstr ""
 
 #. Translators: 1 - Focus Keyphrase or Keyphrase.
-#: languages/aioseo-lite.php:7016
-#: languages/aioseo-pro.php:10255
+#: languages/aioseo-lite.php:7020
+#: languages/aioseo-pro.php:10259
 msgid "Your %1$s appears in the first paragraph. Well done!"
 msgstr ""
 
 #. Translators: 1 - The plural name of the content type (e.g. "Posts" or "Categories").
-#: languages/aioseo-lite.php:7024
-#: languages/aioseo-pro.php:10267
+#: languages/aioseo-lite.php:7028
+#: languages/aioseo-pro.php:10271
 msgid "Your %1$s will be noindexed and excluded from the sitemap so that search engines ignore them. You can still control how their page title looks like below."
 msgstr ""
 
-#: languages/aioseo-lite.php:7027
-#: languages/aioseo-pro.php:10290
+#: languages/aioseo-lite.php:7031
+#: languages/aioseo-pro.php:10294
 msgid "Your content contains images and/or video(s)."
 msgstr ""
 
-#: languages/aioseo-lite.php:7030
-#: languages/aioseo-pro.php:10299
+#: languages/aioseo-lite.php:7034
+#: languages/aioseo-pro.php:10303
 msgid "Your Email Address"
 msgstr ""
 
-#: languages/aioseo-lite.php:7033
-#: languages/aioseo-pro.php:10302
+#: languages/aioseo-lite.php:7037
+#: languages/aioseo-pro.php:10306
 msgid "Your email is needed so you can receive SEO recommendations. This email will also be used to connect your site with our SEO API."
 msgstr ""
 
-#: languages/aioseo-lite.php:7036
-#: languages/aioseo-pro.php:10305
+#: languages/aioseo-lite.php:7040
+#: languages/aioseo-pro.php:10309
 msgid "Your Facebook URL is invalid. Please check the format and try again."
 msgstr ""
 
-#: languages/aioseo-lite.php:7039
-#: languages/aioseo-pro.php:10308
+#: languages/aioseo-lite.php:7043
+#: languages/aioseo-pro.php:10312
 msgid "Your H2 and H3 subheadings reflects the topic of your copy. Good job!"
-msgstr ""
-
-#: languages/aioseo-lite.php:7042
-#: languages/aioseo-pro.php:10311
-msgid "Your H2 or H3 subheading reflects the topic of your copy. Good job!"
 msgstr ""
 
 #: languages/aioseo-lite.php:7046
 #: languages/aioseo-pro.php:10315
-msgid "Your headline doesn’t use enough words. You have more space to add keywords and power words to improve your SEO and get more engagement."
+msgid "Your H2 or H3 subheading reflects the topic of your copy. Good job!"
 msgstr ""
 
 #: languages/aioseo-lite.php:7050
 #: languages/aioseo-pro.php:10319
-msgid "Your headline has a negative sentiment."
+msgid "Your headline doesn’t use enough words. You have more space to add keywords and power words to improve your SEO and get more engagement."
 msgstr ""
 
 #: languages/aioseo-lite.php:7054
 #: languages/aioseo-pro.php:10323
-msgid "Your headline has a neutral sentiment."
+msgid "Your headline has a negative sentiment."
 msgstr ""
 
 #: languages/aioseo-lite.php:7058
 #: languages/aioseo-pro.php:10327
-msgid "Your headline has a positive sentiment."
+msgid "Your headline has a neutral sentiment."
 msgstr ""
 
 #: languages/aioseo-lite.php:7062
 #: languages/aioseo-pro.php:10331
-msgid "Your headline has the right amount of words. Headlines are more likely to be clicked on in search results if they have about 6 words."
+msgid "Your headline has a positive sentiment."
 msgstr ""
 
 #: languages/aioseo-lite.php:7066
 #: languages/aioseo-pro.php:10335
-msgid "Your headline has too many words. Long headlines will get cut off in search results and won’t get as many clicks."
+msgid "Your headline has the right amount of words. Headlines are more likely to be clicked on in search results if they have about 6 words."
 msgstr ""
 
-#: languages/aioseo-lite.php:7069
-#: languages/aioseo-pro.php:10338
-msgid "Your headline would be more likely to get clicks if it had more common words."
+#: languages/aioseo-lite.php:7070
+#: languages/aioseo-pro.php:10339
+msgid "Your headline has too many words. Long headlines will get cut off in search results and won’t get as many clicks."
 msgstr ""
 
 #: languages/aioseo-lite.php:7073
 #: languages/aioseo-pro.php:10342
+msgid "Your headline would be more likely to get clicks if it had more common words."
+msgstr ""
+
+#: languages/aioseo-lite.php:7077
+#: languages/aioseo-pro.php:10346
 msgid "Your headline would be more likely to get clicks if it had more uncommon words."
 msgstr ""
 
-#: languages/aioseo-lite.php:7076
-#: languages/aioseo-pro.php:10345
+#: languages/aioseo-lite.php:7080
+#: languages/aioseo-pro.php:10349
 msgid "Your Instagram URL is invalid. Please check the format and try again."
 msgstr ""
 
-#: languages/aioseo-lite.php:7079
-#: languages/aioseo-pro.php:10348
+#: languages/aioseo-lite.php:7083
+#: languages/aioseo-pro.php:10352
 msgid "Your license has been disabled."
 msgstr ""
 
-#: languages/aioseo-lite.php:7082
-#: languages/aioseo-pro.php:10351
+#: languages/aioseo-lite.php:7086
+#: languages/aioseo-pro.php:10355
 msgid "Your license has expired."
 msgstr ""
 
-#: languages/aioseo-lite.php:7085
-#: languages/aioseo-pro.php:10358
+#: languages/aioseo-lite.php:7089
+#: languages/aioseo-pro.php:10362
 msgid "Your license key is invalid."
 msgstr ""
 
-#: languages/aioseo-lite.php:7088
-#: languages/aioseo-pro.php:10361
+#: languages/aioseo-lite.php:7092
+#: languages/aioseo-pro.php:10365
 msgid "Your license key provides access to updates and addons."
 msgstr ""
 
-#: languages/aioseo-lite.php:7091
-#: languages/aioseo-pro.php:10368
-msgid "Your LinkedIn URL is invalid. Please check the format and try again."
-msgstr ""
-
-#. Translators: 1 - The length of the meta description as a number.
 #: languages/aioseo-lite.php:7095
 #: languages/aioseo-pro.php:10372
-msgid "Your meta description is %1$d characters long, which is too long."
+msgid "Your LinkedIn URL is invalid. Please check the format and try again."
 msgstr ""
 
 #. Translators: 1 - The length of the meta description as a number.
 #: languages/aioseo-lite.php:7099
 #: languages/aioseo-pro.php:10376
-msgid "Your meta description is only %1$d characters long, which is too short."
+msgid "Your meta description is %1$d characters long, which is too long."
 msgstr ""
 
 #. Translators: 1 - The length of the meta description as a number.
 #: languages/aioseo-lite.php:7103
 #: languages/aioseo-pro.php:10380
-msgid "Your meta description is set and is %1$d characters long."
+msgid "Your meta description is only %1$d characters long, which is too short."
 msgstr ""
 
-#: languages/aioseo-lite.php:7106
-#: languages/aioseo-pro.php:10383
-msgid "Your MySpace URL is invalid. Please check the format and try again."
+#. Translators: 1 - The length of the meta description as a number.
+#: languages/aioseo-lite.php:7107
+#: languages/aioseo-pro.php:10384
+msgid "Your meta description is set and is %1$d characters long."
 msgstr ""
 
 #: languages/aioseo-lite.php:7110
 #: languages/aioseo-pro.php:10387
+msgid "Your MySpace URL is invalid. Please check the format and try again."
+msgstr ""
+
+#: languages/aioseo-lite.php:7114
+#: languages/aioseo-pro.php:10391
 msgid "Your name or company name."
 msgstr ""
 
-#: languages/aioseo-lite.php:7113
-#: languages/aioseo-pro.php:10397
+#: languages/aioseo-lite.php:7117
+#: languages/aioseo-pro.php:10401
 msgid "Your Overall Site Score"
 msgstr ""
 
-#: languages/aioseo-lite.php:7116
-#: languages/aioseo-pro.php:10400
+#: languages/aioseo-lite.php:7120
+#: languages/aioseo-pro.php:10404
 msgid "Your page contains a noindex header or meta tag."
 msgstr ""
 
-#: languages/aioseo-lite.php:7119
-#: languages/aioseo-pro.php:10403
+#: languages/aioseo-lite.php:7123
+#: languages/aioseo-pro.php:10407
 msgid "Your page does not contain any noindex header or meta tag."
 msgstr ""
 
-#: languages/aioseo-lite.php:7122
-#: languages/aioseo-pro.php:10406
+#: languages/aioseo-lite.php:7126
+#: languages/aioseo-pro.php:10410
 msgid "Your page has a correct number of internal and external links."
 msgstr ""
 
-#: languages/aioseo-lite.php:7125
-#: languages/aioseo-pro.php:10409
+#: languages/aioseo-lite.php:7129
+#: languages/aioseo-pro.php:10413
 msgid "Your page is using the canonical link tag."
 msgstr ""
 
 #. Translators: 1 - The total number of page requests.
-#: languages/aioseo-lite.php:7129
-#: languages/aioseo-pro.php:10413
+#: languages/aioseo-lite.php:7133
+#: languages/aioseo-pro.php:10417
 msgid "Your page makes %1$d requests."
 msgstr ""
 
-#: languages/aioseo-lite.php:7132
-#: languages/aioseo-pro.php:10416
+#: languages/aioseo-lite.php:7136
+#: languages/aioseo-pro.php:10420
 msgid "Your Pinterest URL is invalid. Please check the format and try again."
 msgstr ""
 
-#: languages/aioseo-lite.php:7135
-#: languages/aioseo-pro.php:10419
+#: languages/aioseo-lite.php:7139
+#: languages/aioseo-pro.php:10423
 msgid "Your post needs improvement!"
 msgstr ""
 
-#: languages/aioseo-lite.php:7138
-#: languages/aioseo-pro.php:10426
+#: languages/aioseo-lite.php:7142
+#: languages/aioseo-pro.php:10430
 msgid "Your response time is under 0.2 seconds."
 msgstr ""
 
-#: languages/aioseo-lite.php:7141
-#: languages/aioseo-pro.php:10429
+#: languages/aioseo-lite.php:7145
+#: languages/aioseo-pro.php:10433
 msgid "Your robots.txt file is missing or unavailable."
 msgstr ""
 
 #. Translators: 1 - Opening link tag, 2 - Closing link tag.
-#: languages/aioseo-lite.php:7145
-#: languages/aioseo-pro.php:10433
-msgid "Your RSS feed has been disabled. Disabling the global RSS feed is NOT recommended. This will prevent users from subscribing to your content and can hurt your SEO rankings. You can re-enable the global RSS feed in the %1$scrawl content settings%2$s."
-msgstr ""
-
-#. Translators: 1 - The length of the SEO title as a number.
 #: languages/aioseo-lite.php:7149
 #: languages/aioseo-pro.php:10437
-msgid "Your SEO title is %1$d characters long, which is too long."
+msgid "Your RSS feed has been disabled. Disabling the global RSS feed is NOT recommended. This will prevent users from subscribing to your content and can hurt your SEO rankings. You can re-enable the global RSS feed in the %1$scrawl content settings%2$s."
 msgstr ""
 
 #. Translators: 1 - The length of the SEO title as a number.
 #: languages/aioseo-lite.php:7153
 #: languages/aioseo-pro.php:10441
-msgid "Your SEO title is only %1$d characters long, which is too short."
+msgid "Your SEO title is %1$d characters long, which is too long."
 msgstr ""
 
 #. Translators: 1 - The length of the SEO title as a number.
 #: languages/aioseo-lite.php:7157
 #: languages/aioseo-pro.php:10445
+msgid "Your SEO title is only %1$d characters long, which is too short."
+msgstr ""
+
+#. Translators: 1 - The length of the SEO title as a number.
+#: languages/aioseo-lite.php:7161
+#: languages/aioseo-pro.php:10449
 msgid "Your SEO title is set and is %1$d characters long."
 msgstr ""
 
-#: languages/aioseo-lite.php:7160
-#: languages/aioseo-pro.php:10448
+#: languages/aioseo-lite.php:7164
+#: languages/aioseo-pro.php:10452
 msgid "Your server is not using \"expires\" headers for your images."
 msgstr ""
 
-#: languages/aioseo-lite.php:7163
-#: languages/aioseo-pro.php:10451
+#: languages/aioseo-lite.php:7167
+#: languages/aioseo-pro.php:10455
 msgid "Your server is using \"expires\" headers for your images."
 msgstr ""
 
-#: languages/aioseo-lite.php:7166
-#: languages/aioseo-pro.php:10454
+#: languages/aioseo-lite.php:7170
+#: languages/aioseo-pro.php:10458
 msgid "Your settings have been reset successfully!"
 msgstr ""
 
-#: languages/aioseo-lite.php:7169
-#: languages/aioseo-pro.php:10457
+#: languages/aioseo-lite.php:7173
+#: languages/aioseo-pro.php:10461
 msgid "Your site has a robots.txt file which includes one or more \"disallow\" directives."
 msgstr ""
 
-#: languages/aioseo-lite.php:7172
-#: languages/aioseo-pro.php:10460
+#: languages/aioseo-lite.php:7176
+#: languages/aioseo-pro.php:10464
 msgid "Your site has a robots.txt file."
 msgstr ""
 
 #. Translators: 1 - The plugin short name ('AIOSEO').
-#: languages/aioseo-lite.php:7178
-#: languages/aioseo-pro.php:10466
+#: languages/aioseo-lite.php:7182
+#: languages/aioseo-pro.php:10470
 msgid "Your site is not connected. Please connect to %1$s, then try again."
 msgstr ""
 
-#: languages/aioseo-lite.php:7181
-#: languages/aioseo-pro.php:10469
+#: languages/aioseo-lite.php:7185
+#: languages/aioseo-pro.php:10473
 msgid "Your site is not using a secure transfer protocol (https)."
 msgstr ""
 
-#: languages/aioseo-lite.php:7184
-#: languages/aioseo-pro.php:10472
+#: languages/aioseo-lite.php:7188
+#: languages/aioseo-pro.php:10476
 msgid "Your site is using a secure transfer protocol (https)."
 msgstr ""
 
-#: languages/aioseo-lite.php:7187
-#: languages/aioseo-pro.php:10475
+#: languages/aioseo-lite.php:7191
+#: languages/aioseo-pro.php:10479
 msgid "Your Social Profiles"
 msgstr ""
 
-#: languages/aioseo-lite.php:7190
-#: languages/aioseo-pro.php:10478
+#: languages/aioseo-lite.php:7194
+#: languages/aioseo-pro.php:10482
 msgid "Your SoundCloud URL is invalid. Please check the format and try again."
 msgstr ""
 
-#: languages/aioseo-lite.php:7193
-#: languages/aioseo-pro.php:10481
+#: languages/aioseo-lite.php:7197
+#: languages/aioseo-pro.php:10485
 msgid "Your source is the same as a target and this will create a loop."
 msgstr ""
 
-#: languages/aioseo-lite.php:7196
-#: languages/aioseo-pro.php:10485
+#: languages/aioseo-lite.php:7200
+#: languages/aioseo-pro.php:10489
 msgid "Your static sitemap is currently being regenerated. This may take some time based on the size of your site. This may also cause the sitemap content to look outdated."
 msgstr ""
 
 #. Translators: 1 - Adds a html tag with an option like: <code>^</code>.
-#: languages/aioseo-lite.php:7200
-#: languages/aioseo-pro.php:10489
+#: languages/aioseo-lite.php:7204
+#: languages/aioseo-pro.php:10493
 msgid "Your target URL contains the invalid character(s) %1$s"
 msgstr ""
 
-#: languages/aioseo-lite.php:7203
-#: languages/aioseo-pro.php:10492
+#: languages/aioseo-lite.php:7207
+#: languages/aioseo-pro.php:10496
 msgid "Your target URL is not valid."
 msgstr ""
 
 #. Translators: 1 - Adds a html tag with an option like: <code>^</code>, 2 - Adds a html tag with an option like: <code>^</code>.
-#: languages/aioseo-lite.php:7207
-#: languages/aioseo-pro.php:10496
+#: languages/aioseo-lite.php:7211
+#: languages/aioseo-pro.php:10500
 msgid "Your target URL should be an absolute URL like %1$s or start with a slash %2$s."
 msgstr ""
 
-#: languages/aioseo-lite.php:7210
+#: languages/aioseo-lite.php:7214
 msgid "Your Templates"
 msgstr ""
 
-#: languages/aioseo-lite.php:7213
-#: languages/aioseo-pro.php:10503
+#: languages/aioseo-lite.php:7217
+#: languages/aioseo-pro.php:10507
 msgid "Your theme is not visible!"
 msgstr ""
 
-#: languages/aioseo-lite.php:7216
-#: languages/aioseo-pro.php:10506
+#: languages/aioseo-lite.php:7220
+#: languages/aioseo-pro.php:10510
 msgid "Your Tumblr URL is invalid. Please check the format and try again."
 msgstr ""
 
-#: languages/aioseo-lite.php:7219
-#: languages/aioseo-pro.php:10509
+#: languages/aioseo-lite.php:7223
+#: languages/aioseo-pro.php:10513
 msgid "Your Twitter URL is invalid. Please check the format and try again."
 msgstr ""
 
 #. Translators: 1 - Domain URL, 2 - Domain URL.
-#: languages/aioseo-lite.php:7223
-#: languages/aioseo-pro.php:10513
+#: languages/aioseo-lite.php:7227
+#: languages/aioseo-pro.php:10517
 msgid "Your URL appears to contain a domain inside the path: %1$s. Did you mean to use %2$s instead?"
 msgstr ""
 
-#: languages/aioseo-lite.php:7226
-#: languages/aioseo-pro.php:10516
+#: languages/aioseo-lite.php:7230
+#: languages/aioseo-pro.php:10520
 msgid "Your URL is invalid."
 msgstr ""
 
-#: languages/aioseo-lite.php:7229
-#: languages/aioseo-pro.php:10519
+#: languages/aioseo-lite.php:7233
+#: languages/aioseo-pro.php:10523
 msgid "Your URL is invalid. Please check the format and try again."
 msgstr ""
 
 #. Translators: 1 - Learn more link.
-#: languages/aioseo-lite.php:7235
-#: languages/aioseo-pro.php:10525
+#: languages/aioseo-lite.php:7239
+#: languages/aioseo-pro.php:10529
 msgid "Your user account role does not have access to edit this field. %1$s"
 msgstr ""
 
-#: languages/aioseo-lite.php:7238
-#: languages/aioseo-pro.php:10528
+#: languages/aioseo-lite.php:7242
+#: languages/aioseo-pro.php:10532
 msgid "Your Username:"
 msgstr ""
 
-#: languages/aioseo-lite.php:7241
-#: languages/aioseo-pro.php:10531
+#: languages/aioseo-lite.php:7245
+#: languages/aioseo-pro.php:10535
 msgid "Your Wikipedia URL is invalid. Please check the format and try again."
 msgstr ""
 
-#: languages/aioseo-lite.php:7244
-#: languages/aioseo-pro.php:10534
+#: languages/aioseo-lite.php:7248
+#: languages/aioseo-pro.php:10538
 msgid "Your Yelp URL is invalid. Please check the format and try again."
 msgstr ""
 
-#: languages/aioseo-lite.php:7247
-#: languages/aioseo-pro.php:10537
+#: languages/aioseo-lite.php:7251
+#: languages/aioseo-pro.php:10541
 msgid "Your YouTube URL is invalid. Please check the format and try again."
 msgstr ""
 
-#: languages/aioseo-lite.php:7250
-#: languages/aioseo-pro.php:10540
+#: languages/aioseo-lite.php:7254
+#: languages/aioseo-pro.php:10544
 msgid "Yup, we know a thing or two about building awesome products that customers love."
 msgstr ""
 
-#: languages/aioseo-lite.php:7253
-#: languages/aioseo-pro.php:10543
+#: languages/aioseo-lite.php:7257
+#: languages/aioseo-pro.php:10547
 msgid "Zip Code"
 msgstr ""
 
@@ -16339,165 +16346,165 @@ msgstr ""
 msgid "We couldn't find any redirects for this post."
 msgstr ""
 
-#: languages/aioseo-pro.php:9722
+#: languages/aioseo-pro.php:9726
 msgid "We were unable to calculate the speed of this post."
 msgstr ""
 
-#: languages/aioseo-pro.php:9730
+#: languages/aioseo-pro.php:9734
 msgid "We'll let you know if anything changes. Keep up the great work!"
 msgstr ""
 
-#: languages/aioseo-pro.php:9753
+#: languages/aioseo-pro.php:9757
 msgid "Web Page Type"
 msgstr ""
 
-#: languages/aioseo-pro.php:9846
+#: languages/aioseo-pro.php:9850
 msgid "Whoops! Your URL failed to redirect properly."
 msgstr ""
 
-#: languages/aioseo-pro.php:9872
+#: languages/aioseo-pro.php:9876
 msgid "With multiple locations, you will have a new menu item in your admin sidebar. By default, this menu item is labeled using the plural term of locations with each single item being called a location. If you like, you may enter custom labels to better match your business."
 msgstr ""
 
-#: languages/aioseo-pro.php:9878
+#: languages/aioseo-pro.php:9882
 msgid "WooCommerce Support"
 msgstr ""
 
-#: languages/aioseo-pro.php:9881
+#: languages/aioseo-pro.php:9885
 msgid "Woohoo! You crushed the SEO for this post."
 msgstr ""
 
-#: languages/aioseo-pro.php:9884
+#: languages/aioseo-pro.php:9888
 msgid "Woohoo! Your redirect worked perfectly!"
 msgstr ""
 
-#: languages/aioseo-pro.php:9909
+#: languages/aioseo-pro.php:9913
 msgid "Words to Ignore"
 msgstr ""
 
-#: languages/aioseo-pro.php:9922
+#: languages/aioseo-pro.php:9926
 msgid "Would you like to relocate your entire site to a new domain? Everything will be redirected except WordPress login and admin. Enabling this option will disable any site aliases or canonical settings."
 msgstr ""
 
-#: languages/aioseo-pro.php:10000
+#: languages/aioseo-pro.php:10004
 msgid "Yes, I want to delete these redirects"
 msgstr ""
 
-#: languages/aioseo-pro.php:10013
+#: languages/aioseo-pro.php:10017
 msgid "Yes, I want to delete this record"
 msgstr ""
 
-#: languages/aioseo-pro.php:10016
+#: languages/aioseo-pro.php:10020
 msgid "Yes, I want to delete this redirect"
 msgstr ""
 
-#: languages/aioseo-pro.php:10027
+#: languages/aioseo-pro.php:10031
 msgid "Yes, I want to disconnect."
 msgstr ""
 
 #. Translators: 1 - Opening strong tag, 2 - The authed site URL, 3 - Closing strong tag.
-#: languages/aioseo-pro.php:10053
+#: languages/aioseo-pro.php:10057
 msgid "You are connected to %1$s%2$s%3$s."
 msgstr ""
 
 #. Translators: 1 - HTML Strong tag, 2 - HTML Strong tag.
-#: languages/aioseo-pro.php:10079
+#: languages/aioseo-pro.php:10083
 msgid "You are using %1$sRegex%2$s for this redirect so you will need to manually add a URL to test."
 msgstr ""
 
 #. Translators: 1 - The base URL with path, 2 - The path.
-#: languages/aioseo-pro.php:10125
+#: languages/aioseo-pro.php:10129
 msgid "You can test redirects with a URL that includes your domain name ( %1$s ) or just the path ( %2$s )"
 msgstr ""
 
-#: languages/aioseo-pro.php:10134
+#: languages/aioseo-pro.php:10138
 msgid "You can use this section to add any URLs to your sitemap which aren’t a part of your WordPress installation. For example, if you have a contact form that you would like to be included on your sitemap you can enter the information manually."
 msgstr ""
 
-#: languages/aioseo-pro.php:10149
+#: languages/aioseo-pro.php:10153
 msgid "You currently don't have permission to activate this addon. Please ask a site administrator to activate first."
 msgstr ""
 
-#: languages/aioseo-pro.php:10163
+#: languages/aioseo-pro.php:10167
 msgid "You don't yet have a Focus Keyphrase for this post. Add one to track trends and get suggested changes for your content to help you rank higher in search results."
 msgstr ""
 
-#: languages/aioseo-pro.php:10166
+#: languages/aioseo-pro.php:10170
 msgid "You don't yet have any keywords."
 msgstr ""
 
-#: languages/aioseo-pro.php:10203
+#: languages/aioseo-pro.php:10207
 msgid "You must first enter a Google Maps API Key for this feature to work."
 msgstr ""
 
 #. Translators: 1 - Maps Embed API documentation link.
-#: languages/aioseo-pro.php:10207
+#: languages/aioseo-pro.php:10211
 msgid "You selected a Place (from Google Places) but your Maps Embed API is not enabled. For a more seamless experience and rich information cards please enable it in your Google Project. %1$s"
 msgstr ""
 
 #. Translators: 1 - Opening link tag, 2 - Closing link tag.
-#: languages/aioseo-pro.php:10223
+#: languages/aioseo-pro.php:10227
 msgid "You'll need to update your Site Address URL to match your new site address. %1$sUpdate Site Address URL%2$s."
 msgstr ""
 
 #. Translators: 1 - The plugin name ("All in One SEO"), 2 - Add license key text.
-#: languages/aioseo-pro.php:10237
+#: languages/aioseo-pro.php:10241
 msgid "You're using %1$s but no license key has been entered. Add your %2$s."
 msgstr ""
 
 #. Translators: 1 - The plugin name ("All in One SEO"), 2 - Renew text.
-#: languages/aioseo-pro.php:10241
+#: languages/aioseo-pro.php:10245
 msgid "You're using %1$s but your license has expired. %2$s."
 msgstr ""
 
-#: languages/aioseo-pro.php:10270
+#: languages/aioseo-pro.php:10274
 msgid "Your 404's will now be redirected by the URL slug."
 msgstr ""
 
-#: languages/aioseo-pro.php:10273
+#: languages/aioseo-pro.php:10277
 msgid "Your 404's will now be redirected to the Custom URL below."
 msgstr ""
 
-#: languages/aioseo-pro.php:10276
+#: languages/aioseo-pro.php:10280
 msgid "Your 404's will now be redirected to the Home Page. We'll still keep track of them in the 404 Logs."
 msgstr ""
 
-#: languages/aioseo-pro.php:10279
+#: languages/aioseo-pro.php:10283
 msgid "Your 404's will now be redirected to their parent page or post. We'll still keep track of them in the 404 Logs."
 msgstr ""
 
 #. Translators: 1 - A learn more link.
-#: languages/aioseo-pro.php:10284
+#: languages/aioseo-pro.php:10288
 msgid "Your API Key is invalid. Please make sure you have set your key correctly. %1$s"
 msgstr ""
 
-#: languages/aioseo-pro.php:10293
+#: languages/aioseo-pro.php:10297
 msgid "Your current marker"
 msgstr ""
 
-#: languages/aioseo-pro.php:10296
+#: languages/aioseo-pro.php:10300
 msgid "Your current site address"
 msgstr ""
 
 #. Translators: 1 - WordPress Multisite.
-#: languages/aioseo-pro.php:10355
+#: languages/aioseo-pro.php:10359
 msgid "Your license key has been set at the network level of your %1$s. If you would like to use a different license for this subsite, you can enter it below."
 msgstr ""
 
-#: languages/aioseo-pro.php:10391
+#: languages/aioseo-pro.php:10395
 msgid "Your new site address"
 msgstr ""
 
-#: languages/aioseo-pro.php:10394
+#: languages/aioseo-pro.php:10398
 msgid "Your old site address"
 msgstr ""
 
 #. Translators: 1 - Nginx/Apache, 2 - Learn more link.
-#: languages/aioseo-pro.php:10423
+#: languages/aioseo-pro.php:10427
 msgid "Your redirect settings have been updated. In order for them to work properly you may need to reload your %1$s configuration. %2$s"
 msgstr ""
 
-#: languages/aioseo-pro.php:10546
+#: languages/aioseo-pro.php:10550
 msgid "Zoom"
 msgstr ""
 

@@ -177,7 +177,6 @@
 				<div class="webpcLoader__successInner">
 					<div class="webpcLoader__successContent">
 						<?php echo wp_kses_post( __( 'The process was completed successfully. Your images have been converted!', 'webp-converter-for-media' ) ); ?>
-						<?php echo wp_kses_post( __( 'Please flush cache if you use caching plugin or caching via hosting.', 'webp-converter-for-media' ) ); ?>
 						<br>
 						<?php
 						echo wp_kses_post(

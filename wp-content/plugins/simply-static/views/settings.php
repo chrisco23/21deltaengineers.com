@@ -89,6 +89,7 @@ namespace Simply_Static;
 							<select name='delivery_method' id='deliveryMethod'>
 								<option value='zip' <?php Util::selected_if( $this->delivery_method === 'zip' ) ?>><?php _e( "ZIP Archive", 'simply-static' ); ?></option>
 								<option value='local' <?php Util::selected_if( $this->delivery_method === 'local' ) ?>><?php _e( "Local Directory", 'simply-static' ); ?></option>
+                                <option value='simply-cdn' <?php Util::selected_if( $this->delivery_method === 'simply-cdn' ) ?>><?php _e( "Simply CDN", 'simply-static' ); ?></option>
 								<?php do_action( 'simply_static_delivery_methods' ); ?>
 							</select>
 						</td>
@@ -119,6 +120,52 @@ namespace Simply_Static;
 							</div>
 						</td>
 					</tr>
+                    <tr class='delivery-method simply-cdn'>
+                        <th></th>
+                        <td>
+                            <p>
+                                <?php echo sprintf(__("The fast and easy way to bring your static website online. %s handles hosting, performance, security and form submissions for your static site.", 'simply-static' ), '<a target="_blank" href="https://simplycdn.io">Simply CDN</a>'); ?>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr class='delivery-method simply-cdn'>
+                        <th>
+                            <label for='sch_token'><?php _e( "Security Token", 'simply-static' );?></label>
+                        </th>
+                        <td>
+                            <p>
+		                        <?php esc_html_e( 'Copy and paste the Security Token from your project and click connect.', 'simply-static' ); ?>
+                            </p>
+                            <p>
+                                <input aria-describedby='securityTokenHelpBlock' type='text' id='sch_token' name='sch_token' value='<?php echo esc_attr( get_option('sch_token') ); ?>' class='widefat' />
+                                <span class="button button-secondary" id="simply-cdn-connect"><?php esc_html_e( 'Connect', 'simply-static' ); ?></span>
+                            </p>
+                        </td>
+                    </tr>
+                    <?php
+                        if ( is_network_admin() ) {
+                            $this->allow_subsites = is_null( $this->allow_subsites ) ? 'yes' : $this->allow_subsites;
+                            ?>
+                            <tr>
+                                <th>
+                                    <label for='local_dir'><?php _e( "Allow Sites to use Simply Static?", 'simply-static' );?></label>
+                                </th>
+                                <td>
+                                    <div>
+                                        <label>
+                                            <input <?php checked( $this->allow_subsites, 'yes' ); ?> type='radio' name='allow_subsites' value="yes" /> Yes
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <input <?php checked( $this->allow_subsites, 'no' ); ?> type='radio' name='allow_subsites' value="no" /> No
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    ?>
 					<tr>
 						<th></th>
 						<td>
@@ -292,17 +339,9 @@ namespace Simply_Static;
                 </tbody>
             </table>
 			<h2 class="title"><?php _e( "Additional Settings", 'simply-static' ); ?></h2>
-			<p><?php esc_html_e( 'Here you can configure some additional settings like running exports with WP-Cron, modifing the URL replacement behaviour and more.', 'simply-static' ); ?></p>
-			<table class='form-table  id='additional-settings'>
+			<p><?php esc_html_e( 'Here you can configure some additional settings like clearing the local directory before running an export or activating force replacement for all URLs.', 'simply-static' ); ?></p>
+			<table class='form-table'  id='additional-settings'>
 				<tbody>
-					<tr>
-						<th>
-							<label for='use_cron'><?php _e( "Run with WP-Cron", 'simply-static' ); ?></label>
-						</th>
-						<td>						
-							<input type="checkbox" name="use_cron" id="use_cron" <?php Util::checked_if( $this->use_cron === 'on' ); ?> />
-						</td>
-					</tr>
                     <tr>
                         <th>
                             <label for='force_replace_url'><?php _e( "Force URL replacements", 'simply-static' ); ?></label>

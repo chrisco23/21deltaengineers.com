@@ -822,7 +822,7 @@ class Admin {
 
 			$this->currentPage = $page;
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueueAssets' ], 11 );
-			add_action( 'admin_enqueue_scripts', [ $this, 'dequeueTagDivOptinBuilderScript' ], 99999 );
+			add_action( 'admin_enqueue_scripts', [ aioseo()->filters, 'dequeueThirdPartyAssets' ], 99999 );
 
 			add_filter( 'admin_footer_text', [ $this, 'addFooterText' ] );
 
@@ -1174,9 +1174,11 @@ class Admin {
 	*/
 	private function getScoreClass( $score ) {
 		$scoreClass = 50 < $score ? 'score-orange' : 'score-red';
+
 		if ( 0 === $score ) {
 			$scoreClass = 'score-none';
 		}
+
 		if ( $score >= 80 ) {
 			$scoreClass = 'score-green';
 		}
@@ -1193,17 +1195,6 @@ class Admin {
 	 */
 	public function loadTextDomain() {
 		aioseo()->helpers->loadTextDomain( 'all-in-one-seo-pack' );
-	}
-
-	/**
-	 * Dequeues a script from the tagDiv Opt-in Builder plugin that, accompanied by the Newspaper theme, crashes our menu pages.
-	 *
-	 * @since 4.1.9
-	 *
-	 * @return void
-	 */
-	public function dequeueTagDivOptinBuilderScript() {
-		wp_dequeue_script( 'tds_js_vue_files_last' );
 	}
 
 	/**

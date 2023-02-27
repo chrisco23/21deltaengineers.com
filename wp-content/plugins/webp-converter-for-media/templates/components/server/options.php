@@ -38,12 +38,6 @@ use WebpConverter\Service\StatsManager;
 		</td>
 	</tr>
 	<tr>
-		<td class="e"><?php echo esc_html( LitespeedNotice::NOTICE_OPTION ); ?></td>
-		<td class="v">
-			<?php echo esc_html( OptionsAccessManager::get_option( LitespeedNotice::NOTICE_OPTION, '-' ) ); ?>
-		</td>
-	</tr>
-	<tr>
 		<td class="e"><?php echo esc_html( UpgradeNotice::NOTICE_OPTION ); ?></td>
 		<td class="v">
 			<?php echo esc_html( OptionsAccessManager::get_option( UpgradeNotice::NOTICE_OPTION, '-' ) ); ?>

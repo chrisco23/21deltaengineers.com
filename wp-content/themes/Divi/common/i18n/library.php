@@ -31,7 +31,10 @@ return [
 
 	'Save this %s snippet to the Divi Library for later use.'                                => esc_html__( 'Save this %s snippet to the Divi Library for later use.', 'et_builder' ),
 	'Exporting your %s will create a JSON file that can be imported into a different area.' => esc_html__( 'Exporting your %s will create a JSON file that can be imported into a different area.', 'et_builder' ),
-	'Save Selection Only'               => esc_html__( 'Save Selection Only', 'et_builder' ),
-	'Create New Category/Categories'    => esc_html__( 'Create New Category/Categories', 'et_builder' ),
-	'Create New Tag(s)'                 => esc_html__( 'Create New Tag(s)', 'et_builder' ),
+	'Save Selection Only'              => esc_html__( 'Save Selection Only', 'et_builder' ),
+	'Create New Category/Categories'   => esc_html__( 'Create New Category/Categories', 'et_builder' ),
+	'Create New Tag(s)'                => esc_html__( 'Create New Tag(s)', 'et_builder' ),
+	'Choose Library'                   => esc_html__( 'Choose Library', 'et_builder' ),
+	'My Divi Cloud'                    => esc_html__( 'My Divi Cloud', 'et_builder' ),
+	'My Cloud'                         => esc_html__( 'My Cloud', 'et_builder' ),
 ];

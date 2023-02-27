@@ -242,7 +242,8 @@ function et_fb_get_dynamic_backend_helpers() {
 		? get_post( get_post_thumbnail_id()->post_title )
 		: false;
 
-	$request_type = $post_type;
+	$request_type  = $post_type;
+	$user_cloud_id = 0;
 
 	// Set request_type on 404 pages.
 	if ( is_404() ) {
@@ -269,6 +270,8 @@ function et_fb_get_dynamic_backend_helpers() {
 		if ( ! empty( $_GET['cloudItem'] ) && get_post_status( $post_id ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
 			$remote_item_id  = (int) sanitize_text_field( $_GET['cloudItem'] ); // phpcs:ignore WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
 			$layout_location = 'cloud';
+
+			$user_cloud_id = isset( $_GET['userCloudId'] ) ? sanitize_text_field( $_GET['userCloudId'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
 		}
 	}
 
@@ -329,6 +332,7 @@ function et_fb_get_dynamic_backend_helpers() {
 		'layoutBuiltFor'               => $layout_built_for,
 		'hasPredefinedContent'         => $has_predefined_content,
 		'remoteItemId'                 => $remote_item_id,
+		'userCloudId'                  => $user_cloud_id,
 		'publishCapability'            => ( is_page() && ! current_user_can( 'publish_pages' ) ) || ( ! is_page() && ! current_user_can( 'publish_posts' ) ) ? 'no_publish' : 'publish',
 		'ajaxUrl'                      => is_ssl() ? admin_url( 'admin-ajax.php' ) : admin_url( 'admin-ajax.php', 'http' ),
 		'et_account'                   => et_core_get_et_account(),

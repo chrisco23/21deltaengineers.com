@@ -8,7 +8,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '4.19.5' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '4.20.0' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {

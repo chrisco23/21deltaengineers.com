@@ -15,3 +15,4 @@ include_once($HOOKDIR.'filter-dbdb_get_extended_font_icon_symbols.php');
 include_once($HOOKDIR.'filter-dbdb_et_pb_get_font_down_icon_symbols.php');
 include_once($HOOKDIR.'filter-dbdb_filterable_portfolio_tabs_terms.php');
 include_once($HOOKDIR.'filter-dbdb_render_slug_shortcode_output.php');
+include_once($HOOKDIR.'filter-dbdb_etmodules_font_require_social_icons.php');

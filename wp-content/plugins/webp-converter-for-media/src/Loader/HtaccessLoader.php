@@ -6,7 +6,6 @@ use WebpConverter\Service\CloudflareConfigurator;
 use WebpConverter\Service\OptionsAccessManager;
 use WebpConverter\Service\PathsGenerator;
 use WebpConverter\Settings\Option\ExtraFeaturesOption;
-use WebpConverter\Settings\Option\LoaderTypeOption;
 use WebpConverter\Settings\Option\RewriteInheritanceOption;
 use WebpConverter\Settings\Option\SupportedExtensionsOption;
 
@@ -20,16 +19,21 @@ class HtaccessLoader extends LoaderAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function init_hooks() {
+	public function get_type(): string {
+		return self::LOADER_TYPE;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function init_admin_hooks() {
 		add_filter( 'webpc_htaccess_rewrite_root', [ $this, 'modify_document_root_path' ] );
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function is_active_loader(): bool {
-		$settings = $this->plugin_data->get_plugin_settings();
-		return ( ( $settings[ LoaderTypeOption::OPTION_NAME ] ?? '' ) === self::LOADER_TYPE );
+	public function init_front_end_hooks() {
 	}
 
 	/**
@@ -85,15 +89,22 @@ class HtaccessLoader extends LoaderAbstract {
 			return;
 		}
 
-		$content = $this->add_comments_to_rules(
-			[
-				$this->get_mod_rewrite_rules( $settings ),
-				$this->get_mod_headers_rules( $settings ),
-			]
-		);
+		$content = $this->add_comments_to_rules( $this->get_rules_to_wp_content( $settings ) );
 
 		$content = apply_filters( 'webpc_htaccess_rules', $content, $path . '/.htaccess' );
 		$this->save_rewrites_in_htaccesss( $path, $content );
+	}
+
+	/**
+	 * @param mixed[] $settings Plugin settings.
+	 *
+	 * @return string[]
+	 */
+	protected function get_rules_to_wp_content( array $settings ): array {
+		return [
+			$this->get_mod_rewrite_rules( $settings ),
+			$this->get_mod_headers_rules( $settings ),
+		];
 	}
 
 	/**
@@ -156,7 +167,7 @@ class HtaccessLoader extends LoaderAbstract {
 	 *
 	 * @return string Rules for .htaccess file.
 	 */
-	private function get_mod_rewrite_rules( array $settings, string $output_path_suffix = null ): string {
+	protected function get_mod_rewrite_rules( array $settings, string $output_path_suffix = null ): string {
 		$content = '';
 		if ( ! $settings[ SupportedExtensionsOption::OPTION_NAME ] ) {
 			return $content;
@@ -205,7 +216,7 @@ class HtaccessLoader extends LoaderAbstract {
 	 *
 	 * @return string Rules for .htaccess file.
 	 */
-	private function get_mod_headers_rules( array $settings ): string {
+	protected function get_mod_headers_rules( array $settings ): string {
 		$content    = '';
 		$extensions = implode( '|', $settings[ SupportedExtensionsOption::OPTION_NAME ] );
 

@@ -34,7 +34,7 @@ $(window).on('et_code_snippets_container_ready', (event, preferences, container 
   if (process.env.NODE_ENV === 'development') {
     devtools = Devtools({
       host:                 '127.0.0.1:4045',
-      reconnect:            true,
+      reconnect:            false,
       bigComponentsWarning: 15,
     });
   }

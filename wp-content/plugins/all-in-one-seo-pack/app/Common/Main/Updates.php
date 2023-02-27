@@ -22,8 +22,12 @@ class Updates {
 	public function __construct() {
 		add_action( 'aioseo_v4_migrate_post_schema', [ $this, 'migratePostSchema' ] );
 		add_action( 'aioseo_v4_migrate_post_schema_default', [ $this, 'migratePostSchemaDefault' ] );
+		add_action( 'aioseo_v419_remove_revision_records', [ $this, 'removeRevisionRecords' ] );
 
-		if ( wp_doing_ajax() || wp_doing_cron() ) {
+		if (
+			wp_doing_ajax() ||
+			wp_doing_cron()
+		) {
 			return;
 		}
 
@@ -140,7 +144,7 @@ class Updates {
 
 		if ( version_compare( $lastActiveVersion, '4.1.9', '<' ) ) {
 			$this->fixTaxonomyTags();
-			$this->removeRevisionRecords();
+			$this->scheduleRemoveRevisionsRecords();
 		}
 
 		if ( version_compare( $lastActiveVersion, '4.0.0', '>=' ) && version_compare( $lastActiveVersion, '4.2.0', '<' ) ) {
@@ -813,9 +817,11 @@ class Updates {
 	 *
 	 * @return void
 	 */
-	private function removeRevisionRecords() {
+	public function removeRevisionRecords() {
 		$postsTableName       = aioseo()->core->db->prefix . 'posts';
 		$aioseoPostsTableName = aioseo()->core->db->prefix . 'aioseo_posts';
+		$limit                = 5000;
+
 		aioseo()->core->db->execute(
 			"DELETE FROM `$aioseoPostsTableName`
 			WHERE `post_id` IN (
@@ -824,8 +830,14 @@ class Updates {
 				WHERE `post_parent` != 0
 				AND `post_type` = 'revision'
 				AND `post_status` = 'inherit'
-			)"
+			)
+			LIMIT {$limit}"
 		);
+
+		// If the limit equals the amount of post IDs found, there might be more revisions left, so we need a new scan.
+		if ( aioseo()->core->db->rowsAffected() === $limit ) {
+			$this->scheduleRemoveRevisionsRecords();
+		}
 	}
 
 	/**
@@ -1128,7 +1140,7 @@ class Updates {
 		switch ( $schemaType ) {
 			case 'Article':
 				$graph = [
-					'id'         => 'aioseo-article-' . uniqid(),
+					'id'         => '#aioseo-article-' . uniqid(),
 					'slug'       => 'article',
 					'graphName'  => 'Article',
 					'label'      => __( 'Article', 'all-in-one-seo-pack' ),
@@ -1153,7 +1165,7 @@ class Updates {
 				break;
 			case 'Course':
 				$graph = [
-					'id'         => 'aioseo-course-' . uniqid(),
+					'id'         => '#aioseo-course-' . uniqid(),
 					'slug'       => 'course',
 					'graphName'  => 'Course',
 					'label'      => __( 'Course', 'all-in-one-seo-pack' ),
@@ -1170,7 +1182,7 @@ class Updates {
 				break;
 			case 'Product':
 				$graph = [
-					'id'         => 'aioseo-product-' . uniqid(),
+					'id'         => '#aioseo-product-' . uniqid(),
 					'slug'       => 'product',
 					'graphName'  => 'Product',
 					'label'      => __( 'Product', 'all-in-one-seo-pack' ),
@@ -1227,7 +1239,7 @@ class Updates {
 				break;
 			case 'Recipe':
 				$graph = [
-					'id'         => 'aioseo-recipe-' . uniqid(),
+					'id'         => '#aioseo-recipe-' . uniqid(),
 					'slug'       => 'recipe',
 					'graphName'  => 'Recipe',
 					'label'      => __( 'Recipe', 'all-in-one-seo-pack' ),
@@ -1270,7 +1282,7 @@ class Updates {
 				break;
 			case 'SoftwareApplication':
 				$graph = [
-					'id'         => 'aioseo-software-application-' . uniqid(),
+					'id'         => '#aioseo-software-application-' . uniqid(),
 					'slug'       => 'software-application',
 					'graphName'  => 'SoftwareApplication',
 					'label'      => __( 'Software', 'all-in-one-seo-pack' ),
@@ -1312,7 +1324,7 @@ class Updates {
 			case 'WebPage':
 				if ( 'FAQPage' === $schemaTypeOptions->webPage->webPageType ) {
 					$graph = [
-						'id'         => 'aioseo-faq-page-' . uniqid(),
+						'id'         => '#aioseo-faq-page-' . uniqid(),
 						'slug'       => 'faq-page',
 						'graphName'  => 'FAQPage',
 						'label'      => __( 'FAQ Page', 'all-in-one-seo-pack' ),
@@ -1340,7 +1352,7 @@ class Updates {
 					}
 				} else {
 					$graph = [
-						'id'         => 'aioseo-web-page-' . uniqid(),
+						'id'         => '#aioseo-web-page-' . uniqid(),
 						'slug'       => 'web-page',
 						'graphName'  => 'WebPage',
 						'label'      => __( 'Web Page', 'all-in-one-seo-pack' ),
@@ -1377,5 +1389,16 @@ class Updates {
 		$aioseoPost->save();
 
 		return $aioseoPost;
+	}
+
+	/**
+	 * Schedules the revision records removal.
+	 *
+	 * @since 4.3.1
+	 *
+	 * @return void
+	 */
+	private function scheduleRemoveRevisionsRecords() {
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v419_remove_revision_records', 10, [], true );
 	}
 }

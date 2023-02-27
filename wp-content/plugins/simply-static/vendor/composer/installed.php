@@ -31,12 +31,12 @@
     ),
     'symfony/css-selector' => 
     array (
-      'pretty_version' => 'v5.4.11',
-      'version' => '5.4.11.0',
+      'pretty_version' => 'v5.4.19',
+      'version' => '5.4.19.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'c1681789f059ab756001052164726ae88512ae3d',
+      'reference' => 'f4a7d150f5b9e8f974f6f127d8167e420d11fc62',
     ),
     'symfony/polyfill-iconv' => 
     array (
@@ -103,21 +103,21 @@
     ),
     'voku/portable-utf8' => 
     array (
-      'pretty_version' => '6.0.11',
-      'version' => '6.0.11.0',
+      'pretty_version' => '6.0.12',
+      'version' => '6.0.12.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'a768656da0b8e42d236b325a4ebfc56ad6d0e111',
+      'reference' => 'db0583727bb17666bbd2ba238c85babb973fd165',
     ),
     'voku/simple_html_dom' => 
     array (
-      'pretty_version' => '4.8.6',
-      'version' => '4.8.6.0',
+      'pretty_version' => '4.8.8',
+      'version' => '4.8.8.0',
       'aliases' => 
       array (
       ),
-      'reference' => '1df7e9844eddbe190450c87f281e87bbd8d7f645',
+      'reference' => '9ef90f0280fe16054c117e04ea86617ce0fcdd35',
     ),
   ),
 );

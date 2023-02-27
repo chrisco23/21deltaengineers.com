@@ -261,14 +261,14 @@ namespace AIOSEO\Plugin {
 				$translations = new Pro\Main\Translations(
 					'plugin',
 					'all-in-one-seo-pack',
-					'https://packages.translationspress.com/aioseo/all-in-one-seo-pack/packages.json'
+					'https://aioseo.com/aioseo-plugin/all-in-one-seo-pack/packages.json'
 				);
 				$translations->init();
 
 				$translations = new Pro\Main\Translations(
 					'plugin',
 					'aioseo-pro',
-					'https://packages.translationspress.com/aioseo/aioseo-pro/packages.json'
+					'https://aioseo.com/aioseo-plugin/aioseo-pro/packages.json'
 				);
 				$translations->init();
 			}

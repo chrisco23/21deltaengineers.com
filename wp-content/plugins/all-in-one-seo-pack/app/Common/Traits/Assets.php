@@ -140,10 +140,10 @@ trait Assets {
 
 		if ( ! empty( $res ) ) {
 			add_action( 'admin_head', function () use ( &$res ) {
-				echo $res; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $res; // phpcs:ignore
 			} );
 			add_action( 'wp_head', function () use ( &$res ) {
-				echo $res; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $res; // phpcs:ignore
 			} );
 		}
 	}
@@ -570,5 +570,39 @@ trait Assets {
 		$paths[ $path ] = $newPath;
 
 		return apply_filters( 'aioseo_normalize_assets_host', $paths[ $path ] );
+	}
+
+	/**
+	 * Get all the CSS files which a JS asset depends on.
+	 * This won't work properly unless you've run `npm run build` first.
+	 *
+	 * @since 4.3.1
+	 *
+	 * @param  string $asset The asset to find the CSS dependencies for.
+	 * @return array         All the asset's CSS dependencies if any.
+	 */
+	public function getJsAssetCssQueue( $asset ) {
+		$queue = [];
+
+		foreach ( $this->getCssUrls( $asset ) as $file => $url ) {
+			$queue[] = [
+				'handle' => $this->cssHandle( $file ),
+				'url'    => $url
+			];
+		}
+
+		$manifestAsset = $this->getManifestItem( $asset );
+		if ( ! empty( $manifestAsset['imports'] ) ) {
+			foreach ( $manifestAsset['imports'] as $subAsset ) {
+				foreach ( $this->getCssUrls( $subAsset ) as $file => $url ) {
+					$queue[] = [
+						'handle' => $this->cssHandle( $file ),
+						'url'    => $url
+					];
+				}
+			}
+		}
+
+		return $queue;
 	}
 }

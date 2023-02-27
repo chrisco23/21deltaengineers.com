@@ -30,7 +30,7 @@ class Review {
 	 */
 	public function maybeShowNotice() {
 		$dismissed = get_user_meta( get_current_user_id(), '_aioseo_plugin_review_dismissed', true );
-		if ( '1' === $dismissed || '2' === $dismissed ) {
+		if ( '3' === $dismissed || '4' === $dismissed ) {
 			return;
 		}
 
@@ -304,7 +304,7 @@ class Review {
 		$relay = isset( $_POST['relay'] ) ? 'true' === wp_unslash( $_POST['relay'] ) : false; // phpcs:ignore HM.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		if ( ! $delay ) {
-			update_user_meta( get_current_user_id(), '_aioseo_plugin_review_dismissed', $relay ? '2' : '1' );
+			update_user_meta( get_current_user_id(), '_aioseo_plugin_review_dismissed', $relay ? '4' : '3' );
 
 			return wp_send_json_success();
 		}

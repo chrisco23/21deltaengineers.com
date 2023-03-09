@@ -1000,6 +1000,10 @@ class Updates {
 	 */
 	private function schedulePostSchemaMigration() {
 		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v4_migrate_post_schema', 10 );
+
+		if ( ! aioseo()->cache->get( 'v4_migrate_post_schema_default_date' ) ) {
+			aioseo()->cache->update( 'v4_migrate_post_schema_default_date', gmdate( 'Y-m-d H:i:s' ), 3 * MONTH_IN_SECONDS );
+		}
 	}
 
 	/**
@@ -1026,7 +1030,7 @@ class Updates {
 		}
 
 		// Once done, schedule the next action.
-		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v4_migrate_post_schema', 30 );
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v4_migrate_post_schema', 30, [], true );
 	}
 
 	/**
@@ -1037,36 +1041,7 @@ class Updates {
 	 * @return void
 	 */
 	private function schedulePostSchemaDefaultMigration() {
-		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v4_migrate_post_schema_default', 10 );
-
-		if ( ! aioseo()->cache->get( 'v4_migrate_post_schema_default_date' ) ) {
-			aioseo()->cache->update( 'v4_migrate_post_schema_default_date', gmdate( 'Y-m-d H:i:s' ), 3 * MONTH_IN_SECONDS );
-		}
-	}
-
-	/**
-	 * Updates the dashboardWidgets with the new array format.
-	 *
-	 * @since 4.2.8
-	 *
-	 * @return void
-	 */
-	private function migrateDashboardWidgetsOptions() {
-		$rawOptions = $this->getRawOptions();
-
-		if ( empty( $rawOptions ) || ! is_bool( $rawOptions['advanced']['dashboardWidgets'] ) ) {
-			return;
-		}
-
-		$widgets = [ 'seoNews' ];
-
-		// If the dashboardWidgets was activated, let's turn on the other widgets.
-		if ( $rawOptions['advanced']['dashboardWidgets'] ) {
-			$widgets[] = 'seoOverview';
-			$widgets[] = 'seoSetup';
-		}
-
-		aioseo()->options->advanced->dashboardWidgets = $widgets;
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v4_migrate_post_schema_default', 30 );
 	}
 
 	/**
@@ -1102,7 +1077,7 @@ class Updates {
 		}
 
 		// Once done, schedule the next action.
-		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v4_migrate_post_schema_default', 30 );
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v4_migrate_post_schema_default', 30, [], true );
 	}
 
 	/**
@@ -1389,6 +1364,31 @@ class Updates {
 		$aioseoPost->save();
 
 		return $aioseoPost;
+	}
+
+	/**
+	 * Updates the dashboardWidgets with the new array format.
+	 *
+	 * @since 4.2.8
+	 *
+	 * @return void
+	 */
+	private function migrateDashboardWidgetsOptions() {
+		$rawOptions = $this->getRawOptions();
+
+		if ( empty( $rawOptions ) || ! is_bool( $rawOptions['advanced']['dashboardWidgets'] ) ) {
+			return;
+		}
+
+		$widgets = [ 'seoNews' ];
+
+		// If the dashboardWidgets was activated, let's turn on the other widgets.
+		if ( $rawOptions['advanced']['dashboardWidgets'] ) {
+			$widgets[] = 'seoOverview';
+			$widgets[] = 'seoSetup';
+		}
+
+		aioseo()->options->advanced->dashboardWidgets = $widgets;
 	}
 
 	/**

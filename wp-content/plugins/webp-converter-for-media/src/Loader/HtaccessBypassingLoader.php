@@ -79,7 +79,7 @@ class HtaccessBypassingLoader extends HtaccessLoader {
 	 */
 	protected function get_rules_to_wp_content( array $settings ): array {
 		return [
-			$this->get_suffix_redirect_rules(),
+			$this->get_suffix_redirect_rules( $settings ),
 			$this->get_mod_rewrite_rules( $settings ),
 			$this->get_mod_headers_rules( $settings ),
 		];
@@ -88,15 +88,18 @@ class HtaccessBypassingLoader extends HtaccessLoader {
 	/**
 	 * Generates redirects for suffixed URLs.
 	 *
-	 * @param string $content .
+	 * @param mixed[] $settings Plugin settings.
 	 *
 	 * @return string Rules for .htaccess file.
 	 */
-	private function get_suffix_redirect_rules( string $content = '' ): string {
+	private function get_suffix_redirect_rules( array $settings ): string {
+		$content    = '';
+		$extensions = implode( '|', $settings[ SupportedExtensionsOption::OPTION_NAME ] ) ?: '.+';
+
 		$content .= '<IfModule mod_rewrite.c>' . PHP_EOL;
 		$content .= '  RewriteEngine On' . PHP_EOL;
 		$content .= '  RewriteCond %{REQUEST_FILENAME} !-f' . PHP_EOL;
-		$content .= '  RewriteRule ^([^\.]+)' . self::FILENAME_SUFFIX . '\.(.+)$ $1.$2 [NC]' . PHP_EOL;
+		$content .= '  RewriteRule ^(.+)' . self::FILENAME_SUFFIX . '\.(' . $extensions . ')$ $1.$2 [NC]' . PHP_EOL;
 		$content .= '</IfModule>';
 
 		return $content;

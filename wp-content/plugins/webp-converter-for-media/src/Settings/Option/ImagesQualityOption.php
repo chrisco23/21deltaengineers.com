@@ -46,7 +46,7 @@ class ImagesQualityOption extends OptionAbstract {
 			[
 				sprintf(
 				/* translators: %s: level name */
-					__( 'The "%s" value is the best choice for most websites.', 'webp-converter-for-media' ),
+					__( 'The "%s" value is the most optimal choice for most websites.', 'webp-converter-for-media' ),
 					__( 'Optimal', 'webp-converter-for-media' )
 				),
 				sprintf(

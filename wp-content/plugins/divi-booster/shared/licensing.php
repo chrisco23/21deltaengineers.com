@@ -169,7 +169,7 @@ class Licensing {
                         $message = __( 'Invalid license.' );
                         break;
                     case 'invalid_item_id' :
-                        $message = __( 'Invalid / empty license key.' );
+                        $message = sprintf( __( 'Sorry, that license key is for a different plugin by Divi Booster. Please use a license key for the %s plugin.' ), $this->plugin_name);
                         break;
                     case 'invalid' :
                     case 'site_inactive' :

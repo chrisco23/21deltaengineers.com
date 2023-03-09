@@ -219,7 +219,7 @@ trait WpContext {
 	public function getPostId() {
 		$post = $this->getPost();
 
-		return property_exists( $post, 'ID' ) ? $post->ID : null;
+		return is_object( $post ) && property_exists( $post, 'ID' ) ? $post->ID : null;
 	}
 
 	/**
@@ -587,15 +587,21 @@ trait WpContext {
 	/**
 	 * Checks whether we're on the given screen.
 	 *
-	 * @since 4.0.7
+	 * @since   4.0.7
+	 * @version 4.3.1
 	 *
 	 * @param  string $screenName The screen name.
+	 * @param  string $comparison Check as a prefix.
 	 * @return bool               Whether we're on the given screen.
 	 */
-	public function isScreenBase( $screenName ) {
+	public function isScreenBase( $screenName, $comparison = '' ) {
 		$screen = $this->getCurrentScreen();
 		if ( ! $screen || ! isset( $screen->base ) ) {
 			return false;
+		}
+
+		if ( 'prefix' === $comparison ) {
+			return 0 === stripos( $screen->base, $screenName );
 		}
 
 		return $screen->base === $screenName;

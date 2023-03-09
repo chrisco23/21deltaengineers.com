@@ -451,3 +451,24 @@ function et_get_extra_tax_layout_id() {
 	}
 	return null;
 }
+
+/**
+ * Get embeded media from post content.
+ *
+ * @since 4.20.1
+ *
+ * @param int $content Post Content.
+ *
+ * @return boolean false on failure, true on success.
+ */
+function et_is_media_embedded_in_content( $content ) {
+	// regex match for youtube and vimeo urls in $content.
+	$pattern = '~https?://(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/|vimeo\.com/)([^\s]+)~i';
+	preg_match_all( $pattern, $content, $matches );
+
+	if ( empty( $matches[0] ) ) {
+		return false;
+	}
+
+	return true;
+}

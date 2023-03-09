@@ -27,10 +27,27 @@ function db133_add_setting($plugin) {
 			'h3' => 'H3',
 			'h4' => 'H4',
 			'h5' => 'H5',
-			'h6' => 'H6'
+			'h6' => 'H6',
+            'p' => 'P'
 		);
-		$selected = dbdb_option('133-header-title-and-tagline', 'titleHeaderLevel', 'h1');
+		$selected = dbdb_option('133-header-title-and-tagline', 'titleHeaderLevel', 'h2');
 		$plugin->selectpicker(__FILE__, 'titleHeaderLevel', $options, $selected);
+		?>
+	</div>
+	<div class="db_subsetting">
+		Tagline HTML tag:
+		<?php
+		$options = array(
+			'h1' => 'H1',
+			'h2' => 'H2',
+			'h3' => 'H3',
+			'h4' => 'H4',
+			'h5' => 'H5',
+			'h6' => 'H6',
+            'p' => 'P'
+		);
+		$selected = dbdb_option('133-header-title-and-tagline', 'taglineHeaderLevel', 'p');
+		$plugin->selectpicker(__FILE__, 'taglineHeaderLevel', $options, $selected);
 		?>
 	</div>
 	<?php

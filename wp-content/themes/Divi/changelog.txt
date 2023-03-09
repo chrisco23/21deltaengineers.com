@@ -1,3 +1,22 @@
+version 4.20.2 ( updated 03-08-2023 )
+- Adjusted a fix in 4.20.1 that changed section class enumeration. For customers using performance plugins that strip away version parameters from CSS files, this could cause styles to appear jumbled when they did not clear their browser cache.
+	* includes/builder/feature/dynamic-assets/class-dynamic-assets.php
+	* includes/builder/feature/dynamic-assets/dynamic-assets.php
+	* includes/builder/frontend-builder/bundle.js
+
+version 4.20.1 ( updated 03-06-2023 )
+- Fixed Widget Area Creator panel not rendering in Widget Block Editor.
+- Fixed issue allowing users to switch to default editor when creating a new post.
+- Fixed unable to switch to Default Editor when creating new post.
+- Fixed white space issue on top and bottom of embedded media.
+- Fixed a JavaScript error that occurred in some cases when switching the Block Editor from Visual to Code or vice-versa.
+- Fixed compatibility issue for WordPress 6.2 that affected the Edit Post/Page page.
+	* common/init.php
+	* includes/builder/feature/dynamic-assets/class-dynamic-assets.php
+	* includes/builder/feature/dynamic-assets/dynamic-assets.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/scripts/ext/widgets.js
+
 version 4.20 ( updated 02-16-2023 )
 - Introduced Divi Cloud Sharing, allowing team members to share their Divi Cloud libraries.
 - Improved Divi Library popup responsiveness.

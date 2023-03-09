@@ -106,7 +106,7 @@ class GdMethod extends LibraryMethodAbstract {
 			throw new ExtensionUnsupportedException( [ $extension, $source_path ] );
 		}
 
-		$exif = exif_read_data( $source_path ) ?: [];
+		$exif = ( function_exists( 'exif_read_data' ) ) ? ( exif_read_data( $source_path ) ?: [] ) : [];
 		switch ( $exif['Orientation'] ?? '' ) {
 			case 2:
 				imageflip( $image, IMG_FLIP_HORIZONTAL );

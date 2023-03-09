@@ -93,6 +93,7 @@ class SeoPreview {
 	 */
 	public function enqueueScript() {
 		aioseo()->core->assets->load( $this->mainAssetRelativeFilename, [], $this->getVueData(), 'aioseoSeoPreview' );
+		aioseo()->main->enqueueTranslations();
 	}
 
 	/**

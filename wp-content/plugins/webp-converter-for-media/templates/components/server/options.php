@@ -7,7 +7,6 @@
 
 use WebpConverter\Conversion\Cron\CronStatusManager;
 use WebpConverter\Notice\CloudflareNotice;
-use WebpConverter\Notice\LitespeedNotice;
 use WebpConverter\Notice\ThanksNotice;
 use WebpConverter\Notice\UpgradeNotice;
 use WebpConverter\Notice\WelcomeNotice;

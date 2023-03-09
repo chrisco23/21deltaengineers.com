@@ -44,7 +44,7 @@ class RewriteInheritanceOption extends OptionAbstract {
 		return sprintf(
 			'%1$s (%2$s)',
 			__( 'Disable rewrite inheritance in .htaccess files', 'webp-converter-for-media' ),
-			__( 'use if you have a problem e.g. with loading CSS or JS files', 'webp-converter-for-media' )
+			__( 'use if you have a problem with, e.g., loading CSS or JS files', 'webp-converter-for-media' )
 		);
 	}
 

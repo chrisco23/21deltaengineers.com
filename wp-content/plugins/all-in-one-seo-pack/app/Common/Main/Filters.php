@@ -385,5 +385,30 @@ abstract class Filters {
 			wp_dequeue_script( 'theme-script-vendor' );
 			wp_dequeue_script( 'theme-script-main' );
 		}
+
+		// Voxel theme.
+		if ( class_exists( '\Voxel\Controllers\Assets_Controller' ) ) {
+			wp_dequeue_script( 'vue' );
+			wp_dequeue_script( 'vx:backend.js' );
+		}
+	}
+
+	/**
+	 * Dequeues third-party scripts from the other plugins or themes that crashes our menu pages.
+	 *
+	 * @version 4.3.2
+	 *
+	 * @return void
+	 */
+	public function dequeueThirdPartyAssetsEarly() {
+		// Disables scripts for plugins StmMotorsExtends and StmPostType.
+		if ( class_exists( 'STM_Metaboxes' ) ) {
+			remove_action( 'admin_enqueue_scripts', [ 'STM_Metaboxes', 'wpcfto_scripts' ] );
+		}
+
+		// Disables scripts for LearnPress plugin.
+		if ( function_exists( 'learn_press_admin_assets' ) ) {
+			remove_action( 'admin_enqueue_scripts', [ learn_press_admin_assets(), 'load_scripts' ] );
+		}
 	}
 }

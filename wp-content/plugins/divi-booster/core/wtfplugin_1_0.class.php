@@ -122,6 +122,8 @@ class wtfplugin_1_0 {
 	// === Handle JS and CSS files
 	
 	function enqueue_user_js() { 
+        clearstatcache();
+        if (!filesize($this->cachedir().'wp_footer.js')) { return; }
 		$dependencies = array('jquery');
 		if (wp_script_is('divi-custom-script', 'enqueued')) { 
 			$dependencies[] = 'divi-custom-script';
@@ -136,6 +138,8 @@ class wtfplugin_1_0 {
 	} 
 	
 	function enqueue_user_css() { 
+        clearstatcache();
+        if (!filesize($this->cachedir().'wp_head.css')) { return; }
 		wp_enqueue_style($this->slug.'-user-css', $this->cacheurl().'wp_head.css', array(), $this->last_save()); 
 	}
 	

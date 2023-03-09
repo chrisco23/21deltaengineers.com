@@ -2471,7 +2471,7 @@ class ET_Dynamic_Assets {
 				$this->_enqueue_fitvids = true;
 			}
 
-			if ( $this->_enqueue_fitvids || et_disable_js_on_demand() ) {
+			if ( $this->_enqueue_fitvids || et_disable_js_on_demand() || et_is_media_embedded_in_content( $this->_all_content ) ) {
 				wp_enqueue_script( 'fitvids', ET_BUILDER_URI . '/feature/dynamic-assets/assets/js/jquery.fitvids.js', array( 'jquery' ), ET_CORE_VERSION, true );
 			}
 		}

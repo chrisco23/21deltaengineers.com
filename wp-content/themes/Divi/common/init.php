@@ -39,15 +39,19 @@ if ( ! function_exists( 'et_fb_enqueue_react' ) ):
 	 *
 	 */
 	function et_fb_enqueue_react() {
+		if ( ! et_common_should_enqueue_react() ) {
+			return;
+		}
+
 		$DEBUG          = defined( 'ET_DEBUG' ) && ET_DEBUG;
 		$common_scripts = ET_COMMON_URL . 'scripts';
 		$react_version  = '16.14.0';
-	
+
 		wp_dequeue_script( 'react' );
 		wp_dequeue_script( 'react-dom' );
 		wp_deregister_script( 'react' );
 		wp_deregister_script( 'react-dom' );
-	
+
 		if ( $DEBUG || DiviExtensions::is_debugging_extension() ) {
 			wp_enqueue_script( 'react', "https://cdn.jsdelivr.net/npm/react@{$react_version}/umd/react.development.js", array(), $react_version, true );
 			wp_enqueue_script( 'react-dom', "https://cdn.jsdelivr.net/npm/react-dom@{$react_version}/umd/react-dom.development.js", array( 'react' ), $react_version, true );
@@ -57,4 +61,31 @@ if ( ! function_exists( 'et_fb_enqueue_react' ) ):
 			wp_enqueue_script( 'react-dom', "{$common_scripts}/react-dom.production.min.js", array( 'react' ), $react_version, true );
 		}
 	}
-	endif;
+endif;
+
+if ( ! function_exists( 'et_common_should_enqueue_react' ) ) :
+	/**
+	 * Determine whether React should be enqueued or not.
+	 *
+	 * @since ??
+	 *
+	 * @return bool
+	 */
+	function et_common_should_enqueue_react() {
+		$page      = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
+		$is_fb     = et_core_is_fb_enabled();
+		$is_tb     = et_pb_is_allowed( 'theme_builder' ) && 'et_theme_builder' === $page;
+		$is_epanel = et_pb_is_allowed( 'theme_options' ) && 'et_divi_options' === $page;
+
+		$should_enqueue = $is_fb || $is_tb || $is_epanel;
+
+		/**
+		 * Filter whether React should be enqueued or not.
+		 *
+		 * @since ??
+		 *
+		 * @param string $should_enqueue Enqueue status.
+		 */
+		return apply_filters( 'et_common_should_enqueue_react', $should_enqueue );
+	}
+endif;

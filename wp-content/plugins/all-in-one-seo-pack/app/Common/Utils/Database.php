@@ -26,10 +26,12 @@ class Database {
 		'aioseo_notifications',
 		'aioseo_posts',
 		'aioseo_redirects',
+		'aioseo_redirects_404',
 		'aioseo_redirects_404_logs',
 		'aioseo_redirects_hits',
 		'aioseo_redirects_logs',
-		'aioseo_terms'
+		'aioseo_terms',
+		'aioseo_search_statistics_objects'
 	];
 
 	/**

@@ -4,7 +4,7 @@ Tags: SEO, Google Search Console, XML Sitemap, meta description, schema, meta ti
 Tested up to: 6.1.1
 Requires at least: 4.9
 Requires PHP: 5.6
-Stable tag: 4.3.1.1
+Stable tag: 4.3.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -90,6 +90,16 @@ AIOSEO comes with built-in smart SEO schema markup feature to help you get more 
 
 [youtube https://www.youtube.com/watch?v=51sCgN0OiFY]
 
+### ✨ Enhance Your Website's SEO Efforts with AIOSEO's Cutting-Edge Link Assistant and OpenAI Integration ###
+
+AIOSEO's proprietary AI technology, called Link Assistant, is a powerful tool designed to help businesses and website owners improve their website's internal linking structure. With Link Assistant, website owners can quickly and easily identify and create internal links that will help to improve their website's search engine rankings.
+
+Link Assistant is powered by advanced machine learning algorithms that are designed to analyze a website's content and identify the most relevant pages for internal linking. Using this information, the tool then creates a list of recommended internal links that can be added to the website's content.
+
+In addition to its internal linking capabilities, AIOSEO has also integrated OpenAI's natural language processing technology (ChatGPT) to help users generate effective SEO titles and meta descriptions. By leveraging OpenAI's powerful language models, AIOSEO can help website owners create compelling and optimized titles and descriptions that are more likely to attract clicks from search engine users.
+
+Overall, AIOSEO's combination of Link Assistant and OpenAI integration represents a powerful suite of tools that can help you as a website owner to optimize your website's content, improve your search engine rankings, and attract more organic traffic to your website.
+
 ### ✨ Local SEO, WooCommerce SEO, Google AMP, and More ###
 
 **All in One SEO is the most comprehensive WordPress SEO plugin / marketing toolkit in the world.**
@@ -145,6 +155,7 @@ Since redirect speed is important for SEO, we built in both Apache / NGINX serve
 * **Google AMP SEO** - Improve your mobile SEO rankings with Google AMP SEO.
 * **Advanced SEO Canonical URLs** - Prevent duplicate content in SEO with automatic canonical URLs and boost your SEO rankings.
 * **Advanced Robots Meta SEO Settings** - granular controls for no index, no follow, no archive, no snippet, max snippet, max video, and more.
+* **AI Title/Description Generator** - using OpenAI's ChatGPT, generate SEO titles and meta descriptions to help improve your rankings.
 * **RSS Content for SEO** - Stop content theft from hurting your SEO rankings with our RSS Content tool.
 * **User Access Control** - Control who can manage your SEO settings with our advanced SEO access control.
 * **Competitor Site SEO Analysis** - Use our competitor SEO analysis to outrank them by improving your website's SEO optimization.
@@ -175,6 +186,7 @@ Since redirect speed is important for SEO, we built in both Apache / NGINX serve
 * **Knowledge Panel SEO** - improve website SEO apperance by adding social media profile links for Facebook, Twitter, Wikpedia, Instagram, LinkedIn, Yelp, YouTube, and more.
 * **SEO Webmaster Tool Content** - Connect your WordPress site with various webmaster tools to improve SEO rankings.
 * **Semrush SEO integration** - See additional SEO keywords and relevant SEO keyphrases with our Semrush SEO integration.
+* **OpenAI Integration** - Use the power of ChatGPT to write compelling SEO titles and meta descriptions to improve your SEO rankings.
 
 ### ✨ WordPress SEO Plugin Importer ###
 
@@ -244,6 +256,18 @@ Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeg
 
 
 == Changelog ==
+
+**New in Version 4.3.2**
+
+* New: AI Title/Description Generator – Generate engaging SEO title and meta description suggestions via OpenAI. 🤖
+* Fixed: Numerous plugin/theme conflicts that break navigation menu in AIOSEO screens.
+* Fixed: Plugin conflict with Gravity Forms where both plugins are output buffering at the same time.
+* Fixed: “Add Link” button of Classic Editor link format sometimes not visible on smaller screens.
+* Fixed: PHP error when using WooCommerce’s Product REST API endpoint and PHP 8.0 or higher.
+* Fixed: Database error when installing/activating AIOSEO for the first time via an AJAX request.
+* Fixed: PHP notice when navigating directly to the sitemap stylesheet.
+* Fixed: Translations for SEO preview on frontend are now loaded correctly.
+* Fixed: Redirect option icons no longer shrink when adding multiple source URLs.
 
 **New in Version 4.3.1.1**
 
@@ -487,6 +511,6 @@ Additionally, AIOSEO can also provide you with data on the most frequently used 
 
 == Upgrade Notice ==
 
-= 4.3.1.1 =
+= 4.3.2 =
 
 This update adds major improvements and bug fixes.

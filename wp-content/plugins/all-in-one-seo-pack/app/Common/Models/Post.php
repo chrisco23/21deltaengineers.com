@@ -36,6 +36,7 @@ class Post extends Model {
 		// 'schema_type_options',
 		'images',
 		'videos',
+		'open_ai',
 		'options'
 	];
 
@@ -433,6 +434,9 @@ class Post extends Model {
 			: wp_json_encode( self::getDefaultSchemaOptions() );
 		$thePost->local_seo                   = ! empty( $data['local_seo'] ) ? wp_json_encode( $data['local_seo'] ) : null;
 		$thePost->limit_modified_date         = isset( $data['limit_modified_date'] ) ? rest_sanitize_boolean( $data['limit_modified_date'] ) : 0;
+		$thePost->open_ai                     = ! empty( $data['open_ai'] )
+			? wp_json_encode( self::getDefaultOpenAiOptions( $data['open_ai'] ) )
+			: wp_json_encode( self::getDefaultOpenAiOptions() );
 		$thePost->updated                     = gmdate( 'Y-m-d H:i:s' );
 
 		// Before we determine the OG/Twitter image, we need to set the meta data cache manually because the changes haven't been saved yet.
@@ -690,5 +694,35 @@ class Post extends Model {
 		$post->options = json_decode( wp_json_encode( $post->options ) );
 
 		return $post;
+	}
+
+	/**
+	 * Returns the default Open AI options.
+	 *
+	 * @since 4.3.2
+	 *
+	 * @param  array $existingOptions The existing options.
+	 * @return array                  The default options.
+	 */
+	public static function getDefaultOpenAiOptions( $existingOptions = '' ) {
+		$defaults = [
+			'title'       => [
+				'suggestions' => [],
+				'usage'       => 0
+			],
+			'description' => [
+				'suggestions' => [],
+				'usage'       => 0
+			]
+		];
+
+		if ( empty( $existingOptions ) ) {
+			return json_decode( wp_json_encode( $defaults ) );
+		}
+
+		$existingOptions = json_decode( wp_json_encode( $existingOptions ), true );
+		$existingOptions = array_replace_recursive( $defaults, $existingOptions );
+
+		return json_decode( wp_json_encode( $existingOptions ) );
 	}
 }

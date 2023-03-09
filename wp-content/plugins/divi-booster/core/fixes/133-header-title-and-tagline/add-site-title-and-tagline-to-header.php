@@ -99,13 +99,14 @@ if (!function_exists('db133_site_tagline')) {
 
 if (!function_exists('db133_site_title_tag')) {
 	function db133_site_title_tag() {
-		$tag = dbdb_option('133-header-title-and-tagline', 'titleHeaderLevel', 'h1');
+		$tag = dbdb_option('133-header-title-and-tagline', 'titleHeaderLevel', 'h2');
 		return apply_filters('db133_site_title_tag', $tag);
 	}
 }
 
 if (!function_exists('db133_site_tagline_tag')) {
 	function db133_site_tagline_tag() {
-		return apply_filters('db133_site_tagline_tag', 'h5');
+		$tag = dbdb_option('133-header-title-and-tagline', 'taglineHeaderLevel', 'p');
+		return apply_filters('db133_site_tagline_tag', $tag);
 	}
 }

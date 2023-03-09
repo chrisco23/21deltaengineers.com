@@ -823,6 +823,7 @@ class Admin {
 			$this->currentPage = $page;
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueueAssets' ], 11 );
 			add_action( 'admin_enqueue_scripts', [ aioseo()->filters, 'dequeueThirdPartyAssets' ], 99999 );
+			add_action( 'admin_enqueue_scripts', [ aioseo()->filters, 'dequeueThirdPartyAssetsEarly' ], 0 );
 
 			add_filter( 'admin_footer_text', [ $this, 'addFooterText' ] );
 

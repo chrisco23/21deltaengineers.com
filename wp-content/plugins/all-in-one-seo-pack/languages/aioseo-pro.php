@@ -40,7 +40,7 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/pages/search-statistics/views/partials/Statistic.vue:66
 	// Translators: 1 - The direction (up or down), 2 - The difference, 3 - "in search results", 4 - The first date, 5 - The second date.
-	__( '%1$s %2$s %3$s compared to the previous period (%3$s - %4$s)', 'all-in-one-seo-pack' ),
+	__( '%1$s %2$s %3$s compared to the previous period (%4$s - %5$s)', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/cta/Index.vue:82
 	// Reference: /src/vue/pages/about/views/GettingStarted.vue:127
@@ -349,7 +349,7 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/pages/redirects/views/lite/redirects/Redirects.vue:28
 	// Reference: /src/vue/pages/redirects/views/pro/redirects/Activate.vue:23
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:20
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:23
 	__( '404 Monitoring', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/plugins/constants.js:1315
@@ -993,7 +993,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/local-seo/views/pro/partials/ActivateCta.vue:34
 	// Reference: /src/vue/pages/local-seo/views/pro/partials/UpdateCta.vue:35
 	// Reference: /src/vue/pages/redirects/views/pro/redirects/Activate.vue:27
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:25
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:28
 	// Reference: /src/vue/pages/search-appearance/views/pro/image-seo/Activate.vue:21
 	// Reference: /src/vue/pages/search-appearance/views/pro/image-seo/Update.vue:21
 	// Reference: /src/vue/pages/sitemaps/views/pro/news-sitemap/Activate.vue:34
@@ -1403,7 +1403,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/redirects/views/lite/redirects/Redirects.vue:26
 	// Reference: /src/vue/pages/redirects/views/pro/Settings.vue:94
 	// Reference: /src/vue/pages/redirects/views/pro/redirects/Activate.vue:21
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:18
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:21
 	__( 'Automatic Redirects', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/settings/views/Advanced.vue:63
@@ -1428,7 +1428,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordInner.vue:46
 	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordsTable.vue:130
 	// Reference: /src/vue/pages/search-statistics/views/partials/SeoStatisticsOverview.vue:34
-	__( 'Avg. CTR', 'aioseo-pro' ),
+	__( 'Avg. CTR', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/search-statistics/views/partials/SeoStatisticsOverview.vue:39
 	__( 'Avg. Position', 'all-in-one-seo-pack' ),
@@ -1980,7 +1980,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordsTable.vue:122
 	// Reference: /src/vue/pages/search-statistics/views/partials/PostsTable.vue:104
 	// Reference: /src/vue/pages/search-statistics/views/partials/TopKeywords.vue:17
-	__( 'Clicks', 'aioseo-pro' ),
+	__( 'Clicks', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/core/Help.vue:27
 	__( 'Close', 'all-in-one-seo-pack' ),
@@ -3049,7 +3049,7 @@ $generated_i18n_strings = [
 	__( 'Enable Redirects', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/redirects/views/pro/redirects/Activate.vue:19
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:16
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:19
 	// Reference: /src/vue/pages/search-statistics/views/partials/post-detail/redirects/Activate.vue:12
 	__( 'Enable Redirects on your Site', 'aioseo-pro' ),
 
@@ -3415,7 +3415,7 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/pages/redirects/views/lite/redirects/Redirects.vue:25
 	// Reference: /src/vue/pages/redirects/views/pro/redirects/Activate.vue:20
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:17
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:20
 	__( 'Fast Server Redirects', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/blocks/business-info/BusinessInfoSidebar.vue:24
@@ -3633,7 +3633,7 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/pages/redirects/views/lite/redirects/Redirects.vue:29
 	// Reference: /src/vue/pages/redirects/views/pro/redirects/Activate.vue:24
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:21
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:24
 	__( 'Full Site Redirects', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/plugins/constants.js:1539
@@ -4400,7 +4400,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordInner.vue:51
 	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordsTable.vue:138
 	// Reference: /src/vue/pages/search-statistics/views/partials/PostsTable.vue:112
-	__( 'Impressions', 'aioseo-pro' ),
+	__( 'Impressions', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/dashboard/views/Main.vue:96
 	__( 'Improve local SEO rankings with schema for business address, open hours, contact, and more.', 'all-in-one-seo-pack' ),
@@ -5956,7 +5956,7 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/pages/redirects/views/lite/redirects/Redirects.vue:31
 	// Reference: /src/vue/pages/redirects/views/pro/redirects/Activate.vue:26
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:23
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:26
 	__( 'Our Redirection Manager allows you to easily create and manage redirects for your broken links to avoid confusing search engines and users, as well as losing valuable backlinks. It even automatically sends users and search engines from your old URLs to your new ones.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/settings/views/Advanced.vue:163
@@ -6259,7 +6259,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordsTable.vue:146
 	// Reference: /src/vue/pages/search-statistics/views/partials/PostsTable.vue:120
 	// Reference: /src/vue/pages/search-statistics/views/partials/post-detail/FocusKeywordTrends.vue:43
-	__( 'Position', 'aioseo-pro' ),
+	__( 'Position', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:34
 	// Reference: /src/vue/mixins/HeadlineResult.js:178
@@ -6604,7 +6604,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/redirects/views/pro/partials/HTTPHeaders.vue:49
 	__( 'redirect', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/pages/redirects/views/pro/Logs404.vue:83
+	// Reference: /src/vue/pages/redirects/views/pro/Logs404.vue:84
 	// Reference: /src/vue/pages/redirects/views/pro/partials/HTTPHeaders.vue:48
 	__( 'Redirect', 'all-in-one-seo-pack' ),
 
@@ -6636,7 +6636,7 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/pages/redirects/views/lite/redirects/Redirects.vue:27
 	// Reference: /src/vue/pages/redirects/views/pro/redirects/Activate.vue:22
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:19
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:22
 	__( 'Redirect Monitoring', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/redirects/views/pro/Settings.vue:42
@@ -7631,7 +7631,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/redirects/views/lite/redirects/Redirects.vue:30
 	// Reference: /src/vue/pages/redirects/views/pro/partials/SiteAliases.vue:22
 	// Reference: /src/vue/pages/redirects/views/pro/redirects/Activate.vue:25
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:22
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:25
 	__( 'Site Aliases', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/redirects/views/pro/partials/SiteAliases.vue:23
@@ -8594,7 +8594,7 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/pages/link-assistant/views/pro/overview/Update.vue:26
 	// Reference: /src/vue/pages/local-seo/views/pro/partials/UpdateCta.vue:38
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:28
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:31
 	// Reference: /src/vue/pages/search-appearance/views/pro/image-seo/Update.vue:25
 	// Reference: /src/vue/pages/sitemaps/views/pro/news-sitemap/Update.vue:38
 	// Reference: /src/vue/pages/sitemaps/views/pro/video-sitemap/Update.vue:28
@@ -9309,7 +9309,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/tools/views/partials/debug/DeprecatedOptions.vue:19
 	__( 'Update Options', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:15
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:18
 	// Reference: /src/vue/pages/search-statistics/views/partials/post-detail/redirects/Update.vue:14
 	__( 'Update Redirects', 'all-in-one-seo-pack' ),
 
@@ -10265,7 +10265,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/link-assistant/views/pro/overview/Activate.vue:23
 	// Reference: /src/vue/pages/local-seo/views/pro/partials/ActivateCta.vue:35
 	// Reference: /src/vue/pages/redirects/views/pro/redirects/Activate.vue:28
-	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:24
+	// Reference: /src/vue/pages/redirects/views/pro/redirects/Update.vue:27
 	// Reference: /src/vue/pages/search-appearance/views/pro/image-seo/Activate.vue:22
 	// Reference: /src/vue/pages/sitemaps/views/pro/news-sitemap/Activate.vue:35
 	// Reference: /src/vue/pages/sitemaps/views/pro/video-sitemap/Activate.vue:25

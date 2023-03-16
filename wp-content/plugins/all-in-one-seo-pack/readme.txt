@@ -4,7 +4,7 @@ Tags: SEO, Google Search Console, XML Sitemap, meta description, schema, meta ti
 Tested up to: 6.1.1
 Requires at least: 4.9
 Requires PHP: 5.6
-Stable tag: 4.3.2
+Stable tag: 4.3.3
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -256,6 +256,18 @@ Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeg
 
 
 == Changelog ==
+
+**New in Version 4.3.3**
+
+* Updated: AI Title/Description Generator now supports the new ChatGPT 3.5 AI model.
+* Updated: Added a filter hook that allows users to control the flags that are used to encode our JSON schema.
+* Fixed: Search statistics object scan sometimes duplicated and running for non-elite users.
+* Fixed: Image SEO strip punctuation rules being applied to the filenames of files other than images.
+* Fixed: UI issue where an extra border was shown on Search Statistics card footer.
+* Fixed: Search Statistics no longer displays difference if there’s no data to compare with.
+* Fixed: Post/term data not saved correctly when MySQL mode is set to NO_AUTO_VALUE_ON_ZERO.
+* Fixed: Redirects, logs and 404 logs now refresh properly after activating/updating the redirects addon.
+* Fixed: Missing Local Business block styles when editing a post.
 
 **New in Version 4.3.2**
 
@@ -511,6 +523,6 @@ Additionally, AIOSEO can also provide you with data on the most frequently used 
 
 == Upgrade Notice ==
 
-= 4.3.2 =
+= 4.3.3 =
 
 This update adds major improvements and bug fixes.

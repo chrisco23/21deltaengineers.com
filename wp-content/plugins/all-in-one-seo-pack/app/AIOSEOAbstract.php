@@ -552,4 +552,13 @@ abstract class AIOSEOAbstract {
 	 * @var \AIOSEO\Plugin\Common\Utils\ActionScheduler
 	 */
 	public $actionScheduler = null;
+
+	/**
+	 * AI class instance.
+	 *
+	 * @since 4.3.3
+	 *
+	 * @var null|\AIOSEO\Plugin\Pro\Ai\Ai
+	 */
+	public $ai = null;
 }

@@ -21,7 +21,7 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/pages/search-statistics/views/partials/Statistic.vue:66
 	// Translators: 1 - The direction (up or down), 2 - The difference, 3 - "in search results", 4 - The first date, 5 - The second date.
-	__( '%1$s %2$s %3$s compared to the previous period (%3$s - %4$s)', 'all-in-one-seo-pack' ),
+	__( '%1$s %2$s %3$s compared to the previous period (%4$s - %5$s)', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/cta/Index.vue:82
 	// Reference: /src/vue/pages/about/views/GettingStarted.vue:127
@@ -954,6 +954,11 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/about/views/lite/LiteVsPro.vue:196
 	__( 'Available as Addon Plugin', 'all-in-one-seo-pack' ),
 
+	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordInner.vue:46
+	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordsTable.vue:130
+	// Reference: /src/vue/pages/search-statistics/views/partials/SeoStatisticsOverview.vue:34
+	__( 'Avg. CTR', 'all-in-one-seo-pack' ),
+
 	// Reference: /src/vue/pages/search-statistics/views/partials/SeoStatisticsOverview.vue:39
 	__( 'Avg. Position', 'all-in-one-seo-pack' ),
 
@@ -1338,6 +1343,12 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/components/common/core/CopyBlock.vue:24
 	__( 'Click to Copy', 'all-in-one-seo-pack' ),
+
+	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordInner.vue:41
+	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordsTable.vue:122
+	// Reference: /src/vue/pages/search-statistics/views/partials/PostsTable.vue:104
+	// Reference: /src/vue/pages/search-statistics/views/partials/TopKeywords.vue:17
+	__( 'Clicks', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/core/Help.vue:27
 	__( 'Close', 'all-in-one-seo-pack' ),
@@ -3046,6 +3057,11 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/tools/views/partials/ImportAioseo.vue:32
 	__( 'Imported settings will overwrite existing settings and will not be merged.', 'all-in-one-seo-pack' ),
 
+	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordInner.vue:51
+	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordsTable.vue:138
+	// Reference: /src/vue/pages/search-statistics/views/partials/PostsTable.vue:112
+	__( 'Impressions', 'all-in-one-seo-pack' ),
+
 	// Reference: /src/vue/pages/dashboard/views/Main.vue:96
 	__( 'Improve local SEO rankings with schema for business address, open hours, contact, and more.', 'all-in-one-seo-pack' ),
 
@@ -4329,6 +4345,12 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/standalone/setup-wizard/views/Category.vue:60
 	__( 'Portfolio', 'all-in-one-seo-pack' ),
+
+	// Reference: /src/vue/pages/search-statistics/mixins/Table.js:10
+	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordInner.vue:56
+	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordsTable.vue:146
+	// Reference: /src/vue/pages/search-statistics/views/partials/PostsTable.vue:120
+	__( 'Position', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:34
 	// Reference: /src/vue/mixins/HeadlineResult.js:178

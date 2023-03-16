@@ -315,6 +315,7 @@ namespace AIOSEO\Plugin {
 			$this->slugMonitor        = new Common\Admin\SlugMonitor();
 			$this->schema             = $this->pro ? new Pro\Schema\Schema() : new Common\Schema\Schema();
 			$this->actionScheduler    = new Common\Utils\ActionScheduler();
+			$this->ai                 = $this->pro ? new Pro\Ai\Ai() : null;
 
 			if ( ! wp_doing_ajax() && ! wp_doing_cron() ) {
 				$this->rss       = new Common\Rss();

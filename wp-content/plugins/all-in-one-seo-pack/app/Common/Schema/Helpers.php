@@ -86,9 +86,13 @@ class Helpers {
 			return strcmp( $a['@type'], $b['@type'] );
 		} );
 
+		// Allow users to control the default json_encode flags.
+		// Some users report better SEO performance when non-Latin unicode characters are not escaped.
+		$jsonFlags = apply_filters( 'aioseo_schema_json_flags', 0 );
+
 		$json = isset( $_GET['aioseo-dev'] ) || $isValidator
 			? aioseo()->helpers->wpJsonEncode( $schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE )
-			: aioseo()->helpers->wpJsonEncode( $schema );
+			: aioseo()->helpers->wpJsonEncode( $schema, $jsonFlags );
 
 		return $json;
 	}

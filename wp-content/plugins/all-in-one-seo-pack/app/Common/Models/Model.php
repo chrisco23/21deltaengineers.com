@@ -77,12 +77,13 @@ class Model implements \JsonSerializable {
 
 	/**
 	 * The ID of the model.
+	 * This needs to be null in order for MySQL to auto-increment correctly if the NO_AUTO_VALUE_ON_ZERO SQL mode is enabled.
 	 *
 	 * @since 4.2.7
 	 *
-	 * @var int
+	 * @var int|null
 	 */
-	public $id = 0;
+	public $id = null;
 
 	/**
 	 * An array of columns from the DB that we can use.

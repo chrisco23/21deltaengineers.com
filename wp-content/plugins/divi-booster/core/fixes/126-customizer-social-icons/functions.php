@@ -19,7 +19,7 @@ function db121_add_icon_option_filter($option) {
 function db121_enqueue_scripts() { 
 	$icons = db121_get_icons();
 	if (empty($icons)) { return; }
-	wp_register_style('db121_socicons', plugin_dir_url(__FILE__).'icons.css', array(), BOOSTER_VERSION);
+	wp_register_style('db121_socicons', plugin_dir_url(__FILE__).'icons.min.css', array(), BOOSTER_VERSION);
     wp_enqueue_style('db121_socicons'); 
     do_action('dbdb_font_icons_enqueue_fonts');
 	

@@ -13,7 +13,7 @@ add_filter('dbdb_icons_socicon_data', 'dbdb_icons_socicon_sort_networks_by_name'
 
 if (!function_exists('dbdb_icons_socicon_register_css')) {
 	function dbdb_icons_socicon_register_css() { 
-		wp_register_style('dbdb-icons-socicon', plugin_dir_url(__FILE__).'socicon/style.css', array(), BOOSTER_VERSION);
+		wp_register_style('dbdb-icons-socicon', plugin_dir_url(__FILE__).'socicon/style.min.css', array(), BOOSTER_VERSION);
 	}
 }
 

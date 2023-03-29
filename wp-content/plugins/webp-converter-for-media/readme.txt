@@ -5,7 +5,7 @@ Tags: convert webp, webp, optimize images, image optimization, compress images
 Requires at least: 4.9
 Tested up to: 6.2
 Requires PHP: 7.0
-Stable tag: 5.8.3
+Stable tag: 5.8.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -370,6 +370,9 @@ After making changes, remember to restart the service:
 4. Optimization statistics of Media Library
 
 == Changelog ==
+
+= 5.8.4 (2023-03-20) =
+* `[Fixed]` Generating rules in .htaccess file when real DOCUMENT_ROOT path is different from WordPress root directory
 
 = 5.8.3 (2023-03-09) =
 * `[Fixed]` Converting images without EXIF data support using GD method

@@ -54,8 +54,8 @@ function db014_get_icon_urls() {
 function db014_shared_css() { ?>
 <style>	
 /* Custom icons */		
-.et-pb-icon.db-custom-icon {
-    line-height: unset;
+.db-custom-icon {
+    line-height: unset !important;
 }
 .db-custom-icon img { 
     height: 1em;
@@ -86,8 +86,18 @@ function db014_shared_css() { ?>
 }
 .et_pb_custom_button_icon[data-icon^="wtfdivi014-url"],
 .db-custom-extended-icon { 
-    overflow: hidden;
+    overflow: hidden; 
 }
+
+.db-custom-extended-icon:before { 
+    left: 0;
+    background-position: 2em;
+}
+.db-custom-extended-icon:after { 
+    right: 0;
+    background-position: right 0.7em center;
+}
+
 /* Inline icons */
 .et_pb_posts .et_pb_inline_icon[data-icon^="wtfdivi014-url"]:before,
 .et_pb_portfolio_item .et_pb_inline_icon[data-icon^="wtfdivi014-url"]:before {
@@ -165,9 +175,11 @@ span.db-custom-icon {
 }
 
 
-function db014_sharedUserJs() {
-    echo <<<'END'
-
+function db014_sharedUserJs() { 
+    $custom_icon_classes = apply_filters('dbdb_custom_icon_classes', array('et-pb-icon'));
+    $custom_icon_classes = array_map(function($class) { return '.'.esc_html($class); }, $custom_icon_classes);
+    $custom_icon_classes = implode(',', $custom_icon_classes);
+    ?>
     function db014_update_icon(icon_id, icon_url) {
         db014_update_icons(jQuery(document), icon_id, icon_url);
         var $app_frame = jQuery("#et-fb-app-frame");
@@ -182,7 +194,7 @@ function db014_sharedUserJs() {
     }
 
     function db014_update_custom_icons(doc, icon_id, icon_url) {
-        var $custom_icons = doc.find('.et-pb-icon:contains("'+icon_id+'")');	
+        var $custom_icons = doc.find(<?php echo json_encode($custom_icon_classes); ?>).filter(':contains("'+icon_id+'")');
         var icon_visible = (icon_url !== '');
         var $icons = $custom_icons.filter(function(){ return jQuery(this).text() == icon_id; }); 
         $icons.addClass('db-custom-icon');
@@ -208,11 +220,14 @@ function db014_sharedUserJs() {
         });
         $icons_inline.toggle(icon_visible);
     }
-END;
+    <?php
 }
 
 function db014_getMutationObserverJs() { 
-    echo <<<'END'
+    $custom_icon_classes = apply_filters('dbdb_custom_icon_classes', array('et-pb-icon'));
+    $custom_icon_classes = array_map(function($class) { return '.'.esc_html($class); }, $custom_icon_classes);
+    $custom_icon_classes = implode('|', $custom_icon_classes);
+    ?>
     db014_watch_for_changes_that_might_update_icons();
     
     function db014_watch_for_changes_that_might_update_icons() {
@@ -251,10 +266,10 @@ function db014_getMutationObserverJs() {
         if (classes.search === undefined) { 
             return false; 
         }
-        if (classes.search(/(et-pb-icon|et_pb_inline_icon|et-fb-root-ancestor|et_pb_root--vb|et-fb-post-content|et_pb_section|et_pb_row|et_pb_column)/i) !== -1) {
+        if (classes.search(/(<?php echo $custom_icon_classes; ?>|et_pb_inline_icon|et-fb-root-ancestor|et_pb_root--vb|et-fb-post-content|et_pb_section|et_pb_row|et_pb_column)/i) !== -1) {
             return true;
         }
         return false;
     }
-END;
+    <?php
 }

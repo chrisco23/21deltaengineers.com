@@ -5,6 +5,7 @@ function db133_add_setting($plugin) {
 	$plugin->setting_start(); 
 	$plugin->techlink('https://divibooster.com/display-site-title-and-tagline-text-in-header/'); 
 	$plugin->checkbox(__FILE__); ?> Show site title and tagline in header
+    <div class="db_subsetting"><?php $plugin->checkbox(__FILE__, 'disable-title-link'); ?> Don't link title to homepage</div>
 	<div class="db_subsetting">
 		Layout:
 		<?php

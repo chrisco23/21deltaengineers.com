@@ -42,6 +42,7 @@ class Licensing {
 
     public function init() {
         add_action('admin_menu', array($this, 'dbal_license_menu'));
+        add_filter("db-settings-{$this->plugin_slug}-tabs", array($this, 'register_settings_tab'), 11);
         add_action('admin_init', array($this, 'dbal_register_option'));
         add_action('admin_init', array($this, 'dbal_deactivate_license'));
         add_action('admin_init', array($this, 'dbal_activate_license'), 11);
@@ -53,37 +54,54 @@ class Licensing {
     function dbal_license_menu() {
         add_options_page($this->plugin_name, $this->plugin_name, 'manage_options', $this->settings_page, array($this, 'dbal_license_page'));
     }
+
+    function register_settings_tab($tabs) {
+        if (!is_array($tabs)) { return $tabs; }
+        $tabs['updates'] = array(
+            'title' => 'Updates', 
+            'url' => admin_url("/options-general.php?page={$this->plugin_slug}-settings"),
+        );
+        return $tabs;
+    }
+    
     
     function dbal_license_page() {
+        add_filter("db-settings-{$this->plugin_slug}-active-tab", function() { return 'updates'; });
         $license = get_option($this->license_key_option);
         $status  = get_option($this->license_status_option, false );
         ?>
-        <div class="wrap">
-            <h2><?php esc_html_e($this->plugin_name); ?></h2>
+        <div class="db-settings-wrap">
             <form method="post" action="options.php">
     
                 <?php settings_fields($this->settings_fields); ?>
                 <?php wp_nonce_field($this->settings_nonce, $this->settings_nonce); ?>
-    
-                <table class="form-table">
-                    <tbody>
-                        <tr valign="top">
-                            <th scope="row" valign="top">
-                                <?php _e('License Key'); ?>
-                            </th>
-                            <td>
-                                <input id="<?php esc_attr_e($this->license_key_option); ?>" name="<?php esc_attr_e($this->license_key_option); ?>" type="password" class="regular-text" value="<?php esc_attr_e( $license ); ?>" />
-                                <?php if( $status !== false && $status == 'valid' ) { ?>
-                                    <input type="submit" class="button-secondary" name="edd_license_deactivate" value="<?php _e('Deactivate'); ?>"/>
-                                    <span style="color:green;line-height:28px;margin-right:1em;margin-left: 1em;"><?php _e('Active'); ?></span>
-                                <?php } else { ?>
-                                    <span style="color:red;line-height:28px;margin-right:1em;margin-left: 1em;"><?php _e('Inactive'); ?></span>
-                                    <p>Enter your license key to enable updates.</p><p>You can get your license key from your <a href="https://divibooster.com/your-account/" target="_blank">Divi Booster account</a>, or <a href="<?php esc_attr_e($this->plugin_url); ?>" target="_blank">purchase a license</a>.</p>
-                                <?php } ?>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                
+                <?php do_action('db-settings-settings-box-before'); ?>
+                <div id="db-settings-box">
+                    <h1 id="db-settings-box-title"><?php esc_html_e($this->plugin_name); ?> Settings</h1>
+                    <?php do_action('db-settings-title-after', $this->plugin_slug); ?>
+                    <div class="db-settings-box-tab-content">
+                        <table class="db-settings-box-tab-content-table form-table">
+                            <tbody>
+                                <tr valign="top">
+                                    <th scope="row" valign="top">
+                                        <?php _e('License Key'); ?>
+                                    </th>
+                                    <td>
+                                        <input id="<?php esc_attr_e($this->license_key_option); ?>" name="<?php esc_attr_e($this->license_key_option); ?>" type="password" class="regular-text" value="<?php esc_attr_e( $license ); ?>" />
+                                        <?php if( $status !== false && $status == 'valid' ) { ?>
+                                            <input type="submit" class="button-secondary" name="edd_license_deactivate" value="<?php _e('Deactivate'); ?>"/>
+                                            <span style="color:green;line-height:28px;margin-right:1em;margin-left: 1em;"><?php _e('Active'); ?></span>
+                                        <?php } else { ?>
+                                            <span style="color:red;line-height:28px;margin-right:1em;margin-left: 1em;"><?php _e('Inactive'); ?></span>
+                                            <p>Enter your license key to enable updates.</p><p>You can get your license key from your <a href="https://divibooster.com/your-account/" target="_blank">Divi Booster account</a>, or <a href="<?php esc_attr_e($this->plugin_url); ?>" target="_blank">purchase a license</a>.</p>
+                                        <?php } ?>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <?php submit_button(); ?>
     
             </form>
@@ -210,31 +228,8 @@ class Licensing {
             // retrieve the license from the database
             $license = trim( get_option($this->license_key_option) );
     
-            if (!$this->dbal_license_deactivated_in_edd($license)) {
-                
-                $response = $this->dbal_submit_license('deactivate', $license);
-                   
-                // Always deactivate locally, regardless of server deactivation success
-                /* 
-                // make sure the response came back okay
-                if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-                    $message =  ( is_wp_error( $response ) && $response->get_error_message() !== '' ) ? $response->get_error_message() : __( 'An error occurred while connecting to the license server, please try again.' );
-                    
-                } else {
-                    
-                    $license_data = json_decode( wp_remote_retrieve_body( $response ) );
-                    if ( false === $license_data->success ) {
-                        $message = __( 'An error occurred while deactivating the license, please try again.' );
-                    }
-                }
-                // Check if anything passed on a message constituting a failure
-                if ( ! empty( $message ) ) {
-                    $base_url = admin_url('options-general.php?page='.$this->settings_page);
-                    $redirect = add_query_arg( array( 'sl_deactivation' => 'false', 'message' => urlencode( $message ) ), $base_url );
-                    wp_redirect( $redirect );
-                    exit();
-                }
-                */
+            if (!$this->dbal_license_deactivated_in_edd($license)) {  
+                $this->dbal_submit_license('deactivate', $license);
             }
             
             update_option($this->license_status_option, 'deactivated');
@@ -354,5 +349,3 @@ class Licensing {
     }
 
 }
-
-

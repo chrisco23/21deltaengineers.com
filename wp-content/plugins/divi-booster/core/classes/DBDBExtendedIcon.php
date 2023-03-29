@@ -105,32 +105,81 @@ END;
             ?>
 			<script data-name="dbdb-update-custom-icons">
 			jQuery(function($){
-                
-                function db014_update_all_icons() {
-                    jQuery('.db-custom-icon:not(:has(.dbdb-custom-icon-img))').removeClass('db-custom-icon'); // Clear class on non-custom icons
-                    jQuery('.et_pb_button[data-icon=<?php echo $encoded_unicode; ?>]').addClass('db-custom-extended-icon');
-                    db014_update_icon(<?php echo $encoded_id; ?>, <?php echo $encoded_url; ?>); 
-                    db014_update_icon(<?php echo $encoded_unicode; ?>, <?php echo $encoded_url; ?>);
-                }
 
 				<?php if (!function_exists('et_fb_enabled') || !et_fb_enabled()) { ?>
 				setTimeout(
 					function() { 
-                        db014_update_all_icons();
+                        update_all_icons();
 					}, 100
 				);
 				<?php } ?>
 				$(document).on('db_vb_custom_icons_updated', function () {
-                    db014_update_all_icons();
+                    update_all_icons();
 				});
 				$('#et-main-area, .et_pb_module').on('mouseover mouseout', function () {
 					setTimeout(
 						function() { 
-                            db014_update_all_icons();
+                            update_all_icons();
 						},
 						0
 					);
 				});
+
+                function update_all_icons() {
+                    $('.db-custom-icon:not(:has(.dbdb-custom-icon-img))').removeClass('db-custom-icon'); // Clear class on non-custom icons
+                    $('.et_pb_button[data-icon=<?php echo $encoded_unicode; ?>]').addClass('db-custom-extended-icon');
+
+                    $('.dbdb-icon-on-left.dbdb-icon-on-hover-off .db-custom-extended-icon').each(function () {
+                        add_padding_to_icon(this, 'left', false);
+                    });
+                    $('.dbdb-icon-on-left.dbdb-icon-on-hover .db-custom-extended-icon:hover').each(function () {
+                        add_padding_to_icon(this, 'left', true);
+                    });
+                    $('.dbdb-icon-on-right.dbdb-icon-on-hover-off .db-custom-extended-icon').each(function () {
+                        add_padding_to_icon(this, 'right', false);
+                    });
+                    $('.dbdb-icon-on-right.dbdb-icon-on-hover .db-custom-extended-icon:hover').each(function () {
+                        add_padding_to_icon(this, 'right', true);
+                    });
+
+                    db014_update_icon(<?php echo $encoded_id; ?>, <?php echo $encoded_url; ?>); 
+                    db014_update_icon(<?php echo $encoded_unicode; ?>, <?php echo $encoded_url; ?>);
+                }
+
+                function add_padding_to_icon(button, side='left', hoverOnly=false) {
+                    var $button = $(button);
+                    var icon = window.getComputedStyle($button[0], (side==='left')?'::before':'::after');
+                    if (typeof window.Image === 'function') {
+                        var img = new Image();
+                        img.src = icon.getPropertyValue('background-image').replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');;
+                        img.onload = function() {
+                            var $button = $(button);
+                            set_padding_css($button, icon_padding(this), side);
+                            if (hoverOnly) {
+                                $button.hover(
+                                    function() {
+                                        set_padding_css($button, icon_padding(this), side); 
+                                    },
+                                    function() {
+                                        setTimeout(function() {
+                                            set_padding_css($button, '1em', side); 
+                                        }, 100); 
+                                    }
+                                );
+                            }
+                        }
+                    }
+                }
+
+                function icon_padding(icon) {
+                    var icon_standard_padding_in_em = 1.3;
+                    var icon_rendered_height_in_em = 1;
+                    return icon_standard_padding_in_em+(icon.width/icon.height)*icon_rendered_height_in_em+'em';
+                }
+
+                function set_padding_css($button, padding, side='left') {
+                    $button.css('padding-' + side, padding);
+                }
 			});
             
 			</script>

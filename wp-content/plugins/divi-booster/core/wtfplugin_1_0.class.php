@@ -267,16 +267,14 @@ class wtfplugin_1_0 {
 	// create the options page
 	function settings_page() {
 		if (!current_user_can('manage_options')) { wp_die(__('You do not have sufficient permissions to access this page.')); }
+        
+        add_filter("db-settings-divi-booster-active-tab", function() { return 'general'; });
 		
 		// Shorthand
 		$slug = $this->slug;
 		
 		// Hook prior to settings page execution
 		do_action("$slug-before-settings-page", $this);
-		
-		// Get license info
-		//$license = get_option(BOOSTER_LICENCE_NAME);
-		//$status = get_option(BOOSTER_LICENCE_STATUS);
 		
 		// Get last error, if any
 		$last_error = get_option(BOOSTER_OPTION_LAST_ERROR);
@@ -285,63 +283,61 @@ class wtfplugin_1_0 {
 		$has_error_details = !empty($last_error_details);
 		update_option(BOOSTER_OPTION_LAST_ERROR, ''); // clear last error
 		
-		// updates
-		//$plugins_url = is_network_admin()?network_admin_url('plugins.php'):admin_url('plugins.php');
-		//$update_link = wp_nonce_url(add_query_arg(array('puc_check_for_updates'=>1,'puc_slug' => urlencode($this->package_slug)),$plugins_url),'puc_check_for_updates');
-		
 		?>
 		
-		<div id="wtf-settings-page" class="wrap">
+		<div class="db-settings-wrap">
 		
-		<form id="wtf-form" class="wtf-form" enctype="multipart/form-data" method="post" action="options.php">
-		
-		<div id="db-header">
-			<div id="db-header-left">
-			<h2><?php echo $this->config['plugin']['name']; ?> Settings</h2>
-			</div>
-			<div id="db-header-right">
-			<?php submit_button(); ?>
-			</div>
-		</div>
-		
-		<input type="hidden" name="<?php esc_attr_e($slug); ?>[lastsave]" value="<?php esc_attr_e(intval(time())); ?>"/>
-		
-		<?php 
-		$options = get_option($slug);
-		$plugin_dir_url = plugin_dir_url(__FILE__);
-		$image_dir_url = $plugin_dir_url.'img/';
-			
-		// Output the setting sections
-		foreach($this->config['sections'] as $sectionslug=>$sectionheading) {
-			$open = (isset($options[$sectionslug]['open']) and $options[$sectionslug]['open']=='1')?1:0; 
-			$is_subheading = (strpos($sectionslug, '-')==true);
-			?>
-			
-			<h3 class="wtf-section-head <?php esc_attr_e($is_subheading?'wtf-subheading':'wtf-topheading'); ?> <?php esc_attr_e("dbdb-settings-section_{$sectionslug}"); ?>">
-				<img src="<?php esc_attr_e($image_dir_url); ?>collapsed.png" 
-					 class="wtf-expanded-icon <?php esc_attr_e($open?'rotated':''); ?>"/>
-				<?php echo $sectionheading; ?>
-			</h3>
-			
-			<input type="hidden" name="<?php esc_attr_e($slug); ?>[<?php esc_attr_e($sectionslug); ?>][open]" value="<?php esc_attr_e($open); ?>"/>
-			
-			<div class="wtf-setting-group <?php esc_attr_e($is_subheading?'wtf-subheading-group':''); ?> clearfix" 
-				 style="<?php esc_attr_e((!$open and !$is_subheading)?'display:none':''); ?>;">
-				<?php if (has_action("$slug-$sectionslug")) { ?>
-					<?php do_action("$slug-$sectionslug", $this); // output settings ?>
-				<?php } ?>
-			</div>
-			
-			<?php
-		} 
+		<form enctype="multipart/form-data" method="post" action="options.php">
 
-		settings_fields("$slug-group");
-		do_settings_sections("$slug-group");
+        <?php do_action('db-settings-settings-box-before'); ?>
+        <div id="db-settings-box">
+            <h1 id="db-settings-box-title"><?php esc_html_e($this->config['plugin']['name']); ?> Settings</h1>
+        
+            <?php do_action('db-settings-title-after', 'divi-booster'); ?>
+
+            <div class="db-settings-box-tab-content">
+            
+                <input type="hidden" name="<?php esc_attr_e($slug); ?>[lastsave]" value="<?php esc_attr_e(intval(time())); ?>"/>
+                
+                <?php 
+                $options = get_option($slug);
+                $plugin_dir_url = plugin_dir_url(__FILE__);
+                $image_dir_url = $plugin_dir_url.'img/';
+                    
+                // Output the setting sections
+                foreach($this->config['sections'] as $sectionslug=>$sectionheading) {
+                    $open = (isset($options[$sectionslug]['open']) and $options[$sectionslug]['open']=='1')?1:0; 
+                    $is_subheading = (strpos($sectionslug, '-')==true);
+                    ?>
+                    
+                    <h3 class="wtf-section-head <?php esc_attr_e($is_subheading?'wtf-subheading':'wtf-topheading'); ?> <?php esc_attr_e("dbdb-settings-section_{$sectionslug}"); ?>">
+                        <img src="<?php esc_attr_e($image_dir_url); ?>collapsed.png" 
+                            class="wtf-expanded-icon <?php esc_attr_e($open?'rotated':''); ?>"/>
+                        <?php echo $sectionheading; ?>
+                    </h3>
+                    
+                    <input type="hidden" name="<?php esc_attr_e($slug); ?>[<?php esc_attr_e($sectionslug); ?>][open]" value="<?php esc_attr_e($open); ?>"/>
+                    
+                    <div class="wtf-setting-group <?php esc_attr_e($is_subheading?'wtf-subheading-group':''); ?> clearfix" 
+                        style="<?php esc_attr_e((!$open and !$is_subheading)?'display:none':''); ?>;">
+                        <?php if (has_action("$slug-$sectionslug")) { ?>
+                            <?php do_action("$slug-$sectionslug", $this); // output settings ?>
+                        <?php } ?>
+                </div>
+                
+                <?php
+            } 
+
+            settings_fields("$slug-group");
+            do_settings_sections("$slug-group");
+            ?>
+            </div>
+        </div>
+        <?php
 		submit_button();
 		?>
 		<hr/>
 		</form>
-		<div id="wtf-sidebar"><?php do_action("$slug-plugin-sidebar"); ?></div>
 		<div style="clear:both"></div>
 		<?php do_action("$slug-plugin-footer"); ?>
 		</div>

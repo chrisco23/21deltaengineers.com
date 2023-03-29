@@ -4,13 +4,13 @@ Plugin Name: Divi Booster
 Plugin URI: 
 Description: Bug fixes and enhancements for Elegant Themes' Divi Theme.
 Author: Dan Mossop
-Version: 4.1.3
+Version: 4.1.6
 Requires PHP: 5.3
 Author URI: https://divibooster.com
 */	
 
 if (!defined('BOOSTER_VERSION')) {
-    define('BOOSTER_VERSION', '4.1.3');
+    define('BOOSTER_VERSION', '4.1.6');
 }
 
 if (!function_exists('dbdb_file')) {
@@ -77,9 +77,6 @@ if (!defined('BOOSTER_DIR_FIXES')) {
 // === Setup ===		
 include_once(BOOSTER_CORE.'/index.php'); // Load the plugin framework
 
-
-
-
 // === Start updates === 
 
 $config = array(
@@ -95,10 +92,9 @@ $config = array(
 if (version_compare(phpversion(), '5.3', '>=')) {
     include_once(dirname(__FILE__).'/core/NO_EDIT_shared/licensing.php');
     if (get_option($config['plugin_slug'].'-license_status') === 'valid') {
-        //include_once(dirname(__FILE__).'/core/NO_EDIT_shared/updates.php');
         booster_enable_updates(dbdb_file()); // Enable auto-updates for this plugin
     }
-    //include_once(dirname(__FILE__).'/core/plugin-main.php');
+    include_once(dirname(__FILE__).'/core/NO_EDIT_shared/settings.php');
 }
 else {
     add_action('admin_notices', 'dbdb_php_version_notice');
@@ -131,6 +127,7 @@ $sections = array(
 	'header-main'=>'Main Header',
 	'header-mobile'=>'Mobile Header',
 	'posts'=>'Posts',
+    'projects'=>'Projects',
 	'sidebar'=>'Sidebar',
 	'footer'=>'Footer',
 	'footer-layout'=>'Layout',
@@ -303,3 +300,15 @@ if (!function_exists('divibooster_footer')) {
 }
 add_action($slug.'-plugin-footer', 'divibooster_footer');
 
+// === Add "General" tab to settings page ===
+if (!function_exists('divibooster_add_general_tab')) {
+    function divibooster_add_general_tab($tabs) {
+        if (!is_array($tabs)) { return $tabs; }
+        $tabs['general'] = array(
+            'title' => 'General',
+            'url' => admin_url('admin.php?page=wtfdivi_settings')
+        );
+        return $tabs;
+    }
+}
+add_filter('db-settings-divi-booster-tabs', 'divibooster_add_general_tab');

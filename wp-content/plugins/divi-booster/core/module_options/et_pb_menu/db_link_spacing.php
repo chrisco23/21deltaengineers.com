@@ -29,6 +29,7 @@ function dbmo_et_pb_menu_add_link_spacing_field($fields) {
             'default_on_front' => '',
 			'tab_slug'          => 'advanced',
 			'toggle_slug'       => 'layout',
+            'vb_support' => false
 		)
 	);
 	return $new_fields + $fields;

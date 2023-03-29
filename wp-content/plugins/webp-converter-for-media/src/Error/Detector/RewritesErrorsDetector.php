@@ -190,7 +190,7 @@ class RewritesErrorsDetector implements ErrorDetector {
 				$this->test_version,
 				__FUNCTION__
 			);
-			return ( ! in_array( $file_status, [ 404, 500 ] ) );
+			return ( ! in_array( $file_status, [ 500 ] ) );
 		}
 
 		return ( $file_webp < $file_size );

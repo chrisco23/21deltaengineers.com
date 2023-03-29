@@ -37,7 +37,7 @@ function icon_data($icons=array()) {
 }
 
 function register_css() { 
-    wp_register_style('dbdb-icons-divi-booster-icons', plugin_dir_url(__FILE__).'icomoon/style.css', array(), BOOSTER_VERSION);
+    wp_register_style('dbdb-icons-divi-booster-icons', plugin_dir_url(__FILE__).'icomoon/style.min.css', array(), BOOSTER_VERSION);
 }
 
 function enqueue_fonts() {  

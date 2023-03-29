@@ -1,28 +1,11 @@
 <?php
 
-add_action('init', 'db133_load');
+add_filter('et_html_logo_container', 'db133_add_title_and_tagline_to_logo_container');
 
-if (!function_exists('db133_load')) {
-	function db133_load() {	
-		add_action('et_html_logo_container', 'db133_add_title_and_tagline');
-	}
-}
- 
-if (!function_exists('db133_add_title_and_tagline')) {
-	function db133_add_title_and_tagline($content){
-		$logo_regex = '#<img[^>]*?id="logo"[^>]*?/>#';
-		$result = preg_replace_callback($logo_regex, 'db133_add_title_and_tagline_callback', $content);
-		return apply_filters('db133_add_title_and_tagline', $result, $content);
-	}
+function db133_add_title_and_tagline_to_logo_container($html) {
+    return preg_replace('/<\/div>\s*$/', db133_title_and_tagline_html() . '</div>', $html);
 }
 
-if (!function_exists('db133_add_title_and_tagline_callback')) {
-	function db133_add_title_and_tagline_callback($m) {
-		$logo = isset($m[0])?$m[0]:'';
-		$markup = $logo.db133_title_and_tagline_html();
-		return apply_filters('db133_add_title_and_tagline_callback', $markup, $m);
-	}
-}
 
 if (!function_exists('db133_title_and_tagline_html')) {
 	function db133_title_and_tagline_html() {
@@ -48,6 +31,9 @@ if (!function_exists('db133_title_and_tagline_html_from_data')) {
 				esc_html($data['title']),
 				esc_html($data['title_tag'])
 			);
+            if (apply_filters('db133_enable_title_link', true)) {
+                $title = '<a href="'.esc_url( home_url( '/' ) ).'">'.$title.'</a>';
+            }
 			$tagline = db133_site_tagline_html($data);
 			
 			$result = '<div id="db_title_and_tagline">'.$title.$tagline.'</div>';
@@ -109,4 +95,10 @@ if (!function_exists('db133_site_tagline_tag')) {
 		$tag = dbdb_option('133-header-title-and-tagline', 'taglineHeaderLevel', 'p');
 		return apply_filters('db133_site_tagline_tag', $tag);
 	}
+}
+
+add_filter('db133_enable_title_link', 'db133_enable_title_link');
+
+function db133_enable_title_link($enabled) {
+    return dbdb_option('133-header-title-and-tagline', 'disable-title-link', false) !== '1';
 }

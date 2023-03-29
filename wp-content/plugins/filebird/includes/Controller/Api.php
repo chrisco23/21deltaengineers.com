@@ -207,7 +207,7 @@ class Api {
 		);
 	}
 	public function resAdminPermissionsCheck() {
-		return current_user_can( 'upload_files' );
+		return current_user_can( 'upload_files' ) && current_user_can( 'manage_options' );
 	}
 	public function resPublicPermissionsCheck() {
 		$key = get_option( 'fbv_rest_api_key', '' );

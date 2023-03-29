@@ -38,10 +38,12 @@ ul.sub-menu { margin-top: -3px; }
 add_action('wp_head.css', 'db003_user_css');
 
 function db003_user_js($plugin) { ?>
+<script>
 jQuery(function($){
-	$("#et-top-navigation").after($("#wtfdivi003-widget-area-wrap"));
+	$("#et-top-navigation").append($("#wtfdivi003-widget-area-wrap"));
 	$("#wtfdivi003-widget-area-wrap").first().show();
 });
+</script>
 <?php 
 }
-add_action('wp_footer.js', 'db003_user_js');
+add_action('wp_footer', 'db003_user_js');

@@ -55,12 +55,12 @@ private static $installed = array (
     ),
     'symfony/css-selector' => 
     array (
-      'pretty_version' => 'v5.4.19',
-      'version' => '5.4.19.0',
+      'pretty_version' => 'v5.4.21',
+      'version' => '5.4.21.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'f4a7d150f5b9e8f974f6f127d8167e420d11fc62',
+      'reference' => '95f3c7468db1da8cc360b24fa2a26e7cefcb355d',
     ),
     'symfony/polyfill-iconv' => 
     array (
@@ -127,12 +127,12 @@ private static $installed = array (
     ),
     'voku/portable-utf8' => 
     array (
-      'pretty_version' => '6.0.12',
-      'version' => '6.0.12.0',
+      'pretty_version' => '6.0.13',
+      'version' => '6.0.13.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'db0583727bb17666bbd2ba238c85babb973fd165',
+      'reference' => 'b8ce36bf26593e5c2e81b1850ef0ffb299d2043f',
     ),
     'voku/simple_html_dom' => 
     array (

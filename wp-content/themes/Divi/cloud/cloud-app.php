@@ -233,7 +233,7 @@ class ET_Cloud_App {
 	 */
 	public static function normalize_shared_cloud_array( $shared_cloud_array ) {
 		if ( empty( $shared_cloud_array ) ) {
-			return array();
+			return null;
 		}
 
 		$normalized_array = array();
@@ -288,6 +288,7 @@ class ET_Cloud_App {
 				'et_cloud_download_item'                           => wp_create_nonce( 'et_cloud_download_item' ),
 				'et_cloud_refresh_token'                           => wp_create_nonce( 'et_cloud_refresh_token' ),
 				'et_cloud_remove_token'                            => wp_create_nonce( 'et_cloud_remove_token' ),
+				'et_builder_split_library_item'          => wp_create_nonce( 'et_builder_split_library_item' ),
 				'et_builder_ajax_save_domain_token'                => wp_create_nonce( 'et_builder_ajax_save_domain_token' ),
 				'et_builder_marketplace_api_get_layouts'           => wp_create_nonce( 'et_builder_marketplace_api_get_layouts' ),
 				'et_builder_marketplace_api_get_layout_categories' => wp_create_nonce( 'et_builder_marketplace_api_get_layout_categories' ),

@@ -44,7 +44,7 @@ if ( $max_value && $min_value === $max_value ) {
 			placeholder="<?php echo esc_attr( $placeholder ); ?>"
 			inputmode="<?php echo esc_attr( $inputmode ); ?>"
 		/>
-		<?php if ( isset( $args['readonly'] ) ) : ?>
+		<?php if ( isset( $args['readonly'] ) && 'readonly' === $args['readonly'] ) : ?>
 			<span>
 				<?php echo esc_attr( $input_value ); ?>
 			</span>

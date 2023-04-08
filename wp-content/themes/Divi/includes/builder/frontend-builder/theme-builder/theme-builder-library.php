@@ -291,11 +291,17 @@ function et_theme_builder_library_get_library_items_data( $item_type ) {
 	$posts = $tb_items
 		->query()
 		->not()->with_meta( '_et_set_template', $set_template_flag )
-		->run( array( 'post_status' => array( 'publish', 'trash' ) ) );
+		->run(
+			array(
+				'post_status' => array( 'publish', 'trash' ),
+				'fields'      => 'ids',
+			)
+		);
 
-	$posts = $_->array_sort_by( is_array( $posts ) ? $posts : array( $posts ), 'post_name' );
+	$posts = is_array( $posts ) ? $posts : array( $posts );
 
-	foreach ( $posts as $post ) {
+	foreach ( $posts as $post_id ) {
+		$post = get_post( $post_id );
 		$item = new stdClass();
 
 		setup_postdata( $post );

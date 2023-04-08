@@ -31,6 +31,7 @@ function dbmo_et_pb_countdown_timer_register_fields($fields) {
 	if (!is_array($fields)) { return $fields; }
 	$label_fields = dbmo_et_pb_countdown_timer_get_label_fields();
 	$fields += array_keys($label_fields);
+    $fields[] = 'use_custom_labels';
 	return $fields;
 }
 

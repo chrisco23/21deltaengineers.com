@@ -7,7 +7,7 @@ function booster_update_check() {
 	$new = BOOSTER_VERSION;
     if ($old !== $new) { 
 		if (dbdbHasUpdated($old, $new)) {
-			do_action('booster_update', $wtfdivi, $old, $new); 
+			do_action('db-divi-booster-updated', $wtfdivi, $old, $new); 
 		}
 		update_option(BOOSTER_VERSION_OPTION, $new);
 	} 
@@ -40,7 +40,7 @@ function db074_add_alpha($plugin, $old, $new) {
 		}
 	}
 }
-add_action('booster_update', 'db074_add_alpha', 10, 3);
+add_action('db-divi-booster-updated', 'db074_add_alpha', 10, 3);
 
 // === v2.6.5: db135,db138 - split module content width feature into two, maintaining user choice ===
 function db135_enable_footer_content_width($plugin, $old, $new) {
@@ -54,7 +54,7 @@ function db135_enable_footer_content_width($plugin, $old, $new) {
 		update_option('wtfdivi', $option);
 	}
 }
-add_action('booster_update', 'db135_enable_footer_content_width', 10, 3);
+add_action('db-divi-booster-updated', 'db135_enable_footer_content_width', 10, 3);
 
 
 // === v2.6.5: db095 - Add 0.7 opacity to old colors ===
@@ -79,4 +79,4 @@ function db095_add_alpha($plugin, $old, $new) {
 		}
 	}
 }
-add_action('booster_update', 'db095_add_alpha', 10, 3);
+add_action('db-divi-booster-updated', 'db095_add_alpha', 10, 3);

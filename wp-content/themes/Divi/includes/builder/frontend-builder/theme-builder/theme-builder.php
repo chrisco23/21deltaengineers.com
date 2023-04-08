@@ -1421,10 +1421,11 @@ function et_theme_builder_store_template( $theme_builder_id, $template, $allow_d
 					'post_title' => $title,
 				)
 			);
+
+			// Update layout title for each template.
+			et_theme_builder_update_layout_title( $template );
 		}
 
-		// Update layout title for each template.
-		et_theme_builder_update_layout_title( $template );
 	} else {
 		$post_id = wp_insert_post(
 			array(
@@ -1823,7 +1824,10 @@ function et_theme_builder_update_layout_title( $template ) {
 	foreach ( $template['layouts'] as $layout ) {
 		$layout_id = (int) $layout['id'];
 
-		if ( ! $layout_id ) {
+		$new_layout_title  = sanitize_text_field( $template['title'] );
+		$curr_layout_title = get_the_title( $layout_id );
+
+		if ( ! $layout_id || $new_layout_title === $curr_layout_title ) {
 			continue;
 		}
 

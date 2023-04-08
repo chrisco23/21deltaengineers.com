@@ -1,3 +1,11 @@
+= 4.1.8 =
+* Fixed closing shortcode tags displaying in WP 6.2
+
+= 4.1.7 =
+* Added license check on plugin update
+* Fixed Uncaught TypeError in custom footer HTML when WP Rocket enabled
+* Custom icons feature updated for improved compatibility with Divi Supreme Lite & Pro modules
+
 = 4.1.6 =
 * Icon CSS files are now minified
 * Improved settings page / license page UI and cross-linking

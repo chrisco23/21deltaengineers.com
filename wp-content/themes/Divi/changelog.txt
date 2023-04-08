@@ -1,3 +1,39 @@
+version 4.20.4 ( updated 04-03-2023 )
+- Fixed Divi Cloud configuration error.
+	* cloud/cloud-app.php
+
+version 4.20.3 ( updated 04-03-2023 )
+- Fixed progress bar rendering when importing items to the Divi Cloud.
+- Added ability to split library layout into sections, section to rows, and row to modules.
+- Fixed duplicate quantity number in Woo Cart Products module.
+- Fixed a PHP error that occurred in some cases with 3rd-party WooCommerce plugins when the session object does not exist.
+- Added support to import multiple json files in Divi Library.
+- Fixed issues with Theme Builder loading and saving with big amount of templates.
+- Improved local Divi Library performance on websites with big amount of layouts.
+- Fixed security issue on a few legacy shortcodes, some attributes were not properly escaped.
+- Added 'Share With My Team' button to the library modal.
+- Added ability to split library layout into sections, section to rows, and row to modules.
+- Improved shared clouds permission checks.
+	* cloud/cloud-app.php
+	* cloud/i18n/library.php
+	* composer.json
+	* core/admin/js/portability.js
+	* core/code-snippets/code-snippets-library.php
+	* core/ui/components/controls/index.js
+	* epanel/shortcodes/shortcodes.php
+	* includes/builder/core.php
+	* includes/builder/feature/Library.php
+	* includes/builder/feature/SplitLibrary.php
+	* includes/builder/feature/woocommerce-modules.php
+	* includes/builder/feature/woocommerce/templates/global/quantity-input.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/theme-builder/api.php
+	* includes/builder/frontend-builder/theme-builder/theme-builder-library.php
+	* includes/builder/frontend-builder/theme-builder/theme-builder.php
+	* includes/builder/functions.php
+	* includes/builder/scripts/src/builder.js
+
 version 4.20.2 ( updated 03-08-2023 )
 - Adjusted a fix in 4.20.1 that changed section class enumeration. For customers using performance plugins that strip away version parameters from CSS files, this could cause styles to appear jumbled when they did not clear their browser cache.
 	* includes/builder/feature/dynamic-assets/class-dynamic-assets.php

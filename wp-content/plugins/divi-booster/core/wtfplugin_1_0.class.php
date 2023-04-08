@@ -34,7 +34,7 @@ class wtfplugin_1_0 {
 		
 		/* Check for plugin update */
 		add_action('init', array($this, 'update_cache'));
-		add_action('booster_update', array($this, 'compile_patch_files'));
+		add_action('db-divi-booster-updated', array($this, 'compile_patch_files'));
 		
 		// Customizer
 		// Regenerate cache files when customizer saved

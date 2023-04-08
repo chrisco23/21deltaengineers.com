@@ -110,6 +110,13 @@ function add_module() {
                     'css' => array(
                         'main' => "{$this->main_css_element}_wrapper",
                     ),
+                ),
+                'box_shadow' => array(
+                    'default' => array(
+                        'css' => array(
+                            'main' => "{$this->main_css_element} .et_pb_button",
+                        ),
+                    ),
                 )
             );
         }
@@ -122,6 +129,7 @@ function add_module() {
                     $(this).closest('.et_pb_module_inner').find('.<?php esc_attr_e($this->slug); ?>_popup_wrapper').show();
                     $(this).closest('.et_pb_column').addClass('<?php esc_attr_e($this->slug); ?>_has_popup');
                     $(this).closest('.et_pb_row').addClass('<?php esc_attr_e($this->slug); ?>_has_popup');
+                    $(this).closest('.et_builder_inner_content').addClass('<?php esc_attr_e($this->slug); ?>_has_popup');
 
                     $('body').addClass('<?php esc_attr_e($this->slug); ?>_popup_visible');
                 });
@@ -134,6 +142,7 @@ function add_module() {
                         $('body').removeClass('<?php esc_attr_e($this->slug); ?>_popup_visible');
                         $(this).closest('.et_pb_column').removeClass('<?php esc_attr_e($this->slug); ?>_has_popup');
                         $(this).closest('.et_pb_row').removeClass('<?php esc_attr_e($this->slug); ?>_has_popup');
+                        $(this).closest('.et_builder_inner_content').removeClass('<?php esc_attr_e($this->slug); ?>_has_popup');
                     }
                 });
                 // Close if close button clicked
@@ -142,6 +151,7 @@ function add_module() {
                     $('body').removeClass('<?php esc_attr_e($this->slug); ?>_popup_visible');
                     $(this).closest('.et_pb_column').removeClass('<?php esc_attr_e($this->slug); ?>_has_popup');
                     $(this).closest('.et_pb_row').removeClass('<?php esc_attr_e($this->slug); ?>_has_popup');
+                    $(this).closest('.et_builder_inner_content').removeClass('<?php esc_attr_e($this->slug); ?>_has_popup');
                 });
                 
             });
@@ -174,7 +184,7 @@ function add_module() {
     display: inline-block !important;
 }
 
-.{$slug}_popup_visible #main-content .et_builder_inner_content {
+.{$slug}_popup_visible .et_builder_inner_content.{$slug}_has_popup {
     z-index: 100000;
 }
 

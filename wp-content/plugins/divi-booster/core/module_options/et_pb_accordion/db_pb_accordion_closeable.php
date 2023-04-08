@@ -41,6 +41,18 @@ function dbmo_et_pb_accordion_add_closeable_field($fields) {
 	return $new_fields + $fields;
 }
 
+/*
+add_filter('et_module_shortcode_output', 'db_pb_accordion_add_closeable_code_to_shortcode_output', 10, 3);
+
+function db_pb_accordion_add_closeable_code_to_shortcode_output($output, $render_slug, $module) {
+
+    if (!is_string($output)) { return $output; }
+    if ($render_slug !== 'et_pb_accordion') { return $output; }
+    if (!isset($module->props) || !is_array($module->props)) { return $output; }
+    $output = db_pb_accordion_add_closeable_code_to_content($output, $module->props, $render_slug);
+    return $output;
+}
+*/
 
 // Process added options
 function db_pb_accordion_add_closeable_code_to_content($content, $args, $module='et_pb_accordion') {

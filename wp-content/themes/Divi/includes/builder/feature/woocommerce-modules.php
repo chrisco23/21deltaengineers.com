@@ -1058,15 +1058,17 @@ function et_builder_wc_render_module_template( $function_name, $args = array(), 
 			call_user_func( $function_name, $message );
 			break;
 		case 'wc_print_notices':
-			// Save existing notices to restore them as many times as we need.
-			$et_wc_cached_notices = WC()->session->get( 'wc_notices', array() );
+			if ( isset( WC()->session ) ) {
+				// Save existing notices to restore them as many times as we need.
+				$et_wc_cached_notices = WC()->session->get( 'wc_notices', array() );
 
-			// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
-			call_user_func( $function_name );
+				// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- Using for consistency.
+				call_user_func( $function_name );
 
-			// Restore notices which were removed after wc_print_notices() executed to render multiple modules on page.
-			if ( ! empty( $et_wc_cached_notices ) && empty( WC()->session->get( 'wc_notices', array() ) ) ) {
-				WC()->session->set( 'wc_notices', $et_wc_cached_notices );
+				// Restore notices which were removed after wc_print_notices() executed to render multiple modules on page.
+				if ( ! empty( $et_wc_cached_notices ) && empty( WC()->session->get( 'wc_notices', array() ) ) ) {
+					WC()->session->set( 'wc_notices', $et_wc_cached_notices );
+				}
 			}
 			break;
 		case 'woocommerce_checkout_login_form':
@@ -1091,17 +1093,19 @@ function et_builder_wc_render_module_template( $function_name, $args = array(), 
 			wc_get_template( 'cart/cart-empty.php' );
 			break;
 		case 'woocommerce_output_all_notices':
-			// Save existing notices to restore them as many times as we need.
-			$et_wc_cached_notices = WC()->session->get( 'wc_notices', array() );
+			if ( isset( WC()->session ) ) {
+				// Save existing notices to restore them as many times as we need.
+				$et_wc_cached_notices = WC()->session->get( 'wc_notices', array() );
 
-			if ( function_exists( $function_name ) ) {
-				// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- Using for consistency.
-				call_user_func( $function_name );
-			}
+				if ( function_exists( $function_name ) ) {
+					// @phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- Using for consistency.
+					call_user_func( $function_name );
+				}
 
-			// Restore notices which were removed after wc_print_notices() executed to render multiple modules on page.
-			if ( ! empty( $et_wc_cached_notices ) && empty( WC()->session->get( 'wc_notices', array() ) ) ) {
-				WC()->session->set( 'wc_notices', $et_wc_cached_notices );
+				// Restore notices which were removed after wc_print_notices() executed to render multiple modules on page.
+				if ( ! empty( $et_wc_cached_notices ) && empty( WC()->session->get( 'wc_notices', array() ) ) ) {
+					WC()->session->set( 'wc_notices', $et_wc_cached_notices );
+				}
 			}
 			break;
 		case 'woocommerce_template_single_price':

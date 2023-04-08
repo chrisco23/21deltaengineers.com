@@ -17,6 +17,17 @@ class DBDBModuleOutputFilterHook {
         $this->hook = (string) $hook;
     }
 
+    public function enable() {
+        $this->wp->add_filter('et_module_shortcode_output', array($this, 'applyFilters'), 10, 3);
+    }
+
+    public function applyFilters($output, $render_slug, $module) {
+        if (!is_string($output)) return $output;
+        if (!isset($module->props) || !is_array($module->props)) return $output;
+        if ($render_slug !== $this->render_slug) return $output;
+        return $this->wp->apply_filters($this->hook, $output, $module->props, $render_slug);
+    }
+
     public function enableInTb() {
         $this->wp->add_filter('et_module_shortcode_output', array($this, 'applyFiltersInTb'), 10, 3);
     }

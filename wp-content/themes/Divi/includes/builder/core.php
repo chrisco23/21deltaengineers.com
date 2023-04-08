@@ -162,6 +162,7 @@ if ( ! function_exists( 'et_builder_load_library' ) ) :
 	function et_builder_load_library() {
 		// Initialize the Divi Library.
 		require_once ET_BUILDER_DIR . 'feature/Library.php';
+		require_once ET_BUILDER_DIR . 'feature/SplitLibrary.php';
 
 		// Initialize DiviCloud.
 		if ( defined( 'ET_BUILDER_PLUGIN_ACTIVE' ) ) {

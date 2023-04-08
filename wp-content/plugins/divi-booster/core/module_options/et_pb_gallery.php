@@ -19,6 +19,7 @@ function dbmo_et_pb_gallery_register_fields($fields) {
 	$fields[] = 'db_image_row_spacing_phone';
 	$fields[] = 'db_image_center_titles';
 	$fields[] = 'db_image_object_fit';
+    $fields[] = 'dbdb_version';
 	return $fields;
 }
 

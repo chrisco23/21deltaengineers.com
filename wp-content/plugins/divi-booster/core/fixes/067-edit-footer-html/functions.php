@@ -18,7 +18,7 @@ function db067_add_footer_jquery_fallback() {
 	
 	// Output the footer jQuery
 	?>
-	$('#footer-info').html(<?php echo json_encode($footerhtml); ?>);
+	jQuery('#footer-info').html(<?php echo json_encode($footerhtml); ?>);
 	<?php
 }
 

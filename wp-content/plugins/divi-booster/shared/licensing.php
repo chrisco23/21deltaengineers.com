@@ -43,12 +43,36 @@ class Licensing {
     public function init() {
         add_action('admin_menu', array($this, 'dbal_license_menu'));
         add_filter("db-settings-{$this->plugin_slug}-tabs", array($this, 'register_settings_tab'), 11);
+        add_action("db-{$this->plugin_slug}-updated", array($this, 'dbal_check_license')); 
         add_action('admin_init', array($this, 'dbal_register_option'));
         add_action('admin_init', array($this, 'dbal_deactivate_license'));
         add_action('admin_init', array($this, 'dbal_activate_license'), 11);
-        add_action('admin_notices', array($this, 'dbal_admin_notices'));
-        add_action( 'after_plugin_row_'.plugin_basename($this->plugin_file), array($this, 'dbal_after_plugin_row'), 20, 3);
+        add_action('admin_notices', array($this, 'dbal_admin_notices'), 0); // Register early
+        add_action('admin_notices', array($this, 'hide_unrelated_admin_notices'), 1); // Hide all registered later
+        add_action('after_plugin_row_'.plugin_basename($this->plugin_file), array($this, 'dbal_after_plugin_row'), 20, 3);
         add_action('admin_head', array($this, 'dbal_plugins_php_license_required_css'));
+    }
+
+    function dbal_check_license() {
+        $license = trim(get_option($this->license_key_option));
+        if (empty($license)) { 
+            delete_option($this->license_status_option);
+        } else {
+            $response = $this->dbal_submit_license('check', $license);
+            if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) { 
+                return; 
+            }
+            $license_data = json_decode(wp_remote_retrieve_body($response));
+            if (isset($license_data->license) && $license_data->license === 'invalid') {
+                delete_option($this->license_status_option);
+            } 
+        }
+    }
+
+    function hide_unrelated_admin_notices() {
+        if (isset($_GET['page']) && $_GET['page'] === $this->settings_page) {
+            remove_all_actions( 'admin_notices' );
+        }
     }
 
     function dbal_license_menu() {
@@ -142,7 +166,7 @@ class Licensing {
             // Check if anything passed on a message constituting a failure
             if ( ! empty( $message ) ) {
                 $base_url = admin_url('options-general.php?page='.$this->settings_page);
-                $redirect = add_query_arg( array( 'sl_activation' => 'false', 'message' => urlencode( $message ) ), $base_url );
+                $redirect = add_query_arg( array( 'sl_activation' => 'false', 'plugin' => $this->plugin_slug, 'message' => urlencode( $message ) ), $base_url );
                 wp_redirect( $redirect );
                 exit();
             }
@@ -156,6 +180,7 @@ class Licensing {
             }
             
             update_option($this->license_status_option, $validity );
+
             wp_redirect( admin_url( 'options-general.php?page=' . $this->settings_page) );
             exit();
         }
@@ -273,7 +298,8 @@ class Licensing {
         if (empty($_GET['page']) || $_GET['page'] !== $this->settings_page) {
             return;
         }
-        if ( isset( $_GET['sl_activation'] ) && ! empty( $_GET['message'] ) ) {
+        if (empty($_GET['plugin']) || $_GET['plugin'] !== $this->plugin_slug) { return; }
+        if ( isset( $_GET['sl_activation'] ) && !empty( $_GET['message'] ) ) {
             switch( $_GET['sl_activation'] ) {
                 case 'false':
                     $message = urldecode( $_GET['message'] );

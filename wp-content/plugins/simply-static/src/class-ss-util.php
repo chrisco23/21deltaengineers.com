@@ -35,7 +35,7 @@ class Util {
 	 * @return string home URL
 	 */
 	public static function origin_url() {
-		return apply_filters( 'ss_origin_url', home_url() );
+		return apply_filters( 'ss_origin_url', untrailingslashit( home_url() ) );
 	}
 
 	/**
@@ -43,7 +43,7 @@ class Util {
 	 * @return string home URL
 	 */
 	public static function wp_installation_url() {
-		return site_url();
+		return untrailingslashit( site_url() );
 	}
 
 	/**
@@ -298,6 +298,19 @@ class Util {
 	 */
 	public static function is_local_url( $url ) {
 		return ( stripos( self::strip_protocol_from_url( $url ), self::origin_host() ) === 0 );
+	}
+
+	/**
+	 * Check if WP-Cron is running.
+	 *
+	 * @return bool
+	 */
+	public static function is_cron(): bool {
+		if ( ! defined( 'DISABLE_WP_CRON' ) || DISABLE_WP_CRON !== true || defined( 'SS_CRON' ) ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**

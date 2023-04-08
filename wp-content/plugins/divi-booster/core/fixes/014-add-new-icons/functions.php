@@ -179,6 +179,11 @@ function db014_sharedUserJs() {
     $custom_icon_classes = apply_filters('dbdb_custom_icon_classes', array('et-pb-icon'));
     $custom_icon_classes = array_map(function($class) { return '.'.esc_html($class); }, $custom_icon_classes);
     $custom_icon_classes = implode(',', $custom_icon_classes);
+
+    $custom_inline_icon_classes = apply_filters('dbdb_custom_inline_icon_classes', array('et_pb_inline_icon'));
+    $custom_inline_icon_classes = array_map(function($class) { return '.'.esc_html($class); }, $custom_inline_icon_classes);
+    $custom_inline_icon_classes = implode(',', $custom_inline_icon_classes);
+
     ?>
     function db014_update_icon(icon_id, icon_url) {
         db014_update_icons(jQuery(document), icon_id, icon_url);
@@ -196,14 +201,14 @@ function db014_sharedUserJs() {
     function db014_update_custom_icons(doc, icon_id, icon_url) {
         var $custom_icons = doc.find(<?php echo json_encode($custom_icon_classes); ?>).filter(':contains("'+icon_id+'")');
         var icon_visible = (icon_url !== '');
-        var $icons = $custom_icons.filter(function(){ return jQuery(this).text() == icon_id; }); 
+        var $icons = $custom_icons.filter(function(){ return jQuery(this).text().trim() == icon_id; }); 
         $icons.addClass('db-custom-icon');
         $icons.html('<img class="dbdb-custom-icon-img" src="'+icon_url+'"/>');
         $icons.toggle(icon_visible); 
     }
     
     function db014_update_custom_inline_icons(doc, icon_id, icon_url) {
-        var $custom_inline_icons = doc.find('.et_pb_inline_icon[data-icon="'+icon_id+'"]');
+        var $custom_inline_icons = doc.find(<?php echo json_encode($custom_inline_icon_classes); ?>).filter('[data-icon="'+icon_id+'"]');
         var icon_visible = (icon_url !== '');
         var $icons_inline = $custom_inline_icons.filter(function(){ return jQuery(this).attr('data-icon') == icon_id; });
         $icons_inline.addClass('db-custom-icon');

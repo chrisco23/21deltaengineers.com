@@ -129,12 +129,14 @@ function et_code_snippets_library_get_library_items_data( $code_snippet_type ) {
 			array(
 				'post_status' => array( 'publish', 'trash' ),
 				'orderby'     => 'name',
+				'fields'      => 'ids',
 			)
 		);
 
 	$posts = is_array( $posts ) ? $posts : array( $posts );
 
-	foreach ( $posts as $post ) {
+	foreach ( $posts as $post_id ) {
+		$post = get_post( $post_id );
 		$item = new stdClass();
 
 		setup_postdata( $post );

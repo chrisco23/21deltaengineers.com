@@ -22,10 +22,10 @@ $divibooster_module_shortcodes = array(
 );
 
 // Register shortcodes
-divibooster_register_module_shortcodes(); // Register shortcodes
+//divibooster_register_module_shortcodes(); // Register shortcodes
 
 // Clear modified modules in local storage as necessary
-add_action('booster_update', 'divibooster_clear_module_local_storage');
+add_action('db-divi-booster-updated', 'divibooster_clear_module_local_storage');
 if (defined('DB_DISABLE_LOCAL_CACHING')) { 
 	divibooster_clear_module_local_storage();
 }
@@ -37,8 +37,8 @@ add_filter('the_posts', 'divibooster_filter_global_modules');
 add_action('et_builder_ready', 'db_add_module_field_filter', 11);
 
 // Wrap the shortcodes
-add_filter('the_content', 'dbmo_wrap_module_shortcodes');
-add_filter('db_filter_et_pb_layout', 'dbmo_wrap_global_module_shortcodes');
+// add_filter('the_content', 'dbmo_wrap_module_shortcodes');
+// add_filter('db_filter_et_pb_layout', 'dbmo_wrap_global_module_shortcodes');
 
 
 // Remove excess <p> tags which get added around slides
@@ -102,7 +102,7 @@ function dbdb_module_options_fix_missing_props($props, $attrs, $render_slug) {
     return $props;
 }
 
-
+/*
 // === Shortcode wrapping ===
 
 function dbmo_wrap_module_shortcodes($content) {
@@ -189,13 +189,18 @@ function divibooster_module_shortcode_callback($atts, $content, $tag) {
 	}
 	return $content;
 }
+*/
 
 // === Enable {$tag}_content filter in theme builder layouts
 
+foreach($divibooster_module_shortcodes as $etsc=>$dbsc) {
+    DBDBModuleOutputFilterHook::create($etsc, "{$dbsc}_content")->enable();
+}
+/*
 DBDBModuleOutputFilterHook::create('et_pb_gallery', 'db_pb_gallery_content')->enableInTb();
 DBDBModuleOutputFilterHook::create('et_pb_menu', 'db_pb_menu_content')->enableInTb();
 DBDBModuleOutputFilterHook::create('et_pb_team_member', 'db_pb_team_member_content')->enableInTb();
-
+*/
 
 // === Avoid local caching === 
 

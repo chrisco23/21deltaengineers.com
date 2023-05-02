@@ -227,11 +227,12 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'et_fb_retrieve_builder_data',
 			'et_fb_update_builder_assets',
 			'et_pb_process_custom_font',
-			'et_builder_email_add_account',     // email opt-in module
-			'et_builder_email_remove_account',  // email opt-in module
-			'et_builder_email_get_lists',       // email opt-in module
-			'et_builder_save_settings',         // builder plugin dashboard (global builder settings)
-			'save_epanel',                      // ePanel (global builder settings)
+			'et_builder_email_add_account',     // email opt-in module.
+			'et_builder_email_remove_account',  // email opt-in module.
+			'et_builder_email_get_lists',       // email opt-in module.
+			'et_builder_save_settings',         // builder plugin dashboard (global builder settings).
+			'save_epanel',                      // ePanel (global builder settings).
+			'save_epanel_temp',                 // ePanel (temp global builder settings).
 			'et_builder_library_get_layout',
 			'et_builder_library_update_terms',
 			'et_builder_toggle_cloud_status',

@@ -66,6 +66,7 @@ class ET_Code_Snippets_App {
 				'et_code_snippets_library_save_item_content'    => wp_create_nonce( 'et_code_snippets_library_save_item_content' ),
 				'et_code_snippets_library_update_terms'         => wp_create_nonce( 'et_code_snippets_library_update_terms' ),
 				'et_code_snippets_library_get_token'            => wp_create_nonce( 'et_code_snippets_library_get_token' ),
+				'et_code_snippets_save_to_local_library'        => wp_create_nonce( 'et_code_snippets_save_to_local_library' ),
 			],
 		];
 		// phpcs:enable

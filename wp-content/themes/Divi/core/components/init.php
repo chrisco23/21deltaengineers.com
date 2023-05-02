@@ -262,6 +262,7 @@ function et_core_get_nonces() {
 
 	return $nonces ? $nonces : $nonces = array(
 		'clear_page_resources_nonce' => wp_create_nonce( 'clear_page_resources' ),
+		'et_core_portability_export' => wp_create_nonce( 'et_core_portability_export' ),
 	);
 }
 endif;

@@ -2233,6 +2233,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'show_only'             => esc_html__( 'Show Only', 'et_builder' ),
 			'filterNotice'          => esc_html__( 'No options exist for this search query. <span>Click here</span> to clear your search filters.', 'et_builder' ),
 			'filterNoticeClickable' => esc_html__( 'Click here', 'et_builder' ),
+			'exploreDiviModules'    => esc_html__( 'Explore More Divi Modules', 'et_builder' ),
 			'extend_styles'         => array(
 				'title'   => esc_html__( 'Extend Styles', 'et_builder' ),
 				'button'  => esc_html__( 'Extend', 'et_builder' ),

@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use AIOSEO\Plugin\Common\Models;
 use AIOSEO\Plugin\Common\Migration;
+use AIOSEO\Plugin\Common\Traits;
 
 /**
  * Abstract class that Pro and Lite both extend.
@@ -15,6 +16,8 @@ use AIOSEO\Plugin\Common\Migration;
  * @since 4.0.0
  */
 class Admin {
+	use Traits\Admin;
+
 	/**
 	 * The page slug for the sidebar.
 	 *
@@ -144,7 +147,6 @@ class Admin {
 			$this->registerLinkFormatHooks();
 
 			add_action( 'admin_footer', [ $this, 'addAioseoModalPortal' ] );
-			add_action( 'admin_enqueue_scripts', [ $this, 'enqueueAioseoModalPortal' ], 11 );
 		}
 
 		$this->loadTextDomain();
@@ -888,20 +890,6 @@ class Admin {
 	}
 
 	/**
-	 * Outputs the element we can mount our footer promotion standalone Vue app on.
-	 * Also enqueues the assets.
-	 *
-	 * @since 4.3.4
-	 *
-	 * @return void
-	 */
-	public function addFooterPromotion() {
-		echo wp_kses_post( '<div id="aioseo-footer-links"></div>' );
-
-		aioseo()->core->assets->load( 'src/vue/standalone/footer-links/main.js' );
-	}
-
-	/**
 	 * Add footer text to the WordPress admin screens.
 	 *
 	 * @since 4.0.0
@@ -1230,16 +1218,5 @@ class Admin {
 	 */
 	public function addAioseoModalPortal() {
 		echo '<div id="aioseo-modal-portal"></div>';
-	}
-
-	/**
-	 * Add the assets for the modal portal.
-	 *
-	 * @since 4.2.5
-	 *
-	 * @return void
-	 */
-	public function enqueueAioseoModalPortal() {
-		aioseo()->core->assets->load( 'src/vue/standalone/modal-portal/main.js' );
 	}
 }

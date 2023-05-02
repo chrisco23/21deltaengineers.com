@@ -1,9 +1,10 @@
 === FileBird - WordPress Media Library Folders & File Manager ===
 Contributors: ninjateam
+Donate link: https://codecanyon.net/item/media-folders-manager-for-wordpress/21715379
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
-Tested up to: 6.1.1
-Stable tag: 5.1.5
+Tested up to: 6.2
+Stable tag: 5.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -191,6 +192,10 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Apr 10, 2023 - Version 5.1.6 =
+- Fixed: Sql_require_primary_key in Digital Ocean
+- Fixed: Can not active when email has plus character
 
 = Mar 23, 2023 - Version 5.1.5 =
 - Supported: LearnPress

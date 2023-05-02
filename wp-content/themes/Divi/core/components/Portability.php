@@ -123,7 +123,7 @@ class ET_Core_Portability {
 			}
 
 			// Check if Import contains Google Api Settings.
-			if ( isset( $import['data']['et_google_api_settings'] ) && 'epanel' === $this->instance->context ) {
+			if ( isset( $import['data']['et_google_api_settings'] ) && ( 'epanel' === $this->instance->context || 'epanel_temp' === $this->instance->context ) ) {
 				$et_google_api_settings = $import['data']['et_google_api_settings'];
 			}
 
@@ -393,7 +393,7 @@ class ET_Core_Portability {
 			$data = $this->apply_query( $data, 'set' );
 
 			// Export Google API settings.
-			if ( 'epanel' === $this->instance->context ) {
+			if ( 'epanel' === $this->instance->context || 'epanel_temp' === $this->instance->context ) {
 				$et_google_api_settings = get_option( 'et_google_api_settings', array() );
 
 				// Unset google api_key settings to prevent exporting it.
@@ -2994,6 +2994,7 @@ function et_core_portability_cap( $context ) {
 	$options_contexts = array(
 		'et_pb_roles',
 		'epanel',
+		'epanel_temp',
 		'et_divi_mods',
 		'et_extra_mods',
 	);

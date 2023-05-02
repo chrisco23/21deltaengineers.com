@@ -85,7 +85,8 @@ class PostMeta {
 			'rank_math_twitter_title'        => 'twitter_title',
 			'rank_math_twitter_description'  => 'twitter_description',
 			'rank_math_twitter_image'        => 'twitter_image_custom_url',
-			'rank_math_twitter_card_type'    => 'twitter_card'
+			'rank_math_twitter_card_type'    => 'twitter_card',
+			'rank_math_primary_category'     => 'primary_term',
 		];
 
 		foreach ( $posts as $post ) {
@@ -186,6 +187,12 @@ class PostMeta {
 					case 'rank_math_twitter_use_facebook':
 						$meta[ $mappedMeta[ $name ] ] = 'on' === $value;
 						break;
+					case 'rank_math_primary_category':
+						$taxonomy                     = 'category';
+						$options                      = new \stdClass();
+						$options->$taxonomy           = (int) $value;
+						$meta[ $mappedMeta[ $name ] ] = wp_json_encode( $options );
+						break;
 					case 'rank_math_title':
 					case 'rank_math_description':
 						if ( 'page' === $post->post_type ) {
@@ -204,6 +211,9 @@ class PostMeta {
 			$aioseoPost->save();
 
 			aioseo()->migration->meta->migrateAdditionalPostMeta( $post->ID );
+
+			// Clear the Overview cache.
+			aioseo()->postSettings->clearPostTypeOverviewCache( $post->ID );
 		}
 
 		if ( count( $posts ) === $postsPerAction ) {

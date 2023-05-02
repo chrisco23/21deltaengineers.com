@@ -75,7 +75,7 @@ function et_local_library_insert_terms_from_str( $terms_str, $tax ) {
  */
 function et_local_library_set_item_taxonomy( $post_id, $preferences ) {
 	$_         = et_();
-	$tax_input = [];
+	$tax_input = et_local_library_get_selected_taxonomy( $preferences );
 
 	$item_type = $_->array_get( $preferences, 'item_type' );
 
@@ -86,7 +86,7 @@ function et_local_library_set_item_taxonomy( $post_id, $preferences ) {
 		} else {
 			$item_type_taxonomy = ET_THEME_BUILDER_TAXONOMY_TYPE;
 		}
-		$tax_input = array_merge( et_local_library_get_selected_taxonomy( $preferences ), [ $item_type_taxonomy => $item_type ] );
+		$tax_input = array_merge( $tax_input, [ $item_type_taxonomy => $item_type ] );
 	}
 
 	// Insert new category and tags.

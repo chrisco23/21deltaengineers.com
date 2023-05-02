@@ -220,7 +220,7 @@ if ( ! function_exists( 'aioseo_lite_notice' ) ) {
 				<p>%2$s</p>
 			</div>',
 			esc_html__( 'Heads up!', 'all-in-one-seo-pack' ),
-			// Translators: 1 - The plugin name ("All in One SEO"), 2 - Same as previous, 3 - Same as previous.
+			// Translators: 1 - "AIOSEO Pro", 2 - "AIOSEO Lite".
 			sprintf( esc_html__( 'Your site already has %1$s activated. If you want to switch to %2$s, please first go to Plugins > Installed Plugins and deactivate %1$s. Then, you can activate %2$s.', 'all-in-one-seo-pack' ), 'AIOSEO Pro', 'AIOSEO Lite' ) // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 		);
 

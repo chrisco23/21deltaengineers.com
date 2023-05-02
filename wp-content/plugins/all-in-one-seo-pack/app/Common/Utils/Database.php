@@ -39,9 +39,9 @@ class Database {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @var wpdb
+	 * @var \wpdb
 	 */
-	public $db;
+	public $db = null;
 
 	/**
 	 * Holds $wpdb prefix.

@@ -26,6 +26,7 @@ function et_setup_theme() {
 	}
 
 	require_once $template_directory . '/epanel/custom_functions.php';
+	require_once $template_directory . '/epanel/theme-options-library/theme-options.php';
 	require_once $template_directory . '/core/code-snippets/code-snippets.php';
 
 	require_once $template_directory . '/includes/functions/choices.php';

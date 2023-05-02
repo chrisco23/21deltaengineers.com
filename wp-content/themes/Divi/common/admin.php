@@ -10,9 +10,9 @@
  */
 function et_code_snippets_get_nonces() {
 	return [
-		'saveDomainToken'                        => wp_create_nonce( 'et_builder_ajax_save_domain_token' ),
-		'et_code_snippets_save_to_local_library' => wp_create_nonce( 'et_code_snippets_save_to_local_library' ),
-		'et_theme_builder_api_get_terms'         => wp_create_nonce( 'et_theme_builder_api_get_terms' ),
+		'saveDomainToken'                => wp_create_nonce( 'et_builder_ajax_save_domain_token' ),
+		'et_theme_builder_api_get_terms' => wp_create_nonce( 'et_theme_builder_api_get_terms' ),
+		'et_library_save_item'           => wp_create_nonce( 'et_library_save_item' ),
 	];
 }
 
@@ -38,7 +38,7 @@ function et_common_global_js_vars() {
 		}
 	}
 
-	$home_url  = wp_parse_url( get_site_url() );
+	$home_url = wp_parse_url( get_site_url() );
 
 	$data = [
 		'config' => [
@@ -49,6 +49,10 @@ function et_common_global_js_vars() {
 			'layoutCategories'    => et_theme_builder_get_terms( 'layout_category' ),
 			'layoutTags'          => et_theme_builder_get_terms( 'layout_tag' ),
 			'localCategoriesEdit' => current_user_can( 'manage_categories' ) ? 'allowed' : 'notAllowed',
+			'post_types'          => [
+				'et_code_snippet'  => ET_CODE_SNIPPET_POST_TYPE,
+				'et_theme_options' => is_admin() ? ET_THEME_OPTIONS_POST_TYPE : '',
+			],
 		],
 		'i18n'   => [
 			'library' => require ET_COMMON_DIR . 'i18n/library.php',

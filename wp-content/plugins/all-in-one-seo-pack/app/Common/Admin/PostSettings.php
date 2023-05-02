@@ -78,7 +78,6 @@ class PostSettings {
 
 			aioseo()->core->assets->load( 'src/vue/standalone/post-settings/main.js', [], aioseo()->helpers->getVueData( $page ) );
 			aioseo()->core->assets->load( 'src/vue/standalone/link-format/main.js', [], aioseo()->helpers->getVueData( $page ) );
-			aioseo()->admin->enqueueAioseoModalPortal();
 		}
 
 		$screen = get_current_screen();

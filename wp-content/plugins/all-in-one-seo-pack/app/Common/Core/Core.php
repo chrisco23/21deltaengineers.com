@@ -51,7 +51,7 @@ class Core {
 	 *
 	 * @since 4.2.7
 	 *
-	 * @var Utils\Filesystem
+	 * @var Utils\Assets
 	 */
 	public $assets = null;
 

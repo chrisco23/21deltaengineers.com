@@ -371,6 +371,33 @@ class PostsTerms {
 	}
 
 	/**
+	 * Disable the Primary Term education.
+	 *
+	 * @since 4.3.6
+	 *
+	 * @param  \WP_REST_Request  $request The REST Request
+	 * @return \WP_REST_Response          The response.
+	 */
+	public static function disablePrimaryTermEducation( $request ) {
+		$args = $request->get_params();
+
+		if ( empty( $args['postId'] ) ) {
+			return new \WP_REST_Response( [
+				'success' => false,
+				'message' => __( 'No post ID was provided.', 'all-in-one-seo-pack' )
+			], 400 );
+		}
+
+		$thePost = Models\Post::getPost( $args['postId'] );
+		$thePost->options->primaryTerm->productEducationDismissed = true;
+		$thePost->save();
+
+		return new \WP_REST_Response( [
+			'success' => true
+		], 200 );
+	}
+
+	/**
 	 * Disable the link format education.
 	 *
 	 * @since 4.2.2

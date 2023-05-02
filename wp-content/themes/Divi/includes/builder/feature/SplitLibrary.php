@@ -69,7 +69,7 @@ class ET_Builder_Split_Library {
 		$cloud_content = isset( $_POST['content'] ) ? $_POST['content'] : ''; // phpcs:ignore ET.Sniffs.ValidatedSanitizedInput -- $_POST['content'] is an array, it's value sanitization is done at the time of accessing value.
 
 		if ( $cloud_content ) {
-			$item_content = reset( $cloud_content['data'] );
+			$item_content = wp_unslash( reset( $cloud_content['data'] ) );
 		} else {
 			$post         = get_post( $id );
 			$item_content = $post->post_content;

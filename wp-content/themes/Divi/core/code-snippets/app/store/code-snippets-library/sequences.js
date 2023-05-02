@@ -13,7 +13,7 @@ import { getItemTypeByContext, getContextByItemType } from '@common-ui/lib/local
 import { updateTokens, doApiRequest } from '@cloud/app/lib/api';
 import { handleCloudError } from '@cloud/app/components/app/actions/shared-actions';
 import { insertCodeIntoField } from './actions';
-import { setCodeSnippetItemsLoaded } from '../../lib/code-snippets-library';
+import { setCodeSnippetItemsLoaded, setCodeSnippetsLibraryToken } from '../../lib/code-snippets-library';
 import { STATE_IDLE, STATE_LOADING, STATE_SUCCESS } from '@code-snippets/lib/constants';
 
 
@@ -23,9 +23,14 @@ const setLibraryContext = sequence('Set Code Snippets library context', [
   set(state`itemsLoadedAndCached`, false),
 ]);
 
+const setCloudToken = sequence('Set cloudToken', [
+  ({ get }) => {
+    setCodeSnippetsLibraryToken(get(props`cloudToken`));
+  },
+]);
+
 const cacheCloudToken = sequence('Retrieve saved Cloud Access token and save to state', [
   ({ codeSnippetsLibApi, path }) => {
-
     return codeSnippetsLibApi.getCloudToken()
       .then(cloudTokenData => {
         return path.success({cloudToken: cloudTokenData.accessToken});
@@ -34,7 +39,7 @@ const cacheCloudToken = sequence('Retrieve saved Cloud Access token and save to 
   },
   {
     success: [
-      set(state`cloudToken`, props`cloudToken`)
+      setCloudToken
     ],
     error: [],
   },
@@ -332,10 +337,6 @@ const downloadSnippetContent = sequence('Download Snippet Content', [
 
 const closeModal = sequence('Close open modal', [
   set(state`openModal`, null),
-]);
-
-const setCloudToken = sequence('Set cloudToken', [
-  set(state`cloudToken`, props`cloudToken`),
 ]);
 
 export {

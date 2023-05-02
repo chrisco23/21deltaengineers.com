@@ -1167,8 +1167,11 @@ function et_theme_builder_library_get_items_data() {
 		wp_send_json_error( 'Error: Wrong item type provided.' );
 	}
 
+	$item_library_local = et_pb_theme_builder_library_local();
+	$data               = $item_library_local->get_library_items( $item_type );
+
 	wp_send_json_success(
-		et_theme_builder_library_get_library_items_data( $item_type )
+		$data
 	);
 }
 
@@ -1212,7 +1215,8 @@ function et_theme_builder_library_update_item() {
 		wp_send_json_error( 'Error: Payload is empty.' );
 	}
 
-	$response = et_theme_builder_library_update_item_data( $payload );
+	$item_library_local = et_pb_theme_builder_library_local();
+	$response           = $item_library_local->perform_item_update( $payload );
 
 	if ( ! $response ) {
 		wp_send_json_error( 'Error: Provide valid data.' );

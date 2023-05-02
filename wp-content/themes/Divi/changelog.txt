@@ -1,3 +1,49 @@
+version 4.21 ( updated 04-21-2023 )
+- Add local and Divi Cloud libraries for Theme Options
+- Fix PHP fatal errors on WP CLI with admin context when checking themes list due to missing builder framework.
+	* cloud/i18n/library.php
+	* common/admin.php
+	* common/i18n/library.php
+	* common/init.php
+	* common/lib/local-library.js
+	* common/library.php
+	* core/admin/css/support-center.css
+	* core/admin/images/blurb-vip.jpg
+	* core/code-snippets/api.php
+	* core/code-snippets/code-snippets-app.php
+	* core/code-snippets/code-snippets-library-local/CodeSnippetsLibraryLocal.php
+	* core/code-snippets/code-snippets-library.php
+	* core/components/PageResource.php
+	* core/components/Portability.php
+	* core/components/SupportCenter.php
+	* core/components/init.php
+	* core/i18n/library.php
+	* core/item-library-local/ItemLibraryLocal.php
+	* epanel/core_functions.php
+	* epanel/css/panel.css
+	* epanel/i18n/epanel.php
+	* epanel/i18n/library.php
+	* epanel/js/functions-init.js
+	* epanel/postcss.config.js
+	* epanel/theme-options-library/ThemeOptionsLibrary.php
+	* epanel/theme-options-library/api.php
+	* epanel/theme-options-library/constants.php
+	* epanel/theme-options-library/post/type/ThemeOptions.php
+	* epanel/theme-options-library/theme-options-library-app.php
+	* epanel/theme-options-library/theme-options-library-local/ThemeOptionsLibraryLocal.php
+	* epanel/theme-options-library/theme-options.php
+	* epanel/webpack.config.js
+	* et-pagebuilder/et-pagebuilder.php
+	* includes/builder/autoload.php
+	* includes/builder/feature/SplitLibrary.php
+	* includes/builder/feature/local-library.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/theme-builder/api.php
+	* includes/builder/frontend-builder/theme-builder/theme-builder-library-local/ThemeBuilderLibraryLocal.php
+	* includes/builder/frontend-builder/theme-builder/theme-builder-library.php
+
 version 4.20.4 ( updated 04-03-2023 )
 - Fixed Divi Cloud configuration error.
 	* cloud/cloud-app.php

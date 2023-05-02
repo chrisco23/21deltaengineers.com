@@ -174,6 +174,14 @@ function _et_pb_autoload( $class ) {
 		_et_pb_autoload_woo_modules( str_replace( 'ET_Builder_Module_Woocommerce_', '', $class ) );
 	} elseif ( strpos( $class, 'ET_Builder_Module_' ) !== false ) {
 		_et_pb_autoload_modules( str_replace( 'ET_Builder_Module_', '', $class ) );
+	} elseif ( 'ET_Item_Library_Local' === $class ) {
+		require_once ET_CORE_PATH . '/item-library-local/ItemLibraryLocal.php';
+	} elseif ( 'ET_Theme_Options_Library_Local' === $class ) {
+		require_once ET_EPANEL_DIR . '/theme-options-library/theme-options-library-local/ThemeOptionsLibraryLocal.php';
+	} elseif ( 'ET_Code_Snippets_Library_Local' === $class ) {
+		require_once ET_CORE_PATH . '/code-snippets/code-snippets-library-local/CodeSnippetsLibraryLocal.php';
+	} elseif ( 'ET_Theme_Builder_Library_Local' === $class ) {
+		require_once ET_BUILDER_DIR . 'frontend-builder/theme-builder/theme-builder-library-local/ThemeBuilderLibraryLocal.php';
 	}
 }
 
@@ -414,4 +422,37 @@ function et_pb_background_options() {
  */
 function et_pb_media_options() {
 	return ET_Builder_Module_Helper_Media::instance();
+}
+
+/**
+ * Class ET_Theme_Options_Library_Local wrapper
+ *
+ * @since 4.21.0
+ *
+ * @return ET_Theme_Options_Library_Local
+ */
+function et_pb_theme_options_library_local() {
+	return ET_Theme_Options_Library_Local::instance();
+}
+
+/**
+ * Class ET_Code_Snippets_Library_Local wrapper
+ *
+ * @since 4.21.0
+ *
+ * @return ET_Code_Snippets_Library_Local
+ */
+function et_pb_code_snippets_library_local() {
+	return ET_Code_Snippets_Library_Local::instance();
+}
+
+/**
+ * Class ET_Theme_Builder_Library_Local wrapper
+ *
+ * @since 4.21.0
+ *
+ * @return ET_Theme_Builder_Library_Local
+ */
+function et_pb_theme_builder_library_local() {
+	return ET_Theme_Builder_Library_Local::instance();
 }

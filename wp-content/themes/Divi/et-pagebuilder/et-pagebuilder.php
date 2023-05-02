@@ -14,7 +14,60 @@ function et_setup_builder() {
 
 	et_pb_register_posttypes();
 }
-add_action( 'init', 'et_setup_builder', 0 );
+
+/**
+ * Setup builder based on the priority and context.
+ *
+ * WP CLI `admin` context execute some admin level stuff on `init` action with priority
+ * PHP_INT_MIN. Due to this action and its priority, all admin related hooks are fired
+ * so early and cause some fatal errors in builder due to some functions are not loaded
+ * yet. The `et_setup_builder` method is responsible to load all builder functions. But,
+ * it's fired too late after all those admin related hooks are fired. It's not possible
+ * to call `et_setup_builder` with priority lower than PHP_INT_MIN. To fix this issue,
+ * we need to increase the WP CLI `admin` context `init` action by one, then call the
+ * `et_setup_builder` with priority PHP_INT_MIN. In that way, `et_setup_builder` will
+ * be on top and called first.
+ *
+ * Note: The process above only run on WP CLI `admin` context.
+ *
+ * @since ??
+ *
+ * @see WP_CLI\Context\Admin
+ * @see https://github.com/elegantthemes/Divi/issues/31631
+ */
+function et_setup_builder_based_on_priority() {
+	global $wp_filter;
+
+	$priority = 0;
+
+	// Check WP CLI `admin` context `init` action if any.
+	if ( defined( 'WP_CLI' ) && WP_CLI && is_admin() && ! empty( $wp_filter['init'] ) ) {
+		// WP CLI `admin` context uses `init` action with priority PHP_INT_MIN and uses
+		// -2147483648 as fallback. Otherwise, we can ignore it.
+		$hook_priority = defined( 'PHP_INT_MIN' ) ? PHP_INT_MIN : -2147483648; // phpcs:ignore PHPCompatibility.Constants.NewConstants.php_int_minFound -- It's used by WP CLI `admin` context and already add constant check to make sure it exists.
+		if ( ! empty( $wp_filter['init'][ $hook_priority ] ) ) {
+			foreach ( $wp_filter['init'][ $hook_priority ] as $hook ) {
+				$hook_function      = isset( $hook['function'] ) ? $hook['function'] : '';
+				$hook_accepted_args = isset( $hook['accepted_args'] ) ? $hook['accepted_args'] : 0;
+
+				// WP CLI `admin` context uses closure as callback. We can assume all hooks
+				// with closure as callback on current priority should be moved.
+				if ( is_a( $hook_function, 'Closure' ) && is_callable( $hook_function ) ) {
+					$priority = $hook_priority;
+
+					// Remove the action temporarily. Re-add the action and increase the priority
+					// by one to ensure `et_setup_builder` is called first.
+					remove_action( 'init', $hook_function, $hook_priority, $hook_accepted_args );
+					add_action( 'init', $hook_function, $hook_priority + 1, $hook_accepted_args );
+				}
+			}
+		}
+	}
+
+	// Setup builder based on the priority.
+	add_action( 'init', 'et_setup_builder', $priority );
+}
+et_setup_builder_based_on_priority();
 
 if ( ! function_exists( 'et_divi_maybe_adjust_row_advanced_options_config' ) ):
 function et_divi_maybe_adjust_row_advanced_options_config( $advanced_options ) {

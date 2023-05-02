@@ -63,6 +63,7 @@ class ET_Core_PageResource {
 		'divi',
 		'builder',
 		'epanel',
+		'epanel_temp',
 		'extra',
 		'core',
 		'bloom',

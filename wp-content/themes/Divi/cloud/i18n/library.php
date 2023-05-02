@@ -221,4 +221,20 @@ return array(
 	'Move'                                   => esc_html__( 'Move', 'et_builder' ),
 	'$itemDownloadFailureNotice'             => esc_html__( "The Item couldn't be downloaded. Please try after a while.", 'et_builder' ),
 	'$itemActionFailureNotice'               => esc_html__( 'The action failed in the following clouds.', 'et_builder' ),
+
+	'$upsellCTATitle'                        => esc_html__( 'Access Your %s From Any Website', 'et_builder' ),
+	'$upsellCTADescription'                  => esc_html__( 'When you sync %s to Divi Cloud, they become available on every website you build.', 'et_builder' ),
+	'$upsellCTAButtonText'                   => esc_html__( 'Learn About Divi Cloud', 'et_builder' ),
+
+	'free$upsellCTATitle'                    => esc_html__( 'Upgrade to Unlimited Cloud Storage!', 'et_builder' ),
+	'free$upsellCTADescription'              => esc_html__( 'Save unlimited layouts, theme builder templates, code snippets and more to Divi Cloud.', 'et_builder' ),
+	'free$upsellCTAButtonText'               => esc_html__( 'Get Unlimited Storage', 'et_builder' ),
+
+	'paid$upsellCTATitle'                    => esc_html__( 'Share Your Divi Cloud With Your Team', 'et_builder' ),
+	'paid$upsellCTADescription'              => esc_html__( 'Improve your web design workflow and collaborate together in the cloud.', 'et_builder' ),
+	'paid$upsellCTAButtonText'               => esc_html__( 'Start Collaborating!', 'et_builder' ),
+
+	'predefined$upsellCTATitle'              => esc_html__( 'Download More Layouts From The Marketplace', 'et_builder' ),
+	'predefined$upsellCTADescription'        => esc_html__( 'The Divi Marketplace is full of thousands of additional layouts!', 'et_builder' ),
+	'predefined$upsellCTAButtonText'         => esc_html__( 'Find More Layouts', 'et_builder' ),
 );

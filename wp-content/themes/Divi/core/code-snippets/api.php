@@ -37,7 +37,8 @@ function et_code_snippets_library_get_items() {
 		wp_send_json_error( 'Error: Wrong item type provided.' );
 	}
 
-	$data = et_code_snippets_library_get_library_items_data( $code_snippet_type );
+	$item_library_local = et_pb_code_snippets_library_local();
+	$data               = $item_library_local->get_library_items( $code_snippet_type );
 
 	wp_send_json_success( $data );
 }
@@ -129,7 +130,8 @@ function et_code_snippets_library_update_item() {
 
 	$payload = isset( $_POST['payload'] ) ? $_POST['payload'] : array(); // phpcs:ignore ET.Sniffs.ValidatedSanitizedInput -- $_POST['payload'] is an array, it's value sanitization is done  at the time of accessing value.
 
-	$response = et_code_snippets_library_update_item_data( $payload );
+	$item_library_local = et_pb_code_snippets_library_local();
+	$response           = $item_library_local->perform_item_update( $payload );
 
 	if ( ! $response ) {
 		wp_send_json_error( 'Error: Wrong data provided.' );
@@ -288,7 +290,8 @@ function et_code_snippets_library_update_terms() {
 		wp_send_json_error( 'Payload is empty.' );
 	}
 
-	$response = et_code_snippets_library_perform_terms_update( $payload );
+	$item_library_local = et_pb_code_snippets_library_local();
+	$response           = $item_library_local->perform_terms_update( $payload );
 
 	wp_send_json_success( $response );
 }
@@ -301,7 +304,7 @@ add_action( 'wp_ajax_et_code_snippets_library_update_terms', 'et_code_snippets_l
 function et_code_snippets_library_save() {
 	et_core_security_check( 'edit_posts', 'et_code_snippets_save_to_local_library' );
 
-	$post_id = et_code_snippets_save_to_local_library( $_POST );
+	$post_id = et_save_item_to_local_library( $_POST );
 
 	if ( is_wp_error( $post_id ) ) {
 		wp_send_json_error();

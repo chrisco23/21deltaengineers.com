@@ -27,6 +27,7 @@ if ( ! function_exists( 'et_common_setup' ) ) :
 		define( 'ET_COMMON_URL', $url );
 
 		require_once ET_COMMON_DIR . 'admin.php';
+		require_once ET_COMMON_DIR . 'library.php';
 	}
 endif;
 

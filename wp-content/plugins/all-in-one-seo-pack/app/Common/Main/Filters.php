@@ -93,7 +93,7 @@ abstract class Filters {
 	 */
 	public function removeEmojiDetectionScripts() {
 		global $wp_version;
-		if ( version_compare( $wp_version, '6.2', '>='  ) ) {
+		if ( version_compare( $wp_version, '6.2', '>=' ) ) {
 			remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 		}
 	}
@@ -258,32 +258,37 @@ abstract class Filters {
 	}
 
 	/**
-	 * Action links for the plugins page.
+	 * Registers our row meta for the plugins page.
 	 *
 	 * @since 4.0.0
 	 *
-	 * @return array The array of actions.
+	 * @param  array  $actions    List of existing actions.
+	 * @param  string $pluginFile The plugin file.
+	 * @return array              List of action links.
 	 */
 	abstract public function pluginRowMeta( $actions, $pluginFile );
 
 	/**
-	 * Action links for the plugins page.
+	 * Registers our action links for the plugins page.
 	 *
 	 * @since 4.0.0
 	 *
-	 * @return array The array of actions.
+	 * @param  array  $actions    List of existing actions.
+	 * @param  string $pluginFile The plugin file.
+	 * @return array              List of action links.
 	 */
 	abstract public function pluginActionLinks( $actions, $pluginFile );
 
 	/**
-	 * Parse the action links.
+	 * Parses the action links.
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param  array  $actions
-	 * @param  string $pluginFile
-	 * @param
-	 * @return array
+	 * @param  array  $actions     The actions.
+	 * @param  string $pluginFile  The plugin file.
+	 * @param  array  $actionLinks The action links.
+	 * @param  string $position    The position.
+	 * @return array               The parsed actions.
 	 */
 	protected function parseActionLinks( $actions, $pluginFile, $actionLinks = [], $position = 'after' ) {
 		if ( empty( $this->plugin ) ) {
@@ -430,6 +435,12 @@ abstract class Filters {
 		if ( class_exists( '\Voxel\Controllers\Assets_Controller' ) ) {
 			wp_dequeue_script( 'vue' );
 			wp_dequeue_script( 'vx:backend.js' );
+		}
+
+		// Meta tags for seo plugin.
+		if ( class_exists( '\Pagup\MetaTags\Settings' ) ) {
+			wp_dequeue_script( 'pmt__vuejs' );
+			wp_dequeue_script( 'pmt__script' );
 		}
 	}
 

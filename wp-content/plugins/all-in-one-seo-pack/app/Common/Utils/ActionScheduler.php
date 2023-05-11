@@ -99,7 +99,7 @@ class ActionScheduler {
 	 * @param  \ActionScheduler_Action $action   Class instance.
 	 * @return void
 	 */
-	public function cleanup( $actionId, $action ) {
+	public function cleanup( $actionId, $action = null ) {
 		if (
 			// Bail if this isn't one of our actions or if we're in a dev environment.
 			'aioseo' !== $action->get_group() ||

@@ -1,0 +1,16 @@
+[11-May-2023 18:22:14 UTC] PHP Fatal error:  Uncaught Exception: Can't create folder <strong>/var/www/www.21deltaengineers.com/wp-content/cache/tmp</strong>: mkdir(): Permission denied in /var/www/www.21deltaengineers.com/wp-content/plugins/w3-total-cache/Util_File.php:356
+Stack trace:
+#0 /var/www/www.21deltaengineers.com/wp-content/plugins/w3-total-cache/Util_File.php(373): W3TC\Util_File::create_tmp_dir()
+#1 /var/www/www.21deltaengineers.com/wp-content/plugins/w3-total-cache/ConfigUtil.php(74): W3TC\Util_File::file_put_contents_atomic()
+#2 /var/www/www.21deltaengineers.com/wp-content/plugins/w3-total-cache/ConfigCompiler.php(199): W3TC\ConfigUtil::save_item()
+#3 /var/www/www.21deltaengineers.com/wp-content/plugins/w3-total-cache/Config.php(379): W3TC\ConfigCompiler->save()
+#4 /var/www/www.21deltaengineers.com/wp-content/plugins/w3-total-cache/Generic_Environment.php(31): W3TC\Config->save()
+#5 /var/www/www.21deltaengineers.com/wp-content/plugins/w3-total-cache/Root_Environment.php(28): W3TC\Generic_Environment->fix_on_wpadmin_request()
+#6 /var/www/www.21deltaengineers.com/wp-content/plugins/w3-total-cache/Generic_Plugin_Admin.php(1017): W3TC\Root_Environment->fix_in_wpadmin()
+#7 /var/www/www.21deltaengineers.com/wp-includes/class-wp-hook.php(308): W3TC\Generic_Plugin_Admin->admin_notices()
+#8 /var/www/www.21deltaengineers.com/wp-includes/class-wp-hook.php(332): WP_Hook->apply_filters()
+#9 /var/www/www.21deltaengineers.com/wp-includes/plugin.php(517): WP_Hook->do_action()
+#10 /var/www/www.21deltaengineers.com/wp-admin/admin-header.php(303): do_action()
+#11 /var/www/www.21deltaengineers.com/wp-admin/plugins.php(605): require_once('...')
+#12 {main}
+  thrown in /var/www/www.21deltaengineers.com/wp-content/plugins/w3-total-cache/Util_File.php on line 356

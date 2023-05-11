@@ -4,7 +4,7 @@ Tags: SEO, Google Search Console, XML Sitemap, meta description, schema, meta ti
 Tested up to: 6.2
 Requires at least: 4.9
 Requires PHP: 5.6
-Stable tag: 4.3.6.1
+Stable tag: 4.3.7
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -256,6 +256,24 @@ Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeg
 
 
 == Changelog ==
+
+**New in Version 4.3.7**
+
+* Updated: Added default arg values to filters/actions to prevent fatal errors in PHP 8 when hooks are called incorrectly by third-party themes or plugins.
+* Updated: Improved map preview in Local SEO by showing the address entered under Business Info.
+* Fixed: AI Title/Description Generator now allows non-admin users to generate SEO Titles and Meta Descriptions.
+* Fixed: PHP error when removing all plugin data on uninstall.
+* Fixed: PHP error when trying to deactivate RankMath as conflicting SEO plugin through our notice.
+* Fixed: Added filter to hide and remove version number from AIOSEO generator.
+* Fixed: URLs containing the word ‘null’ or encoded urls in the 404 redirect logs can now be deleted.
+* Fixed: Redirect source url is now normalized to be always relative.
+* Fixed: Conflict with Fiscomm PURS E-Fiscalisation plugin.
+* Fixed: Conflict with Elementor and AIOSEO’s Search Term tag.
+* Fixed: Headline Analyzer now correctly pushes previously analyzed headline to the top of the results if it is analyzed again.
+* Fixed: Content Rankings report in Search Statistics no longer breaks the ordering of results on pagination.
+* Fixed: PHP warning when activating an addon plugin.
+* Fixed: Editing text in Table of Contents block now saves correctly without errors in the console.
+* Fixed: Fixed glitchy ripple animation on tab component.
 
 **New in Version 4.3.6.1**
 
@@ -562,6 +580,6 @@ Additionally, AIOSEO can also provide you with data on the most frequently used 
 
 == Upgrade Notice ==
 
-= 4.3.6.1 =
+= 4.3.7 =
 
 This update adds major improvements and bug fixes.

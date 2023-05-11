@@ -86,7 +86,7 @@ define('WPLANG', '');
  */
 define('WP_DEBUG', false);
 define('WP_DEBUG_LOG', false);
-define('FORCE_SSL_ADMIN', true);
+define('FORCE_SSL_ADMIN', false);
 
 /* That's all, stop editing! Happy blogging. */
 

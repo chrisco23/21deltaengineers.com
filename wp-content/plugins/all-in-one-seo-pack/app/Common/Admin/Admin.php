@@ -142,7 +142,7 @@ class Admin {
 			add_action( 'admin_init', [ $this, 'addPluginScripts' ] );
 
 			// Add redirects messages to trashed posts.
-			add_filter( 'bulk_post_updated_messages', [ $this, 'appendTrashedMessage' ], 10, 2 );
+			add_filter( 'bulk_post_updated_messages', [ $this, 'appendTrashedMessage' ] );
 
 			$this->registerLinkFormatHooks();
 
@@ -316,7 +316,7 @@ class Admin {
 				'title'          => esc_html__( 'Insert/edit link', 'all-in-one-seo-pack' ),
 				'update'         => esc_html__( 'Update', 'all-in-one-seo-pack' ),
 				'save'           => esc_html__( 'Add Link', 'all-in-one-seo-pack' ),
-				'noTitle'        => esc_html__( '(no title)', 'all-in-one-seo-pack' ),
+				'noTitle'        => esc_html__( '(no title)' ), // phpcs:ignore AIOSEO.Wp.I18n.MissingArgDomain
 				'labelTitle'     => esc_html__( 'Title', 'all-in-one-seo-pack' ),
 				'noMatchesFound' => esc_html__( 'No results found.', 'all-in-one-seo-pack' ),
 				'linkSelected'   => esc_html__( 'Link selected.', 'all-in-one-seo-pack' ),
@@ -1126,7 +1126,7 @@ class Admin {
 	 * @param  array $messages The original messages.
 	 * @return array           The modified messages.
 	 */
-	public function appendTrashedMessage( $messages, $counts ) {
+	public function appendTrashedMessage( $messages ) {
 		// Let advanced users override this.
 		if ( apply_filters( 'aioseo_redirects_disable_trashed_posts_suggestions', false ) ) {
 			return $messages;

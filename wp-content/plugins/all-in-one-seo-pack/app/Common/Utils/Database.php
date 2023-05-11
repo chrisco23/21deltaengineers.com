@@ -838,7 +838,7 @@ class Database {
 					continue;
 				}
 
-				if ( is_null( $value ) || false !== stristr( $value, 'NULL' ) ) {
+				if ( is_null( $value ) || 'null' === strtolower( $value ) ) {
 					// Change to a true NULL value.
 					$value = null;
 					continue;

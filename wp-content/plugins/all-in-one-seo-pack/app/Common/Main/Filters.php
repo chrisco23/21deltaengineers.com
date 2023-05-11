@@ -145,7 +145,7 @@ abstract class Filters {
 	 * @param  WP_Post $originalPost The original post object.
 	 * @return void
 	 */
-	public function duplicatePost( $newPostId, $originalPost ) {
+	public function duplicatePost( $newPostId, $originalPost = null ) {
 		$originalPostId     = is_object( $originalPost ) ? $originalPost->ID : $originalPost;
 		$originalAioseoPost = Models\Post::getPost( $originalPostId );
 		if ( ! $originalAioseoPost->exists() ) {
@@ -180,7 +180,7 @@ abstract class Filters {
 	 * @param  mixed   $metaValue The meta value.
 	 * @return void
 	 */
-	public function rewriteAndRepublish( $postId, $metaKey, $metaValue ) {
+	public function rewriteAndRepublish( $postId, $metaKey = '', $metaValue = '' ) {
 		if ( '_dp_has_rewrite_republish_copy' !== $metaKey ) {
 			return;
 		}
@@ -202,7 +202,7 @@ abstract class Filters {
 	 * @param  \WP_Product $originalProduct The original product.
 	 * @return void
 	 */
-	public function scheduleDuplicateProduct( $newProduct, $originalProduct ) {
+	public function scheduleDuplicateProduct( $newProduct, $originalProduct = null ) {
 		self::$originalProductId = $originalProduct->get_id();
 		add_action( 'wp_insert_post', [ $this, 'duplicateProduct' ], 10, 2 );
 	}
@@ -216,7 +216,7 @@ abstract class Filters {
 	 * @param  \WP_Post $post   The new post object.
 	 * @return void
 	 */
-	public function duplicateProduct( $postId, $post ) {
+	public function duplicateProduct( $postId, $post = null ) {
 		if ( ! self::$originalProductId || 'product' !== $post->post_type ) {
 			return;
 		}
@@ -266,7 +266,7 @@ abstract class Filters {
 	 * @param  string $pluginFile The plugin file.
 	 * @return array              List of action links.
 	 */
-	abstract public function pluginRowMeta( $actions, $pluginFile );
+	abstract public function pluginRowMeta( $actions, $pluginFile = '' );
 
 	/**
 	 * Registers our action links for the plugins page.
@@ -277,7 +277,7 @@ abstract class Filters {
 	 * @param  string $pluginFile The plugin file.
 	 * @return array              List of action links.
 	 */
-	abstract public function pluginActionLinks( $actions, $pluginFile );
+	abstract public function pluginActionLinks( $actions, $pluginFile = '' );
 
 	/**
 	 * Parses the action links.

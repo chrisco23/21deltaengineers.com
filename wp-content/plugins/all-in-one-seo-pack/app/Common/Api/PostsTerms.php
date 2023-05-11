@@ -133,7 +133,7 @@ class PostsTerms {
 		if ( empty( $args['postId'] ) ) {
 			return new \WP_REST_Response( [
 				'success' => false,
-				'message' => __( 'No post ID was provided.', 'all-in-one-seo-pack' )
+				'message' => 'No post ID was provided.'
 			], 400 );
 		}
 
@@ -165,7 +165,7 @@ class PostsTerms {
 		if ( empty( $args['postId'] ) ) {
 			return new \WP_REST_Response( [
 				'success' => false,
-				'message' => __( 'No post ID was provided.', 'all-in-one-seo-pack' )
+				'message' => 'No post ID was provided.'
 			], 400 );
 		}
 
@@ -213,7 +213,7 @@ class PostsTerms {
 		if ( ! $postId ) {
 			return new \WP_REST_Response( [
 				'success' => false,
-				'message' => __( 'Post ID is missing.', 'all-in-one-seo-pack' )
+				'message' => 'Post ID is missing.'
 			], 400 );
 		}
 
@@ -384,7 +384,7 @@ class PostsTerms {
 		if ( empty( $args['postId'] ) ) {
 			return new \WP_REST_Response( [
 				'success' => false,
-				'message' => __( 'No post ID was provided.', 'all-in-one-seo-pack' )
+				'message' => 'No post ID was provided.'
 			], 400 );
 		}
 
@@ -411,7 +411,7 @@ class PostsTerms {
 		if ( empty( $args['postId'] ) ) {
 			return new \WP_REST_Response( [
 				'success' => false,
-				'message' => __( 'No post ID was provided.', 'all-in-one-seo-pack' )
+				'message' => 'No post ID was provided.'
 			], 400 );
 		}
 
@@ -440,7 +440,7 @@ class PostsTerms {
 		if ( empty( $args['postId'] ) || null === $count ) {
 			return new \WP_REST_Response( [
 				'success' => false,
-				'message' => __( 'No post ID or count was provided.', 'all-in-one-seo-pack' )
+				'message' => 'No post ID or count was provided.'
 			], 400 );
 		}
 

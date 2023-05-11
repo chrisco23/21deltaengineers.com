@@ -214,7 +214,29 @@ jQuery(function ($) {
         modal: true,
         buttons: {
             'Yes': function() {
-                window.location.href = $(this).data('url');
+                $.ajax({
+                    url: ajaxurl,
+                    dataType: 'json',
+                    type: 'POST',
+                    data: {
+                        action: $( this ).data("action"),
+                        entity_id: $( this ).data("entity-id"),
+                        security : gfwObject.gfwnonce
+                    },
+                    cache: false,
+                    success: function(data) {
+                        if (data.error) {
+                            $( '#gfw-confirm-delete' ).dialog( 'close' );
+                            $( 'tr#post-' +  $( this ).data("entity-id")).remove();
+                            alert( data.error );
+
+                        } else {
+                            $( '#gfw-confirm-delete' ).dialog( 'close' );
+                            $( 'tr#post-' +  $( '#gfw-confirm-delete' ).data("entity-id")).remove();
+                            alert(data.message);
+                        }
+                    }
+                });
             },
             'No': function() {
                 $( this ).dialog( 'close' );
@@ -225,6 +247,8 @@ jQuery(function ($) {
     $(document).on('click', '.gfw-delete-icon', function(event) {
         event.preventDefault();
         $('#gfw-confirm-delete').data('url', event.target);
+        $('#gfw-confirm-delete').data('entity-id', $( this ).data("entity-id"));
+        $('#gfw-confirm-delete').data('action', $( this ).data("action"));
         $( '#gfw-confirm-delete' ).dialog( 'open' );
     });
 

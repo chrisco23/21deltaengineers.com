@@ -1000,9 +1000,9 @@ class Tags {
 			case 'separator_sa':
 				return aioseo()->helpers->decodeHtmlEntities( aioseo()->options->searchAppearance->global->separator );
 			case 'search_term':
-				global $s;
+				$search = get_search_query();
 
-				return empty( $s ) && $sampleData ? __( 'Example search string', 'all-in-one-seo-pack' ) : esc_attr( stripslashes( $s ) );
+				return empty( $search ) && $sampleData ? __( 'Example search string', 'all-in-one-seo-pack' ) : esc_attr( stripslashes( $search ) );
 			case 'custom_field':
 				return $sampleData ? __( 'Sample Custom Field Value', 'all-in-one-seo-pack' ) : '';
 			case 'tax_name':

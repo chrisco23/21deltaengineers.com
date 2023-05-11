@@ -3,7 +3,7 @@
   Plugin Name: GTmetrix for WordPress
   Plugin URI: https://gtmetrix.com/gtmetrix-for-wordpress-plugin.html
   Description: GTmetrix can help you develop a faster, more efficient, and all-around improved website experience for your users. Your users will love you for it.
-  Version: 0.4.6
+  Version: 0.4.7
   Author: GTmetrix
   Author URI: https://gtmetrix.com/
 
@@ -43,6 +43,8 @@ class GTmetrix_For_WordPress {
         add_action( 'gfw_monthly_event', array( &$this, 'scheduled_events' ) );
         add_action( 'wp_ajax_autocomplete', array( &$this, 'autocomplete_callback' ) );
         add_action( 'wp_ajax_save_report', array( &$this, 'save_report_callback' ) );
+        add_action( 'wp_ajax_delete_report', array( &$this, 'delete_report_callback' ) );
+        add_action( 'wp_ajax_delete_event', array( &$this, 'delete_event_callback' ) );
         add_action( 'wp_ajax_expand_report', array( &$this, 'expand_report_callback' ) );
         add_action( 'wp_ajax_report_graph', array( &$this, 'report_graph_callback' ) );
         add_action( 'wp_ajax_reset', array( &$this, 'reset_callback' ) );
@@ -437,7 +439,7 @@ HERE;
         wp_enqueue_script( 'wp-lists' );
         wp_enqueue_script( 'postbox' );
         wp_enqueue_script( 'jquery-ui-tooltip' );
-        wp_enqueue_script( 'gfw-script', GFW_URL . 'gtmetrix-for-wordpress.js', array( 'jquery-ui-autocomplete', 'jquery-ui-dialog' ), GFW_VERSION, true );
+        wp_enqueue_script( 'gfw-script', GFW_URL . 'gtmetrix-for-wordpress-src.js', array( 'jquery-ui-autocomplete', 'jquery-ui-dialog' ), GFW_VERSION, true );
         wp_localize_script( 'gfw-script', 'gfwObject', array( 'gfwnonce' => wp_create_nonce( 'gfwnonce' ) ) );
 
         if ( GFW_AUTHORIZED ) {
@@ -524,7 +526,8 @@ HERE;
     public function schedule_page() {
 
         global $screen_layout_columns;
-        $report_id = isset( $_GET['report_id'] ) ? $_GET['report_id'] : 0;
+        $report_id = isset( $_GET['report_id'] ) ? htmlspecialchars( $_GET['report_id'] ) : 0;
+        error_log( $report_id );
         $event_id = isset( $_GET['event_id'] ) ? $_GET['event_id'] : 0;
         $delete = isset( $_GET['delete'] ) ? $_GET['delete'] : 0;
         $status = isset( $_GET['status'] ) ? $_GET['status'] : 0;
@@ -629,12 +632,13 @@ HERE;
     }
 
     public function tests_page() {
+        /*
         $delete = isset( $_GET['delete'] ) ? $_GET['delete'] : 0;
         if ( $delete ) {
             wp_delete_post( $delete );
             echo $this->set_notice( 'Report deleted' );
         }
-
+        */
         global $screen_layout_columns;
         wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
         wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
@@ -856,6 +860,60 @@ HERE;
                         ) );
             }
             echo $response;
+        }
+        die();
+    }
+
+    public function delete_report_callback() {
+        if ( check_ajax_referer( 'gfwnonce', 'security' ) ) {
+            $status = "ok";
+            $report_id = !empty( $_POST['entity_id'] ) ? absint( $_POST['entity_id'] ) : 0;
+            if ( $report_id ) {
+                $deleted = wp_delete_post( $report_id );
+                if( is_object( $deleted ) ) {
+                    $response = json_encode( array(
+                        'message' => "Report deleted"
+                    ) );
+                } else {
+                    $response = json_encode( array(
+                        'error' => "There was an error deleting this report. Please try again later"
+                    ) );
+                }
+                echo $response;
+            } 
+        }        
+        die();
+    }
+
+    public function delete_event_callback() {
+        if ( check_ajax_referer( 'gfwnonce', 'security' ) ) {
+            $event_id = !empty( $_POST['entity_id'] ) ? absint( $_POST['entity_id'] ) : 0;
+            if ( $event_id ) {
+                $args = array(
+                    'post_type' => 'gfw_report',
+                    'meta_key' => 'gfw_event_id',
+                    'meta_value' => $event_id,
+                    'posts_per_page' => -1
+                );
+    
+                $query = new WP_Query( $args );
+    
+                while ( $query->have_posts() ) {
+                    $query->next_post();
+                    wp_delete_post( $query->post->ID );
+                }
+                $deleted = wp_delete_post( $event_id );
+                if( is_object( $deleted ) ) {
+                    $response = json_encode( array(
+                        'message' => "Event deleted"
+                    ) );
+                } else {
+                    $response = json_encode( array(
+                        'error' => "There was an error deleting this report. Please try again later"
+                    ) );
+                }
+                echo $response;
+            }
         }
         die();
     }
@@ -1251,8 +1309,8 @@ HERE;
     }
 
     public function schedule_meta_box() {
-        $report_id = isset( $_GET['report_id'] ) ? $_GET['report_id'] : 0;
-        $event_id = isset( $_GET['event_id'] ) ? $_GET['event_id'] : 0;
+        $report_id = isset( $_GET['report_id'] ) ? htmlspecialchars( $_GET['report_id'] ) : 0;
+        $event_id = isset( $_GET['event_id'] ) ? htmlspecialchars( $_GET['event_id'] ) : 0;
         $cpt_id = $report_id ? $report_id : $event_id;
         $custom_fields = get_post_custom( $cpt_id );
         $options = get_option( 'gfw_options' );
@@ -1441,7 +1499,7 @@ HERE;
                                 echo '<td data-th="YSlow" class="gfw-toggle gfw-reports-yslow"><div class="gfw-grade-meter gfw-grade-meter-' . $yslow_grade['grade'] . '"><span class="gfw-grade-meter-text">' . $yslow_grade['grade'] . ' (' . $yslow_score . ')</span><span class="gfw-grade-meter-bar" style="width: ' . $yslow_score . '%"></span></div></td>';
                                 echo '<td data-th="Date" class="gfw-toggle" title="' . $report_date . '">' . $report_date . '</td>';
                             }
-                            echo '<td class="gfw-action-icons"><a href="' . GFW_SCHEDULE . '&report_id=' . $query->post->ID . '" class="gfw-schedule-icon-small tooltip" title="Schedule tests">Schedule test</a> <a href="' . GFW_TESTS . '&delete=' . $query->post->ID . '" rel="#gfw-confirm-delete" class="gfw-delete-icon delete-report tooltip" title="Delete Report">Delete Report</a></td>';
+                            echo '<td class="gfw-action-icons"><a href="' . GFW_SCHEDULE . '&report_id=' . $query->post->ID . '" class="gfw-schedule-icon-small tooltip" title="Schedule tests">Schedule test</a> <a href="#" data-action="delete_report" data-entity-id="' . $query->post->ID . '" rel="#gfw-confirm-delete" class="gfw-delete-icon delete-report tooltip" title="Delete Report">Delete Report</a></td>';
                             echo '</tr>';
                         }
                         ?>
@@ -1515,7 +1573,7 @@ HERE;
                             $row .= '<td class="' . $toggle_class . '"' . $toggle_title . '>' . (isset( $custom_fields['gfw_notifications'][0] ) ? 'Enabled' : 'Disabled') . '</div></td>';
                             $row .= '<td class="' . $toggle_class . '"' . $toggle_title . '>' . $last_report . ($custom_fields['gfw_event_error'][0] ? ' <span class="gfw-failed tooltip" title="' . $gtmetrix_error . '">(failed)</span>' : '') . '</td>';
                             $row .= '<td class="' . $toggle_class . '"' . $toggle_title . '>' . $this->wp_date( $next_report[$custom_fields['gfw_recurrence'][0]], true ) . '</td>';
-                            $row .= '<td><a href="' . GFW_SCHEDULE . '&event_id=' . $query->post->ID . '" rel="" class="gfw-edit-icon tooltip" title="Edit this event">Edit</a> <a href="' . GFW_SCHEDULE . '&delete=' . $query->post->ID . '" rel="#gfw-confirm-delete" title="Delete this event" class="gfw-delete-icon delete-event tooltip">Delete Event</a> <a href="' . GFW_SCHEDULE . '&status=' . $query->post->ID . '" class="tooltip gfw-pause-icon' . (1 == $custom_fields['gfw_status'][0] ? '" title="Pause this event">Pause Event' : ' paused" title="Reactivate this event">Reactivate Event') . '</a></td>';
+                            $row .= '<td><a href="' . GFW_SCHEDULE . '&event_id=' . $query->post->ID . '" rel="" class="gfw-edit-icon tooltip" title="Edit this event">Edit</a> <a href="#" data-action="delete_event" data-entity-id="' . $query->post->ID . '" rel="#gfw-confirm-delete" title="Delete this event" class="gfw-delete-icon delete-event tooltip">Delete Event</a> <a href="' . GFW_SCHEDULE . '&status=' . $query->post->ID . '" class="tooltip gfw-pause-icon' . (1 == $custom_fields['gfw_status'][0] ? '" title="Pause this event">Pause Event' : ' paused" title="Reactivate this event">Reactivate Event') . '</a></td>';
                             $row .= '</tr>';
                             echo $row;
                             $row_no++;

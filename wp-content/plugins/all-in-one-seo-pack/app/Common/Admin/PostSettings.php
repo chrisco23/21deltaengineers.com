@@ -341,7 +341,7 @@ class PostSettings {
 	 * @param  WP_Query $query   The WP_Query instance (passed by reference).
 	 * @return array             The clauses array updated.
 	 */
-	public function changeClausesToFilterPosts( $clauses, $query ) {
+	public function changeClausesToFilterPosts( $clauses, $query = null ) {
 		if ( ! is_admin() || ! $query->is_main_query() ) {
 			return $clauses;
 		}

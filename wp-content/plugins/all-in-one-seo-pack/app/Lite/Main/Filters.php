@@ -23,7 +23,7 @@ class Filters extends CommonMain\Filters {
 	 * @param  string $pluginFile The plugin file.
 	 * @return array              List of action links.
 	 */
-	public function pluginRowMeta( $actions, $pluginFile ) {
+	public function pluginRowMeta( $actions, $pluginFile = '' ) {
 		$actionLinks = [
 			'settings' => [
 				// Translators: This is an action link users can click to open a feature request.
@@ -44,7 +44,7 @@ class Filters extends CommonMain\Filters {
 	 * @param  string $pluginFile The plugin file.
 	 * @return array              List of action links.
 	 */
-	public function pluginActionLinks( $actions, $pluginFile ) {
+	public function pluginActionLinks( $actions, $pluginFile = '' ) {
 		$actionLinks = [
 			'settings'   => [
 				'label' => __( 'SEO Settings', 'all-in-one-seo-pack' ),

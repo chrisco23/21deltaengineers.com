@@ -110,7 +110,7 @@ trait Assets {
 	 * @param  string $handle The handle for the script.
 	 * @return string         The modified tag.
 	 */
-	public function scriptLoaderTag( $tag, $handle, $src ) {
+	public function scriptLoaderTag( $tag, $handle = '', $src = '' ) {
 		if ( $this->skipModuleTag( $handle ) ) {
 			return $tag;
 		}

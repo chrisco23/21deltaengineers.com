@@ -149,7 +149,6 @@ class Services_WTF_Test {
      * returns the test_id on success, false otherwise;
      */
     public function test( $data ) {
-
         if ( empty( $data ) ) {
             $this->error = 'Parameters need to be set to start a new test!';
             return false;
@@ -170,15 +169,16 @@ class Services_WTF_Test {
             $this->result = array( );
 
         $data = http_build_query( $data );
-
+        error_log($data);
         $result = $this->query( 'test', 'POST', $data );
 
         if ( $result != false ) {
             $result = json_decode( $result, true );
+            error_log(print_r($result, TRUE));
             if ( empty( $result['error'] ) ) {
                 $this->test_id = $result['test_id'];
 
-                if ( isset( $result['state'] ) AND !empty( $result['state'] ) )
+                if ( isset( $result['state'] ) AND !empty( $result['state'] ) ) 
                     $this->result = $result;
 
                 return $this->test_id;

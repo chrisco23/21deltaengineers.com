@@ -750,13 +750,13 @@ trait Wp {
 
 		$post = aioseo()->helpers->getPost( $postId );
 		if ( ! is_a( $post, 'WP_Post' ) ) {
-			$titles[ $postId ] = __( '(no title)' ); // phpcs:ignore WordPress.WP.I18n.MissingArgDomain
+			$titles[ $postId ] = __( '(no title)' ); // phpcs:ignore AIOSEO.Wp.I18n.MissingArgDomain
 
 			return $titles[ $postId ];
 		}
 
 		$title = $post->post_title;
-		$title = $title ? $title : __( '(no title)' ); // phpcs:ignore WordPress.WP.I18n.MissingArgDomain
+		$title = $title ? $title : __( '(no title)' ); // phpcs:ignore AIOSEO.Wp.I18n.MissingArgDomain
 
 		$titles[ $postId ] = aioseo()->helpers->decodeHtmlEntities( $title );
 

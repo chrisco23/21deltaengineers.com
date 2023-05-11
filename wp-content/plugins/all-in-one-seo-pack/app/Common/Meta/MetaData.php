@@ -41,7 +41,7 @@ class MetaData {
 	 * @param  array   $fields An array of fields to update.
 	 * @return void
 	 */
-	public function updateWpmlLocalization( $postId, $fields, $job ) {
+	public function updateWpmlLocalization( $postId, $fields = [], $job = null ) {
 		$aioseoFields = [
 			'_aioseo_title',
 			'_aioseo_description',

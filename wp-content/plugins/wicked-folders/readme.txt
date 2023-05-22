@@ -2,8 +2,8 @@
 Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
-Tested up to: 6.1
-Stable tag: 2.18.17
+Stable tag: 2.18.18
+Tested up to: 6.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,12 @@ The folder toggle arrow is greyed out when a folder doesn't have any child folde
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 2.18.18 (May 12, 2023) =
+* Tweak folder pane on Elementor Templates screen so that folder pane does not overlap header bar
+* Increase init action priority to 25 to accomodate Barn2 Document Library plugin which registers Document post type at priority 15 (this fixes an 'invalid taxonomy' error when attempting to create folders on the Documents post type screen)
+* Add return types to fix deprecated errors in PHP 8
+* Add ability to assign media to dynamic term folders (Wicked Folders Pro)
 
 = 2.18.17 (February 6, 2023) =
 * Add nonce validation to AJAX functions to address cross-site request forgery vulnerability

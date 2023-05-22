@@ -4,7 +4,6 @@ namespace WebpConverter\Conversion;
 
 use WebpConverter\Conversion\Format\AvifFormat;
 use WebpConverter\Conversion\Format\WebpFormat;
-use WebpConverter\Error\Detector\RewritesErrorsDetector;
 use WebpConverter\PluginData;
 use WebpConverter\Service\ServerConfigurator;
 use WebpConverter\Service\StatsManager;
@@ -139,10 +138,6 @@ class FilesTreeFinder {
 			return $list;
 		}
 
-		if ( $nesting_level === 0 ) {
-			$paths = array_diff( $paths, [ basename( RewritesErrorsDetector::PATH_OUTPUT_FILE_PNG ) ] );
-		}
-
 		sort( $paths, SORT_NATURAL | SORT_FLAG_CASE );
 		foreach ( $paths as $path ) {
 			$current_path = $dir_path . '/' . $path;
@@ -157,7 +152,7 @@ class FilesTreeFinder {
 			} else {
 				$filename = basename( $current_path );
 				$parts    = array_reverse( explode( '.', $filename ) );
-				if ( in_array( strtolower( $parts[0] ?? '' ), $source_formats ) && ! in_array( strtolower( $parts[1] ?? '' ), [ 'jpg', 'jpeg', 'png', 'gif' ] ) ) {
+				if ( in_array( strtolower( $parts[0] ?? '' ), $source_formats ) && ! in_array( strtolower( $parts[1] ?? '' ), SkipExcludedPaths::EXCLUDED_SUB_EXTENSIONS ) ) {
 					if ( apply_filters( 'webpc_supported_source_file', true, $filename, $current_path )
 						&& ! $this->is_converted_file( $current_path, $output_formats, $force_convert_deleted, $force_convert_crashed ) ) {
 						$list['files'][] = $path;

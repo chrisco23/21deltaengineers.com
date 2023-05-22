@@ -18,7 +18,9 @@ final class Wicked_Folders {
 
 		// Increased priority to 15 to accomodate Pods plugin which registers
 		// its custom post types at priority 11
-        add_action( 'init',				array( $this, 'init' ), 15 );
+		// Increased priority to 25 to accomodate Barn2 Document Library plugin
+		// which registers its Document post type at priority 15
+        add_action( 'init',				array( $this, 'init' ), 25 );
 		add_action( 'pre_get_posts', 	array( $this, 'pre_get_posts' ), 20 ); // Must be called after pre_get_posts action in Wicked_Folders_Admin
 
 		// Keep folder order in sync with sort order changes made by Category
@@ -976,7 +978,7 @@ final class Wicked_Folders {
 								'post_type' 	=> $post_type,
 								'taxonomy' 		=> $taxonomy->name,
 								'term_id' 		=> $term->term_id,
-								'assignable' 	=> 'attachment' == $post_type ? false : true,
+								'assignable' 	=> true,
 								'order' 		=> $index,
 							) );
 						}

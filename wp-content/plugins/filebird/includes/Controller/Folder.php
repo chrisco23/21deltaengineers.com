@@ -358,14 +358,7 @@ class Folder extends Controller {
 			return $clauses;
 		}
 
-		// $isFolderUserEnabled = has_filter('fbv_in_not_in_created_by');
-		$sizeMeta   = SizeMeta::getInstance()->meta_key;
 		$fbvPropery = $query->get( 'fbv' );
-
-		if ( $query->get( 'orderby' ) === $sizeMeta ) {
-			$clauses['join']   .= " LEFT JOIN {$wpdb->postmeta} AS fbmt ON ({$wpdb->posts}.ID = fbmt.post_id AND fbmt.meta_key = '{$sizeMeta}') ";
-			$clauses['orderby'] = " fbmt.meta_value + 0 {$query->query['order']} ";
-		}
 
 		if ( isset( $_GET['fbv'] ) || $fbvPropery !== '' ) {
 			$fbv = isset( $_GET['fbv'] ) ? (int) sanitize_text_field( $_GET['fbv'] ) : (int) $fbvPropery;

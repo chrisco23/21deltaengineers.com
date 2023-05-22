@@ -209,7 +209,9 @@
                     <p id="njt-fb-csv-user-import-description"></p>
                     <p class="description">
                         <?php esc_html_e( 'Choose FileBird CSV file to import.', 'filebird' ); ?><br />
-                        <?php esc_html_e( '(Please check to make sure that there is no duplicated name. The current folder structure is preserved.)', 'filebird' ); ?><br />
+                        <?php esc_html_e( '(Please check to make sure that there is no duplicated name. The current folder structure is preserved.)', 'filebird' ); ?>
+                        <a href="https://ninjateam.gitbook.io/filebird/settings/import-and-export-folder-structure" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Learn more', 'filebird' ); ?></a>
+                        <br />
                     </p>
                 </td>
 			</tr>

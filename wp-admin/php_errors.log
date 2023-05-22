@@ -14,3 +14,34 @@ Stack trace:
 #11 /var/www/www.21deltaengineers.com/wp-admin/plugins.php(605): require_once('...')
 #12 {main}
   thrown in /var/www/www.21deltaengineers.com/wp-content/plugins/w3-total-cache/Util_File.php on line 356
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173
+[22-May-2023 18:50:29 UTC] PHP Warning:  chmod(): Operation not permitted in /var/www/www.21deltaengineers.com/wp-admin/includes/class-wp-filesystem-direct.php on line 173

@@ -34,42 +34,42 @@ abstract class Wicked_Folders_Object_Collection implements Countable, Iterator {
     /**
      * Count implementation.
      */
-    public function count() {
+    public function count(): int {
         return count( $this->items );
     }
 
     /**
      * Current implementation.
      */
-    public function current() {
+    public function current(): mixed {
         return $this->items[ $this->index ];
     }
 
     /**
      * Key implementation.
      */
-    public function key() {
+    public function key(): int {
         return $this->index;
     }
 
     /**
      * Next implementation.
      */
-    public function next() {
+    public function next(): void {
         ++$this->index;
     }
 
     /**
      * Rewind implementation.
      */
-    public function rewind() {
+    public function rewind(): void {
         $this->index = 0;
     }
 
     /**
      * Valid implementation.
      */
-    public function valid() {
+    public function valid(): bool {
         return isset( $this->items[ $this->index ] );
     }
 
@@ -81,7 +81,7 @@ abstract class Wicked_Folders_Object_Collection implements Countable, Iterator {
 	/**
 	 * Sorts the items in the collection by their 'order' property (if one exists).
 	 */
-	public function sort() {
+	public function sort(): array {
 		usort( $this->items, function( $a, $b ) {
 			if ( isset( $a->order ) && isset( $b->order ) ) {
 				if ( $a->order == $b->order ) {
@@ -150,7 +150,7 @@ abstract class Wicked_Folders_Object_Collection implements Countable, Iterator {
 	 * @return boolen
 	 *  True if the collection contains no items, false otherwise.
 	 */
-	public function is_empty() {
+	public function is_empty(): bool {
 		return $this->count() < 1;
 	}
 }

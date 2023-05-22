@@ -237,6 +237,8 @@ final class Wicked_Folders_Admin {
 
 				body.rtl.wp-admin.wicked-object-folder-pane #wpcontent {padding-left: 0; padding-right: " . ( int ) ( $state->tree_pane_width + 11 ) . "px;}
 				body.rtl.wp-admin.wicked-object-folder-pane #wpfooter {left: 0; right: " . ( int ) ( $state->tree_pane_width - 6 ) . "px;}
+
+				#wpwrap #e-admin-top-bar-root {width: calc(100% - " . ( int ) ( $state->tree_pane_width + 154 ) . "px);}				
 			";
 
 			if ( $is_wider_admin_menu_active ) {

@@ -40,7 +40,7 @@ class Wicked_Folders_Term_Dynamic_Folder extends Wicked_Folders_Dynamic_Folder {
 
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         $data = parent::jsonSerialize();
 
         $data['termId'] = $this->term_id;

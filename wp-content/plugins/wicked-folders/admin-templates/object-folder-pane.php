@@ -238,6 +238,14 @@ var wickedFolderPane;
             model:  controller
         });
 
+        controller.on( 'change:treePaneWidth', function( model ){
+            var width = model.get( 'treePaneWidth' ) + 154;
+
+            width = 'calc(100% - ' + width + 'px)';
+            
+            $( '#e-admin-top-bar-root' ).css( 'width', width );
+        } );
+
         $( 'body' ).on( 'wickedfolders:toggleFolderPane', function( e, visible ){
             if ( visible ) {
                 pane.model.set( 'isFolderPaneVisible', true );

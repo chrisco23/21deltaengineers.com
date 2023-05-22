@@ -1,3 +1,16 @@
+= 4.2.2 =
+* Improved slider randomization shuffling algorithm
+* Fixed slider randomization not working when slider border set
+
+= 4.2.1 =
+* Fixed slider randomization feature causing a type error in some situations
+
+= 4.2.0 =
+* Added option to randomize the slider slides
+
+= 4.1.9 =
+* Fixed error in custom icon feature when option value returned as string
+
 = 4.1.8 =
 * Fixed closing shortcode tags displaying in WP 6.2
 

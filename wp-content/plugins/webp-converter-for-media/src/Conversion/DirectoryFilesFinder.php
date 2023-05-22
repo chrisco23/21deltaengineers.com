@@ -2,7 +2,6 @@
 
 namespace WebpConverter\Conversion;
 
-use WebpConverter\Error\Detector\RewritesErrorsDetector;
 use WebpConverter\PluginData;
 use WebpConverter\Service\ServerConfigurator;
 use WebpConverter\Settings\Option\SupportedExtensionsOption;
@@ -69,10 +68,6 @@ class DirectoryFilesFinder {
 			return $list;
 		}
 
-		if ( $path_prefix === '' ) {
-			$paths = array_diff( $paths, [ basename( RewritesErrorsDetector::PATH_OUTPUT_FILE_PNG ) ] );
-		}
-
 		rsort( $paths );
 		foreach ( $paths as $path ) {
 			$current_path = $dir_path . '/' . $path;
@@ -87,7 +82,7 @@ class DirectoryFilesFinder {
 			} else {
 				$filename = basename( $current_path );
 				$parts    = array_reverse( explode( '.', $filename ) );
-				if ( in_array( strtolower( $parts[0] ?? '' ), $allowed_source_exts ) && ! in_array( strtolower( $parts[1] ?? '' ), [ 'jpg', 'jpeg', 'png', 'gif' ] ) ) {
+				if ( in_array( strtolower( $parts[0] ?? '' ), $allowed_source_exts ) && ! in_array( strtolower( $parts[1] ?? '' ), SkipExcludedPaths::EXCLUDED_SUB_EXTENSIONS ) ) {
 					if ( apply_filters( 'webpc_supported_source_file', true, $filename, $current_path ) ) {
 						$list[] = trim( $path_prefix . '/' . $path, '/' );
 					}

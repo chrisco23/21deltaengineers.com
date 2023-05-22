@@ -78,7 +78,7 @@ a,abbr,acronym,address,applet,b,big,blockquote,body,center,cite,code,dd,del,dfn,
 .et_pb_text{word-wrap:break-word}.et_pb_text ol,.et_pb_text ul{padding-bottom:1em}.et_pb_text>:last-child{padding-bottom:0}.et_pb_text_inner{position:relative}
 </style>
 <link rel="https://api.w.org/" href="https://www.21deltaengineers.com/wp-json/" /><link rel="alternate" type="application/json" href="https://www.21deltaengineers.com/wp-json/wp/v2/pages/383" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.21deltaengineers.com/xmlrpc.php?rsd" />
-<meta name="generator" content="WordPress 6.2" />
+<meta name="generator" content="WordPress 6.2.2" />
 <link rel='shortlink' href='https://www.21deltaengineers.com/' />
 <link rel="alternate" type="application/json+oembed" href="https://www.21deltaengineers.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.21deltaengineers.com%2F" />
 <link rel="alternate" type="text/xml+oembed" href="https://www.21deltaengineers.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.21deltaengineers.com%2F&#038;format=xml" />
@@ -337,6 +337,14 @@ jQuery(function($){
 	overflow: hidden;
 }
 </style>
+<script>
+jQuery(document).ready(function($){
+    $('.et_pb_slider.dbdb_slider_random').each(function() {
+        var slides = $(this).find('.et_pb_slides');
+        slides.children().sort(function() {return Math.random()-0.5;}).detach().appendTo(slides);
+    });
+});
+</script>
 
 <link rel="stylesheet" href="https://www.21deltaengineers.com/wp-content/cache/minify/a5ff7.css" media="all" />
 
@@ -351,7 +359,7 @@ jqueryParams.length&&$.each(jqueryParams,function(e,r){if("function"==typeof r){
 var DIVI = {"item_count":"%d Item","items_count":"%d Items"};
 var et_builder_utils_params = {"condition":{"diviTheme":true,"extraTheme":false},"scrollLocations":["app","top"],"builderScrollLocations":{"desktop":"app","tablet":"app","phone":"app"},"onloadScrollLocation":"app","builderType":"fe"};
 var et_frontend_scripts = {"builderCssContainerPrefix":"#et-boc","builderCssLayoutPrefix":"#et-boc .et-l"};
-var et_pb_custom = {"ajaxurl":"https:\/\/www.21deltaengineers.com\/wp-admin\/admin-ajax.php","images_uri":"https:\/\/www.21deltaengineers.com\/wp-content\/themes\/Divi\/images","builder_images_uri":"https:\/\/www.21deltaengineers.com\/wp-content\/themes\/Divi\/includes\/builder\/images","et_frontend_nonce":"51d4314c7f","subscription_failed":"Please, check the fields below to make sure you entered the correct information.","et_ab_log_nonce":"639c4f8977","fill_message":"Please, fill in the following fields:","contact_error_message":"Please, fix the following errors:","invalid":"Invalid email","captcha":"Captcha","prev":"Prev","previous":"Previous","next":"Next","wrong_captcha":"You entered the wrong number in captcha.","wrong_checkbox":"Checkbox","ignore_waypoints":"no","is_divi_theme_used":"1","widget_search_selector":".widget_search","ab_tests":[],"is_ab_testing_active":"","page_id":"383","unique_test_id":"","ab_bounce_rate":"5","is_cache_plugin_active":"no","is_shortcode_tracking":"","tinymce_uri":"https:\/\/www.21deltaengineers.com\/wp-content\/themes\/Divi\/includes\/builder\/frontend-builder\/assets\/vendors","accent_color":"#2ea3f2","waypoints_options":[]};
+var et_pb_custom = {"ajaxurl":"https:\/\/www.21deltaengineers.com\/wp-admin\/admin-ajax.php","images_uri":"https:\/\/www.21deltaengineers.com\/wp-content\/themes\/Divi\/images","builder_images_uri":"https:\/\/www.21deltaengineers.com\/wp-content\/themes\/Divi\/includes\/builder\/images","et_frontend_nonce":"d742fdd3da","subscription_failed":"Please, check the fields below to make sure you entered the correct information.","et_ab_log_nonce":"cc7a4f2338","fill_message":"Please, fill in the following fields:","contact_error_message":"Please, fix the following errors:","invalid":"Invalid email","captcha":"Captcha","prev":"Prev","previous":"Previous","next":"Next","wrong_captcha":"You entered the wrong number in captcha.","wrong_checkbox":"Checkbox","ignore_waypoints":"no","is_divi_theme_used":"1","widget_search_selector":".widget_search","ab_tests":[],"is_ab_testing_active":"","page_id":"383","unique_test_id":"","ab_bounce_rate":"5","is_cache_plugin_active":"no","is_shortcode_tracking":"","tinymce_uri":"https:\/\/www.21deltaengineers.com\/wp-content\/themes\/Divi\/includes\/builder\/frontend-builder\/assets\/vendors","accent_color":"#2ea3f2","waypoints_options":[]};
 var et_pb_box_shadow_elements = [];
 /* ]]> */
 </script>
@@ -370,7 +378,7 @@ Object Caching 20/112 objects using disk
 Page Caching using disk: enhanced 
 Lazy Loading
 Minified using disk
-Database Caching using disk (Request-wide modification query)
+Database Caching using disk
 
-Served from: www.21deltaengineers.com @ 2023-05-11 10:41:46 by W3 Total Cache
+Served from: www.21deltaengineers.com @ 2023-05-22 10:51:35 by W3 Total Cache
 -->

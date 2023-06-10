@@ -193,6 +193,10 @@ class Updates {
 			$this->addPrimaryTermColumn();
 		}
 
+		if ( version_compare( $lastActiveVersion, '4.3.9', '<' ) ) {
+			$this->migratePriorityColumn();
+		}
+
 		do_action( 'aioseo_run_updates', $lastActiveVersion );
 
 		// Always clear the cache if the last active version is different from our current.
@@ -1191,12 +1195,13 @@ class Updates {
 				];
 
 				$identifierType = ! empty( $schemaTypeOptions->product->identifierType ) ? $schemaTypeOptions->product->identifierType : '';
+				$identifier     = ! empty( $schemaTypeOptions->product->identifier ) ? $schemaTypeOptions->product->identifier : '';
 				if ( preg_match( '/gtin/i', $identifierType ) ) {
-					$graph['properties']['identifiers']['gtin'] = $identifierType;
+					$graph['properties']['identifiers']['gtin'] = $identifier;
 				}
 
 				if ( preg_match( '/mpn/i', $identifierType ) ) {
-					$graph['properties']['identifiers']['mpn'] = $identifierType;
+					$graph['properties']['identifiers']['mpn'] = $identifier;
 				}
 
 				$reviews = ! empty( $schemaTypeOptions->product->reviews ) ? $schemaTypeOptions->product->reviews : [];
@@ -1421,5 +1426,27 @@ class Updates {
 	 */
 	private function scheduleRemoveRevisionsRecords() {
 		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v419_remove_revision_records', 10, [], true );
+	}
+
+	/**
+	 * Casts the priority column to a float.
+	 *
+	 * @since 4.3.9
+	 *
+	 * @return void
+	 */
+	private function migratePriorityColumn() {
+		if ( ! aioseo()->db->columnExists( 'aioseo_posts', 'priority' ) ) {
+			return;
+		}
+
+		$prefix               = aioseo()->db->prefix;
+		$aioseoPostsTableName = $prefix . 'aioseo_posts';
+
+		// First, cast the default value to NULL since it's a string.
+		aioseo()->core->db->execute( "UPDATE {$aioseoPostsTableName} SET priority = NULL WHERE priority = 'default'" );
+
+		// Then, alter the column to a float.
+		aioseo()->core->db->execute( "ALTER TABLE {$aioseoPostsTableName} MODIFY priority float" );
 	}
 }

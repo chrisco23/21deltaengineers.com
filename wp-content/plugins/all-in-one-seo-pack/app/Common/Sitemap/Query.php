@@ -42,6 +42,10 @@ class Query {
 		$fields .= '`p`.`post_parent`, `p`.`post_date_gmt`, `p`.`post_modified_gmt`, `ap`.`priority`, `ap`.`frequency`';
 		$maxAge  = '';
 
+		if ( ! aioseo()->sitemap->helpers->excludeImages() ) {
+			$fields .= ', `ap`.`images`';
+		}
+
 		// Order by highest priority first (highest priority at the top),
 		// then by post modified date (most recently updated at the top).
 		$orderBy = '`ap`.`priority` DESC, `p`.`post_modified_gmt` DESC';

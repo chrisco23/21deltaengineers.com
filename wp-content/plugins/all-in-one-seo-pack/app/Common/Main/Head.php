@@ -24,6 +24,15 @@ class Head {
 	private static $pageTitle = null;
 
 	/**
+	 * Title class instance.
+	 *
+	 * @since 4.3.9
+	 *
+	 * @var Title
+	 */
+	private $title;
+
+	/**
 	 * GoogleAnalytics class instance.
 	 *
 	 * @since 4.2.7
@@ -78,6 +87,7 @@ class Head {
 		add_action( 'wp', [ $this, 'registerTitleHooks' ], 1000 );
 		add_action( 'wp_head', [ $this, 'init' ], 1 );
 
+		$this->title        = new Title();
 		$this->analytics    = new GoogleAnalytics();
 		$this->links        = new Meta\Links();
 		$this->keywords     = new Meta\Keywords();
@@ -118,8 +128,8 @@ class Head {
 		add_filter( 'pre_get_document_title', [ $this, 'getTitle' ], 99999 );
 		add_filter( 'wp_title', [ $this, 'getTitle' ], 99999 );
 		if ( ! current_theme_supports( 'title-tag' ) ) {
-			add_action( 'template_redirect', [ $this, 'startOutputBuffering' ] );
-			add_action( 'wp_footer', [ $this, 'endOutputBuffering' ], -2 );
+			add_action( 'template_redirect', [ $this->title, 'startOutputBuffering' ], 99999 );
+			add_action( 'wp_head', [ $this->title, 'endOutputBuffering' ], 99999 );
 		}
 	}
 
@@ -154,60 +164,6 @@ class Head {
 		self::$pageTitle = aioseo()->meta->title->filterPageTitle( $wpTitle );
 
 		return self::$pageTitle;
-	}
-
-	/**
-	 * Starts our output buffering.
-	 *
-	 * @since 4.0.5
-	 *
-	 * @return void
-	 */
-	public function startOutputBuffering() {
-		ob_start( [ $this, 'rewriteTitle' ] );
-	}
-
-	/**
-	 * Flush and send the output buffer.
-	 *
-	 * @since 4.3.2
-	 *
-	 * @return void
-	 */
-	public function endOutputBuffering() {
-		ob_flush();
-	}
-
-	/**
-	 * Callback to fire when ob_flush() is called.
-	 * Rewrites the page title using output buffering.
-	 *
-	 * @since   4.0.5
-	 * @version 4.3.2
-	 *
-	 * @param  string $content The buffer content.
-	 * @return string
-	 */
-	public function rewriteTitle( $content ) {
-		$split = explode( '</head>', $content );
-
-		if ( empty( $split[1] ) ) {
-			return $content;
-		}
-
-		$head = $split[0] . '</head>';
-
-		unset( $split[0] );
-		$body = implode( '</head>', $split );
-
-		// Remove all existing title tags.
-		$head = preg_replace( '#<title.*?\/title>#s', '', $head );
-
-		// Add the new title tag to our own comment block.
-		$pageTitle = aioseo()->helpers->escapeRegexReplacement( $this->getTitle() );
-		$head      = preg_replace( '/(<!--\sAll\sin\sOne\sSEO[a-z0-9\s.]+\s-\saioseo\.com\s-->)/i', "$1\r\n\t\t<title>$pageTitle</title>", $head, 1 );
-
-		return $head . $body;
 	}
 
 	/**

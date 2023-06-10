@@ -1,3 +1,10 @@
+= 4.2.4 =
+* Fixed filesize stat failed error when WPML active
+
+= 4.2.3 =
+* Added option to change the position of the Filterable Portfolio module's "All" tab to the end
+* Added option to change set the default category for the filterable portfolio module 
+
 = 4.2.2 =
 * Improved slider randomization shuffling algorithm
 * Fixed slider randomization not working when slider border set

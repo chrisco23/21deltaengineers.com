@@ -234,8 +234,7 @@ class Content {
 			];
 
 			if ( ! $excludeImages ) {
-				$metaData        = aioseo()->meta->metaData->getMetaData( $post->ID );
-				$entry['images'] = ! empty( $metaData->images ) ? $metaData->images : [];
+				$entry['images'] = ! empty( $post->images ) ? json_decode( $post->images ) : [];
 			}
 
 			// Override priority/frequency for static homepage.
@@ -474,22 +473,29 @@ class Content {
 			return [];
 		}
 
-		$args = [
-			'has_published_posts' => [ 'post' ]
-		];
+		$authors = aioseo()->db->start( 'users as u' )
+			->select( 'u.ID as ID, u.user_nicename as nicename, MAX(p.post_modified_gmt) as lastModified' )
+			->join( 'posts as p', 'u.ID = p.post_author' )
+			->where( 'p.post_status', 'publish' )
+			->whereIn( 'p.post_type', aioseo()->sitemap->helpers->includedPostTypes() )
+			->groupBy( 'u.ID' )
+			->orderBy( 'lastModified DESC' )
+			->limit( aioseo()->sitemap->linksPerIndex, aioseo()->sitemap->pageNumber * aioseo()->sitemap->linksPerIndex )
+			->run()
+			->result();
 
-		$authors = get_users( $args );
-		if ( ! $authors ) {
+		if ( empty( $authors ) ) {
 			return [];
 		}
 
 		$entries = [];
-		foreach ( $authors as $author ) {
+		foreach ( $authors as $authorData ) {
+			$nicename  = $authorData->nicename ? $authorData->nicename : null;
 			$entries[] = [
-				'loc'        => get_author_posts_url( $author->ID ),
-				'lastmod'    => aioseo()->sitemap->helpers->lastModifiedPostTime( 'post', [ 'author' => $author->ID ] ),
+				'loc'        => get_author_posts_url( $authorData->ID, $nicename ),
+				'lastmod'    => aioseo()->helpers->dateTimeToIso8601( $authorData->lastModified ),
 				'changefreq' => aioseo()->sitemap->priority->frequency( 'author' ),
-				'priority'   => aioseo()->sitemap->priority->priority( 'author' ),
+				'priority'   => aioseo()->sitemap->priority->priority( 'author' )
 			];
 		}
 
@@ -523,23 +529,23 @@ class Content {
 			return [];
 		}
 
-		global $wpdb;
-		$dates = $wpdb->get_results( $wpdb->prepare(
+		$postsTable = aioseo()->db->db->posts;
+		$dates      = aioseo()->db->execute(
 			"SELECT
 				YEAR(post_date) AS `year`,
 				MONTH(post_date) AS `month`,
 				post_modified_gmt
-			FROM {$wpdb->posts}
-			WHERE post_type = %s AND post_status = 'publish'
+			FROM {$postsTable}
+			WHERE post_type = 'post' AND post_status = 'publish'
 			GROUP BY
 				YEAR(post_date),
 				MONTH(post_date)
-			ORDER BY post_date ASC LIMIT %d",
-			'post',
-			50000
-		) );
+			ORDER BY post_date ASC 
+			LIMIT 50000",
+			true
+		)->result();
 
-		if ( ! $dates ) {
+		if ( empty( $dates ) ) {
 			return [];
 		}
 

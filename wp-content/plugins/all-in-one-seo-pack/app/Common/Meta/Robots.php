@@ -101,7 +101,7 @@ class Robots {
 			return $this->metaHelper();
 		}
 
-		if ( is_home() && 'posts' === get_option( 'show_on_front' ) ) {
+		if ( is_home() && 'page' !== get_option( 'show_on_front' ) ) {
 			$this->globalValues();
 
 			return $this->metaHelper();

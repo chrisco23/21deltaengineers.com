@@ -14,7 +14,7 @@ class BlackFridayNotice extends NoticeAbstract implements NoticeInterface {
 
 	const NOTICE_OPTION     = 'webpc_notice_bf2023';
 	const NOTICE_VIEW_PATH  = 'components/notices/discount-coupon.php';
-	const NOTICE_DATE_START = '2023-11-23';
+	const NOTICE_DATE_START = '2023-11-20';
 	const NOTICE_DATE_END   = '2023-11-27';
 
 	/**

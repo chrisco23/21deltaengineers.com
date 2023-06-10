@@ -2,6 +2,7 @@
 
 namespace WebpConverter\Conversion;
 
+use WebpConverter\Error\Detector\RewritesErrorsDetector;
 use WebpConverter\PluginData;
 use WebpConverter\Service\ServerConfigurator;
 use WebpConverter\Settings\Option\SupportedExtensionsOption;
@@ -66,6 +67,10 @@ class DirectoryFilesFinder {
 		$list  = [];
 		if ( ! is_array( $paths ) ) {
 			return $list;
+		}
+
+		if ( $path_prefix === '' ) {
+			$paths = array_diff( $paths, [ basename( RewritesErrorsDetector::PATH_OUTPUT_FILE_PNG ) ] );
 		}
 
 		rsort( $paths );

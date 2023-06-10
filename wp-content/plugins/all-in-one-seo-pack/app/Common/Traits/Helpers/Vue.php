@@ -1,13 +1,14 @@
 <?php
 namespace AIOSEO\Plugin\Common\Traits\Helpers;
 
-use AIOSEO\Plugin\Common\Models;
-use AIOSEO\Plugin\Common\Tools;
-
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use AIOSEO\Plugin\Common\Integrations\WpCode as WpCodeIntegration;
+use AIOSEO\Plugin\Common\Models;
+use AIOSEO\Plugin\Common\Tools;
 
 /**
  * Contains all Vue related helper methods.
@@ -345,6 +346,14 @@ trait Vue {
 			$data['data']['status']    = Tools\SystemStatus::getSystemStatusInfo();
 			$data['data']['htaccess']  = aioseo()->htaccess->getContents();
 			$data['data']['v3Options'] = ! empty( get_option( 'aioseop_options' ) );
+
+			// WPCode Integration.
+			$data['integrations']['wpcode'] = [
+				'snippets'          => WpCodeIntegration::loadWpCodeSnippets(),
+				'pluginInstalled'   => WpCodeIntegration::isPluginInstalled(),
+				'pluginActive'      => WpCodeIntegration::isPluginActive(),
+				'pluginNeedsUpdate' => WpCodeIntegration::pluginNeedsUpdate()
+			];
 		}
 
 		if (

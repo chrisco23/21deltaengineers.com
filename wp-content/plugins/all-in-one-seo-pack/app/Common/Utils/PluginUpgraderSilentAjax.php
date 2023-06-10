@@ -48,6 +48,7 @@ class PluginUpgraderSilentAjax extends \Plugin_Upgrader {
 		'sugarCalendar'        => 'https://downloads.wordpress.org/plugins/sugar-calendar-lite.zip',
 		'wpSimplePay'          => 'https://downloads.wordpress.org/plugins/stripe.zip',
 		'easyDigitalDownloads' => 'https://downloads.wordpress.org/plugins/easy-digital-downloads.zip',
+		'wpcode'               => 'https://downloads.wordpress.org/plugin/insert-headers-and-footers.zip',
 		'searchWp'             => '',
 		'affiliateWp'          => ''
 	];
@@ -76,7 +77,8 @@ class PluginUpgraderSilentAjax extends \Plugin_Upgrader {
 		'sugarCalendar' => 'https://wordpress.org/plugins/sugar-calendar-lite/',
 		'wpSimplePay'   => 'https://wordpress.org/plugins/stripe/',
 		'searchWp'      => 'https://searchwp.com/',
-		'affiliateWp'   => 'https://affiliatewp.com/'
+		'affiliateWp'   => 'https://affiliatewp.com/',
+		'wpcode'        => 'https://wordpress.org/plugins/insert-headers-and-footers/'
 	];
 
 	/**
@@ -117,7 +119,9 @@ class PluginUpgraderSilentAjax extends \Plugin_Upgrader {
 		'easyDigitalDownloads'    => 'easy-digital-downloads/easy-digital-downloads.php',
 		'easyDigitalDownloadsPro' => 'easy-digital-downloads-pro/easy-digital-downloads.php',
 		'searchWp'                => 'searchwp/index.php',
-		'affiliateWp'             => 'affiliate-wp/affiliate-wp.php'
+		'affiliateWp'             => 'affiliate-wp/affiliate-wp.php',
+		'wpcode'                  => 'insert-headers-and-footers/ihaf.php',
+		'wpcodePro'               => 'wpcode-premium/wpcode.php'
 	];
 
 	/**
@@ -158,7 +162,9 @@ class PluginUpgraderSilentAjax extends \Plugin_Upgrader {
 		'easyDigitalDownloads'    => 'edit.php?post_type=download&page=edd-settings',
 		'easyDigitalDownloadsPro' => 'edit.php?post_type=download&page=edd-settings',
 		'searchWp'                => 'options-general.php?page=searchwp',
-		'affiliateWp'             => 'admin.php?page=affiliate-wp'
+		'affiliateWp'             => 'admin.php?page=affiliate-wp',
+		'wpcode'                  => 'admin.php?page=wpcode',
+		'wpcodePro'               => 'admin.php?page=wpcode'
 	];
 
 	/**

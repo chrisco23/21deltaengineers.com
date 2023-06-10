@@ -638,7 +638,9 @@ namespace AIOSEO\Plugin\Common\Breadcrumbs {
 		 * @return void
 		 */
 		public function registerWidget() {
-			register_widget( 'AIOSEO\Plugin\Common\Breadcrumbs\Widget' );
+			if ( aioseo()->helpers->canRegisterLegacyWidget( 'aioseo-breadcrumb-widget' ) ) {
+				register_widget( 'AIOSEO\Plugin\Common\Breadcrumbs\Widget' );
+			}
 		}
 	}
 }

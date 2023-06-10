@@ -90,6 +90,7 @@ class Standalone {
 		new PublishPanel();
 		new LimitModifiedDate();
 		new Notifications();
+		new WpCode();
 
 		$this->pageBuilderIntegrations = [
 			'elementor' => new PageBuilders\Elementor(),

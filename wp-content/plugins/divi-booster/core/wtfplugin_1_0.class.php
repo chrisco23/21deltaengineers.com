@@ -123,7 +123,7 @@ class wtfplugin_1_0 {
 	
 	function enqueue_user_js() { 
         clearstatcache();
-        if (!filesize($this->cachedir().'wp_footer.js')) { return; }
+        if (!file_exists($this->cachedir().'wp_footer.js') || !filesize($this->cachedir().'wp_footer.js')) { return; }
 		$dependencies = array('jquery');
 		if (wp_script_is('divi-custom-script', 'enqueued')) { 
 			$dependencies[] = 'divi-custom-script';

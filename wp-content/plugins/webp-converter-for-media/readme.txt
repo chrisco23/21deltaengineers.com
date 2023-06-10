@@ -5,7 +5,7 @@ Tags: convert webp, webp, optimize images, image optimization, compress images
 Requires at least: 4.9
 Tested up to: 6.2
 Requires PHP: 7.0
-Stable tag: 5.9.0
+Stable tag: 5.9.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -370,6 +370,9 @@ After making changes, remember to restart the service:
 4. Optimization statistics of Media Library
 
 == Changelog ==
+
+= 5.9.1 (2023-05-24) =
+* `[Changed]` Error message for rewrites_not_executed error in server configuration
 
 = 5.9.0 (2023-05-20) =
 * `[Fixed]` Conversion of images in WP-CLI using force flag

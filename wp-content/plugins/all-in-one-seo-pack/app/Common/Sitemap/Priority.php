@@ -118,7 +118,7 @@ class Priority {
 				! empty( self::$objectTypePriority[ $pageType . $objectType ] )
 					? self::$objectTypePriority[ $pageType . $objectType ]
 					: self::$globalPriority[ $pageType . $objectType ];
-			$priority     = 'default' === $defaultValue->value ? $priority : $defaultValue->value;
+			$priority     = null === $defaultValue->value ? $priority : $defaultValue->value;
 		}
 
 		return $priority;

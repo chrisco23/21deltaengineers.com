@@ -4,6 +4,7 @@ namespace WebpConverter\Conversion;
 
 use WebpConverter\Conversion\Format\AvifFormat;
 use WebpConverter\Conversion\Format\WebpFormat;
+use WebpConverter\Error\Detector\RewritesErrorsDetector;
 use WebpConverter\PluginData;
 use WebpConverter\Service\ServerConfigurator;
 use WebpConverter\Service\StatsManager;
@@ -136,6 +137,10 @@ class FilesTreeFinder {
 		];
 		if ( ! is_array( $paths ) ) {
 			return $list;
+		}
+
+		if ( $nesting_level === 0 ) {
+			$paths = array_diff( $paths, [ basename( RewritesErrorsDetector::PATH_OUTPUT_FILE_PNG ) ] );
 		}
 
 		sort( $paths, SORT_NATURAL | SORT_FLAG_CASE );

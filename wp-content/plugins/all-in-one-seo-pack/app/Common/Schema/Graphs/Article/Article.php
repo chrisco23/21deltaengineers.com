@@ -68,7 +68,7 @@ class Article extends Graphs\Graph {
 			$keywords = array_map( function ( $keywordObject ) {
 				return $keywordObject['value'];
 			}, $keywords );
-			$data['keywords'] = implode( ',', $keywords );
+			$data['keywords'] = implode( ', ', $keywords );
 		}
 
 		if ( isset( $graphData->properties->dates->include ) && ! $graphData->properties->dates->include ) {

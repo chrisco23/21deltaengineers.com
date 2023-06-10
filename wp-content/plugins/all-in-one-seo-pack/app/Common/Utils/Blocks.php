@@ -77,25 +77,28 @@ class Blocks {
 	}
 
 	/**
-	 * Register Gutenberg editor assets
+	 * Registers Gutenberg editor assets.
 	 *
 	 * @since 4.2.1
 	 *
 	 * @return void
 	 */
 	public function registerBlockEditorAssets() {
-		/**
-		 * For now, we're loading Legacy Widgets both on the Widgets and the Customize pages.
-		 *
-		 */
+		$postSettingJsAsset = 'src/vue/standalone/post-settings/main.js';
 		if (
 			aioseo()->helpers->isScreenBase( 'widgets' ) ||
 			aioseo()->helpers->isScreenBase( 'customize' )
 		) {
-			return;
+			/**
+			 * Make sure the post settings JS asset is registered before adding it as a dependency below.
+			 * This is needed because this asset is not loaded on widgets and customizer screens,
+			 * {@see \AIOSEO\Plugin\Common\Admin\PostSettings::enqueuePostSettingsAssets}.
+			 *
+			 */
+			aioseo()->core->assets->load( $postSettingJsAsset, [], aioseo()->helpers->getVueData() );
 		}
 
-		aioseo()->core->assets->loadCss( 'src/vue/standalone/blocks/main.js', [], false );
+		aioseo()->core->assets->loadCss( 'src/vue/standalone/blocks/main.js' );
 
 		$dependencies = [
 			'wp-blocks',
@@ -105,7 +108,7 @@ class Blocks {
 			'wp-data',
 			'wp-url',
 			'wp-polyfill',
-			aioseo()->core->assets->jsHandle( 'src/vue/standalone/post-settings/main.js' )
+			aioseo()->core->assets->jsHandle( $postSettingJsAsset )
 		];
 
 		global $wp_version;
@@ -113,7 +116,7 @@ class Blocks {
 			$dependencies[] = 'wp-block-editor';
 		}
 
-		aioseo()->core->assets->registerJs( 'src/vue/standalone/blocks/main.js', $dependencies );
+		aioseo()->core->assets->enqueueJs( 'src/vue/standalone/blocks/main.js', $dependencies );
 		aioseo()->core->assets->registerCss( 'src/vue/assets/scss/blocks-editor.scss' );
 	}
 

@@ -1,5 +1,4 @@
 <?php
-
 namespace AIOSEO\Plugin\Common\Traits\Helpers;
 
 /**

@@ -1,4 +1,4 @@
-ˆºkd<?php exit; ?>a:1:{s:7:"content";O:8:"stdClass":24:{s:2:"ID";i:214;s:11:"post_author";s:1:"1";s:9:"post_date";s:19:"2018-05-20 14:28:30";s:13:"post_date_gmt";s:19:"2018-05-20 22:28:30";s:12:"post_content";s:263:":not(.et_pb_fullwidth_section).et_pb_section {
+Uõ„d<?php exit; ?>a:1:{s:7:"content";O:8:"stdClass":24:{s:2:"ID";i:214;s:11:"post_author";s:1:"1";s:9:"post_date";s:19:"2018-05-20 14:28:30";s:13:"post_date_gmt";s:19:"2018-05-20 22:28:30";s:12:"post_content";s:263:":not(.et_pb_fullwidth_section).et_pb_section {
    padding-top: 0px !important;
    padding-bottom: 0px !important;
 }

@@ -52,6 +52,21 @@ function db_pb_slide_button_2_content_content($content, $args) {
 			'#(<a class="(et_pb_button[^"]+et_pb_more_button[^"]*)" href=".*?"([^>]*)>.*?</a>)#', 
 			'\\1<a class="\\2 db_pb_button_2" href="'.esc_attr($button_2_url).'"\\3>'.esc_html($button_2_text).'</a>',
 			$content); 
+
+        // Set the button icon
+        if (isset($args['custom_db_slide_button_2']) && $args['custom_db_slide_button_2'] === 'on') {
+            if (isset($args['db_slide_button_2_use_icon']) && $args['db_slide_button_2_use_icon'] === 'on') {
+                if (function_exists('et_pb_process_font_icon')) {
+                    $button_2_icon = et_pb_process_font_icon($args['db_slide_button_2_icon']);
+                    // If icon set on button 2, replace data icon attribute in button 2 with icon set in props
+                    if (preg_match('#<a[^>]+class="[^"]*db_pb_button_2[^"]*"[^>]+data-icon="([^"]+)"[^>]*>#', $content, $matches)) {
+                        $content = str_replace($matches[0], str_replace($matches[1], $button_2_icon, $matches[0]), $content);
+                    } else { // Handle case that data-icon attribute not set in button 1
+                        $content = preg_replace('#(<a[^>]+class="[^"]*db_pb_button_2[^"]*"[^>]+)>([^<]*)</a>#', '\\1 data-icon="'.$button_2_icon.'">\\2</a>', $content);
+                    }
+                }
+            }
+        }
 	}
 	
 	return $content;

@@ -1,3 +1,6 @@
+= 4.2.5 =
+* Fixed second slide button icon not set correctly
+
 = 4.2.4 =
 * Fixed filesize stat failed error when WPML active
 

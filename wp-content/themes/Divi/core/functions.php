@@ -2124,7 +2124,10 @@ function et_code_snippets_admin_enqueue_scripts( $hook_suffix ) {
 	$is_templates_page = isset( $_GET['page'] ) && 'et_theme_builder' === $_GET['page'];
 	$is_options_page   = 'toplevel_page_et_' . $shortname . '_options' === $hook_suffix;
 
-	if ( ! $is_templates_page && ! $is_options_page && ! et_builder_bfb_enabled() ) {
+	$current_screen          = get_current_screen();
+	$is_layouts_library_page = isset( $current_screen->id ) && 'edit-et_pb_layout' === $current_screen->id;
+
+	if ( ! $is_templates_page && ! $is_options_page && ! $is_layouts_library_page && ! et_builder_bfb_enabled() ) {
 		return;
 	}
 
@@ -2132,6 +2135,10 @@ function et_code_snippets_admin_enqueue_scripts( $hook_suffix ) {
 		require_once ET_CORE_PATH . 'code-snippets/code-snippets-app.php';
 	}
 
+	if ( $is_layouts_library_page ) {
+		// Avoids et_cloud_data not defined error.
+		ET_Cloud_App::load_js();
+	}
 	ET_Code_Snippets_App::load_js();
 }
 
@@ -2156,3 +2163,24 @@ function et_code_snippets_vb_enqueue_scripts() {
 	ET_Code_Snippets_App::load_js();
 }
 add_action( 'wp_enqueue_scripts', 'et_code_snippets_vb_enqueue_scripts' );
+
+/**
+ * Load Cloud Snippets App on `Export To Divi Cloud` btn click.
+ *
+ * @since ??
+ *
+ * @return void
+ */
+function et_save_to_cloud_modal() {
+	$current_screen    = get_current_screen();
+	$current_screen_id = $current_screen ? $current_screen->id : '';
+
+	if ( 'edit-et_pb_layout' !== $current_screen_id ) {
+		return;
+	}
+	?>
+		<div id="et-cloud-app--layouts"></div>
+	<?php
+}
+
+add_action( 'admin_footer', 'et_save_to_cloud_modal' );

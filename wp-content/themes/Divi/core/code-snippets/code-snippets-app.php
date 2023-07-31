@@ -88,14 +88,17 @@ class ET_Code_Snippets_App {
 		$ET_DEBUG     = defined( 'ET_DEBUG' ) && ET_DEBUG;
 		$DEBUG        = $ET_DEBUG;
 
-		$home_url      = wp_parse_url( get_site_url() );
-		$build_dir_uri = ET_CORE_URL . 'build';
-		$cache_buster  = $DEBUG ? mt_rand() / mt_getrandmax() : $CORE_VERSION; // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_mt_rand -- mt_rand() should do for cache busting.
-		$asset_path    = ET_CORE_PATH . 'build/et-core-app.bundle.js';
+		$home_url       = wp_parse_url( get_site_url() );
+		$build_dir_uri  = ET_CORE_URL . 'build';
+		$common_scripts = ET_COMMON_URL . '/scripts';
+		$cache_buster   = $DEBUG ? mt_rand() / mt_getrandmax() : $CORE_VERSION; // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_mt_rand -- mt_rand() should do for cache busting.
+		$asset_path     = ET_CORE_PATH . 'build/et-core-app.bundle.js';
 
 		if ( file_exists( $asset_path ) ) {
 			wp_enqueue_style( 'et-code-snippets-styles', "{$build_dir_uri}/et-core-app.bundle.css", [], (string) $cache_buster );
 		}
+
+		wp_enqueue_script( 'es6-promise', "{$common_scripts}/es6-promise.auto.min.js", [], '4.2.2', true );
 
 		$BUNDLE_DEPS = [
 			'jquery',

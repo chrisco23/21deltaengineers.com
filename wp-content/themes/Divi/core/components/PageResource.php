@@ -1023,6 +1023,15 @@ class ET_Core_PageResource {
 		if ( $force ) {
 			delete_option( 'et_core_page_resource_remove_all' );
 		}
+
+		/**
+		 * Fires when the static resources are removed.
+		 *
+		 * @since ??
+		 *
+		 * @param mixed $post_id The post ID.
+		 */
+		do_action( 'et_core_static_resources_removed', $post_id );
 	}
 
 	/**

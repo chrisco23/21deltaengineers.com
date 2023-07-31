@@ -1,6 +1,14 @@
 <?php
 
-require_once ABSPATH . WPINC . '/class-http.php';
+global $wp_version;
+
+// Since WP 5.9, the 'wp-includes/class-http.php' file is deprecated in favor of the
+// 'wp-includes/class-wp-http.php' file.
+if ( version_compare( $wp_version, '5.9', '>=' ) ) {
+	require_once ABSPATH . WPINC . '/class-wp-http.php';
+} else {
+	require_once ABSPATH . WPINC . '/class-http.php';
+}
 
 /**
  * Some 3rd-party APIs require data to be sent in the request body for
@@ -297,7 +305,13 @@ class ET_Core_LIB_WPHttp extends WP_Http {
 		mbstring_binary_safe_encoding();
 
 		try {
-			$requests_response = Requests::request( $url, $headers, $data, $type, $options );
+			// Since WP 6.2, the 'Requests_Exception' class is deprecated in favor of the
+			// 'WpOrg\Requests\Requests' class due to Requests library upgraded to 2.0.5.
+			if ( class_exists( 'WpOrg\Requests\Requests' ) ) {
+				$requests_response = WpOrg\Requests\Requests::request( $url, $headers, $data, $type, $options );
+			} else {
+				$requests_response = Requests::request( $url, $headers, $data, $type, $options );
+			}
 
 			// Convert the response into an array
 			$http_response = new WP_HTTP_Requests_Response( $requests_response, $request_args['filename'] );
@@ -305,7 +319,10 @@ class ET_Core_LIB_WPHttp extends WP_Http {
 
 			// Add the original object to the array.
 			$response['http_response'] = $http_response;
-		} catch ( Requests_Exception $e ) {
+		} catch ( Exception $e ) {
+			// Since there is no change on the error details and the method to get the error
+			// message, we can use `Exception` to cover both of `WpOrg\Requests\Exception` and
+			// `Requests_Exception` classes.
 			$response = new WP_Error( 'http_request_failed', $e->getMessage() );
 		}
 

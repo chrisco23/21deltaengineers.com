@@ -68,6 +68,8 @@ PERFORMANCE OF THIS SOFTWARE.
 
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+
 /**
        * Generates className value based on the args provided. Takes any number of args which can
        * be a string or an object. The argument `foo` is short for `{ foo: true }`. If the value

@@ -1,7 +1,7 @@
 === Head, Footer and Post Injections ===
 Tags: header, footer, ads, analytics, facebook pixel, amp
-Tested up to: 6.0
-Stable tag: 3.2.5
+Tested up to: 6.2.2
+Stable tag: 3.2.6
 Donate link: https://www.satollo.net/donations
 Contributors: satollo
 
@@ -88,6 +88,10 @@ FAQs are answered on [Header and Footer](http://www.satollo.net/plugins/header-f
 
 
 == Changelog ==
+
+= 3.2.6 =
+
+* Fixed PHP short open tag
 
 = 3.2.5 =
 

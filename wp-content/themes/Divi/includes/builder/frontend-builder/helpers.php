@@ -2207,6 +2207,10 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'saveText'               => esc_html__( 'Save To Library', 'et_builder' ),
 			'saveToCloudText'        => esc_html__( 'Save To Divi Cloud', 'et_builder' ),
 			'allCategoriesText'      => esc_html__( 'All Categories', 'et_builder' ),
+			'saveIndividual'         => esc_html__( 'Save Individual Items', 'et_builder' ),
+			'saveSectionsIndividual' => esc_html__( 'Also Save All %s Sections as Individual Items', 'et_builder' ),
+			'saveRowsIndividual'     => esc_html__( 'Also Save All %s Rows as Individual Items', 'et_builder' ),
+			'saveModulesIndividual'  => esc_html__( 'Also Save All %s Modules as Individual Items', 'et_builder' ),
 		),
 		'alertModal'                => array(
 			'buttonCancelLabel'  => et_builder_i18n( 'Cancel' ),

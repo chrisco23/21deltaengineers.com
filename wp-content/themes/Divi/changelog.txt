@@ -1,3 +1,38 @@
+version 4.21.1 ( updated 06-27-2023 )
+- Fixed an issue where the Scroll Effects scroll steps were incorrectly calculated.
+- Fixed issues affecting saving in Theme Builder in some cases.
+- Fixed an issue with the Slider module where the animations would stop working.
+- Fixed Global color not working when set via the Page settings bar.
+- Fixed the issue when Existing Pages were not loaded in some cases.
+- Added a new et_core_static_resources_removed hook that triggers when the static resources are removed.
+- Add the option to export layouts to Divi Cloud directly from Divi Layouts admin page.
+- Fixed WordPress deprecated warnings related to deprecated HTTP class file and Requests library upgrade.
+- Fixed PHP notice related to undefined index lists in Sendinblue email provider class.
+	* common/admin.php
+	* common/i18n/library.php
+	* common/init.php
+	* core/admin/css/core.css
+	* core/admin/js/portability.js
+	* core/code-snippets/app/boot.js
+	* core/code-snippets/code-snippets-app.php
+	* core/components/PageResource.php
+	* core/components/Portability.php
+	* core/components/api/email/SendinBlue.php
+	* core/components/lib/WPHttp.php
+	* core/functions.php
+	* core/i18n/library.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/class-et-builder-settings.php
+	* includes/builder/core.php
+	* includes/builder/feature/SplitLibrary.php
+	* includes/builder/feature/dynamic-assets/assets/js/slider.js
+	* includes/builder/feature/global-presets/Settings.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/theme-builder/api.php
+	* includes/builder/functions.php
+	* includes/builder/scripts/frontend/scripts.js
+
 version 4.21 ( updated 04-21-2023 )
 - Add local and Divi Cloud libraries for Theme Options
 - Fix PHP fatal errors on WP CLI with admin context when checking themes list due to missing builder framework.

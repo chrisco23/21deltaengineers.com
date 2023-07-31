@@ -68,22 +68,24 @@ if ( ! function_exists( 'et_common_should_enqueue_react' ) ) :
 	/**
 	 * Determine whether React should be enqueued or not.
 	 *
-	 * @since ??
+	 * @since 4.20.1
 	 *
 	 * @return bool
 	 */
 	function et_common_should_enqueue_react() {
-		$page      = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
-		$is_fb     = et_core_is_fb_enabled();
-		$is_tb     = et_pb_is_allowed( 'theme_builder' ) && 'et_theme_builder' === $page;
-		$is_epanel = et_pb_is_allowed( 'theme_options' ) && 'et_divi_options' === $page;
+		$page            = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
+		$post_type       = isset( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification -- This function does not change any state, and is therefore not susceptible to CSRF.
+		$is_fb           = et_core_is_fb_enabled();
+		$is_tb           = et_pb_is_allowed( 'theme_builder' ) && 'et_theme_builder' === $page;
+		$is_epanel       = et_pb_is_allowed( 'theme_options' ) && 'et_divi_options' === $page;
+		$is_divi_library = et_pb_is_allowed( 'divi_library' ) && 'et_pb_layout' === $post_type;
 
-		$should_enqueue = $is_fb || $is_tb || $is_epanel;
+		$should_enqueue = $is_fb || $is_tb || $is_epanel || $is_divi_library;
 
 		/**
 		 * Filter whether React should be enqueued or not.
 		 *
-		 * @since ??
+		 * @since 4.20.1
 		 *
 		 * @param string $should_enqueue Enqueue status.
 		 */

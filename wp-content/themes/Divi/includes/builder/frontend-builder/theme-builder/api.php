@@ -154,7 +154,7 @@ function et_theme_builder_api_save() {
 	$library_tb_id       = (int) $_->array_get( $_POST, 'library_theme_builder_id', 0 );
 	$library_item_id     = (int) $_->array_get( $_POST, 'library_item_id', 0 );
 	$theme_builder_id    = $library_tb_id ? $library_tb_id : et_theme_builder_get_theme_builder_post_id( $live, true );
-	$has_default         = false;
+	$has_default         = '1' === $_->array_get( $_POST, 'hasDefault', '0' );
 	$updated_ids         = array();
 	// phpcs:enable
 
@@ -191,16 +191,16 @@ function et_theme_builder_api_save() {
 		// Add template ID into $affected_templates for later use
 		// to Add mapping template ID to theme builder ID
 		// and delete existing template mapping.
-		$affected_templates[ $new_post_id ] = array(
+		$affected_templates[] = array(
 			'raw'         => $raw_post_id,
 			'normalized'  => $post_id,
 			'new_post_id' => $new_post_id,
 		);
 	}
 
-	foreach ( $affected_templates as $template_id => $template_pair ) {
-		if ( $template_pair['normalized'] !== $template_id ) {
-			$updated_ids[ $template_pair['raw'] ] = $template_id;
+	foreach ( $affected_templates as $template_pair ) {
+		if ( $template_pair['normalized'] !== $template_pair['new_post_id'] ) {
+			$updated_ids[ $template_pair['raw'] ] = $template_pair['new_post_id'];
 		}
 	}
 
@@ -219,7 +219,7 @@ function et_theme_builder_api_save() {
 		$processed_templates = array_merge( $processed_templates, $affected_templates );
 
 		// Insert new template mapping.
-		foreach ( $processed_templates as $template_id => $template_pair ) {
+		foreach ( $processed_templates as $template_pair ) {
 			add_post_meta( $theme_builder_id, '_et_template', $template_pair['new_post_id'] );
 		}
 
@@ -248,6 +248,7 @@ function et_theme_builder_api_save() {
 		array(
 			'updatedTemplateIds'     => (object) $updated_ids,
 			'processedTemplatesData' => (object) $affected_templates,
+			'hasDefault'             => $has_default ? '1' : '0',
 		)
 	);
 }

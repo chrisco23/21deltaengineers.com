@@ -832,6 +832,10 @@ class ET_Builder_Global_Presets_Settings {
 
 						$fixed_global_colors_info = array();
 
+						if ( empty( $module_global_colors_info ) ) {
+							$module_global_colors_info = array();
+						}
+
 						foreach ( $module_global_colors_info as $gcid => $settings_that_use_this_gcid_raw ) {
 							if ( empty( $settings_that_use_this_gcid_raw ) ) {
 								continue;

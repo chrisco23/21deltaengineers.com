@@ -28,6 +28,17 @@ function hefo_field_checkbox_only($name, $tips = '', $attrs = '', $link = null) 
     echo '</td>';
 }
 
+function hefo_field_checkbox_only2($name, $tips = '', $attrs = '', $link = null) {
+    global $options;
+    echo '<td><input type="checkbox" name="options[' . esc_attr($name) . ']" value="1" ' .
+    (!empty($options[$name]) ? 'checked' : '') . '/>';
+    echo ' ' . $tips;
+    if ($link) {
+        echo '<br><a href="' . esc_attr($link) . '" target="_blank">Read more</a>.';
+    }
+    echo '</td>';
+}
+
 function hefo_field_text($name, $label = '', $tips = '') {
     global $options;
 

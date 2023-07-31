@@ -25,7 +25,7 @@ return [
 	'Import & Export Snippet'  => esc_html__( 'Import & Export Snippet', 'et_builder' ),
 	'Import Snippets'          => esc_html__( 'Import Snippets', 'et_builder' ),
 	'Import Snippet'           => esc_html__( 'Import Snippet', 'et_builder' ),
-
+	'Log In To Divi Cloud'     => esc_html__( 'Log In To Divi Cloud', 'et_builder' ),
 	'Theme Options Library'    => esc_html__( 'Theme Options Library', 'et_builder' ),
 	'Theme Options Details'    => esc_html__( 'Theme Options Details', 'et_builder' ),
 ];

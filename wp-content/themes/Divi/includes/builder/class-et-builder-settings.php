@@ -672,12 +672,16 @@ class ET_Builder_Settings {
 		$et_pb_dark_text_color = '' !== $dark_text_color ? $dark_text_color : $default;
 		$is_default[]          = strtolower( $et_pb_dark_text_color ) === $default ? 'et_pb_dark_text_color' : '';
 
-		$content_area_background_color       = get_post_meta( $post_id, '_et_pb_content_area_background_color', true );
+		$content_area_background_color = get_post_meta( $post_id, '_et_pb_content_area_background_color', true );
+
+		$content_area_background_color       = et_builder_is_global_color( $content_area_background_color ) ? et_builder_get_global_color( $content_area_background_color ) : $content_area_background_color;
 		$default                             = et_()->array_get( $fields, array( 'et_pb_content_area_background_color', 'default' ) );
 		$et_pb_content_area_background_color = '' !== $content_area_background_color ? $content_area_background_color : $default;
 		$is_default[]                        = strtolower( $et_pb_content_area_background_color ) === $default ? 'et_pb_content_area_background_color' : '';
 
 		$section_background_color = get_post_meta( $post_id, '_et_pb_section_background_color', true );
+
+		$section_background_color = et_builder_is_global_color( $section_background_color ) ? et_builder_get_global_color( $section_background_color ) : $section_background_color;
 
 		$default                        = et_()->array_get( $fields, array( 'et_pb_section_background_color', 'default' ) );
 		$et_pb_section_background_color = '' !== $section_background_color ? $section_background_color : $default;

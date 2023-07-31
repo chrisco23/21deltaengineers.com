@@ -746,6 +746,15 @@ class ET_Builder_Element {
 	protected $_use_unique_id = false;
 
 	/**
+	 * Whether WordPress lazy load is disabled or not.
+	 *
+	 * @since ??
+	 *
+	 * @var boolean
+	 */
+	public static $is_wp_lazy_load_disabled = false;
+
+	/**
 	 * ET_Builder_Element constructor.
 	 */
 	public function __construct() {
@@ -15622,6 +15631,8 @@ class ET_Builder_Element {
 	 * @param string $function_name Module slug.
 	 */
 	public function process_scroll_effects( $function_name ) {
+		global $wp_version;
+
 		$advanced_fields = self::$_->array_get( $this->advanced_fields, 'scroll_effects', array( 'default' => array() ) );
 
 		if ( ! $advanced_fields ) {
@@ -15655,6 +15666,13 @@ class ET_Builder_Element {
 
 		if ( ! $scroll_effects_enabled ) {
 			return;
+		}
+
+		// Disable WordPress lazy load if it's not already disabled. The wp_lazy_loading_enabled filter is available since WordPress 5.5.0.
+		if ( false === self::$is_wp_lazy_load_disabled && version_compare( $wp_version, '5.5.0', '>=' ) ) {
+			self::$is_wp_lazy_load_disabled = true;
+
+			add_filter( 'wp_lazy_loading_enabled', '__return_false' );
 		}
 
 		foreach ( $options as $id => $option ) {

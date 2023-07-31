@@ -7,6 +7,7 @@ class Layout {
     
     static function fromShortcode($shortcode) {
         $shortcode = trim($shortcode);
+		$shortcode = str_replace(array('[p]', '[/p]'), array('<p>', '</p>'), $shortcode); // Fix p tags converted to shortcodes
         $shortcode = self::fix_unclosed_shortcodes($shortcode);
         $shortcode = preg_replace('/^<br \/>/', '', $shortcode);
         $layout = self::parse_layout($shortcode);
@@ -65,7 +66,7 @@ class Layout {
             $shortcode_string = str_replace("\r", '', $shortcode_string);
             $shortcode_string = str_replace(base64_decode('wqA='), ' ', $shortcode_string); // Replace uft-8 non-breaking spaces
             $shortcode_string = trim($shortcode_string);
-            return $shortcode_string;
+            return esc_html($shortcode_string);
         }
     }
 

@@ -4,7 +4,7 @@
   Plugin Name: Head, Footer and Post Injections
   Plugin URI: https://www.satollo.net/plugins/header-footer
   Description: Header and Footer lets to add html/javascript code to the head and footer and posts of your blog. Some examples are provided on the <a href="http://www.satollo.net/plugins/header-footer">official page</a>.
-  Version: 3.2.5
+  Version: 3.2.6
   Requires PHP: 5.6
   Requires at least: 4.6
   Author: Stefano Lissa
@@ -40,7 +40,7 @@ if (isset($_SERVER['HTTP_USER_AGENT']) && isset($hefo_options['mobile_user_agent
 }
 
 if (is_admin()) {
-    require_once dirname(__FILE__) . '/admin/admin.php';
+    require_once __DIR__ . '/admin/admin.php';
 }
 
 if (isset($hefo_options['disable_css_id'])) {
@@ -64,7 +64,11 @@ register_activation_hook(__FILE__, function () {
     if (!is_array($options)) {
         $options = [];
     }
-    $options = array_merge(['after' => '', 'before' => '', 'head' => '', 'body' => '', 'head_home' => '', 'footer' => ''], $options);
+    // Compatibility with "already" installed
+    if (!empty($options)) {
+        $options['enable_php'] = 1;
+    }
+    $options = array_merge(['enable_php'=>0, 'after' => '', 'before' => '', 'head' => '', 'body' => '', 'head_home' => '', 'footer' => ''], $options);
     for ($i = 1; $i <= 5; $i++) {
         $options['snippet_' . $i] = '';
         $options['generic_' . $i] = '';
@@ -334,9 +338,9 @@ function hefo_replace($buffer) {
 }
 
 function hefo_execute($buffer) {
-    global $post;
+    global $hefo_options, $post;
 
-    if (apply_filters('hefo_php_exec', true)) {
+    if (apply_filters('hefo_php_exec', !empty($hefo_options['enable_php']))) {
         ob_start();
         eval('?>' . $buffer);
         $buffer = ob_get_clean();

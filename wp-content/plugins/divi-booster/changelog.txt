@@ -1,3 +1,16 @@
+= 4.2.9 =
+* Added new social icons: Threads and X
+
+= 4.2.8 = 
+* Added new social icons: what3words, OpenStreetMap, Michelin Guide, Komoot and Ko-fi
+
+= 4.2.7 =
+* Added Button Animation option with rocking animation to the Email Optin module.
+* Fixed slider height migration incorrectly affecting height of new sliders
+
+= 4.2.6 =
+* Removed now redundant slider height option
+
 = 4.2.5 =
 * Fixed second slide button icon not set correctly
 

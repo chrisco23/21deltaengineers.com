@@ -254,8 +254,8 @@ class Helpers {
 	 * @return bool             Whether or not there is an indexed post.
 	 */
 	private function checkForIndexedPost( $postType ) {
-		$posts = aioseo()->core->db
-			->start( aioseo()->core->db->db->posts . ' as p', true )
+		$db    = aioseo()->core->db->noConflict();
+		$posts = $db->start( aioseo()->core->db->db->posts . ' as p', true )
 			->select( 'p.ID' )
 			->join( 'aioseo_posts as ap', '`ap`.`post_id` = `p`.`ID`' )
 			->where( 'p.post_status', 'attachment' === $postType ? 'inherit' : 'publish' )
@@ -383,9 +383,46 @@ class Helpers {
 			$type = 'general';
 		}
 
+		// Allow WPML to filter out hidden language posts/terms.
+		$hiddenObjectIds = [];
+		if ( aioseo()->helpers->isWpmlActive() ) {
+			$hiddenLanguages = apply_filters( 'wpml_setting', [], 'hidden_languages' );
+			foreach ( $hiddenLanguages as $language ) {
+				$objectTypes = [];
+				if ( 'excludePosts' === $option ) {
+					$objectTypes = aioseo()->sitemap->helpers->includedPostTypes();
+					$objectTypes = array_map( function( $postType ) {
+						return "post_{$postType}";
+					}, $objectTypes );
+				}
+
+				if ( 'excludeTerms' === $option ) {
+					$objectTypes = aioseo()->sitemap->helpers->includedTaxonomies();
+					$objectTypes = array_map( function( $taxonomy ) {
+						return "tax{$taxonomy}";
+					}, $objectTypes );
+				}
+
+				$dbNoConflict = aioseo()->core->db->noConflict();
+				$rows         = $dbNoConflict->start( 'icl_translations' )
+					->select( 'element_id' )
+					->whereIn( 'element_type', $objectTypes )
+					->where( 'language_code', $language )
+					->run()
+					->result();
+
+				$ids = array_map( function( $row ) {
+					return (int) $row->element_id;
+				}, $rows );
+
+				$hiddenObjectIds = array_merge( $hiddenObjectIds, $ids );
+			}
+		}
+
 		$hasFilter = has_filter( 'aioseo_sitemap_' . aioseo()->helpers->toSnakeCase( $option ) );
 		$advanced  = aioseo()->options->sitemap->$type->advancedSettings->enable;
-		$excluded  = aioseo()->options->sitemap->$type->advancedSettings->$option;
+		$excluded  = array_merge( $hiddenObjectIds, aioseo()->options->sitemap->{$type}->advancedSettings->{$option} );
+
 		if (
 			( ! $advanced || empty( $excluded ) ) &&
 			! $hasFilter
@@ -395,6 +432,11 @@ class Helpers {
 
 		$ids = [];
 		foreach ( $excluded as $object ) {
+			if ( is_numeric( $object ) ) {
+				$ids[] = (int) $object;
+				continue;
+			}
+
 			$object = json_decode( $object );
 			if ( is_int( $object->value ) ) {
 				$ids[] = $object->value;
@@ -425,10 +467,10 @@ class Helpers {
 			return $urls;
 		}
 
-		foreach ( aioseo()->addons->getLoadedAddons() as $loadedAddon ) {
-			if ( ! empty( $loadedAddon->helpers ) && method_exists( $loadedAddon->helpers, 'getSitemapUrls' ) ) {
-				$urls = array_merge( $urls, $loadedAddon->helpers->getSitemapUrls() );
-			}
+		$addonsUrls = array_filter( aioseo()->addons->doAddonFunction( 'helpers', 'getSitemapUrls' ) );
+
+		foreach ( $addonsUrls as $addonUrls ) {
+			$urls = array_merge( $urls, $addonUrls );
 		}
 
 		if ( aioseo()->options->sitemap->general->enable ) {

@@ -32,7 +32,42 @@ function icon_data($icons=array()) {
             'name' => 'Eventbrite', 
             'color' => '#eb572c',
             'code' => '\e901'
-        )
+        ),
+        'kofi' => array(
+            'name' => 'Ko-fi', 
+            'color' => '#FF5E5B',
+            'code' => '\e902'
+        ),
+        'komoot' => array(
+            'name' => 'Komoot', 
+            'color' => 'rgb(141, 207, 86)',
+            'code' => '\e903'
+        ),
+        'michelin-guide' => array(
+            'name' => 'Michelin Guide', 
+            'color' => '#EE1C25',
+            'code' => '\e904'
+        ),
+        'openstreetmap' => array(
+            'name' => 'OpenStreetMap', 
+            'color' => '#003b6f',
+            'code' => '\e905'
+        ),
+        'what3words' => array(
+            'name' => 'What3words', 
+            'color' => '#E11F26',
+            'code' => '\e906'
+        ),
+        'x' => array(
+            'name' => 'X', 
+            'color' => 'rgb(15, 20, 25)',
+            'code' => '\e908'
+        ),
+        'threads' => array(
+            'name' => 'Threads', 
+            'color' => '#000000',
+            'code' => '\e907'
+        ),
     );
 }
 

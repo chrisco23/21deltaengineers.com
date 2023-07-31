@@ -2567,6 +2567,7 @@ function et_fb_get_nonces() {
 		'processImportedData'             => wp_create_nonce( 'et_fb_process_imported_data_nonce' ),
 		'retrieveLibraryModules'          => wp_create_nonce( 'et_fb_retrieve_library_modules_nonce' ),
 		'saveLibraryModules'              => wp_create_nonce( 'et_fb_save_library_modules_nonce' ),
+		'splitLibraryItem'                => wp_create_nonce( 'et_builder_split_library_item' ),
 		'clearTempPresets'                => wp_create_nonce( 'et_fb_clear_temp_presets_nonce' ),
 		'saveCloudItemContent'            => wp_create_nonce( 'et_fb_save_cloud_item_nonce' ),
 		'removeLibraryModules'            => wp_create_nonce( 'et_fb_remove_library_modules_nonce' ),

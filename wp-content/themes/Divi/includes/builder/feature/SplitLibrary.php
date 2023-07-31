@@ -57,6 +57,7 @@ class ET_Builder_Split_Library {
 		$prefix     = isset( $_POST['itemName'] ) ? sanitize_text_field( $_POST['itemName'] ) : false;
 		$to_cloud   = isset( $_POST['cloud'] ) ? sanitize_text_field( $_POST['cloud'] ) : 'off';
 		$split_type = isset( $_POST['updateType'] ) ? sanitize_text_field( $_POST['updateType'] ) : false;
+		$origin     = isset( $_POST['actionOrigin'] ) ? sanitize_text_field( $_POST['actionOrigin'] ) : '';
 
 		if ( ! $id || ! $split_type || ! $prefix ) {
 			wp_send_json_error();
@@ -87,7 +88,7 @@ class ET_Builder_Split_Library {
 				break;
 
 			case 'split_row':
-				$pattern     = '/\[(et_pb_(?!row|column).+?)\s.+?]?\[\/\1]/s';
+				$pattern     = '/\[(et_pb_(?!section|row|column).+?)\s.+?]?\[\/\1]/s';
 				$layout_type = 'module';
 				break;
 		}
@@ -113,7 +114,16 @@ class ET_Builder_Split_Library {
 		$processed = false;
 
 		foreach ( $matches[0] as $key => $content ) {
-			$args['layout_name'] = $prefix . ' ' . ( ++$key );
+			$title = $prefix;
+
+			if ( 'split_row' === $split_type && 'save_modal' === $origin ) {
+				$module_name = explode( ' ', $content )[0];
+				$module_name = str_replace( '[et_pb_', '', $module_name );
+				$module_name = ucfirst( str_replace( '_', ' ', $module_name ) );
+				$title       = str_replace( '%module_type%', $module_name, $prefix );
+			}
+
+			$args['layout_name'] = $title . ' ' . ( ++$key );
 
 			$content = $this->_get_content_with_type( $content, $layout_type );
 

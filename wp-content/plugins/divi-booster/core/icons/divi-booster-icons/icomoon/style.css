@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'divi-booster-icons';
-  src:  url('fonts/divi-booster-icons.eot?7o75rl');
-  src:  url('fonts/divi-booster-icons.eot?7o75rl#iefix') format('embedded-opentype'),
-    url('fonts/divi-booster-icons.ttf?7o75rl') format('truetype'),
-    url('fonts/divi-booster-icons.woff?7o75rl') format('woff'),
-    url('fonts/divi-booster-icons.svg?7o75rl#divi-booster-icons') format('svg');
+  src:  url('fonts/divi-booster-icons.eot?dl6bdb');
+  src:  url('fonts/divi-booster-icons.eot?dl6bdb#iefix') format('embedded-opentype'),
+    url('fonts/divi-booster-icons.ttf?dl6bdb') format('truetype'),
+    url('fonts/divi-booster-icons.woff?dl6bdb') format('woff'),
+    url('fonts/divi-booster-icons.svg?dl6bdb#divi-booster-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.divi-booster-icons-threads:before {
+  content: "\e907";
+}
+.divi-booster-icons-x:before {
+  content: "\e908";
+}
+.divi-booster-icons-komoot:before {
+  content: "\e903";
+}
+.divi-booster-icons-michelin-guide:before {
+  content: "\e904";
+}
+.divi-booster-icons-openstreetmap:before {
+  content: "\e905";
+}
+.divi-booster-icons-what3words:before {
+  content: "\e906";
+}
+.divi-booster-icons-kofi:before {
+  content: "\e902";
+}
 .divi-booster-icons-linktree:before {
   content: "\e900";
   color: #39e09b;

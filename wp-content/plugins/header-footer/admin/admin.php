@@ -17,7 +17,7 @@ add_action('admin_init', function () {
 
 
 add_action('admin_menu', function() {
-    add_options_page('Header and Footer', 'Header and Footer', 'manage_options', 'header-footer/admin/options.php');
+    add_options_page('Head and Footer', 'Head and Footer', 'manage_options', 'header-footer/admin/options.php');
 });
 
 

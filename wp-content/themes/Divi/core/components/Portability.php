@@ -463,7 +463,7 @@ class ET_Core_Portability {
 
 		// Return exported content instead of printing it
 		if ( $return ) {
-			return $data;
+			return array_merge( $data, [ 'timestamp' => $timestamp ] );
 		}
 
 		$filesystem->put_contents( $temp_file, wp_json_encode( (array) $data ) );
@@ -2639,15 +2639,18 @@ class ET_Core_Portability {
 			'postMaxSize'   => $this->to_megabytes( @ini_get( 'post_max_size' ) ),
 			'uploadMaxSize' => $this->to_megabytes( @ini_get( 'upload_max_filesize' ) ),
 			'text'          => array(
-				'browserSupport'      => esc_html__( 'The browser version you are currently using is outdated. Please update to the newest version.', ET_CORE_TEXTDOMAIN ),
-				'memoryExhausted'     => esc_html__( 'You reached your server memory limit. Please try increasing your PHP memory limit.', ET_CORE_TEXTDOMAIN ),
-				'maxSizeExceeded'     => esc_html__( 'This file cannot be imported. It may be caused by file_uploads being disabled in your php.ini. It may also be caused by post_max_size or/and upload_max_filesize being smaller than file selected. Please increase it or transfer more substantial data at the time.', ET_CORE_TEXTDOMAIN ),
-				'invalideFile'        => esc_html__( 'Invalid File format. You should be uploading a JSON file.', ET_CORE_TEXTDOMAIN ),
-				'importContextFail'   => esc_html__( 'This file should not be imported in this context.', ET_CORE_TEXTDOMAIN ),
-				'noItemsSelected'     => esc_html__( 'Please select at least one item to export or disable the "Only export selected items" option', ET_CORE_TEXTDOMAIN ),
-				'importing'           => sprintf( esc_html__( 'Import estimated time remaining: %smin', ET_CORE_TEXTDOMAIN ), $time ),
-				'exporting'           => sprintf( esc_html__( 'Export estimated time remaining: %smin', ET_CORE_TEXTDOMAIN ), $time ),
-				'backuping'           => sprintf( esc_html__( 'Backup estimated time remaining: %smin', ET_CORE_TEXTDOMAIN ), $time ),
+				// phpcs:disable WordPress.WP.I18n.NonSingularStringLiteralDomain -- Following the standard.
+				'browserSupport'    => esc_html__( 'The browser version you are currently using is outdated. Please update to the newest version.', ET_CORE_TEXTDOMAIN ),
+				'memoryExhausted'   => esc_html__( 'You reached your server memory limit. Please try increasing your PHP memory limit.', ET_CORE_TEXTDOMAIN ),
+				'maxSizeExceeded'   => esc_html__( 'This file cannot be imported. It may be caused by file_uploads being disabled in your php.ini. It may also be caused by post_max_size or/and upload_max_filesize being smaller than file selected. Please increase it or transfer more substantial data at the time.', ET_CORE_TEXTDOMAIN ),
+				'invalideFile'      => esc_html__( 'Invalid File format. You should be uploading a JSON file.', ET_CORE_TEXTDOMAIN ),
+				'importContextFail' => esc_html__( 'This file should not be imported in this context.', ET_CORE_TEXTDOMAIN ),
+				'noItemsSelected'   => esc_html__( 'Please select at least one item to export or disable the "Only export selected items" option', ET_CORE_TEXTDOMAIN ),
+				'noItemsToExport'   => esc_html__( 'There are no items to export.', ET_CORE_TEXTDOMAIN ),
+				'importing'         => sprintf( esc_html__( 'Import estimated time remaining: %smin', ET_CORE_TEXTDOMAIN ), $time ),
+				'exporting'         => sprintf( esc_html__( 'Export estimated time remaining: %smin', ET_CORE_TEXTDOMAIN ), $time ),
+				'backuping'         => sprintf( esc_html__( 'Backup estimated time remaining: %smin', ET_CORE_TEXTDOMAIN ), $time ),
+				// phpcs:enable
 			),
 		) );
 	}
@@ -2668,6 +2671,7 @@ class ET_Core_Portability {
 
 		$is_etdev_plugin_activated = is_plugin_active( 'etdev/etdev.php' );
 
+		// phpcs:disable WordPress.WP.I18n.NonSingularStringLiteralDomain -- Existing codebase.
 		?>
 		<div class="et-core-modal-overlay et-core-form" data-et-core-portability="<?php echo esc_attr( $this->instance->context ); ?>">
 			<div class="et-core-modal">
@@ -2695,8 +2699,13 @@ class ET_Core_Portability {
 								<?php endif; ?>
 							</form>
 						</div>
-						<a class="et-core-modal-action" href="#" data-et-core-portability-export="<?php echo esc_url( $export_url ); ?>"><?php printf( esc_html__( 'Export %s', ET_CORE_TEXTDOMAIN ), esc_html( $this->instance->name ) ); ?></a>
-						<a class="et-core-modal-action et-core-button-danger" href="#" data-et-core-portability-cancel><?php esc_html_e( 'Cancel Export', ET_CORE_TEXTDOMAIN ); ?></a>
+						<div class="et-core-action-buttons-container">
+							<a class="et-core-modal-action et-core-button-primary" href="#" data-et-core-portability-export="<?php echo esc_url( $export_url ); ?>"><?php esc_html_e( 'Download Export', ET_CORE_TEXTDOMAIN ); ?></a>
+							<a class="et-core-modal-action et-core-button-secondary" href="#" data-et-core-portability-export-to-cloud="1"><?php esc_html_e( 'Export To Divi Cloud', 'et-core' ); ?></a>
+						</div>
+						<div class="et-core-action-buttons-container__during_action">
+							<a class="et-core-modal-action et-core-button-danger" href="#" data-et-core-portability-cancel><?php esc_html_e( 'Cancel Export', ET_CORE_TEXTDOMAIN ); ?></a>
+						</div>
 					</div>
 					<div id="et-core-portability-import">
 						<div class="et-core-modal-content">
@@ -2728,6 +2737,7 @@ class ET_Core_Portability {
 			</div>
 		</div>
 		<?php
+		// phpcs:enable
 	}
 }
 
@@ -2898,34 +2908,43 @@ endif;
 
 
 if ( ! function_exists( 'et_core_portability_ajax_export' ) ) :
-/**
- * Ajax portability Export.
- *
- * @since 2.7.0
- */
-function et_core_portability_ajax_export() {
-	if ( ! isset( $_POST['context'] ) ) {
-			wp_send_json_error();
-			return;
+	/**
+	 * Ajax portability Export.
+	 *
+	 * @since 2.7.0
+	 */
+	function et_core_portability_ajax_export() {
+		if ( ! isset( $_POST['context'] ) ) {
+				wp_send_json_error();
+				return;
+		}
+
+		$context = sanitize_text_field( $_POST['context'] );
+
+		// phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure, WordPress.CodeAnalysis.AssignmentInCondition.Found -- Existing codebase.
+		if ( ! $capability = et_core_portability_cap( $context ) ) {
+				wp_send_json_error();
+				return;
+		}
+
+		if ( ! et_core_security_check_passed( $capability, 'et_core_portability_export', 'nonce' ) ) {
+				wp_send_json_error();
+				return;
+		}
+
+		$return = isset( $_POST['return'] ) && sanitize_text_field( $_POST['return'] );
+
+		if ( $return ) {
+			$data = et_core_portability_load( $context )->export( $return );
+
+			wp_send_json_success( $data );
+		} else {
+			et_core_portability_load( $context )->export();
+		}
+
+		wp_send_json_error();
 	}
-
-	$context = sanitize_text_field( $_POST['context'] );
-
-	if ( ! $capability = et_core_portability_cap( $context ) ) {
-			wp_send_json_error();
-			return;
-	}
-
-	if ( ! et_core_security_check_passed( $capability, 'et_core_portability_export', 'nonce' ) ) {
-			wp_send_json_error();
-			return;
-	}
-
-	et_core_portability_load( $context )->export();
-
-	wp_send_json_error();
-}
-add_action( 'wp_ajax_et_core_portability_export', 'et_core_portability_ajax_export' );
+	add_action( 'wp_ajax_et_core_portability_export', 'et_core_portability_ajax_export' );
 endif;
 
 

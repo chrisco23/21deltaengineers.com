@@ -7,9 +7,8 @@ if (!current_user_can('administrator')) {
     die();
 }
 
-if (function_exists('load_plugin_textdomain')) {
-    load_plugin_textdomain('header-footer', false, 'header-footer/languages');
-}
+load_plugin_textdomain('header-footer', false, 'header-footer/languages');
+
 
 require_once __DIR__ . '/controls.php';
 
@@ -18,7 +17,7 @@ $dismissed = get_option('hefo_dismissed', []);
 if (isset($_REQUEST['dismiss']) && check_admin_referer('dismiss')) {
     $dismissed[$_REQUEST['dismiss']] = 1;
     update_option('hefo_dismissed', $dismissed);
-    wp_redirect('?page=header-footer%2Foptions.php');
+    wp_redirect('?page=header-footer%2Fadmin%2Foptions.php');
     exit();
 }
 
@@ -26,6 +25,12 @@ if (isset($_POST['save'])) {
     if (!wp_verify_nonce($_POST['_wpnonce'], 'save'))
         die('Page expired');
     $options = hefo_request('options');
+    
+    // Another thing to be improved...
+    if (!isset($options['enable_php'])) {
+        $options['enable_php'] = '0';
+    }
+    
     if (empty($options['mobile_user_agents'])) {
         $options['mobile_user_agents'] = "phone\niphone\nipod\nandroid.+mobile\nxoom";
     }
@@ -94,7 +99,7 @@ if (isset($_POST['save'])) {
 
     <div style="padding: 15px; background-color: #fff; border: 1px solid #eee; font-size: 16px; line-height: 22px">
 <?php
-            if (apply_filters('hefo_php_exec', true)) {
+            if (apply_filters('hefo_php_exec', $options['enable_php'])) {
                 esc_html_e('PHP is allowed in your code.','header-footer');
             } else {
                 esc_html_e('PHP is NOT allowed in your code (disabled by your theme or a plugin)', 'header-footer');
@@ -379,14 +384,20 @@ if (isset($_POST['save'])) {
                     <?php esc_html_e('Useful for social button to be placed before and after the post or in posts and pages.', 'header-footer'); ?>
                 </p>
                 <table class="form-table">
-                    <? for ($i=1; $i<=5; $i++) { ?>
+                    <?php for ($i=1; $i<=5; $i++) { ?>
                     <tr valign="top"><?php hefo_field_textarea('snippet_' . $i, __('Snippet ' . $i, 'header-footer'), ''); ?></tr>
-                    <? } ?>
+                    <?php } ?>
                 </table>
                 <div class="clearfix"></div>
             </div>
 
             <div id="tabs-8">
+                <table class="form-table">
+                    <tr valign="top">
+                        <th scope="row">PHP</th>
+                        <?php hefo_field_checkbox_only2('enable_php', __('Enable PHP execution', 'header-footer'), ''); ?>
+                    </tr>
+                </table>
                 <table class="form-table">
                     <tr valign="top">
                         <?php

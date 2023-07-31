@@ -211,7 +211,7 @@ class ET_Core_API_Email_SendinBlue extends ET_Core_API_Email_Provider {
 
 		$result                      = 'success';
 		$this->data['is_authorized'] = 'true';
-		$list_data                   = $use_legacy_api ? $this->response->DATA['data']['lists'] : $this->response->DATA['lists'];
+		$list_data                   = $use_legacy_api ? $this->response->DATA['data']['lists'] : ( isset( $this->response->DATA['lists'] ) ? $this->response->DATA['lists'] : [] );
 
 		if ( ! empty( $list_data ) ) {
 			$this->data['lists'] = $this->_process_subscriber_lists( $list_data );

@@ -28,12 +28,14 @@ function et_common_global_js_vars() {
 		global $shortname;
 
 		// phpcs:disable WordPress.Security.NonceVerification -- This function does not change any state and is therefore not susceptible to CSRF.
-		$is_templates_page = isset( $_GET['page'] ) && 'et_theme_builder' === $_GET['page'];
-		$current_screen    = get_current_screen();
-		$toplevel_page     = 'toplevel_page_et_' . $shortname . '_options';
-		$is_options_page   = $toplevel_page === $current_screen->id;
+		$is_templates_page       = isset( $_GET['page'] ) && 'et_theme_builder' === $_GET['page'];
+		$current_screen          = get_current_screen();
+		$toplevel_page           = 'toplevel_page_et_' . $shortname . '_options';
+		$is_options_page         = $toplevel_page === $current_screen->id;
+		$is_layouts_library_page = isset( $current_screen->id ) && 'edit-et_pb_layout' === $current_screen->id;
+		$is_divi_library         = isset( $_GET['post_type'] ) && 'et_pb_layout' === $_GET['post_type'];
 
-		if ( ! $is_templates_page && ! $is_options_page && ! et_builder_bfb_enabled() ) {
+		if ( ! $is_templates_page && ! $is_options_page && ! $is_layouts_library_page && ! $is_divi_library && ! et_builder_bfb_enabled() ) {
 			return;
 		}
 	}

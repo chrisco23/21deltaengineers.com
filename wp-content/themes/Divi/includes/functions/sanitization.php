@@ -184,6 +184,8 @@ function et_sanitize_alpha_color( $color ) {
 			) {
 			return "rgba({$red},{$green},{$blue},{$alpha})";
 		}
+	} elseif ( 0 === strpos( $color, 'gcid-' ) ) {
+		return $color;
 	}
 
 	return false;

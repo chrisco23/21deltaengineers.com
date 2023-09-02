@@ -1,3 +1,39 @@
+version 4.22 ( updated 08-09-2023 )
+- Introduced Divi AI text and image generation.
+	* common/admin.php
+	* common/constants/colors.js
+	* common/i18n/ai.php
+	* common/lib/ai.js
+	* common/lib/i18n.js
+	* common/utils/color/color.js
+	* common/utils/html-utils.js
+	* core/functions.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/class-et-builder-module-shortcode-manager.php
+	* includes/builder/core.php
+	* includes/builder/feature/I18n.php
+	* includes/builder/feature/ai-button.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/assets.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/theme-builder/admin.php
+	* includes/builder/functions.php
+	* includes/builder/module/Heading.php
+
+version 4.21.2 ( updated 07-31-2023 )
+- Fixed a bug where export did not work correctly in the Backend Builder when the Post Content was used in the Theme Builder layout.
+- Fixed a bug that caused the Contact Form module field option "Allowed Symbols" to not work correctly in Chrome.
+- Fixed broken color picker in builder after upgrading to WordPress 6.3.
+- Fixed JavaScriot Uncaught ReferenceError: pagenow is not defined in Portability.
+- Removed unwanted Export To Divi Cloud button from the Theme Options export modal.
+	* core/admin/css/core.css
+	* core/admin/js/portability.js
+	* core/components/Portability.php
+	* core/ui/utils/frame-helpers.js
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/module/ContactFormItem.php
+
 version 4.21.1 ( updated 06-27-2023 )
 - Fixed an issue where the Scroll Effects scroll steps were incorrectly calculated.
 - Fixed issues affecting saving in Theme Builder in some cases.

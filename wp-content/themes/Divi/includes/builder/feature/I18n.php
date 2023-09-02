@@ -85,6 +85,7 @@ class ET_Builder_I18n {
 			case 'Flip'            : return esc_html__( 'Flip', 'et_builder' );
 			case 'Font size (em)'  : return esc_html__( 'Font size (em)', 'et_builder' );
 			case 'Hard Light'      : return esc_html__( 'Hard Light', 'et_builder' );
+			case 'Heading'         : return esc_html__( 'Heading', 'et_builder' );
 			case 'Hue'             : return esc_html__( 'Hue', 'et_builder' );
 			case 'Image'           : return esc_html__( 'Image', 'et_builder' );
 			case 'Inches (in)'     : return esc_html__( 'Inches (in)', 'et_builder' );

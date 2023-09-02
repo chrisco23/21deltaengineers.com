@@ -475,6 +475,13 @@ function et_fb_get_dynamic_backend_helpers() {
 
 	$helpers['dynamicContentFields'] = et_builder_get_dynamic_content_fields( $post_id, 'edit' );
 
+	$helpers['aiTextFieldEmptyOptions']        = et_builder_get_ai_text_field_empty_options();
+	$helpers['aiImageFieldOptions']            = et_builder_get_ai_text_field_empty_options( true );
+	$helpers['aiTextFieldOptions']             = et_builder_get_ai_text_field_options();
+	$helpers['aiTextOptions']                  = et_builder_get_ai_text_options();
+	$helpers['aiImageOptions']                 = et_builder_get_ai_image_options();
+	$helpers['aiTextFieldSelectedTextOptions'] = et_builder_get_ai_selected_text_field_options();
+
 	return $helpers;
 }
 
@@ -868,6 +875,9 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 				'opacity'        => ET_Global_Settings::get_value( 'all_filter_opacity' ),
 				'blur'           => ET_Global_Settings::get_value( 'all_filter_blur' ),
 				'mix_blend_mode' => ET_Global_Settings::get_value( 'all_mix_blend_mode' ),
+			),
+			'et_pb_heading'            => array(
+				'title' => $modules_defaults['title'],
 			),
 		),
 		'saveModuleLibraryCategories'      => et_fb_prepare_library_terms(),
@@ -2074,6 +2084,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 				'findReplace' => esc_html__( 'Find & Replace Color', 'et_builder' ),
 				'remove'      => esc_html__( 'Remove Gradient Stop', 'et_builder' ),
 			),
+			'generate_content_with_ai'  => esc_html__( 'Generate Content With AI', 'et_builder' ),
 		),
 		'tooltips'                  => array(
 			'insertModule'         => esc_html__( 'Insert Module', 'et_builder' ),
@@ -2791,6 +2802,14 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			),
 			'preset_desktop' => esc_html__( 'Desktop View', 'et_builder' ),
 			'preset_custom'  => esc_html__( 'Custom View', 'et_builder' ),
+		),
+
+		'ai'                        => array(
+			'tooltips' => array(
+				'divi_ai_options' => esc_html__( 'Divi AI Options', 'et_builder' ),
+			),
+			'title'                      => esc_html__( 'Title', 'et_builder' ),
+			'excerpt'                    => esc_html__( 'Excerpt', 'et_builder' ),
 		),
 	);
 	// phpcs:enable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned

@@ -175,6 +175,7 @@ require_once ET_BUILDER_DIR . 'feature/background-masks/PatternFields.php';
 require_once ET_BUILDER_DIR . 'feature/background-masks/MaskFields.php';
 require_once ET_BUILDER_DIR . 'feature/gutenberg/BlockTemplates.php';
 require_once ET_BUILDER_DIR . 'feature/local-library.php';
+require_once ET_BUILDER_DIR . 'feature/ai-button.php';
 
 // Conditional Includes.
 if ( et_is_woocommerce_plugin_active() ) {

@@ -164,11 +164,13 @@ if ( ! function_exists( 'et_builder_load_library' ) ) :
 		require_once ET_BUILDER_DIR . 'feature/Library.php';
 		require_once ET_BUILDER_DIR . 'feature/SplitLibrary.php';
 
-		// Initialize DiviCloud.
+		// Initialize Divi Cloud and AI.
 		if ( defined( 'ET_BUILDER_PLUGIN_ACTIVE' ) ) {
 			require_once ET_BUILDER_PLUGIN_DIR . '/cloud/cloud-app.php';
+			require_once ET_BUILDER_PLUGIN_DIR . '/ai-app/ai-app.php';
 		} else {
 			require_once get_template_directory() . '/cloud/cloud-app.php';
+			require_once get_template_directory() . '/ai-app/ai-app.php';
 		}
 	}
 endif;

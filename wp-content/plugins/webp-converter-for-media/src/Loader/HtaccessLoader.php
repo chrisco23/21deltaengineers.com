@@ -6,6 +6,8 @@ use WebpConverter\Service\CloudflareConfigurator;
 use WebpConverter\Service\EnvDetector;
 use WebpConverter\Service\OptionsAccessManager;
 use WebpConverter\Service\PathsGenerator;
+use WebpConverter\Settings\Option\CloudflareApiTokenOption;
+use WebpConverter\Settings\Option\CloudflareZoneIdOption;
 use WebpConverter\Settings\Option\ExtraFeaturesOption;
 use WebpConverter\Settings\Option\RewriteInheritanceOption;
 use WebpConverter\Settings\Option\SupportedExtensionsOption;
@@ -244,7 +246,8 @@ class HtaccessLoader extends LoaderAbstract {
 		$extensions = implode( '|', $settings[ SupportedExtensionsOption::OPTION_NAME ] );
 
 		$cache_control = true;
-		if ( OptionsAccessManager::get_option( CloudflareConfigurator::REQUEST_CACHE_CONFIG_OPTION ) === 'yes' ) {
+		if ( $settings[ CloudflareZoneIdOption::OPTION_NAME ] && $settings[ CloudflareApiTokenOption::OPTION_NAME ]
+			&& OptionsAccessManager::get_option( CloudflareConfigurator::REQUEST_CACHE_CONFIG_OPTION ) === 'yes' ) {
 			$cache_control = false;
 		} elseif ( EnvDetector::is_cdn_bunny() ) {
 			$cache_control = false;

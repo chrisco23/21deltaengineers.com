@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 5.9.5 (2023-07-31) =
+* `[Changed]` Error message for bypassing_apache error in server configuration
+* `[Added]` Clearing Cloudflare cache when activating and deactivating plugin
+
 = 5.9.4 (2023-07-12) =
 * `[Added]` Support for Bunny CDN and BunnyCDN plugin
 * `[Added]` Support for WordPress 6.3

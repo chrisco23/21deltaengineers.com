@@ -399,7 +399,7 @@ class Helpers {
 				if ( 'excludeTerms' === $option ) {
 					$objectTypes = aioseo()->sitemap->helpers->includedTaxonomies();
 					$objectTypes = array_map( function( $taxonomy ) {
-						return "tax{$taxonomy}";
+						return "tax_{$taxonomy}";
 					}, $objectTypes );
 				}
 
@@ -424,7 +424,8 @@ class Helpers {
 		$excluded  = array_merge( $hiddenObjectIds, aioseo()->options->sitemap->{$type}->advancedSettings->{$option} );
 
 		if (
-			( ! $advanced || empty( $excluded ) ) &&
+			! $advanced &&
+			empty( $excluded ) &&
 			! $hasFilter
 		) {
 			return '';

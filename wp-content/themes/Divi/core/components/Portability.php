@@ -2701,7 +2701,9 @@ class ET_Core_Portability {
 						</div>
 						<div class="et-core-action-buttons-container">
 							<a class="et-core-modal-action et-core-button-primary" href="#" data-et-core-portability-export="<?php echo esc_url( $export_url ); ?>"><?php esc_html_e( 'Download Export', ET_CORE_TEXTDOMAIN ); ?></a>
-							<a class="et-core-modal-action et-core-button-secondary" href="#" data-et-core-portability-export-to-cloud="1"><?php esc_html_e( 'Export To Divi Cloud', 'et-core' ); ?></a>
+							<?php if ( 'et_builder_layouts' === $this->instance->context ) { ?>
+								<a class="et-core-modal-action et-core-button-secondary" href="#" data-et-core-portability-export-to-cloud="1"><?php esc_html_e( 'Export To Divi Cloud', 'et-core' ); ?></a>
+							<?php } ?>
 						</div>
 						<div class="et-core-action-buttons-container__during_action">
 							<a class="et-core-modal-action et-core-button-danger" href="#" data-et-core-portability-cancel><?php esc_html_e( 'Cancel Export', ET_CORE_TEXTDOMAIN ); ?></a>

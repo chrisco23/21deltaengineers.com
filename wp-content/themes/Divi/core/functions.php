@@ -1751,9 +1751,13 @@ function et_core_get_et_account() {
 	$utils           = ET_Core_Data_Utils::instance();
 	$updates_options = get_site_option( 'et_automatic_updates_options', array() );
 
+	// Improve performance by NOT using $utils->array_get().
+	$username = isset( $updates_options['username'] ) ? $updates_options['username'] : '';
+	$api_key  = isset( $updates_options['api_key'] ) ? $updates_options['api_key'] : '';
+
 	return array(
-		'et_username' => $utils->array_get( $updates_options, 'username', '' ),
-		'et_api_key'  => $utils->array_get( $updates_options, 'api_key', '' ),
+		'et_username' => $username,
+		'et_api_key'  => $api_key,
 		'status'      => get_site_option( 'et_account_status', 'not_active' ),
 	);
 }
@@ -2165,9 +2169,31 @@ function et_code_snippets_vb_enqueue_scripts() {
 add_action( 'wp_enqueue_scripts', 'et_code_snippets_vb_enqueue_scripts' );
 
 /**
- * Load Cloud Snippets App on `Export To Divi Cloud` btn click.
+ * Enqueue AI scripts on BFB page.
  *
  * @since ??
+ *
+ * @return void
+ */
+function et_ai_admin_enqueue_scripts() {
+	if ( ! et_builder_bfb_enabled() ) {
+		return;
+	}
+
+	if ( ! class_exists( 'ET_AI_App' ) ) {
+		$path = defined( 'ET_BUILDER_PLUGIN_ACTIVE' ) ? ET_BUILDER_PLUGIN_DIR : get_template_directory();
+		require_once $path . '/ai-app/ai-app.php';
+	}
+
+	ET_AI_App::load_js();
+}
+
+add_action( 'admin_enqueue_scripts', 'et_ai_admin_enqueue_scripts' );
+
+/**
+ * Load Cloud Snippets App on `Export To Divi Cloud` btn click.
+ *
+ * @since 4.21.1
  *
  * @return void
  */

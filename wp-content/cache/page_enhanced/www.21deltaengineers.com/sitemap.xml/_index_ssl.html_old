@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This sitemap was dynamically generated on August 27, 2023 at 1:27 pm by All in One SEO v4.4.3 - the original SEO plugin for WordPress. -->
+
+<?xml-stylesheet type="text/xsl" href="https://www.21deltaengineers.com/default-sitemap.xsl?sitemap=root"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<sitemap>
+		<loc><![CDATA[https://www.21deltaengineers.com/page-sitemap.xml]]></loc>
+		<lastmod><![CDATA[2021-02-09T21:11:52+00:00]]></lastmod>
+	</sitemap>
+	<sitemap>
+		<loc><![CDATA[https://www.21deltaengineers.com/attachment-sitemap.xml]]></loc>
+		<lastmod><![CDATA[2012-06-20T09:24:33+00:00]]></lastmod>
+	</sitemap>
+</sitemapindex>
+
+<!--
+Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/
+
+Object Caching 19/23 objects using disk
+Page Caching using disk: enhanced 
+Lazy Loading
+Minified using disk
+Database Caching 8/27 queries in 0.016 seconds using disk (modification query)
+
+Served from: www.21deltaengineers.com @ 2023-08-27 13:27:06 by W3 Total Cache
+-->

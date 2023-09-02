@@ -8,7 +8,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '4.21.0' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '4.22.0' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -2542,7 +2542,7 @@ function et_fb_get_shortcode_from_fb_object() {
 
 	// phpcs:ignore ET.Sniffs.ValidatedSanitizedInput -- $_POST['modules'] will not be stored in db.
 	$shortcode_data = isset( $_POST['modules'] ) ? json_decode( stripslashes( $_POST['modules'] ), true ) : array();
-	$layout_type    = '';
+	$layout_type    = isset( $_POST['layout_type'] ) ? sanitize_text_field( $_POST['layout_type'] ) : '';
 
 	$post_content = et_fb_process_to_shortcode( $shortcode_data, array(), $layout_type );
 
@@ -13312,7 +13312,7 @@ function et_builder_get_global_color_info( $color_id ) {
 /**
  * Check if given value is a Global Color Id.
  *
- * @since ??
+ * @since 4.21.1
  *
  * @param string $attr_value Color value.
  * @return bool
@@ -13324,7 +13324,7 @@ function et_builder_is_global_color( $attr_value ) {
 /**
  * Get Global Color by Color Id.
  *
- * @since ??
+ * @since 4.21.1
  *
  * @param string $color_id Color ID.
  * @return string

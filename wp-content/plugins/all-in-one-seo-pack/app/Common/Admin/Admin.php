@@ -8,7 +8,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use AIOSEO\Plugin\Common\Models;
 use AIOSEO\Plugin\Common\Migration;
-use AIOSEO\Plugin\Common\Traits;
 
 /**
  * Abstract class that Pro and Lite both extend.
@@ -16,8 +15,6 @@ use AIOSEO\Plugin\Common\Traits;
  * @since 4.0.0
  */
 class Admin {
-	use Traits\Admin;
-
 	/**
 	 * The page slug for the sidebar.
 	 *
@@ -74,6 +71,15 @@ class Admin {
 		'plugins' => 'src/app/plugins/main.js',
 		'pages'   => 'src/vue/pages/{page}/main.js'
 	];
+
+	/**
+	 * Connect class instance.
+	 *
+	 * @since 4.4.3
+	 *
+	 * @var \AIOSEO\Plugin\Lite\Admin\Connect|null
+	 */
+	public $connect = null;
 
 	/**
 	 * Construct method.
@@ -353,7 +359,7 @@ class Admin {
 
 		$linkFormat = 'block';
 		if ( is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
-			$data = get_plugin_data( ABSPATH . 'wp-content/plugins/gutenberg/gutenberg.php', false, false );
+			$data = get_plugin_data( WP_CONTENT_DIR . '/plugins/gutenberg/gutenberg.php', false, false );
 			if ( version_compare( $data['Version'], '7.4.0', '<' ) ) {
 				$linkFormat = 'block-old';
 			}
@@ -1227,5 +1233,20 @@ class Admin {
 	 */
 	public function addAioseoModalPortal() {
 		echo '<div id="aioseo-modal-portal"></div>';
+	}
+
+	/**
+	 * Outputs the element we can mount our footer promotion standalone Vue app on.
+	 * Also enqueues the assets.
+	 *
+	 * @since   4.3.6
+	 * @version 4.4.3
+	 *
+	 * @return void
+	 */
+	public function addFooterPromotion() {
+		echo wp_kses_post( '<div id="aioseo-footer-links"></div>' );
+
+		aioseo()->core->assets->load( 'src/vue/standalone/footer-links/main.js' );
 	}
 }

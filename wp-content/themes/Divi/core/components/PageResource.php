@@ -1027,7 +1027,7 @@ class ET_Core_PageResource {
 		/**
 		 * Fires when the static resources are removed.
 		 *
-		 * @since ??
+		 * @since 4.21.1
 		 *
 		 * @param mixed $post_id The post ID.
 		 */

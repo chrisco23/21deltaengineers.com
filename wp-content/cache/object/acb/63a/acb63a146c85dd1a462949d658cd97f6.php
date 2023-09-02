@@ -1,0 +1,1 @@
+Áiód<?php exit; ?>a:1:{s:7:"content";s:133:"a:4:{s:4:"type";s:6:"manual";s:5:"email";s:28:"cortese.consulting@gmail.com";s:7:"version";s:5:"4.7.1";s:9:"timestamp";i:1484678342;}";}

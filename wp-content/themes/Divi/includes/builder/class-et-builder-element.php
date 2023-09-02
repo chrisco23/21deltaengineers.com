@@ -748,7 +748,7 @@ class ET_Builder_Element {
 	/**
 	 * Whether WordPress lazy load is disabled or not.
 	 *
-	 * @since ??
+	 * @since 4.21.1
 	 *
 	 * @var boolean
 	 */
@@ -4548,42 +4548,45 @@ class ET_Builder_Element {
 			}
 
 			if ( isset( $option_settings['header_level'] ) ) {
-				$additional_options[ "{$option_name}_level" ] = array(
-					'label'           => sprintf( esc_html__( '%1$s Heading Level', 'et_builder' ), $option_settings['label'] ),
-					'description'     => sprintf( esc_html__( 'Module %1$s are created using HTML headings. You can change the heading level for this module by choosing anything from H1 through H6. Higher heading levels are smaller and less significant.', 'et_builder' ), $option_settings['label'] ),
-					'type'            => 'multiple_buttons',
-					'option_category' => 'font_option',
-					'options'         => array(
-						'h1' => array(
-							'title' => 'H1',
-							'icon'  => 'text-h1',
+				$additional_options[ "{$option_name}_level" ] = wp_parse_args(
+					$option_settings['header_level'],
+					array(
+						'label'           => sprintf( esc_html__( '%1$s Heading Level', 'et_builder' ), $option_settings['label'] ),
+						'description'     => sprintf( esc_html__( 'Module %1$s are created using HTML headings. You can change the heading level for this module by choosing anything from H1 through H6. Higher heading levels are smaller and less significant.', 'et_builder' ), $option_settings['label'] ),
+						'type'            => 'multiple_buttons',
+						'option_category' => 'font_option',
+						'options'         => array(
+							'h1' => array(
+								'title' => 'H1',
+								'icon'  => 'text-h1',
+							),
+							'h2' => array(
+								'title' => 'H2',
+								'icon'  => 'text-h2',
+							),
+							'h3' => array(
+								'title' => 'H3',
+								'icon'  => 'text-h3',
+							),
+							'h4' => array(
+								'title' => 'H4',
+								'icon'  => 'text-h4',
+							),
+							'h5' => array(
+								'title' => 'H5',
+								'icon'  => 'text-h5',
+							),
+							'h6' => array(
+								'title' => 'H6',
+								'icon'  => 'text-h6',
+							),
 						),
-						'h2' => array(
-							'title' => 'H2',
-							'icon'  => 'text-h2',
-						),
-						'h3' => array(
-							'title' => 'H3',
-							'icon'  => 'text-h3',
-						),
-						'h4' => array(
-							'title' => 'H4',
-							'icon'  => 'text-h4',
-						),
-						'h5' => array(
-							'title' => 'H5',
-							'icon'  => 'text-h5',
-						),
-						'h6' => array(
-							'title' => 'H6',
-							'icon'  => 'text-h6',
-						),
-					),
-					'default'         => isset( $option_settings['header_level']['default'] ) ? $option_settings['header_level']['default'] : 'h2',
-					'tab_slug'        => $tab_slug,
-					'toggle_slug'     => $toggle_slug,
-					'sub_toggle'      => $sub_toggle,
-					'advanced_fields' => true,
+						'default'         => isset( $option_settings['header_level']['default'] ) ? $option_settings['header_level']['default'] : 'h2',
+						'tab_slug'        => $tab_slug,
+						'toggle_slug'     => $toggle_slug,
+						'sub_toggle'      => $sub_toggle,
+						'advanced_fields' => true,
+					)
 				);
 
 				if ( isset( $option_settings['header_level']['computed_affects'] ) ) {

@@ -1,1 +1,1 @@
-ûÌÇd<?php exit; ?>a:1:{s:7:"content";s:2:"31";}
+¶iód<?php exit; ?>a:1:{s:7:"content";i:31;}

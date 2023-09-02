@@ -1,4 +1,4 @@
-!ÅÛd<?php exit; ?>a:6:{s:10:"last_error";s:0:"";s:10:"last_query";s:182:"
+ÇæÛd<?php exit; ?>a:6:{s:10:"last_error";s:0:"";s:10:"last_query";s:182:"
 			SELECT  t.term_id
 			FROM wp_terms AS t  INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id
 			WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('Divi')

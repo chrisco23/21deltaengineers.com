@@ -356,6 +356,7 @@ class Content {
 		$lastModified = aioseo()->core->db
 			->start( aioseo()->core->db->db->posts . ' as p', true )
 			->select( 'MAX(`p`.`post_modified_gmt`) as last_modified' )
+			->where( 'p.post_status', 'publish' )
 			->whereRaw( "
 			( `p`.`ID` IN
 				(
@@ -481,7 +482,7 @@ class Content {
 				->select( 'u.ID as ID, u.user_nicename as nicename, MAX(p.post_modified_gmt) as lastModified' )
 				->join( 'posts as p', 'u.ID = p.post_author' )
 				->where( 'p.post_status', 'publish' )
-				->whereIn( 'p.post_type', aioseo()->sitemap->helpers->includedPostTypes() )
+				->whereIn( 'p.post_type', aioseo()->sitemap->helpers->getAuthorPostTypes() )
 				->groupBy( 'u.ID' )
 				->orderBy( 'lastModified DESC' )
 				->limit( aioseo()->sitemap->linksPerIndex, aioseo()->sitemap->pageNumber * aioseo()->sitemap->linksPerIndex )

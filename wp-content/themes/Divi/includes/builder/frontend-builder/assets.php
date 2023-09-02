@@ -352,7 +352,9 @@ function et_fb_enqueue_assets() {
 	// Skip react loading for the Cloud app ( second param = true ) as we already did it at this point ( @see et_fb_enqueue_react() above ).
 	ET_Cloud_App::load_js( false, true );
 
-	ET_AI_App::load_js( false, true );
+	if ( et_pb_is_allowed( 'divi_ai' ) ) {
+		ET_AI_App::load_js( false, true );
+	}
 }
 
 function et_fb_app_src( $tag, $handle, $src ) {

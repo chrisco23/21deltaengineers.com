@@ -529,4 +529,18 @@ class Helpers {
 
 		return apply_filters( 'aioseo_sitemap_exclude_images', $shouldExclude );
 	}
+
+	/**
+	 * Returns the post types to check against for the author sitemap.
+	 *
+	 * @since 4.4.4
+	 *
+	 * @return array The post types.
+	 */
+	public function getAuthorPostTypes() {
+		// By default, WP only considers posts for author archives, but users can include additional post types.
+		$postTypes = [ 'post' ];
+
+		return apply_filters( 'aioseo_sitemap_author_post_types', $postTypes );
+	}
 }

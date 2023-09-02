@@ -108,7 +108,7 @@ trait ThirdParty {
 			return is_shop();
 		}
 
-		$id = ! $id && ! empty( $_GET['post'] ) ? (int) wp_unslash( $_GET['post'] ) : (int) $id; // phpcs:ignore HM.Security.ValidatedSanitizedInput
+		$id = ! $id && ! empty( $_GET['post'] ) ? (int) wp_unslash( $_GET['post'] ) : (int) $id; // phpcs:ignore HM.Security.ValidatedSanitizedInput, HM.Security.NonceVerification.Recommended
 
 		return $id && wc_get_page_id( 'shop' ) === $id;
 	}
@@ -130,7 +130,7 @@ trait ThirdParty {
 			return is_cart();
 		}
 
-		$id = ! $id && ! empty( $_GET['post'] ) ? (int) wp_unslash( $_GET['post'] ) : (int) $id; // phpcs:ignore HM.Security.ValidatedSanitizedInput
+		$id = ! $id && ! empty( $_GET['post'] ) ? (int) wp_unslash( $_GET['post'] ) : (int) $id; // phpcs:ignore HM.Security.ValidatedSanitizedInput, HM.Security.NonceVerification.Recommended
 
 		return $id && wc_get_page_id( 'cart' ) === $id;
 	}
@@ -152,7 +152,7 @@ trait ThirdParty {
 			return is_checkout();
 		}
 
-		$id = ! $id && ! empty( $_GET['post'] ) ? (int) wp_unslash( $_GET['post'] ) : (int) $id; // phpcs:ignore HM.Security.ValidatedSanitizedInput
+		$id = ! $id && ! empty( $_GET['post'] ) ? (int) wp_unslash( $_GET['post'] ) : (int) $id; // phpcs:ignore HM.Security.ValidatedSanitizedInput, HM.Security.NonceVerification.Recommended
 
 		return $id && wc_get_page_id( 'checkout' ) === $id;
 	}
@@ -174,7 +174,7 @@ trait ThirdParty {
 			return is_account_page();
 		}
 
-		$id = ! $id && ! empty( $_GET['post'] ) ? (int) wp_unslash( $_GET['post'] ) : (int) $id; // phpcs:ignore HM.Security.ValidatedSanitizedInput
+		$id = ! $id && ! empty( $_GET['post'] ) ? (int) wp_unslash( $_GET['post'] ) : (int) $id; // phpcs:ignore HM.Security.ValidatedSanitizedInput, HM.Security.NonceVerification.Recommended
 
 		return $id && wc_get_page_id( 'myaccount' ) === $id;
 	}
@@ -595,7 +595,7 @@ trait ThirdParty {
 		global $wp;
 
 		// This URL param is set when using plain permalinks.
-		return isset( $_GET['amp'] ) || preg_match( '/amp$/', untrailingslashit( $wp->request ) );
+		return isset( $_GET['amp'] ) || preg_match( '/amp$/', untrailingslashit( $wp->request ) ); // phpcs:ignore HM.Security.NonceVerification.Recommended
 	}
 
 	/**
@@ -633,5 +633,16 @@ trait ThirdParty {
 		$et_pb_rendering_column_content = $flag;
 
 		return $originalValue;
+	}
+
+	/**
+	 * Checks whether the current request is being done by a crawler from Yandex.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @return bool Whether the current request is being done by a crawler from Yandex.
+	 */
+	public function isYandexUserAgent() {
+		return preg_match( '#.*Yandex.*#', $_SERVER['HTTP_USER_AGENT'] );
 	}
 }

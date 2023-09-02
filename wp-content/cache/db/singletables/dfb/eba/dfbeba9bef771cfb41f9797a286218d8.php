@@ -1,4 +1,4 @@
-!ÅÛd<?php exit; ?>a:6:{s:10:"last_error";s:0:"";s:10:"last_query";s:224:"
+ÇæÛd<?php exit; ?>a:6:{s:10:"last_error";s:0:"";s:10:"last_query";s:224:"
 			SELECT   wp_posts.*
 			FROM wp_posts 
 			WHERE 1=1  AND ( 

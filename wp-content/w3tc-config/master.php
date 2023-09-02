@@ -1,5 +1,5 @@
 <?php exit; ?>{
-    "version": "2.3.3",
+    "version": "2.4.1",
     "cluster.messagebus.debug": false,
     "cluster.messagebus.enabled": false,
     "cluster.messagebus.sns.region": "",
@@ -1042,10 +1042,10 @@
         "visibility": "never"
     },
     "imageservice.configuration_overloaded": true,
-    "lazyload_process_background": true,
     "fragmentcache": {
         "engine": ""
     },
+    "lazyload_process_background": true,
     "pgcache.bad_behavior_path": "",
     "newrelic": {
         "monitoring_type": "apm"

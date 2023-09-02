@@ -64,7 +64,6 @@ class ET_AI_App {
 		return [ 'action' => array( 'et_builder_update_et_account_local', 'et_ai_upload_image' ) ];
 	}
 
-
 	/**
 	 * AJAX Callback: Upload thumbnail and assign it to specified post.
 	 *
@@ -78,18 +77,42 @@ class ET_AI_App {
 	public static function et_ai_upload_image() {
 		et_core_security_check( 'edit_posts', 'et_ai_upload_image', 'wp_nonce' );
 
-		$image_url_raw = isset( $_POST['imageURL'] ) ? esc_url_raw( $_POST['imageURL'] ) : ''; // phpcs:ignore ET.Sniffs.ValidVariableName.VariableNotSnakeCase -- This is valid format for the property in the Cloud App.
+		// Get image URL from POST data
+		$image_url_raw = isset( $_POST['imageURL'] ) ? esc_url_raw( $_POST['imageURL'] ) : '';
 
-		// Upload and set featured image.
+		// Check if image URL is valid
 		if ( $image_url_raw && '' !== $image_url_raw ) {
+			// Download image and add it to Media Library
 			$upload = media_sideload_image( $image_url_raw, get_the_id(), null, 'id' );
 
+			// Check for errors while downloading image
+			if ( is_wp_error( $upload ) ) {
+				wp_send_json_error( [ 'message' => $upload->get_error_message() ] );
+			}
+
+			// Get attachment ID and image URL
 			$attachment_id  = is_wp_error( $upload ) ? 0 : $upload;
 			$image_url      = get_attached_file( $attachment_id );
-			$image_metadata = wp_generate_attachment_metadata( $attachment_id, $image_url );
 
-			wp_update_attachment_metadata( $attachment_id, $image_metadata );
+			// Convert image to JPG and compress with quality of 80
+			$image_editor = wp_get_image_editor( $image_url );
+			if ( ! is_wp_error( $image_editor ) ) {
+				$image_editor->set_quality( 80 );
+				$saved = $image_editor->save( null, 'image/jpeg' );
 
+				if ( ! is_wp_error( $saved ) ) {
+					wp_delete_attachment( $attachment_id, true );
+					$attachment_id = wp_insert_attachment([
+						'post_mime_type' => 'image/jpeg',
+						'post_title'     => preg_replace('/\.[^.]+$/', '', basename($saved['path'])),
+						'post_content'   => '',
+						'post_status'    => 'inherit'
+					], $saved['path']);
+					wp_update_attachment_metadata($attachment_id, wp_generate_attachment_metadata($attachment_id, $saved['path']));
+				}
+			}
+
+			// Send success response with attachment ID and URL
 			wp_send_json_success([
 				'localImageID'  => $attachment_id,
 				'localImageURL' => wp_get_attachment_url( $attachment_id ),

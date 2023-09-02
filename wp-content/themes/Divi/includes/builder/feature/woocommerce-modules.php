@@ -1049,7 +1049,9 @@ function et_builder_wc_render_module_template( $function_name, $args = array(), 
 			}
 			break;
 		case 'wc_get_stock_html':
-			echo wc_get_stock_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput -- `wc_get_stock_html` include woocommerce's `single-product/stock.php` template.
+			if ( is_a( $product, 'WC_Product' ) ) {
+				echo wc_get_stock_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput -- `wc_get_stock_html` include woocommerce's `single-product/stock.php` template.
+			}
 			break;
 		case 'wc_print_notice':
 			$message = et_()->array_get( $args, 'wc_cart_message', '' );

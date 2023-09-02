@@ -246,7 +246,10 @@ function et_theme_builder_enqueue_scripts() {
 	et_builder_load_library();
 
 	ET_Cloud_App::load_js();
-	ET_AI_App::load_js();
+
+	if ( et_pb_is_allowed( 'divi_ai' ) ) {
+		ET_AI_App::load_js();
+	}
 }
 add_action( 'admin_enqueue_scripts', 'et_theme_builder_enqueue_scripts' );
 

@@ -1,1 +1,0 @@
-l¶ôd<?php exit; ?>a:1:{s:7:"content";s:61:"/var/www/www.21deltaengineers.com/wp-content/themes/Divi/core";}

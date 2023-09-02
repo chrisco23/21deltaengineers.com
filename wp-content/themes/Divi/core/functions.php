@@ -2171,7 +2171,7 @@ add_action( 'wp_enqueue_scripts', 'et_code_snippets_vb_enqueue_scripts' );
 /**
  * Enqueue AI scripts on BFB page.
  *
- * @since ??
+ * @since 4.22.0
  *
  * @return void
  */
@@ -2185,7 +2185,9 @@ function et_ai_admin_enqueue_scripts() {
 		require_once $path . '/ai-app/ai-app.php';
 	}
 
-	ET_AI_App::load_js();
+	if ( et_pb_is_allowed( 'divi_ai' ) ) {
+		ET_AI_App::load_js();
+	}
 }
 
 add_action( 'admin_enqueue_scripts', 'et_ai_admin_enqueue_scripts' );

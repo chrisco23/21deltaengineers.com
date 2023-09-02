@@ -1004,8 +1004,11 @@ class Admin {
 				</svg>
 				<span>
 					<?php
-						// Translators: 1 - The short plugin name ("AIOSEO").
-						echo sprintf( esc_html__( '%1$s Score', 'all-in-one-seo-pack' ), esc_html( AIOSEO_PLUGIN_SHORT_NAME ) );
+						echo sprintf(
+							// Translators: 1 - The short plugin name ("AIOSEO").
+							esc_html__( '%1$s Score', 'all-in-one-seo-pack' ),
+							esc_html( AIOSEO_PLUGIN_SHORT_NAME )
+						);
 					?>
 				</span>
 				<div id="aioseo-post-settings-sidebar-button" class="aioseo-score-button classic-editor <?php echo esc_attr( $this->getScoreClass( $score ) ); ?>">
@@ -1151,12 +1154,13 @@ class Admin {
 			return $messages;
 		}
 
-		if ( empty( $_GET['ids'] ) ) {
+		if ( empty( $_GET['ids'] ) ) { // phpcs:ignore HM.Security.NonceVerification.Recommended
 			return $messages;
 		}
 
+		$ids = array_map( 'intval', explode( ',', wp_unslash( $_GET['ids'] ) ) ); // phpcs:ignore HM.Security.NonceVerification.Recommended, HM.Security.ValidatedSanitizedInput.InputNotSanitized
+
 		$posts = [];
-		$ids     = array_map( 'intval', explode( ',', wp_unslash( $_GET['ids'] ) ) ); // phpcs:ignore HM.Security.ValidatedSanitizedInput.InputNotSanitized
 		foreach ( $ids as $id ) {
 			// We need to clone the post here so we can get a real permalink for the post even if it is not published already.
 			$post = aioseo()->helpers->getPost( $id );

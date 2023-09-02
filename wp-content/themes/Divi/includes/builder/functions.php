@@ -8,7 +8,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '4.22.0' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '4.22.1' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -9609,6 +9609,10 @@ function et_pb_all_role_options() {
 				),
 				'theme_builder' => array(
 					'name'          => esc_html__( 'Theme Builder', 'et_builder' ),
+					'applicability' => array( 'administrator', 'editor' ),
+				),
+				'divi_ai'       => array(
+					'name'          => esc_html__( 'Divi AI', 'et_builder' ),
 					'applicability' => array( 'administrator', 'editor' ),
 				),
 				'ab_testing'    => array(

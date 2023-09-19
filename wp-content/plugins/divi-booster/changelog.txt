@@ -1,3 +1,8 @@
+= 4.3.0 =
+* Removed source files from build
+* Fixed issue with settings tabs being doubled up
+* Added vertical padding options for default Divi footer
+
 = 4.2.9 =
 * Added new social icons: Threads and X
 

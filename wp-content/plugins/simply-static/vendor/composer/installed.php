@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '1b6a2ae3ca998edb79d2c8620aaeccf3476b0864',
+    'reference' => 'fdf13d11b5285f5e3d8df3460c9819d52d5e9b28',
     'name' => 'patrickposner/simply-static',
   ),
   'versions' => 
@@ -27,7 +27,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '1b6a2ae3ca998edb79d2c8620aaeccf3476b0864',
+      'reference' => 'fdf13d11b5285f5e3d8df3460c9819d52d5e9b28',
     ),
     'symfony/css-selector' => 
     array (

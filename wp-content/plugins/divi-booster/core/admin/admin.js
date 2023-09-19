@@ -10,6 +10,16 @@ jQuery(function($){
 	
 	/* Show currently expanded sections */
 	$('.wtf-topheading').opened().show().subheadings().show().opened().show();
+
+    /* Add opened / closed classes */
+    $('.wtf-section-head').each(function(){
+        var section = $(this).section();
+        if (section.is(":visible")) {
+            $(this).addClass('dbdb-settings-section-opened');
+        } else {
+            $(this).addClass('dbdb-settings-section-closed');
+        }
+    });
 	
 	/* Handle clicks on section headings */
 	$(".wtf-section-head").click(function(){
@@ -19,11 +29,15 @@ jQuery(function($){
 			if ($(this).hasClass('wtf-topheading')) { // hide subsections
 				$(this).subheadings().collapse().opened().collapse(); 
 			}
+            $(this).removeClass('dbdb-settings-section-opened');
+            $(this).addClass('dbdb-settings-section-closed');
 		} else {
 			section.expand(); // open block
 			if ($(this).hasClass('wtf-topheading')) { // show subsections
 				$(this).subheadings().expand().opened().expand();
 			}
+            $(this).removeClass('dbdb-settings-section-closed');
+            $(this).addClass('dbdb-settings-section-opened');
 		}
 		
 		// record state in hidden input

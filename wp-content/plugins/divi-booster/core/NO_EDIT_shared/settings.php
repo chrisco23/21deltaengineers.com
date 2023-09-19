@@ -5,9 +5,18 @@ if (!defined('ABSPATH')) { exit(); } // No direct access
 
 add_action('db-settings-settings-box-before', 'submit_button');
 
-add_action('db-settings-title-after', __NAMESPACE__.'\output_settings_nav_tabs');
+add_action('db-settings-title-after', __NAMESPACE__.'\output_settings_nav_tabs'); // Applies to all plugins
 
-function output_settings_nav_tabs($plugin_slug) { ?>
+function output_settings_nav_tabs($plugin_slug) {
+    
+    // Only show the tabs for the current plugin
+    $split_path = explode('/', plugin_basename(__FILE__));
+    $current_plugin = array_shift($split_path);
+    if ($current_plugin !== $plugin_slug) {
+        return;
+    }
+    
+    ?>
     <ul id="db-settings-box-tabs">
     <?php 
     $tabs = \apply_filters("db-settings-{$plugin_slug}-tabs", array());

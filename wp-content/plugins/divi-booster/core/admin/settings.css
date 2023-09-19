@@ -126,3 +126,15 @@ div.wtfdivi011_cssblock:nth-of-type(1) { display:none; }
 a.wtfdivi011_action { margin:6px; vertical-align:bottom; background-repeat:no-repeat; background-size:16px 16px; display:inline-block; text-decoration:none; background-position:left center; padding-left:24px; }
 a.wtfdivi011_delete { background-image:url('../img/delete.png'); color:#c06; float:right; margin-right:-24px; }
 a.dbdb_add_custom_css_box { background-image:url('../img/icon_plus_alt2.png'); }
+
+/* Padding fields */
+.dbdb-settings-padding th {
+    font-weight: normal;   
+    width: auto !important;
+    min-width: 30px;
+    color: #444;
+    font-weight: 500;
+}
+.dbdb-settings-padding {
+    margin-left: 30px;
+}

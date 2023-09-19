@@ -1,0 +1,2 @@
+Î%
+e<?php exit; ?>a:1:{s:7:"content";s:505:"{"common.install":1677529033,"common.install_version":"2.3.0","common.show_note.nginx_restart_required":"false","license.status":"no_key","license.next_check":1695595579,"license.terms":"","license.community_terms":"decline","minify.hide_minify_help":true,"common.hide_note_wp_content_permissions":"true","common.show_note.plugins_updated":false,"common.show_note.plugins_updated.timestamp":1678396538,"common.show_note.flush_posts_needed":false,"common.show_note.flush_posts_needed.timestamp":1678396538}";}

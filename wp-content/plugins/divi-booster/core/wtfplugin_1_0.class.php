@@ -439,6 +439,26 @@ class wtfplugin_1_0 {
 			)
 		);
 	}
+
+    function paddingpicker($file, $defaults=array()) {
+        $top = isset($defaults['top'])?$defaults['top']:'';
+        $bottom = isset($defaults['bottom'])?$defaults['bottom']:'';
+        ?>
+        <table class="dbdb-settings-padding">
+        <tr>
+            <td>
+                <?php $this->numberpicker($file, 'top', $top); ?>
+            </td>
+            <td>px</td>
+            <td>
+                <?php $this->numberpicker($file, 'bottom', $bottom); ?>
+            </td>
+            <td>px</td>
+        </tr>
+        <tr><th>Top</th><th></th><th>Bottom</th><th></th></tr>
+        </table>
+	    <?php
+    }
 	
 	function textpicker($file, $field, $default='') { 
 		list($name, $option) = $this->get_setting_bases($file);

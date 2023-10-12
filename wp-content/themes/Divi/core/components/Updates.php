@@ -408,7 +408,7 @@ final class ET_Core_Updates {
 			$update_uri = isset( $plugin['UpdateURI'] ) ? $plugin['UpdateURI'] : '';
 			$is_et_uri  = false !== strpos( $update_uri, 'elegantthemes.com' );
 
-			// Continue to the next iteration if the Update URI 
+			// Continue to the next iteration if the Update URI
 			// is not empty and not using Elegant Themes's domain.
 			if ( ! empty( $update_uri ) && ! $is_et_uri ) {
 				continue;
@@ -428,27 +428,35 @@ final class ET_Core_Updates {
 		// Add automatic updates data if Username and API key are set correctly
 		$send_to_api = $this->maybe_add_automatic_updates_data( $send_to_api );
 
+		// If we don't have update values cached in the transient, we need to bypass rate limiting.
+		if ( $et_update_plugins ) {
+			$rate_limit = 'true';
+		} else {
+			$rate_limit = 'false';
+		}
+
 		$options = array(
-			'timeout'    => ( ( defined('DOING_CRON') && DOING_CRON ) ? 30 : 3),
+			'timeout'    => ( ( defined('DOING_CRON') && DOING_CRON ) ? 10 : 3),
 			'body'       => $send_to_api,
-			'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
+			'headers'    => array(
+				'rate_limit' => $rate_limit,
+			),
+			'user-agent' => 'WordPress/' . $wp_version . '; Plugin Updates/' . ET_CORE_VERSION . '; ' . home_url( '/' ),
 		);
 
 		$last_update = new stdClass();
 
 		$plugins_request = wp_remote_post( 'https://www.elegantthemes.com/api/api.php', $options );
 
-		if ( is_wp_error( $plugins_request ) ) {
-			$options['body']['failed_request'] = 'true';
-			$plugins_request = wp_remote_post( 'https://cdn.elegantthemes.com/api/api.php', $options );
-		}
-
-		$plugins_response = array();
+		$plugins_response = [];
+		$et_update_plugins_updated = false;
 
 		if ( ! is_wp_error( $plugins_request ) && wp_remote_retrieve_response_code( $plugins_request ) === 200 ){
 			$plugins_response = maybe_unserialize( wp_remote_retrieve_body( $plugins_request ) );
 
 			if ( ! empty( $plugins_response ) && is_array( $plugins_response ) ) {
+				$et_update_plugins_updated = true;
+
 				$request_settings = array( 'is_plugin_response' => true );
 
 				$plugins_response = $this->process_additional_response_settings( $plugins_response, $request_settings );
@@ -457,16 +465,22 @@ final class ET_Core_Updates {
 				$last_update->response = $plugins_response;
 
 				$last_update = $this->add_up_to_date_products_data( $last_update, $request_settings );
+
+				$last_update->last_checked = time();
+
+				$update_transient = $this->merge_et_products_response( $update_transient, $plugins_response );
+
+				set_site_transient( 'et_update_all_plugins', $last_update );
+
+				$this->update_product_domains();
 			}
 		}
 
-		$last_update->last_checked = time();
-
-		$update_transient = $this->merge_et_products_response( $update_transient, $plugins_response );
-
-		set_site_transient( 'et_update_all_plugins', $last_update );
-
-		$this->update_product_domains();
+		// if this is a rate limited or failed request, fallback to the last et_update_plugins value
+		// rather than overwrite it with an empty response
+		if ( ! $et_update_plugins_updated ) {
+			$update_transient = $this->merge_et_products_response( $update_transient, $et_update_plugins );
+		}
 
 		return $update_transient;
 	}
@@ -618,41 +632,56 @@ final class ET_Core_Updates {
 		// Add automatic updates data if Username and API key are set correctly
 		$send_to_api = $this->maybe_add_automatic_updates_data( $send_to_api );
 
+		// If we don't have update values cached in the transient, we need to bypass rate limiting.
+		if ( $et_update_themes ) {
+			$rate_limit = 'true';
+		} else {
+			$rate_limit = 'false';
+		}
+
 		$options = array(
-			'timeout'    => ( ( defined('DOING_CRON') && DOING_CRON ) ? 30 : 3 ),
+			'timeout'    => ( ( defined('DOING_CRON') && DOING_CRON ) ? 10 : 3 ),
 			'body'       => $send_to_api,
-			'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url()
+			'headers'    => array(
+				'rate_limit' => $rate_limit,
+			),
+			'user-agent' => 'WordPress/' . $wp_version . '; Theme Updates/' . ET_CORE_VERSION . '; ' . home_url( '/' ),
 		);
 
 		$last_update = new stdClass();
 
 		$theme_request = wp_remote_post( 'https://www.elegantthemes.com/api/api.php', $options );
-
-		if ( is_wp_error( $theme_request ) ) {
-			$options['body']['failed_request'] = 'true';
-			$theme_request = wp_remote_post( 'https://cdn.elegantthemes.com/api/api.php', $options );
-		}
+		$theme_response = [];
+		$et_update_themes_updated = false;
 
 		if ( ! is_wp_error( $theme_request ) && wp_remote_retrieve_response_code( $theme_request ) === 200 ){
 			$theme_response = maybe_unserialize( wp_remote_retrieve_body( $theme_request ) );
 
 			if ( ! empty( $theme_response ) && is_array( $theme_response ) ) {
+				$et_update_themes_updated = true;
+
 				$theme_response = $this->process_additional_response_settings( $theme_response );
 
 				$last_update->checked  = $themes;
 				$last_update->response = $theme_response;
 
 				$last_update = $this->add_up_to_date_products_data( $last_update );
+
+				$last_update->last_checked = time();
+
+				$update_transient = $this->merge_et_products_response( $update_transient, $last_update );
+
+				set_site_transient( 'et_update_themes', $last_update );
+
+				$this->update_product_domains();
 			}
 		}
 
-		$last_update->last_checked = time();
-
-		$update_transient = $this->merge_et_products_response( $update_transient, $last_update );
-
-		set_site_transient( 'et_update_themes', $last_update );
-
-		$this->update_product_domains();
+		// if this is a rate limited or failed request, fallback to the last et_update_themes value
+		// rather than overwrite it with an empty response
+		if ( ! $et_update_themes_updated ) {
+			$update_transient = $this->merge_et_products_response( $update_transient, $et_update_themes );
+		}
 
 		return $update_transient;
 	}

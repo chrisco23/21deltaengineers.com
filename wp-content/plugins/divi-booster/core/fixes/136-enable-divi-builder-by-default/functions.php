@@ -20,18 +20,17 @@ if (!class_exists('DBDBOption136_EnableBuilderByDefault')) {
 		
 		public function convertToVisualBuilderPost($post_id, $post) {
 			remove_action('wp_insert_post', array($this, 'convertToVisualBuilderPost'), 10, 2); 
-			if (isset($post->post_type) && in_array($post->post_type, $this->et_builder_get_enabled_builder_post_types())) {
+			if (isset($post->post_type) && in_array($post->post_type, $this->supported_post_types())) {
 				$this->setPostStatusToDraft($post_id);
 				$this->enableDiviBuilder($post_id);
 				$this->redirectToVisualBuilder($post_id);
 			}
 		}
 		
-		protected function et_builder_get_enabled_builder_post_types() {
-			if (!function_exists('et_builder_get_enabled_builder_post_types')) { 
-				return array(); 
-			}
-			return et_builder_get_enabled_builder_post_types();
+		protected function supported_post_types() {
+            $supported = function_exists('et_builder_get_enabled_builder_post_types')?et_builder_get_enabled_builder_post_types():array();
+            $supported = apply_filters('dbdb_enable_divi_builder_by_default_supported_post_types', $supported);
+			return $supported;
 		}
 		
 		protected function setPostStatusToDraft($post_id) {

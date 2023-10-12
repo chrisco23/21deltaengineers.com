@@ -46,6 +46,7 @@ return array(
     'WebpConverter\\Conversion\\Endpoint\\EndpointInterface' => $baseDir . '/src/Conversion/Endpoint/EndpointInterface.php',
     'WebpConverter\\Conversion\\Endpoint\\FilesStatsEndpoint' => $baseDir . '/src/Conversion/Endpoint/FilesStatsEndpoint.php',
     'WebpConverter\\Conversion\\Endpoint\\PathsEndpoint' => $baseDir . '/src/Conversion/Endpoint/PathsEndpoint.php',
+    'WebpConverter\\Conversion\\Endpoint\\RegenerateAttachmentEndpoint' => $baseDir . '/src/Conversion/Endpoint/RegenerateAttachmentEndpoint.php',
     'WebpConverter\\Conversion\\Endpoint\\RegenerateEndpoint' => $baseDir . '/src/Conversion/Endpoint/RegenerateEndpoint.php',
     'WebpConverter\\Conversion\\ExcludedPathsOperator' => $baseDir . '/src/Conversion/ExcludedPathsOperator.php',
     'WebpConverter\\Conversion\\FilesTreeFinder' => $baseDir . '/src/Conversion/FilesTreeFinder.php',

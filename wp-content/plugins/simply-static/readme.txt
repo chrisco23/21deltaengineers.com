@@ -4,7 +4,7 @@ Tags: HTML, static website generator, static site, secure, fast
 Requires at least: 6.2
 Tested up to: 6.3
 Requires PHP: 7.4
-Stable tag: 3.0.9
+Stable tag: 3.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,21 @@ We can even minify inline CSS & JavaScript.
 
 You can get the pro version [here](https://simplystatic.com/simply-static-pro/).
 
+== webtozip ==
+
+We also developed a service called [webtozip.com](https://webtozip.com/).
+
+If all you need is an archive of an existing WordPress website and you don't want to switch to a static site setup, we highly recommend using it instead of Simply Static.
+
+Here are the benefits:
+
+* it runs remotely (not on your server)
+* it is probably faster than running it on your own server
+* you don't have to worry about your WordPress version or your PHP version
+* you get the download link to the ZIP file via e-mail (no need for writing access on your server)
+
+It uses the same codebase as Simply Static but is not a plugin. It is a service that runs on our servers.
+
 = Tutorials =
 
 I publish new tutorials on how to work with Simply Static and other tools on my blog.
@@ -206,6 +221,13 @@ Simply Static creates a static copy of your WordPress site that is intended to b
 3. Diagnostics
 
 == Changelog ==
+
+= 3.1.1 =
+
+* improved admin UI descriptions in general settings
+* added support for 404 pages
+* added error message to WP_Error when archive dir cannot be created
+* added add_status_message method to Simply_Static\Options for WP CLI handling
 
 = 3.1.0 =
 

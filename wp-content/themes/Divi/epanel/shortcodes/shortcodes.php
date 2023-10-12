@@ -174,7 +174,7 @@ function et_add_simple_buttons(){
 
 	$buttons[] = array('name' => 'twitter',
 					'options' => array(
-						'display_name' => 'twitter',
+						'display_name' => 'x',
 						'open_tag' => '\n[twitter name="name"]',
 						'close_tag' => '[/twitter]\n',
 						'key' => ''

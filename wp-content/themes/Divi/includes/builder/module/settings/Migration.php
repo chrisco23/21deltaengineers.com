@@ -69,7 +69,7 @@ abstract class ET_Builder_Module_Settings_Migration {
 	 *
 	 * @var string
 	 */
-	public static $max_version = '4.16';
+	public static $max_version = '4.22.2';
 
 	/**
 	 * Array of already migrated data.
@@ -112,6 +112,7 @@ abstract class ET_Builder_Module_Settings_Migration {
 		'4.14.0'  => 'WooTextOG',
 		'4.15'    => 'BackgroundGradientOverlaysImage',
 		'4.16'    => 'BackgroundGradientStops',
+		'4.22.2'  => 'SocialMediaFollowNetworkTwitterToX',
 	);
 
 	/**

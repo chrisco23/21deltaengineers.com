@@ -23,7 +23,6 @@ class ET_Builder_Module_Heading extends ET_Builder_Module {
 		$this->plural           = esc_html__( 'Headings', 'et_builder' );
 		$this->slug             = 'et_pb_heading';
 		$this->vb_support       = 'on';
-		$this->main_css_element = '%%order_class%% .et_pb_heading_container';
 
 		$this->settings_modal_toggles = array(
 			'general'    => array(
@@ -47,12 +46,12 @@ class ET_Builder_Module_Heading extends ET_Builder_Module {
 					'label'          => et_builder_i18n( 'Heading' ),
 					'css'            => array(
 						'main' => [
-							'%%order_class%% h1',
-							'%%order_class%% h2',
-							'%%order_class%% h3',
-							'%%order_class%% h4',
-							'%%order_class%% h5',
-							'%%order_class%% h6',
+							'%%order_class%% .et_pb_heading_container h1',
+							'%%order_class%% .et_pb_heading_container h2',
+							'%%order_class%% .et_pb_heading_container h3',
+							'%%order_class%% .et_pb_heading_container h4',
+							'%%order_class%% .et_pb_heading_container h5',
+							'%%order_class%% .et_pb_heading_container h6',
 						],
 					),
 					'font_size'      => array(
@@ -71,13 +70,15 @@ class ET_Builder_Module_Heading extends ET_Builder_Module {
 				),
 			),
 			'background'      => array(
-				'css'     => array(
-					'main' => '%%order_class%%',
-				),
 				'options' => array(
 					'parallax_method' => array(
 						'default' => 'off',
 					),
+				),
+			),
+			'margin_padding' => array(
+				'css' => array(
+					'important' => 'all',
 				),
 			),
 			'max_width'       => array(
@@ -98,15 +99,6 @@ class ET_Builder_Module_Heading extends ET_Builder_Module {
 						'%%order_class%% h6',
 					],
 				),
-			),
-			'borders'         => array(
-				'default' => [
-					'css' => [
-						'main' => [
-							'border_radii' => '%%order_class%% .et_pb_heading_container',
-						],
-					],
-				],
 			),
 			'box_shadow'      => array(
 				'default' => array(),
@@ -174,32 +166,17 @@ class ET_Builder_Module_Heading extends ET_Builder_Module {
 	public function render( $attrs, $content, $render_slug ) {
 		$multi_view = et_pb_multi_view_options( $this );
 		// Allowing full html for backwards compatibility.
-		$title = $this->_esc_attr( 'title', 'full' );
-		// Allowing full html for backwards compatibility.
-		$text_orientation = $this->get_text_orientation();
+		$title            = $this->_esc_attr( 'title', 'full' );
 		$header_level     = $this->props['title_level'];
-
 		$video_background = $this->video_background();
 
-		$heading_content = '';
-		if ( $multi_view->has_value( 'title' ) ) {
-			$title = $multi_view->render_element(
-				array(
-					'tag'     => et_pb_process_header_level( $header_level, 'h1' ),
-					'content' => '{{title}}',
-					'attrs'   => array(
-						'class' => 'et_pb_module_heading',
-					),
-				)
-			);
-
-			$heading_content = $title;
-		}
-
-		// Module classnames.
-		$this->add_classname(
+		$title = $multi_view->render_element(
 			array(
-				"et_pb_text_align_{$text_orientation}",
+				'tag'     => et_pb_process_header_level( $header_level, 'h1' ),
+				'content' => '{{title}}',
+				'attrs'   => array(
+					'class' => 'et_pb_module_heading',
+				),
 			)
 		);
 
@@ -213,19 +190,29 @@ class ET_Builder_Module_Heading extends ET_Builder_Module {
 		// Background layout data attributes.
 		$data_background_layout = et_pb_background_layout_options()->get_background_layout_attrs( $this->props );
 
+		$content = $multi_view->render_element(
+			array(
+				'tag'     => 'div',
+				'content' => $title,
+				'attrs'   => array(
+					'class' => 'et_pb_heading_container',
+				),
+			)
+		);
+
 		$output = sprintf(
-			'<div class="et_pb_heading_container %2$s%5$s%6$s">
-					%4$s
-					%3$s
-					%7$s
-					%8$s
-					%1$s
+			'<div%3$s class="%2$s"%6$s>
+				%5$s
+				%4$s
+				%7$s
+				%8$s
+				%1$s
 			</div>',
-			/* 01 */ ( '' !== $heading_content ? $heading_content : '' ),
-			/* 02 */ ( '' !== $text_orientation ? sprintf( ' %1$s', esc_attr( $text_orientation ) ) : '' ),
-			/* 03 */ $parallax_image_background,
+			/* 01 */ $content,
+			/* 02 */ $this->module_classname( $render_slug ),
+			/* 03 */ $this->module_id(),
 			/* 04 */ $video_background,
-			/* 05 */ $this->module_classname( $render_slug ),
+			/* 05 */ $parallax_image_background,
 			/* 06 */ et_core_esc_previously( $data_background_layout ),
 			/* 07 */ et_core_esc_previously( $this->background_pattern() ),
 			/* 08 */ et_core_esc_previously( $this->background_mask() )

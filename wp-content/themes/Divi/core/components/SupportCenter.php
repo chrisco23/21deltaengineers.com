@@ -2311,7 +2311,7 @@ class ET_Core_SupportCenter {
 		$support_user_options = array(
 			'timeout'    => 30,
 			'body'       => $send_to_api,
-			'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
+			'user-agent' => 'WordPress/' . $wp_version . '; Support Center/' . ET_CORE_VERSION . '; ' . home_url( '/' ),
 		);
 
 		$request = wp_remote_post(
@@ -2589,10 +2589,6 @@ class ET_Core_SupportCenter {
 		);
 
 		$request = wp_remote_post( 'https://www.elegantthemes.com/api/token.php', $settings );
-
-		if ( is_wp_error( $request ) ) {
-			wp_remote_post( 'https://cdn.elegantthemes.com/api/token.php', $settings );
-		}
 	}
 
 	function support_user_update_via_ajax() {
@@ -3331,7 +3327,7 @@ class ET_Core_SupportCenter {
 					'username' => $et_username,
 					'api_key'  => $et_api_key,
 				),
-				'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
+				'user-agent' => 'WordPress/' . $wp_version . '; Support Center/' . ET_CORE_VERSION . '; ' . home_url( '/' ),
 			);
 		}
 

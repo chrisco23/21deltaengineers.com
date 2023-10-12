@@ -1935,13 +1935,13 @@ if ( ! function_exists( 'et_maybe_update_hosting_card_status' ) ) :
 
 		// Prepare settings for API request
 		$options = array(
-			'timeout'    => 30,
+			'timeout'    => 10,
 			'body'       => array(
 				'action'   => 'disable_hosting_card',
 				'username' => $et_username,
 				'api_key'  => $et_api_key,
 			),
-			'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
+			'user-agent' => 'WordPress/' . $wp_version . '; Hosting Card/' . ET_CORE_VERSION . '; ' . home_url( '/' ),
 		);
 
 		$request               = wp_remote_post( 'https://www.elegantthemes.com/api/api.php', $options );

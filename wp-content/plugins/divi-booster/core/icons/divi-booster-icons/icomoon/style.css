@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'divi-booster-icons';
-  src:  url('fonts/divi-booster-icons.eot?dl6bdb');
-  src:  url('fonts/divi-booster-icons.eot?dl6bdb#iefix') format('embedded-opentype'),
-    url('fonts/divi-booster-icons.ttf?dl6bdb') format('truetype'),
-    url('fonts/divi-booster-icons.woff?dl6bdb') format('woff'),
-    url('fonts/divi-booster-icons.svg?dl6bdb#divi-booster-icons') format('svg');
+  src:  url('fonts/divi-booster-icons.eot?1f56pp');
+  src:  url('fonts/divi-booster-icons.eot?1f56pp#iefix') format('embedded-opentype'),
+    url('fonts/divi-booster-icons.ttf?1f56pp') format('truetype'),
+    url('fonts/divi-booster-icons.woff?1f56pp') format('woff'),
+    url('fonts/divi-booster-icons.svg?1f56pp#divi-booster-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.divi-booster-icons-substack:before {
+  content: "\e909";
+  color: #ff681a;
+}
 .divi-booster-icons-threads:before {
   content: "\e907";
 }

@@ -80,8 +80,8 @@ class ET_Core_API_ElegantThemes {
 		global $wp_version;
 
 		$options = array_merge( array(
-			'timeout'    => 30,
-			'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
+			'timeout'    => 10,
+			'user-agent' => 'WordPress/' . $wp_version . '; Elegant Themes/' . ET_CORE_VERSION . '; ' . home_url( '/' ),
 		), $options );
 
 		return $options;

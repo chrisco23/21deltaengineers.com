@@ -188,11 +188,11 @@ $options = array (
                    "std" => "on",
                    "desc" =>esc_html__( "Here you can choose to display the Facebook Icon on your homepage. ", $themename ) ),
 
-			array( "name" =>esc_html__( "Show Twitter Icon", $themename ),
+			array( "name" =>esc_html__( "Show X Icon", $themename ),
                    "id" => $shortname . "_show_twitter_icon",
                    "type" => "checkbox2",
                    "std" => "on",
-                   "desc" =>esc_html__( "Here you can choose to display the Twitter Icon. ", $themename ) ),
+                   "desc" =>esc_html__( "Here you can choose to display the X Icon. ", $themename ) ),
 
 			array( 'name' => esc_html__( 'Show Instagram Icon', $themename ),
                    'id' => $shortname . '_show_instagram_icon',
@@ -213,12 +213,12 @@ $options = array (
                    "validation_type" => "url",
 				   "desc" =>esc_html__( "Enter the URL of your Facebook Profile. ", $themename ) ),
 
-			array( "name" =>esc_html__( "Twitter Profile Url", $themename ),
+			array( "name" =>esc_html__( "X Profile Url", $themename ),
                    "id" => $shortname . "_twitter_url",
                    "std" => "#",
                    "type" => "text",
                    "validation_type" => "url",
-				   "desc" =>esc_html__( "Enter the URL of your Twitter Profile.", $themename ) ),
+				   "desc" =>esc_html__( "Enter the URL of your X Profile.", $themename ) ),
 
 			array( 'name' => esc_html__( 'Instagram Profile Url', $themename ),
                    'id' => $shortname . '_instagram_url',

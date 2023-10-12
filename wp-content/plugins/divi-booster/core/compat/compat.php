@@ -6,3 +6,4 @@ include(dirname(__FILE__).'/supreme-modules-for-divi/supreme-modules-for-divi.ph
 include(dirname(__FILE__).'/wpml/wpml.php');
 include(dirname(__FILE__).'/wp-optimize/wp-optimize.php');
 include(dirname(__FILE__).'/wp-rocket/wp-rocket.php');
+include(dirname(__FILE__).'/the-events-calendar/the-events-calendar.php');

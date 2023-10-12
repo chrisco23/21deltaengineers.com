@@ -61,6 +61,7 @@ class ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56
         'WebpConverter\\Conversion\\Endpoint\\EndpointInterface' => __DIR__ . '/../..' . '/src/Conversion/Endpoint/EndpointInterface.php',
         'WebpConverter\\Conversion\\Endpoint\\FilesStatsEndpoint' => __DIR__ . '/../..' . '/src/Conversion/Endpoint/FilesStatsEndpoint.php',
         'WebpConverter\\Conversion\\Endpoint\\PathsEndpoint' => __DIR__ . '/../..' . '/src/Conversion/Endpoint/PathsEndpoint.php',
+        'WebpConverter\\Conversion\\Endpoint\\RegenerateAttachmentEndpoint' => __DIR__ . '/../..' . '/src/Conversion/Endpoint/RegenerateAttachmentEndpoint.php',
         'WebpConverter\\Conversion\\Endpoint\\RegenerateEndpoint' => __DIR__ . '/../..' . '/src/Conversion/Endpoint/RegenerateEndpoint.php',
         'WebpConverter\\Conversion\\ExcludedPathsOperator' => __DIR__ . '/../..' . '/src/Conversion/ExcludedPathsOperator.php',
         'WebpConverter\\Conversion\\FilesTreeFinder' => __DIR__ . '/../..' . '/src/Conversion/FilesTreeFinder.php',

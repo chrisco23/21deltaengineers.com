@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ET_AI_SERVER_URL' ) ) {
+	define( 'ET_AI_SERVER_URL', 'https://ai.elegantthemes.com/api/v1' );
+}
+
 class ET_AI_App {
 	/**
 	 * @var ET_AI_App
@@ -210,7 +214,7 @@ class ET_AI_App {
 			'site_language'       => self::get_language_english_name(),
 			'available_languages' => self::get_available_languages(),
 			'images_uri'          => ET_AI_PLUGIN_URI . '/app/images',
-			'ai_server_url'       => 'https://ai.elegantthemes.com/api/v1',
+			'ai_server_url'       => ET_AI_SERVER_URL,
 		);
 
 		if ( get_post_type() === 'page' ) {

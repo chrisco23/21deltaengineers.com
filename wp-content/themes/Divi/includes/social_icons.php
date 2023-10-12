@@ -10,7 +10,7 @@
 <?php if ( 'on' === et_get_option( 'divi_show_twitter_icon', 'on' ) ) : ?>
 	<li class="et-social-icon et-social-twitter">
 		<a href="<?php echo esc_url( strval( et_get_option( 'divi_twitter_url', '#' ) ) ); ?>" class="icon">
-			<span><?php esc_html_e( 'Twitter', 'Divi' ); ?></span>
+			<span><?php esc_html_e( 'X', 'Divi' ); ?></span>
 		</a>
 	</li>
 <?php endif; ?>

@@ -68,6 +68,11 @@ function icon_data($icons=array()) {
             'color' => '#000000',
             'code' => '\e907'
         ),
+        'substack' => array(
+            'name' => 'Substack', 
+            'color' => '#FFA500',
+            'code' => '\e909'
+        ),
     );
 }
 

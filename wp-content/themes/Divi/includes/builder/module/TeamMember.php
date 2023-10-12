@@ -231,18 +231,10 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 				'dynamic_content' => 'url',
 			),
 			'twitter_url'        => array(
-				'label'           => esc_html__( 'Twitter Profile Url', 'et_builder' ),
+				'label'           => esc_html__( 'X Profile Url', 'et_builder' ),
 				'type'            => 'text',
 				'option_category' => 'basic_option',
-				'description'     => esc_html__( 'Input Twitter Profile Url', 'et_builder' ),
-				'toggle_slug'     => 'main_content',
-				'dynamic_content' => 'url',
-			),
-			'google_url'         => array(
-				'label'           => esc_html__( 'Google+ Profile Url', 'et_builder' ),
-				'type'            => 'text',
-				'option_category' => 'basic_option',
-				'description'     => esc_html__( 'Input Google+ Profile Url', 'et_builder' ),
+				'description'     => esc_html__( 'Input X Profile Url', 'et_builder' ),
 				'toggle_slug'     => 'main_content',
 				'dynamic_content' => 'url',
 			),
@@ -361,7 +353,6 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 		$animation          = $this->props['animation'];
 		$facebook_url       = $this->props['facebook_url'];
 		$twitter_url        = $this->props['twitter_url'];
-		$google_url         = $this->props['google_url'];
 		$linkedin_url       = $this->props['linkedin_url'];
 		$use_icon_font_size = $this->props['use_icon_font_size'];
 
@@ -393,15 +384,7 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 			$social_links .= sprintf(
 				'<li><a href="%1$s" class="et_pb_font_icon et_pb_twitter_icon"><span>%2$s</span></a></li>',
 				esc_url( $twitter_url ),
-				esc_html__( 'Twitter', 'et_builder' )
-			);
-		}
-
-		if ( '' !== $google_url ) {
-			$social_links .= sprintf(
-				'<li><a href="%1$s" class="et_pb_font_icon et_pb_google_icon"><span>%2$s</span></a></li>',
-				esc_url( $google_url ),
-				esc_html__( 'Google+', 'et_builder' )
+				esc_html__( 'X', 'et_builder' )
 			);
 		}
 

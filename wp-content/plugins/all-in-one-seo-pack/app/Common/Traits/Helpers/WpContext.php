@@ -290,10 +290,18 @@ trait WpContext {
 			return $postContent;
 		}
 
+		// Because do_blocks() and do_shortcodes() can trigger conflicts, we need to clone these objects and restore them afterwards.
+		// We need to clone deep to sever pointers/references because these have nested object properties.
+		global $wp_query, $post;
+		$this->originalQuery = $this->deepClone( $wp_query );
+		$this->originalPost  = is_a( $post, 'WP_Post' ) ? $this->deepClone( $post ) : null;
+
 		// The order of the function calls below is intentional and should NOT change.
 		$postContent = function_exists( 'do_blocks' ) ? do_blocks( $postContent ) : $postContent; // phpcs:ignore AIOSEO.WpFunctionUse.NewFunctions.do_blocksFound
 		$postContent = wpautop( $postContent );
 		$postContent = $this->doShortcodes( $postContent );
+
+		$this->restoreWpQuery();
 
 		return $postContent;
 	}
@@ -775,13 +783,15 @@ trait WpContext {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param  \WP_Post $wpPost The post object.
+	 * @param  \WP_Post|int $wpPost The post object or ID.
 	 * @return void
 	 */
 	public function setWpQueryPost( $wpPost ) {
+		$wpPost = is_a( $wpPost, 'WP_Post' ) ? $wpPost : get_post( $wpPost );
+
 		global $wp_query, $post;
-		$this->originalQuery = clone $wp_query;
-		$this->originalPost  = $post;
+		$this->originalQuery = $this->deepClone( $wp_query );
+		$this->originalPost  = is_a( $post, 'WP_Post' ) ? $this->deepClone( $post ) : null;
 
 		$wp_query->posts                 = [ $wpPost ];
 		$wp_query->post                  = $wpPost;
@@ -806,18 +816,26 @@ trait WpContext {
 	 * @return void
 	 */
 	public function restoreWpQuery() {
-		if ( null === $this->originalQuery ) {
-			return;
+		global $wp_query, $post;
+		if ( is_a( $this->originalQuery, 'WP_Query' ) ) {
+			// Loop over all properties and replace the ones that have changed.
+			// We want to avoid replacing the entire object because it can cause issues with other plugins.
+			foreach ( $this->originalQuery as $key => $value ) {
+				if ( $value !== $wp_query->{$key} ) {
+					$wp_query->{$key} = $value;
+				}
+			}
 		}
 
-		global $wp_query, $post;
-		$wp_query = clone $this->originalQuery;
-
-		if ( null !== $this->originalPost ) {
-			$post = $this->originalPost;
+		if ( is_a( $this->originalPost, 'WP_Post' ) ) {
+			foreach ( $this->originalPost as $key => $value ) {
+				if ( $value !== $post->{$key} ) {
+					$post->{$key} = $value;
+				}
+			}
 		}
 
 		$this->originalQuery = null;
-		$this->originalPost = null;
+		$this->originalPost  = null;
 	}
 }

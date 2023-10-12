@@ -1755,6 +1755,11 @@ class ET_Dynamic_Assets {
 					"{$assets_prefix}/css/overlay{$this->_cpt_suffix}.css",
 				),
 			),
+			'et_pb_heading'                     => array(
+				'css' => array(
+					"{$assets_prefix}/css/heading{$this->_cpt_suffix}.css",
+				),
+			),
 			'et_pb_image'                       => array(
 				'css' => array(
 					"{$assets_prefix}/css/image{$this->_cpt_suffix}.css",

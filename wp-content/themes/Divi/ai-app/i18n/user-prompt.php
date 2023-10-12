@@ -65,7 +65,7 @@ return array(
 		'Lengthen'     => esc_html__( 'Lengthen', 'Divi' ),
 		'Shorten'      => esc_html__( 'Shorten', 'Divi' ),
 		'Simplify'     => esc_html__( 'Simplify', 'Divi' ),
-		'GenerateMore' => esc_html__( 'Generate 4 More', 'Divi' ),
+		'GenerateMore' => esc_html__( 'Generate Four More', 'Divi' ),
 	],
 	'tones'                                        => [
 		'informative' => esc_html__( 'Informative', 'Divi' ),

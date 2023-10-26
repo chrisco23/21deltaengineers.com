@@ -479,6 +479,7 @@ function et_fb_get_dynamic_backend_helpers() {
 	$helpers['aiImageFieldOptions']            = et_builder_get_ai_text_field_empty_options( true );
 	$helpers['aiTextFieldOptions']             = et_builder_get_ai_text_field_options();
 	$helpers['aiTextOptions']                  = et_builder_get_ai_text_options();
+	$helpers['aiCodeOptions']                  = et_builder_get_ai_code_options();
 	$helpers['aiImageOptions']                 = et_builder_get_ai_image_options();
 	$helpers['aiTextFieldSelectedTextOptions'] = et_builder_get_ai_selected_text_field_options();
 
@@ -1941,14 +1942,16 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 				'mapPinAddressInvalid' => esc_html__( 'Invalid Pin and address data. Please try again.', 'et_builder' ),
 			),
 			'tabs'             => array(
-				'general'  => et_builder_i18n( 'Content' ),
-				'design'   => et_builder_i18n( 'Design' ),
-				'advanced' => et_builder_i18n( 'Design' ),
-				'css'      => et_builder_i18n( 'Advanced' ),
-				'desktop'  => et_builder_i18n( 'Desktop' ),
-				'tablet'   => et_builder_i18n( 'Tablet' ),
-				'phone'    => et_builder_i18n( 'Phone' ),
-				'hover'    => esc_html__( 'Hover', 'et_builder' ),
+				'general'        => et_builder_i18n( 'Content' ),
+				'design'         => et_builder_i18n( 'Design' ),
+				'advanced'       => et_builder_i18n( 'Design' ),
+				'css'            => et_builder_i18n( 'Advanced' ),
+				'desktop'        => et_builder_i18n( 'Desktop' ),
+				'tablet'         => et_builder_i18n( 'Tablet' ),
+				'phone'          => et_builder_i18n( 'Phone' ),
+				'hover'          => esc_html__( 'Hover', 'et_builder' ),
+				'moduleElements' => esc_html__( 'Module Elements', 'et_builder' ),
+				'freeFormCSS'    => esc_html__( 'Free-Form CSS', 'et_builder' ),
 			),
 			'additionalButton' => array(
 				'changeApiKey'              => esc_html__( 'Change API Key', 'et_builder' ),
@@ -1978,6 +1981,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			),
 			'cssText'          => esc_html__( 'CSS', 'et_builder' ),
 			'cssSelector'      => esc_html__( 'CSS added here will target the following class:', 'et_builder' ),
+			'cssSelectorFree'  => esc_html__( 'CSS added here can target this element and any sub element using the selector keyword.', 'et_builder' ),
 			'hoverOptions'     => array(
 				'default' => et_builder_i18n( 'Default' ),
 				'hover'   => esc_html__( 'Hover', 'et_builder' ),
@@ -2331,6 +2335,14 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 				),
 				'filterNotice'          => esc_html__( 'No layers exist for this search query. Click here to clear your search filters.', 'et_builder' ),
 				'filterNoticeClickable' => esc_html__( 'Click here', 'et_builder' ),
+			),
+			'moduleElements'        => array(
+				'part1' => esc_html__( 'Target predefined selectors within this element without the need to write out selectors name. i.e.', 'et_builder' ),
+				'part2' => esc_html__( 'instead of', 'et_builder' ),
+			),
+			'freeFormCSS'           => array(
+				'part1' => esc_html__( 'Write free-form css using the keyword', 'et_builder' ),
+				'part2' => esc_html__( 'to target this module i.e.', 'et_builder' ),
 			),
 		),
 		'selectControl'             => array(
@@ -2808,8 +2820,8 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'tooltips' => array(
 				'divi_ai_options' => esc_html__( 'Divi AI Options', 'et_builder' ),
 			),
-			'title'                      => esc_html__( 'Title', 'et_builder' ),
-			'excerpt'                    => esc_html__( 'Excerpt', 'et_builder' ),
+			'title'          => esc_html__( 'Title', 'et_builder' ),
+			'excerpt'        => esc_html__( 'Excerpt', 'et_builder' ),
 		),
 	);
 	// phpcs:enable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned

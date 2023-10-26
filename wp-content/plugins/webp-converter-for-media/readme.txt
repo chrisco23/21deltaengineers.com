@@ -5,7 +5,7 @@ Tags: convert webp, webp, optimize images, image optimization, compress images
 Requires at least: 4.9
 Tested up to: 6.3
 Requires PHP: 7.0
-Stable tag: 5.11.1
+Stable tag: 5.11.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -376,6 +376,10 @@ Current list of supported CDN servers:
 5. Ability to manually undo optimization of selected image
 
 == Changelog ==
+
+= 5.11.2 (2023-10-16) =
+* `[Added]` Button to expand/collapse list of directories to optimize in Bulk Optimization of Images section
+* `[Added]` Notification about plugin requirements in WordPress Playground environment
 
 = 5.11.1 (2023-10-02) =
 * `[Fixed]` Duplicated rewrite rules for .jpeg files

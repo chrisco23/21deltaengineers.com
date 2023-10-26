@@ -166,10 +166,10 @@ span.db-custom-icon {
 .et_button_no_icon .db-custom-extended-icon.et_pb_button:after{
 	display: inline-block;
 }
-.et_button_no_icon .db-custom-extended-icon.et_pb_button:hover,
-.et_button_no_icon .et_pb_module .db-custom-extended-icon.et_pb_button:hover{
+.et_button_no_icon .et_pb_module:not(.dbdb-has-custom-padding) .db-custom-extended-icon.et_pb_button:hover{
 	padding:.3em 2em .3em .7em !important;
 }
+
 </style>
 <?php
 }

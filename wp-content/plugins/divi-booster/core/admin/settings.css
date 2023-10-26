@@ -69,7 +69,12 @@
 }
 
 /* image picker */
-.wtf-imagepicker-thumb { height:29px; vertical-align:top; margin:1px 2px 0; }
+.wtf-imagepicker-thumb { 
+    height:29px; 
+    vertical-align:top; 
+    margin:1px 2px 0; 
+    filter: drop-shadow(0px 0px 1px #444444);
+}
 .wtf-imagepicker-thumb[src=""] { display: none; }
 
 /* textbox picker */

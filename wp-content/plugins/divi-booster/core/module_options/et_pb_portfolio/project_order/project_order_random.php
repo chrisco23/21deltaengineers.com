@@ -27,5 +27,4 @@ function db_remove_pre_get_portfolio_projects_random($content) {
 function db_randomize_portfolio_module_projects($query) {	
 	$query->set('orderby', 'rand');
 	do_action('dbdb_portfolio_projectOrder_random_preGetPosts', $query);
-	//$query->set('ignore_custom_sort', true); // Ignore "Post Type Order" plugin ordering
 }

@@ -112,7 +112,7 @@ function booster_minify_css($css) {
 }
 
 // Add helper classes to buttons
-function add_class_to_right_icon_button($output, $render_slug, $module) {
+function dbdb_add_button_classes($output, $render_slug, $module) {
 	if (!is_string($output)) { return $output; }
     if (!isset($module->props)) return $output;
     $props = $module->props;
@@ -127,7 +127,11 @@ function add_class_to_right_icon_button($output, $render_slug, $module) {
     } elseif (isset($props['button_on_hover']) && $props['button_on_hover'] === 'off') {
         $output = preg_replace('/^(<div\b[^>]*\bclass="[^"]*)/', '$1 dbdb-icon-on-hover-off', $output);
     }
+    // Add class if custom_padding set
+    if (!empty($props['custom_padding'])) {
+        $output = preg_replace('/^(<div\b[^>]*\bclass="[^"]*)/', '$1 dbdb-has-custom-padding', $output);
+    }
 
     return $output;
 }
-add_filter('et_module_shortcode_output', 'add_class_to_right_icon_button', 10, 3);
+add_filter('et_module_shortcode_output', 'dbdb_add_button_classes', 10, 3);

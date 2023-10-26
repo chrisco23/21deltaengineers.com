@@ -203,6 +203,7 @@ class ET_AI_App {
 			'i18n'    => [
 				'userPrompt'    => require ET_AI_PLUGIN_DIR . '/i18n/user-prompt.php',
 				'authorization' => require ET_AI_PLUGIN_DIR . '/i18n/authorization.php',
+				'aiCode'        => require ET_AI_PLUGIN_DIR . '/i18n/ai-code.php',
 			],
 			'ajaxurl' => is_ssl() ? admin_url( 'admin-ajax.php' ) : admin_url( 'admin-ajax.php', 'http' ),
 			'nonces'  => [

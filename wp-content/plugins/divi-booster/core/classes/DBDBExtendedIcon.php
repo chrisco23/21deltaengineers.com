@@ -203,6 +203,7 @@ END;
 				width: 16px !important; 
 				height: 16px !important; 
 				color: rgba(0,0,0,0) !important; 
+                filter: drop-shadow(0px 0px 1px #111111);
 			}
 END;
 		}		

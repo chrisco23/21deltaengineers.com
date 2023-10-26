@@ -1,3 +1,13 @@
+= 4.3.4 =
+* Added option to hide top header on scroll when fixed header enabled
+* Added drop shadow to custom icon uploader thumbnails for improved visibility
+
+= 4.3.3 =
+* Fixed custom button icon padding incorrectly overridden when button icons disabled in customizer
+
+= 4.3.2 =
+* Fixed option to limit video module youtube related videos not working
+
 = 4.3.1 =
 * Added new social icon: Substack
 * Fixed "enable builder by default" 404 error when used with Events Calendar post type

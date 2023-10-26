@@ -1,3 +1,8 @@
+version 4.23 ( updated 10-19-2023 )
+- Introduced Divi Code AI, a personal coding assistant for Divi.
+	* includes/builder/functions.php
+	* includes/builder/scripts/src/builder.js
+
 version 4.22.2 ( updated 09-20-2023 )
 - Changed Twitter Icon and Twitter references to X.
 - Fixed Heading module various style options not applying correctly.

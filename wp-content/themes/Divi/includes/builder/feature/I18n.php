@@ -63,6 +63,7 @@ class ET_Builder_I18n {
 			case 'Cover'           : return esc_html__( 'Cover', 'et_builder' );
 			case 'Custom CSS'      : return esc_html__( 'Custom CSS', 'et_builder' );
 			case 'Custom Size'     : return esc_html__( 'Custom Size', 'et_builder' );
+			case 'CSS'             : return esc_html__( 'CSS', 'et_builder' );
 			case 'Dark'            : return esc_html__( 'Dark', 'et_builder' );
 			case 'Darken'          : return esc_html__( 'Darken', 'et_builder' );
 			case 'Default'         : return esc_html__( 'Default', 'et_builder' );

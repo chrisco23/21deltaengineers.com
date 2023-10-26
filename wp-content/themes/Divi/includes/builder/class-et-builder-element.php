@@ -414,6 +414,13 @@ class ET_Builder_Element {
 	private static $styles = array();
 
 	/**
+	 * Holds module free form styles for the current request.
+	 *
+	 * @var string
+	 */
+	private static $_free_form_styles = '';
+
+	/**
 	 * Holds internal module styles for the current module.
 	 * e.x In the Blog post module, {@see $internal_modules_styles} will hold style of all posts.
 	 *
@@ -8915,6 +8922,9 @@ class ET_Builder_Element {
 				'label'                    => et_builder_i18n( 'After' ),
 				'selector'                 => ':after',
 				'no_space_before_selector' => true,
+			),
+			'free_form'    => array(
+				'label' => et_builder_i18n( 'CSS' ),
 			),
 		);
 		$custom_css_fields          = apply_filters( 'et_default_custom_css_fields', $custom_css_default_options );
@@ -17627,6 +17637,36 @@ class ET_Builder_Element {
 	}
 
 	/**
+	 * Apply free form CSS.
+	 *
+	 * @param string $function_name Module slug.
+	 * @param string $element_selector Element selector.
+	 * @param string $css_string CSS string.
+	 *
+	 * @return void
+	 */
+	public function apply_free_form_css( $function_name, $element_selector, $css_string ) {
+		if ( '' === $css_string ) {
+			return;
+		}
+
+		$final_css_string = $css_string;
+		$selectors        = '/selector|\.selector|#selector/';
+		$order_class_name = self::get_module_order_class( $function_name );
+
+		if ( preg_match( $selectors, $css_string ) ) {
+			$final_css_string = preg_replace( $selectors, ".{$order_class_name}", $css_string );
+		}
+
+		if ( '' !== $final_css_string ) {
+			// New lines are saved as || in CSS Custom settings, remove them.
+			$final_css_string = preg_replace( '/(\|\|)/i', '', $final_css_string );
+
+			self::_set_free_form_style( $final_css_string );
+		}
+	}
+
+	/**
 	 * Process custom css fields into CSS style.
 	 *
 	 * @param string $function_name Module slug.
@@ -17693,11 +17733,15 @@ class ET_Builder_Element {
 			} else {
 				// Non responsive mode custom CSS.
 				if ( '' !== $css ) {
-					$el_style = array(
-						'selector'    => $selector,
-						'declaration' => trim( $css ),
-					);
-					self::set_style( $function_name, $el_style );
+					if ( 'free_form' === $slug ) {
+						$this->apply_free_form_css( $function_name, $selector, $css );
+					} else {
+						$el_style = array(
+							'selector'    => $selector,
+							'declaration' => trim( $css ),
+						);
+						self::set_style( $function_name, $el_style );
+					}
 				}
 			}
 
@@ -19592,6 +19636,15 @@ class ET_Builder_Element {
 	}
 
 	/**
+	 * Return style string from {@see self::$_free_form_styles}.
+	 *
+	 * @return string
+	 */
+	public static function get_free_form_styles() {
+		return self::$_free_form_styles;
+	}
+
+	/**
 	 * Intended to be used for unit testing
 	 *
 	 * @intendedForTesting
@@ -19720,6 +19773,12 @@ class ET_Builder_Element {
 			}
 
 			$output .= $media_query_output;
+		}
+
+		$free_form_styles_output = self::get_free_form_styles();
+
+		if ( isset( $free_form_styles_output ) && '' !== $free_form_styles_output ) {
+			$output .= wp_strip_all_tags( $free_form_styles_output );
 		}
 
 		return $output;
@@ -20293,6 +20352,17 @@ class ET_Builder_Element {
 			self::$internal_modules_styles[ $style_key ] = $styles;
 		} else {
 			self::$styles[ $style_key ] = $styles;
+		}
+	}
+
+	/**
+	 * Set free form module style.
+	 *
+	 * @param string $style Style string.
+	 */
+	protected static function _set_free_form_style( $style ) {
+		if ( '' !== $style ) {
+			self::$_free_form_styles = $style;
 		}
 	}
 

@@ -127,6 +127,27 @@ function et_builder_get_ai_text_options() {
 	];
 }
 
+/**
+ * Get AI code options to be listed.
+ *
+ * These options are shown when the code field is NOT empty.
+ *
+ * @return Array
+ */
+function et_builder_get_ai_code_options() {
+	return [
+		'code_with_ai'          => esc_html__( 'Code With AI', 'et_builder' ),
+		'improve_code_with_ai'  => esc_html__( 'Improve With AI', 'et_builder' ),
+
+		// Later, qucik options will be retrieved from AI server, these are just placeholders for now.
+		'make_it_better'        => esc_html__( 'Make It Better', 'et_builder' ),
+		'format'                => esc_html__( 'Format', 'et_builder' ),
+		'improve_compatibility' => esc_html__( 'Improve Compatibility', 'et_builder' ),
+		'optimize'              => esc_html__( 'Optimize', 'et_builder' ),
+		'convert_color_values'  => esc_html__( 'Convert Color Values', 'et_builder' ),
+		'prefix_classes'        => esc_html__( 'Prefix Classes', 'et_builder' ),
+	];
+}
 
 /**
  * Gets AI image options to be listed.

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This sitemap was dynamically generated on November 5, 2023 at 10:18 am by All in One SEO v4.4.8 - the original SEO plugin for WordPress. -->
+
+<?xml-stylesheet type="text/xsl" href="https://www.21deltaengineers.com/default-sitemap.xsl?sitemap=page"?>
+<urlset
+	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+	xmlns:xhtml="http://www.w3.org/1999/xhtml"
+	xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/]]></loc>
+		<lastmod><![CDATA[2020-11-11T22:39:49+00:00]]></lastmod>
+		<changefreq><![CDATA[always]]></changefreq>
+		<priority><![CDATA[1]]></priority>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/banner_cropped_to_logo_sdvosb.png]]></image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/services/]]></loc>
+		<lastmod><![CDATA[2021-10-12T22:54:13+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/contact/]]></loc>
+		<lastmod><![CDATA[2021-02-09T21:11:52+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/projects/]]></loc>
+		<lastmod><![CDATA[2020-08-24T06:06:20+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/extend_chilled_water_loop-1.png]]></image:loc>
+		</image:image>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/extend_chilled_water_loop_schematic.png]]></image:loc>
+		</image:image>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/resign_and_resurface.jpg]]></image:loc>
+		</image:image>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/resign_and_resurface_schematic.jpg]]></image:loc>
+		</image:image>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/wichita.png]]></image:loc>
+		</image:image>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/wichita_photo.png]]></image:loc>
+		</image:image>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/hvac_corrections_800_364.png]]></image:loc>
+		</image:image>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/resign_and_resurface_2.jpg]]></image:loc>
+		</image:image>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/resign_and_resurface_3.jpg]]></image:loc>
+		</image:image>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/boiler_control_station-1.png]]></image:loc>
+		</image:image>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/replace_steam_800x600.jpg]]></image:loc>
+		</image:image>
+		<image:image>
+			<image:loc><![CDATA[https://www.21deltaengineers.com/wp-content/uploads/2020/08/replace_steam_2.png]]></image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/links/]]></loc>
+		<lastmod><![CDATA[2020-08-24T04:39:08+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/careers/]]></loc>
+		<lastmod><![CDATA[2020-08-24T04:37:18+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/links/government-links/]]></loc>
+		<lastmod><![CDATA[2018-05-29T01:32:24+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/links/electrical-systems/]]></loc>
+		<lastmod><![CDATA[2018-05-29T01:31:29+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/links/electrical-power/]]></loc>
+		<lastmod><![CDATA[2018-05-29T01:30:46+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/links/state-board-links/]]></loc>
+		<lastmod><![CDATA[2018-05-29T01:29:57+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/links/organization-links/]]></loc>
+		<lastmod><![CDATA[2018-05-29T01:29:04+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/links/drafting-cad/]]></loc>
+		<lastmod><![CDATA[2018-05-29T01:27:43+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/links/mechanical-systems/]]></loc>
+		<lastmod><![CDATA[2018-05-29T01:26:22+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/veterans/]]></loc>
+		<lastmod><![CDATA[2018-05-29T01:07:18+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+	<url>
+		<loc><![CDATA[https://www.21deltaengineers.com/links/lighting/]]></loc>
+		<lastmod><![CDATA[2018-05-29T00:38:05+00:00]]></lastmod>
+		<changefreq><![CDATA[weekly]]></changefreq>
+		<priority><![CDATA[0.7]]></priority>
+	</url>
+</urlset>
+
+<!--
+Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/
+
+Object Caching 17/48 objects using disk
+Page Caching using disk: enhanced 
+Lazy Loading
+Minified using disk
+Database Caching using disk (modification query)
+
+Served from: www.21deltaengineers.com @ 2023-11-05 10:18:45 by W3 Total Cache
+-->

@@ -1,5 +1,4 @@
 <?php
-
 defined('ABSPATH') || exit;
 
 // Quick security patch, to be better integrated
@@ -9,8 +8,9 @@ if (!current_user_can('administrator')) {
 
 load_plugin_textdomain('header-footer', false, 'header-footer/languages');
 
-
 require_once __DIR__ . '/controls.php';
+
+//update_option('hefo_dismissed', []);
 
 $dismissed = get_option('hefo_dismissed', []);
 
@@ -25,12 +25,12 @@ if (isset($_POST['save'])) {
     if (!wp_verify_nonce($_POST['_wpnonce'], 'save'))
         die('Page expired');
     $options = hefo_request('options');
-    
+
     // Another thing to be improved...
     if (!isset($options['enable_php'])) {
         $options['enable_php'] = '0';
     }
-    
+
     if (empty($options['mobile_user_agents'])) {
         $options['mobile_user_agents'] = "phone\niphone\nipod\nandroid.+mobile\nxoom";
     }
@@ -52,7 +52,7 @@ if (isset($_POST['save'])) {
 
 <script>
     jQuery(function () {
-        
+
         jQuery("textarea.hefo-cm").each(function () {
             wp.codeEditor.initialize(this);
         });
@@ -70,7 +70,7 @@ if (isset($_POST['save'])) {
                 I never asked before and I'm curious: <a href="http://wordpress.org/extend/plugins/header-footer/" target="_blank"><strong>would you rate this plugin</strong></a>?
                 (takes only few seconds required - account on WordPress.org, every blog owner should have one...). <strong>Really appreciated, Stefano</strong>.
                 <a class="hefo-dismiss" href="<?php echo wp_nonce_url($_SERVER['REQUEST_URI'] . '&dismiss=rate&noheader=1', 'dismiss') ?>">&times;</a>
-            </p>   
+            </p>
         </div>
     <?php } ?>
 
@@ -84,32 +84,42 @@ if (isset($_POST['save'])) {
                 <input type="submit" value="Subscribe">
             </form>
             <a class="hefo-dismiss" href="<?php echo wp_nonce_url($_SERVER['REQUEST_URI'] . '&dismiss=newsletter&noheader=1', 'dismiss') ?>">&times;</a>
-            </p>   
+            </p>
         </div>
-    <?php } ?>      
+    <?php } ?>
+
+    <?php if (!isset($dismissed['automation'])) { ?>
+        <div class="notice notice-success"><p>
+                I'm developing a new plugin:
+                <a href="https://automation.webagile.net" target="_blank">Welcome Email for Contact Form 7</a> (and more).
+                Available for direct donwload until I wait the approvation to publish on WP.org.
+            <a class="hefo-dismiss" href="<?php echo wp_nonce_url($_SERVER['REQUEST_URI'] . '&dismiss=automation&noheader=1', 'dismiss') ?>">&times;</a>
+
+        </div>
+    <?php } ?>
 
     <div style="padding: 15px; background-color: #fff; border: 1px solid #eee; font-size: 16px; line-height: 22px; margin-bottom: 10px;">
-        Did this plugin save you lot of time and troubles?    
+        Did this plugin save you lot of time and troubles?
         <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5PHGDGNHAYLJ8" target="_blank"><img style="vertical-align: bottom" src="<?php echo plugins_url('header-footer') ?>/images/donate.png"></a>
         To help children. Even <b>2$</b> help. <a href="http://www.satollo.net/donations" target="_blank">Please read more</a>. Thank you.
         <br>
-        Are you profitably using this free plugin for your customers? One more reason to consider a 
+        Are you profitably using this free plugin for your customers? One more reason to consider a
         <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5PHGDGNHAYLJ8" target="_blank">donation</a>. Thank you.
     </div>
 
     <div style="padding: 15px; background-color: #fff; border: 1px solid #eee; font-size: 16px; line-height: 22px">
-<?php
-            if (apply_filters('hefo_php_exec', $options['enable_php'])) {
-                esc_html_e('PHP is allowed in your code.','header-footer');
-            } else {
-                esc_html_e('PHP is NOT allowed in your code (disabled by your theme or a plugin)', 'header-footer');
-            }
-            ?>
+        <?php
+        if (apply_filters('hefo_php_exec', $options['enable_php'])) {
+            esc_html_e('PHP is allowed in your code.', 'header-footer');
+        } else {
+            esc_html_e('PHP is NOT allowed in your code (disabled by your theme or a plugin)', 'header-footer');
+        }
+        ?>
         <br>
-        
-            <?php esc_html_e('Mobile configuration is <strong>now deprecated</strong>', 'header-footer'); ?>. 
-            <a href="https://www.satollo.net/plugins/header-footer" target="_blank" class="readmore"><?php esc_html_e('Read more', 'header-footer'); ?></a>
-        
+
+        <?php esc_html_e('Mobile configuration is now deprecated', 'header-footer'); ?>.
+        <a href="https://www.satollo.net/plugins/header-footer" target="_blank" class="readmore"><?php esc_html_e('Read more', 'header-footer'); ?></a>
+
     </div>
 
 
@@ -124,6 +134,7 @@ if (isset($_POST['save'])) {
             <ul>
                 <li><a href="#tabs-first"><?php esc_html_e('Head and footer', 'header-footer'); ?></a></li>
                 <li><a href="#tabs-post"><?php esc_html_e('Posts', 'header-footer'); ?></a></li>
+                <li><a href="#tabs-cpts"><?php esc_html_e('CPTs', 'header-footer'); ?></a></li>
                 <li><a href="#tabs-post-inner"><?php esc_html_e('Inside posts', 'header-footer'); ?></a></li>
                 <li><a href="#tabs-page"><?php esc_html_e('Pages', 'header-footer'); ?></a></li>
                 <li><a href="#tabs-excerpt"><?php esc_html_e('Excerpts', 'header-footer'); ?></a></li>
@@ -238,6 +249,45 @@ if (isset($_POST['save'])) {
                 <div class="clearfix"></div>
             </div>
 
+            <div id="tabs-cpts">
+                <?php
+                $post_types = get_post_types(['public' => true], 'objects', 'and');
+                ?>
+
+                <?php foreach ($post_types as $post_type) { ?>
+                    <?php
+                    if ($post_type->name === 'post' || $post_type->name === 'page' || $post_type->name === 'attachment') {
+                        continue;
+                    }
+                    ?>
+                    <h3><?php echo esc_html($post_type->label) ?></h3>
+                    <p>
+                    <?php hefo_field_select($post_type->name . '_mode', [''=>__('Use the post configuration', 'header-footer'),
+                        'enabled'=>__('Enable injections below', 'header-footer'),
+                        'disabled'=>__('Do not inject', 'header-footer')]); ?>
+                    </p>
+                    <div class="row">
+
+                        <div class="col-2">
+                            <label><?php esc_html_e('Before the post content', 'header-footer'); ?></label>
+                            <?php hefo_base_textarea_cm($post_type->name . '_before'); ?>
+                        </div>
+
+
+
+
+
+                        <div class="col-2">
+                            <label><?php esc_html_e('After the post content', 'header-footer'); ?></label>
+                            <?php hefo_base_textarea_cm($post_type->name . '_after'); ?>
+                        </div>
+
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                <?php } ?>
+            </div>
 
             <div id="tabs-post-inner">
 
@@ -384,8 +434,8 @@ if (isset($_POST['save'])) {
                     <?php esc_html_e('Useful for social button to be placed before and after the post or in posts and pages.', 'header-footer'); ?>
                 </p>
                 <table class="form-table">
-                    <?php for ($i=1; $i<=5; $i++) { ?>
-                    <tr valign="top"><?php hefo_field_textarea('snippet_' . $i, __('Snippet ' . $i, 'header-footer'), ''); ?></tr>
+                    <?php for ($i = 1; $i <= 5; $i++) { ?>
+                        <tr valign="top"><?php hefo_field_textarea('snippet_' . $i, __('Snippet ' . $i, 'header-footer'), ''); ?></tr>
                     <?php } ?>
                 </table>
                 <div class="clearfix"></div>

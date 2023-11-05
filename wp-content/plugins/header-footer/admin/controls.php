@@ -1,4 +1,5 @@
 <?php
+
 defined('ABSPATH') || exit;
 
 function hefo_request($name, $default = null) {
@@ -90,7 +91,7 @@ function hefo_base_textarea_cm($name, $type = '', $tips = '') {
     if (!empty($type)) {
         $type = '-' . $type;
     }
-    
+
     if (!isset($options[$name])) {
         $options[$name] = '';
     }
@@ -105,17 +106,30 @@ function hefo_base_textarea_cm($name, $type = '', $tips = '') {
     echo '<p class="description">' . $tips . '</p>';
 }
 
+function hefo_field_select($name, $items) {
+    global $options;
+    echo '<select name="options[', esc_attr($name), ']">';
+    foreach ($items as $k => $v) {
+        echo '<option value="', esc_attr($k), '"';
+        if (isset($options[$name]) && $options[$name] === $k) {
+            echo ' selected';
+        }
+        echo '>', esc_attr($v), '</option>';
+    }
+    echo '</select>';
+}
+
 function hefo_rule($number) {
     global $options;
-    
+
     if (!isset($options['inner_pos_' . $number])) {
         $options['inner_pos_' . $number] = 'after';
     }
-    
+
     if (!isset($options['inner_skip_' . $number])) {
         $options['inner_skip_' . $number] = 0;
     }
-    
+
     if (!isset($options['inner_tag_' . $number])) {
         $options['inner_tag_' . $number] = '';
     }
@@ -151,5 +165,3 @@ function hefo_rule($number) {
     echo '</select>';
     echo '<div class="clearfix"></div></div>';
 }
-
-

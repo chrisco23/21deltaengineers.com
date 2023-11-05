@@ -1,7 +1,7 @@
 === Head, Footer and Post Injections ===
 Tags: header, footer, ads, analytics, facebook pixel, amp
-Tested up to: 6.2.2
-Stable tag: 3.2.6
+Tested up to: 6.3.2
+Stable tag: 3.2.7
 Donate link: https://www.satollo.net/donations
 Contributors: satollo
 
@@ -11,7 +11,7 @@ Header and Footer plugin let you to add html code to the head and footer section
 == Description ==
 
 About WordPress SEO and Facebook Open Graph: I was very unpleased by Yoast invitation to
-remove my plugin, and it's not the case. 
+remove my plugin, and it's not the case.
 [Read more here](https://www.satollo.net/yoast-and-wordpress-seo-this-is-too-much-conflict-with-header-and-footer).
 
 = Head and Footer Codes =
@@ -34,7 +34,7 @@ without loosing the code injected!
 = AMP =
 
 A new AMP dedicated section compatible with [AMP plugin](https://wordpress.org/plugins/amp) lets you to inject specific codes in
-AMP pages. Should be ok even with other AMP plugins. 
+AMP pages. Should be ok even with other AMP plugins.
 
 = Post Top and Bottom Codes =
 
@@ -88,6 +88,10 @@ FAQs are answered on [Header and Footer](http://www.satollo.net/plugins/header-f
 
 
 == Changelog ==
+
+= 3.2.7 =
+
+* Added Custom Post Types
 
 = 3.2.6 =
 
@@ -150,7 +154,7 @@ FAQs are answered on [Header and Footer](http://www.satollo.net/plugins/header-f
 
 = 3.1.0 =
 
-* Removed the Facebook setting (move to a specialized plugin to have the Facebook Open Graph Meta) 
+* Removed the Facebook setting (move to a specialized plugin to have the Facebook Open Graph Meta)
 * Removed bbPress setting (please use bbpress ads)
 * Label fix
 * Removed notices

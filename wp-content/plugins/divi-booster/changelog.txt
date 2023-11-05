@@ -1,3 +1,6 @@
+= 4.3.5 =
+* Added option to send confirmation email to submitter from contact form module
+
 = 4.3.4 =
 * Added option to hide top header on scroll when fixed header enabled
 * Added drop shadow to custom icon uploader thumbnails for improved visibility

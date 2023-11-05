@@ -4,7 +4,7 @@
   Plugin Name: Head, Footer and Post Injections
   Plugin URI: https://www.satollo.net/plugins/header-footer
   Description: Header and Footer lets to add html/javascript code to the head and footer and posts of your blog. Some examples are provided on the <a href="http://www.satollo.net/plugins/header-footer">official page</a>.
-  Version: 3.2.6
+  Version: 3.2.7
   Requires PHP: 5.6
   Requires at least: 4.6
   Author: Stefano Lissa
@@ -68,7 +68,7 @@ register_activation_hook(__FILE__, function () {
     if (!empty($options)) {
         $options['enable_php'] = 1;
     }
-    $options = array_merge(['enable_php'=>0, 'after' => '', 'before' => '', 'head' => '', 'body' => '', 'head_home' => '', 'footer' => ''], $options);
+    $options = array_merge(['enable_php' => 0, 'after' => '', 'before' => '', 'head' => '', 'body' => '', 'head_home' => '', 'footer' => ''], $options);
     for ($i = 1; $i <= 5; $i++) {
         $options['snippet_' . $i] = '';
         $options['generic_' . $i] = '';
@@ -93,8 +93,9 @@ $hefo_generic_block = array();
 function hefo_template_redirect() {
     global $hefo_body_block, $hefo_generic_block, $hefo_options, $hefo_is_mobile;
 
-    if (function_exists('is_amp_endpoint') && is_amp_endpoint())
+    if (function_exists('is_amp_endpoint') && is_amp_endpoint()) {
         return;
+    }
 
     if ($hefo_is_mobile && isset($hefo_options['mobile_body_enabled'])) {
         $hefo_body_block = hefo_execute_option('mobile_body');
@@ -172,7 +173,6 @@ add_action('amp_post_template_head', function () {
     echo hefo_execute_option('amp_head', true);
 }, 100);
 
-
 add_action('amp_post_template_css', function () {
     hefo_execute_option('amp_css', true);
 }, 100);
@@ -215,10 +215,20 @@ function hefo_the_content($content) {
     if (!is_singular()) {
         return $content;
     }
+
     $type = '';
 
+    // Being an experienced code, I should write this thing much better... :-)
     if (is_page() && !isset($hefo_options['page_use_post'])) {
         $type = 'page_';
+    } else if ($post->post_type !== 'post') {
+        if (isset($hefo_options[$post->post_type . '_mode'])) {
+            if ($hefo_options[$post->post_type . '_mode'] === 'enabled') {
+                $type = $post->post_type . '_';
+            } else if ($hefo_options[$post->post_type . '_mode'] === 'disabled') {
+                return $content;
+            }
+        }
     }
 
     if (!get_post_meta($post->ID, 'hefo_before', true)) {

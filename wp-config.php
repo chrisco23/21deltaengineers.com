@@ -1,6 +1,5 @@
 <?php
-/** Enable W3 Total Cache */
-define('WP_CACHE', true); // Added by W3 Total Cache
+define( 'CONCATENATE_SCRIPTS', false );
 
 /**
  * The base configurations of the WordPress.
@@ -84,8 +83,8 @@ define('WPLANG', '');
  * It is strongly recommended that plugin and theme developers use WP_DEBUG
  * in their development environments.
  */
-define('WP_DEBUG', false);
-define('WP_DEBUG_LOG', false);
+//define('WP_DEBUG', true);
+//define('WP_DEBUG_LOG', "wp_errors.log");
 define('FORCE_SSL_ADMIN', false);
 
 /* That's all, stop editing! Happy blogging. */

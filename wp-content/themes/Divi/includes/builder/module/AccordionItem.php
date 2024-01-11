@@ -1,6 +1,13 @@
 <?php
 
 class ET_Builder_Module_Accordion_Item extends ET_Builder_Module {
+	/**
+	 * Should render module in Visual Builder.
+	 *
+	 * @var bool
+	 */
+	public $no_render;
+
 	function init() {
 		$this->name             = esc_html__( 'Accordion', 'et_builder' );
 		$this->plural           = esc_html__( 'Accordions', 'et_builder' );

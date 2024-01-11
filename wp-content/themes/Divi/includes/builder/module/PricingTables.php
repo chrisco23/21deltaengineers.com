@@ -1,6 +1,13 @@
 <?php
 
 class ET_Builder_Module_Pricing_Tables extends ET_Builder_Module {
+	/**
+	 * Holds additional shortcode.
+	 *
+	 * @var string
+	 */
+	public $additional_shortcode;
+
 	function init() {
 		$this->name             = esc_html__( 'Pricing Tables', 'et_builder' );
 		$this->plural           = esc_html__( 'Pricing Tables', 'et_builder' );

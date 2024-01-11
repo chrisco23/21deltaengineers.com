@@ -1600,7 +1600,18 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 
 				<?php if ( 'off' === $fullwidth || ! in_array( $post_format, array( 'link', 'audio', 'quote' ) ) || post_password_required( $post ) ) { ?>
 					<?php if ( ! in_array( $post_format, array( 'link', 'audio' ) ) || post_password_required( $post ) ) { ?>
-					<<?php echo et_core_intentionally_unescaped( $processed_header_level, 'fixed_string' ); ?> class="entry-title"><a href="<?php esc_url( the_permalink() ); ?>"><?php the_title(); ?></a></<?php echo et_core_intentionally_unescaped( $processed_header_level, 'fixed_string' ); ?>>
+					<<?php echo et_core_intentionally_unescaped( $processed_header_level, 'fixed_string' ); ?> class="entry-title">
+						<?php
+						// Check whether $link_url exists.
+						// This fixes: ltrim(): Passing null to parameter #1 ($str) of function ltrim() is deprecated.
+						$link_url = get_permalink();
+						if ( $link_url ) {
+							?>
+							<a href="<?php esc_url( the_permalink() ); ?>"><?php the_title(); ?></a>
+						<?php } else { ?>
+							<?php the_title(); ?>
+						<?php } ?>
+					</<?php echo et_core_intentionally_unescaped( $processed_header_level, 'fixed_string' ); ?>>
 				<?php } ?>
 
 					<?php

@@ -1,10 +1,12 @@
 <?php 
 if (!defined('ABSPATH')) { exit(); } // No direct access
 
-$color_code = dbdb_option('046-slider-text-transparent-background', 'bgcol', '#000');
-$opacity_percentage = dbdb_option('046-slider-text-transparent-background', 'opacity', 100);
+use DiviBooster\DiviBooster\Color;
+
+$background_color = dbdb_option('046-slider-text-transparent-background', 'bgcol', '#000');
+$opacity = dbdb_option('046-slider-text-transparent-background', 'opacity', 100)/100;
 $border_radius = intval(dbdb_option('046-slider-text-transparent-background', 'border-radius', '15'));
-$color = (new DBDB_color($color_code, $opacity_percentage/100));
+$color = Color::fromHexAndOpacity($background_color, $opacity);
 ?>
 
 /* Set background */
@@ -14,7 +16,7 @@ $color = (new DBDB_color($color_code, $opacity_percentage/100));
 #et_builder_outer_content .et_pb_slide_description,
 #et_builder_outer_content .et_pb_slide_description:before,
 #et_builder_outer_content .et_pb_slide_description:after {
-	background-color: <?php esc_html_e($color->rgba_str()); ?>;	
+	background-color: <?php esc_html_e($color->rgba()); ?>;	
 }
 .et_pb_slide_description,
 #et_builder_outer_content .et_pb_slide_description { 

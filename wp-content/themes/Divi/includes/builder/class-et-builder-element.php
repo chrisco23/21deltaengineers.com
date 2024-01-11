@@ -85,6 +85,78 @@ class ET_Builder_Element {
 	public $has_advanced_fields;
 
 	/**
+	 * ET_Builder_Module_Field_TextShadow utility class.
+	 *
+	 * @var ET_Builder_Module_Field_TextShadow
+	 */
+	public $text_shadow;
+
+	/**
+	 * ET_Builder_Module_Field_MarginPadding utility class.
+	 *
+	 * Utility class to handle margin and padding fields.
+	 *
+	 * @var ET_Builder_Module_Field_MarginPadding
+	 */
+	public $margin_padding;
+
+	/**
+	 * Holds module's additional fields.
+	 *
+	 * @var array
+	 */
+	public $_additional_fields_options;
+
+	/**
+	 * Holds new item(module) text.
+	 *
+	 * @var string
+	 */
+	public $child_item_text;
+
+	/**
+	 * Holds Title text.
+	 *
+	 * @var string
+	 */
+	public $advanced_setting_title_text;
+
+	/**
+	 * Holds Settings text.
+	 *
+	 * @var string
+	 */
+	public $settings_text;
+
+	/**
+	 * Holds defaults.
+	 *
+	 * @var array
+	 */
+	public $defaults;
+
+	/**
+	 * Additional shortcode slugs.
+	 *
+	 * @var string|array
+	 */
+	public $additional_shortcode_slugs;
+
+	/**
+	 * Boolean to indicate whether the module is a fullwidth module.
+	 *
+	 * @var bool
+	 */
+	public $fullwidth;
+
+	/**
+	 * Holds Module's global settings slug.
+	 *
+	 * @var string
+	 */
+	public $global_settings_slug;
+
+	/**
 	 * Cached translations.
 	 *
 	 * @since 4.4.9
@@ -268,18 +340,18 @@ class ET_Builder_Element {
 	public static $settings_migrations_initialized = false;
 
 	/**
-	 * Unused var. @todo Remove this unused var.
-	 *
-	 * @var bool
-	 */
-	public static $setting_advanced_styles = false;
-
-	/**
 	 * An array of modules where `module_classname()` used.
 	 *
 	 * @var array
 	 */
 	public static $uses_module_classname = array();
+
+	/**
+	 * Holds module's shortcode.
+	 *
+	 * @var string|string[]|null
+	 */
+	public $_original_content;
 
 	/**
 	 * Unique field definitions across all modules.
@@ -5720,7 +5792,7 @@ class ET_Builder_Element {
 		}
 
 		return array(
-			"${prefix}vertical_motion"   => array(
+			"{$prefix}vertical_motion"   => array(
 				'label'            => $i18n['motion']['vertical']['label'],
 				'description'      => $i18n['motion']['vertical']['description'],
 				'startValueTitle'  => $i18n['motion']['vertical']['startValueTitle'],
@@ -10385,7 +10457,7 @@ class ET_Builder_Element {
 				)
 			);
 
-			$options[ "${base_name}_color_gradient_overlays_image" ] = self::background_field_template(
+			$options[ "{$base_name}_color_gradient_overlays_image" ] = self::background_field_template(
 				'color_gradient_overlays_image',
 				array(
 					'label'            => $i18n['background']['gradient_overlay']['label'],
@@ -10553,7 +10625,7 @@ class ET_Builder_Element {
 			);
 
 			if ( 'button' !== $background_tab && ! in_array( 'parallax', $options_filters, true ) ) {
-				$options[ "${baseless_prefix}parallax" ] = self::background_field_template(
+				$options[ "{$baseless_prefix}parallax" ] = self::background_field_template(
 					'parallax',
 					array(
 						'label'            => $i18n['background']['parallax']['label'],
@@ -10575,7 +10647,7 @@ class ET_Builder_Element {
 					)
 				);
 
-				$options[ "${baseless_prefix}parallax_method" ] = self::background_field_template(
+				$options[ "{$baseless_prefix}parallax_method" ] = self::background_field_template(
 					'parallax_method',
 					array(
 						'label'            => $i18n['background']['parallax_method']['label'],
@@ -10595,7 +10667,7 @@ class ET_Builder_Element {
 						'sticky'           => true,
 						'hover'            => 'tabs',
 						'show_if'          => array(
-							"${baseless_prefix}parallax" => 'on',
+							"{$baseless_prefix}parallax" => 'on',
 						),
 					)
 				);
@@ -10624,7 +10696,7 @@ class ET_Builder_Element {
 					'sticky'           => true,
 					'hover'            => 'tabs',
 					'show_if'          => array(
-						"${baseless_prefix}parallax" => 'off',
+						"{$baseless_prefix}parallax" => 'off',
 					),
 				)
 			);
@@ -10653,7 +10725,7 @@ class ET_Builder_Element {
 						"{$base_name}_size" => 'custom',
 					),
 					'show_if_not'      => array(
-						"${baseless_prefix}parallax" => 'on',
+						"{$baseless_prefix}parallax" => 'on',
 					),
 					'sticky'           => true,
 					'type'             => 'range',
@@ -10685,7 +10757,7 @@ class ET_Builder_Element {
 						"{$base_name}_size" => 'custom',
 					),
 					'show_if_not'      => array(
-						"${baseless_prefix}parallax" => 'on',
+						"{$baseless_prefix}parallax" => 'on',
 					),
 					'sticky'           => true,
 					'type'             => 'range',
@@ -10709,7 +10781,7 @@ class ET_Builder_Element {
 					'mobile_options'   => true,
 					'sticky'           => true,
 					'show_if_not'      => array(
-						"${baseless_prefix}parallax" => 'on',
+						"{$baseless_prefix}parallax" => 'on',
 					),
 					'hover'            => 'tabs',
 				)
@@ -10743,7 +10815,7 @@ class ET_Builder_Element {
 						),
 					),
 					'show_if_not'      => array(
-						"${baseless_prefix}parallax" => 'on',
+						"{$baseless_prefix}parallax" => 'on',
 					),
 					'sticky'           => true,
 					'type'             => 'range',
@@ -10779,7 +10851,7 @@ class ET_Builder_Element {
 						),
 					),
 					'show_if_not'      => array(
-						"${baseless_prefix}parallax" => 'on',
+						"{$baseless_prefix}parallax" => 'on',
 					),
 					'sticky'           => true,
 					'type'             => 'range',
@@ -10810,7 +10882,7 @@ class ET_Builder_Element {
 						),
 					),
 					'show_if_not'      => array(
-						"${baseless_prefix}parallax" => 'on',
+						"{$baseless_prefix}parallax" => 'on',
 					),
 					'sticky'           => true,
 					'hover'            => 'tabs',
@@ -10958,7 +11030,7 @@ class ET_Builder_Element {
 				)
 			);
 
-			$options[ "${baseless_prefix}allow_player_pause" ] = self::background_field_template(
+			$options[ "{$baseless_prefix}allow_player_pause" ] = self::background_field_template(
 				'allow_player_pause',
 				array(
 					'label'            => $i18n['background']['pause']['label'],
@@ -10980,7 +11052,7 @@ class ET_Builder_Element {
 				)
 			);
 
-			$options[ "${base_name}_video_pause_outside_viewport" ] = self::background_field_template(
+			$options[ "{$base_name}_video_pause_outside_viewport" ] = self::background_field_template(
 				'video_pause_outside_viewport',
 				array(
 					'label'            => $i18n['background']['viewport']['label'],
@@ -17640,12 +17712,11 @@ class ET_Builder_Element {
 	 * Apply free form CSS.
 	 *
 	 * @param string $function_name Module slug.
-	 * @param string $element_selector Element selector.
 	 * @param string $css_string CSS string.
 	 *
 	 * @return void
 	 */
-	public function apply_free_form_css( $function_name, $element_selector, $css_string ) {
+	public function apply_free_form_css( $function_name, $css_string ) {
 		if ( '' === $css_string ) {
 			return;
 		}
@@ -17655,7 +17726,8 @@ class ET_Builder_Element {
 		$order_class_name = self::get_module_order_class( $function_name );
 
 		if ( preg_match( $selectors, $css_string ) ) {
-			$final_css_string = preg_replace( $selectors, ".{$order_class_name}", $css_string );
+			$order_class_name = apply_filters( 'et_builder_free_form_css_selectors', ".{$order_class_name}" );
+			$final_css_string = preg_replace( $selectors, $order_class_name, $css_string );
 		}
 
 		if ( '' !== $final_css_string ) {
@@ -17663,6 +17735,12 @@ class ET_Builder_Element {
 			$final_css_string = preg_replace( '/(\|\|)/i', '', $final_css_string );
 
 			self::_set_free_form_style( $final_css_string );
+
+			do_action(
+				'et_builder_after_free_form_css_processed',
+				$final_css_string,
+				self::setup_advanced_styles_manager()
+			);
 		}
 	}
 
@@ -17734,7 +17812,7 @@ class ET_Builder_Element {
 				// Non responsive mode custom CSS.
 				if ( '' !== $css ) {
 					if ( 'free_form' === $slug ) {
-						$this->apply_free_form_css( $function_name, $selector, $css );
+						$this->apply_free_form_css( $function_name, $css );
 					} else {
 						$el_style = array(
 							'selector'    => $selector,
@@ -18125,8 +18203,8 @@ class ET_Builder_Element {
 		}
 
 		// order high and low priority toggles.
-		uasort( $high_priority_toggles, array( 'self', 'compare_by_priority' ) );
-		uasort( $low_priority_toggles, array( 'self', 'compare_by_priority' ) );
+		uasort( $high_priority_toggles, array( 'ET_Builder_Element', 'compare_by_priority' ) );
+		uasort( $low_priority_toggles, array( 'ET_Builder_Element', 'compare_by_priority' ) );
 
 		// merge 3 arrays to get the correct order of toggles.
 		return array_merge( $high_priority_toggles, $manually_ordered_toggles, $low_priority_toggles );
@@ -18244,7 +18322,7 @@ class ET_Builder_Element {
 			/**
 			 * Sort modules alphabetically by name.
 			 */
-			uasort( $sorted_modules, array( 'self', 'compare_by_name' ) );
+			uasort( $sorted_modules, array( 'ET_Builder_Element', 'compare_by_name' ) );
 
 			foreach ( $sorted_modules as $module ) {
 				/**
@@ -19669,7 +19747,9 @@ class ET_Builder_Element {
 		// use appropriate array depending on which styles we need.
 		$styles_array = self::get_style_array( $internal, $key );
 
-		if ( empty( $styles_array ) ) {
+		$free_form_styles_output = self::get_free_form_styles();
+
+		if ( empty( $styles_array ) && empty( $free_form_styles_output ) ) {
 			return '';
 		}
 
@@ -19775,10 +19855,13 @@ class ET_Builder_Element {
 			$output .= $media_query_output;
 		}
 
-		$free_form_styles_output = self::get_free_form_styles();
-
 		if ( isset( $free_form_styles_output ) && '' !== $free_form_styles_output ) {
 			$output .= wp_strip_all_tags( $free_form_styles_output );
+
+			if ( $internal ) {
+			// Output is already set, we can reset the free form styles to avoid duplicate output.
+			self::_set_free_form_style( '', $reset = true );
+			}
 		}
 
 		return $output;
@@ -20360,9 +20443,14 @@ class ET_Builder_Element {
 	 *
 	 * @param string $style Style string.
 	 */
-	protected static function _set_free_form_style( $style ) {
+	protected static function _set_free_form_style( $style, $reset = false ) {
+		if ( $reset ) {
+			self::$_free_form_styles = '';
+			return;
+		}
+
 		if ( '' !== $style ) {
-			self::$_free_form_styles = $style;
+			self::$_free_form_styles .= $style;
 		}
 	}
 
@@ -21116,11 +21204,11 @@ class ET_Builder_Element {
 				$value            = et_sanitize_input_unit( $value, false, 'deg' );
 				$label_css_format = str_replace( '_', '-', $label );
 				// Construct string of all CSS Filter values.
-				$css_value[ $label ] = esc_html( "${label_css_format}(${value})" );
+				$css_value[ $label ] = esc_html( "{$label_css_format}({$value})" );
 				// Construct Visual Builder hover rules.
 				if ( ! in_array( $label, array( 'opacity', 'blur' ), true ) ) {
 					// Skip those, because they mess with VB controls.
-					$css_value_fb_hover[ $label ] = esc_html( "${label_css_format}(${value})" );
+					$css_value_fb_hover[ $label ] = esc_html( "{$label_css_format}({$value})" );
 				}
 			}
 
@@ -23019,6 +23107,13 @@ class ET_Builder_Module extends ET_Builder_Element {
 	 * @var bool
 	 */
 	public $is_structure_element = false;
+
+	/**
+	 * Name of the folder under which the module should fall into..
+	 *
+	 * @var string
+	 */
+	public $folder_name;
 }
 
 /**

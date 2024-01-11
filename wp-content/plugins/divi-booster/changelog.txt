@@ -1,3 +1,11 @@
+= 4.3.6 (8 Jan 2024) =
+* Fixed person module open links in tab not working in some cases
+* Delayed portfolio sorting filters for improved compatibility with custom code 
+* Fixed WP MapIT preventing admin settings sections from opening
+* Fixed PHP 8 JSMin deprecation notices
+* Fixed html tags displayed as text in contact form confirmation email
+* Fixed customizer social icons option missing 
+
 = 4.3.5 =
 * Added option to send confirmation email to submitter from contact form module
 

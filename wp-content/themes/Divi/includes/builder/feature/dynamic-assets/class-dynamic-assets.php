@@ -1157,7 +1157,7 @@ class ET_Dynamic_Assets {
 					$assets_data[ $file_type ]['content'][] = $file_content;
 
 					if ( $this->is_rtl ) {
-						$file_rtl = str_replace( ".${file_type}", "-rtl.{$file_type}", $file );
+						$file_rtl = str_replace( ".{$file_type}", "-rtl.{$file_type}", $file );
 
 						if ( file_exists( $file_rtl ) ) {
 							$file_content_rtl = $wp_filesystem->get_contents( $file_rtl );

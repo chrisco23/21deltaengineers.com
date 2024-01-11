@@ -182,8 +182,8 @@ function et_fb_add_admin_body_class( $classes ) {
 			$layout_type  = et_fb_get_layout_type( $post_id );
 			$layout_scope = et_fb_get_layout_term_slug( $post_id, 'scope' );
 
-			$classes .= " et_pb_library_page_top-${layout_type}";
-			$classes .= " et_pb_library_page_top-${layout_scope}";
+			$classes .= " et_pb_library_page_top-{$layout_type}";
+			$classes .= " et_pb_library_page_top-{$layout_scope}";
 		}
 	}
 

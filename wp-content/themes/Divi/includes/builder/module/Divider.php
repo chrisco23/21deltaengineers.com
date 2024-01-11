@@ -1,6 +1,13 @@
 <?php
 
 class ET_Builder_Module_Divider extends ET_Builder_Module {
+	/**
+	 * Array to store divier options.
+	 *
+	 * @var array
+	 */
+	public $show_divider_options;
+
 	function init() {
 		$this->name       = esc_html__( 'Divider', 'et_builder' );
 		$this->plural     = esc_html__( 'Dividers', 'et_builder' );

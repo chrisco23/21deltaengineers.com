@@ -23,6 +23,13 @@ if ( ! class_exists( 'ET_Builder_Module_Tabs' ) ) {
  */
 class ET_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs {
 	/**
+	 * Holds WooCommerce Tabs data rendered by self::get_tabs().
+	 *
+	 * @var array
+	 */
+	public $rendered_tabs_data = [];
+
+	/**
 	 * Define WooCommerce Tabs property.
 	 */
 	public function init() {

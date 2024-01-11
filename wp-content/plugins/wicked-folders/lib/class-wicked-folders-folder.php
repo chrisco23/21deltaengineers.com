@@ -111,6 +111,15 @@ class Wicked_Folders_Folder implements \JsonSerializable {
      */
     public $order = 0;
 
+    /**
+     * The class name of the folder instance.
+     * 
+     * @since 2.18.19
+     * 
+     * @var string
+     */
+    public $type;
+    
     public function __construct( array $args ) {
         // TODO: throw error if ID argument is set and contains reserved characters
         // such as periods

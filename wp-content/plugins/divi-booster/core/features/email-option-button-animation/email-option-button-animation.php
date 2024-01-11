@@ -21,10 +21,13 @@ function db_my_customizations($fields) {
     return $fields;
 }
 
-add_filter('et_pb_all_fields_unprocessed_et_pb_signup', __NAMESPACE__.'\\db_my_customizations');
+if (function_exists('add_filter')) {
+    \add_filter('et_pb_all_fields_unprocessed_et_pb_signup', __NAMESPACE__.'\\db_my_customizations');
+}
 
-
-add_action('wp_footer', __NAMESPACE__.'\\db_add_button_animation_effect');
+if (function_exists('add_action')) {
+    \add_action('wp_footer', __NAMESPACE__.'\\db_add_button_animation_effect');
+}
 
 function db_add_button_animation_effect() {
 ?>
@@ -58,7 +61,9 @@ function db_filter_module_shortcode_properties($output, $render_slug, $module) {
     }
     return $output;
 }
-add_filter('et_module_shortcode_output', __NAMESPACE__.'\\db_filter_module_shortcode_properties', 20, 3);
 
+if (function_exists('add_filter')) {
+    \add_filter('et_module_shortcode_output', __NAMESPACE__.'\\db_filter_module_shortcode_properties', 20, 3);
+}
 
 

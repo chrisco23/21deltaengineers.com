@@ -92,17 +92,17 @@ class ET_Builder_Module_Settings_Migration_ColumnOptions extends ET_Builder_Modu
 					for ( $i = 1; $i <= $max_columns_number; $i++ ) {
 						if ( array_key_exists( $field_name_raw, $this->fieldsWithSuffix ) ) {
 							foreach ( $this->fieldsWithSuffix[ $field_name_raw ] as $suffix ) {
-								$fields[ "${field_name}_${i}_$suffix" ] = array(
+								$fields[ "{$field_name}_{$i}_$suffix" ] = array(
 									'affected_fields' => array(
-										"${field_name}_${i}_$suffix" => array( 'et_pb_row', 'et_pb_row_inner' ),
+										"{$field_name}_{$i}_$suffix" => array( 'et_pb_row', 'et_pb_row_inner' ),
 									),
 								);
 							}
 						}
 
-						$fields[ "${field_name}_${i}" ] = array(
+						$fields[ "{$field_name}_{$i}" ] = array(
 							'affected_fields' => array(
-								"${field_name}_${i}" => array( 'et_pb_row', 'et_pb_row_inner' ),
+								"{$field_name}_{$i}" => array( 'et_pb_row', 'et_pb_row_inner' ),
 							),
 						);
 					}
@@ -127,9 +127,9 @@ class ET_Builder_Module_Settings_Migration_ColumnOptions extends ET_Builder_Modu
 
 					if ( array_key_exists( $field_name_raw, $this->fieldsWithSuffix ) ) {
 						foreach ( $this->fieldsWithSuffix[ $field_name_raw ] as $suffix ) {
-							$fields[ "${field_name}_${suffix}" ] = array(
+							$fields[ "{$field_name}_{$suffix}" ] = array(
 								'affected_fields' => array(
-									"${field_name}_${suffix}" => array( 'et_pb_column', 'et_pb_column_inner' ),
+									"{$field_name}_{$suffix}" => array( 'et_pb_column', 'et_pb_column_inner' ),
 								),
 							);
 						}
@@ -157,13 +157,15 @@ class ET_Builder_Module_Settings_Migration_ColumnOptions extends ET_Builder_Modu
 			return $saved_value;
 		}
 
+		// phpcs:disable ET.Sniffs.ValidVariableName.UsedPropertyNotSnakeCase, ET.Sniffs.ValidVariableName.UsedPropertyNotSnakeCase -- Existing codebase.
 		foreach ( $padding_sides as $side ) {
-			if ( isset( $this->columnSettingsFromRow[ $row_address ], $this->columnSettingsFromRow[ $row_address ][ "${side}_${column_index}${suffix}" ] ) ) {
-				$padding_combined[] = $this->columnSettingsFromRow[ $row_address ][ "${side}_${column_index}${suffix}" ];
+			if ( isset( $this->columnSettingsFromRow[ $row_address ], $this->columnSettingsFromRow[ $row_address ][ "{$side}_{$column_index}{$suffix}" ] ) ) {
+				$padding_combined[] = $this->columnSettingsFromRow[ $row_address ][ "{$side}_{$column_index}{$suffix}" ];
 			} else {
 				$padding_combined[] = '';
 			}
 		}
+		// phpcs:enable ET.Sniffs.ValidVariableName.UsedPropertyNotSnakeCase, ET.Sniffs.ValidVariableName.UsedPropertyNotSnakeCase -- Existing codebase.
 
 		return implode( '|', $padding_combined );
 	}
@@ -202,9 +204,9 @@ class ET_Builder_Module_Settings_Migration_ColumnOptions extends ET_Builder_Modu
 				}
 
 				// Insert the column index in the middle of field name right before suffix.
-				$row_field_name = '__no_suffix__' === $field_name_without_suffix ? "${field_name}_${column_index}" : str_replace( $field_name_without_suffix, "${field_name_replacement}_${column_index}", $field_name );
+				$row_field_name = '__no_suffix__' === $field_name_without_suffix ? "{$field_name}_{$column_index}" : str_replace( $field_name_without_suffix, "{$field_name_replacement}_{$column_index}", $field_name );
 			} else {
-				$row_field_name = 'background_image' === $field_name ? "bg_img_${column_index}" : "${field_name}_${column_index}";
+				$row_field_name = 'background_image' === $field_name ? "bg_img_{$column_index}" : "{$field_name}_{$column_index}";
 			}
 
 			if ( in_array( $field_name, array( 'padding', 'padding__hover' ) ) ) {

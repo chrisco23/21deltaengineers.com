@@ -113,7 +113,7 @@ function et_builder_get_built_in_dynamic_content_fields( $post_id ) {
 		}
 	}
 
-	$default_category_type = 'post' === $post_type ? 'category' : "${post_type}_category";
+	$default_category_type = 'post' === $post_type ? 'category' : "{$post_type}_category";
 
 	if ( ! isset( $post_taxonomy_types[ $default_category_type ] ) ) {
 		$default_category_type = 'category';
@@ -749,6 +749,66 @@ function et_builder_get_custom_dynamic_content_fields( $post_id ) {
 
 	return $custom_fields;
 }
+
+
+/**
+ * Sanitize dynamic content on save.
+ *
+ * Check on save post if the user has the unfiltered_html capability,
+ * if they do, we can bail, because they can save whatever they want,
+ * if they don't, we need to strip the enable_html flag from the dynamic content item,
+ * and then re-encode it, and put the new value back in the post content.
+ *
+ * @since 4.23.2
+ *
+ * @param array $data    An array of slashed post data.
+ *
+ * @return array $data Modified post data.
+ */
+function et_builder_sanitize_dynamic_content_fields( $data ) {
+	// get the post content, and unslash it.
+	$post_content_being_saved = wp_unslash( $data['post_content'] );
+
+	// get the dynamic content items.
+	$dynamic_content_items = et_builder_get_dynamic_contents( $post_content_being_saved );
+
+	// if there are no dynamic content items, we can bail.
+	if ( empty( $dynamic_content_items ) ) {
+		return $data;
+	}
+
+	// if the current user can save unfiltered html, we can bail,
+	// because they can save whatever they want.
+	if ( current_user_can( 'unfiltered_html' ) ) {
+		return $data;
+	}
+
+	// loop through the dynamic content items.
+	foreach ( $dynamic_content_items as $dynamic_content_item ) {
+		// parse the dynamic content item.
+		$dynamic_content_item_parsed = et_builder_parse_dynamic_content( $dynamic_content_item );
+
+		// check if enable_html is set.
+		if ( $dynamic_content_item_parsed->get_settings( 'enable_html' ) !== '' ) {
+
+			// Set the enable_html flag to off.
+			$dynamic_content_item_parsed->set_settings( 'enable_html', 'off' );
+
+			// reserialize the dynamic content item.
+			$re_serialized_dynamic_content_item = $dynamic_content_item_parsed->serialize();
+
+			// replace the content in the post content.
+			$post_content_being_saved = str_replace( $dynamic_content_item, $re_serialized_dynamic_content_item, $post_content_being_saved );
+		}
+	}
+
+	// update the post content, and re-slash it.
+	$data['post_content'] = wp_slash( $post_content_being_saved );
+
+	return $data;
+}
+
+add_filter( 'wp_insert_post_data', 'et_builder_sanitize_dynamic_content_fields', 10, 2 );
 
 /**
  * Get all dynamic content fields.
@@ -1685,6 +1745,7 @@ function et_builder_filter_resolve_custom_field_dynamic_content( $content, $name
 	return $content;
 }
 add_filter( 'et_builder_resolve_dynamic_content', 'et_builder_filter_resolve_custom_field_dynamic_content', 10, 6 );
+
 
 /**
  * Resolve a dynamic group post content field for use during editing.

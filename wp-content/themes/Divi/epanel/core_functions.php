@@ -421,7 +421,7 @@ if ( ! function_exists( 'et_build_epanel' ) ) {
 
 																// phpcs:ignore Generic.WhiteSpace.ScopeIndent.IncorrectExact -- Indentation is correct.
 																if ( is_array( get_site_option( $global_setting_main_name ) ) ) {
-																	$setting = get_option( $global_setting_main_name );
+																	$setting = get_site_option( $global_setting_main_name );
 																}
 
 																$et_input_value = isset( $setting[ $global_setting_sub_name ] ) ? $setting[ $global_setting_sub_name ] : '';

@@ -76,6 +76,33 @@ class ET_Builder_Code_Snippets_Library {
 	public $code_snippets;
 
 	/**
+	 * ET_Builder_Post_Taxonomy_LayoutCategory instance.
+	 *
+	 * Shall be used for querying `et_tb_layout_category` taxonomy .
+	 *
+	 * @var ET_Builder_Post_Taxonomy_LayoutCategory
+	 */
+	public $code_snippets_categories;
+
+	/**
+	 * ET_Builder_Post_Taxonomy_LayoutTag instance.
+	 *
+	 * Shall be used for querying `et_tb_layout_tag` taxonomy .
+	 *
+	 * @var ET_Builder_Post_Taxonomy_LayoutTag
+	 */
+	public $code_snippets_tags;
+
+	/**
+	 * ET_Builder_Post_Taxonomy_CodeSnippetType instance.
+	 *
+	 * Shall be used for querying `et_tb_layout_type` taxonomy .
+	 *
+	 * @var ET_Builder_Post_Taxonomy_CodeSnippetType
+	 */
+	public $code_snippets_type;
+
+	/**
 	 * Class constructor.
 	 */
 	public function __construct() {

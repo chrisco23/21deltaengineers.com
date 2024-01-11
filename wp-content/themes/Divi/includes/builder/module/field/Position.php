@@ -195,9 +195,9 @@ class ET_Builder_Module_Field_Position extends ET_Builder_Module_Field_Base {
 		}
 
 		foreach ( $responsive_options as $option ) {
-			$additional_options[ "${option}_tablet" ]      = $skip;
-			$additional_options[ "${option}_phone" ]       = $skip;
-			$additional_options[ "${option}_last_edited" ] = $skip;
+			$additional_options[ "{$option}_tablet" ]      = $skip;
+			$additional_options[ "{$option}_phone" ]       = $skip;
+			$additional_options[ "{$option}_last_edited" ] = $skip;
 		}
 
 		return $additional_options;
@@ -497,7 +497,7 @@ class ET_Builder_Module_Field_Position extends ET_Builder_Module_Field_Base {
 					$position_origins[ $type ] .= '_is_default';
 				}
 				if ( strpos( $position_origins[ $type ], '_is_default' ) === false ) {
-					$type_selector = 'hover' === $type ? "${position_selector}:hover" : $position_selector;
+					$type_selector = 'hover' === $type ? "{$position_selector}:hover" : $position_selector;
 
 					$el_style = array(
 						'selector'    => $type_selector,
@@ -580,7 +580,8 @@ class ET_Builder_Module_Field_Position extends ET_Builder_Module_Field_Base {
 
 				$offsets = array( 'vertical', 'horizontal' );
 				foreach ( $offsets as $offsetSlug ) {
-					$field_slug    = "${offsetSlug}_offset";
+					// phpcs:disable ET.Sniffs.ValidVariableName.InterpolatedVariableNotSnakeCase -- Existing codebase.
+					$field_slug    = "{$offsetSlug}_offset";
 					$is_hover      = 'hover' === $type && $hover_status[ $offsetSlug ];
 					$is_sticky     = 'sticky' === $type;
 					$is_responsive = in_array( $type, array( 'tablet', 'phone' ) ) && $resp_status[ $offsetSlug ];
@@ -616,6 +617,7 @@ class ET_Builder_Module_Field_Position extends ET_Builder_Module_Field_Base {
 							$inverse_property = 'top';
 						}
 					}
+					// phpcs:enable ET.Sniffs.ValidVariableName.InterpolatedVariableNotSnakeCase -- Existing codebase.
 
 					// add the adminbar height offset to avoid overflow of fixed elements.
 					$active_position = $this->get_value( $props, 'positioning', $position_default, $type, true );

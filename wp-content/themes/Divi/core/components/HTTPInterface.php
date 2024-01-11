@@ -293,6 +293,20 @@ class ET_Core_HTTPInterface {
 	public $response;
 
 	/**
+	 * Whether or not json responses are expected to be received. Default is `true`.
+	 *
+	 * @var bool
+	 */
+	public $expects_json;
+
+	/**
+	 * The name of the theme/plugin that created this class instance. Default: 'ET_Core'.
+	 *
+	 * @var string
+	 */
+	public $owner;
+
+	/**
 	 * ET_Core_API_HTTP_Interface constructor.
 	 *
 	 * @since 1.1.0

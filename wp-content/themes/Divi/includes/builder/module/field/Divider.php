@@ -37,6 +37,13 @@ class ET_Builder_Module_Field_Divider extends ET_Builder_Module_Field_Base {
 	public static $responsive = null;
 
 	/**
+	 * Number of times the module has been rendered.
+	 *
+	 * @var int
+	 */
+	public $count;
+
+	/**
 	 * Constructor for the class. This is done so that the divider options could be filtered
 	 * by a child theme or plugin.
 	 */

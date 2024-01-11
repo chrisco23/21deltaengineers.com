@@ -1,9 +1,13 @@
 <?php 
 
-add_filter('dbmo_et_pb_team_member_whitelisted_fields', 'dbmo_et_pb_team_member_register_fields');
-add_filter('dbmo_et_pb_team_member_fields', 'dbmo_et_pb_team_member_add_fields');
-add_filter('db_pb_team_member_content', 'db_pb_team_member_filter_content', 10, 2);
-add_action('wp_head', 'db_pb_team_member_css');
+if (function_exists('add_filter')) {
+    add_filter('dbmo_et_pb_team_member_whitelisted_fields', 'dbmo_et_pb_team_member_register_fields');
+    add_filter('dbmo_et_pb_team_member_fields', 'dbmo_et_pb_team_member_add_fields');
+    add_filter('db_pb_team_member_content', 'db_pb_team_member_filter_content', 10, 2);
+}
+if (function_exists('add_action')) {
+    add_action('wp_head', 'db_pb_team_member_css');
+}
 
 function db_pb_team_member_css() { ?>
 <style>
@@ -114,12 +118,12 @@ function db_pb_team_member_filter_content($content, $args) {
 			// Add the instagram icon to the social links list
 			$content = preg_replace('#(<ul[^>]*class="et_pb_member_social_links"[^>]*>.*?)<\/ul>#', '\\1<li><a href="'.esc_attr($url).'" class="et_pb_font_icon db_pb_team_member_instagram_icon"><span>Instagram</span></a></li></ul>', $content);
 		}
-		
-		// Add target=_blank if required
-		if (!empty($args['db_link_target']) and $args['db_link_target'] === 'on') {
-			$content = str_replace('<a href=', '<a target="_blank" href=', $content);
-		}
-		
 	}
+    
+    // Add target=_blank if required
+    if (!empty($args['db_link_target']) && $args['db_link_target'] === 'on') {
+        $content = str_replace('<a href=', '<a target="_blank" href=', $content);
+    }
+
 	return $content;
 }

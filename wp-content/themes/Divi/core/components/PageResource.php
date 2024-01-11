@@ -290,6 +290,13 @@ class ET_Core_PageResource {
 	public $write_file_location;
 
 	/**
+	 * The output location where this resource should be output.
+	 *
+	 * @var string
+	 */
+	public $location;
+
+	/**
 	 * ET_Core_PageResource constructor
 	 *
 	 * @param string     $owner    The owner of the instance (core|divi|builder|bloom|monarch|custom).

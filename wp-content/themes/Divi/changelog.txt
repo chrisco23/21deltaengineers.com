@@ -1,5 +1,119 @@
+version 4.23.4 ( updated 12-28-2023 )
+- Fixed issue with saving Recaptcha settings not working in Contact form.
+	* core/components/api/spam/Provider.php
+
+version 4.23.3 ( updated 12-26-2023 )
+- Security Update: Resolved a bug in v4.23.2 that mistakenly added the unfiltered_html capability to the administrator role only affecting multisite installations as the unfiltered_html capability is already present for the administrator role in non-multisite installations.
+	* core/components/SupportCenter.php
+	* includes/builder/class-et-builder-value.php
+	* includes/builder/feature/dynamic-content.php
+	* includes/builder/module/Blog.php
+
+version 4.23.2 ( updated 12-20-2023 )
+- Security Update: Fixed a Stored Cross-Site Scripting Vulnerability: Resolved an issue where a contributor-level or author user could, by using a specific Divi shortcode linked to a custom field, introduce executable JavaScript from the custom field into posts.
+- Fixed Free-form CSS not outputting the styles when styles exists for more than one module.
+- Fixed the issue where AI and library fields were displayed on the 'Find' field in Find Replace.
+- Fixed issue where incorrect option was being selected in the Inline Text Editor toolbar.
+- Added tooltips to theme builder set export checklist for a better user experience.
+- Updated apply_free_form_css() and setFreeFormCss() methods to improve CSS flexibility and compatibility.
+- Added support for closing the export modal and fixed portability modal difference in TB.
+- Fixed various PHP v8.2 warnings.
+- Fixed an issue with the custom_functions.php file where the array key was not properly formatted.
+- Fixed an issue with the ContentResultsModal component where string values were not properly handled, causing images to fail to render.
+- Fixed an issue in the CodeResultsRefine component that caused an error when retrying a prompt with updated text.
+- Resolved issue where the first line of code extends beyond field of view.
+- Changed elegant_themes_support elevated role to administrator.
+- Fixed Presets being imported when not checked.
+- Added new class properties for querying taxonomies and handling API requests.
+- Fixed compatibility issue with the Hustle plugin caused by the smooth scroll functionality in Divi.
+- Fixed an issue with incorrect formatting of padding values in the module-customizer module migrations.
+	* ai-app/ai-app.php
+	* ai-app/i18n/ai-code.php
+	* ai-app/i18n/user-prompt.php
+	* ai-app/build/et-ai-app.bundle.js
+	* ai-app/build/et-ai-app.bundle.css
+	* core/code-snippets/CodeSnippetsLibrary.php
+	* core/components/HTTPInterface.php
+	* core/components/PageResource.php
+	* core/components/Portability.php
+	* core/components/SupportCenter.php
+	* core/components/api/Service.php
+	* core/components/api/spam/Provider.php
+	* epanel/custom_functions.php
+	* includes/builder/autoload.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/class-et-builder-value.php
+	* includes/builder/feature/Library.php
+	* includes/builder/feature/dynamic-assets/class-dynamic-assets.php
+	* includes/builder/feature/dynamic-content.php
+	* includes/builder/feature/icon-manager/ExtendedFontIcons.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/view.php
+	* includes/builder/module/AccordionItem.php
+	* includes/builder/module/Blog.php
+	* includes/builder/module/Divider.php
+	* includes/builder/module/Icon.php
+	* includes/builder/module/PricingTables.php
+	* includes/builder/module/VideoSlider.php
+	* includes/builder/module/field/Border.php
+	* includes/builder/module/field/BoxShadow.php
+	* includes/builder/module/field/Divider.php
+	* includes/builder/module/field/Position.php
+	* includes/builder/module/field/Transform.php
+	* includes/builder/module/helpers/MultiViewOptions.php
+	* includes/builder/module/settings/migration/ColumnOptions.php
+	* includes/builder/module/woocommerce/Tabs.php
+	* includes/module-customizer/migrations.php
+	* js/src/custom-dynamic.js
+	* js/src/custom.js
+
+version 4.23.1 ( updated 11-06-2023 )
+- Fixed an issue where the "Custom CSS" option was incorrectly appended with "CSS" during a search in the settings modal.
+- Fixed an issue where the class was not correctly replacing selectors when pseudo elements are involved.
+- Fixed a compatibility issue that occurred with WooCommerce Payments and object caching where the page content would not load correctly in DIvi Builder.
+- Added ability to convert a library item element type into another.
+- Fixed an issue where the AI App cannot be opened in Theme Builder in some cases.
+- Fixed free-form CSS is not working for the fresh new module where there are no settings changed.
+- Fixed issue with ETBuilderCustomCSSOutput component not resetting values correctly.
+- Fixed an issue with saving API key and username in multisite installs.
+- Removed deprecated TEMPLATEPATH constant usage.
+- Added support of Enter hotkey for Categories/Tags editor in Cloud App modal.
+- Updated prompt module to correctly calculate the width and adjust the position when displayed with the admin bar.
+- Fixed an issue with Code AI icon not rendering correctly in some cases.
+- Removed deprecated STYLESHEETPATH constant usage.
+	* ai-app/build/et-ai-app.bundle.css
+	* ai-app/build/et-ai-app.bundle.js
+	* cloud/i18n/library.php
+	* common/i18n/ai.php
+	* common/lib/ai.js
+	* core/code-snippets/app/boot.js
+	* core/code-snippets/app/store/code-snippets-library/actions.js
+	* core/code-snippets/app/store/code-snippets-library/sequences.js
+	* core/functions.php
+	* epanel/core_functions.php
+	* epanel/custom_functions.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/core.php
+	* includes/builder/feature/I18n.php
+	* includes/builder/feature/Library.php
+	* includes/builder/feature/ai-button.php
+	* includes/builder/feature/woocommerce-modules.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/functions.php
+	* includes/builder/module/Heading.php
+	* includes/builder/scripts/src/builder.js
+
 version 4.23 ( updated 10-19-2023 )
 - Introduced Divi Code AI, a personal coding assistant for Divi.
+	* ai-app/ai-app.php
+	* ai-app/ai-code.php
+	* ai-app/build/et-ai-app.bundle.css
+	* ai-app/build/et-ai-app.bundle.js
+	* ai-app/build/et-ai-app.bundle.js.LICENSE.txt
+	* ai-app/i18n/user-prompt.php
 	* includes/builder/functions.php
 	* includes/builder/scripts/src/builder.js
 
@@ -17,6 +131,10 @@ version 4.22.2 ( updated 09-20-2023 )
 - Added filters for third-party modules to enable/disable AI buttons on fields.
 - Fixed issue where images were not generated for hover and responsive options.
 - Improved ET product update requests to avoid issues that occurred during rate limiting.
+	* ai-app/ai-app.php
+	* ai-app/build/et-ai-app.bundle.css
+	* ai-app/build/et-ai-app.bundle.js
+	* ai-app/i18n/user-prompt.php
 	* core/admin/fonts/modules/all/modules.eot
 	* core/admin/fonts/modules/all/modules.svg
 	* core/admin/fonts/modules/all/modules.ttf
@@ -52,6 +170,8 @@ version 4.22.1 ( updated 08-18-2023 )
 - Fixed a PHP fatal error that occurred due to a compatibility issue with WPML's Automatic Translation and the Woo Product Stock module.
 - Added permission check on Divi AI script load.
 - Added a new "Writable et-cache Directory" setting for the system diagnostic report in Support Center.
+	* ai-app/ai-app.php
+	* ai-app/build/et-ai-app.bundle.js
 	* core/components/SupportCenter.php
 	* core/functions.php
 	* includes/builder/feature/ai-button.php
@@ -64,6 +184,7 @@ version 4.22.1 ( updated 08-18-2023 )
 
 version 4.22 ( updated 08-09-2023 )
 - Introduced Divi AI text and image generation.
+	* ai-app
 	* common/admin.php
 	* common/constants/colors.js
 	* common/i18n/ai.php

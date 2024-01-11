@@ -1,1 +1,1 @@
-hîGe<?php exit; ?>a:1:{s:7:"content";s:49:"a:2:{s:11:"total_posts";i:0;s:9:"old_posts";i:0;}";}
+L e<?php exit; ?>a:1:{s:7:"content";s:49:"a:2:{s:11:"total_posts";i:0;s:9:"old_posts";i:0;}";}

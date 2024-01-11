@@ -2583,6 +2583,7 @@ function et_fb_get_nonces() {
 		'libraryLayoutsData'              => wp_create_nonce( 'et_builder_library_get_layouts_data' ),
 		'libraryGetLayout'                => wp_create_nonce( 'et_builder_library_get_layout' ),
 		'libraryUpdateLayout'             => wp_create_nonce( 'et_builder_library_update_layout' ),
+		'libraryConvertLayout'            => wp_create_nonce( 'et_builder_library_convert_layout' ),
 		'libraryUpdateTerms'              => wp_create_nonce( 'et_builder_library_update_terms' ),
 		'libraryUpdateLocation'           => wp_create_nonce( 'et_builder_library_toggle_item_location' ),
 		'libraryUpdateAccount'            => wp_create_nonce( 'et_builder_library_update_account' ),

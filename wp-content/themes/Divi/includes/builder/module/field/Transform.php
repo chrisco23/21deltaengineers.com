@@ -76,7 +76,7 @@ class ET_Builder_Module_Field_Transform extends ET_Builder_Module_Field_Base {
 					'transform_scale' => array(
 						'type'           => 'transform',
 						'label'          => $i18n['scale']['label'],
-						'default'        => "${defaults['scale']}|${defaults['scale']}",
+						'default'        => "{$defaults['scale']}|{$defaults['scale']}",
 						'default_unit'   => '%',
 						'range_settings' => array(
 							'min'  => -100,
@@ -95,7 +95,7 @@ class ET_Builder_Module_Field_Transform extends ET_Builder_Module_Field_Base {
 					'transform_translate' => array(
 						'type'           => 'transform',
 						'label'          => $i18n['translate']['label'],
-						'default'        => "${defaults['translate']}|${defaults['translate']}",
+						'default'        => "{$defaults['translate']}|{$defaults['translate']}",
 						'default_unit'   => 'px',
 						'range_settings' => array(
 							'min'  => -300,
@@ -114,7 +114,7 @@ class ET_Builder_Module_Field_Transform extends ET_Builder_Module_Field_Base {
 					'transform_rotate' => array(
 						'type'           => 'transform',
 						'label'          => $i18n['rotate']['label'],
-						'default'        => "${defaults['rotate']}|${defaults['rotate']}|${defaults['rotate']}",
+						'default'        => "{$defaults['rotate']}|{$defaults['rotate']}|{$defaults['rotate']}",
 						'default_unit'   => 'deg',
 						'range_settings' => array(
 							'min'  => 0,
@@ -133,7 +133,7 @@ class ET_Builder_Module_Field_Transform extends ET_Builder_Module_Field_Base {
 					'transform_skew' => array(
 						'type'           => 'transform',
 						'label'          => $i18n['skew']['label'],
-						'default'        => "${defaults['skew']}|${defaults['skew']}",
+						'default'        => "{$defaults['skew']}|{$defaults['skew']}",
 						'default_unit'   => 'deg',
 						'range_settings' => array(
 							'min'       => -180,
@@ -154,7 +154,7 @@ class ET_Builder_Module_Field_Transform extends ET_Builder_Module_Field_Base {
 					'transform_origin' => array(
 						'type'           => 'transform',
 						'label'          => $i18n['origin']['label'],
-						'default'        => "${defaults['origin']}|${defaults['origin']}",
+						'default'        => "{$defaults['origin']}|{$defaults['origin']}",
 						'default_unit'   => '%',
 						'range_settings' => array(
 							'min'  => -50,
@@ -196,15 +196,15 @@ class ET_Builder_Module_Field_Transform extends ET_Builder_Module_Field_Base {
 		foreach ( $additional_options['transform_styles']['composite_structure'] as $tab_name => $tab ) {
 			foreach ( $tab['controls'] as $field_name => $field_options ) {
 				$controls                                = $additional_options['transform_styles']['composite_structure'][ $tab_name ]['controls'];
-				$controls[ "${field_name}_tablet" ]      = $skip;
-				$controls[ "${field_name}_phone" ]       = $skip;
-				$controls[ "${field_name}_last_edited" ] = $skip;
+				$controls[ "{$field_name}_tablet" ]      = $skip;
+				$controls[ "{$field_name}_phone" ]       = $skip;
+				$controls[ "{$field_name}_last_edited" ] = $skip;
 				if ( in_array( $field_name, array( 'transform_scale', 'transform_translate', 'transform_skew' ) ) ) {
-					$controls[ "${field_name}_linked" ]         = $linked_skip;
-					$controls[ "${field_name}_linked_tablet" ]  = $linked_skip;
-					$controls[ "${field_name}_linked_phone" ]   = $linked_skip;
-					$controls[ "${field_name}_linked__hover" ]  = $linked_skip;
-					$controls[ "${field_name}_linked__sticky" ] = $linked_skip;
+					$controls[ "{$field_name}_linked" ]         = $linked_skip;
+					$controls[ "{$field_name}_linked_tablet" ]  = $linked_skip;
+					$controls[ "{$field_name}_linked_phone" ]   = $linked_skip;
+					$controls[ "{$field_name}_linked__hover" ]  = $linked_skip;
+					$controls[ "{$field_name}_linked__sticky" ] = $linked_skip;
 				}
 				$additional_options['transform_styles']['composite_structure'][ $tab_name ]['controls'] = $controls;
 			}
@@ -355,13 +355,15 @@ class ET_Builder_Module_Field_Transform extends ET_Builder_Module_Field_Base {
 		if ( 'hover' === $device || 'sticky' === $device ) {
 			return array();
 		}
+
+		// phpcs:disable ET.Sniffs.ValidVariableName.VariableNotSnakeCase, ET.Sniffs.ValidVariableName.InterpolatedVariableNotSnakeCase -- Existing codebase
 		$utils                = ET_Core_Data_Utils::instance();
 		$startElements        = $elements['transform'];
 		$responsive           = ET_Builder_Module_Helper_ResponsiveOptions::instance();
 		$direction            = $responsive->get_any_value( $this->processing_props, 'animation_direction', 'center', true, $device );
 		$animation_intensity  = $utils->array_get( $this->processing_props, "animation_intensity_$animationType", 50 );
 		$module_class         = ET_Builder_Element::get_module_order_class( $function_name );
-		$animationName        = "et_pb_${animationType}_${direction}_$module_class";
+		$animationName        = "et_pb_{$animationType}_{$direction}_$module_class";
 		$newKeyframe          = "@keyframes $animationName";
 		$newAnimationSelector = ".$module_class.et_animated.transformAnim";
 		$newAnimationRules    = "animation-name: $animationName;";
@@ -562,7 +564,7 @@ class ET_Builder_Module_Field_Transform extends ET_Builder_Module_Field_Base {
 				}
 				$startDeclaration  = $this->getTransformDeclaration( $startElements );
 				$newKeyframeRules  = "0%{{$startDeclaration}}";
-				$newKeyframeRules .= "100%{opacity:1;${transformDeclaration}}";
+				$newKeyframeRules .= "100%{opacity:1;{$transformDeclaration}}";
 				// replace origin declaration to preserve animation direction setting only if transform origin is not set
 				if ( empty( $elements['origin'] ) ) {
 					$originDeclaration = "transform-origin: $direction;";
@@ -608,6 +610,7 @@ class ET_Builder_Module_Field_Transform extends ET_Builder_Module_Field_Base {
 				'declaration'    => $transformDeclaration . $originDeclaration,
 			);
 		}
+		// phpcs:enable ET.Sniffs.ValidVariableName.VariableNotSnakeCase, ET.Sniffs.ValidVariableName.InterpolatedVariableNotSnakeCase
 
 		return array();
 	}

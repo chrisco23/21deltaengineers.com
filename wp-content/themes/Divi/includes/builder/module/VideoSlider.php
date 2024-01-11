@@ -1,6 +1,13 @@
 <?php
 
 class ET_Builder_Module_Video_Slider extends ET_Builder_Module {
+	/**
+	 * Indicates if module has box shadow.
+	 *
+	 * @var bool
+	 */
+	public $has_box_shadow;
+
 	function init() {
 		$this->name                   = esc_html__( 'Video Slider', 'et_builder' );
 		$this->plural                 = esc_html__( 'Video Sliders', 'et_builder' );

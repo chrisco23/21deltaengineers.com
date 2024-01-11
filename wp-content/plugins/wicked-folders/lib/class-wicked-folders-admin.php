@@ -475,36 +475,11 @@ final class Wicked_Folders_Admin {
 		$menu_items 			= array();
 		$post_types 			= Wicked_Folders::post_type_objects();
 		$enable_taxonomy_pages 	= get_option( 'wicked_folders_enable_taxonomy_pages', false );
-		$enable_folder_pages 	= get_option( 'wicked_folders_enable_folder_pages', null );
 		$filter_args 			= array(
 			'post_types' => $post_types,
 		);
 
 		foreach ( $post_types as $post_type ) {
-			// Folder page menu item
-			$menu_item = array(
-				'parent_slug' 	=> 'edit.php?post_type=' . $post_type->name,
-				'capability' 	=> 'edit_posts',
-				'menu_slug' 	=> Wicked_Folders::get_tax_name( $post_type->name ),
-				'page_title' 	=> sprintf( __( '%1$s Folders', 'wicked-folders' ), $post_type->labels->singular_name ),
-				//'menu_title' 	=> sprintf( __( '%1$s Folders', 'wicked-folders' ), $post_type->labels->singular_name ),
-				'menu_title' 	=> __( 'Folders', 'wicked-folders' ),
-				'callback' 		=> array( $this, 'folders_page' ),
-			);
-			if ( is_string( $post_type->show_in_menu ) ) {
-				$menu_item['parent_slug'] = $post_type->show_in_menu;
-			}
-			if ( 'post' == $post_type->name ) {
-				$menu_item['parent_slug'] = 'edit.php';
-			}
-			if ( $post_type->_builtin ) {
-				$menu_item['page_title'] = __( 'Folders', 'wicked-folders' );
-				$menu_item['menu_title'] = __( 'Folders', 'wicked-folders' );
-			}
-			if ( $enable_folder_pages ) $menu_items[] = $menu_item;
-
-			if ( 'attachment' == $post_type->name ) continue;
-
 			if ( $enable_taxonomy_pages ) {
 				// Folder management (i.e. folder taxonomy) menu item
 				$taxonomy 	= Wicked_Folders::get_tax_name( $post_type->name );

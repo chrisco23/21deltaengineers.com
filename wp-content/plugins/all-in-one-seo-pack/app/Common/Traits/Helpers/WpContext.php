@@ -125,7 +125,9 @@ trait WpContext {
 
 		$post = aioseo()->helpers->getPost( $post );
 
-		return ( 'page' === get_option( 'show_on_front' ) && ! empty( $post->ID ) && (int) get_option( 'page_on_front' ) === $post->ID );
+		$isHomePage = ( 'page' === get_option( 'show_on_front' ) && ! empty( $post->ID ) && (int) get_option( 'page_on_front' ) === $post->ID );
+
+		return $isHomePage;
 	}
 
 	/**
@@ -146,8 +148,20 @@ trait WpContext {
 	 *
 	 * @return bool Whether the current page is the static posts page.
 	 */
-	public function isStaticPostsPage() {
-		return is_home() && ( 0 !== (int) get_option( 'page_for_posts' ) );
+	public function isStaticPostsPage( $post = null ) {
+		static $isStaticPostsPage = null;
+		if ( null !== $isStaticPostsPage ) {
+			return $isStaticPostsPage;
+		}
+
+		$post = aioseo()->helpers->getPost( $post );
+
+		$isStaticPostsPage = (
+			( is_home() && ( 0 !== (int) get_option( 'page_for_posts' ) ) ) ||
+			( ! empty( $post->ID ) && (int) get_option( 'page_for_posts' ) === $post->ID )
+		);
+
+		return $isStaticPostsPage;
 	}
 
 	/**
@@ -420,9 +434,16 @@ trait WpContext {
 	 * @return int|false The page number or false if we're not on a comment page.
 	 */
 	public function getCommentPageNumber() {
-		$cpage = get_query_var( 'cpage' );
+		$cpage = get_query_var( 'cpage', null );
+		if ( $this->isBlockTheme() ) {
+			global $wp_query;
 
-		return ! empty( $cpage ) ? (int) $cpage : false;
+			// For block themes we can't rely on `get_query_var()` because of {@see build_comment_query_vars_from_block()},
+			// so we need to check the query directly.
+			$cpage = $wp_query->query['cpage'] ?? null;
+		}
+
+		return isset( $cpage ) ? (int) $cpage : false;
 	}
 
 	/**
@@ -847,5 +868,20 @@ trait WpContext {
 		global $_wp_theme_features;
 
 		return isset( $_wp_theme_features ) && is_array( $_wp_theme_features ) ? $_wp_theme_features : [];
+	}
+
+	/**
+	 * Returns whether the active theme is a block-based theme or not.
+	 *
+	 * @since 4.5.3
+	 *
+	 * @return bool Whether the active theme is a block-based theme or not.
+	 */
+	public function isBlockTheme() {
+		if ( function_exists( 'wp_is_block_theme' ) ) {
+			return wp_is_block_theme(); // phpcs:ignore
+		}
+
+		return false;
 	}
 }

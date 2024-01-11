@@ -115,7 +115,7 @@ function _et_pb_autoload_modules( $class ) {
 		 * as part of WooCommerce Modules v2.
 		*/
 		file_exists( ET_BUILDER_DIR . "module/woocommerce/{$class}.php" ) ) {
-		require_once "module/woocommerce/${class}.php";
+		require_once "module/woocommerce/{$class}.php";
 	}
 }
 

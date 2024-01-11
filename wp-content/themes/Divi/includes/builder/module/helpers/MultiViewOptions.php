@@ -156,6 +156,13 @@ class ET_Builder_Module_Helper_MultiViewOptions {
 	public static $phone_suffix = '_phone';
 
 	/**
+	 * List of props that inherited from previous breakpoint
+	 *
+	 * @var array
+	 */
+	public $inherited_props;
+
+	/**
 	 * Class constructor
 	 *
 	 * @since 3.27.1

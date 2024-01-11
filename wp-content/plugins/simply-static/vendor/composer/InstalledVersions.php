@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'fdf13d11b5285f5e3d8df3460c9819d52d5e9b28',
+    'reference' => '57ab3368fb2359ebea4895698004694c83524bbf',
     'name' => 'patrickposner/simply-static',
   ),
   'versions' => 
@@ -51,7 +51,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'fdf13d11b5285f5e3d8df3460c9819d52d5e9b28',
+      'reference' => '57ab3368fb2359ebea4895698004694c83524bbf',
     ),
     'symfony/css-selector' => 
     array (

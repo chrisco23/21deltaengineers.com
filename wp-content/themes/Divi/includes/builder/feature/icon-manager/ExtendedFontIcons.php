@@ -39,7 +39,7 @@ if ( ! function_exists( 'et_pb_maybe_old_single_utf_divi_icon' ) ) {
 	 * @return bool
 	 */
 	function et_pb_maybe_old_single_utf_divi_icon( $icon_value ) {
-		return 1 === strlen( utf8_decode( $icon_value ) ) && in_array( $icon_value, et_pb_get_decoded_divi_icons(), true );
+		return 1 === strlen( mb_convert_encoding( $icon_value, 'ISO-8859-1', 'UTF-8' ) ) && in_array( $icon_value, et_pb_get_decoded_divi_icons(), true );
 	}
 }
 

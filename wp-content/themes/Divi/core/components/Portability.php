@@ -77,14 +77,18 @@ class ET_Core_Portability {
 
 		self::$_doing_import = true;
 
-		$timestamp              = $this->get_timestamp();
-		$filesystem             = $this->set_filesystem();
-		$temp_file_id           = sanitize_file_name( $timestamp );
-		$temp_file              = $this->has_temp_file( $temp_file_id, 'et_core_import' );
-		$include_global_presets = isset( $_POST['include_global_presets'] ) ? wp_validate_boolean( $_POST['include_global_presets'] ) : false;
-		$return_json            = isset( $_POST['et_cloud_return_json'] ) ? wp_validate_boolean( sanitize_text_field( $_POST['et_cloud_return_json'] ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is handled earlier.
-		$temp_presets           = isset( $_POST['et_cloud_use_temp_presets'] ) ? wp_validate_boolean( sanitize_text_field( $_POST['et_cloud_use_temp_presets'] ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is handled earlier.
-		$global_presets         = '';
+		$timestamp    = $this->get_timestamp();
+		$filesystem   = $this->set_filesystem();
+		$temp_file_id = sanitize_file_name( $timestamp );
+		$temp_file    = $this->has_temp_file( $temp_file_id, 'et_core_import' );
+
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verification is handled earlier.
+		$include_global_presets = isset( $_POST['include_global_presets'] ) ? wp_validate_boolean( sanitize_text_field( $_POST['include_global_presets'] ) ) : false;
+		$return_json            = isset( $_POST['et_cloud_return_json'] ) ? wp_validate_boolean( sanitize_text_field( $_POST['et_cloud_return_json'] ) ) : false;
+		$temp_presets           = isset( $_POST['et_cloud_use_temp_presets'] ) ? wp_validate_boolean( sanitize_text_field( $_POST['et_cloud_use_temp_presets'] ) ) : false;
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+
+		$global_presets = '';
 
 		if ( $temp_file ) {
 			$import = json_decode( $filesystem->get_contents( $temp_file ), true );
@@ -190,8 +194,12 @@ class ET_Core_Portability {
 			$shortcode_string = is_array( $success['postContent'] ) && ! empty( $success['postContent']['post_content'] ) ? $success['postContent']['post_content'] : $success['postContent'];
 
 			if ( ! empty( $import['presets'] ) ) {
-				$preset_rewrite_map = $this->prepare_to_import_layout_presets( $import['presets'] );
-				$global_presets     = $import['presets'];
+				$preset_rewrite_map = [];
+
+				if ( $include_global_presets ) {
+					$preset_rewrite_map = $this->prepare_to_import_layout_presets( $import['presets'] );
+					$global_presets     = $import['presets'];
+				}
 
 				$shortcode_object = et_fb_process_shortcode( $shortcode_string );
 				$this->rewrite_module_preset_ids( $shortcode_object, $import['presets'], $preset_rewrite_map );

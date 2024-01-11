@@ -42,6 +42,13 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 	);
 
 	/**
+	 * Option template helper.
+	 *
+	 * @var ET_Builder_Module_Helper_OptionTemplate
+	 */
+	public $template;
+
+	/**
 	 * ET_Builder_Module_Field_Border constructor.
 	 */
 	public function __construct() {

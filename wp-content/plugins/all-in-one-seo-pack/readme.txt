@@ -1,10 +1,10 @@
 === All in One SEO – Best WordPress SEO Plugin – Easily Improve SEO Rankings & Increase Traffic ===
 Contributors: aioseo, smub, benjaminprojas
 Tags: SEO, Google Search Console, XML Sitemap, meta description, schema, meta title, rich snippets, woocommerce seo, local seo, open graph, google news sitemap, video sitemap, robots.txt, seo audit, content analysis, seo plugin, redirection
-Tested up to: 6.3.2
+Tested up to: 6.4.2
 Requires at least: 4.9
 Requires PHP: 7.0
-Stable tag: 4.4.9.2
+Stable tag: 4.5.3.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -27,7 +27,7 @@ AIOSEO's <a href="https://aioseo.com/?utm_source=wprepo&utm_medium=link&utm_camp
 
 **We took the pain out of optimizing WordPress SEO and made it easy.** Here's why smart business owners, SEO experts, marketers, and developers love AIOSEO, and you will too!
 
-[youtube https://www.youtube.com/watch?v=OVJuc-xUslI]
+[youtube https://youtu.be/AZpXSrZDbW4]
 
 ### ✨ Properly Setup WordPress SEO (without Hiring an Expert) ###
 
@@ -238,25 +238,105 @@ AIOSEO&reg; is a registered trademark of Semper Plugins LLC. When writing about 
 
 If you like our WordPress SEO plugin, then consider checking out our other projects:
 
-* <a href="https://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a> - Get More Email Subscribers with the most popular conversion optimization plugin for WordPress.
-* <a href="https://wpforms.com/" rel="friend" title="WPForms">WPForms</a> - #1 drag & drop online form builder for WordPress.
-* <a href="https://www.monsterinsights.com/" rel="friend" title="MonsterInsights">MonsterInsights</a> - See the stats that matter and grow your business with confidence. The best Google Analytics plugin for WordPress.
+* <a href="https://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a> - Get more email subscribers with the most popular conversion optimization plugin for WordPress.
+* <a href="https://wpforms.com/" rel="friend" title="WPForms">WPForms</a> - #1 drag & drop online form builder for WordPress (trusted by 5 million sites).
+* <a href="https://www.monsterinsights.com/" rel="friend" title="MonsterInsights">MonsterInsights</a> - See the stats that matter and grow your business with confidence. Best Google Analytics plugin for WordPress.
 * <a href="https://www.seedprod.com/" rel="friend" title="SeedProd">SeedProd</a> - Create beautiful landing pages with our powerful drag & drop landing page builder.
 * <a href="https://wpmailsmtp.com">WP Mail SMTP</a> - Improve email deliverability for your contact form with the most popular SMTP plugin for WordPress.
 * <a href="https://rafflepress.com/">RafflePress</a> - Best WordPress giveaway and contest plugin to grow traffic and social followers.
-* <a href="https://www.smashballoon.com">Smash Balloon</a> - #1 social feeds plugin for WordPress – display social media content in WordPress without code.
+* <a href="https://www.smashballoon.com">Smash Balloon</a> - #1 social feeds plugin for WordPress - display social media content in WordPress without code.
+* <a href="https://wpcode.com/">WPCode</a> - Must have WordPress code snippet management plugin to help you future-proof website customization (trusted by 1.5 million sites).
+* <a href="https://duplicator.com/">Duplicator</a> - Popular WordPress backup and migration plugin used by over 1 million websites.
 * <a href="https://www.pushengage.com/">Push Engage</a> - Connect with visitors after they leave your website with the leading web push notification plugin.
 * <a href="https://trustpulse.com/">TrustPulse</a> - Add real-time social proof notifications to boost your store conversions by up to 15%.
 * <a href="https://searchwp.com/">SearchWP</a> – The most advanced custom WordPress search plugin to improve WordPress search quality.
 * <a href="https://affiliatewp.com/">AffiliateWP</a> – #1 affiliate management plugin for WordPress. Add a referral program to your online store.
 * <a href="https://wpsimplepay.com/">WP Simple Pay</a> – #1 Stripe payments plugin for WordPress. Start accepting one-time or recurring payments without a shopping cart.
 * <a href="https://easydigitaldownloads.com/">Easy Digital Downloads</a> – The best WordPress eCommerce plugin to sell digital products (eBooks, software, music, and more).
+* <a href="https://www.wpcharitable.com/">WPCharitable</a> - Top-rated WordPress donation and fundraising plugin for WordPress.
 * <a href="https://sugarcalendar.com/">Sugar Calendar</a> – A simple event calendar plugin for WordPress that's both easy and powerful.
 
-Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeginner</a> to learn from our <a href="http://www.wpbeginner.com/category/wp-tutorials/" rel="friend" title="WordPress Tutorials">WordPress Tutorials</a> and find out about other <a href="http://www.wpbeginner.com/category/plugins/" rel="friend" title="Best WordPress Plugins">best WordPress plugins</a>.
+Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeginner</a> to learn from our <a href="http://www.wpbeginner.com/category/wp-tutorials/" rel="friend" title="WordPress Tutorials">WordPress Tutorials</a> and find out about the <a href="http://www.wpbeginner.com/category/plugins/" rel="friend" title="Best WordPress Plugins">best WordPress plugins</a>.
 
 
 == Changelog ==
+
+**New in Version 4.5.3.1**
+
+* Fixed: AIOSEO Settings modal sometimes opening in Divi visual editor when user performs unrelated action.
+
+**New in Version 4.5.3**
+
+* New: Added support for importing Locations from Yoast SEO into Local SEO.
+* New: Added support for LiteSpeed servers to Redirection Manager.
+* Updated: Numerous performance updates under the hood.
+* Updated: SEO Revisions now tracks changes to the Cornerstone Content setting.
+* Updated: Redirect's manual 404s now load a 404 WP template instead of just sending a 404 header to the browser.
+* Updated: Added post status badges to the Links Report in Link Assistant to show the post status of non-published posts.
+* Updated: Improved style compatibility between AIOSEO and the Extra theme.
+* Fixed: Paged Format now uses the global separator tag.
+* Fixed: Product schema is no longer output when the product does not have a valid price set.
+* Fixed: Various schema graphs now consider timezones when outputting dates and no longer output incorrect timestamps.
+* Fixed: Redirect modal UI now works correctly when a post is trashed.
+* Fixed: Redirects no longer prevent the use of WP CLI.
+* Fixed: Redirect's HTTP Headers table no longer disappears after inserting a value in the field.
+* Fixed: When editing a redirect the edit screen no longer closes after selecting a value.
+* Fixed: Error when importing robots.txt rules with certain regex patterns.
+* Fixed: File structure issue that caused some localized strings from being excluded in language files.
+* Fixed: Cornerstone Content setting removed for attachment pages.
+* Fixed: Setup Wizard sometimes showing wrong step count.
+* Fixed: Snippet preview showing incorrect preview for Taxonomy Title smart tag when no primary category is selected.
+* Fixed: Search Statistics now correctly syncs the homepage with what is selected under Settings > Reading.
+* Fixed: Plugin conflict with the Autoptimization plugin where the frontend of the site shows a whitescreen when logged-in users are using Russian as their locale.
+* Fixed: Conflict with block-based themes in WP 6.0+.
+
+**New in Version 4.5.2.1**
+
+* Fixed: Conflict with Avada where some Avada elements cause the post editor to load the wrong data.
+
+**New in Version 4.5.2**
+
+* New: Integrations with Avada & WPBakery - Control your SEO and optimize your content directly from the Avada and WPBakery visual page builders.
+* New: Added support for the Limit Modified Date setting to Elementor, Divi and SeedProd.
+* Updated: Improved shipping details schema logic for WooCommerce to better prevent plugin/theme conflicts.
+* Fixed: PHP error in Tools menu when using WP 5.4 or lower.
+
+**New in Version 4.5.1.1**
+
+* Fixed: Plugin conflict with Jetpack.
+
+**New in Version 4.5.1**
+
+* Updated: Added support for the Performant Translations plugin.
+* Updated: Added support for schema validation for AIOSEO's schema supported blocks (FAQ block).
+* Updated: Added support for WooCommerce grouped products to Product schema.
+* Updated: Updated our icons for X (formely Twitter).
+* Updated: Removed support for Google Analytics V3 as it has been discontinued by Google.
+* Updated: We now hide the TruSEO score for static blog pages.
+* Updated: Added emoji picker to the 404 breadcrumb template.
+* Updated: Advanced 404 redirect can now use an external domain URL.
+* Fixed: Rare issue where site could use more memory due to circular cache reference.
+* Fixed: Conflict with Safe Redirect Manager.
+* Fixed: Conflict between AIOSEO and the Presto Player and Product Tabs Manager plugins by Sparks.
+* Fixed: Schema Generator custom schema and validator editors not rendered on smaller screens.
+* Fixed: Default date value for datepicker in Event schema graph settings.
+* Fixed: Default schema not added to new SeedProd landing pages.
+* Fixed: Post column makes the post title column too small on smaller screens.
+* Fixed: Spaces stripped when searching for a post in the source/target URL field in Redirects.
+* Fixed: Feature inside Feature Manager would sometimes appear as active even when it is disabled.
+* Fixed: Fixed a number of strings that weren't localized before.
+* Fixed: PHP 8.2 deprecation warnings in Setup Wizard when using WP 6.4+
+* Fixed: PHP error when fetching WooCommerce Product Categories through REST API when AIOSEO REST API addon is active.
+* Fixed: PHP notice when using a custom multi-type JSON schema graph.
+* Fixed: Console error in Link Assistant when attempting to add a link through an Outbound Internal Suggestion.
+* Fixed: Redirects table footer height.
+* Fixed: Redirect source and target url no longer strip empty spaces when searching for posts/pages.
+
+**New in Version 4.5.0**
+
+* New: Post Index Status - Check whether your posts have been indexed by Google inside our Search Statistics reports and revamped AIOSEO Details column.
+* New: AIOSEO Details Column Revamp - We've redesigned our post/term column to give it a fresh lick of paint. You can now add smart tags to the title & meta description inside the column and see your headline score.
+* Fixed: Search Statistics no longer considers URLs with query args or HTML anchors.
 
 **New in Version 4.4.9.2**
 
@@ -647,6 +727,6 @@ Additionally, AIOSEO can also provide you with data on the most frequently used 
 
 == Upgrade Notice ==
 
-= 4.4.9.2 =
+= 4.5.3.1 =
 
 This update adds major improvements and bug fixes.

@@ -4,6 +4,13 @@ class ET_Builder_Module_Field_BoxShadow extends ET_Builder_Module_Field_Base {
 	private static $classes = array();
 
 	/**
+	 * ET_Builder_Module_Helper_OptionTemplate class
+	 *
+	 * @var ET_Builder_Module_Helper_OptionTemplate
+	 */
+	public $template;
+
+	/**
 	 * @var ET_Builder_Module_Helper_ResponsiveOptions
 	 *
 	 * @since 3.23

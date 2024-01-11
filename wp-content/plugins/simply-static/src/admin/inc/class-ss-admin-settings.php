@@ -145,7 +145,8 @@ class Admin_Settings {
 		$debug_file = Util::get_debug_log_filename();
 
 		if ( file_exists( $debug_file ) ) {
-			$args['log_file'] = SIMPLY_STATIC_URL . '/debug.txt';
+            $uploadsDir = wp_upload_dir();
+			$args['log_file'] = $uploadsDir['baseurl'] . '/simply-static/debug.txt';
 		}
 
 		// Maybe show migration notice.
@@ -392,7 +393,7 @@ class Admin_Settings {
 	 * @return false|string
 	 */
 	public function clear_log() {
-		Util::delete_debug_log();
+		Util::clear_debug_log();
 
 		return json_encode( [ 'status' => 200, 'message' => "Ok" ] );
 	}
@@ -472,8 +473,6 @@ class Admin_Settings {
 	 * @return false|string
 	 */
 	public function is_running( $request ) {
-		$blog_id = ! empty( $params['blog_id'] ) ? $params['blog_id'] : 0;
-
 		return json_encode( [
 			'status'  => 200,
 			'running' => Plugin::instance()->get_archive_creation_job()->is_running()

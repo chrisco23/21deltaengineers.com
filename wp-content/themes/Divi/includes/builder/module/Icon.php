@@ -14,6 +14,20 @@
  */
 class ET_Builder_Module_Icon extends ET_Builder_Module {
 	/**
+	 * Holds icon selector.
+	 *
+	 * @var string
+	 */
+	public $icon_element_selector;
+
+	/**
+	 * Holds icon element's classname.
+	 *
+	 * @var string
+	 */
+	public $icon_element_classname;
+
+	/**
 	 * Initialize the module class.
 	 *
 	 * @since ?

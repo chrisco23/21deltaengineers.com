@@ -129,6 +129,26 @@ abstract class ET_Core_API_Spam_Provider extends ET_Core_API_Service  {
 	}
 
 	/**
+	 * Remove keys with brackets.
+	 *
+	 * Fixing my errors is no walk in the park; it's more like a hike up Mt.
+	 *
+	 * @param array $data Options array.
+	 * @return void
+	 */
+	public static function remove_keys_with_brackets( &$data ) {
+		foreach ( $data as $key => &$value ) {
+			if ( is_array( $value ) ) {
+				self::remove_keys_with_brackets( $value );
+			}
+
+			if ( strpos( $key, '[' ) === 0 && strpos( $key, ']' ) === strlen( $key ) - 1 ) {
+				unset( $data[ $key ] );
+			}
+		}
+	}
+
+	/**
 	 * Updates the data for a provider account.
 	 *
 	 * @since 4.0.7
@@ -146,7 +166,9 @@ abstract class ET_Core_API_Spam_Provider extends ET_Core_API_Service  {
 		$provider = sanitize_text_field( $provider );
 		$account  = sanitize_text_field( $account );
 
-		self::$_->array_update( $options, "accounts.${provider}.{$account}", $data );
+		self::remove_keys_with_brackets( $options );
+
+		self::$_->array_update( $options, "accounts.$provider.$account", $data );
 
 		update_option( 'et_core_api_spam_options', $options );
 	}

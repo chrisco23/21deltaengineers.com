@@ -222,6 +222,22 @@ abstract class ET_Core_API_Service {
 	public $uses_oauth;
 
 	/**
+	 * Data Utility class.
+	 *
+	 * @var ET_Core_Data_Utils
+	 */
+	public $data_utils;
+
+	// phpcs:disable ET.Sniffs.ValidVariableName.PropertyNotSnakeCase -- Existing codebase.
+	/**
+	 * Error message for when API Key is required.
+	 *
+	 * @var string
+	 */
+	public $API_KEY_REQUIRED;
+	// phpcs:enable ET.Sniffs.ValidVariableName.PropertyNotSnakeCase -- Existing codebase.
+
+	/**
 	 * ET_Core_API_Service constructor.
 	 *
 	 * @since 1.1.0

@@ -1276,16 +1276,31 @@ function et_builder_wc_disable_default_layout() {
 function et_builder_wc_relocate_single_product_summary() {
 	global $post, $wp_filter;
 
-	// Bail early if there is no `woocommerce_single_product_summary` hook callbacks.
-	$hook = et_()->array_get( $wp_filter, 'woocommerce_single_product_summary', null );
-	if ( empty( $hook->callbacks ) ) {
+	if ( ! $post ) {
+		return;
+	}
+
+	$tb_body_layout    = ET_THEME_BUILDER_BODY_LAYOUT_POST_TYPE;
+	$tb_body_override  = et_theme_builder_overrides_layout( $tb_body_layout );
+	$tb_layouts        = et_theme_builder_get_template_layouts();
+	$tb_body_layout_id = $tb_body_override ? $tb_layouts[$tb_body_layout]['id'] : false;
+	$tb_body_content   = $tb_body_layout_id ? get_post_field( 'post_content', $tb_body_layout_id ) : '';
+	$has_wc_module     = et_builder_has_woocommerce_module( $post->post_content );
+	$has_wc_module_tb  = et_builder_has_woocommerce_module( $tb_body_content );
+	$hook              = et_()->array_get( $wp_filter, 'woocommerce_single_product_summary', null );
+
+	// Bail early if there is no `woocommerce_single_product_summary` hook callbacks or
+	// if there is no WooCommerce module in the content of current page and TB body layout.
+	if (
+		( ! $has_wc_module && ! $has_wc_module_tb )
+		|| empty( $hook->callbacks ) 
+	) {
 		return;
 	}
 
 	$is_copy_needed = false;
 	$is_move_needed = false;
 	$post_id        = ! empty( $post->ID ) ? $post->ID : false;
-	$post_type      = ! empty( $post->post_type ) ? $post->post_type : '';
 
 	// Product related pages.
 	$is_product          = function_exists( 'is_product' ) && is_product();
@@ -1315,10 +1330,7 @@ function et_builder_wc_relocate_single_product_summary() {
 	// - Builder is used.
 	// - TB Body layout overrides the content.
 	if ( $is_product ) {
-		if (
-			et_pb_is_pagebuilder_used( $post_id )
-			|| et_theme_builder_overrides_layout( ET_THEME_BUILDER_BODY_LAYOUT_POST_TYPE )
-		) {
+		if ( et_pb_is_pagebuilder_used( $post_id ) || $tb_body_override ) {
 			$is_move_needed = true;
 		}
 	}

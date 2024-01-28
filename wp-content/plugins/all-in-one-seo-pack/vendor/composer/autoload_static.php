@@ -35,6 +35,7 @@ class ComposerStaticInit651aebe52d12925c0afecab162ebab77
         'AIOSEO\\Plugin\\Common\\Admin\\Admin' => __DIR__ . '/../..' . '/app/Common/Admin/Admin.php',
         'AIOSEO\\Plugin\\Common\\Admin\\ConflictingPlugins' => __DIR__ . '/../..' . '/app/Common/Admin/ConflictingPlugins.php',
         'AIOSEO\\Plugin\\Common\\Admin\\Dashboard' => __DIR__ . '/../..' . '/app/Common/Admin/Dashboard.php',
+        'AIOSEO\\Plugin\\Common\\Admin\\DeactivationSurvey' => __DIR__ . '/../..' . '/app/Common/Admin/DeactivationSurvey.php',
         'AIOSEO\\Plugin\\Common\\Admin\\NetworkAdmin' => __DIR__ . '/../..' . '/app/Common/Admin/NetworkAdmin.php',
         'AIOSEO\\Plugin\\Common\\Admin\\Notices\\ConflictingPlugins' => __DIR__ . '/../..' . '/app/Common/Admin/Notices/ConflictingPlugins.php',
         'AIOSEO\\Plugin\\Common\\Admin\\Notices\\DeprecatedWordPress' => __DIR__ . '/../..' . '/app/Common/Admin/Notices/DeprecatedWordPress.php',

@@ -35,7 +35,11 @@ class UserProfileTab {
 			return;
 		}
 
-		$screen = get_current_screen();
+		$screen = aioseo()->helpers->getCurrentScreen();
+		if ( empty( $screen->id ) ) {
+			return;
+		}
+
 		if ( ! in_array( $screen->id, [ 'user-edit', 'profile' ], true ) ) {
 			if ( 'follow-up_page_followup-emails-reports' === $screen->id ) {
 				aioseo()->core->assets->load( 'src/vue/standalone/user-profile-tab/follow-up-emails-nav-bar.js' );
@@ -59,7 +63,7 @@ class UserProfileTab {
 	 *
 	 * @return array
 	 */
-	private function getVueData() {
+	public function getVueData() {
 		global $user_id;
 
 		$socialProfiles = $this->getSocialProfiles();

@@ -204,6 +204,7 @@ class ET_AI_App {
 				'userPrompt'    => require ET_AI_PLUGIN_DIR . '/i18n/user-prompt.php',
 				'authorization' => require ET_AI_PLUGIN_DIR . '/i18n/authorization.php',
 				'aiCode'        => require ET_AI_PLUGIN_DIR . '/i18n/ai-code.php',
+				'aiImageEditor' => require ET_AI_PLUGIN_DIR . '/i18n/ai-image-editor.php',
 			],
 			'ajaxurl' => is_ssl() ? admin_url( 'admin-ajax.php' ) : admin_url( 'admin-ajax.php', 'http' ),
 			'nonces'  => [

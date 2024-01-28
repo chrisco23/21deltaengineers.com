@@ -1,3 +1,17 @@
+version 4.24 ( updated 01-18-2024 )
+- Introduced the Divi AI Image Editor
+	* ai-app/ai-app.php
+	* ai-app/build/et-ai-app.bundle.js
+	* ai-app/build/et-ai-app.bundle.css
+	* common/admin.php
+	* common/i18n/ai.php
+	* common/i18n/common.php
+	* common/images/no-color.png
+	* common/lib/ai.js
+	* common/utils/color/color.js
+	* includes/builder/feature/ai-button.php
+	* includes/builder/frontend-builder/bundle.js
+
 version 4.23.4 ( updated 12-28-2023 )
 - Fixed issue with saving Recaptcha settings not working in Contact form.
 	* core/components/api/spam/Provider.php

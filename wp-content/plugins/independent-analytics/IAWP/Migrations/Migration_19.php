@@ -1,0 +1,20 @@
+<?php
+
+namespace IAWP_SCOPED\IAWP\Migrations;
+
+use IAWP_SCOPED\IAWP\Known_Referrers;
+/** @internal */
+class Migration_19 extends Migration
+{
+    /**
+     * @var string
+     */
+    protected $database_version = '19';
+    /**
+     * @return void
+     */
+    protected function migrate() : void
+    {
+        Known_Referrers::replace_known_referrers_table();
+    }
+}

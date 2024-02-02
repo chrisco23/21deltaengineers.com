@@ -1,0 +1,3 @@
+SELECT *
+FROM wp_independent_analytics_sessions
+WHERE session_id = :session_id

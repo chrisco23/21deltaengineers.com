@@ -1,0 +1,7 @@
+SELECT *
+FROM wp_independent_analytics_campaigns
+WHERE utm_campaign = :utm_campaign
+  AND utm_medium = :utm_medium
+  AND utm_source = :utm_source
+  AND (utm_term = :utm_term OR (:ignore_utm_term = 1 AND :utm_term IS NULL))
+  AND (utm_content = :utm_content OR (:ignore_utm_content = 1 AND :utm_content IS NULL))

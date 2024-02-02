@@ -1,0 +1,8 @@
+SELECT COUNT(DISTINCT (sessions.visitor_id))                           AS visitors,
+       COUNT(*) as views,
+       ABS(CEILING(TIMESTAMPDIFF(SECOND, :end, views.viewed_at) / 10)) AS interval_ago
+FROM wp_independent_analytics_views as views
+         LEFT JOIN wp_independent_analytics_sessions AS sessions
+                   ON views.session_id = sessions.session_id
+WHERE viewed_at BETWEEN :start AND :end
+GROUP BY interval_ago

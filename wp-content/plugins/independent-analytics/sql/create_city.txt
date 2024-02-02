@@ -1,0 +1,6 @@
+INSERT IGNORE INTO wp_independent_analytics_cities
+(country_id, subdivision, city)
+VALUES (:country_id, :subdivision, :city)
+ON DUPLICATE KEY UPDATE country_id = :country_id,
+                        subdivision      = :subdivision,
+                        city    = :city;

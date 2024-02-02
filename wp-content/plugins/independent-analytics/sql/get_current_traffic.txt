@@ -1,0 +1,10 @@
+SELECT COUNT(DISTINCT (sessions.visitor_id))      AS visitor_count,
+       COUNT(DISTINCT (views.resource_id))     AS page_count,
+       COUNT(DISTINCT (sessions.referrer_id))     AS referrer_count,
+       COUNT(DISTINCT (sessions.country_id)) AS country_count,
+       COUNT(DISTINCT (sessions.campaign_id))     AS campaign_count,
+       COUNT(*)                                AS view_count
+FROM wp_independent_analytics_views AS views
+         LEFT JOIN wp_independent_analytics_sessions AS sessions
+                   ON views.session_id = sessions.session_id
+WHERE viewed_at BETWEEN :start AND :end

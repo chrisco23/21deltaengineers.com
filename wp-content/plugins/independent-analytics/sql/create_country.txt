@@ -1,0 +1,6 @@
+INSERT IGNORE INTO wp_independent_analytics_countries
+(country_code, country, continent)
+VALUES (:country_code, :country, :continent)
+ON DUPLICATE KEY UPDATE country_code = :country_code,
+                        country      = :country,
+                        continent    = :continent;

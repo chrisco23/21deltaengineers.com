@@ -1,0 +1,4 @@
+SELECT *
+FROM wp_independent_analytics_resources
+WHERE resource = :resource
+  AND :resource_key = :resource_value;

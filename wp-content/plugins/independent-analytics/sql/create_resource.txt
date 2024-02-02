@@ -1,0 +1,7 @@
+INSERT INTO wp_independent_analytics_resources
+    (resource, :resource_key)
+VALUES (:resource, :resource_value);
+
+SELECT *
+FROM wp_independent_analytics_resources
+WHERE id = LAST_INSERT_ID();

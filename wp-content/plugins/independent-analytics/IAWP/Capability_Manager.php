@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
 /** @internal */
 class Capability_Manager
@@ -90,6 +90,6 @@ class Capability_Manager
         if (self::is_admin()) {
             return \false;
         }
-        return \IAWP_SCOPED\iawp()->get_option('iawp_white_label', \false);
+        return \IAWPSCOPED\iawp()->get_option('iawp_white_label', \false);
     }
 }

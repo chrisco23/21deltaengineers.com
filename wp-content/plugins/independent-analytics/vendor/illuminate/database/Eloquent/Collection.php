@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent;
 
-use IAWP_SCOPED\Illuminate\Contracts\Queue\QueueableCollection;
-use IAWP_SCOPED\Illuminate\Contracts\Queue\QueueableEntity;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Collection as BaseCollection;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Contracts\Queue\QueueableCollection;
+use IAWPSCOPED\Illuminate\Contracts\Queue\QueueableEntity;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Collection as BaseCollection;
+use IAWPSCOPED\Illuminate\Support\Str;
 use LogicException;
 /** @internal */
 class Collection extends BaseCollection implements QueueableCollection

@@ -1,18 +1,18 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Factories;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Factories;
 
 use Closure;
-use IAWP_SCOPED\Faker\Generator;
-use IAWP_SCOPED\Illuminate\Container\Container;
-use IAWP_SCOPED\Illuminate\Contracts\Foundation\Application;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Support\Collection;
-use IAWP_SCOPED\Illuminate\Support\Str;
-use IAWP_SCOPED\Illuminate\Support\Traits\Conditionable;
-use IAWP_SCOPED\Illuminate\Support\Traits\ForwardsCalls;
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\Faker\Generator;
+use IAWPSCOPED\Illuminate\Container\Container;
+use IAWPSCOPED\Illuminate\Contracts\Foundation\Application;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Support\Traits\Conditionable;
+use IAWPSCOPED\Illuminate\Support\Traits\ForwardsCalls;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
 use Throwable;
 /** @internal */
 abstract class Factory
@@ -194,7 +194,7 @@ abstract class Factory
      */
     public function createMany(iterable $records)
     {
-        return new EloquentCollection(\IAWP_SCOPED\collect($records)->map(function ($record) {
+        return new EloquentCollection(\IAWPSCOPED\collect($records)->map(function ($record) {
             return $this->state($record)->create();
         }));
     }
@@ -224,8 +224,8 @@ abstract class Factory
         }
         $results = $this->make($attributes, $parent);
         if ($results instanceof Model) {
-            $this->store(\IAWP_SCOPED\collect([$results]));
-            $this->callAfterCreating(\IAWP_SCOPED\collect([$results]), $parent);
+            $this->store(\IAWPSCOPED\collect([$results]));
+            $this->callAfterCreating(\IAWPSCOPED\collect([$results]), $parent);
         } else {
             $this->store($results);
             $this->callAfterCreating($results, $parent);
@@ -312,7 +312,7 @@ abstract class Factory
         }
         if ($this->count === null) {
             return tap($this->makeInstance($parent), function ($instance) {
-                $this->callAfterMaking(\IAWP_SCOPED\collect([$instance]));
+                $this->callAfterMaking(\IAWPSCOPED\collect([$instance]));
             });
         }
         if ($this->count < 1) {
@@ -389,7 +389,7 @@ abstract class Factory
      */
     protected function expandAttributes(array $definition)
     {
-        return \IAWP_SCOPED\collect($definition)->map(function ($attribute, $key) use(&$definition) {
+        return \IAWPSCOPED\collect($definition)->map(function ($attribute, $key) use(&$definition) {
             if (\is_callable($attribute) && !\is_string($attribute) && !\is_array($attribute)) {
                 $attribute = $attribute($definition);
             }

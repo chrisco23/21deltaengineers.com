@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema;
+namespace IAWPSCOPED\Illuminate\Database\Schema;
 
-use IAWP_SCOPED\Illuminate\Support\Facades\File;
+use IAWPSCOPED\Illuminate\Support\Facades\File;
 /** @internal */
 class SQLiteBuilder extends Builder
 {

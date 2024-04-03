@@ -1,20 +1,20 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent;
 
 use BadMethodCallException;
 use Closure;
 use Exception;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
-use IAWP_SCOPED\Illuminate\Database\Concerns\BuildsQueries;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Relation;
-use IAWP_SCOPED\Illuminate\Database\Query\Builder as QueryBuilder;
-use IAWP_SCOPED\Illuminate\Database\RecordsNotFoundException;
-use IAWP_SCOPED\Illuminate\Pagination\Paginator;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Str;
-use IAWP_SCOPED\Illuminate\Support\Traits\ForwardsCalls;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Database\Concerns\BuildsQueries;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Relation;
+use IAWPSCOPED\Illuminate\Database\Query\Builder as QueryBuilder;
+use IAWPSCOPED\Illuminate\Database\RecordsNotFoundException;
+use IAWPSCOPED\Illuminate\Pagination\Paginator;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Support\Traits\ForwardsCalls;
 use ReflectionClass;
 use ReflectionMethod;
 /**
@@ -715,15 +715,15 @@ class Builder
             $this->enforceOrderBy();
         }
         if ($shouldReverse) {
-            $this->query->orders = \IAWP_SCOPED\collect($this->query->orders)->map(function ($order) {
+            $this->query->orders = \IAWPSCOPED\collect($this->query->orders)->map(function ($order) {
                 $order['direction'] = $order['direction'] === 'asc' ? 'desc' : 'asc';
                 return $order;
             })->toArray();
         }
         if ($this->query->unionOrders) {
-            return \IAWP_SCOPED\collect($this->query->unionOrders);
+            return \IAWPSCOPED\collect($this->query->unionOrders);
         }
-        return \IAWP_SCOPED\collect($this->query->orders);
+        return \IAWPSCOPED\collect($this->query->orders);
     }
     /**
      * Save a new model and return the instance.
@@ -1018,7 +1018,7 @@ class Builder
      */
     protected function groupWhereSliceForScope(QueryBuilder $query, $whereSlice)
     {
-        $whereBooleans = \IAWP_SCOPED\collect($whereSlice)->pluck('boolean');
+        $whereBooleans = \IAWPSCOPED\collect($whereSlice)->pluck('boolean');
         // Here we'll check if the given subset of where clauses contains any "or"
         // booleans and in this case create a nested where expression. That way
         // we don't add any unnecessary nesting thus keeping the query clean.

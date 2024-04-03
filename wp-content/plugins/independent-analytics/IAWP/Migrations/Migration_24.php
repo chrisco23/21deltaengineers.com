@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Migrations;
+namespace IAWP\Migrations;
 
-use IAWP_SCOPED\IAWP\Query;
+use IAWP\Query;
 /** @internal */
-class Migration_24 extends Step_Migration
+class Migration_24 extends \IAWP\Migrations\Step_Migration
 {
     /**
      * @return int

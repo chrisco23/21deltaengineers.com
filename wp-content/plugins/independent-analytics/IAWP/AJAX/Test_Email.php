@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Capability_Manager;
+use IAWP\Capability_Manager;
 /** @internal */
-class Test_Email extends AJAX
+class Test_Email extends \IAWP\AJAX\AJAX
 {
     protected function action_name() : string
     {
@@ -19,7 +19,7 @@ class Test_Email extends AJAX
         if (!Capability_Manager::can_edit()) {
             return;
         }
-        $sent = \IAWP_SCOPED\iawp()->email_reports->send_email_report(\true);
+        $sent = \IAWPSCOPED\iawp()->email_reports->send_email_report(\true);
         echo \rest_sanitize_boolean($sent);
     }
 }

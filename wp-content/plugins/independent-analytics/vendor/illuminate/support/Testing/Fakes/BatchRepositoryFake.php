@@ -1,15 +1,15 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Testing\Fakes;
+namespace IAWPSCOPED\Illuminate\Support\Testing\Fakes;
 
-use IAWP_SCOPED\Carbon\CarbonImmutable;
+use IAWPSCOPED\Carbon\CarbonImmutable;
 use Closure;
-use IAWP_SCOPED\Illuminate\Bus\Batch;
-use IAWP_SCOPED\Illuminate\Bus\BatchRepository;
-use IAWP_SCOPED\Illuminate\Bus\PendingBatch;
-use IAWP_SCOPED\Illuminate\Bus\UpdatedBatchJobCounts;
-use IAWP_SCOPED\Illuminate\Support\Facades\Facade;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Bus\Batch;
+use IAWPSCOPED\Illuminate\Bus\BatchRepository;
+use IAWPSCOPED\Illuminate\Bus\PendingBatch;
+use IAWPSCOPED\Illuminate\Bus\UpdatedBatchJobCounts;
+use IAWPSCOPED\Illuminate\Support\Facades\Facade;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 class BatchRepositoryFake implements BatchRepository
 {

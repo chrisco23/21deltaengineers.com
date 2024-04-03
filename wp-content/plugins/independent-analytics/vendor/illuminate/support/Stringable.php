@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Support\Traits\Conditionable;
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
-use IAWP_SCOPED\Illuminate\Support\Traits\Tappable;
+use IAWPSCOPED\Illuminate\Support\Traits\Conditionable;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\Illuminate\Support\Traits\Tappable;
 use JsonSerializable;
-use IAWP_SCOPED\Symfony\Component\VarDumper\VarDumper;
+use IAWPSCOPED\Symfony\Component\VarDumper\VarDumper;
 /** @internal */
 class Stringable implements JsonSerializable
 {
@@ -186,7 +186,7 @@ class Stringable implements JsonSerializable
      */
     public function explode($delimiter, $limit = \PHP_INT_MAX)
     {
-        return \IAWP_SCOPED\collect(\explode($delimiter, $this->value, $limit));
+        return \IAWPSCOPED\collect(\explode($delimiter, $this->value, $limit));
     }
     /**
      * Split a string using a regular expression or by length.
@@ -199,10 +199,10 @@ class Stringable implements JsonSerializable
     public function split($pattern, $limit = -1, $flags = 0)
     {
         if (\filter_var($pattern, \FILTER_VALIDATE_INT) !== \false) {
-            return \IAWP_SCOPED\collect(\mb_str_split($this->value, $pattern));
+            return \IAWPSCOPED\collect(\mb_str_split($this->value, $pattern));
         }
         $segments = \preg_split($pattern, $this->value, $limit, $flags);
-        return !empty($segments) ? \IAWP_SCOPED\collect($segments) : \IAWP_SCOPED\collect();
+        return !empty($segments) ? \IAWPSCOPED\collect($segments) : \IAWPSCOPED\collect();
     }
     /**
      * Cap a string with a single instance of a given value.
@@ -532,7 +532,7 @@ class Stringable implements JsonSerializable
      */
     public function scan($format)
     {
-        return \IAWP_SCOPED\collect(\sscanf($this->value, $format));
+        return \IAWPSCOPED\collect(\sscanf($this->value, $format));
     }
     /**
      * Begin a string with a single instance of a given value.
@@ -721,7 +721,7 @@ class Stringable implements JsonSerializable
      */
     public function ucsplit()
     {
-        return \IAWP_SCOPED\collect(Str::ucsplit($this->value));
+        return \IAWPSCOPED\collect(Str::ucsplit($this->value));
     }
     /**
      * Execute the given callback if the string contains a given substring.

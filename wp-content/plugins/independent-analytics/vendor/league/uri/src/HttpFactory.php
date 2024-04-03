@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri;
+namespace IAWPSCOPED\League\Uri;
 
-use IAWP_SCOPED\Psr\Http\Message\UriFactoryInterface;
-use IAWP_SCOPED\Psr\Http\Message\UriInterface;
+use IAWPSCOPED\Psr\Http\Message\UriFactoryInterface;
+use IAWPSCOPED\Psr\Http\Message\UriInterface;
 /** @internal */
 final class HttpFactory implements UriFactoryInterface
 {

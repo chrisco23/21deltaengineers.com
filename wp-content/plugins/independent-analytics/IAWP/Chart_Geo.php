@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Models\Geo;
+use IAWP\Models\Geo;
 /** @internal */
 class Chart_Geo
 {
@@ -22,7 +22,7 @@ class Chart_Geo
         $chart_data = \array_map(function ($country) {
             return [$country['country_code'], $country['views'], $this->get_tooltip($country)];
         }, $this->countries);
-        $dark_mode = \IAWP_SCOPED\iawp()->get_option('iawp_dark_mode', '0');
+        $dark_mode = \IAWPSCOPED\iawp()->get_option('iawp_dark_mode', '0');
         \ob_start();
         ?>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -36,10 +36,10 @@ class Chart_Geo
                 <div id="myChart"
                      data-controller="chart-geo"
                      data-chart-geo-data-value="<?php 
-        \esc_attr_e(\json_encode($chart_data));
+        echo \esc_attr(\json_encode($chart_data));
         ?>"
                      data-chart-geo-dark-mode-value="<?php 
-        \esc_attr_e($dark_mode);
+        echo \esc_attr($dark_mode);
         ?>">
                     <div data-chart-geo-target="chart"></div>
                 </div>
@@ -75,7 +75,7 @@ class Chart_Geo
         ?>
         <div class="iawp-geo-chart-tooltip">
             <?php 
-        echo Icon_Directory_Factory::flags()->find($country['country_code']);
+        echo \IAWP\Icon_Directory_Factory::flags()->find($country['country_code']);
         ?>
             <h1><?php 
         echo $country['country'];

@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache\Psr6;
+namespace IAWPSCOPED\Doctrine\Common\Cache\Psr6;
 
 use InvalidArgumentException;
-use IAWP_SCOPED\Psr\Cache\InvalidArgumentException as PsrInvalidArgumentException;
+use IAWPSCOPED\Psr\Cache\InvalidArgumentException as PsrInvalidArgumentException;
 /**
  * @internal
  */

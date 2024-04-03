@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Support;
+namespace IAWPSCOPED\Illuminate\Contracts\Support;
 
 /** @internal */
 interface MessageProvider

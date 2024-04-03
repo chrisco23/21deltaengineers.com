@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations;
 
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 /** @internal */
 class Pivot extends Model
 {

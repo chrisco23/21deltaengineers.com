@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema\Grammars;
+namespace IAWPSCOPED\Illuminate\Database\Schema\Grammars;
 
-use IAWP_SCOPED\Doctrine\DBAL\Schema\AbstractSchemaManager as SchemaManager;
-use IAWP_SCOPED\Doctrine\DBAL\Schema\Column;
-use IAWP_SCOPED\Doctrine\DBAL\Schema\TableDiff;
-use IAWP_SCOPED\Illuminate\Database\Connection;
-use IAWP_SCOPED\Illuminate\Database\Schema\Blueprint;
-use IAWP_SCOPED\Illuminate\Support\Fluent;
+use IAWPSCOPED\Doctrine\DBAL\Schema\AbstractSchemaManager as SchemaManager;
+use IAWPSCOPED\Doctrine\DBAL\Schema\Column;
+use IAWPSCOPED\Doctrine\DBAL\Schema\TableDiff;
+use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Database\Schema\Blueprint;
+use IAWPSCOPED\Illuminate\Support\Fluent;
 /** @internal */
 class RenameColumn
 {

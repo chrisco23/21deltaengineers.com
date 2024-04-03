@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Capsule;
+namespace IAWPSCOPED\Illuminate\Database\Capsule;
 
-use IAWP_SCOPED\Illuminate\Container\Container;
-use IAWP_SCOPED\Illuminate\Contracts\Events\Dispatcher;
-use IAWP_SCOPED\Illuminate\Database\Connectors\ConnectionFactory;
-use IAWP_SCOPED\Illuminate\Database\DatabaseManager;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model as Eloquent;
-use IAWP_SCOPED\Illuminate\Support\Traits\CapsuleManagerTrait;
+use IAWPSCOPED\Illuminate\Container\Container;
+use IAWPSCOPED\Illuminate\Contracts\Events\Dispatcher;
+use IAWPSCOPED\Illuminate\Database\Connectors\ConnectionFactory;
+use IAWPSCOPED\Illuminate\Database\DatabaseManager;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model as Eloquent;
+use IAWPSCOPED\Illuminate\Support\Traits\CapsuleManagerTrait;
 use PDO;
 /** @internal */
 class Manager

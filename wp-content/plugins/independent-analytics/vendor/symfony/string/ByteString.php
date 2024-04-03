@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\String;
+namespace IAWPSCOPED\Symfony\Component\String;
 
-use IAWP_SCOPED\Symfony\Component\String\Exception\ExceptionInterface;
-use IAWP_SCOPED\Symfony\Component\String\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\String\Exception\RuntimeException;
+use IAWPSCOPED\Symfony\Component\String\Exception\ExceptionInterface;
+use IAWPSCOPED\Symfony\Component\String\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a binary-safe string of bytes.
  *
@@ -38,7 +38,7 @@ class ByteString extends AbstractString
      *
      * Copyright (c) 2004-2020, Facebook, Inc. (https://www.facebook.com/)
      */
-    public static function fromRandom(int $length = 16, string $alphabet = null) : self
+    public static function fromRandom(int $length = 16, ?string $alphabet = null) : self
     {
         if ($length <= 0) {
             throw new InvalidArgumentException(\sprintf('A strictly positive length is expected, "%d" given.', $length));
@@ -176,7 +176,7 @@ class ByteString extends AbstractString
     {
         return '' === $this->string || \preg_match('//u', $this->string);
     }
-    public function join(array $strings, string $lastGlue = null) : parent
+    public function join(array $strings, ?string $lastGlue = null) : parent
     {
         $str = clone $this;
         $tail = null !== $lastGlue && 1 < \count($strings) ? $lastGlue . \array_pop($strings) : '';
@@ -288,7 +288,7 @@ class ByteString extends AbstractString
         $str->string = \strrev($str->string);
         return $str;
     }
-    public function slice(int $start = 0, int $length = null) : parent
+    public function slice(int $start = 0, ?int $length = null) : parent
     {
         $str = clone $this;
         $str->string = (string) \substr($this->string, $start, $length ?? \PHP_INT_MAX);
@@ -297,16 +297,16 @@ class ByteString extends AbstractString
     public function snake() : parent
     {
         $str = $this->camel();
-        $str->string = \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], 'IAWP_SCOPED\\1_\\2', $str->string));
+        $str->string = \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], 'IAWPSCOPED\\1_\\2', $str->string));
         return $str;
     }
-    public function splice(string $replacement, int $start = 0, int $length = null) : parent
+    public function splice(string $replacement, int $start = 0, ?int $length = null) : parent
     {
         $str = clone $this;
         $str->string = \substr_replace($this->string, $replacement, $start, $length ?? \PHP_INT_MAX);
         return $str;
     }
-    public function split(string $delimiter, int $limit = null, int $flags = null) : array
+    public function split(string $delimiter, ?int $limit = null, ?int $flags = null) : array
     {
         if (1 > ($limit = $limit ?? \PHP_INT_MAX)) {
             throw new InvalidArgumentException('Split limit must be a positive integer.');
@@ -340,11 +340,11 @@ class ByteString extends AbstractString
         $str->string = $allWords ? \ucwords($str->string) : \ucfirst($str->string);
         return $str;
     }
-    public function toUnicodeString(string $fromEncoding = null) : UnicodeString
+    public function toUnicodeString(?string $fromEncoding = null) : UnicodeString
     {
         return new UnicodeString($this->toCodePointString($fromEncoding)->string);
     }
-    public function toCodePointString(string $fromEncoding = null) : CodePointString
+    public function toCodePointString(?string $fromEncoding = null) : CodePointString
     {
         $u = new CodePointString();
         if (\in_array($fromEncoding, [null, 'utf8', 'utf-8', 'UTF8', 'UTF-8'], \true) && \preg_match('//u', $this->string)) {

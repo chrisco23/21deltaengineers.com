@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Jsonable;
-use IAWP_SCOPED\Illuminate\Contracts\Support\MessageBag as MessageBagContract;
-use IAWP_SCOPED\Illuminate\Contracts\Support\MessageProvider;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Jsonable;
+use IAWPSCOPED\Illuminate\Contracts\Support\MessageBag as MessageBagContract;
+use IAWPSCOPED\Illuminate\Contracts\Support\MessageProvider;
 use JsonSerializable;
 /** @internal */
 class MessageBag implements Jsonable, JsonSerializable, MessageBagContract, MessageProvider
@@ -179,7 +179,7 @@ class MessageBag implements Jsonable, JsonSerializable, MessageBagContract, Mess
      */
     protected function getMessagesForWildcardKey($key, $format)
     {
-        return \IAWP_SCOPED\collect($this->messages)->filter(function ($messages, $messageKey) use($key) {
+        return \IAWPSCOPED\collect($this->messages)->filter(function ($messages, $messageKey) use($key) {
             return Str::is($key, $messageKey);
         })->map(function ($messages, $messageKey) use($format) {
             return $this->transform($messages, $this->checkFormat($format), $messageKey);
@@ -220,7 +220,7 @@ class MessageBag implements Jsonable, JsonSerializable, MessageBagContract, Mess
      */
     protected function transform($messages, $format, $messageKey)
     {
-        return \IAWP_SCOPED\collect((array) $messages)->map(function ($message) use($format, $messageKey) {
+        return \IAWPSCOPED\collect((array) $messages)->map(function ($message) use($format, $messageKey) {
             // We will simply spin through the given messages and transform each one
             // replacing the :message place holder with the real message allowing
             // the messages to be easily formatted to each developer's desires.

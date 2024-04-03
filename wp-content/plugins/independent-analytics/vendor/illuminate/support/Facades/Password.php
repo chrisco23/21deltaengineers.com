@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Illuminate\Contracts\Auth\PasswordBroker;
+use IAWPSCOPED\Illuminate\Contracts\Auth\PasswordBroker;
 /**
  * @method static mixed reset(array $credentials, \Closure $callback)
  * @method static string sendResetLink(array $credentials, \Closure $callback = null)

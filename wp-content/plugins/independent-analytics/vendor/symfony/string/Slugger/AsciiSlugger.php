@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\String\Slugger;
+namespace IAWPSCOPED\Symfony\Component\String\Slugger;
 
-use IAWP_SCOPED\Symfony\Component\String\AbstractUnicodeString;
-use IAWP_SCOPED\Symfony\Component\String\UnicodeString;
-use IAWP_SCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
+use IAWPSCOPED\Symfony\Component\String\AbstractUnicodeString;
+use IAWPSCOPED\Symfony\Component\String\UnicodeString;
+use IAWPSCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
 if (!\interface_exists(LocaleAwareInterface::class)) {
     throw new \LogicException('You cannot use the "Symfony\\Component\\String\\Slugger\\AsciiSlugger" as the "symfony/translation-contracts" package is not installed. Try running "composer require symfony/translation-contracts".');
 }
@@ -34,7 +34,7 @@ class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
     /**
      * @param array|\Closure|null $symbolsMap
      */
-    public function __construct(string $defaultLocale = null, $symbolsMap = null)
+    public function __construct(?string $defaultLocale = null, $symbolsMap = null)
     {
         if (null !== $symbolsMap && !\is_array($symbolsMap) && !$symbolsMap instanceof \Closure) {
             throw new \TypeError(\sprintf('Argument 2 passed to "%s()" must be array, Closure or null, "%s" given.', __METHOD__, \gettype($symbolsMap)));
@@ -59,7 +59,7 @@ class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function slug(string $string, string $separator = '-', string $locale = null) : AbstractUnicodeString
+    public function slug(string $string, string $separator = '-', ?string $locale = null) : AbstractUnicodeString
     {
         $locale = $locale ?? $this->defaultLocale;
         $transliterator = [];

@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Mail;
+namespace IAWPSCOPED\Illuminate\Contracts\Mail;
 
 /** @internal */
 interface MailQueue

@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
 /**
  * @method static void setUpProcess(callable $callback)
@@ -22,6 +22,6 @@ class ParallelTesting extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \IAWP_SCOPED\Illuminate\Testing\ParallelTesting::class;
+        return \IAWPSCOPED\Illuminate\Testing\ParallelTesting::class;
     }
 }

@@ -1,16 +1,16 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
-use IAWP_SCOPED\Doctrine\DBAL\Driver\PDOMySql\Driver as DoctrineDriver;
-use IAWP_SCOPED\Doctrine\DBAL\Version;
-use IAWP_SCOPED\Illuminate\Database\PDO\MySqlDriver;
-use IAWP_SCOPED\Illuminate\Database\Query\Grammars\MySqlGrammar as QueryGrammar;
-use IAWP_SCOPED\Illuminate\Database\Query\Processors\MySqlProcessor;
-use IAWP_SCOPED\Illuminate\Database\Schema\Grammars\MySqlGrammar as SchemaGrammar;
-use IAWP_SCOPED\Illuminate\Database\Schema\MySqlBuilder;
-use IAWP_SCOPED\Illuminate\Database\Schema\MySqlSchemaState;
-use IAWP_SCOPED\Illuminate\Filesystem\Filesystem;
+use IAWPSCOPED\Doctrine\DBAL\Driver\PDOMySql\Driver as DoctrineDriver;
+use IAWPSCOPED\Doctrine\DBAL\Version;
+use IAWPSCOPED\Illuminate\Database\PDO\MySqlDriver;
+use IAWPSCOPED\Illuminate\Database\Query\Grammars\MySqlGrammar as QueryGrammar;
+use IAWPSCOPED\Illuminate\Database\Query\Processors\MySqlProcessor;
+use IAWPSCOPED\Illuminate\Database\Schema\Grammars\MySqlGrammar as SchemaGrammar;
+use IAWPSCOPED\Illuminate\Database\Schema\MySqlBuilder;
+use IAWPSCOPED\Illuminate\Database\Schema\MySqlSchemaState;
+use IAWPSCOPED\Illuminate\Filesystem\Filesystem;
 use PDO;
 /** @internal */
 class MySqlConnection extends Connection

@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Mail;
+namespace IAWPSCOPED\Illuminate\Contracts\Mail;
 
-use IAWP_SCOPED\Illuminate\Contracts\Queue\Factory as Queue;
+use IAWPSCOPED\Illuminate\Contracts\Queue\Factory as Queue;
 /** @internal */
 interface Mailable
 {

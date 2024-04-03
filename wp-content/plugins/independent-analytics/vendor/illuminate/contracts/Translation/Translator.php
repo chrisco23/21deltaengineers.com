@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Translation;
+namespace IAWPSCOPED\Illuminate\Contracts\Translation;
 
 /** @internal */
 interface Translator

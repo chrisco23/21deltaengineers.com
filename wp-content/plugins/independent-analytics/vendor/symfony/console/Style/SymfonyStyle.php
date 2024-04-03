@@ -8,25 +8,25 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Style;
+namespace IAWPSCOPED\Symfony\Component\Console\Style;
 
-use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\RuntimeException;
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\Helper;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\ProgressBar;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\SymfonyQuestionHelper;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\Table;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\TableCell;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\TableSeparator;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\TrimmedBufferOutput;
-use IAWP_SCOPED\Symfony\Component\Console\Question\ChoiceQuestion;
-use IAWP_SCOPED\Symfony\Component\Console\Question\ConfirmationQuestion;
-use IAWP_SCOPED\Symfony\Component\Console\Question\Question;
-use IAWP_SCOPED\Symfony\Component\Console\Terminal;
+use IAWPSCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\RuntimeException;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
+use IAWPSCOPED\Symfony\Component\Console\Helper\Helper;
+use IAWPSCOPED\Symfony\Component\Console\Helper\ProgressBar;
+use IAWPSCOPED\Symfony\Component\Console\Helper\SymfonyQuestionHelper;
+use IAWPSCOPED\Symfony\Component\Console\Helper\Table;
+use IAWPSCOPED\Symfony\Component\Console\Helper\TableCell;
+use IAWPSCOPED\Symfony\Component\Console\Helper\TableSeparator;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\TrimmedBufferOutput;
+use IAWPSCOPED\Symfony\Component\Console\Question\ChoiceQuestion;
+use IAWPSCOPED\Symfony\Component\Console\Question\ConfirmationQuestion;
+use IAWPSCOPED\Symfony\Component\Console\Question\Question;
+use IAWPSCOPED\Symfony\Component\Console\Terminal;
 /**
  * Output decorator helpers for the Symfony Style Guide.
  *
@@ -56,7 +56,7 @@ class SymfonyStyle extends OutputStyle
      *
      * @param string|array $messages The message to write in the block
      */
-    public function block($messages, string $type = null, string $style = null, string $prefix = ' ', bool $padding = \false, bool $escape = \true)
+    public function block($messages, ?string $type = null, ?string $style = null, string $prefix = ' ', bool $padding = \false, bool $escape = \true)
     {
         $messages = \is_array($messages) ? \array_values($messages) : [$messages];
         $this->autoPrependBlock();
@@ -209,7 +209,7 @@ class SymfonyStyle extends OutputStyle
     /**
      * {@inheritdoc}
      */
-    public function ask(string $question, string $default = null, callable $validator = null)
+    public function ask(string $question, ?string $default = null, ?callable $validator = null)
     {
         $question = new Question($question, $default);
         $question->setValidator($validator);
@@ -218,7 +218,7 @@ class SymfonyStyle extends OutputStyle
     /**
      * {@inheritdoc}
      */
-    public function askHidden(string $question, callable $validator = null)
+    public function askHidden(string $question, ?callable $validator = null)
     {
         $question = new Question($question);
         $question->setHidden(\true);
@@ -285,7 +285,7 @@ class SymfonyStyle extends OutputStyle
     /**
      * @see ProgressBar::iterate()
      */
-    public function progressIterate(iterable $iterable, int $max = null) : iterable
+    public function progressIterate(iterable $iterable, ?int $max = null) : iterable
     {
         yield from $this->createProgressBar()->iterate($iterable, $max);
         $this->newLine(2);
@@ -389,7 +389,7 @@ class SymfonyStyle extends OutputStyle
         // We need to know if the last chars are PHP_EOL
         $this->bufferedOutput->write($message, $newLine, $type);
     }
-    private function createBlock(iterable $messages, string $type = null, string $style = null, string $prefix = ' ', bool $padding = \false, bool $escape = \false) : array
+    private function createBlock(iterable $messages, ?string $type = null, ?string $style = null, string $prefix = ' ', bool $padding = \false, bool $escape = \false) : array
     {
         $indentLength = 0;
         $prefixLength = Helper::width(Helper::removeDecoration($this->getFormatter(), $prefix));

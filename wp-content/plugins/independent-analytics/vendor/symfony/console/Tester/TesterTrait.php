@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Tester;
+namespace IAWPSCOPED\Symfony\Component\Console\Tester;
 
-use IAWP_SCOPED\PHPUnit\Framework\Assert;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\ConsoleOutput;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\StreamOutput;
-use IAWP_SCOPED\Symfony\Component\Console\Tester\Constraint\CommandIsSuccessful;
+use IAWPSCOPED\PHPUnit\Framework\Assert;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\ConsoleOutput;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\StreamOutput;
+use IAWPSCOPED\Symfony\Component\Console\Tester\Constraint\CommandIsSuccessful;
 /**
  * @author Amrouche Hamza <hamza.simperfit@gmail.com>
  * @internal

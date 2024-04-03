@@ -407,7 +407,21 @@ trait ThirdParty {
 					$value = "<img src='$imageUrl' />";
 					break;
 				case 'gallery':
-					$value = "<img src='{$field['value'][0]['url']}' />";
+					$imageUrl = $field['value'];
+					// The value of a gallery field should always be an array.
+					if ( is_array( $imageUrl ) ) {
+						$imageUrl = current( $imageUrl );
+					}
+
+					// Image array format.
+					if ( is_array( $imageUrl ) && ! empty( $imageUrl['url'] ) ) {
+						$imageUrl = $imageUrl['url'];
+					}
+
+					// Image ID format.
+					$imageUrl = is_numeric( $imageUrl ) ? wp_get_attachment_image_url( $imageUrl ) : $imageUrl;
+
+					$value = ! empty( $imageUrl ) ? "<img src='{$imageUrl}' />" : '';
 					break;
 				case 'link':
 					$value = make_clickable( $field['value']['url'] ?? $field['value'] ?? '' );
@@ -616,23 +630,48 @@ trait ThirdParty {
 	}
 
 	/**
+	 * Helper function for {@see isAmpPage()}.
 	 * Checks if the current page is an AMP page.
-	 * Helper function for isAmpPage(). Contains common logic that applies to both AMP and AMP for WP.
 	 *
 	 * @since 4.2.4
 	 *
 	 * @return bool Whether the current page is an AMP page.
 	 */
 	private function isAmpPageHelper() {
-		// Check if the AMP or AMP for WP plugin is active.
-		if ( ! function_exists( 'is_amp_endpoint' ) ) {
-			return false;
+		// First check for the existence of any AMP plugin functions. Bail early if none are found, and prevent false positives.
+		if (
+			! function_exists( 'amp_is_request' ) &&
+			! function_exists( 'is_amp_endpoint' ) &&
+			! function_exists( 'ampforwp_is_amp_endpoint' ) &&
+			! function_exists( 'is_amp_wp' )
+		) {
+			// If none of the AMP plugin functions are found, return false and allow compatibility with custom implementations.
+			return apply_filters( 'aioseo_is_amp_page', false );
 		}
 
-		global $wp;
+		if ( did_action( 'parse_query' ) ) {
+			// Check for the "AMP" plugin.
+			if ( function_exists( 'amp_is_request' ) ) {
+				return (bool) amp_is_request();
+			}
 
-		// This URL param is set when using plain permalinks.
-		return isset( $_GET['amp'] ) || preg_match( '/amp$/', untrailingslashit( $wp->request ) ); // phpcs:ignore HM.Security.NonceVerification.Recommended
+			// Check for the "AMP" plugin (`is_amp_endpoint()` is deprecated).
+			if ( function_exists( 'is_amp_endpoint' ) ) {
+				return (bool) is_amp_endpoint();
+			}
+
+			// Check for the "AMP for WP – Accelerated Mobile Pages" plugin.
+			if ( function_exists( 'ampforwp_is_amp_endpoint' ) ) {
+				return (bool) ampforwp_is_amp_endpoint();
+			}
+
+			// Check for the "AMP WP" plugin.
+			if ( function_exists( 'is_amp_wp' ) ) {
+				return (bool) is_amp_wp();
+			}
+		}
+
+		return false;
 	}
 
 	/**

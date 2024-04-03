@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Helper;
+namespace IAWPSCOPED\Symfony\Component\Console\Helper;
 
-use IAWP_SCOPED\Symfony\Component\Console\Cursor;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\MissingInputException;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\RuntimeException;
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Input\StreamableInputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\ConsoleSectionOutput;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Question\ChoiceQuestion;
-use IAWP_SCOPED\Symfony\Component\Console\Question\Question;
-use IAWP_SCOPED\Symfony\Component\Console\Terminal;
-use function IAWP_SCOPED\Symfony\Component\String\s;
+use IAWPSCOPED\Symfony\Component\Console\Cursor;
+use IAWPSCOPED\Symfony\Component\Console\Exception\MissingInputException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\RuntimeException;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Input\StreamableInputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\ConsoleSectionOutput;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Question\ChoiceQuestion;
+use IAWPSCOPED\Symfony\Component\Console\Question\Question;
+use IAWPSCOPED\Symfony\Component\Console\Terminal;
+use function IAWPSCOPED\Symfony\Component\String\s;
 /**
  * The QuestionHelper class provides helpers to interact with the user.
  *
@@ -410,16 +410,7 @@ class QuestionHelper extends Helper
         if (null !== self::$stdinIsInteractive) {
             return self::$stdinIsInteractive;
         }
-        if (\function_exists('stream_isatty')) {
-            return self::$stdinIsInteractive = @\stream_isatty(\fopen('php://stdin', 'r'));
-        }
-        if (\function_exists('posix_isatty')) {
-            return self::$stdinIsInteractive = @\posix_isatty(\fopen('php://stdin', 'r'));
-        }
-        if (!\function_exists('shell_exec')) {
-            return self::$stdinIsInteractive = \true;
-        }
-        return self::$stdinIsInteractive = (bool) \shell_exec('stty 2> ' . ('\\' === \DIRECTORY_SEPARATOR ? 'NUL' : '/dev/null'));
+        return self::$stdinIsInteractive = @\stream_isatty(\fopen('php://stdin', 'r'));
     }
     /**
      * Reads one or more lines of input and returns what is read.

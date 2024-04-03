@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
 /** @internal */
-class Update_User_Settings extends AJAX
+class Update_User_Settings extends \IAWP\AJAX\AJAX
 {
     protected function action_name() : string
     {

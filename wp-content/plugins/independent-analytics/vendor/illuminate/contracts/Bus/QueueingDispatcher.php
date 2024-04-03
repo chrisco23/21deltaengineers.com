@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Bus;
+namespace IAWPSCOPED\Illuminate\Contracts\Bus;
 
 /** @internal */
 interface QueueingDispatcher extends Dispatcher

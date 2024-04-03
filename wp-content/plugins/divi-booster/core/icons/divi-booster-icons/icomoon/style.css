@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'divi-booster-icons';
-  src:  url('fonts/divi-booster-icons.eot?1f56pp');
-  src:  url('fonts/divi-booster-icons.eot?1f56pp#iefix') format('embedded-opentype'),
-    url('fonts/divi-booster-icons.ttf?1f56pp') format('truetype'),
-    url('fonts/divi-booster-icons.woff?1f56pp') format('woff'),
-    url('fonts/divi-booster-icons.svg?1f56pp#divi-booster-icons') format('svg');
+  src:  url('fonts/divi-booster-icons.eot?qmxm39');
+  src:  url('fonts/divi-booster-icons.eot?qmxm39#iefix') format('embedded-opentype'),
+    url('fonts/divi-booster-icons.ttf?qmxm39') format('truetype'),
+    url('fonts/divi-booster-icons.woff?qmxm39') format('woff'),
+    url('fonts/divi-booster-icons.svg?qmxm39#divi-booster-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,30 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.divi-booster-icons-gab:before {
+  content: "\e911";
+}
+.divi-booster-icons-truth-social:before {
+  content: "\e910";
+}
+.divi-booster-icons-rumble:before {
+  content: "\e90f";
+}
+.divi-booster-icons-blog:before {
+  content: "\e90e";
+}
+.divi-booster-icons-youtube-music:before {
+  content: "\e90d";
+}
+.divi-booster-icons-amazon-music:before {
+  content: "\e90c";
+}
+.divi-booster-icons-apple-music:before {
+  content: "\e90b";
+}
+.divi-booster-icons-bluesky:before {
+  content: "\e90a";
+}
 .divi-booster-icons-substack:before {
   content: "\e909";
   color: #ff681a;

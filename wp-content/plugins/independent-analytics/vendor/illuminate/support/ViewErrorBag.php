@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
 use Countable;
-use IAWP_SCOPED\Illuminate\Contracts\Support\MessageBag as MessageBagContract;
+use IAWPSCOPED\Illuminate\Contracts\Support\MessageBag as MessageBagContract;
 /**
  * @mixin \Illuminate\Contracts\Support\MessageBag
  * @internal

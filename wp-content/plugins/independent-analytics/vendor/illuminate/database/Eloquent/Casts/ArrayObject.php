@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Casts;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Casts;
 
 use ArrayObject as BaseArrayObject;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
 use JsonSerializable;
 /** @internal */
 class ArrayObject extends BaseArrayObject implements Arrayable, JsonSerializable
@@ -15,7 +15,7 @@ class ArrayObject extends BaseArrayObject implements Arrayable, JsonSerializable
      */
     public function collect()
     {
-        return \IAWP_SCOPED\collect($this->getArrayCopy());
+        return \IAWPSCOPED\collect($this->getArrayCopy());
     }
     /**
      * Get the instance as an array.

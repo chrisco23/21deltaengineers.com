@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri;
+namespace IAWPSCOPED\League\Uri;
 
-use IAWP_SCOPED\League\Uri\Exceptions\IdnaConversionFailed;
-use IAWP_SCOPED\League\Uri\Exceptions\IdnSupportMissing;
-use IAWP_SCOPED\League\Uri\Exceptions\SyntaxError;
-use IAWP_SCOPED\League\Uri\Idna\Idna;
+use IAWPSCOPED\League\Uri\Exceptions\IdnaConversionFailed;
+use IAWPSCOPED\League\Uri\Exceptions\IdnSupportMissing;
+use IAWPSCOPED\League\Uri\Exceptions\SyntaxError;
+use IAWPSCOPED\League\Uri\Idna\Idna;
 use function array_merge;
 use function explode;
 use function filter_var;

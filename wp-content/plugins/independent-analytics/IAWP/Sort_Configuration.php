@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
 /** @internal */
 class Sort_Configuration

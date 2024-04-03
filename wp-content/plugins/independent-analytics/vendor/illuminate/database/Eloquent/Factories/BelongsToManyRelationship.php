@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Factories;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Factories;
 
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Support\Collection;
 /** @internal */
 class BelongsToManyRelationship
 {

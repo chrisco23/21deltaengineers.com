@@ -3,9 +3,9 @@ Contributors: bensibley, andrewmead
 Tags: analytics, wordpress analytics, google analytics, analytics dashboard, statistics, stats, tracking, google, ga, universal analytics, web stats, site visitors
 Donate link: https://independentwp.com
 Requires at least: 5.9
-Tested up to: 6.4.2
+Tested up to: 6.4.3
 Requires PHP: 7.3.33
-Stable tag: 2.1.6
+Stable tag: 2.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -194,6 +194,58 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 
 == Changelog ==
 
+= 2.3.2 - April 1st, 2024 =
+
+* **Fix:** Fixed an issue with average session duration being over-inflated
+* **Fix:** Fixed max_connection error
+
+= 2.3.1 - March 28th, 2024 =
+
+* **Fix:** Fixed a conflict with the Age Gate plugin
+
+= 2.3.0 - March 26th, 2024 =
+
+* **Feature:** Created new Help & Support menu
+* **Feature:** Created new Updates menu
+* **Feature:** Added 6 more pre-defined date buttons: Last 60 Days, Last 90 Days, Last 3 Months, Last 6 Months, Last 12 Months, and All Time
+* **Feature:** The Admin Bar stats now include "All Time" views
+* **Feature:** Added four more custom color options to the email report
+* **Feature:** Added option to make view counter private (logged-in visitors only)
+* **Feature:** The view counter can now get stats for today, the last 30 days, this month, last month, or all time
+* **Feature:** Added option to manually adjust the view counter count for individual pages
+* **Update:** Removed every non-report page from the analytics sidebar
+* **Update:** The /temp/ directory can now be defined using the IAWP_TEMP_DIR constant
+* **Update:** Added an error message if missing database privileges are found
+* **Update:** Added automatic tracking for PDF pages made with TNC FlipBook
+* **Update:** Updated the IP address to geolocation MMDB file for more accurate location reporting
+* **Update:** Added conflict detection when the REST API is blocked by Admin & Site Enhancements
+* **Update:** Added icons for more browsers
+* **Fix:** Fixed a fatal error with the Age Gate plugin
+* **Fix:** Fixed a 500 server error that could occur when updating a taxonomy
+* **Fix:** Increased timeout to prevent errors during data migrations and allow for more time for the analytics to load
+* **Fix:** Filtering by category wasn't working for posts in multiple categories
+* **Fix:** Fixed stylesheet conflict with WP Media Files Name Rename plugin
+* **Fix:** POT file wasn't getting regenerated with each update
+* **Fix:** Fixed IP blocking for IPv6 addresses and added wilcard support
+* **Fix:** Updated BladeOne library to resolve conflict with WP Ultimo
+* **Fix:** Preventing a fatal error when the database tables are deleted manually
+* **Fix:** View counter stats fixed when shown for each posts in an archive page
+
+= 2.2.1 - February 13th, 2024 =
+
+* **Fix:** bug fix for 2.2.0
+
+= 2.2.0 - February 7th, 2024 =
+
+* **Feature:** Added PDF download button to toolbar
+* **Feature:** Added WooCommerce sales columns to Pages report
+* **Update:** UI layout style improvements
+* **Update:** Added links to Settings and Campaign Builder in the menu sidebar
+* **Update:** The WooCommerce Checkout Success page now shows up separately from the Checkout page
+* **Update:** Added conflict detection for WP Hide plugin
+* **Fix:** Added styling for RTL languages
+* **Fix:** Fixed notice about undefined variable in WC order pages
+
 = 2.1.6 - January 29th 2024 =
 
 * **Fix:** bug fix for 2.1.0
@@ -221,7 +273,6 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 = 2.1.0 - January 17th, 2024 =
 
 * **Feature:** Implemented a developer API for accessing analytics data on other pages
-
 * **Feature:** Included new option to regenerate the visitor salt token every day for improved GDPR compliance
 * **Update:** Made major optimizations to the database queries to speed up the analytics dashboard and fix crashes for high-traffic websites
 * **Update:** Implemented performance optimization to speed up the REST API request on the front end
@@ -254,7 +305,6 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 * **Feature:** Added new option to hide the Dashboard Widget from the main WP admin page
 * **Update:** Data table now uses horizontal scrolling when space is limited
 * **Update:** Added option to reset analytics to zero without disrupting other settings
-
 * **Fix:** Moved contents of /iawp/ folder from /uploads/ into the plugin
 * **Fix:** Added an option to delete + deactivate the plugin, so it can be removed without leaving DB tables behind
 
@@ -269,11 +319,9 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 * **Fix:** devices that aren’t identified caused lots of warnings in the error log
 * **Fix:** various dark mode style fixes
 
-
 = 1.29 - September 5th, 2023 =
 
 * **Feature:** added Device report! It includes the device types, browsers, and OSes your visitors are using.
-
 * **Fix:** view counter was missing number formatting
 * **Fix:** various mobile style enhancements
 * **Fix:** added error message for sites missing PDO extension and prevents crashing
@@ -293,7 +341,6 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 
 = 1.28.0 - August 14th, 2023 =
 
-
 * **Update:** optimized database to reduce storage space by 25% or more
 * **Update:** filter button text is now relevant to each report
 * **Update:** added notice if the REST API is blocked by the NinjaFirewall plugin
@@ -301,7 +348,6 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 * **Fix:** the ip-to-geolocation database didn't download for some websites 
 * **Fix:** the chart interval wasn't staying the same when navigating between reports
 * **Fix:** the table layout would break if the columns were edited before the table finished loading
-
 * **Fix:** numbers in the data table could break into two lines on small screens
 * **Fix:** various styles fixes for Dark Mode
 
@@ -346,7 +392,6 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 * **Update:** removed popup that asks for feedback when deactivating IA
 * **Update:** abbreviating large numbers in the Quick Stats
 * **Update:** Sessions table column hidden by default
-
 * **Update:** settings page styles nicer for dark mode
 * **Fix:** translations from wp.org were not matching the text domain in IA
 * **Fix:** added missing i18n for the chart
@@ -361,7 +406,6 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 
 * **Feature:** added two new metrics: Session Duration & View Duration!
 * **Update:** style updates to Quick Stats that make filtered data easier to read
-
 * **Fix:** incorrect URL displaying for articles translated with WPML
 * **Fix:** compatibility fixes for plugins adversely affecting IA's dashboard
 * **Fix:** scroll-to-top arrow wasn't working on Learn menu
@@ -379,19 +423,16 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 * **Fix:** the update notice sometimes persisted due to aggressive caching
 * **Fix:** a second session was recorded if a visitor refreshed the page on their first page view
 
-
 = 1.21.0 - April 17th, 2023 =
 
 * **Update:** major performance improvements for the Referrers menu
 * **Update:** Google Docs added as a recognized referrer
-
 
 = 1.20.0 - March 30th, 2023 =
 
 * **Feature:** added new Comments column to Pages dashboard
 * **Fix:** some text not marked for translation properly
 * **Update:** removed decimal places from Visitors Growth and Views Growth to improve readability
-
 
 = 1.19.1 - March 13th, 2023 =
 
@@ -404,7 +445,6 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 * **Update:** updated geolocation database for improved accuracy
 * **Fix:** the REST API notice was showing for private sites even if the API wasn't blocked
 * **Fix:** support for Polylang added so the view counter label can be translated to multiple languages
-
 
 = 1.18 - March 1st, 2023 =
 
@@ -487,7 +527,6 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 = 1.12 - September 28th, 2022 =
 
 * **Update:** Independent Analytics Pro now available!
-
 * **Update:** improved caching for even faster dashboard performance
 
 = 1.11 - September 6th, 2022 =

@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Laravel\Ui\UiServiceProvider;
+use IAWPSCOPED\Laravel\Ui\UiServiceProvider;
 use RuntimeException;
 /**
  * @method static \Illuminate\Auth\AuthManager extend(string $driver, \Closure $callback)

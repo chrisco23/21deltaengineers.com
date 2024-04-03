@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon;
+namespace IAWPSCOPED\Carbon;
 
-use IAWP_SCOPED\Carbon\Exceptions\ImmutableException;
-use IAWP_SCOPED\Symfony\Component\Config\ConfigCacheFactoryInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+use IAWPSCOPED\Carbon\Exceptions\ImmutableException;
+use IAWPSCOPED\Symfony\Component\Config\ConfigCacheFactoryInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
 /** @internal */
 class TranslatorImmutable extends Translator
 {
@@ -55,7 +55,7 @@ class TranslatorImmutable extends Translator
     /**
      * @codeCoverageIgnore
      */
-    public function setConfigCacheFactory(ConfigCacheFactoryInterface $configCacheFactory)
+    public function setConfigCacheFactory(ConfigCacheFactoryInterface $configCacheFactory) : void
     {
         $this->disallowMutation(__METHOD__);
         parent::setConfigCacheFactory($configCacheFactory);

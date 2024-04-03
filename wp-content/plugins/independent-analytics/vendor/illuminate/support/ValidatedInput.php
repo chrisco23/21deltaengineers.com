@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
 use ArrayIterator;
-use IAWP_SCOPED\Illuminate\Contracts\Support\ValidatedData;
+use IAWPSCOPED\Illuminate\Contracts\Support\ValidatedData;
 use stdClass;
 /** @internal */
 class ValidatedInput implements ValidatedData

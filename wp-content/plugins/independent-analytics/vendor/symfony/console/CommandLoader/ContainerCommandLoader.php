@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\CommandLoader;
+namespace IAWPSCOPED\Symfony\Component\Console\CommandLoader;
 
-use IAWP_SCOPED\Psr\Container\ContainerInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\CommandNotFoundException;
+use IAWPSCOPED\Psr\Container\ContainerInterface;
+use IAWPSCOPED\Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * Loads commands from a PSR-11 container.
  *

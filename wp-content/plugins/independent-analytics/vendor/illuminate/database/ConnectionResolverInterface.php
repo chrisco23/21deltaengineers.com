@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
 /** @internal */
 interface ConnectionResolverInterface

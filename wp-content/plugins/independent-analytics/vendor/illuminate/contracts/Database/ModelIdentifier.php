@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Database;
+namespace IAWPSCOPED\Illuminate\Contracts\Database;
 
 /** @internal */
 class ModelIdentifier

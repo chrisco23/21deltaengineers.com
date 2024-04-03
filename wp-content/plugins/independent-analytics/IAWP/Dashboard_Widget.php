@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Date_Range\Relative_Date_Range;
-use IAWP_SCOPED\IAWP\Statistics\Page_Statistics;
+use IAWP\Date_Range\Relative_Date_Range;
+use IAWP\Statistics\Page_Statistics;
 /** @internal */
 class Dashboard_Widget
 {
@@ -15,7 +15,7 @@ class Dashboard_Widget
     }
     public function add_dashboard_widget()
     {
-        if (Migrations\Migrations::is_migrating() || !Capability_Manager::can_view()) {
+        if (\IAWP\Migrations\Migrations::is_migrating() || !\IAWP\Capability_Manager::can_view()) {
             return;
         }
         \ob_start();
@@ -25,10 +25,10 @@ class Dashboard_Widget
         ?></span>
         <span>
             <a href="<?php 
-        echo \esc_url(\IAWP_SCOPED\iawp_dashboard_url());
+        echo \esc_url(\IAWPSCOPED\iawp_dashboard_url());
         ?>" class="iawp-button purple">
                 <?php 
-        \esc_html_e('Open Dashboard');
+        \esc_html_e('Open Dashboard', 'independent-analytics');
         ?>
             </a>
         </span>
@@ -41,8 +41,8 @@ class Dashboard_Widget
     {
         $date_range = new Relative_Date_Range('LAST_THIRTY');
         $statistics = new Page_Statistics($date_range);
-        $chart = new Chart($statistics, null, \true);
-        $stats = new Quick_Stats(null, $statistics, \true);
+        $chart = new \IAWP\Chart($statistics, null, \true);
+        $stats = new \IAWP\Quick_Stats(null, $statistics, \true);
         echo $chart->get_html();
         echo $stats->get_html();
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Support\Str;
 use Throwable;
 /** @internal */
 trait DetectsLostConnections

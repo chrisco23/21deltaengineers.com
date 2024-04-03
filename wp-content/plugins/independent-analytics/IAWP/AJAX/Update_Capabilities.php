@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Capability_Manager;
+use IAWP\Capability_Manager;
 /** @internal */
-class Update_Capabilities extends AJAX
+class Update_Capabilities extends \IAWP\AJAX\AJAX
 {
     protected function action_name() : string
     {

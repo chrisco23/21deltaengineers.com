@@ -1,6 +1,6 @@
 <div id="real-time-dashboard" class="real-time-dashboard refreshed"
      data-controller="real-time"
-     data-real-time-chart-data-value="<?php esc_attr_e(json_encode($chart_data)) ?>"
+     data-real-time-chart-data-value="<?php echo esc_attr(json_encode($chart_data)) ?>"
      data-real-time-nonce-value="<?php echo wp_create_nonce('iawp_real_time') ?>"
 >
     <div class="iawp-heading">
@@ -17,7 +17,7 @@
                         </g>
                     </g>
                 </svg>
-                <span data-real-time-target="visitorMessage" data-testid="real-time-title"><?php esc_html_e($visitor_message) ?></span>
+                <span data-real-time-target="visitorMessage" data-testid="real-time-title"><?php echo esc_html($visitor_message) ?></span>
                 <a class="learn-more" href="#">
                     <span class="dashicons dashicons-info-outline"></span>
                     <div class="tooltip">
@@ -27,11 +27,11 @@
             </div>
         </div>
         <div class="iawp-overview"><span
-                    data-real-time-target="pageMessage" data-testid="page-count"><?php esc_html_e($page_message) ?></span>
+                    data-real-time-target="pageMessage" data-testid="page-count"><?php echo esc_html($page_message) ?></span>
             &#8226; <span
-                    data-real-time-target="referrerMessage" data-testid="referrer-count"><?php esc_html_e($referrer_message); ?></span>
+                    data-real-time-target="referrerMessage" data-testid="referrer-count"><?php echo esc_html($referrer_message); ?></span>
             &#8226; <span
-                    data-real-time-target="countryMessage" data-testid="country-count"><?php esc_html_e($country_message) ?></span>
+                    data-real-time-target="countryMessage" data-testid="country-count"><?php echo esc_html($country_message) ?></span>
         </div>
     </div>
 
@@ -61,25 +61,25 @@
     </div>
     <div class="most-popular-container">
         <?php foreach ($lists as $list_id => $list) : ?>
-            <div class="most-popular-list" data-testid="<?php esc_attr_e(sanitize_title($list['title'])); ?>">
+            <div class="most-popular-list" data-testid="<?php echo esc_attr(sanitize_title($list['title'])); ?>">
                 <div class="heading">
-                    <div class="title-med"><?php esc_html_e($list['title']) ?></div>
+                    <div class="title-med"><?php echo esc_html($list['title']) ?></div>
                     <div class="views-heading"><?php esc_html_e('Views', 'independent-analytics'); ?></div>
                 </div>
-                <ol data-real-time-target="<?php esc_attr_e($list_id) ?>List">
+                <ol data-real-time-target="<?php echo esc_attr($list_id) ?>List">
                     <?php foreach ($list['entries'] as $index => $item): ?>
-                        <li data-id="<?php esc_attr_e($item['id']) ?>"
-                            data-position="<?php esc_attr_e($index + 1); ?>"
+                        <li data-id="<?php echo esc_attr($item['id']) ?>"
+                            data-position="<?php echo esc_attr($index + 1); ?>"
                         >
                             <span class="real-time-position"><?php echo absint($index + 1) ?>.</span>
                             <?php if (!empty($item['flag'])): ?>
                                 <?php echo $item['flag'] ?>
                             <?php endif; ?>
                             <span class="real-time-resource">
-                                <?php esc_html_e($item['title']) ?>
+                                <?php echo esc_html($item['title']) ?>
 
                                 <?php if (!empty($item['subtitle'])): ?>
-                                    <span class="real-time-subtitle"><?php esc_html_e($item['subtitle']); ?></span>
+                                    <span class="real-time-subtitle"><?php echo esc_html($item['subtitle']); ?></span>
                                 <?php endif; ?>
                             </span>
                             <span class="real-time-stat"><?php echo absint($item['views']) ?></span>

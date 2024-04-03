@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Tables\Columns;
+namespace IAWP\Tables\Columns;
 
-use IAWP_SCOPED\IAWP\Tables\Groups\Group;
+use IAWP\Tables\Groups\Group;
 /** @internal */
 class Column
 {

@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation;
+namespace IAWPSCOPED\Symfony\Component\Translation;
 
-use IAWP_SCOPED\Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
-use IAWP_SCOPED\Symfony\Contracts\Translation\TranslatorInterface;
+use IAWPSCOPED\Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
+use IAWPSCOPED\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  * @internal
@@ -38,7 +38,7 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
     /**
      * {@inheritdoc}
      */
-    public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null)
+    public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null)
     {
         $trans = $this->translator->trans($id = (string) $id, $parameters, $domain, $locale);
         $this->collectMessage($locale, $domain, $id, $trans, $parameters);
@@ -61,7 +61,7 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
     /**
      * {@inheritdoc}
      */
-    public function getCatalogue(string $locale = null)
+    public function getCatalogue(?string $locale = null)
     {
         return $this->translator->getCatalogue($locale);
     }

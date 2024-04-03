@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Inflector;
+namespace IAWPSCOPED\Doctrine\Inflector;
 
 use RuntimeException;
 use function chr;
@@ -169,7 +169,7 @@ class Inflector
         } else {
             $lowered = strtolower($unaccented);
         }
-        $replacements = ['/\\W/' => ' ', '/([A-Z]+)([A-Z][a-z])/' => 'IAWP_SCOPED\\1_\\2', '/([a-z\\d])([A-Z])/' => 'IAWP_SCOPED\\1_\\2', '/[^A-Z^a-z^0-9^\\/]+/' => '-'];
+        $replacements = ['/\\W/' => ' ', '/([A-Z]+)([A-Z][a-z])/' => 'IAWPSCOPED\\1_\\2', '/([a-z\\d])([A-Z])/' => 'IAWPSCOPED\\1_\\2', '/[^A-Z^a-z^0-9^\\/]+/' => '-'];
         $urlized = $lowered;
         foreach ($replacements as $pattern => $replacement) {
             $replaced = preg_replace($pattern, $replacement, $urlized);

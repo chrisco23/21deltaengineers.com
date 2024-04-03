@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\voku\helper;
+namespace IAWPSCOPED\voku\helper;
 
 /**
  * @psalm-immutable

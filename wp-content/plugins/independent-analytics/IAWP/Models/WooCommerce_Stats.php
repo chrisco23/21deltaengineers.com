@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
 /** @internal */
 trait WooCommerce_Stats

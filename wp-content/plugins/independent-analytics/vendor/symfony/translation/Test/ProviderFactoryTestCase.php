@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Test;
+namespace IAWPSCOPED\Symfony\Component\Translation\Test;
 
-use IAWP_SCOPED\PHPUnit\Framework\TestCase;
-use IAWP_SCOPED\Psr\Log\LoggerInterface;
-use IAWP_SCOPED\Symfony\Component\HttpClient\MockHttpClient;
-use IAWP_SCOPED\Symfony\Component\Translation\Dumper\XliffFileDumper;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\IncompleteDsnException;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\UnsupportedSchemeException;
-use IAWP_SCOPED\Symfony\Component\Translation\Loader\LoaderInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\Provider\Dsn;
-use IAWP_SCOPED\Symfony\Component\Translation\Provider\ProviderFactoryInterface;
-use IAWP_SCOPED\Symfony\Contracts\HttpClient\HttpClientInterface;
+use IAWPSCOPED\PHPUnit\Framework\TestCase;
+use IAWPSCOPED\Psr\Log\LoggerInterface;
+use IAWPSCOPED\Symfony\Component\HttpClient\MockHttpClient;
+use IAWPSCOPED\Symfony\Component\Translation\Dumper\XliffFileDumper;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\IncompleteDsnException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\UnsupportedSchemeException;
+use IAWPSCOPED\Symfony\Component\Translation\Loader\LoaderInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Provider\Dsn;
+use IAWPSCOPED\Symfony\Component\Translation\Provider\ProviderFactoryInterface;
+use IAWPSCOPED\Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * A test case to ease testing a translation provider factory.
  *
@@ -77,7 +77,7 @@ abstract class ProviderFactoryTestCase extends TestCase
     /**
      * @dataProvider unsupportedSchemeProvider
      */
-    public function testUnsupportedSchemeException(string $dsn, string $message = null)
+    public function testUnsupportedSchemeException(string $dsn, ?string $message = null)
     {
         $factory = $this->createFactory();
         $dsn = new Dsn($dsn);
@@ -90,7 +90,7 @@ abstract class ProviderFactoryTestCase extends TestCase
     /**
      * @dataProvider incompleteDsnProvider
      */
-    public function testIncompleteDsnException(string $dsn, string $message = null)
+    public function testIncompleteDsnException(string $dsn, ?string $message = null)
     {
         $factory = $this->createFactory();
         $dsn = new Dsn($dsn);

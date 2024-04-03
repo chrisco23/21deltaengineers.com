@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Illuminate_Builder;
-use IAWP_SCOPED\IAWP\Query;
+use IAWP\Illuminate_Builder;
+use IAWP\Query;
 /** @internal */
-class Rename_Report extends AJAX
+class Rename_Report extends \IAWP\AJAX\AJAX
 {
     /**
      * @return array

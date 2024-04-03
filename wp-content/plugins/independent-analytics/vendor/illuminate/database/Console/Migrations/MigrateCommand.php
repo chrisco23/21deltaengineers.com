@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console\Migrations;
+namespace IAWPSCOPED\Illuminate\Database\Console\Migrations;
 
-use IAWP_SCOPED\Illuminate\Console\ConfirmableTrait;
-use IAWP_SCOPED\Illuminate\Contracts\Events\Dispatcher;
-use IAWP_SCOPED\Illuminate\Database\Events\SchemaLoaded;
-use IAWP_SCOPED\Illuminate\Database\Migrations\Migrator;
-use IAWP_SCOPED\Illuminate\Database\SqlServerConnection;
+use IAWPSCOPED\Illuminate\Console\ConfirmableTrait;
+use IAWPSCOPED\Illuminate\Contracts\Events\Dispatcher;
+use IAWPSCOPED\Illuminate\Database\Events\SchemaLoaded;
+use IAWPSCOPED\Illuminate\Database\Migrations\Migrator;
+use IAWPSCOPED\Illuminate\Database\SqlServerConnection;
 /** @internal */
 class MigrateCommand extends BaseCommand
 {

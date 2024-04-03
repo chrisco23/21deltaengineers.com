@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Concerns;
 
-use IAWP_SCOPED\Illuminate\Contracts\Events\Dispatcher;
-use IAWP_SCOPED\Illuminate\Events\NullDispatcher;
-use IAWP_SCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Contracts\Events\Dispatcher;
+use IAWPSCOPED\Illuminate\Events\NullDispatcher;
+use IAWPSCOPED\Illuminate\Support\Arr;
 use InvalidArgumentException;
 /** @internal */
 trait HasEvents

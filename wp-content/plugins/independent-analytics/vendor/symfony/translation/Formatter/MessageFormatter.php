@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Formatter;
+namespace IAWPSCOPED\Symfony\Component\Translation\Formatter;
 
-use IAWP_SCOPED\Symfony\Component\Translation\IdentityTranslator;
-use IAWP_SCOPED\Symfony\Contracts\Translation\TranslatorInterface;
+use IAWPSCOPED\Symfony\Component\Translation\IdentityTranslator;
+use IAWPSCOPED\Symfony\Contracts\Translation\TranslatorInterface;
 // Help opcache.preload discover always-needed symbols
 \class_exists(IntlFormatter::class);
 /**
@@ -25,7 +25,7 @@ class MessageFormatter implements MessageFormatterInterface, IntlFormatterInterf
     /**
      * @param TranslatorInterface|null $translator An identity translator to use as selector for pluralization
      */
-    public function __construct(TranslatorInterface $translator = null, IntlFormatterInterface $intlFormatter = null)
+    public function __construct(?TranslatorInterface $translator = null, ?IntlFormatterInterface $intlFormatter = null)
     {
         $this->translator = $translator ?? new IdentityTranslator();
         $this->intlFormatter = $intlFormatter ?? new IntlFormatter();

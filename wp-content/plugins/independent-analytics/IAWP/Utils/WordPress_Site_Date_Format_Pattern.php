@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Utils;
+namespace IAWP\Utils;
 
 /** @internal */
 class WordPress_Site_Date_Format_Pattern

@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /**
  * This file is part of the Carbon package.
@@ -15,8 +15,8 @@ namespace IAWP_SCOPED;
  * - Quentí
  */
 // @codeCoverageIgnoreStart
-use IAWP_SCOPED\Symfony\Component\Translation\PluralizationRules;
-if (\class_exists('IAWP_SCOPED\\Symfony\\Component\\Translation\\PluralizationRules')) {
+use IAWPSCOPED\Symfony\Component\Translation\PluralizationRules;
+if (\class_exists('IAWPSCOPED\\Symfony\\Component\\Translation\\PluralizationRules')) {
     PluralizationRules::set(static function ($number) {
         return $number == 1 ? 0 : 1;
     }, 'oc');

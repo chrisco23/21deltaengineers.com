@@ -16,14 +16,14 @@
         @if($env->is_free() && !$is_white_labeled)
             <div class="pro-ad">
                 <a href="https://independentwp.com/pricing/?utm_source=User+Dashboard&utm_medium=WP+Admin&utm_campaign=Upgrade+to+Pro&utm_content=Sidebar"
-                class="iawp-button" target="_blank">
+                target="_blank">
                     <span class="upgrade-text">{{ __('Upgrade to Pro (45% off)', 'independent-analytics') }}</span>
                     <span class="dashicons dashicons-arrow-right-alt"></span>
                 </a>
             </div>
         @endif
         <div class="collapse-container">
-            <button id="collapse-sidebar" class="collapse-sidebar iawp-button" data-testid="collapse-button"><span
+            <button id="collapse-sidebar" class="collapse-sidebar iawp-text-button" data-testid="collapse-button"><span
                         class="dashicons dashicons-admin-collapse"></span><span
                         class="text">{{__('Collapse sidebar', 'independent-analytics')}}</span>
             </button>
@@ -126,72 +126,8 @@
                         'external'          => false,
                         'upgrade'           => false
                     ]);
-                    // CAMPAIGN BUILDER
-                    echo iawp_blade()->run('partials.sidebar-menu-section', [
-                        'favorite_report'   => $favorite_report,
-                        'can_edit_settings' => $can_edit_settings,
-                        'current'           => $report_finder->is_campaign_builder_page(),
-                        'report_name'       => esc_html__('Campaign Builder', 'independent-analytics'),
-                        'slug'              => 'campaign-builder',
-                        'reports'           => null,
-                        'collapsed_label'   => esc_html__('Open Campaign Builder', 'independent-analytics'),
-                        'has_reports'       => false,
-                        'url'               => iawp_dashboard_url(['tab' => 'campaign-builder']),
-                        'external'          => false,
-                        'upgrade'           => false
-                    ]);
                 }
                 ?>
-                @if($can_edit_settings)
-                <?php
-                // SETTINGS
-                echo iawp_blade()->run('partials.sidebar-menu-section', [
-                    'favorite_report'   => $favorite_report,
-                    'can_edit_settings' => $can_edit_settings,
-                    'current'           => $report_finder->is_settings_page(),
-                    'report_name'       => esc_html__('Settings', 'independent-analytics'),
-                    'slug'              => 'settings',
-                    'reports'           => null,
-                    'collapsed_label'   => esc_html__('Open Settings', 'independent-analytics'),
-                    'has_reports'       => false,
-                    'url'               => iawp_dashboard_url(['tab' => 'settings']),
-                    'external'          => false,
-                    'upgrade'           => false
-                ]);
-                ?>
-                @endif
-                @if(!$is_white_labeled)
-                <?php
-                // KNOWLEDGEBASE
-                echo iawp_blade()->run('partials.sidebar-menu-section', [
-                    'favorite_report'   => $favorite_report,
-                    'can_edit_settings' => $can_edit_settings,
-                    'current'           => false,
-                    'report_name'       => esc_html__('Knowledgebase', 'independent-analytics'),
-                    'slug'              => 'knowledgebase',
-                    'reports'           => null,
-                    'collapsed_label'   => esc_html__('Visit Knowledgebase', 'independent-analytics'),
-                    'has_reports'       => false,
-                    'url'               => 'https://independentwp.com/knowledgebase/',
-                    'external'          => true,
-                    'upgrade'           => false
-                ]);
-                // LEAVE US A REVIEW
-                echo iawp_blade()->run('partials.sidebar-menu-section', [
-                    'favorite_report'   => $favorite_report,
-                    'can_edit_settings' => $can_edit_settings,
-                    'current'           => false,
-                    'report_name'       => esc_html__('Leave us a review', 'independent-analytics'),
-                    'slug'              => 'reviews',
-                    'reports'           => null,
-                    'collapsed_label'   => esc_html__('Leave us a review', 'independent-analytics'),
-                    'has_reports'       => false,
-                    'url'               => 'https://wordpress.org/support/plugin/independent-analytics/reviews/',
-                    'external'          => true,
-                    'upgrade'           => false
-                ]);
-                ?>
-                @endif
                 @if($env->is_free() && ! $env->is_white_labeled())
                 <?php
                     // CAMPAIGNS UPGRADE
@@ -224,39 +160,7 @@
                 ]);
                 ?>
                 @endif
-                @if(!$is_white_labeled)
-                <?php
-                // CHANGELOG UPDATES
-                // https://api.wordpress.org/plugins/info/1.0/independent-analytics.json
-                $version_history = ['2.1.0']; // Newest first. Oldest last.
-                $last_update_viewed = get_option('iawp_last_update_viewed', '0');
-                $notification_html = '';
-                $unseen_versions = array_filter($version_history, function ($version) use ($last_update_viewed) {
-                    return version_compare($last_update_viewed, $version, '<');
-                });
-
-                if(count($unseen_versions) > 0) {
-                    $notification_html = '<span class="notification">' . count($unseen_versions) . '</span>';
-                }
-
-                $report_name = sprintf(_x("What's new in %s", 'Plugin version e.g. 2.1', 'independent-analytics'), $version_history[0]) . $notification_html;
-                echo iawp_blade()->run('partials.sidebar-menu-section', [
-                    'favorite_report'   => $favorite_report,
-                    'can_edit_settings' => $can_edit_settings,
-                    'current'           => false,
-                    'report_name'       => $report_name,
-                    'slug'              => 'updates',
-                    'reports'           => null,
-                    'collapsed_label'   => $report_name,
-                    'has_reports'       => false,
-                    'url'               => '#',
-                    'external'          => false,
-                    'upgrade'           => false
-                ]);
-                ?>
-                @endif
             </div>
         </div>
     </div>
 </div>
-<?php echo iawp_blade()->run('partials.updates'); ?>

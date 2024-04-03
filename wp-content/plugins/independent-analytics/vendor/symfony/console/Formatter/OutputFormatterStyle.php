@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Formatter;
+namespace IAWPSCOPED\Symfony\Component\Console\Formatter;
 
-use IAWP_SCOPED\Symfony\Component\Console\Color;
+use IAWPSCOPED\Symfony\Component\Console\Color;
 /**
  * Formatter style class for defining styles.
  *
@@ -31,21 +31,21 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
      * @param string|null $foreground The style foreground color name
      * @param string|null $background The style background color name
      */
-    public function __construct(string $foreground = null, string $background = null, array $options = [])
+    public function __construct(?string $foreground = null, ?string $background = null, array $options = [])
     {
         $this->color = new Color($this->foreground = $foreground ?: '', $this->background = $background ?: '', $this->options = $options);
     }
     /**
      * {@inheritdoc}
      */
-    public function setForeground(string $color = null)
+    public function setForeground(?string $color = null)
     {
         $this->color = new Color($this->foreground = $color ?: '', $this->background, $this->options);
     }
     /**
      * {@inheritdoc}
      */
-    public function setBackground(string $color = null)
+    public function setBackground(?string $color = null)
     {
         $this->color = new Color($this->foreground, $this->background = $color ?: '', $this->options);
     }

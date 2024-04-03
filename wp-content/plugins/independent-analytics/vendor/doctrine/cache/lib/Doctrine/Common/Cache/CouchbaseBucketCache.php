@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Common\Cache;
+namespace IAWPSCOPED\Doctrine\Common\Cache;
 
 use Couchbase\Bucket;
-use IAWP_SCOPED\Couchbase\Document;
-use IAWP_SCOPED\Couchbase\Exception;
+use IAWPSCOPED\Couchbase\Document;
+use IAWPSCOPED\Couchbase\Exception;
 use RuntimeException;
 use function phpversion;
 use function serialize;

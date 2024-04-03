@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Migrations;
+namespace IAWPSCOPED\Illuminate\Database\Migrations;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Filesystem\Filesystem;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Filesystem\Filesystem;
+use IAWPSCOPED\Illuminate\Support\Str;
 use InvalidArgumentException;
 /** @internal */
 class MigrationCreator

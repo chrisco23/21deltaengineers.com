@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
 use ReflectionClass;
 use ReflectionMethod;

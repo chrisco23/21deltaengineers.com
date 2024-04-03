@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /**
  * This file is part of the Carbon package.
@@ -25,7 +25,7 @@ namespace IAWP_SCOPED;
  * - Avtandil Kikabidze (akalongman)
  * - Levan Velijanashvili (Stichoza)
  */
-use IAWP_SCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonInterface;
 return ['year' => ':count წელი', 'y' => ':count წელი', 'a_year' => '{1}წელი|]1,Inf[:count წელი', 'month' => ':count თვე', 'm' => ':count თვე', 'a_month' => '{1}თვე|]1,Inf[:count თვე', 'week' => ':count კვირა', 'w' => ':count კვირა', 'a_week' => '{1}კვირა|]1,Inf[:count კვირა', 'day' => ':count დღე', 'd' => ':count დღე', 'a_day' => '{1}დღე|]1,Inf[:count დღე', 'hour' => ':count საათი', 'h' => ':count საათი', 'a_hour' => '{1}საათი|]1,Inf[:count საათი', 'minute' => ':count წუთი', 'min' => ':count წუთი', 'a_minute' => '{1}წუთი|]1,Inf[:count წუთი', 'second' => ':count წამი', 's' => ':count წამი', 'a_second' => '{1}რამდენიმე წამი|]1,Inf[:count წამი', 'ago' => function ($time) {
     $replacements = [
         // year

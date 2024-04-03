@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
 use ArrayAccess;
 use ArrayObject;
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
 /** @internal */
 class Optional implements ArrayAccess
 {

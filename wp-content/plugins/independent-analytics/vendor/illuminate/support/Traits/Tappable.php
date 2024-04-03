@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Traits;
+namespace IAWPSCOPED\Illuminate\Support\Traits;
 
 /** @internal */
 trait Tappable

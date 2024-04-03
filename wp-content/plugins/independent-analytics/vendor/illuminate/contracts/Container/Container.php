@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Container;
+namespace IAWPSCOPED\Illuminate\Contracts\Container;
 
 use Closure;
-use IAWP_SCOPED\Psr\Container\ContainerInterface;
+use IAWPSCOPED\Psr\Container\ContainerInterface;
 /** @internal */
 interface Container extends ContainerInterface
 {

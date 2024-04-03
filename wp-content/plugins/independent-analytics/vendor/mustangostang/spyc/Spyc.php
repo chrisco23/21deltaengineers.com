@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /**
  * Spyc -- A Simple PHP YAML Class
@@ -12,7 +12,7 @@ namespace IAWP_SCOPED;
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  * @package Spyc
  */
-if (!\function_exists('IAWP_SCOPED\\spyc_load')) {
+if (!\function_exists('IAWPSCOPED\\spyc_load')) {
     /**
      * Parses YAML to array.
      * @param string $string YAML string.
@@ -24,7 +24,7 @@ if (!\function_exists('IAWP_SCOPED\\spyc_load')) {
         return Spyc::YAMLLoadString($string);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\spyc_load_file')) {
+if (!\function_exists('IAWPSCOPED\\spyc_load_file')) {
     /**
      * Parses YAML to array.
      * @param string $file Path to YAML file.
@@ -36,7 +36,7 @@ if (!\function_exists('IAWP_SCOPED\\spyc_load_file')) {
         return Spyc::YAMLLoad($file);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\spyc_dump')) {
+if (!\function_exists('IAWPSCOPED\\spyc_dump')) {
     /**
      * Dumps array to YAML.
      * @param array $data Array.
@@ -48,7 +48,7 @@ if (!\function_exists('IAWP_SCOPED\\spyc_dump')) {
         return Spyc::YAMLDump($data, \false, \false, \true);
     }
 }
-if (!\class_exists('IAWP_SCOPED\\Spyc')) {
+if (!\class_exists('IAWPSCOPED\\Spyc')) {
     /**
      * The Simple PHP YAML Class.
      *
@@ -507,7 +507,7 @@ if (!\class_exists('IAWP_SCOPED\\Spyc')) {
             if (empty($Source)) {
                 return array();
             }
-            if ($this->setting_use_syck_is_possible && \function_exists('IAWP_SCOPED\\syck_load')) {
+            if ($this->setting_use_syck_is_possible && \function_exists('IAWPSCOPED\\syck_load')) {
                 $array = syck_load(\implode("\n", $Source));
                 return \is_array($array) ? $array : array();
             }

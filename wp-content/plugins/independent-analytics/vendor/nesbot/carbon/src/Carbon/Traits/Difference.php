@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Traits;
+namespace IAWPSCOPED\Carbon\Traits;
 
-use IAWP_SCOPED\Carbon\Carbon;
-use IAWP_SCOPED\Carbon\CarbonImmutable;
-use IAWP_SCOPED\Carbon\CarbonInterface;
-use IAWP_SCOPED\Carbon\CarbonInterval;
-use IAWP_SCOPED\Carbon\CarbonPeriod;
-use IAWP_SCOPED\Carbon\Translator;
+use IAWPSCOPED\Carbon\Carbon;
+use IAWPSCOPED\Carbon\CarbonImmutable;
+use IAWPSCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonInterval;
+use IAWPSCOPED\Carbon\CarbonPeriod;
+use IAWPSCOPED\Carbon\Translator;
 use Closure;
 use DateInterval;
 use DateTimeInterface;
@@ -265,9 +265,9 @@ trait Difference
      */
     public function diffInWeekdays($date = null, $absolute = \true)
     {
-        return $this->diffInDaysFiltered(function (CarbonInterface $date) {
+        return $this->diffInDaysFiltered(static function (CarbonInterface $date) {
             return $date->isWeekday();
-        }, $date, $absolute);
+        }, $this->resolveCarbon($date)->avoidMutation()->modify($this->format('H:i:s.u')), $absolute);
     }
     /**
      * Get the difference in weekend days using a filter rounded down.
@@ -279,9 +279,9 @@ trait Difference
      */
     public function diffInWeekendDays($date = null, $absolute = \true)
     {
-        return $this->diffInDaysFiltered(function (CarbonInterface $date) {
+        return $this->diffInDaysFiltered(static function (CarbonInterface $date) {
             return $date->isWeekend();
-        }, $date, $absolute);
+        }, $this->resolveCarbon($date)->avoidMutation()->modify($this->format('H:i:s.u')), $absolute);
     }
     /**
      * Get the difference in hours rounded down.

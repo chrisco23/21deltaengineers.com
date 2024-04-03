@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations;
 
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 class MorphPivot extends Pivot
 {

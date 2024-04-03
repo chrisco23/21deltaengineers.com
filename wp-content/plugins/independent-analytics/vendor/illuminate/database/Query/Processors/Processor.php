@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Query\Processors;
+namespace IAWPSCOPED\Illuminate\Database\Query\Processors;
 
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
 /** @internal */
 class Processor
 {

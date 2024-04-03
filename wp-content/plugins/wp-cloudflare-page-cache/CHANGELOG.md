@@ -1,3 +1,26 @@
+#####   Version 4.7.9 (2024-04-01)
+
+### Improvements
+- **Updated internal dependencies**
+
+#####   Version 4.7.8 (2024-03-29)
+
+### Fixes
+- Updated internal dependencies
+
+#####   Version 4.7.7 (2024-03-07)
+
+### Fixes
+
+- NPS Survey added
+- Updated dependencies
+
+#####   Version 4.7.6 (2024-02-15)
+
+### Fixes
+- Enhanced security
+- Updated dependencies
+
 #####   Version 4.7.5 (2023-10-30)
 
 - Added swcfpc_bypass_cache_metabox_post_types filter to ensure users can add their CPTs to the list of allowed post types for which the bypass cache meta box will be registered.

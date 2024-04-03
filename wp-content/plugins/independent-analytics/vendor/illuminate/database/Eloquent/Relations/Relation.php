@@ -1,17 +1,17 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Builder;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Collection;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\ModelNotFoundException;
-use IAWP_SCOPED\Illuminate\Database\MultipleRecordsFoundException;
-use IAWP_SCOPED\Illuminate\Database\Query\Expression;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Traits\ForwardsCalls;
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Builder;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Collection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Database\Eloquent\ModelNotFoundException;
+use IAWPSCOPED\Illuminate\Database\MultipleRecordsFoundException;
+use IAWPSCOPED\Illuminate\Database\Query\Expression;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Traits\ForwardsCalls;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
 /**
  * @mixin \Illuminate\Database\Eloquent\Builder
  * @internal
@@ -237,7 +237,7 @@ abstract class Relation
      */
     protected function getKeys(array $models, $key = null)
     {
-        return \IAWP_SCOPED\collect($models)->map(function ($value) use($key) {
+        return \IAWPSCOPED\collect($models)->map(function ($value) use($key) {
             return $key ? $value->getAttribute($key) : $value->getKey();
         })->values()->unique(null, \true)->sort()->all();
     }

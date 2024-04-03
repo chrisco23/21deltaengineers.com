@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Inflector;
+namespace IAWPSCOPED\Doctrine\Inflector;
 
-use IAWP_SCOPED\Doctrine\Inflector\Rules\English;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\French;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\NorwegianBokmal;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Portuguese;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Spanish;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Turkish;
+use IAWPSCOPED\Doctrine\Inflector\Rules\English;
+use IAWPSCOPED\Doctrine\Inflector\Rules\French;
+use IAWPSCOPED\Doctrine\Inflector\Rules\NorwegianBokmal;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Portuguese;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Spanish;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Turkish;
 use InvalidArgumentException;
 use function sprintf;
 /** @internal */

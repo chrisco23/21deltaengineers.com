@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Factories;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Factories;
 
 /** @internal */
 trait HasFactory

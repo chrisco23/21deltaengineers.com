@@ -1,11 +1,12 @@
-<div id="iawp-table-wrapper">
+<div id="iawp-table-wrapper" class="iawp-table-wrapper">
     <div id="data-table-container" class="data-table-container">
         <div id='data-table'
              class='data-table'
-             data-table-name='<?php esc_attr_e($table_name); ?>'
+             data-table-name='<?php echo esc_attr($table_name); ?>'
              data-columns='<?php echo \IAWP\Utils\Security::json_encode($all_columns) ?>'
              data-column-count='<?php echo count($all_columns); ?>'
-             style="margin: 2px; min-width: <?php echo absint($visible_column_count) * 170; ?>px; --columns: <?php echo absint($visible_column_count); ?>; --columns-mobile: <?php echo absint($visible_column_count - 1); ?>"
+             data-total-number-of-rows {{-- The value is added in JavaScript after page load --}}
+             style="min-width: <?php echo absint($visible_column_count) * 170; ?>px; --columns: <?php echo absint($visible_column_count); ?>; --columns-mobile: <?php echo absint($visible_column_count - 1); ?>"
         >
 
             <!-- Header -->
@@ -17,20 +18,19 @@
                     foreach ($all_columns as $column): ?>
                         <?php
                         $cell_class = $column->visible() ? 'cell' : 'cell hide'; ?>
-                    <div class="<?php esc_attr_e($cell_class); ?>"
-                         data-column="<?php esc_attr_e($column->id()); ?>"
+                    <div class="<?php echo esc_attr($cell_class); ?>"
+                         data-column="<?php echo esc_attr($column->id()); ?>"
                          data-test-visibility="<?php echo $column->visible() ? 'visible' : 'hidden'; ?>"
                     >
                         <button class="sort-button"
                                 data-sort-target="sortButton"
                                 data-sort-direction="<?php echo $column->id() === esc_attr($sort_column) ? esc_attr($sort_direction) : '' ?>"
-                                data-default-sort-direction="<?php esc_attr_e($column->sort_direction()); ?>"
-                                data-sort-column="<?php esc_attr_e($column->id()); ?>"
+                                data-default-sort-direction="<?php echo esc_attr($column->sort_direction()); ?>"
+                                data-sort-column="<?php echo esc_attr($column->id()); ?>"
                                 data-action="sort#sortColumnColumn"
                         >
                             <div class="row-number"></div>
-                            <span class="name"><?php
-                                                   esc_html_e($column->label()); ?></span>
+                            <span class="name"><?php echo esc_html($column->label()); ?></span>
                             <span class="dashicons dashicons-arrow-right"></span>
                             <span class="dashicons dashicons-arrow-up"></span>
                             <span class="dashicons dashicons-arrow-down"></span>
@@ -53,8 +53,8 @@
                     foreach ($all_columns as $column): ?>
                         <?php
                         $class = $column->visible() ? 'cell' : 'cell hide'; ?>
-                    <div class="<?php esc_attr_e($class); ?>"
-                         data-column="<?php esc_attr_e($column->id()); ?>"
+                    <div class="<?php echo esc_attr($class); ?>"
+                         data-column="<?php echo esc_attr($column->id()); ?>"
                          data-test-visibility="<?php echo $column->visible() ? 'visible' : 'hidden'; ?>"
                     >
                         <div class="row-number"></div>

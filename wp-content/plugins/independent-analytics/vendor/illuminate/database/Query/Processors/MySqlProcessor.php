@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Query\Processors;
+namespace IAWPSCOPED\Illuminate\Database\Query\Processors;
 
 /** @internal */
 class MySqlProcessor extends Processor

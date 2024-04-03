@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Illuminate\Filesystem\Filesystem;
+use IAWPSCOPED\Illuminate\Filesystem\Filesystem;
 /**
  * @method static \Illuminate\Contracts\Filesystem\Filesystem assertExists(string|array $path)
  * @method static \Illuminate\Contracts\Filesystem\Filesystem assertMissing(string|array $path)

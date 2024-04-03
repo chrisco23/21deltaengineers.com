@@ -1,21 +1,21 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
-use IAWP_SCOPED\Illuminate\Contracts\Events\Dispatcher;
-use IAWP_SCOPED\Illuminate\Contracts\Support\DeferrableProvider;
-use IAWP_SCOPED\Illuminate\Database\Console\Migrations\FreshCommand;
-use IAWP_SCOPED\Illuminate\Database\Console\Migrations\InstallCommand;
-use IAWP_SCOPED\Illuminate\Database\Console\Migrations\MigrateCommand;
-use IAWP_SCOPED\Illuminate\Database\Console\Migrations\MigrateMakeCommand;
-use IAWP_SCOPED\Illuminate\Database\Console\Migrations\RefreshCommand;
-use IAWP_SCOPED\Illuminate\Database\Console\Migrations\ResetCommand;
-use IAWP_SCOPED\Illuminate\Database\Console\Migrations\RollbackCommand;
-use IAWP_SCOPED\Illuminate\Database\Console\Migrations\StatusCommand;
-use IAWP_SCOPED\Illuminate\Database\Migrations\DatabaseMigrationRepository;
-use IAWP_SCOPED\Illuminate\Database\Migrations\MigrationCreator;
-use IAWP_SCOPED\Illuminate\Database\Migrations\Migrator;
-use IAWP_SCOPED\Illuminate\Support\ServiceProvider;
+use IAWPSCOPED\Illuminate\Contracts\Events\Dispatcher;
+use IAWPSCOPED\Illuminate\Contracts\Support\DeferrableProvider;
+use IAWPSCOPED\Illuminate\Database\Console\Migrations\FreshCommand;
+use IAWPSCOPED\Illuminate\Database\Console\Migrations\InstallCommand;
+use IAWPSCOPED\Illuminate\Database\Console\Migrations\MigrateCommand;
+use IAWPSCOPED\Illuminate\Database\Console\Migrations\MigrateMakeCommand;
+use IAWPSCOPED\Illuminate\Database\Console\Migrations\RefreshCommand;
+use IAWPSCOPED\Illuminate\Database\Console\Migrations\ResetCommand;
+use IAWPSCOPED\Illuminate\Database\Console\Migrations\RollbackCommand;
+use IAWPSCOPED\Illuminate\Database\Console\Migrations\StatusCommand;
+use IAWPSCOPED\Illuminate\Database\Migrations\DatabaseMigrationRepository;
+use IAWPSCOPED\Illuminate\Database\Migrations\MigrationCreator;
+use IAWPSCOPED\Illuminate\Database\Migrations\Migrator;
+use IAWPSCOPED\Illuminate\Support\ServiceProvider;
 /** @internal */
 class MigrationServiceProvider extends ServiceProvider implements DeferrableProvider
 {

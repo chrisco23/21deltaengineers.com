@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console\Seeds;
+namespace IAWPSCOPED\Illuminate\Database\Console\Seeds;
 
-use IAWP_SCOPED\Illuminate\Console\Command;
-use IAWP_SCOPED\Illuminate\Console\ConfirmableTrait;
-use IAWP_SCOPED\Illuminate\Database\ConnectionResolverInterface as Resolver;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputArgument;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputOption;
+use IAWPSCOPED\Illuminate\Console\Command;
+use IAWPSCOPED\Illuminate\Console\ConfirmableTrait;
+use IAWPSCOPED\Illuminate\Database\ConnectionResolverInterface as Resolver;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputArgument;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputOption;
 /** @internal */
 class SeedCommand extends Command
 {
@@ -104,6 +104,6 @@ class SeedCommand extends Command
      */
     protected function getOptions()
     {
-        return [['class', null, InputOption::VALUE_OPTIONAL, 'The class name of the root seeder', 'IAWP_SCOPED\\Database\\Seeders\\DatabaseSeeder'], ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to seed'], ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production']];
+        return [['class', null, InputOption::VALUE_OPTIONAL, 'The class name of the root seeder', 'IAWPSCOPED\\Database\\Seeders\\DatabaseSeeder'], ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to seed'], ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production']];
     }
 }

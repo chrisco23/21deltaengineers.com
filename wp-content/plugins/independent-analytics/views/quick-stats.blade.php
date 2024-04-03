@@ -1,18 +1,17 @@
 <?php
 $class = $is_filtered ? 'quick-stats filtered' : 'quick-stats' ?>
 <?php $class .= ' total-of-' . count($stats) ?>
-<div id="quick-stats" class="<?php esc_attr_e($class); ?>">
+<div id="quick-stats" class="<?php echo esc_attr($class); ?>">
     <?php foreach ($stats as $stat): ?>
-        <div class="stat <?php esc_attr_e($stat['class']); ?>">
+        <div class="stat <?php echo esc_attr($stat['class']); ?>">
             <div class="metric">
-                <?php esc_html_e($stat['title']); ?>
-                <span class="dashicons dashicons-filter"></span>
-                <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="50"/>
-                </svg>
+                <span class="metric-name"><?php echo esc_html($stat['title']); ?></span>
+                <?php if ($stat['class'] == 'orders' || $stat['class'] == 'net-sales') : ?>
+                    <span class="plugin-label"><?php echo iawp_blade()->run('icons.plugins.woo'); ?></span>
+                <?php endif; ?>
             </div>
             <div class="values">
-                <span class="count" test-value="<?php esc_attr_e(strip_tags($stat['count'])); ?>">
+                <span class="count" test-value="<?php echo esc_attr(strip_tags($stat['count'])); ?>">
                     <?php echo wp_kses($stat['count'], ['span' => []]); ?>
                     <?php if ($is_filtered) : ?>
                         <span class="unfiltered"> / <?php echo wp_kses($stat['unfiltered'], ['span' => []]); ?></span>
@@ -25,8 +24,8 @@ $class = $is_filtered ? 'quick-stats filtered' : 'quick-stats' ?>
         $class              = $stat['growth'] < 0 ? 'down' : '';
         $class .= $normalized < 0 ? ' bad' : '';
         ?>
-                <span class="percentage <?php esc_attr_e($class) ?>"
-                        test-value="<?php esc_attr_e($stat['growth']); ?>">
+                <span class="percentage <?php echo esc_attr($class) ?>"
+                        test-value="<?php echo esc_attr($stat['growth']); ?>">
                         <span class="dashicons dashicons-arrow-up-alt growth-arrow"></span><?php echo $stat['formatted_growth'] ?>
                 </span>
                 <span class="period-label"><?php esc_html_e('vs. previous period', 'independent-analytics') ?></span>

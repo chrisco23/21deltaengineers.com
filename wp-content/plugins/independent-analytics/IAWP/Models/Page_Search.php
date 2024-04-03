@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
 /** @internal */
-class Page_Search extends Page
+class Page_Search extends \IAWP\Models\Page
 {
     private $search_query;
     public function __construct($row)

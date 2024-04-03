@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Traits;
+namespace IAWPSCOPED\Carbon\Traits;
 
-use IAWP_SCOPED\Carbon\CarbonInterval;
-use IAWP_SCOPED\Carbon\Exceptions\InvalidIntervalException;
+use IAWPSCOPED\Carbon\CarbonInterval;
+use IAWPSCOPED\Carbon\Exceptions\InvalidIntervalException;
 use DateInterval;
 /**
  * Trait to call rounding methods to interval or the interval of a period.
@@ -34,7 +34,7 @@ trait IntervalRounding
     {
         $unit = 'second';
         if ($precision instanceof DateInterval) {
-            $precision = (string) CarbonInterval::instance($precision);
+            $precision = (string) CarbonInterval::instance($precision, [], \true);
         }
         if (\is_string($precision) && \preg_match('/^\\s*(?<precision>\\d+)?\\s*(?<unit>\\w+)(?<other>\\W.*)?$/', $precision, $match)) {
             if (\trim($match['other'] ?? '') !== '') {

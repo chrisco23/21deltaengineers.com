@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
 /**
  * @method static \Illuminate\Http\RedirectResponse action(string $action, mixed $parameters = [], int $status = 302, array $headers = [])

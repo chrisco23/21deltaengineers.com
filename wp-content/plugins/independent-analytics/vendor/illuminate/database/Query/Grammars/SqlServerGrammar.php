@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Query\Grammars;
+namespace IAWPSCOPED\Illuminate\Database\Query\Grammars;
 
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 class SqlServerGrammar extends Grammar
 {
@@ -372,16 +372,16 @@ class SqlServerGrammar extends Grammar
     {
         $columns = $this->columnize(\array_keys(\reset($values)));
         $sql = 'merge ' . $this->wrapTable($query->from) . ' ';
-        $parameters = \IAWP_SCOPED\collect($values)->map(function ($record) {
+        $parameters = \IAWPSCOPED\collect($values)->map(function ($record) {
             return '(' . $this->parameterize($record) . ')';
         })->implode(', ');
         $sql .= 'using (values ' . $parameters . ') ' . $this->wrapTable('laravel_source') . ' (' . $columns . ') ';
-        $on = \IAWP_SCOPED\collect($uniqueBy)->map(function ($column) use($query) {
+        $on = \IAWPSCOPED\collect($uniqueBy)->map(function ($column) use($query) {
             return $this->wrap('laravel_source.' . $column) . ' = ' . $this->wrap($query->from . '.' . $column);
         })->implode(' and ');
         $sql .= 'on ' . $on . ' ';
         if ($update) {
-            $update = \IAWP_SCOPED\collect($update)->map(function ($value, $key) {
+            $update = \IAWPSCOPED\collect($update)->map(function ($value, $key) {
                 return \is_numeric($key) ? $this->wrap($value) . ' = ' . $this->wrap('laravel_source.' . $value) : $this->wrap($key) . ' = ' . $this->parameter($value);
             })->implode(', ');
             $sql .= 'when matched then update set ' . $update . ' ';

@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri\Idna;
+namespace IAWPSCOPED\League\Uri\Idna;
 
-use IAWP_SCOPED\League\Uri\Exceptions\IdnaConversionFailed;
-use IAWP_SCOPED\League\Uri\Exceptions\IdnSupportMissing;
-use IAWP_SCOPED\League\Uri\Exceptions\SyntaxError;
+use IAWPSCOPED\League\Uri\Exceptions\IdnaConversionFailed;
+use IAWPSCOPED\League\Uri\Exceptions\IdnSupportMissing;
+use IAWPSCOPED\League\Uri\Exceptions\SyntaxError;
 use function defined;
 use function function_exists;
 use function idn_to_ascii;

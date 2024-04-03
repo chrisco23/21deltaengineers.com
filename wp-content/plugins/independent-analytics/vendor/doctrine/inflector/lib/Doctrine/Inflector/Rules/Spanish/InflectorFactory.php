@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Inflector\Rules\Spanish;
+namespace IAWPSCOPED\Doctrine\Inflector\Rules\Spanish;
 
-use IAWP_SCOPED\Doctrine\Inflector\GenericLanguageInflectorFactory;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Ruleset;
+use IAWPSCOPED\Doctrine\Inflector\GenericLanguageInflectorFactory;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Ruleset;
 /** @internal */
 final class InflectorFactory extends GenericLanguageInflectorFactory
 {

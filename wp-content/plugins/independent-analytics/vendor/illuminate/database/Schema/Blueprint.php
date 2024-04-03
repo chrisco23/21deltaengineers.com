@@ -1,15 +1,15 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema;
+namespace IAWPSCOPED\Illuminate\Database\Schema;
 
 use BadMethodCallException;
 use Closure;
-use IAWP_SCOPED\Illuminate\Database\Connection;
-use IAWP_SCOPED\Illuminate\Database\Query\Expression;
-use IAWP_SCOPED\Illuminate\Database\Schema\Grammars\Grammar;
-use IAWP_SCOPED\Illuminate\Database\SQLiteConnection;
-use IAWP_SCOPED\Illuminate\Support\Fluent;
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Database\Query\Expression;
+use IAWPSCOPED\Illuminate\Database\Schema\Grammars\Grammar;
+use IAWPSCOPED\Illuminate\Database\SQLiteConnection;
+use IAWPSCOPED\Illuminate\Support\Fluent;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
 /** @internal */
 class Blueprint
 {
@@ -149,7 +149,7 @@ class Blueprint
      */
     protected function commandsNamed(array $names)
     {
-        return \IAWP_SCOPED\collect($this->commands)->filter(function ($command) use($names) {
+        return \IAWPSCOPED\collect($this->commands)->filter(function ($command) use($names) {
             return \in_array($command->name, $names);
         });
     }
@@ -220,7 +220,7 @@ class Blueprint
      */
     public function creating()
     {
-        return \IAWP_SCOPED\collect($this->commands)->contains(function ($command) {
+        return \IAWPSCOPED\collect($this->commands)->contains(function ($command) {
             return $command->name === 'create';
         });
     }
@@ -1482,7 +1482,7 @@ class Blueprint
      */
     public function hasAutoIncrementColumn()
     {
-        return !\is_null(\IAWP_SCOPED\collect($this->getAddedColumns())->first(function ($column) {
+        return !\is_null(\IAWPSCOPED\collect($this->getAddedColumns())->first(function ($column) {
             return $column->autoIncrement === \true;
         }));
     }
@@ -1496,7 +1496,7 @@ class Blueprint
         if (!$this->hasAutoIncrementColumn()) {
             return [];
         }
-        return \IAWP_SCOPED\collect($this->getAddedColumns())->mapWithKeys(function ($column) {
+        return \IAWPSCOPED\collect($this->getAddedColumns())->mapWithKeys(function ($column) {
             return $column->autoIncrement === \true ? [$column->name => $column->get('startingValue', $column->get('from'))] : [$column->name => null];
         })->filter()->all();
     }

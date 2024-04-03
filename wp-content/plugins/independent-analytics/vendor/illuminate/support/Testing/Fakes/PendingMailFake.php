@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Testing\Fakes;
+namespace IAWPSCOPED\Illuminate\Support\Testing\Fakes;
 
-use IAWP_SCOPED\Illuminate\Contracts\Mail\Mailable;
-use IAWP_SCOPED\Illuminate\Mail\PendingMail;
+use IAWPSCOPED\Illuminate\Contracts\Mail\Mailable;
+use IAWPSCOPED\Illuminate\Mail\PendingMail;
 /** @internal */
 class PendingMailFake extends PendingMail
 {

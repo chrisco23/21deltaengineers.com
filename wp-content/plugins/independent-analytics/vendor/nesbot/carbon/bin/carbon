@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
-use IAWP_SCOPED\Carbon\Cli\Invoker;
+use IAWPSCOPED\Carbon\Cli\Invoker;
 $dir = __DIR__ . '/..';
 if (!\file_exists($dir . '/autoload.php')) {
     $dir = __DIR__ . '/../vendor';

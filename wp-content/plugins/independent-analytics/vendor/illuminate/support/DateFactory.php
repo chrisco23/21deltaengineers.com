@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
-use IAWP_SCOPED\Carbon\Factory;
+use IAWPSCOPED\Carbon\Factory;
 use InvalidArgumentException;
 /**
  * @see https://carbon.nesbot.com/docs/

@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use IAWPSCOPED\Illuminate\Contracts\Auth\Access\Gate as GateContract;
 /**
  * @method static \Illuminate\Auth\Access\Gate guessPolicyNamesUsing(callable $callback)
  * @method static \Illuminate\Auth\Access\Response authorize(string $ability, array|mixed $arguments = [])

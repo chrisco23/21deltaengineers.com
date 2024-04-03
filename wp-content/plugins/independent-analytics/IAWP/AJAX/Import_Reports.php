@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Report_Finder;
-use IAWP_SCOPED\IAWP\Report_Options_Parser;
+use IAWP\Report_Finder;
+use IAWP\Report_Options_Parser;
 /** @internal */
-class Import_Reports extends AJAX
+class Import_Reports extends \IAWP\AJAX\AJAX
 {
     /**
      * @inheritDoc

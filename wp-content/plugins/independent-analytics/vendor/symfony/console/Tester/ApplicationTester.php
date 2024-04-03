@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Tester;
+namespace IAWPSCOPED\Symfony\Component\Console\Tester;
 
-use IAWP_SCOPED\Symfony\Component\Console\Application;
-use IAWP_SCOPED\Symfony\Component\Console\Input\ArrayInput;
+use IAWPSCOPED\Symfony\Component\Console\Application;
+use IAWPSCOPED\Symfony\Component\Console\Input\ArrayInput;
 /**
  * Eases the testing of console applications.
  *

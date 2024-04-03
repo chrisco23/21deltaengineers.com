@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Catalogue;
+namespace IAWPSCOPED\Symfony\Component\Translation\Catalogue;
 
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogueInterface;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogueInterface;
 /**
  * Merge operation between two catalogues as follows:
  * all = source ∪ target = {x: x ∈ source ∨ x ∈ target}

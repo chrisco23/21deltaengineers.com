@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Helper;
+namespace IAWPSCOPED\Symfony\Component\Console\Helper;
 
-use IAWP_SCOPED\Symfony\Component\Console\Descriptor\DescriptorInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Descriptor\JsonDescriptor;
-use IAWP_SCOPED\Symfony\Component\Console\Descriptor\MarkdownDescriptor;
-use IAWP_SCOPED\Symfony\Component\Console\Descriptor\TextDescriptor;
-use IAWP_SCOPED\Symfony\Component\Console\Descriptor\XmlDescriptor;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Descriptor\DescriptorInterface;
+use IAWPSCOPED\Symfony\Component\Console\Descriptor\JsonDescriptor;
+use IAWPSCOPED\Symfony\Component\Console\Descriptor\MarkdownDescriptor;
+use IAWPSCOPED\Symfony\Component\Console\Descriptor\TextDescriptor;
+use IAWPSCOPED\Symfony\Component\Console\Descriptor\XmlDescriptor;
+use IAWPSCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
 /**
  * This class adds helper method to describe objects in various formats.
  *

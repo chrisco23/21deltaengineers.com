@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
 use ArrayAccess;
 use ArrayIterator;
-use IAWP_SCOPED\Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
-use IAWP_SCOPED\Illuminate\Support\Traits\EnumeratesValues;
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
+use IAWPSCOPED\Illuminate\Support\Traits\EnumeratesValues;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
 use stdClass;
 /** @internal */
 class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerable
@@ -363,7 +363,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
         if (\array_key_exists($key, $this->items)) {
             return $this->items[$key];
         }
-        return \IAWP_SCOPED\value($default);
+        return \IAWPSCOPED\value($default);
     }
     /**
      * Get an item from the collection by key or add it to collection if it does not exist.
@@ -377,7 +377,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
         if (\array_key_exists($key, $this->items)) {
             return $this->items[$key];
         }
-        $this->offsetSet($key, $value = \IAWP_SCOPED\value($value));
+        $this->offsetSet($key, $value = \IAWPSCOPED\value($value));
         return $value;
     }
     /**

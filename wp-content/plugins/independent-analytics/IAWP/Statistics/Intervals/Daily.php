@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Statistics\Intervals;
+namespace IAWP\Statistics\Intervals;
 
 /** @internal */
-class Daily extends Interval
+class Daily extends \IAWP\Statistics\Intervals\Interval
 {
     public function id() : string
     {

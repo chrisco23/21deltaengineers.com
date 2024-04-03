@@ -8,12 +8,12 @@
  * @license http://www.gnu.org/licenses/lgpl.html LGPL v3 or later
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\DeviceDetector\Parser\Client;
+namespace IAWPSCOPED\DeviceDetector\Parser\Client;
 
-use IAWP_SCOPED\DeviceDetector\Cache\CacheInterface;
-use IAWP_SCOPED\DeviceDetector\ClientHints;
-use IAWP_SCOPED\DeviceDetector\Parser\Client\Hints\AppHints;
-use IAWP_SCOPED\DeviceDetector\Yaml\ParserInterface as YamlParser;
+use IAWPSCOPED\DeviceDetector\Cache\CacheInterface;
+use IAWPSCOPED\DeviceDetector\ClientHints;
+use IAWPSCOPED\DeviceDetector\Parser\Client\Hints\AppHints;
+use IAWPSCOPED\DeviceDetector\Yaml\ParserInterface as YamlParser;
 /**
  * Class MobileApp
  *
@@ -23,7 +23,7 @@ use IAWP_SCOPED\DeviceDetector\Yaml\ParserInterface as YamlParser;
 class MobileApp extends AbstractClientParser
 {
     /**
-     * @var AppHints|null
+     * @var AppHints
      */
     private $appHints;
     /**

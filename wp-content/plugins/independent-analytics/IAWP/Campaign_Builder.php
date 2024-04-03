@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Utils\Singleton;
-use IAWP_SCOPED\IAWP\Utils\String_Util;
-use IAWP_SCOPED\IAWP\Utils\URL;
-use IAWP_SCOPED\Illuminate\Support\Carbon;
-use IAWP_SCOPED\League\Uri\Uri;
+use IAWP\Utils\Singleton;
+use IAWP\Utils\String_Util;
+use IAWP\Utils\URL;
+use IAWPSCOPED\Illuminate\Support\Carbon;
+use IAWPSCOPED\League\Uri\Uri;
 /** @internal */
 class Campaign_Builder
 {
@@ -16,7 +16,7 @@ class Campaign_Builder
     }
     public function render_campaign_builder()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('campaign-builder', ['campaigns' => $this->get_previously_created_campaigns()]);
+        echo \IAWPSCOPED\iawp_blade()->run('campaign-builder', ['campaigns' => $this->get_previously_created_campaigns()]);
     }
     public function create_campaign($path, $source, $medium, $campaign, $term, $content)
     {
@@ -47,12 +47,12 @@ class Campaign_Builder
             $campaign_error = 'Campaign is required';
         }
         if ($has_errors) {
-            return \IAWP_SCOPED\iawp_blade()->run('campaign-builder', ['path' => $path, 'path_error' => $path_error, 'utm_source' => $source, 'utm_source_error' => $source_error, 'utm_medium' => $medium, 'utm_medium_error' => $medium_error, 'utm_campaign' => $campaign, 'utm_campaign_error' => $campaign_error, 'utm_term' => $term, 'utm_content' => $content, 'campaigns' => $this->get_previously_created_campaigns()]);
+            return \IAWPSCOPED\iawp_blade()->run('campaign-builder', ['path' => $path, 'path_error' => $path_error, 'utm_source' => $source, 'utm_source_error' => $source_error, 'utm_medium' => $medium, 'utm_medium_error' => $medium_error, 'utm_campaign' => $campaign, 'utm_campaign_error' => $campaign_error, 'utm_term' => $term, 'utm_content' => $content, 'campaigns' => $this->get_previously_created_campaigns()]);
         }
-        $campaign_urls_table = Query::get_table_name(Query::CAMPAIGN_URLS);
+        $campaign_urls_table = \IAWP\Query::get_table_name(\IAWP\Query::CAMPAIGN_URLS);
         $wpdb->insert($campaign_urls_table, ['path' => $path, 'utm_source' => $source, 'utm_medium' => $medium, 'utm_campaign' => $campaign, 'utm_term' => $term, 'utm_content' => $content, 'created_at' => (new \DateTime())->format('Y-m-d H:i:s')]);
         $url = $this->build_url($path, $source, $medium, $campaign, $term, $content);
-        return \IAWP_SCOPED\iawp_blade()->run('campaign-builder', ['path' => $path, 'utm_source' => $source, 'utm_medium' => $medium, 'utm_campaign' => $campaign, 'utm_term' => $term, 'utm_content' => $content, 'new_campaign_url' => $url, 'campaigns' => $this->get_previously_created_campaigns()]);
+        return \IAWPSCOPED\iawp_blade()->run('campaign-builder', ['path' => $path, 'utm_source' => $source, 'utm_medium' => $medium, 'utm_campaign' => $campaign, 'utm_term' => $term, 'utm_content' => $content, 'new_campaign_url' => $url, 'campaigns' => $this->get_previously_created_campaigns()]);
     }
     public function build_url($path, $source, $medium, $campaign, $term = null, $content = null) : string
     {
@@ -78,7 +78,7 @@ class Campaign_Builder
     private function get_previously_created_campaigns()
     {
         global $wpdb;
-        $campaign_urls_table = Query::get_table_name(Query::CAMPAIGN_URLS);
+        $campaign_urls_table = \IAWP\Query::get_table_name(\IAWP\Query::CAMPAIGN_URLS);
         $results = $wpdb->get_results("\n            SELECT * FROM {$campaign_urls_table} ORDER BY created_at DESC LIMIT 100\n        ");
         return \array_map(function ($result) {
             $created_at = Carbon::parse($result->created_at)->diffForHumans();
@@ -87,13 +87,13 @@ class Campaign_Builder
     }
     public static function has_campaigns() : bool
     {
-        $campaign_builder = new Campaign_Builder();
+        $campaign_builder = new \IAWP\Campaign_Builder();
         return \count($campaign_builder->get_previously_created_campaigns()) > 0;
     }
     public static function delete_campaign(string $campaign_url_id)
     {
-        $campaign_urls_table = Query::get_table_name(Query::CAMPAIGN_URLS);
-        $delete_campaign = Illuminate_Builder::get_builder();
+        $campaign_urls_table = \IAWP\Query::get_table_name(\IAWP\Query::CAMPAIGN_URLS);
+        $delete_campaign = \IAWP\Illuminate_Builder::get_builder();
         $delete_campaign->from($campaign_urls_table)->where('campaign_url_id', '=', $campaign_url_id)->delete();
     }
 }

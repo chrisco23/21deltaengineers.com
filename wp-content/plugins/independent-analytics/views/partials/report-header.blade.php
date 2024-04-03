@@ -36,7 +36,7 @@
             @endif
         </div>
     @else
-        <div>
+        <div class="primary-report-title-container">
             <h1 class="report-title">{{$report->name()}}</h1>
         </div>
     @endif
@@ -51,7 +51,7 @@
                     <button id="save-report-button" 
                             data-save-report-target="button"
                             data-action="save-report#save"
-                            class="iawp-button purple">{{__('Save', 'independent-analytics')}}</button>
+                            class="save-report-button iawp-button">{{__('Save', 'independent-analytics')}}</button>
                 </div>
             @endif
 
@@ -66,7 +66,7 @@
                 <button id="save-as-report-button"
                         data-action="click->copy-report#toggleModal"
                         data-copy-report-target="modalButton"
-                        class="iawp-button purple">{{__('Save As', 'independent-analytics')}}</button>
+                        class="save-as-report-button iawp-button">{{__('Save As', 'independent-analytics')}}</button>
                 <div class="modal small" data-copy-report-target="modal">
                     <div class="modal-inner">
                         <div class="title-small">

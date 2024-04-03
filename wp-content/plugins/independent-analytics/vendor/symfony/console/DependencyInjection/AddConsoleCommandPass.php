@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\DependencyInjection;
+namespace IAWPSCOPED\Symfony\Component\Console\DependencyInjection;
 
-use IAWP_SCOPED\Symfony\Component\Console\Command\Command;
-use IAWP_SCOPED\Symfony\Component\Console\Command\LazyCommand;
-use IAWP_SCOPED\Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
-use IAWP_SCOPED\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use IAWP_SCOPED\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use IAWP_SCOPED\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
-use IAWP_SCOPED\Symfony\Component\DependencyInjection\ContainerBuilder;
-use IAWP_SCOPED\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\DependencyInjection\Reference;
-use IAWP_SCOPED\Symfony\Component\DependencyInjection\TypedReference;
+use IAWPSCOPED\Symfony\Component\Console\Command\Command;
+use IAWPSCOPED\Symfony\Component\Console\Command\LazyCommand;
+use IAWPSCOPED\Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
+use IAWPSCOPED\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use IAWPSCOPED\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use IAWPSCOPED\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
+use IAWPSCOPED\Symfony\Component\DependencyInjection\ContainerBuilder;
+use IAWPSCOPED\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\DependencyInjection\Reference;
+use IAWPSCOPED\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * Registers console commands.
  *

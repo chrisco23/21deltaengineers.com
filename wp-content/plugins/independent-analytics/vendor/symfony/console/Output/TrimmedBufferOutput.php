@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Output;
+namespace IAWPSCOPED\Symfony\Component\Console\Output;
 
-use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use IAWPSCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * A BufferedOutput that keeps only the last N chars.
  *
@@ -22,7 +22,7 @@ class TrimmedBufferOutput extends Output
 {
     private $maxLength;
     private $buffer = '';
-    public function __construct(int $maxLength, ?int $verbosity = self::VERBOSITY_NORMAL, bool $decorated = \false, OutputFormatterInterface $formatter = null)
+    public function __construct(int $maxLength, ?int $verbosity = self::VERBOSITY_NORMAL, bool $decorated = \false, ?OutputFormatterInterface $formatter = null)
     {
         if ($maxLength <= 0) {
             throw new InvalidArgumentException(\sprintf('"%s()" expects a strictly positive maxLength. Got %d.', __METHOD__, $maxLength));

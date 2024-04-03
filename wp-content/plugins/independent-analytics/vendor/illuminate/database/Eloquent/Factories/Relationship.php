@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Factories;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Factories;
 
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\HasOneOrMany;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 /** @internal */
 class Relationship
 {

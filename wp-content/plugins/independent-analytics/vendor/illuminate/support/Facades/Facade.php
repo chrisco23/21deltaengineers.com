@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
 use Closure;
-use IAWP_SCOPED\Mockery;
-use IAWP_SCOPED\Mockery\LegacyMockInterface;
+use IAWPSCOPED\Mockery;
+use IAWPSCOPED\Mockery\LegacyMockInterface;
 use RuntimeException;
 /** @internal */
 abstract class Facade

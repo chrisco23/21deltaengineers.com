@@ -1,13 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\MaxMind\Db\Reader;
+namespace IAWPSCOPED\MaxMind\Db\Reader;
 
 /** @internal */
 class Util
 {
     /**
-     * @param resource $stream
+     * @param resource    $stream
+     * @param int<0, max> $numberOfBytes
      */
     public static function read($stream, int $offset, int $numberOfBytes) : string
     {

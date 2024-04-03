@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console\Seeds;
+namespace IAWPSCOPED\Illuminate\Database\Console\Seeds;
 
-use IAWP_SCOPED\Illuminate\Console\GeneratorCommand;
+use IAWPSCOPED\Illuminate\Console\GeneratorCommand;
 /** @internal */
 class SeederMakeCommand extends GeneratorCommand
 {

@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri\UriTemplate;
+namespace IAWPSCOPED\League\Uri\UriTemplate;
 
-use IAWP_SCOPED\League\Uri\Exceptions\SyntaxError;
-use IAWP_SCOPED\League\Uri\Exceptions\TemplateCanNotBeExpanded;
+use IAWPSCOPED\League\Uri\Exceptions\SyntaxError;
+use IAWPSCOPED\League\Uri\Exceptions\TemplateCanNotBeExpanded;
 use function array_filter;
 use function array_keys;
 use function array_map;

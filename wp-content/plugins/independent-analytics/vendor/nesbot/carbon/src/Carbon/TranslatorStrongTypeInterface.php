@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon;
+namespace IAWPSCOPED\Carbon;
 
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogueInterface;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogueInterface;
 /**
  * Mark translator using strong type from symfony/translation >= 6.
  * @internal

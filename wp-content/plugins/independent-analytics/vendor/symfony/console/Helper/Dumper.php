@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Helper;
+namespace IAWPSCOPED\Symfony\Component\Console\Helper;
 
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
-use IAWP_SCOPED\Symfony\Component\VarDumper\Cloner\ClonerInterface;
-use IAWP_SCOPED\Symfony\Component\VarDumper\Cloner\VarCloner;
-use IAWP_SCOPED\Symfony\Component\VarDumper\Dumper\CliDumper;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\VarDumper\Cloner\ClonerInterface;
+use IAWPSCOPED\Symfony\Component\VarDumper\Cloner\VarCloner;
+use IAWPSCOPED\Symfony\Component\VarDumper\Dumper\CliDumper;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  * @internal
@@ -24,7 +24,7 @@ final class Dumper
     private $dumper;
     private $cloner;
     private $handler;
-    public function __construct(OutputInterface $output, CliDumper $dumper = null, ClonerInterface $cloner = null)
+    public function __construct(OutputInterface $output, ?CliDumper $dumper = null, ?ClonerInterface $cloner = null)
     {
         $this->output = $output;
         $this->dumper = $dumper;

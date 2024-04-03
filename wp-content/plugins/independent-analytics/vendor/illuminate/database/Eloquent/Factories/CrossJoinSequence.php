@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Factories;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Factories;
 
-use IAWP_SCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Arr;
 /** @internal */
 class CrossJoinSequence extends Sequence
 {

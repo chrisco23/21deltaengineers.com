@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Capability_Manager;
-use IAWP_SCOPED\IAWP\Date_Range\Exact_Date_Range;
-use IAWP_SCOPED\IAWP\Rows\Countries;
-use IAWP_SCOPED\IAWP\Tables\Table_Geo;
+use IAWP\Capability_Manager;
+use IAWP\Date_Range\Exact_Date_Range;
+use IAWP\Rows\Countries;
+use IAWP\Tables\Table_Geo;
 /** @internal */
-class Export_Geo extends AJAX
+class Export_Geo extends \IAWP\AJAX\AJAX
 {
     protected function action_name() : string
     {

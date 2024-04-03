@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Query\Grammars;
+namespace IAWPSCOPED\Illuminate\Database\Query\Grammars;
 
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 class MySqlGrammar extends Grammar
 {
@@ -141,7 +141,7 @@ class MySqlGrammar extends Grammar
      */
     protected function compileUpdateColumns(Builder $query, array $values)
     {
-        return \IAWP_SCOPED\collect($values)->map(function ($value, $key) {
+        return \IAWPSCOPED\collect($values)->map(function ($value, $key) {
             if ($this->isJsonSelector($key)) {
                 return $this->compileJsonUpdateColumn($key, $value);
             }
@@ -160,7 +160,7 @@ class MySqlGrammar extends Grammar
     public function compileUpsert(Builder $query, array $values, array $uniqueBy, array $update)
     {
         $sql = $this->compileInsert($query, $values) . ' on duplicate key update ';
-        $columns = \IAWP_SCOPED\collect($update)->map(function ($value, $key) {
+        $columns = \IAWPSCOPED\collect($update)->map(function ($value, $key) {
             return \is_numeric($key) ? $this->wrap($value) . ' = values(' . $this->wrap($value) . ')' : $this->wrap($key) . ' = ' . $this->parameter($value);
         })->implode(', ');
         return $sql . $columns;
@@ -215,7 +215,7 @@ class MySqlGrammar extends Grammar
      */
     public function prepareBindingsForUpdate(array $bindings, array $values)
     {
-        $values = \IAWP_SCOPED\collect($values)->reject(function ($value, $column) {
+        $values = \IAWPSCOPED\collect($values)->reject(function ($value, $column) {
             return $this->isJsonSelector($column) && \is_bool($value);
         })->map(function ($value) {
             return \is_array($value) ? \json_encode($value) : $value;

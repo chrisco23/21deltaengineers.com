@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Query\Grammars;
+namespace IAWPSCOPED\Illuminate\Database\Query\Grammars;
 
-use IAWP_SCOPED\Illuminate\Database\Grammar as BaseGrammar;
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
-use IAWP_SCOPED\Illuminate\Database\Query\JoinClause;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Database\Grammar as BaseGrammar;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
+use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Str;
 use RuntimeException;
 /** @internal */
 class Grammar extends BaseGrammar
@@ -136,7 +136,7 @@ class Grammar extends BaseGrammar
      */
     protected function compileJoins(Builder $query, $joins)
     {
-        return \IAWP_SCOPED\collect($joins)->map(function ($join) use($query) {
+        return \IAWPSCOPED\collect($joins)->map(function ($join) use($query) {
             $table = $this->wrapTable($join->table);
             $nestedJoins = \is_null($join->joins) ? '' : ' ' . $this->compileJoins($query, $join->joins);
             $tableAndNestedJoins = \is_null($join->joins) ? $table : '(' . $table . $nestedJoins . ')';
@@ -173,7 +173,7 @@ class Grammar extends BaseGrammar
      */
     protected function compileWheresToArray($query)
     {
-        return \IAWP_SCOPED\collect($query->wheres)->map(function ($where) use($query) {
+        return \IAWPSCOPED\collect($query->wheres)->map(function ($where) use($query) {
             return $where['boolean'] . ' ' . $this->{"where{$where['type']}"}($query, $where);
         })->all();
     }
@@ -775,7 +775,7 @@ class Grammar extends BaseGrammar
         // We need to build a list of parameter place-holders of values that are bound
         // to the query. Each insert should have the exact same amount of parameter
         // bindings so we will loop through the record and parameterize them all.
-        $parameters = \IAWP_SCOPED\collect($values)->map(function ($record) {
+        $parameters = \IAWPSCOPED\collect($values)->map(function ($record) {
             return '(' . $this->parameterize($record) . ')';
         })->implode(', ');
         return "insert into {$table} ({$columns}) values {$parameters}";
@@ -840,7 +840,7 @@ class Grammar extends BaseGrammar
      */
     protected function compileUpdateColumns(Builder $query, array $values)
     {
-        return \IAWP_SCOPED\collect($values)->map(function ($value, $key) {
+        return \IAWPSCOPED\collect($values)->map(function ($value, $key) {
             return $this->wrap($key) . ' = ' . $this->parameter($value);
         })->implode(', ');
     }

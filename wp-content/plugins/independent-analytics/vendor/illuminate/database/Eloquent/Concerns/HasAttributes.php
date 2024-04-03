@@ -1,26 +1,26 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Concerns;
 
-use IAWP_SCOPED\Carbon\CarbonImmutable;
-use IAWP_SCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonImmutable;
+use IAWPSCOPED\Carbon\CarbonInterface;
 use DateTimeInterface;
-use IAWP_SCOPED\Illuminate\Contracts\Database\Eloquent\Castable;
-use IAWP_SCOPED\Illuminate\Contracts\Database\Eloquent\CastsInboundAttributes;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Casts\AsArrayObject;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Casts\AsCollection;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Casts\Attribute;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\InvalidCastException;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\JsonEncodingException;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Relation;
-use IAWP_SCOPED\Illuminate\Database\LazyLoadingViolationException;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Carbon;
-use IAWP_SCOPED\Illuminate\Support\Collection as BaseCollection;
-use IAWP_SCOPED\Illuminate\Support\Facades\Crypt;
-use IAWP_SCOPED\Illuminate\Support\Facades\Date;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Contracts\Database\Eloquent\Castable;
+use IAWPSCOPED\Illuminate\Contracts\Database\Eloquent\CastsInboundAttributes;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Casts\AsArrayObject;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Casts\AsCollection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Casts\Attribute;
+use IAWPSCOPED\Illuminate\Database\Eloquent\InvalidCastException;
+use IAWPSCOPED\Illuminate\Database\Eloquent\JsonEncodingException;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Relation;
+use IAWPSCOPED\Illuminate\Database\LazyLoadingViolationException;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Carbon;
+use IAWPSCOPED\Illuminate\Support\Collection as BaseCollection;
+use IAWPSCOPED\Illuminate\Support\Facades\Crypt;
+use IAWPSCOPED\Illuminate\Support\Facades\Date;
+use IAWPSCOPED\Illuminate\Support\Str;
 use InvalidArgumentException;
 use LogicException;
 use ReflectionClass;
@@ -1401,7 +1401,7 @@ trait HasAttributes
         if ($key) {
             return $this->transformModelValue($key, Arr::get($this->original, $key, $default));
         }
-        return \IAWP_SCOPED\collect($this->original)->mapWithKeys(function ($value, $key) {
+        return \IAWPSCOPED\collect($this->original)->mapWithKeys(function ($value, $key) {
             return [$key => $this->transformModelValue($key, $value)];
         })->all();
     }
@@ -1671,10 +1671,10 @@ trait HasAttributes
      */
     public static function cacheMutatedAttributes($class)
     {
-        static::$getAttributeMutatorCache[$class] = \IAWP_SCOPED\collect($attributeMutatorMethods = static::getAttributeMarkedMutatorMethods($class))->mapWithKeys(function ($match) {
+        static::$getAttributeMutatorCache[$class] = \IAWPSCOPED\collect($attributeMutatorMethods = static::getAttributeMarkedMutatorMethods($class))->mapWithKeys(function ($match) {
             return [\lcfirst(static::$snakeAttributes ? Str::snake($match) : $match) => \true];
         })->all();
-        static::$mutatorCache[$class] = \IAWP_SCOPED\collect(static::getMutatorMethods($class))->merge($attributeMutatorMethods)->map(function ($match) {
+        static::$mutatorCache[$class] = \IAWPSCOPED\collect(static::getMutatorMethods($class))->merge($attributeMutatorMethods)->map(function ($match) {
             return \lcfirst(static::$snakeAttributes ? Str::snake($match) : $match);
         })->all();
     }
@@ -1698,7 +1698,7 @@ trait HasAttributes
     protected static function getAttributeMarkedMutatorMethods($class)
     {
         $instance = \is_object($class) ? $class : new $class();
-        return \IAWP_SCOPED\collect((new ReflectionClass($instance))->getMethods())->filter(function ($method) use($instance) {
+        return \IAWPSCOPED\collect((new ReflectionClass($instance))->getMethods())->filter(function ($method) use($instance) {
             $returnType = $method->getReturnType();
             if ($returnType && $returnType instanceof ReflectionNamedType && $returnType->getName() === Attribute::class) {
                 $method->setAccessible(\true);

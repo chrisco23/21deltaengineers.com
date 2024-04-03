@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
 /** @internal */
-class Page_Post_Type_Archive extends Page
+class Page_Post_Type_Archive extends \IAWP\Models\Page
 {
     private $post_type;
     public function __construct($row)

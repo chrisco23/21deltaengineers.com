@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\MessageFormatter;
+namespace IAWPSCOPED\Carbon\MessageFormatter;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Formatter\ChoiceMessageFormatterInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Formatter\ChoiceMessageFormatterInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
 if (!\class_exists(LazyMessageFormatter::class, \false)) {
     /** @internal */
     abstract class LazyMessageFormatter implements MessageFormatterInterface, ChoiceMessageFormatterInterface

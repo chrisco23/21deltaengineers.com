@@ -1,31 +1,38 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
-use  IAWP_SCOPED\eftec\bladeone\BladeOne ;
-use  IAWP_SCOPED\IAWP\Dashboard_Options ;
-use  IAWP_SCOPED\IAWP\Date_Range\Exact_Date_Range ;
-use  IAWP_SCOPED\IAWP\Env ;
-use  IAWP_SCOPED\IAWP\Geo_Database_Background_Job ;
-use  IAWP_SCOPED\IAWP\Independent_Analytics ;
-use  IAWP_SCOPED\IAWP\Interrupt ;
-use  IAWP_SCOPED\IAWP\Migrations ;
-use  IAWP_SCOPED\IAWP\Public_API\Analytics ;
-use  IAWP_SCOPED\IAWP\Public_API\Singular_Analytics ;
-use  IAWP_SCOPED\IAWP\WP_Option_Cache_Bust ;
+use  IAWP\Dashboard_Options ;
+use  IAWP\Database ;
+use  IAWP\Database_Manager ;
+use  IAWP\Date_Range\Exact_Date_Range ;
+use  IAWP\Env ;
+use  IAWP\Geo_Database_Background_Job ;
+use  IAWP\Independent_Analytics ;
+use  IAWP\Interrupt ;
+use  IAWP\Migrations ;
+use  IAWP\Public_API\Analytics ;
+use  IAWP\Public_API\Singular_Analytics ;
+use  IAWP\Utils\BladeOne ;
+use  IAWP\WP_Option_Cache_Bust ;
 \define( 'IAWP_DIRECTORY', \rtrim( \plugin_dir_path( __FILE__ ), \DIRECTORY_SEPARATOR ) );
 \define( 'IAWP_URL', \rtrim( \plugin_dir_url( __FILE__ ), '/' ) );
-\define( 'IAWP_VERSION', '2.1.6' );
-\define( 'IAWP_SCOPED\\IAWP_DATABASE_VERSION', '26' );
+\define( 'IAWP_VERSION', '2.3.2' );
+\define( 'IAWP_DATABASE_VERSION', '27' );
 \define( 'IAWP_LANGUAGES_DIRECTORY', \dirname( \plugin_basename( __FILE__ ) ) . '/languages' );
-\define( 'IAWP_SCOPED\\IAWP_PLUGIN_FILE', __DIR__ . '/iawp.php' );
+\define( 'IAWP_PLUGIN_FILE', __DIR__ . '/iawp.php' );
 
-if ( \file_exists( \IAWP_SCOPED\iawp_path_to( 'vendor/scoper-autoload.php' ) ) ) {
-    require_once \IAWP_SCOPED\iawp_path_to( 'vendor/scoper-autoload.php' );
+if ( \file_exists( \IAWPSCOPED\iawp_path_to( 'vendor/scoper-autoload.php' ) ) ) {
+    require_once \IAWPSCOPED\iawp_path_to( 'vendor/scoper-autoload.php' );
 } else {
-    require_once \IAWP_SCOPED\iawp_path_to( 'vendor/autoload.php' );
+    require_once \IAWPSCOPED\iawp_path_to( 'vendor/autoload.php' );
 }
 
+// This is needed because something with age gate is preventing my own helpers from loading
+// The problem is that in autoload_static.php, there's some sort of caching going on where it's trying
+// to not load a file twice. I'm guessing that's normally a good thing, but in our case we've made changes (scoped)
+// so we do indeed want to load our version even though age gate has alreawdy learned
+require_once \IAWPSCOPED\iawp_path_to( 'vendor/illuminate/collections/helpers.php' );
 /**
  * @param $log
  *
@@ -65,10 +72,10 @@ function iawp_path_to( string $path ) : string
  */
 function iawp_temp_path_to( string $path ) : string
 {
-    $temp_directory = \apply_filters( 'iawp_temp_directory_path', 'temp' );
+    $temp_directory = ( \defined( 'IAWP_TEMP_DIR' ) ? \IAWP_TEMP_DIR : \apply_filters( 'iawp_temp_directory_path', 'temp' ) );
     $path = \rtrim( $path, \DIRECTORY_SEPARATOR );
     if ( $temp_directory === 'temp' ) {
-        return \IAWP_SCOPED\iawp_path_to( \implode( \DIRECTORY_SEPARATOR, [ $temp_directory, $path ] ) );
+        return \IAWPSCOPED\iawp_path_to( \implode( \DIRECTORY_SEPARATOR, [ $temp_directory, $path ] ) );
     }
     $temp_directory = \rtrim( $temp_directory, \DIRECTORY_SEPARATOR );
     if ( !\is_writable( $temp_directory ) ) {
@@ -113,7 +120,7 @@ function iawp_is_pro() : bool
  */
 function iawp_is_free() : bool
 {
-    return !\IAWP_SCOPED\iawp_is_pro();
+    return !\IAWPSCOPED\iawp_is_pro();
 }
 
 /**
@@ -124,7 +131,7 @@ function iawp_is_free() : bool
 function iawp_using_woocommerce() : bool
 {
     global  $wpdb ;
-    if ( \IAWP_SCOPED\iawp_is_free() ) {
+    if ( \IAWPSCOPED\iawp_is_free() ) {
         return \false;
     }
     $class_missing = \class_exists( '\\WooCommerce' ) === \false;
@@ -152,14 +159,25 @@ function iawp_dashboard_url( array $query_arguments = [] ) : string
 }
 
 /** @internal */
-function iawp_blade() : BladeOne
+function iawp_blade()
 {
-    if ( !\file_exists( \IAWP_SCOPED\iawp_temp_path_to( 'template-cache' ) ) ) {
-        \wp_mkdir_p( \IAWP_SCOPED\iawp_temp_path_to( 'template-cache' ) );
+    if ( !\file_exists( \IAWPSCOPED\iawp_temp_path_to( 'template-cache' ) ) ) {
+        \wp_mkdir_p( \IAWPSCOPED\iawp_temp_path_to( 'template-cache' ) );
     }
-    $blade = new BladeOne( \IAWP_SCOPED\iawp_path_to( 'views' ), \IAWP_SCOPED\iawp_temp_path_to( 'template-cache' ) );
+    $blade = BladeOne::create();
     $blade->share( 'env', new Env() );
     return $blade;
+}
+
+/**
+ * Get the currently installed database version
+ *
+ * @return int
+ * @internal
+ */
+function iawp_db_version() : int
+{
+    return \intval( \get_option( 'iawp_db_version', '0' ) );
 }
 
 /**
@@ -195,7 +213,7 @@ function iawp_analytics( \DateTime $from, \DateTime $to ) : Analytics
 
 
 if ( !\extension_loaded( 'pdo' ) || !\extension_loaded( 'pdo_mysql' ) ) {
-    $interrupt = new Interrupt( 'interrupt.pdo', \false );
+    $interrupt = new Interrupt( 'interrupt.pdo' );
     $interrupt->render();
     return;
 }
@@ -203,7 +221,7 @@ if ( !\extension_loaded( 'pdo' ) || !\extension_loaded( 'pdo_mysql' ) ) {
 global  $wpdb ;
 
 if ( \strlen( $wpdb->prefix ) > 25 ) {
-    $interrupt = new Interrupt( 'interrupt.database-prefix-too-long', \false );
+    $interrupt = new Interrupt( 'interrupt.database-prefix-too-long' );
     $interrupt->render( [
         'prefix' => $wpdb->prefix,
         'length' => \strlen( $wpdb->prefix ),
@@ -213,7 +231,23 @@ if ( \strlen( $wpdb->prefix ) > 25 ) {
 
 
 if ( Migrations\Migrations::is_database_ahead_of_plugin() ) {
-    $interrupt = new Interrupt( 'interrupt.database-ahead-of-plugin', \false );
+    $interrupt = new Interrupt( 'interrupt.database-ahead-of-plugin' );
+    $interrupt->render();
+    return;
+}
+
+
+if ( \IAWPSCOPED\iawp_db_version() === 0 && !Database::has_correct_database_privileges() ) {
+    $interrupt = new Interrupt( 'interrupt.missing-database-permissions' );
+    $interrupt->render( [
+        'missing_privileges' => Database::missing_database_privileges(),
+    ] );
+    return;
+}
+
+
+if ( \is_admin() && \IAWPSCOPED\iawp_db_version() > 0 && Database::is_missing_all_tables() ) {
+    $interrupt = new Interrupt( 'interrupt.missing-database-tables' );
     $interrupt->render();
     return;
 }
@@ -228,10 +262,10 @@ function iawp()
     return Independent_Analytics::getInstance();
 }
 
-\IAWP_SCOPED\iawp();
-\register_activation_hook( \IAWP_SCOPED\IAWP_PLUGIN_FILE, function () {
-    \wp_mkdir_p( \IAWP_SCOPED\iawp_temp_path_to( 'template-cache' ) );
-    \wp_mkdir_p( \IAWP_SCOPED\iawp_temp_path_to( 'device-data-cache' ) );
+\IAWPSCOPED\iawp();
+\register_activation_hook( \IAWP_PLUGIN_FILE, function () {
+    \wp_mkdir_p( \IAWPSCOPED\iawp_temp_path_to( 'template-cache' ) );
+    \wp_mkdir_p( \IAWPSCOPED\iawp_temp_path_to( 'device-data-cache' ) );
     
     if ( \get_option( 'iawp_db_version', '0' ) === '0' ) {
         // If there is no database installed, run migration on current process
@@ -243,15 +277,17 @@ function iawp()
     
     Geo_Database_Background_Job::maybe_dispatch();
     \update_option( 'iawp_need_clear_cache', \true );
-    \IAWP_SCOPED\iawp()->cron_manager->schedule_refresh_salt();
-    if ( \IAWP_SCOPED\iawp_is_pro() ) {
-        \IAWP_SCOPED\iawp()->email_reports->schedule_email_report();
+    \IAWPSCOPED\iawp()->cron_manager->schedule_refresh_salt();
+    if ( \IAWPSCOPED\iawp_is_pro() ) {
+        \IAWPSCOPED\iawp()->email_reports->schedule_email_report();
     }
+    // Set current version for changelog notifications
+    \update_option( 'iawp_last_update_viewed', \IAWP_VERSION );
 } );
-\register_deactivation_hook( \IAWP_SCOPED\IAWP_PLUGIN_FILE, function () {
-    \IAWP_SCOPED\iawp()->cron_manager->unschedule_daily_salt_refresh();
-    if ( \IAWP_SCOPED\iawp_is_pro() ) {
-        \IAWP_SCOPED\iawp()->email_reports->unschedule_email_report();
+\register_deactivation_hook( \IAWP_PLUGIN_FILE, function () {
+    \IAWPSCOPED\iawp()->cron_manager->unschedule_daily_salt_refresh();
+    if ( \IAWPSCOPED\iawp_is_pro() ) {
+        \IAWPSCOPED\iawp()->email_reports->unschedule_email_report();
     }
     \wp_delete_file( \trailingslashit( \WPMU_PLUGIN_DIR ) . 'iawp-performance-boost.php' );
     \delete_option( 'iawp_must_use_directory_not_writable' );

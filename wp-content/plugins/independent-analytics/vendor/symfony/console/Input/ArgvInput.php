@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Input;
+namespace IAWPSCOPED\Symfony\Component\Console\Input;
 
-use IAWP_SCOPED\Symfony\Component\Console\Exception\RuntimeException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\RuntimeException;
 /**
  * ArgvInput represents an input coming from the CLI arguments.
  *
@@ -41,7 +41,7 @@ class ArgvInput extends Input
 {
     private $tokens;
     private $parsed;
-    public function __construct(array $argv = null, InputDefinition $definition = null)
+    public function __construct(?array $argv = null, ?InputDefinition $definition = null)
     {
         $argv = $argv ?? $_SERVER['argv'] ?? [];
         // strip the application name

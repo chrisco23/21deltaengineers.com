@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Migrations;
+namespace IAWP\Migrations;
 
-use IAWP_SCOPED\IAWP\Utils\Dir;
+use IAWP\Utils\Dir;
 /** @internal */
-class Migration_18 extends Migration
+class Migration_18 extends \IAWP\Migrations\Migration
 {
     /**
      * @inheritdoc

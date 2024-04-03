@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console;
+namespace IAWPSCOPED\Symfony\Component\Console;
 
-use IAWP_SCOPED\Symfony\Component\Console\Event\ConsoleCommandEvent;
-use IAWP_SCOPED\Symfony\Component\Console\Event\ConsoleErrorEvent;
-use IAWP_SCOPED\Symfony\Component\Console\Event\ConsoleSignalEvent;
-use IAWP_SCOPED\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use IAWPSCOPED\Symfony\Component\Console\Event\ConsoleCommandEvent;
+use IAWPSCOPED\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use IAWPSCOPED\Symfony\Component\Console\Event\ConsoleSignalEvent;
+use IAWPSCOPED\Symfony\Component\Console\Event\ConsoleTerminateEvent;
 /**
  * Contains all events dispatched by an Application.
  *

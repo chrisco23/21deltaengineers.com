@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\EventListener;
+namespace IAWPSCOPED\Symfony\Component\Console\EventListener;
 
-use IAWP_SCOPED\Psr\Log\LoggerInterface;
-use IAWP_SCOPED\Symfony\Component\Console\ConsoleEvents;
-use IAWP_SCOPED\Symfony\Component\Console\Event\ConsoleErrorEvent;
-use IAWP_SCOPED\Symfony\Component\Console\Event\ConsoleEvent;
-use IAWP_SCOPED\Symfony\Component\Console\Event\ConsoleTerminateEvent;
-use IAWP_SCOPED\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use IAWPSCOPED\Psr\Log\LoggerInterface;
+use IAWPSCOPED\Symfony\Component\Console\ConsoleEvents;
+use IAWPSCOPED\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use IAWPSCOPED\Symfony\Component\Console\Event\ConsoleEvent;
+use IAWPSCOPED\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use IAWPSCOPED\Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * @author James Halsall <james.t.halsall@googlemail.com>
  * @author Robin Chalas <robin.chalas@gmail.com>
@@ -24,7 +24,7 @@ use IAWP_SCOPED\Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class ErrorListener implements EventSubscriberInterface
 {
     private $logger;
-    public function __construct(LoggerInterface $logger = null)
+    public function __construct(?LoggerInterface $logger = null)
     {
         $this->logger = $logger;
     }

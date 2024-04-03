@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Inflector\Rules;
+namespace IAWPSCOPED\Doctrine\Inflector\Rules;
 
 /** @internal */
 class Word

@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Traits;
+namespace IAWPSCOPED\Illuminate\Support\Traits;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Support\Reflector;
+use IAWPSCOPED\Illuminate\Support\Reflector;
 use ReflectionFunction;
 use RuntimeException;
 /** @internal */
@@ -41,7 +41,7 @@ trait ReflectsClosures
     protected function firstClosureParameterTypes(Closure $closure)
     {
         $reflection = new ReflectionFunction($closure);
-        $types = \IAWP_SCOPED\collect($reflection->getParameters())->mapWithKeys(function ($parameter) {
+        $types = \IAWPSCOPED\collect($reflection->getParameters())->mapWithKeys(function ($parameter) {
             if ($parameter->isVariadic()) {
                 return [$parameter->getName() => null];
             }
@@ -66,7 +66,7 @@ trait ReflectsClosures
     protected function closureParameterTypes(Closure $closure)
     {
         $reflection = new ReflectionFunction($closure);
-        return \IAWP_SCOPED\collect($reflection->getParameters())->mapWithKeys(function ($parameter) {
+        return \IAWPSCOPED\collect($reflection->getParameters())->mapWithKeys(function ($parameter) {
             if ($parameter->isVariadic()) {
                 return [$parameter->getName() => null];
             }

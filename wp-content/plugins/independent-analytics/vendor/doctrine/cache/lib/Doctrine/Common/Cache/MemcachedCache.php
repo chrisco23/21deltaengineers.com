@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache;
+namespace IAWPSCOPED\Doctrine\Common\Cache;
 
 use Memcached;
 use function array_keys;

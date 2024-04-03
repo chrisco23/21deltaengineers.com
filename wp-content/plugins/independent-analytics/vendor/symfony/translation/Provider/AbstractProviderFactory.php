@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Provider;
+namespace IAWPSCOPED\Symfony\Component\Translation\Provider;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\IncompleteDsnException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\IncompleteDsnException;
 /** @internal */
 abstract class AbstractProviderFactory implements ProviderFactoryInterface
 {
@@ -25,7 +25,7 @@ abstract class AbstractProviderFactory implements ProviderFactoryInterface
     protected function getUser(Dsn $dsn) : string
     {
         if (null === ($user = $dsn->getUser())) {
-            throw new IncompleteDsnException('User is not set.', $dsn->getOriginalDsn());
+            throw new IncompleteDsnException('User is not set.', $dsn->getScheme() . '://' . $dsn->getHost());
         }
         return $user;
     }

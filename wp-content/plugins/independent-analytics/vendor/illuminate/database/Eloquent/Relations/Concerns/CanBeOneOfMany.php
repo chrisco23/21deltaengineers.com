@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Builder;
-use IAWP_SCOPED\Illuminate\Database\Query\JoinClause;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Builder;
+use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Str;
 use InvalidArgumentException;
 /** @internal */
 trait CanBeOneOfMany
@@ -109,7 +109,7 @@ trait CanBeOneOfMany
      */
     public function latestOfMany($column = 'id', $relation = null)
     {
-        return $this->ofMany(\IAWP_SCOPED\collect(Arr::wrap($column))->mapWithKeys(function ($column) {
+        return $this->ofMany(\IAWPSCOPED\collect(Arr::wrap($column))->mapWithKeys(function ($column) {
             return [$column => 'MAX'];
         })->all(), 'MAX', $relation);
     }
@@ -123,7 +123,7 @@ trait CanBeOneOfMany
      */
     public function oldestOfMany($column = 'id', $relation = null)
     {
-        return $this->ofMany(\IAWP_SCOPED\collect(Arr::wrap($column))->mapWithKeys(function ($column) {
+        return $this->ofMany(\IAWPSCOPED\collect(Arr::wrap($column))->mapWithKeys(function ($column) {
             return [$column => 'MIN'];
         })->all(), 'MIN', $relation);
     }

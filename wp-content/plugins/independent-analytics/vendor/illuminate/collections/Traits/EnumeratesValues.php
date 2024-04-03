@@ -1,19 +1,19 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Traits;
+namespace IAWPSCOPED\Illuminate\Support\Traits;
 
 use CachingIterator;
 use Closure;
 use Exception;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Jsonable;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Collection;
-use IAWP_SCOPED\Illuminate\Support\Enumerable;
-use IAWP_SCOPED\Illuminate\Support\HigherOrderCollectionProxy;
-use IAWP_SCOPED\Illuminate\Support\HigherOrderWhenProxy;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Jsonable;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Support\Enumerable;
+use IAWPSCOPED\Illuminate\Support\HigherOrderCollectionProxy;
+use IAWPSCOPED\Illuminate\Support\HigherOrderWhenProxy;
 use JsonSerializable;
-use IAWP_SCOPED\Symfony\Component\VarDumper\VarDumper;
+use IAWPSCOPED\Symfony\Component\VarDumper\VarDumper;
 use Traversable;
 use UnexpectedValueException;
 use UnitEnum;

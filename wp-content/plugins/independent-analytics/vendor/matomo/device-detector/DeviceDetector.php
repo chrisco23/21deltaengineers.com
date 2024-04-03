@@ -8,32 +8,32 @@
  * @license http://www.gnu.org/licenses/lgpl.html LGPL v3 or later
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\DeviceDetector;
+namespace IAWPSCOPED\DeviceDetector;
 
-use IAWP_SCOPED\DeviceDetector\Cache\CacheInterface;
-use IAWP_SCOPED\DeviceDetector\Cache\StaticCache;
-use IAWP_SCOPED\DeviceDetector\Parser\AbstractBotParser;
-use IAWP_SCOPED\DeviceDetector\Parser\Bot;
-use IAWP_SCOPED\DeviceDetector\Parser\Client\AbstractClientParser;
-use IAWP_SCOPED\DeviceDetector\Parser\Client\Browser;
-use IAWP_SCOPED\DeviceDetector\Parser\Client\FeedReader;
-use IAWP_SCOPED\DeviceDetector\Parser\Client\Library;
-use IAWP_SCOPED\DeviceDetector\Parser\Client\MediaPlayer;
-use IAWP_SCOPED\DeviceDetector\Parser\Client\MobileApp;
-use IAWP_SCOPED\DeviceDetector\Parser\Client\PIM;
-use IAWP_SCOPED\DeviceDetector\Parser\Device\AbstractDeviceParser;
-use IAWP_SCOPED\DeviceDetector\Parser\Device\Camera;
-use IAWP_SCOPED\DeviceDetector\Parser\Device\CarBrowser;
-use IAWP_SCOPED\DeviceDetector\Parser\Device\Console;
-use IAWP_SCOPED\DeviceDetector\Parser\Device\HbbTv;
-use IAWP_SCOPED\DeviceDetector\Parser\Device\Mobile;
-use IAWP_SCOPED\DeviceDetector\Parser\Device\Notebook;
-use IAWP_SCOPED\DeviceDetector\Parser\Device\PortableMediaPlayer;
-use IAWP_SCOPED\DeviceDetector\Parser\Device\ShellTv;
-use IAWP_SCOPED\DeviceDetector\Parser\OperatingSystem;
-use IAWP_SCOPED\DeviceDetector\Parser\VendorFragment;
-use IAWP_SCOPED\DeviceDetector\Yaml\ParserInterface as YamlParser;
-use IAWP_SCOPED\DeviceDetector\Yaml\Spyc;
+use IAWPSCOPED\DeviceDetector\Cache\CacheInterface;
+use IAWPSCOPED\DeviceDetector\Cache\StaticCache;
+use IAWPSCOPED\DeviceDetector\Parser\AbstractBotParser;
+use IAWPSCOPED\DeviceDetector\Parser\Bot;
+use IAWPSCOPED\DeviceDetector\Parser\Client\AbstractClientParser;
+use IAWPSCOPED\DeviceDetector\Parser\Client\Browser;
+use IAWPSCOPED\DeviceDetector\Parser\Client\FeedReader;
+use IAWPSCOPED\DeviceDetector\Parser\Client\Library;
+use IAWPSCOPED\DeviceDetector\Parser\Client\MediaPlayer;
+use IAWPSCOPED\DeviceDetector\Parser\Client\MobileApp;
+use IAWPSCOPED\DeviceDetector\Parser\Client\PIM;
+use IAWPSCOPED\DeviceDetector\Parser\Device\AbstractDeviceParser;
+use IAWPSCOPED\DeviceDetector\Parser\Device\Camera;
+use IAWPSCOPED\DeviceDetector\Parser\Device\CarBrowser;
+use IAWPSCOPED\DeviceDetector\Parser\Device\Console;
+use IAWPSCOPED\DeviceDetector\Parser\Device\HbbTv;
+use IAWPSCOPED\DeviceDetector\Parser\Device\Mobile;
+use IAWPSCOPED\DeviceDetector\Parser\Device\Notebook;
+use IAWPSCOPED\DeviceDetector\Parser\Device\PortableMediaPlayer;
+use IAWPSCOPED\DeviceDetector\Parser\Device\ShellTv;
+use IAWPSCOPED\DeviceDetector\Parser\OperatingSystem;
+use IAWPSCOPED\DeviceDetector\Parser\VendorFragment;
+use IAWPSCOPED\DeviceDetector\Yaml\ParserInterface as YamlParser;
+use IAWPSCOPED\DeviceDetector\Yaml\Spyc;
 /**
  * Class DeviceDetector
  *
@@ -66,7 +66,7 @@ class DeviceDetector
     /**
      * Current version number of DeviceDetector
      */
-    public const VERSION = '6.1.4';
+    public const VERSION = '6.3.0';
     /**
      * Constant used as value for unknown browser / os
      */
@@ -134,12 +134,12 @@ class DeviceDetector
     protected $skipBotDetection = \false;
     /**
      * Holds the cache class used for caching the parsed yml-Files
-     * @var CacheInterface
+     * @var CacheInterface|null
      */
     protected $cache = null;
     /**
      * Holds the parser class used for parsing yml-Files
-     * @var YamlParser
+     * @var YamlParser|null
      */
     protected $yamlParser = null;
     /**
@@ -659,13 +659,13 @@ class DeviceDetector
         return !!$this->matchUserAgent($regex);
     }
     /**
-     * Returns if the parsed UA contains the 'Desktop x64;' or 'Desktop x32;' or 'Desktop WOW64' fragment
+     * Returns if the parsed UA contains the 'Desktop;', 'Desktop x32;', 'Desktop x64;' or 'Desktop WOW64;' fragment
      *
      * @return bool
      */
     protected function hasDesktopFragment() : bool
     {
-        $regex = 'Desktop (x(?:32|64)|WOW64);';
+        $regex = 'Desktop(?: (x(?:32|64)|WOW64))?;';
         return !!$this->matchUserAgent($regex);
     }
     /**
@@ -757,10 +757,11 @@ class DeviceDetector
         $osFamily = $this->getOsAttribute('family');
         $osVersion = $this->getOsAttribute('version');
         $clientName = $this->getClientAttribute('name');
+        $appleOsNames = ['iPadOS', 'tvOS', 'watchOS', 'iOS', 'Mac'];
         /**
-         * if it's fake UA then it's best not to identify it as Apple running Android OS
+         * if it's fake UA then it's best not to identify it as Apple running Android OS or GNU/Linux
          */
-        if ('Android' === $osName && 'Apple' === $this->brand) {
+        if ('Apple' === $this->brand && !\in_array($osName, $appleOsNames)) {
             $this->device = null;
             $this->brand = '';
             $this->model = '';
@@ -768,8 +769,14 @@ class DeviceDetector
         /**
          * Assume all devices running iOS / Mac OS are from Apple
          */
-        if (empty($this->brand) && \in_array($osName, ['iPadOS', 'tvOS', 'watchOS', 'iOS', 'Mac'])) {
+        if (empty($this->brand) && \in_array($osName, $appleOsNames)) {
             $this->brand = 'Apple';
+        }
+        /**
+         * All devices containing VR fragment are assumed to be a wearable
+         */
+        if (null === $this->device && $this->matchUserAgent(' VR ')) {
+            $this->device = AbstractDeviceParser::DEVICE_TYPE_WEARABLE;
         }
         /**
          * Chrome on Android passes the device type based on the keyword 'Mobile'
@@ -779,9 +786,9 @@ class DeviceDetector
          *       a detected browser, but can still be detected. So we check the useragent for Chrome instead.
          */
         if (null === $this->device && 'Android' === $osFamily && $this->matchUserAgent('Chrome/[\\.0-9]*')) {
-            if ($this->matchUserAgent('(?:Mobile|eliboM) Safari/')) {
+            if ($this->matchUserAgent('(?:Mobile|eliboM)')) {
                 $this->device = AbstractDeviceParser::DEVICE_TYPE_SMARTPHONE;
-            } elseif ($this->matchUserAgent('(?!Mobile )Safari/')) {
+            } else {
                 $this->device = AbstractDeviceParser::DEVICE_TYPE_TABLET;
             }
         }
@@ -851,7 +858,7 @@ class DeviceDetector
         /**
          * All devices that contain Andr0id in string are assumed to be a tv
          */
-        if ($this->matchUserAgent('Andr0id|Android TV|\\(lite\\) TV')) {
+        if ($this->matchUserAgent('Andr0id|(?:Android(?: UHD)?|Google) TV|\\(lite\\) TV|BRAVIA')) {
             $this->device = AbstractDeviceParser::DEVICE_TYPE_TV;
         }
         /**
@@ -861,9 +868,9 @@ class DeviceDetector
             $this->device = AbstractDeviceParser::DEVICE_TYPE_TV;
         }
         /**
-         * Devices running Kylo or Espital TV Browsers are assumed to be a TV
+         * Devices running those clients are assumed to be a TV
          */
-        if (null === $this->device && \in_array($clientName, ['Kylo', 'Espial TV Browser'])) {
+        if (\in_array($clientName, ['Kylo', 'Espial TV Browser', 'LUJO TV Browser', 'LogicUI TV Browser', 'Open TV Browser', 'Seraphic Sraf', 'Opera Devices', 'Crow Browser', 'Vewd Browser', 'TiviMate', 'Quick Search TV'])) {
             $this->device = AbstractDeviceParser::DEVICE_TYPE_TV;
         }
         /**

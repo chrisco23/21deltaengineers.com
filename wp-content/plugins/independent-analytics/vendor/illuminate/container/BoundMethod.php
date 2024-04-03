@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Container;
+namespace IAWPSCOPED\Illuminate\Container;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Contracts\Container\BindingResolutionException;
+use IAWPSCOPED\Illuminate\Contracts\Container\BindingResolutionException;
 use InvalidArgumentException;
 use ReflectionFunction;
 use ReflectionMethod;

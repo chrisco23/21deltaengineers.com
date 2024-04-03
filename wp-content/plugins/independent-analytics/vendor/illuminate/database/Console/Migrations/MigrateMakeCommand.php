@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console\Migrations;
+namespace IAWPSCOPED\Illuminate\Database\Console\Migrations;
 
-use IAWP_SCOPED\Illuminate\Database\Migrations\MigrationCreator;
-use IAWP_SCOPED\Illuminate\Support\Composer;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Database\Migrations\MigrationCreator;
+use IAWPSCOPED\Illuminate\Support\Composer;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 class MigrateMakeCommand extends BaseCommand
 {

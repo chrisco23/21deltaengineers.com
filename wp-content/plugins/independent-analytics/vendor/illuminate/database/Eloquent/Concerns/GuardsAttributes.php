@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Concerns;
 
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 trait GuardsAttributes
 {

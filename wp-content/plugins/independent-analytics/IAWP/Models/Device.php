@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
 /** @internal */
 class Device
 {
-    use View_Stats;
-    use WooCommerce_Stats;
+    use \IAWP\Models\View_Stats;
+    use \IAWP\Models\WooCommerce_Stats;
     private $type;
     private $os;
     private $browser;

@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Laravel;
+namespace IAWPSCOPED\Carbon\Laravel;
 
-use IAWP_SCOPED\Carbon\Carbon;
-use IAWP_SCOPED\Carbon\CarbonImmutable;
-use IAWP_SCOPED\Carbon\CarbonInterval;
-use IAWP_SCOPED\Carbon\CarbonPeriod;
-use IAWP_SCOPED\Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
-use IAWP_SCOPED\Illuminate\Events\Dispatcher;
-use IAWP_SCOPED\Illuminate\Events\EventDispatcher;
-use IAWP_SCOPED\Illuminate\Support\Carbon as IlluminateCarbon;
-use IAWP_SCOPED\Illuminate\Support\Facades\Date;
+use IAWPSCOPED\Carbon\Carbon;
+use IAWPSCOPED\Carbon\CarbonImmutable;
+use IAWPSCOPED\Carbon\CarbonInterval;
+use IAWPSCOPED\Carbon\CarbonPeriod;
+use IAWPSCOPED\Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use IAWPSCOPED\Illuminate\Events\Dispatcher;
+use IAWPSCOPED\Illuminate\Events\EventDispatcher;
+use IAWPSCOPED\Illuminate\Support\Carbon as IlluminateCarbon;
+use IAWPSCOPED\Illuminate\Support\Facades\Date;
 use Throwable;
 /** @internal */
-class ServiceProvider extends \IAWP_SCOPED\Illuminate\Support\ServiceProvider
+class ServiceProvider extends \IAWPSCOPED\Illuminate\Support\ServiceProvider
 {
     /** @var callable|null */
     protected $appGetter = null;
@@ -44,7 +44,7 @@ class ServiceProvider extends \IAWP_SCOPED\Illuminate\Support\ServiceProvider
         $service = $this;
         $events = $this->app['events'];
         if ($this->isEventDispatcher($events)) {
-            $events->listen(\class_exists('IAWP_SCOPED\\Illuminate\\Foundation\\Events\\LocaleUpdated') ? 'Illuminate\\Foundation\\Events\\LocaleUpdated' : 'locale.changed', function () use($service) {
+            $events->listen(\class_exists('IAWPSCOPED\\Illuminate\\Foundation\\Events\\LocaleUpdated') ? 'Illuminate\\Foundation\\Events\\LocaleUpdated' : 'locale.changed', function () use($service) {
                 $service->updateLocale();
             });
         }
@@ -93,7 +93,7 @@ class ServiceProvider extends \IAWP_SCOPED\Illuminate\Support\ServiceProvider
     }
     protected function getGlobalApp(...$args)
     {
-        return \function_exists('IAWP_SCOPED\\app') ? \IAWP_SCOPED\app(...$args) : null;
+        return \function_exists('IAWPSCOPED\\app') ? \IAWPSCOPED\app(...$args) : null;
     }
     protected function isEventDispatcher($instance)
     {

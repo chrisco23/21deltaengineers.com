@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Casts;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Casts;
 
-use IAWP_SCOPED\Illuminate\Contracts\Database\Eloquent\Castable;
-use IAWP_SCOPED\Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use IAWP_SCOPED\Illuminate\Support\Collection;
-use IAWP_SCOPED\Illuminate\Support\Facades\Crypt;
+use IAWPSCOPED\Illuminate\Contracts\Database\Eloquent\Castable;
+use IAWPSCOPED\Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use IAWPSCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Support\Facades\Crypt;
 /** @internal */
 class AsEncryptedCollection implements Castable
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Container;
+namespace IAWPSCOPED\Illuminate\Contracts\Container;
 
 /** @internal */
 interface ContextualBindingBuilder

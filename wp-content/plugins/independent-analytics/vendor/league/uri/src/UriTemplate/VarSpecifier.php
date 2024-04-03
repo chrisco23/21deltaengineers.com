@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri\UriTemplate;
+namespace IAWPSCOPED\League\Uri\UriTemplate;
 
-use IAWP_SCOPED\League\Uri\Exceptions\SyntaxError;
+use IAWPSCOPED\League\Uri\Exceptions\SyntaxError;
 use function preg_match;
 /** @internal */
 final class VarSpecifier

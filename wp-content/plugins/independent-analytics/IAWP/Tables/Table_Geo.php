@@ -1,16 +1,16 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Tables;
+namespace IAWP\Tables;
 
-use IAWP_SCOPED\IAWP\Rows\Cities;
-use IAWP_SCOPED\IAWP\Rows\Countries;
-use IAWP_SCOPED\IAWP\Statistics\City_Statistics;
-use IAWP_SCOPED\IAWP\Statistics\Country_Statistics;
-use IAWP_SCOPED\IAWP\Tables\Columns\Column;
-use IAWP_SCOPED\IAWP\Tables\Groups\Group;
-use IAWP_SCOPED\IAWP\Tables\Groups\Groups;
+use IAWP\Rows\Cities;
+use IAWP\Rows\Countries;
+use IAWP\Statistics\City_Statistics;
+use IAWP\Statistics\Country_Statistics;
+use IAWP\Tables\Columns\Column;
+use IAWP\Tables\Groups\Group;
+use IAWP\Tables\Groups\Groups;
 /** @internal */
-class Table_Geo extends Table
+class Table_Geo extends \IAWP\Tables\Table
 {
     protected function table_name() : string
     {
@@ -19,8 +19,8 @@ class Table_Geo extends Table
     protected function groups() : Groups
     {
         $groups = [];
-        $groups[] = new Group('country', \__('Country', 'independent-analytics'), \__('Countries', 'independent-analytics'), Countries::class, Country_Statistics::class);
-        $groups[] = new Group('city', \__('City', 'independent-analytics'), \__('Cities', 'independent-analytics'), Cities::class, City_Statistics::class);
+        $groups[] = new Group('country', \__('Country', 'independent-analytics'), Countries::class, Country_Statistics::class);
+        $groups[] = new Group('city', \__('City', 'independent-analytics'), Cities::class, City_Statistics::class);
         return new Groups($groups);
     }
     protected function local_columns() : array

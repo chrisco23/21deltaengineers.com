@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Exception;
+namespace IAWPSCOPED\Symfony\Component\Translation\Exception;
 
 /**
  * Base RuntimeException for the Translation component.

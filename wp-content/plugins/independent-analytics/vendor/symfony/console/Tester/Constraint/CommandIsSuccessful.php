@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Tester\Constraint;
+namespace IAWPSCOPED\Symfony\Component\Console\Tester\Constraint;
 
-use IAWP_SCOPED\PHPUnit\Framework\Constraint\Constraint;
-use IAWP_SCOPED\Symfony\Component\Console\Command\Command;
+use IAWPSCOPED\PHPUnit\Framework\Constraint\Constraint;
+use IAWPSCOPED\Symfony\Component\Console\Command\Command;
 /** @internal */
 final class CommandIsSuccessful extends Constraint
 {

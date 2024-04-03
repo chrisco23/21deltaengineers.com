@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /**
  * PSR-4 autoloader implementation for the MaxMind\DB namespace.
@@ -33,11 +33,11 @@ function mmdb_autoload($class) : void
         // replace the namespace separator with a directory separator...
         $path = \str_replace('\\', '/', $path);
         // and finally, add the PHP file extension to the result.
-        $path = $path . '.php';
+        $path .= '.php';
         // $path should now contain the path to a PHP file defining $class
         if (\file_exists($path)) {
             include $path;
         }
     }
 }
-\spl_autoload_register('IAWP_SCOPED\\mmdb_autoload');
+\spl_autoload_register('IAWPSCOPED\\mmdb_autoload');

@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
 /** @internal */
-class Page_Not_Found extends Page
+class Page_Not_Found extends \IAWP\Models\Page
 {
     private $not_found_url;
     public function __construct($row)

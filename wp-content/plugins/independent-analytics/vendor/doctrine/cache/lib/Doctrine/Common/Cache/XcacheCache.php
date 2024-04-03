@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache;
+namespace IAWPSCOPED\Doctrine\Common\Cache;
 
 use BadMethodCallException;
 use function ini_get;
@@ -12,7 +12,7 @@ use function xcache_info;
 use function xcache_isset;
 use function xcache_set;
 use function xcache_unset;
-use const IAWP_SCOPED\XC_TYPE_VAR;
+use const IAWPSCOPED\XC_TYPE_VAR;
 /**
  * Xcache cache driver.
  *

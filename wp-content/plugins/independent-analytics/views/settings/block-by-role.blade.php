@@ -10,7 +10,7 @@
         <input type='hidden' name='option_page' value='iawp_block_by_role_settings'/>
         <input type="hidden" name="action" value="update"/>
         <input type="hidden" name="_wp_http_referer"
-               value="/wp-admin/admin.php?page=independent-analytics&tab=settings">
+               value="/wp-admin/admin.php?page=independent-analytics-settings">
         <?php wp_nonce_field('iawp_block_by_role_settings-options'); ?>
         <div class="inner">
             <div class="block-by-role duplicator">
@@ -43,10 +43,10 @@
                 <?php for ($i = 0; $i < count($blocked); $i++): ?>
                     <div class="entry">
                         <input type="text" readonly
-                               name="iawp_blocked_roles[<?php esc_attr_e($i); ?>]"
-                               id="iawp_blocked_roles[<?php esc_attr_e($i); ?>]"
+                               name="iawp_blocked_roles[<?php echo esc_attr($i); ?>]"
+                               id="iawp_blocked_roles[<?php echo esc_attr($i); ?>]"
                                data-option="iawp_blocked_roles"
-                               value="<?php esc_attr_e($blocked[$i]); ?>">
+                               value="<?php echo esc_attr($blocked[$i]); ?>">
                         <button class="remove iawp-button ghost-purple"><?php esc_html_e('Unblock Role', 'independent-analytics'); ?></button>
                     </div>
                 <?php endfor; ?>

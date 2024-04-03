@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Utils\Request;
+use IAWP\Utils\Request;
 /** @internal */
 class Resource_Identifier
 {
@@ -12,9 +12,9 @@ class Resource_Identifier
     /**
      * @param string $type
      * @param string|null $meta_key
-     * @param string|null $meta_value
+     * @param int|string|null $meta_value
      */
-    private function __construct(string $type, ?string $meta_key = null, ?string $meta_value = null)
+    private function __construct(string $type, ?string $meta_key = null, $meta_value = null)
     {
         $this->type = $type;
         $this->meta_key = $meta_key;
@@ -35,9 +35,9 @@ class Resource_Identifier
         return $this->meta_key;
     }
     /**
-     * @return string|null
+     * @return int|string|null
      */
-    public function meta_value() : ?string
+    public function meta_value()
     {
         return $this->meta_value;
     }
@@ -51,9 +51,13 @@ class Resource_Identifier
     /**
      * @return self|null
      */
-    public static function for_viewed_resource() : ?self
+    public static function for_resource_being_viewed() : ?self
     {
-        if (\is_singular()) {
+        if (\is_string(self::get_virtual_page_id())) {
+            $type = 'virtual_page';
+            $meta_key = 'virtual_page_id';
+            $meta_value = self::get_virtual_page_id();
+        } elseif (\is_singular()) {
             $type = 'singular';
             $meta_key = 'singular_id';
             $meta_value = \get_queried_object_id();
@@ -112,6 +116,17 @@ class Resource_Identifier
                 return null;
             }
             return new self('singular', 'singular_id', $singular_id);
+        }
+        return null;
+    }
+    public static function for_post_id(int $post_id) : ?self
+    {
+        return new self('singular', 'singular_id', $post_id);
+    }
+    private static function get_virtual_page_id() : ?string
+    {
+        if (\IAWPSCOPED\iawp_using_woocommerce() && is_checkout() && is_wc_endpoint_url('order-received')) {
+            return 'wc_checkout_success';
         }
         return null;
     }

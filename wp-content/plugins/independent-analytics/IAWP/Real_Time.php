@@ -1,17 +1,17 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
 use DateTime;
-use IAWP_SCOPED\IAWP\Date_Range\Exact_Date_Range;
-use IAWP_SCOPED\IAWP\Interval\Minute_Interval;
-use IAWP_SCOPED\IAWP\Interval\Ten_Second_Interval;
-use IAWP_SCOPED\IAWP\Rows\Campaigns;
-use IAWP_SCOPED\IAWP\Rows\Countries;
-use IAWP_SCOPED\IAWP\Rows\Device_Types;
-use IAWP_SCOPED\IAWP\Rows\Pages;
-use IAWP_SCOPED\IAWP\Rows\Referrers;
-use IAWP_SCOPED\IAWP\Utils\Singleton;
+use IAWP\Date_Range\Exact_Date_Range;
+use IAWP\Interval\Minute_Interval;
+use IAWP\Interval\Ten_Second_Interval;
+use IAWP\Rows\Campaigns;
+use IAWP\Rows\Countries;
+use IAWP\Rows\Device_Types;
+use IAWP\Rows\Pages;
+use IAWP\Rows\Referrers;
+use IAWP\Utils\Singleton;
 /** @internal */
 class Real_Time
 {
@@ -29,13 +29,13 @@ class Real_Time
         $end_minutes = $this->round_up_by_seconds($now, 60);
         $end_seconds = $this->round_up_by_seconds($now, 10);
         $visitors_by_minute_date_range = new Exact_Date_Range($thirty_minutes_ago, $end_minutes, \false);
-        $visitors_by_minute_finder = new Visitors_Over_Time_Finder($visitors_by_minute_date_range, new Minute_Interval());
+        $visitors_by_minute_finder = new \IAWP\Visitors_Over_Time_Finder($visitors_by_minute_date_range, new Minute_Interval());
         $visitors_by_minute = $visitors_by_minute_finder->fetch();
         $visitors_by_second_date_range = new Exact_Date_Range($five_minutes_ago, $end_seconds, \false);
-        $visitors_by_second_finder = new Visitors_Over_Time_Finder($visitors_by_second_date_range, new Ten_Second_Interval());
+        $visitors_by_second_finder = new \IAWP\Visitors_Over_Time_Finder($visitors_by_second_date_range, new Ten_Second_Interval());
         $visitors_by_second = $visitors_by_second_finder->fetch();
         $five_minute_date_range = new Exact_Date_Range($five_minutes_ago, new DateTime(), \false);
-        $current_traffic_finder = new Current_Traffic_Finder($five_minute_date_range);
+        $current_traffic_finder = new \IAWP\Current_Traffic_Finder($five_minute_date_range);
         $current_traffic = $current_traffic_finder->fetch();
         $pages = new Pages($five_minute_date_range, 10);
         $page_rows = \array_map(function ($row, $index) {
@@ -47,7 +47,7 @@ class Real_Time
         }, $referrers->rows(), \array_keys($referrers->rows()));
         $countries = new Countries($five_minute_date_range, 10);
         $country_rows = \array_map(function ($row, $index) {
-            return ['id' => $row->country(), 'position' => $index + 1, 'title' => $row->country(), 'views' => $row->views(), 'flag' => Icon_Directory_Factory::flags()->find($row->country_code())];
+            return ['id' => $row->country(), 'position' => $index + 1, 'title' => $row->country(), 'views' => $row->views(), 'flag' => \IAWP\Icon_Directory_Factory::flags()->find($row->country_code())];
         }, $countries->rows(), \array_keys($countries->rows()));
         $campaigns = new Campaigns($five_minute_date_range, 10);
         $campaign_rows = \array_map(function ($row, $index) {
@@ -65,7 +65,7 @@ class Real_Time
     }
     public function render_real_time_analytics()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('real_time', $this->get_real_time_analytics());
+        echo \IAWPSCOPED\iawp_blade()->run('real_time', $this->get_real_time_analytics());
     }
     private function get_count_message(int $count, string $singular, string $plural) : string
     {

@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Migrations;
+namespace IAWP\Migrations;
 
-use IAWP_SCOPED\IAWP\Report_Finder;
+use IAWP\Report_Finder;
 /** @internal */
-class Migration_17 extends Migration
+class Migration_17 extends \IAWP\Migrations\Migration
 {
     /**
      * @inheritdoc

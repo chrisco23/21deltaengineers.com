@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema\Grammars;
+namespace IAWPSCOPED\Illuminate\Database\Schema\Grammars;
 
-use IAWP_SCOPED\Illuminate\Database\Schema\Blueprint;
-use IAWP_SCOPED\Illuminate\Support\Fluent;
+use IAWPSCOPED\Illuminate\Database\Schema\Blueprint;
+use IAWPSCOPED\Illuminate\Support\Fluent;
 /** @internal */
 class PostgresGrammar extends Grammar
 {
@@ -100,7 +100,7 @@ class PostgresGrammar extends Grammar
      */
     public function compileAutoIncrementStartingValues(Blueprint $blueprint)
     {
-        return \IAWP_SCOPED\collect($blueprint->autoIncrementingStartingValues())->map(function ($value, $column) use($blueprint) {
+        return \IAWPSCOPED\collect($blueprint->autoIncrementingStartingValues())->map(function ($value, $column) use($blueprint) {
             return 'alter sequence ' . $blueprint->getTable() . '_' . $column . '_seq restart with ' . $value;
         })->all();
     }

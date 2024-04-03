@@ -1,17 +1,17 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Builder;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Collection;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\ModelNotFoundException;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithPivotTable;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Builder;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Collection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Database\Eloquent\ModelNotFoundException;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithPivotTable;
+use IAWPSCOPED\Illuminate\Support\Str;
 use InvalidArgumentException;
 /** @internal */
 class BelongsToMany extends Relation
@@ -714,7 +714,7 @@ class BelongsToMany extends Relation
     protected function aliasedPivotColumns()
     {
         $defaults = [$this->foreignPivotKey, $this->relatedPivotKey];
-        return \IAWP_SCOPED\collect(\array_merge($defaults, $this->pivotColumns))->map(function ($column) {
+        return \IAWPSCOPED\collect(\array_merge($defaults, $this->pivotColumns))->map(function ($column) {
             return $this->qualifyPivotColumn($column) . ' as pivot_' . $column;
         })->unique()->all();
     }

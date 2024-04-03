@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Illuminate\Http\Client\Factory;
+use IAWPSCOPED\Illuminate\Http\Client\Factory;
 /**
  * @method static \GuzzleHttp\Promise\PromiseInterface response($body = null, $status = 200, $headers = [])
  * @method static \Illuminate\Http\Client\Factory fake($callback = null)

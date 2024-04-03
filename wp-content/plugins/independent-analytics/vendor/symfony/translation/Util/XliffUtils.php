@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Util;
+namespace IAWPSCOPED\Symfony\Component\Translation\Util;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidResourceException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidResourceException;
 /**
  * Provides some utility methods for XLIFF translation files, such as validating
  * their contents according to the XSD schema.

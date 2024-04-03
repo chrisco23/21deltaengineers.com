@@ -34,6 +34,14 @@ class Promotions extends Abstract_Module {
 	private $promotions = array();
 
 	/**
+	 * Holds the values of the promotions that are not allowed to be shown.
+	 * Can be filtered by each product.
+	 *
+	 * @var array
+	 */
+	private $dissallowed_promotions = array();
+
+	/**
 	 * Option key for promos.
 	 *
 	 * @var string
@@ -113,6 +121,8 @@ class Promotions extends Abstract_Module {
 
 		$this->promotions = $this->get_promotions();
 
+		$this->dissallowed_promotions = apply_filters( $product->get_key() . '_dissallowed_promotions', array() );
+
 		foreach ( $this->promotions as $slug => $data ) {
 			if ( ! in_array( $slug, $promotions_to_load, true ) ) {
 				unset( $this->promotions[ $slug ] );
@@ -173,6 +183,19 @@ class Promotions extends Abstract_Module {
 	 * @return void
 	 */
 	public function register_reference() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
+		if ( ! isset( $_GET['plugin'] ) || ! isset( $_GET['_wpnonce'] ) ) {
+			return;
+		}
+
+		$plugin = rawurldecode( $_GET['plugin'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( wp_verify_nonce( $_GET['_wpnonce'], 'activate-plugin_' . $plugin ) === false ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			return;
+		}
+
 		if ( isset( $_GET['reference_key'] ) ) {
 			update_option( 'otter_reference_key', sanitize_key( $_GET['reference_key'] ) );
 		}
@@ -269,12 +292,12 @@ class Promotions extends Abstract_Module {
 
 	/**
 	 * Third-party compatibility.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	private function has_conflicts() {
 		global $pagenow;
-	
+
 		// Editor notices aren't compatible with Enfold theme.
 		if ( defined( 'AV_FRAMEWORK_VERSION' ) && in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) {
 			return true;
@@ -492,6 +515,14 @@ class Promotions extends Abstract_Module {
 
 			$return = array_merge( $return, $this->promotions[ $slug ] );
 		}
+
+		$return = array_filter(
+			$return,
+			function ( $value, $key ) {
+				return ! in_array( $key, $this->dissallowed_promotions, true );
+			},
+			ARRAY_FILTER_USE_BOTH 
+		);
 
 		return array_keys( $return );
 	}

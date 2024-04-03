@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache;
+namespace IAWPSCOPED\Doctrine\Common\Cache;
 
 use function is_object;
 use function method_exists;

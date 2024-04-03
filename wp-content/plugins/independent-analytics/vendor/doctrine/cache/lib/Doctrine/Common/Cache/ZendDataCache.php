@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache;
+namespace IAWPSCOPED\Doctrine\Common\Cache;
 
 use function zend_shm_cache_clear;
 use function zend_shm_cache_delete;

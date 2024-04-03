@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /**
  * This file is part of the Carbon package.
@@ -28,7 +28,7 @@ namespace IAWP_SCOPED;
  * - Jan (aso824)
  * - diverpl
  */
-use IAWP_SCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonInterface;
 return ['year' => ':count rok|:count lata|:count lat', 'a_year' => 'rok|:count lata|:count lat', 'y' => ':count r|:count l|:count l', 'month' => ':count miesiąc|:count miesiące|:count miesięcy', 'a_month' => 'miesiąc|:count miesiące|:count miesięcy', 'm' => ':count mies.', 'week' => ':count tydzień|:count tygodnie|:count tygodni', 'a_week' => 'tydzień|:count tygodnie|:count tygodni', 'w' => ':count tyg.', 'day' => ':count dzień|:count dni|:count dni', 'a_day' => 'dzień|:count dni|:count dni', 'd' => ':count d', 'hour' => ':count godzina|:count godziny|:count godzin', 'a_hour' => 'godzina|:count godziny|:count godzin', 'h' => ':count godz.', 'minute' => ':count minuta|:count minuty|:count minut', 'a_minute' => 'minuta|:count minuty|:count minut', 'min' => ':count min', 'second' => ':count sekunda|:count sekundy|:count sekund', 'a_second' => '{1}kilka sekund|:count sekunda|:count sekundy|:count sekund', 's' => ':count sek.', 'ago' => ':time temu', 'from_now' => static function ($time) {
     return 'za ' . \strtr($time, ['godzina' => 'godzinę', 'minuta' => 'minutę', 'sekunda' => 'sekundę']);
 }, 'after' => ':time po', 'before' => ':time przed', 'diff_now' => 'teraz', 'diff_today' => 'Dziś', 'diff_today_regexp' => 'Dziś(?:\\s+o)?', 'diff_yesterday' => 'wczoraj', 'diff_yesterday_regexp' => 'Wczoraj(?:\\s+o)?', 'diff_tomorrow' => 'jutro', 'diff_tomorrow_regexp' => 'Jutro(?:\\s+o)?', 'diff_before_yesterday' => 'przedwczoraj', 'diff_after_tomorrow' => 'pojutrze', 'formats' => ['LT' => 'HH:mm', 'LTS' => 'HH:mm:ss', 'L' => 'DD.MM.YYYY', 'LL' => 'D MMMM YYYY', 'LLL' => 'D MMMM YYYY HH:mm', 'LLLL' => 'dddd, D MMMM YYYY HH:mm'], 'calendar' => ['sameDay' => '[Dziś o] LT', 'nextDay' => '[Jutro o] LT', 'nextWeek' => function (CarbonInterface $date) {

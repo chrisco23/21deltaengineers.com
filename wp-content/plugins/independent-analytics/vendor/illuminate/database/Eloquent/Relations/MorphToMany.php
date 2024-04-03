@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations;
 
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Builder;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Builder;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Support\Arr;
 /** @internal */
 class MorphToMany extends BelongsToMany
 {
@@ -139,7 +139,7 @@ class MorphToMany extends BelongsToMany
     protected function aliasedPivotColumns()
     {
         $defaults = [$this->foreignPivotKey, $this->relatedPivotKey, $this->morphType];
-        return \IAWP_SCOPED\collect(\array_merge($defaults, $this->pivotColumns))->map(function ($column) {
+        return \IAWPSCOPED\collect(\array_merge($defaults, $this->pivotColumns))->map(function ($column) {
             return $this->qualifyPivotColumn($column) . ' as pivot_' . $column;
         })->unique()->all();
     }

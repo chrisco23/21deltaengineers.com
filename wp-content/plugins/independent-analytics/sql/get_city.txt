@@ -1,5 +1,0 @@
-SELECT *
-FROM wp_independent_analytics_cities
-    WHERE country_id = :country_id
-    AND subdivision = :subdivision
-    AND city = :city

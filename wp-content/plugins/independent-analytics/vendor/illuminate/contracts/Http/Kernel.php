@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Http;
+namespace IAWPSCOPED\Illuminate\Contracts\Http;
 
 /** @internal */
 interface Kernel

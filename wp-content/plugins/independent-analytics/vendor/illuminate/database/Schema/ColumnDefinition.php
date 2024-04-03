@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema;
+namespace IAWPSCOPED\Illuminate\Database\Schema;
 
-use IAWP_SCOPED\Illuminate\Support\Fluent;
+use IAWPSCOPED\Illuminate\Support\Fluent;
 /**
  * @method $this after(string $column) Place the column "after" another column (MySQL)
  * @method $this always() Used as a modifier for generatedAs() (PostgreSQL)

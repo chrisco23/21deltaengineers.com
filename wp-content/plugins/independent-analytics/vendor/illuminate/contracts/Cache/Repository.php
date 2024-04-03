@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Cache;
+namespace IAWPSCOPED\Illuminate\Contracts\Cache;
 
 use Closure;
-use IAWP_SCOPED\Psr\SimpleCache\CacheInterface;
+use IAWPSCOPED\Psr\SimpleCache\CacheInterface;
 /** @internal */
 interface Repository extends CacheInterface
 {

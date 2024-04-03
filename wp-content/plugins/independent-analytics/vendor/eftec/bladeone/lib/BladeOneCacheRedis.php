@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\eftec\bladeone;
+namespace IAWPSCOPED\eftec\bladeone;
 
 use Redis;
 use function class_exists;

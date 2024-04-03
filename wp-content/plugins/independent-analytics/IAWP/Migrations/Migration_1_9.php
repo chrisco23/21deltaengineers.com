@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Migrations;
+namespace IAWP\Migrations;
 
-use IAWP_SCOPED\IAWP\Query;
+use IAWP\Query;
 /** @internal */
-class Migration_1_9 extends Migration
+class Migration_1_9 extends \IAWP\Migrations\Migration
 {
     /**
      * @var string

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Exception;
+namespace IAWPSCOPED\Symfony\Component\Translation\Exception;
 
-use IAWP_SCOPED\Symfony\Contracts\HttpClient\ResponseInterface;
+use IAWPSCOPED\Symfony\Contracts\HttpClient\ResponseInterface;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  * @internal
@@ -19,7 +19,7 @@ class ProviderException extends RuntimeException implements ProviderExceptionInt
 {
     private $response;
     private $debug;
-    public function __construct(string $message, ResponseInterface $response, int $code = 0, \Exception $previous = null)
+    public function __construct(string $message, ResponseInterface $response, int $code = 0, ?\Exception $previous = null)
     {
         $this->response = $response;
         $this->debug = $response->getInfo('debug') ?? '';

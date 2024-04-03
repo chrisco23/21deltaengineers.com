@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri;
+namespace IAWPSCOPED\League\Uri;
 
-use IAWP_SCOPED\League\Uri\Contracts\UriInterface;
-use IAWP_SCOPED\Psr\Http\Message\UriInterface as Psr7UriInterface;
+use IAWPSCOPED\League\Uri\Contracts\UriInterface;
+use IAWPSCOPED\Psr\Http\Message\UriInterface as Psr7UriInterface;
 use function explode;
 use function implode;
 use function preg_replace_callback;

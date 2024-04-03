@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache;
+namespace IAWPSCOPED\Doctrine\Common\Cache;
 
 use function apcu_cache_info;
 use function apcu_clear_cache;

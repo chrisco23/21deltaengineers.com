@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
 use ArrayAccess;
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 /** @internal */
 class Arr
@@ -158,7 +158,7 @@ class Arr
     {
         if (\is_null($callback)) {
             if (empty($array)) {
-                return \IAWP_SCOPED\value($default);
+                return \IAWPSCOPED\value($default);
             }
             foreach ($array as $item) {
                 return $item;
@@ -169,7 +169,7 @@ class Arr
                 return $value;
             }
         }
-        return \IAWP_SCOPED\value($default);
+        return \IAWPSCOPED\value($default);
     }
     /**
      * Return the last element in an array passing a given truth test.
@@ -182,7 +182,7 @@ class Arr
     public static function last($array, callable $callback = null, $default = null)
     {
         if (\is_null($callback)) {
-            return empty($array) ? \IAWP_SCOPED\value($default) : \end($array);
+            return empty($array) ? \IAWPSCOPED\value($default) : \end($array);
         }
         return static::first(\array_reverse($array, \true), $callback, $default);
     }
@@ -254,7 +254,7 @@ class Arr
     public static function get($array, $key, $default = null)
     {
         if (!static::accessible($array)) {
-            return \IAWP_SCOPED\value($default);
+            return \IAWPSCOPED\value($default);
         }
         if (\is_null($key)) {
             return $array;
@@ -263,13 +263,13 @@ class Arr
             return $array[$key];
         }
         if (\strpos($key, '.') === \false) {
-            return $array[$key] ?? \IAWP_SCOPED\value($default);
+            return $array[$key] ?? \IAWPSCOPED\value($default);
         }
         foreach (\explode('.', $key) as $segment) {
             if (static::accessible($array) && static::exists($array, $segment)) {
                 $array = $array[$segment];
             } else {
-                return \IAWP_SCOPED\value($default);
+                return \IAWPSCOPED\value($default);
             }
         }
         return $array;

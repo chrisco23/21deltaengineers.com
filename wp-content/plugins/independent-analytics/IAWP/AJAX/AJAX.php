@@ -1,15 +1,16 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Capability_Manager;
-use IAWP_SCOPED\IAWP\Migrations;
+use IAWP\Capability_Manager;
+use IAWP\Migrations;
+use IAWP\Utils\Server;
 /** @internal */
 abstract class AJAX
 {
     public function __construct()
     {
-        if (\IAWP_SCOPED\iawp_is_pro() || !$this->requires_pro()) {
+        if (\IAWPSCOPED\iawp_is_pro() || !$this->requires_pro()) {
             \add_action('wp_ajax_' . $this->action_name(), [$this, 'intercept_ajax']);
         }
     }
@@ -42,6 +43,7 @@ abstract class AJAX
         $can_view = Capability_Manager::can_view();
         \check_ajax_referer($this->action_name(), 'nonce');
         if ($is_not_migrating && $valid_fields && $can_view) {
+            Server::increase_max_execution_time();
             $this->action_callback();
         } else {
             \wp_send_json_error(['errorMessage' => 'Unable to process IAWP AJAX request'], 400);

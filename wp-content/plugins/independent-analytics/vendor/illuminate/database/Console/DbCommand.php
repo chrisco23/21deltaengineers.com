@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console;
+namespace IAWPSCOPED\Illuminate\Database\Console;
 
-use IAWP_SCOPED\Illuminate\Console\Command;
-use IAWP_SCOPED\Illuminate\Support\ConfigurationUrlParser;
-use IAWP_SCOPED\Symfony\Component\Process\Process;
+use IAWPSCOPED\Illuminate\Console\Command;
+use IAWPSCOPED\Illuminate\Support\ConfigurationUrlParser;
+use IAWPSCOPED\Symfony\Component\Process\Process;
 use UnexpectedValueException;
 /** @internal */
 class DbCommand extends Command

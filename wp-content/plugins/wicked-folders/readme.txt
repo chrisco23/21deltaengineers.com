@@ -2,8 +2,8 @@
 Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
-Stable tag: 2.18.19
 Tested up to: 6.4
+Stable tag: 3.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,7 +11,11 @@ Organize pages and custom post types into folders.
 
 == Description ==
 
-Wicked Folders is the ultimate tool for managing large numbers of pages and custom post types.  The plugin simplifies content management by allowing you to organize your content into folders.  Wicked Folders does not alter your content’s permalinks or hierarchy giving you the freedom to organize your pages, posts, and custom post types any way you want independently of your site’s structure.
+**Organize your site's pages and custom post types into folders.**
+
+The ultimate tool for managing large numbers of pages and custom post types.  Save time, stay organized, and find things fast by organizing your site's content into folders.
+
+[**Go Pro**](https://wickedplugins.com/plugins/wicked-folders/?utm_source=readme&utm_campaign=wicked_folders&utm_content=go_pro_link) 🚀
 
 = Features =
 * Organize pages, posts, and custom post types into folders
@@ -29,6 +33,7 @@ Wicked Folders is the ultimate tool for managing large numbers of pages and cust
 * Search folders
 * Display number of items assigned to each folder
 * Support for right-to-left languages
+* Doesn't alter your content’s permalinks or hierarchy giving you the freedom to organize your pages, posts, and custom post types any way you want independently of your site’s structure
 
 = Dynamic Folders =
 Dynamic folders let you to filter pages (and custom post types) by things like date or author.  You can even browse pages or custom post types by other categories that are assigned to the post type.  The handy "Unassigned Items" dynamic folder shows you items that haven't been assigned to a folder yet and the "Page Hierarchy" folder lets you browse your pages as if each parent page were a folder.  Dynamic folders are generated on the fly which means you don’t have to do anything; simply install the plugin and enable dynamic folders for the post types you want on the Wicked Folders settings page.  See the screenshots section for an example.
@@ -46,6 +51,7 @@ Organize your WordPress media library, users, plugins, and more using folders wi
 * Plugins
 * Gravity Forms entries and forms
 * WooCommerce products, orders, and coupons
+* Restrict Content Pro memberships and customers
 * TablePress tables
 
 [Learn more about Wicked Folders Pro](https://wickedplugins.com/plugins/wicked-folders/?utm_source=readme&utm_campaign=wicked_folders&utm_content=pro_learn_more_link).
@@ -136,6 +142,20 @@ The folder toggle arrow is greyed out when a folder doesn't have any child folde
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 3.0.1 (March 4, 2024) =
+* New: add support for Restrict Content Pro membership levels (Wicked Folders Pro)
+* Fix: breadcrumbs disappearing when folder pane is toggled off
+* Fix: fatal error when date dynamic folders are loaded from cache
+* Fix: date dynamic folders not caching
+* Tweak: remove folder type parameter to avoid requests being blocked by firewalls that don't allow backslashes
+
+= 3.0.0 (March 1, 2024) =
+* New: bulk delete folders
+* New: REST API
+* New: add folder support for Restrict Content Pro memberships and customers (Wicked Folders Pro)
+* Tweak: move toggle folder from sidebar to floating icon
+* Tweak: refactor app to use React instead of Backbone
 
 = 2.18.19 (November 9, 2023) =
 * Add static caching to timezone identifier function used by date dynamic folders for better performance 

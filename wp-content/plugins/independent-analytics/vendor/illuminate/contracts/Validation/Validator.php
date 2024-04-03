@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Validation;
+namespace IAWPSCOPED\Illuminate\Contracts\Validation;
 
-use IAWP_SCOPED\Illuminate\Contracts\Support\MessageProvider;
+use IAWPSCOPED\Illuminate\Contracts\Support\MessageProvider;
 /** @internal */
 interface Validator extends MessageProvider
 {

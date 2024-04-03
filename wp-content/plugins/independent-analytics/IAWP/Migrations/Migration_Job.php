@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Migrations;
+namespace IAWP\Migrations;
 
-use IAWP_SCOPED\IAWP\Utils\WP_Async_Request;
+use IAWP\Utils\WP_Async_Request;
 /** @internal */
 class Migration_Job extends WP_Async_Request
 {
@@ -20,7 +20,7 @@ class Migration_Job extends WP_Async_Request
      */
     protected function handle() : void
     {
-        Migrations::create_or_migrate();
+        \IAWP\Migrations\Migrations::create_or_migrate();
     }
     /**
      * Dispatch a migration job if the database is out of date and no migration is currently running
@@ -29,7 +29,7 @@ class Migration_Job extends WP_Async_Request
      */
     public static function maybe_dispatch() : void
     {
-        if (Migrations::should_migrate()) {
+        if (\IAWP\Migrations\Migrations::should_migrate()) {
             $migration_job = new self();
             $migration_job->dispatch();
         }

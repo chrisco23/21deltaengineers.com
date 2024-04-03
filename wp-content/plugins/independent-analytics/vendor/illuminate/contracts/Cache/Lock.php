@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Cache;
+namespace IAWPSCOPED\Illuminate\Contracts\Cache;
 
 /** @internal */
 interface Lock

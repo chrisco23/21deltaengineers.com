@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
 /**
  * @method static \Illuminate\Cache\RateLimiter for(string $name, \Closure $callback)
@@ -26,6 +26,6 @@ class RateLimiter extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'IAWP_SCOPED\\Illuminate\\Cache\\RateLimiter';
+        return 'IAWPSCOPED\\Illuminate\\Cache\\RateLimiter';
     }
 }

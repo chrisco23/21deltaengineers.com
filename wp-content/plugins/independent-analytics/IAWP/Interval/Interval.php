@@ -1,11 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Interval;
+namespace IAWP\Interval;
 
+use IAWP\Date_Range\Date_Range;
 /** @internal */
 abstract class Interval
 {
-    public abstract function get_query_name() : string;
+    public abstract function fetch(Date_Range $date_range) : array;
     public abstract function get_date_interval() : \DateInterval;
     public abstract function short_label() : string;
     public abstract function long_label_singular() : string;

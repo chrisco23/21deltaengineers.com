@@ -1,25 +1,25 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent;
 
 use ArrayAccess;
-use IAWP_SCOPED\Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
-use IAWP_SCOPED\Illuminate\Contracts\Queue\QueueableCollection;
-use IAWP_SCOPED\Illuminate\Contracts\Queue\QueueableEntity;
-use IAWP_SCOPED\Illuminate\Contracts\Routing\UrlRoutable;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
-use IAWP_SCOPED\Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Jsonable;
-use IAWP_SCOPED\Illuminate\Database\ConnectionResolverInterface as Resolver;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Pivot;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Collection as BaseCollection;
-use IAWP_SCOPED\Illuminate\Support\Str;
-use IAWP_SCOPED\Illuminate\Support\Traits\ForwardsCalls;
+use IAWPSCOPED\Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
+use IAWPSCOPED\Illuminate\Contracts\Queue\QueueableCollection;
+use IAWPSCOPED\Illuminate\Contracts\Queue\QueueableEntity;
+use IAWPSCOPED\Illuminate\Contracts\Routing\UrlRoutable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
+use IAWPSCOPED\Illuminate\Contracts\Support\Jsonable;
+use IAWPSCOPED\Illuminate\Database\ConnectionResolverInterface as Resolver;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Pivot;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Collection as BaseCollection;
+use IAWPSCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Support\Traits\ForwardsCalls;
 use JsonSerializable;
 use LogicException;
 /** @internal */
@@ -400,7 +400,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
      */
     public function qualifyColumns($columns)
     {
-        return \IAWP_SCOPED\collect($columns)->map(function ($column) {
+        return \IAWPSCOPED\collect($columns)->map(function ($column) {
             return $this->qualifyColumn($column);
         })->all();
     }
@@ -1290,7 +1290,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
             return $this;
         }
         $this->setRawAttributes($this->setKeysForSelectQuery($this->newQueryWithoutScopes())->firstOrFail()->attributes);
-        $this->load(\IAWP_SCOPED\collect($this->relations)->reject(function ($relation) {
+        $this->load(\IAWPSCOPED\collect($this->relations)->reject(function ($relation) {
             return $relation instanceof Pivot || \is_object($relation) && \in_array(AsPivot::class, class_uses_recursive($relation), \true);
         })->keys()->all());
         $this->syncOriginal();

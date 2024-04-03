@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
 /** @internal */
-class Page_Author_Archive extends Page
+class Page_Author_Archive extends \IAWP\Models\Page
 {
     private $author_id;
     public function __construct($row)

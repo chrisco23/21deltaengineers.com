@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
-use IAWP_SCOPED\League\CommonMark\GithubFlavoredMarkdownConverter;
-use IAWP_SCOPED\Ramsey\Uuid\Codec\TimestampFirstCombCodec;
-use IAWP_SCOPED\Ramsey\Uuid\Generator\CombGenerator;
-use IAWP_SCOPED\Ramsey\Uuid\Uuid;
-use IAWP_SCOPED\Ramsey\Uuid\UuidFactory;
-use IAWP_SCOPED\voku\helper\ASCII;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\League\CommonMark\GithubFlavoredMarkdownConverter;
+use IAWPSCOPED\Ramsey\Uuid\Codec\TimestampFirstCombCodec;
+use IAWPSCOPED\Ramsey\Uuid\Generator\CombGenerator;
+use IAWPSCOPED\Ramsey\Uuid\Uuid;
+use IAWPSCOPED\Ramsey\Uuid\UuidFactory;
+use IAWPSCOPED\voku\helper\ASCII;
 /** @internal */
 class Str
 {
@@ -411,9 +411,9 @@ class Str
     {
         \preg_match_all($pattern, $subject, $matches);
         if (empty($matches[0])) {
-            return \IAWP_SCOPED\collect();
+            return \IAWPSCOPED\collect();
         }
-        return \IAWP_SCOPED\collect($matches[1] ?? $matches[0]);
+        return \IAWPSCOPED\collect($matches[1] ?? $matches[0]);
     }
     /**
      * Pad both sides of a string with another.

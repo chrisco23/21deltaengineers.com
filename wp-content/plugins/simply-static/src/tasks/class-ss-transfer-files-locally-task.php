@@ -7,6 +7,8 @@ namespace Simply_Static;
  */
 class Transfer_Files_Locally_Task extends Task {
 
+	use canTransfer;
+
 	/**
 	 * Task name.
 	 *
@@ -75,7 +77,8 @@ class Transfer_Files_Locally_Task extends Task {
 		Util::debug_log( "Total pages: " . $total_pages . '; Pages remaining: ' . $pages_remaining );
 
 		while ( $static_page = array_shift( $static_pages ) ) {
-			$path_info = Util::url_path_info( $static_page->file_path );
+			$file_path = $this->get_page_file_path( $static_page );
+			$path_info = Util::url_path_info( $file_path );
 			$path      = Util::combine_path( $destination_dir, $path_info['dirname'] );
 
 			if ( wp_mkdir_p( $path ) === false ) {
@@ -83,8 +86,8 @@ class Transfer_Files_Locally_Task extends Task {
 				$static_page->set_error_message( 'Unable to create destination directory' );
 			} else {
 				chmod( $path, 0755 );
-				$origin_file_path      = Util::combine_path( $archive_dir, $static_page->file_path );
-				$destination_file_path = Util::combine_path( $destination_dir, $static_page->file_path );
+				$origin_file_path      = Util::combine_path( $archive_dir, $file_path );
+				$destination_file_path = Util::combine_path( $destination_dir, $file_path );
 
 				// check that destination file doesn't exist OR exists but is writeable
 				if ( ! file_exists( $destination_file_path ) || is_writable( $destination_file_path ) ) {
@@ -100,6 +103,8 @@ class Transfer_Files_Locally_Task extends Task {
 			}
 
 			do_action( 'simply_static_page_file_transferred', $static_page, $destination_dir );
+
+			$this->transfer_404_page( $destination_dir );
 
 			$static_page->last_transferred_at = Util::formatted_datetime();
 			$static_page->save();
@@ -141,4 +146,40 @@ class Transfer_Files_Locally_Task extends Task {
 		return true;
 	}
 
+	/**
+	 * Transfer the 404 page if it exists.
+	 *
+	 * @param string $local_dir Path to local dir.
+	 *
+	 * @return void
+	 */
+	public function transfer_404_page( $local_dir ) {
+		$archive_dir  = $this->options->get_archive_dir();
+		$file_path    = untrailingslashit( $archive_dir ) . DIRECTORY_SEPARATOR . '404'  . DIRECTORY_SEPARATOR . 'index.html';
+
+		Util::debug_log( 'Transferring 404 Page');
+
+		if ( ! file_exists( $file_path ) ) {
+			Util::debug_log( 'No 404 Page found at ' . $file_path );
+			return;
+		}
+
+		$folder_404 = untrailingslashit( $local_dir ) . DIRECTORY_SEPARATOR . '404';
+
+		if ( ! is_dir( $folder_404 ) ) {
+			wp_mkdir_p( $folder_404 );
+		}
+
+		$destination_file = $folder_404  . DIRECTORY_SEPARATOR . 'index.html';
+
+		if ( file_exists( $destination_file ) ) {
+			return;
+		}
+
+		Util::debug_log( 'Destination 404 Page found at ' . $destination_file );
+
+		$copied = copy( $file_path, $destination_file );
+
+		Util::debug_log( 'Copy: ' . $copied ? 'Success' : 'No sucess' );
+	}
 }

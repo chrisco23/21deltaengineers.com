@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Casts;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Casts;
 
 /** @internal */
 class Attribute

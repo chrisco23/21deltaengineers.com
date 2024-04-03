@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Pagination;
+namespace IAWPSCOPED\Illuminate\Contracts\Pagination;
 
 /** @internal */
 interface CursorPaginator

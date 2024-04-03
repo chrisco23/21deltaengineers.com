@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
 /** @internal */
-class Page_Date_Archive extends Page
+class Page_Date_Archive extends \IAWP\Models\Page
 {
     private $date_archive;
     public function __construct($row)

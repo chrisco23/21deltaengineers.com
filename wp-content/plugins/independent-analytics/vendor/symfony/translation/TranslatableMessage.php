@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation;
+namespace IAWPSCOPED\Symfony\Component\Translation;
 
-use IAWP_SCOPED\Symfony\Contracts\Translation\TranslatableInterface;
-use IAWP_SCOPED\Symfony\Contracts\Translation\TranslatorInterface;
+use IAWPSCOPED\Symfony\Contracts\Translation\TranslatableInterface;
+use IAWPSCOPED\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Nate Wiebe <nate@northern.co>
  * @internal
@@ -21,7 +21,7 @@ class TranslatableMessage implements TranslatableInterface
     private $message;
     private $parameters;
     private $domain;
-    public function __construct(string $message, array $parameters = [], string $domain = null)
+    public function __construct(string $message, array $parameters = [], ?string $domain = null)
     {
         $this->message = $message;
         $this->parameters = $parameters;
@@ -43,7 +43,7 @@ class TranslatableMessage implements TranslatableInterface
     {
         return $this->domain;
     }
-    public function trans(TranslatorInterface $translator, string $locale = null) : string
+    public function trans(TranslatorInterface $translator, ?string $locale = null) : string
     {
         return $translator->trans($this->getMessage(), \array_map(static function ($parameter) use($translator, $locale) {
             return $parameter instanceof TranslatableInterface ? $parameter->trans($translator, $locale) : $parameter;

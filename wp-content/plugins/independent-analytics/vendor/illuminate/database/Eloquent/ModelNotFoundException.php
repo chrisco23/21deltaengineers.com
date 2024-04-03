@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent;
 
-use IAWP_SCOPED\Illuminate\Database\RecordsNotFoundException;
-use IAWP_SCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Database\RecordsNotFoundException;
+use IAWPSCOPED\Illuminate\Support\Arr;
 /** @internal */
 class ModelNotFoundException extends RecordsNotFoundException
 {

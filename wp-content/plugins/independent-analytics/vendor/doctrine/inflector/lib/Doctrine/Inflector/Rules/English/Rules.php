@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Inflector\Rules\English;
+namespace IAWPSCOPED\Doctrine\Inflector\Rules\English;
 
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Patterns;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Ruleset;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Substitutions;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Transformations;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Patterns;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Ruleset;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Substitutions;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Transformations;
 /** @internal */
 final class Rules
 {

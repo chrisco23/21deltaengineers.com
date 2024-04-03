@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Command;
+namespace IAWPSCOPED\Symfony\Component\Console\Command;
 
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionInput;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\Output\BashCompletionOutput;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\Output\CompletionOutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\CommandNotFoundException;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\ExceptionInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputOption;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionInput;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
+use IAWPSCOPED\Symfony\Component\Console\Completion\Output\BashCompletionOutput;
+use IAWPSCOPED\Symfony\Component\Console\Completion\Output\CompletionOutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Exception\CommandNotFoundException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\ExceptionInterface;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputOption;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Responsible for providing the values to the shell completion.
  *

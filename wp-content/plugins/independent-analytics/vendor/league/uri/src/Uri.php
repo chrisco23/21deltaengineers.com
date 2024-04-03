@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri;
+namespace IAWPSCOPED\League\Uri;
 
-use IAWP_SCOPED\League\Uri\Contracts\UriInterface;
-use IAWP_SCOPED\League\Uri\Exceptions\FileinfoSupportMissing;
-use IAWP_SCOPED\League\Uri\Exceptions\IdnaConversionFailed;
-use IAWP_SCOPED\League\Uri\Exceptions\IdnSupportMissing;
-use IAWP_SCOPED\League\Uri\Exceptions\SyntaxError;
-use IAWP_SCOPED\League\Uri\Idna\Idna;
-use IAWP_SCOPED\Psr\Http\Message\UriInterface as Psr7UriInterface;
+use IAWPSCOPED\League\Uri\Contracts\UriInterface;
+use IAWPSCOPED\League\Uri\Exceptions\FileinfoSupportMissing;
+use IAWPSCOPED\League\Uri\Exceptions\IdnaConversionFailed;
+use IAWPSCOPED\League\Uri\Exceptions\IdnSupportMissing;
+use IAWPSCOPED\League\Uri\Exceptions\SyntaxError;
+use IAWPSCOPED\League\Uri\Idna\Idna;
+use IAWPSCOPED\Psr\Http\Message\UriInterface as Psr7UriInterface;
 use function array_filter;
 use function array_map;
 use function base64_decode;

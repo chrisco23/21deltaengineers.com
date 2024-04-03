@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Queue;
+namespace IAWPSCOPED\Illuminate\Contracts\Queue;
 
 use InvalidArgumentException;
 /** @internal */

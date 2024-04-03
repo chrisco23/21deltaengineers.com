@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Container;
+namespace IAWPSCOPED\Illuminate\Container;
 
-use IAWP_SCOPED\Illuminate\Contracts\Container\Container;
-use IAWP_SCOPED\Illuminate\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
+use IAWPSCOPED\Illuminate\Contracts\Container\Container;
+use IAWPSCOPED\Illuminate\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
 /** @internal */
 class ContextualBindingBuilder implements ContextualBindingBuilderContract
 {

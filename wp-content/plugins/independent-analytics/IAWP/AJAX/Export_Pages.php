@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Capability_Manager;
-use IAWP_SCOPED\IAWP\Date_Range\Exact_Date_Range;
-use IAWP_SCOPED\IAWP\Rows\Pages;
-use IAWP_SCOPED\IAWP\Tables\Table_Pages;
+use IAWP\Capability_Manager;
+use IAWP\Date_Range\Exact_Date_Range;
+use IAWP\Rows\Pages;
+use IAWP\Tables\Table_Pages;
 /** @internal */
-class Export_Pages extends AJAX
+class Export_Pages extends \IAWP\AJAX\AJAX
 {
     protected function action_name() : string
     {

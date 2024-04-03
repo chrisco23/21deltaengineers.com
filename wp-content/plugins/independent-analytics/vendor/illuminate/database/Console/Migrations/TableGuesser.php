@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console\Migrations;
+namespace IAWPSCOPED\Illuminate\Database\Console\Migrations;
 
 /** @internal */
 class TableGuesser

@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Illuminate\Contracts\Broadcasting\Factory as BroadcastingFactoryContract;
+use IAWPSCOPED\Illuminate\Contracts\Broadcasting\Factory as BroadcastingFactoryContract;
 /**
  * @method static \Illuminate\Broadcasting\Broadcasters\Broadcaster channel(string $channel, callable|string  $callback, array $options = [])
  * @method static mixed auth(\Illuminate\Http\Request $request)

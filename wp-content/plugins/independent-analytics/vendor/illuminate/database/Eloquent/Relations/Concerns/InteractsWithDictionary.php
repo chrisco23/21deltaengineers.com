@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns;
 
 use BackedEnum;
-use IAWP_SCOPED\Doctrine\Instantiator\Exception\InvalidArgumentException;
+use IAWPSCOPED\Doctrine\Instantiator\Exception\InvalidArgumentException;
 /** @internal */
 trait InteractsWithDictionary
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema\Grammars;
+namespace IAWPSCOPED\Illuminate\Database\Schema\Grammars;
 
-use IAWP_SCOPED\Doctrine\DBAL\Schema\AbstractSchemaManager as SchemaManager;
-use IAWP_SCOPED\Doctrine\DBAL\Schema\Comparator;
-use IAWP_SCOPED\Doctrine\DBAL\Schema\Table;
-use IAWP_SCOPED\Doctrine\DBAL\Types\Type;
-use IAWP_SCOPED\Illuminate\Database\Connection;
-use IAWP_SCOPED\Illuminate\Database\Schema\Blueprint;
-use IAWP_SCOPED\Illuminate\Support\Fluent;
+use IAWPSCOPED\Doctrine\DBAL\Schema\AbstractSchemaManager as SchemaManager;
+use IAWPSCOPED\Doctrine\DBAL\Schema\Comparator;
+use IAWPSCOPED\Doctrine\DBAL\Schema\Table;
+use IAWPSCOPED\Doctrine\DBAL\Types\Type;
+use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Database\Schema\Blueprint;
+use IAWPSCOPED\Illuminate\Support\Fluent;
 use RuntimeException;
 /** @internal */
 class ChangeColumn

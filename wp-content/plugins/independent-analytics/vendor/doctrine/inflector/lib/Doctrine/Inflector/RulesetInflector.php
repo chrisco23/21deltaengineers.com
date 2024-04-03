@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Inflector;
+namespace IAWPSCOPED\Doctrine\Inflector;
 
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Ruleset;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Ruleset;
 use function array_merge;
 /**
  * Inflects based on multiple rulesets.

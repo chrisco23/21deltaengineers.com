@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent;
 
-use IAWP_SCOPED\Illuminate\Database\Events\ModelsPruned;
+use IAWPSCOPED\Illuminate\Database\Events\ModelsPruned;
 use LogicException;
 /** @internal */
 trait MassPrunable

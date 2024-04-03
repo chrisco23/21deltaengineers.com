@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Rows;
+namespace IAWP\Rows;
 
-use IAWP_SCOPED\IAWP\Illuminate_Builder;
-use IAWP_SCOPED\IAWP\Models\Geo;
-use IAWP_SCOPED\IAWP\Query;
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
-use IAWP_SCOPED\Illuminate\Database\Query\JoinClause;
+use IAWP\Illuminate_Builder;
+use IAWP\Models\Geo;
+use IAWP\Query;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
+use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
 /** @internal */
-class Cities extends Rows
+class Cities extends \IAWP\Rows\Rows
 {
     public function attach_filters(Builder $query) : void
     {
@@ -38,7 +38,7 @@ class Cities extends Rows
         $total_period_array = [$this->date_range->previous_period()->iso_start(), $this->date_range->iso_end()];
         $calculated_columns = ['views_per_session', 'views_growth', 'visitors_growth', 'bounce_rate', 'wc_net_sales', 'wc_conversion_rate', 'wc_earnings_per_visitor', 'wc_average_order_volume'];
         $has_calculate_column_filter = !empty(\array_filter($this->filters, function ($filter) use($calculated_columns) {
-            return \in_array($filter['column'], $calculated_columns);
+            return \in_array($filter->column(), $calculated_columns);
         }));
         if (\in_array($this->sort_configuration->column(), $calculated_columns)) {
             $has_calculate_column_filter = \true;
@@ -58,12 +58,9 @@ class Cities extends Rows
             $query->whereNull('sessions.ended_at')->orWhereBetween('sessions.ended_at', $total_period_array);
         })->when(\count($this->filters) > 0, function (Builder $query) use($calculated_columns) {
             foreach ($this->filters as $filter) {
-                if (\in_array($filter['column'], $calculated_columns)) {
-                    continue;
+                if (!\in_array($filter->column(), $calculated_columns)) {
+                    $filter->apply_to_query($query);
                 }
-                $filter = new Filter($filter);
-                $method = $filter->method();
-                $query->{$method}($filter->column(), $filter->operator(), $filter->value());
             }
         })->groupBy('cities.city_id')->having('views', '>', 0)->when(!$has_calculate_column_filter, function (Builder $query) {
             $query->when($this->sort_configuration->is_nullable(), function (Builder $query) {
@@ -75,12 +72,9 @@ class Cities extends Rows
         $outer_query = Illuminate_Builder::get_builder();
         $outer_query->selectRaw('cites.*')->selectRaw('IF(sessions = 0, 0, views / sessions) AS views_per_session')->selectRaw('IFNULL((views - previous_period_views) / previous_period_views * 100, 0) AS views_growth')->selectRaw('IFNULL((visitors - previous_period_visitors) / previous_period_visitors * 100, 0) AS visitors_growth')->selectRaw('IFNULL(bounces / sessions * 100, 0) AS bounce_rate')->selectRaw('ROUND(CAST(wc_gross_sales - wc_refunded_amount AS DECIMAL(10, 2))) AS wc_net_sales')->selectRaw('IF(visitors = 0, 0, (wc_orders / visitors) * 100) AS wc_conversion_rate')->selectRaw('IF(visitors = 0, 0, (wc_gross_sales - wc_refunded_amount) / visitors) AS wc_earnings_per_visitor')->selectRaw('IF(wc_orders = 0, 0, ROUND(CAST(wc_gross_sales / wc_orders AS DECIMAL(10, 2)))) AS wc_average_order_volume')->when(\count($this->filters) > 0, function (Builder $query) use($calculated_columns) {
             foreach ($this->filters as $filter) {
-                if (!\in_array($filter['column'], $calculated_columns)) {
-                    continue;
+                if (\in_array($filter->column(), $calculated_columns)) {
+                    $filter->apply_to_query($query);
                 }
-                $filter = new Filter($filter);
-                $method = $filter->method();
-                $query->{$method}($filter->column(), $filter->operator(), $filter->value());
             }
         })->fromSub($cities_query, 'cites')->when($has_calculate_column_filter, function (Builder $query) {
             $query->when($this->sort_configuration->is_nullable(), function (Builder $query) {

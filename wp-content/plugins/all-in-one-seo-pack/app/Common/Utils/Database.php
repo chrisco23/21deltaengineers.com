@@ -21,6 +21,8 @@ class Database {
 	 */
 	protected $customTables = [
 		'aioseo_cache',
+		'aioseo_crawl_cleanup_blocked_args',
+		'aioseo_crawl_cleanup_logs',
 		'aioseo_links',
 		'aioseo_links_suggestions',
 		'aioseo_notifications',
@@ -31,7 +33,8 @@ class Database {
 		'aioseo_redirects_hits',
 		'aioseo_redirects_logs',
 		'aioseo_terms',
-		'aioseo_search_statistics_objects'
+		'aioseo_search_statistics_objects',
+		'aioseo_revisions'
 	];
 
 	/**

@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Models\Visitor;
-use IAWP_SCOPED\IAWP\Utils\Request;
+use IAWP\Models\Visitor;
+use IAWP\Utils\Request;
 /** @internal */
 class WooCommerce_Order
 {
@@ -40,7 +40,7 @@ class WooCommerce_Order
     public function upsert() : void
     {
         global $wpdb;
-        $wc_orders_table = Query::get_table_name(Query::WC_ORDERS);
+        $wc_orders_table = \IAWP\Query::get_table_name(\IAWP\Query::WC_ORDERS);
         $existing_wc_order = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wc_orders_table} WHERE order_id = %d", $this->order_id));
         if (!\is_null($existing_wc_order)) {
             $wpdb->update($wc_orders_table, ['total' => $this->total, 'total_refunded' => $this->total_refunded, 'total_refunds' => $this->total_refunds, 'status' => $this->status], ['order_id' => $this->order_id]);

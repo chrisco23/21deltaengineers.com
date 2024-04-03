@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
 /** @internal */
 class DatabaseTransactionsManager
@@ -18,7 +18,7 @@ class DatabaseTransactionsManager
      */
     public function __construct()
     {
-        $this->transactions = \IAWP_SCOPED\collect();
+        $this->transactions = \IAWPSCOPED\collect();
     }
     /**
      * Start a new database transaction.

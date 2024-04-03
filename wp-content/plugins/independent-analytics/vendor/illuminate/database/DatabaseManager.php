@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
-use IAWP_SCOPED\Doctrine\DBAL\Types\Type;
-use IAWP_SCOPED\Illuminate\Database\Connectors\ConnectionFactory;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\ConfigurationUrlParser;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Doctrine\DBAL\Types\Type;
+use IAWPSCOPED\Illuminate\Database\Connectors\ConnectionFactory;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\ConfigurationUrlParser;
+use IAWPSCOPED\Illuminate\Support\Str;
 use InvalidArgumentException;
 use PDO;
 use RuntimeException;
@@ -209,7 +209,7 @@ class DatabaseManager implements ConnectionResolverInterface
      */
     public function registerDoctrineType(string $class, string $name, string $type) : void
     {
-        if (!\class_exists('IAWP_SCOPED\\Doctrine\\DBAL\\Connection')) {
+        if (!\class_exists('IAWPSCOPED\\Doctrine\\DBAL\\Connection')) {
             throw new RuntimeException('Registering a custom Doctrine type requires Doctrine DBAL (doctrine/dbal).');
         }
         if (!Type::hasType($name)) {

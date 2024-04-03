@@ -255,7 +255,14 @@ trait WpContext {
 			return $content[ $post->ID ];
 		}
 
-		$content[ $post->ID ] = $this->theContent( $post->post_content );
+		// We need to process the content for page builders.
+		$postContent = $post->post_content;
+		$pageBuilder = aioseo()->helpers->getPostPageBuilderName( $post->ID );
+		if ( ! empty( $pageBuilder ) ) {
+			$postContent = aioseo()->standalone->pageBuilderIntegrations[ $pageBuilder ]->processContent( $post->ID, $postContent );
+		}
+
+		$content[ $post->ID ] = $this->theContent( $postContent );
 
 		if ( apply_filters( 'aioseo_description_include_custom_fields', true, $post ) ) {
 			$content[ $post->ID ] .= $this->theContent( $this->getPostCustomFieldsContent( $post ) );
@@ -311,7 +318,7 @@ trait WpContext {
 		$this->originalPost  = is_a( $post, 'WP_Post' ) ? $this->deepClone( $post ) : null;
 
 		// The order of the function calls below is intentional and should NOT change.
-		$postContent = function_exists( 'do_blocks' ) ? do_blocks( $postContent ) : $postContent; // phpcs:ignore AIOSEO.WpFunctionUse.NewFunctions.do_blocksFound
+		$postContent = do_blocks( $postContent );
 		$postContent = wpautop( $postContent );
 		$postContent = $this->doShortcodes( $postContent );
 

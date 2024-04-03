@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Inflector;
+namespace IAWPSCOPED\Doctrine\Inflector;
 
 /** @internal */
 class NoopWordInflector implements WordInflector

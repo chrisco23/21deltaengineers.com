@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Utils;
+namespace IAWP\Utils;
 
 /** @internal */
 class Security
@@ -34,5 +34,3 @@ class Security
         return \wp_kses($html, ['svg' => ['height' => [], 'width' => [], 'fill' => [], 'viewbox' => [], 'style' => []], 'path' => ['d' => []]]);
     }
 }
-/** @internal */
-\class_alias('IAWP_SCOPED\\IAWP\\Utils\\Security', 'IAWP\\Utils\\Security', \false);

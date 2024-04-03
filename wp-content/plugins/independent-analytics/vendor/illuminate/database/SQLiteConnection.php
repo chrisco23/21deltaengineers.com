@@ -1,16 +1,16 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
-use IAWP_SCOPED\Doctrine\DBAL\Driver\PDOSqlite\Driver as DoctrineDriver;
-use IAWP_SCOPED\Doctrine\DBAL\Version;
-use IAWP_SCOPED\Illuminate\Database\PDO\SQLiteDriver;
-use IAWP_SCOPED\Illuminate\Database\Query\Grammars\SQLiteGrammar as QueryGrammar;
-use IAWP_SCOPED\Illuminate\Database\Query\Processors\SQLiteProcessor;
-use IAWP_SCOPED\Illuminate\Database\Schema\Grammars\SQLiteGrammar as SchemaGrammar;
-use IAWP_SCOPED\Illuminate\Database\Schema\SQLiteBuilder;
-use IAWP_SCOPED\Illuminate\Database\Schema\SqliteSchemaState;
-use IAWP_SCOPED\Illuminate\Filesystem\Filesystem;
+use IAWPSCOPED\Doctrine\DBAL\Driver\PDOSqlite\Driver as DoctrineDriver;
+use IAWPSCOPED\Doctrine\DBAL\Version;
+use IAWPSCOPED\Illuminate\Database\PDO\SQLiteDriver;
+use IAWPSCOPED\Illuminate\Database\Query\Grammars\SQLiteGrammar as QueryGrammar;
+use IAWPSCOPED\Illuminate\Database\Query\Processors\SQLiteProcessor;
+use IAWPSCOPED\Illuminate\Database\Schema\Grammars\SQLiteGrammar as SchemaGrammar;
+use IAWPSCOPED\Illuminate\Database\Schema\SQLiteBuilder;
+use IAWPSCOPED\Illuminate\Database\Schema\SqliteSchemaState;
+use IAWPSCOPED\Illuminate\Filesystem\Filesystem;
 /** @internal */
 class SQLiteConnection extends Connection
 {

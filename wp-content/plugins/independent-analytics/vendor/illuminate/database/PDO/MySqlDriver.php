@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\PDO;
+namespace IAWPSCOPED\Illuminate\Database\PDO;
 
-use IAWP_SCOPED\Doctrine\DBAL\Driver\AbstractMySQLDriver;
-use IAWP_SCOPED\Illuminate\Database\PDO\Concerns\ConnectsToDatabase;
+use IAWPSCOPED\Doctrine\DBAL\Driver\AbstractMySQLDriver;
+use IAWPSCOPED\Illuminate\Database\PDO\Concerns\ConnectsToDatabase;
 /** @internal */
 class MySqlDriver extends AbstractMySQLDriver
 {

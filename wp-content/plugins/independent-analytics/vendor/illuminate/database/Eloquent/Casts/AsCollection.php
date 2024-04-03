@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Casts;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Casts;
 
-use IAWP_SCOPED\Illuminate\Contracts\Database\Eloquent\Castable;
-use IAWP_SCOPED\Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use IAWP_SCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Contracts\Database\Eloquent\Castable;
+use IAWPSCOPED\Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use IAWPSCOPED\Illuminate\Support\Collection;
 /** @internal */
 class AsCollection implements Castable
 {

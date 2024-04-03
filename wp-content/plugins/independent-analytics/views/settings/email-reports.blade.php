@@ -11,7 +11,7 @@
         <input type='hidden' name='option_page' value='iawp_email_report_settings'/>
         <input type="hidden" name="action" value="update"/>
         <input type="hidden" name="_wp_http_referer"
-               value="/wp-admin/admin.php?page=independent-analytics&tab=settings">
+               value="/wp-admin/admin.php?page=independent-analytics-settings">
         <?php wp_nonce_field('iawp_email_report_settings-options'); ?>
         <div class="inner">
             <div class="delivery-time iawp-section">
@@ -20,7 +20,7 @@
                     <?php for ($i = 0; $i < 24; $i++) {
                         $readable_time = new DateTime(date('Y-m-d') . ' ' . $i . ':00:00');
                         $readable_time = $readable_time->format(get_option('time_format')); ?>
-                        <option value="<?php esc_attr_e($i); ?>" <?php selected($time, $i, true); ?>><?php esc_html_e($readable_time); ?></option>
+                        <option value="<?php echo esc_attr($i); ?>" <?php selected($time, $i, true); ?>><?php echo esc_html($readable_time); ?></option>
                     <?php
                     } ?>
                 </select>
@@ -30,30 +30,46 @@
                 <div class="custom-colors-list">
                     <div class="custom-color">
                         <p class="element-name"><?php esc_html_e('Header background', 'independent-analytics'); ?></p>
-                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($saved_colors[0]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[0]); ?>" />
+                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($input_default[0]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[0]); ?>" />
                     </div>
                     <div class="custom-color">
                         <p class="element-name"><?php esc_html_e('Header text', 'independent-analytics'); ?></p>
-                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($saved_colors[1]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[1]); ?>" />
+                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($input_default[1]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[1]); ?>" />
                     </div>
                     <div class="custom-color">
                         <p class="element-name"><?php esc_html_e('Sub-header background', 'independent-analytics'); ?></p>
-                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($saved_colors[2]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[2]); ?>" />
+                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($input_default[2]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[2]); ?>" />
                     </div>
                     <div class="custom-color">
                         <p class="element-name"><?php esc_html_e('Sub-header text', 'independent-analytics'); ?></p>
-                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($saved_colors[3]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[3]); ?>" />
+                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($input_default[3]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[3]); ?>" />
                     </div>
                     <div class="custom-color">
                         <p class="element-name"><?php esc_html_e('Bar chart', 'independent-analytics'); ?></p>
-                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($saved_colors[4]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[4]); ?>" />
+                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($input_default[4]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[4]); ?>" />
                     </div>
                     <div class="custom-color">
                         <p class="element-name"><?php esc_html_e('Bar chart accent', 'independent-analytics'); ?></p>
-                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($saved_colors[5]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[5]); ?>" />
+                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($input_default[5]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[5]); ?>" />
+                    </div>
+                    <div class="custom-color">
+                        <p class="element-name"><?php esc_html_e('Borders', 'independent-analytics'); ?></p>
+                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($input_default[6]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[6]); ?>" />
+                    </div>
+                    <div class="custom-color">
+                        <p class="element-name"><?php esc_html_e('Metric background', 'independent-analytics'); ?></p>
+                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($input_default[7]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[7]); ?>" />
+                    </div>
+                    <div class="custom-color">
+                        <p class="element-name"><?php esc_html_e('Outer background', 'independent-analytics'); ?></p>
+                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($input_default[8]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[8]); ?>" />
+                    </div>
+                    <div class="custom-color">
+                        <p class="element-name"><?php esc_html_e('Footer background', 'independent-analytics'); ?></p>
+                        <input type="text" class="iawp-color-picker" value="<?php echo sanitize_hex_color($input_default[9]); ?>" data-default-color="<?php echo sanitize_hex_color($default_colors[9]); ?>" />
                     </div>
                 </div>
-                <input type="hidden" id="iawp_email_report_colors" name="iawp_email_report_colors" value="<?php echo implode(',', $saved_colors); ?>" />
+                <input type="hidden" id="iawp_email_report_colors" name="iawp_email_report_colors" value="<?php echo implode(',', $input_default); ?>" />
             </div>
             <div class="email-addresses iawp-section">
                 <h3><?php esc_html_e('Add new email addresses', 'independent-analytics'); ?></h3>
@@ -80,10 +96,10 @@
                     <?php for ($i = 0; $i < count($emails); $i++) : ?>
                         <div class="entry">
                             <input type="email" readonly
-                                id="iawp_email_report_email_addresses[<?php esc_attr_e($i); ?>]" 
-                                name="iawp_email_report_email_addresses[<?php esc_attr_e($i); ?>]" 
+                                id="iawp_email_report_email_addresses[<?php echo esc_attr($i); ?>]" 
+                                name="iawp_email_report_email_addresses[<?php echo esc_attr($i); ?>]" 
                                 data-option="iawp_email_report_email_addresses"
-                                value="<?php esc_attr_e($emails[$i]); ?>" />
+                                value="<?php echo esc_attr($emails[$i]); ?>" />
                                 <button class="remove iawp-button ghost-purple"><?php esc_html_e('Remove email', 'independent-analytics'); ?></button>
                         </div>
                     <?php endfor; ?>

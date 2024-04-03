@@ -1,3 +1,17 @@
+= 4.4.0 (26 Feb 2024) =
+* Added support for field placeholders in contact form confirmation message.
+* Added new social icons: Rumble, Truth Social and Gab
+
+= 4.3.9 (20 Feb 2024) =
+* Fixed PHP 8.2 deprecation messages
+
+= 4.3.8 (14 Feb 2024) =
+* Fixed license keys with uppercase characters unnecessarily rejected
+* Added new social icon: Blog
+
+= 4.3.7 (13 Feb 2024) =
+* Added new social icons: Bluesky, Amazon Music, YouTube Music and Apple Music
+
 = 4.3.6 (8 Jan 2024) =
 * Fixed person module open links in tab not working in some cases
 * Delayed portfolio sorting filters for improved compatibility with custom code 

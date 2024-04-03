@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Common\Cache;
+namespace IAWPSCOPED\Doctrine\Common\Cache;
 
 use DateTime;
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\UTCDateTime;
-use IAWP_SCOPED\MongoDB\Collection;
-use IAWP_SCOPED\MongoDB\Database;
+use IAWPSCOPED\MongoDB\Collection;
+use IAWPSCOPED\MongoDB\Database;
 use MongoDB\Driver\Exception\Exception;
-use IAWP_SCOPED\MongoDB\Model\BSONDocument;
+use IAWPSCOPED\MongoDB\Model\BSONDocument;
 use function serialize;
 use function time;
 use function unserialize;

@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 php5to4("../spyc.php", 'spyc-latest.php4');
 /** @internal */

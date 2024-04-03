@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache;
+namespace IAWPSCOPED\Doctrine\Common\Cache;
 
-use IAWP_SCOPED\Predis\ClientInterface;
+use IAWPSCOPED\Predis\ClientInterface;
 use function array_combine;
 use function array_filter;
 use function array_map;

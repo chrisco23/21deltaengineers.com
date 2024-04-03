@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Psr\Http\Message;
+namespace IAWPSCOPED\Psr\Http\Message;
 
 /**
  * Value object representing a file uploaded through an HTTP request.

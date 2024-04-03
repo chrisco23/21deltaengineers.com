@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Helper;
+namespace IAWPSCOPED\Symfony\Component\Console\Helper;
 
-use IAWP_SCOPED\Symfony\Component\Console\Command\Command;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Console\Command\Command;
+use IAWPSCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
 /**
  * HelperSet represents a set of helpers to be used with a command.
  *
@@ -34,7 +34,7 @@ class HelperSet implements \IteratorAggregate
             $this->set($helper, \is_int($alias) ? null : $alias);
         }
     }
-    public function set(HelperInterface $helper, string $alias = null)
+    public function set(HelperInterface $helper, ?string $alias = null)
     {
         $this->helpers[$helper->getName()] = $helper;
         if (null !== $alias) {
@@ -68,7 +68,7 @@ class HelperSet implements \IteratorAggregate
     /**
      * @deprecated since Symfony 5.4
      */
-    public function setCommand(Command $command = null)
+    public function setCommand(?Command $command = null)
     {
         trigger_deprecation('symfony/console', '5.4', 'Method "%s()" is deprecated.', __METHOD__);
         $this->command = $command;

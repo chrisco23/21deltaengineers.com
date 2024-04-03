@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Test;
+namespace IAWPSCOPED\Symfony\Component\Translation\Test;
 
-use IAWP_SCOPED\PHPUnit\Framework\TestCase;
-use IAWP_SCOPED\Psr\Log\LoggerInterface;
-use IAWP_SCOPED\Symfony\Component\HttpClient\MockHttpClient;
-use IAWP_SCOPED\Symfony\Component\Translation\Dumper\XliffFileDumper;
-use IAWP_SCOPED\Symfony\Component\Translation\Loader\LoaderInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\Provider\ProviderInterface;
-use IAWP_SCOPED\Symfony\Contracts\HttpClient\HttpClientInterface;
+use IAWPSCOPED\PHPUnit\Framework\TestCase;
+use IAWPSCOPED\Psr\Log\LoggerInterface;
+use IAWPSCOPED\Symfony\Component\HttpClient\MockHttpClient;
+use IAWPSCOPED\Symfony\Component\Translation\Dumper\XliffFileDumper;
+use IAWPSCOPED\Symfony\Component\Translation\Loader\LoaderInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Provider\ProviderInterface;
+use IAWPSCOPED\Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * A test case to ease testing a translation provider.
  *

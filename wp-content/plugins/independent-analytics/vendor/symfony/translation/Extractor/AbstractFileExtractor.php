@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Extractor;
+namespace IAWPSCOPED\Symfony\Component\Translation\Extractor;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
 /**
  * Base class used by classes that extract translation messages from files.
  *

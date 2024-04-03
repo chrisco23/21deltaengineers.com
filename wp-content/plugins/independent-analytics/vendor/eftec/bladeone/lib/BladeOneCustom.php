@@ -4,7 +4,7 @@
 /** @noinspection PhpMissingReturnTypeInspection */
 /** @noinspection UnknownInspectionInspection */
 /** @noinspection PhpUnused */
-namespace IAWP_SCOPED\eftec\bladeone;
+namespace IAWPSCOPED\eftec\bladeone;
 
 /*
  * It's an example of a custom set of functions for bladeone.

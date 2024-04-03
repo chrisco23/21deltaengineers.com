@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache;
+namespace IAWPSCOPED\Doctrine\Common\Cache;
 
-use IAWP_SCOPED\Couchbase;
+use IAWPSCOPED\Couchbase;
 use function explode;
 use function time;
 /**

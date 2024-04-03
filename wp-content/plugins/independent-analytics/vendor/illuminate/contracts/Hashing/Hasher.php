@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Hashing;
+namespace IAWPSCOPED\Illuminate\Contracts\Hashing;
 
 /** @internal */
 interface Hasher

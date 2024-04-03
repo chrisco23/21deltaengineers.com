@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Traits;
+namespace IAWPSCOPED\Carbon\Traits;
 
 use BadMethodCallException;
-use IAWP_SCOPED\Carbon\CarbonInterface;
-use IAWP_SCOPED\Carbon\Exceptions\BadComparisonUnitException;
+use IAWPSCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\Exceptions\BadComparisonUnitException;
 use InvalidArgumentException;
 /**
  * Trait Comparison.

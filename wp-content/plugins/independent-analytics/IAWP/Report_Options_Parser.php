@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
 /** @internal */
 class Report_Options_Parser
@@ -38,7 +38,7 @@ class Report_Options_Parser
     private function strip_empty_options(array $options) : array
     {
         return \array_filter($options, function ($option) {
-            return !$option instanceof Empty_Report_Option;
+            return !$option instanceof \IAWP\Empty_Report_Option;
         });
     }
     /**
@@ -49,7 +49,7 @@ class Report_Options_Parser
     private function get_string_option(string $key)
     {
         if (!\array_key_exists($key, $this->attributes) || !\is_string($this->attributes[$key])) {
-            return new Empty_Report_Option();
+            return new \IAWP\Empty_Report_Option();
         }
         return \sanitize_text_field($this->attributes[$key]);
     }
@@ -61,11 +61,11 @@ class Report_Options_Parser
     private function get_array_option(string $key)
     {
         if (!\array_key_exists($key, $this->attributes) || !\is_array($this->attributes[$key])) {
-            return new Empty_Report_Option();
+            return new \IAWP\Empty_Report_Option();
         }
         foreach ($this->attributes[$key] as $visible_dataset) {
             if (!\is_string($visible_dataset)) {
-                return new Empty_Report_Option();
+                return new \IAWP\Empty_Report_Option();
             }
         }
         return \array_map(function ($item) {
@@ -78,18 +78,18 @@ class Report_Options_Parser
     private function get_filters()
     {
         if (!\array_key_exists('filters', $this->attributes) || !\is_array($this->attributes['filters'])) {
-            return new Empty_Report_Option();
+            return new \IAWP\Empty_Report_Option();
         }
         foreach ($this->attributes['filters'] as $filter) {
             if (!\is_array($filter)) {
-                return new Empty_Report_Option();
+                return new \IAWP\Empty_Report_Option();
             }
             if (\array_keys($filter) !== ['inclusion', 'column', 'operator', 'operand']) {
-                return new Empty_Report_Option();
+                return new \IAWP\Empty_Report_Option();
             }
             foreach ($filter as $value) {
                 if (!\is_string($value)) {
-                    return new Empty_Report_Option();
+                    return new \IAWP\Empty_Report_Option();
                 }
             }
         }
@@ -97,8 +97,8 @@ class Report_Options_Parser
             return ['inclusion' => \sanitize_text_field($filter['inclusion']), 'column' => \sanitize_text_field($filter['column']), 'operator' => \sanitize_text_field($filter['operator']), 'operand' => \sanitize_text_field($filter['operand'])];
         }, $this->attributes['filters']);
     }
-    public static function from_json(string $json) : Report_Options_Parser
+    public static function from_json(string $json) : \IAWP\Report_Options_Parser
     {
-        return new Report_Options_Parser(\json_decode(\stripslashes($json), \true));
+        return new \IAWP\Report_Options_Parser(\json_decode(\stripslashes($json), \true));
     }
 }

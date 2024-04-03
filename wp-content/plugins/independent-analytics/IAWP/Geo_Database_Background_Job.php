@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Utils\WP_Async_Request;
+use IAWP\Utils\WP_Async_Request;
 /** @internal */
 class Geo_Database_Background_Job extends WP_Async_Request
 {
@@ -20,12 +20,12 @@ class Geo_Database_Background_Job extends WP_Async_Request
      */
     protected function handle() : void
     {
-        $downloader = new Geo_Database_Manager();
+        $downloader = new \IAWP\Geo_Database_Manager();
         $downloader->download();
     }
     public static function maybe_dispatch() : void
     {
-        $geo_database = new Geo_Database_Manager();
+        $geo_database = new \IAWP\Geo_Database_Manager();
         if ($geo_database->should_download()) {
             $background_job = new self();
             $background_job->dispatch();

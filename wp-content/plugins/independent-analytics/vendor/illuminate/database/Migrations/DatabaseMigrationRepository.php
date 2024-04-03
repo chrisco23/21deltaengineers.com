@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Migrations;
+namespace IAWPSCOPED\Illuminate\Database\Migrations;
 
-use IAWP_SCOPED\Illuminate\Database\ConnectionResolverInterface as Resolver;
+use IAWPSCOPED\Illuminate\Database\ConnectionResolverInterface as Resolver;
 /** @internal */
 class DatabaseMigrationRepository implements MigrationRepositoryInterface
 {

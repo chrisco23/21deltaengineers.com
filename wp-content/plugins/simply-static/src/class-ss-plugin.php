@@ -88,8 +88,6 @@ class Plugin {
 
 			// Maybe clear local directory.
 			add_action( 'ss_after_setup_task', array( self::$instance, 'maybe_clear_directory' ) );
-			// Move 404 to local directory
-			add_action( 'ss_finished_transferring_files_locally', array( self::$instance, 'transfer_404_page' ) );
 
 			self::$instance->integrations = new Integrations();
 			self::$instance->integrations->load();
@@ -104,6 +102,14 @@ class Plugin {
 
 			// Maybe run upgrade.
 			Upgrade_Handler::run();
+
+			// Multisite.
+			if ( is_multisite() ) {
+				Multisite::get_instance();
+			}
+
+			// Plugin compatibility.
+			Plugin_Compatibility::get_instance();
 
 			// Boot up admin.
 			Admin_Settings::get_instance();
@@ -136,6 +142,7 @@ class Plugin {
 		require_once $path . 'src/class-ss-url-extractor.php';
 		require_once $path . 'src/class-ss-url-fetcher.php';
 		require_once $path . 'src/class-ss-archive-creation-job.php';
+		require_once $path . 'src/tasks/traits/trait-can-transfer.php';
 		require_once $path . 'src/tasks/class-ss-task.php';
 		require_once $path . 'src/tasks/class-ss-setup-task.php';
 		require_once $path . 'src/tasks/class-ss-fetch-urls-task.php';
@@ -157,6 +164,8 @@ class Plugin {
 		require_once $path . 'src/class-integrations.php';
 		require_once $path . 'src/admin/inc/class-ss-admin-settings.php';
 		require_once $path . 'src/admin/inc/class-ss-migrate-settings.php';
+		require_once $path . 'src/class-ss-multisite.php';
+		require_once $path . 'src/class-ss-plugin-compatibility.php';
 	}
 
 	/**
@@ -180,7 +189,29 @@ class Plugin {
 			$blog_id = get_current_blog_id();
 		}
 		do_action( 'ss_before_static_export', $blog_id );
+
 		$this->archive_creation_job->start( $blog_id );
+
+		// Exit if Basic Auth but no credentials were provided.
+		if ( isset( $_SERVER['PHP_AUTH_USER'] ) && isset( $_SERVER['PHP_AUTH_PW'] ) ) {
+			$options         = get_option( 'simply-static' );
+			$basic_auth_user = $options['http_basic_auth_username'];
+			$basic_auth_pass = $options['http_basic_auth_password'];
+
+			if ( empty( $basic_auth_user ) && empty( $basic_auth_pass ) ) {
+				// Cancel export.
+				$message = __( 'Missing Basic Auth credentials - you need to configure the Basic Auth credentials in Simply Static -> Settings -> Misc -> Basic Auth to continue the export.', 'simply-static' );
+				$this->archive_creation_job->cancel();
+				$this->archive_creation_job->save_status_message( $message, 'error' );
+
+				// Reset logs.
+				$options['archive_name']       = null;
+				$options['archive_start_time'] = null;
+				$options['archive_end_time']   = null;
+
+				update_option( 'simply-static', $options );
+			}
+		}
 	}
 
 	/**
@@ -289,7 +320,7 @@ class Plugin {
 	/**
 	 * Set HTTP Basic Auth for wp-background-processing
 	 *
-	 * @param array  $parsed_args given args.
+	 * @param array $parsed_args given args.
 	 * @param string $url given URL.
 	 *
 	 * @return array
@@ -318,7 +349,7 @@ class Plugin {
 				$parsed_args['headers']['Authorization2'] = $value;
 			} else if ( 'Authorization2' === $key ) {
 				$parsed_args['headers']['Authorization'] = $value;
-				unset($parsed_args['headers'][$key]);
+				unset( $parsed_args['headers'][ $key ] );
 			}
 		}
 
@@ -328,7 +359,7 @@ class Plugin {
 	/**
 	 * Return the task list for the Archive Creation Job to process
 	 *
-	 * @param array  $task_list The list of tasks to process.
+	 * @param array $task_list The list of tasks to process.
 	 * @param string $delivery_method The method of delivering static files.
 	 *
 	 * @return array The list of tasks to process.
@@ -336,7 +367,7 @@ class Plugin {
 	public function filter_task_list( $task_list, $delivery_method ): array {
 		array_push( $task_list, 'setup', 'fetch_urls' );
 
-		$generate_404 = $this->options->get('generate_404');
+		$generate_404 = $this->options->get( 'generate_404' );
 
 		// Add 404 task
 		if ( $generate_404 ) {
@@ -362,8 +393,13 @@ class Plugin {
 	 * @return void
 	 */
 	public function maybe_clear_directory() {
+		// Check the export type.
+		$use_single            = get_option( 'simply-static-use-single' );
+		$use_build             = get_option( 'simply-static-use-build' );
+		$clear_local_directory = apply_filters( 'ss_clear_local_directory', empty( $use_build ) && empty( $use_single ) && $this->options->get( 'clear_directory_before_export' ) && 'local' === $this->options->get( 'delivery_method' ) );
+
 		// Clear out the local directory before copying files.
-		if ( $this->options->get( 'clear_directory_before_export' ) && 'local' === $this->options->get( 'delivery_method' ) ) {
+		if ( $clear_local_directory ) {
 			$local_dir = apply_filters( 'ss_local_dir', $this->options->get( 'local_dir' ) );
 
 			// Make sure the directory exists and is not empty.
@@ -373,45 +409,5 @@ class Plugin {
 				Transfer_Files_Locally_Task::delete_local_directory_static_files( $local_dir, $this->options );
 			}
 		}
-	}
-
-	/**
-	 * Transfer the 404 page if it exists.
-	 *
-	 * @param string $local_dir Path to local dir.
-	 *
-	 * @return void
-	 */
-	public function transfer_404_page( $local_dir ) {
-		$archive_dir  = $this->options->get_archive_dir();
-		$file_path    = untrailingslashit( $archive_dir ) . DIRECTORY_SEPARATOR . '404'  . DIRECTORY_SEPARATOR . 'index.html';
-
-		Util::debug_log( 'Transferring 404 Page');
-
-		if ( ! file_exists( $file_path ) ) {
-			 Util::debug_log( 'No 404 Page found at ' . $file_path );
-			 return;
-		}
-
-		$folder_404 = untrailingslashit( $local_dir ) . DIRECTORY_SEPARATOR . '404';
-
-		if ( ! is_dir( $folder_404 ) ) {
-			wp_mkdir_p( $folder_404 );
-		}
-
-		$destination_file = $folder_404  . DIRECTORY_SEPARATOR . 'index.html';
-
-		if ( file_exists( $destination_file ) ) {
-			return;
-		}
-
-		Util::debug_log( 'Destination 404 Page found at ' . $destination_file );
-
-		$copied = copy( $file_path, $destination_file );
-
-		Util::debug_log( 'Copy: ' . $copied ? 'Success' : 'No sucess' );
-
-
-
 	}
 }

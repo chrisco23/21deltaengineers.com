@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation;
+namespace IAWPSCOPED\Symfony\Component\Translation;
 
-use IAWP_SCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
-use IAWP_SCOPED\Symfony\Contracts\Translation\TranslatorInterface;
-use IAWP_SCOPED\Symfony\Contracts\Translation\TranslatorTrait;
+use IAWPSCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
+use IAWPSCOPED\Symfony\Contracts\Translation\TranslatorInterface;
+use IAWPSCOPED\Symfony\Contracts\Translation\TranslatorTrait;
 /**
  * IdentityTranslator does not translate anything.
  *

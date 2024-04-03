@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema;
+namespace IAWPSCOPED\Illuminate\Database\Schema;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Container\Container;
-use IAWP_SCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Container\Container;
+use IAWPSCOPED\Illuminate\Database\Connection;
 use InvalidArgumentException;
 use LogicException;
 /** @internal */

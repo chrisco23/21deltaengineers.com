@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Connectors;
+namespace IAWPSCOPED\Illuminate\Database\Connectors;
 
-use IAWP_SCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Arr;
 use PDO;
 /** @internal */
 class SqlServerConnector extends Connector implements ConnectorInterface

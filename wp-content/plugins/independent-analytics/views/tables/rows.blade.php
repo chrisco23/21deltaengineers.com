@@ -1,5 +1,5 @@
-<div id="iawp-rows" class="iawp-rows" data-row-count="<?php esc_attr_e($row_count); ?>">
-    <?php if ($row_count == 0): ?>
+<div id="iawp-rows" class="iawp-rows" data-number-of-shown-rows="<?php echo esc_attr($number_of_shown_rows) ?>">
+    <?php if ($number_of_shown_rows == 0): ?>
             <!-- No rows -->
         <?php if ($table_name == 'views'): ?>
     <p id="data-error"
@@ -21,7 +21,7 @@
         </p>
             <?php if(!$has_campaigns): ?>
         <p>
-            <a href="?page=independent-analytics&tab=campaign-builder"
+            <a href="?page=independent-analytics-campaign-builder"
                class="iawp-button purple">
                     <?php esc_html_e('Create your first campaign', 'independent-analytics'); ?>
             </a>
@@ -34,11 +34,11 @@
             <!-- Some rows -->
         <?php foreach ($rows as $index => $row): ?>
         <?php $class = $table_name == 'views' && $row->is_deleted() ? 'iawp-row deleted' : 'iawp-row'; ?>
-        <div class="<?php esc_attr_e($class); ?>" <?php echo $table->get_row_data_attributes($row) ?>>
+        <div class="<?php echo esc_attr($class); ?>" <?php echo $table->get_row_data_attributes($row) ?>>
             <?php foreach ($all_columns as $column): ?>
             <?php $class = $column->visible() ? 'cell' : 'cell hide'; ?>
-        <div class="<?php esc_attr_e($class); ?>"
-             data-column="<?php esc_attr_e($column->id()); ?>"
+        <div class="<?php echo esc_attr($class); ?>"
+             data-column="<?php echo esc_attr($column->id()); ?>"
              data-test-visibility="<?php echo $column->visible() ? 'visible' : 'hidden'; ?>"
         >
             <div class="row-number"><?php echo $index + 1; ?></div>

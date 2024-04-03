@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Question;
+namespace IAWPSCOPED\Symfony\Component\Console\Question;
 
-use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\LogicException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\LogicException;
 /**
  * Represents a Question.
  *
@@ -165,7 +165,7 @@ class Question
      *
      * @return $this
      */
-    public function setAutocompleterCallback(callable $callback = null) : self
+    public function setAutocompleterCallback(?callable $callback = null) : self
     {
         if ($this->hidden && null !== $callback) {
             throw new LogicException('A hidden question cannot use the autocompleter.');
@@ -178,7 +178,7 @@ class Question
      *
      * @return $this
      */
-    public function setValidator(callable $validator = null)
+    public function setValidator(?callable $validator = null)
     {
         $this->validator = $validator;
         return $this;

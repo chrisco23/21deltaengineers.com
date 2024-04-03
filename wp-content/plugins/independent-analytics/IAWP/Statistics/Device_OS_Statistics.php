@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Statistics;
+namespace IAWP\Statistics;
 
 /** @internal */
-class Device_OS_Statistics extends Statistics
+class Device_OS_Statistics extends \IAWP\Statistics\Statistics
 {
     protected function required_column() : ?string
     {

@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Illuminate_Builder;
-use IAWP_SCOPED\IAWP\Query;
-use IAWP_SCOPED\IAWP\Report_Options_Parser;
+use IAWP\Illuminate_Builder;
+use IAWP\Query;
+use IAWP\Report_Options_Parser;
 /** @internal */
-class Save_Report extends AJAX
+class Save_Report extends \IAWP\AJAX\AJAX
 {
     /**
      * @return array

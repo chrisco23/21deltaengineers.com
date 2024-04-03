@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Console\Application as Artisan;
-use IAWP_SCOPED\Illuminate\Contracts\Foundation\CachesConfiguration;
-use IAWP_SCOPED\Illuminate\Contracts\Foundation\CachesRoutes;
-use IAWP_SCOPED\Illuminate\Contracts\Support\DeferrableProvider;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Factory as ModelFactory;
-use IAWP_SCOPED\Illuminate\View\Compilers\BladeCompiler;
+use IAWPSCOPED\Illuminate\Console\Application as Artisan;
+use IAWPSCOPED\Illuminate\Contracts\Foundation\CachesConfiguration;
+use IAWPSCOPED\Illuminate\Contracts\Foundation\CachesRoutes;
+use IAWPSCOPED\Illuminate\Contracts\Support\DeferrableProvider;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Factory as ModelFactory;
+use IAWPSCOPED\Illuminate\View\Compilers\BladeCompiler;
 /** @internal */
 abstract class ServiceProvider
 {
@@ -290,7 +290,7 @@ abstract class ServiceProvider
         if (!\is_null($paths = static::pathsForProviderOrGroup($provider, $group))) {
             return $paths;
         }
-        return \IAWP_SCOPED\collect(static::$publishes)->reduce(function ($paths, $p) {
+        return \IAWPSCOPED\collect(static::$publishes)->reduce(function ($paths, $p) {
             return \array_merge($paths, $p);
         }, []);
     }

@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations;
 
 use BadMethodCallException;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Builder;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Collection;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Builder;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Collection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
 /** @internal */
 class MorphTo extends BelongsTo
 {

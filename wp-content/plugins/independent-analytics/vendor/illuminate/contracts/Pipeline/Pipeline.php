@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Pipeline;
+namespace IAWPSCOPED\Illuminate\Contracts\Pipeline;
 
 use Closure;
 /** @internal */

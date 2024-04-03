@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Auth;
+namespace IAWPSCOPED\Illuminate\Contracts\Auth;
 
 use Closure;
 /** @internal */

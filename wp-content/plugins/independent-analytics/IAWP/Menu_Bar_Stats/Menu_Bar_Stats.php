@@ -1,16 +1,16 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Menu_Bar_Stats;
+namespace IAWP\Menu_Bar_Stats;
 
-use IAWP_SCOPED\IAWP\Capability_Manager;
-use IAWP_SCOPED\IAWP\Date_Range\Date_Range;
-use IAWP_SCOPED\IAWP\Date_Range\Relative_Date_Range;
-use IAWP_SCOPED\IAWP\Illuminate_Builder;
-use IAWP_SCOPED\IAWP\Query;
-use IAWP_SCOPED\IAWP\Resource_Identifier;
-use IAWP_SCOPED\IAWP\Utils\Number_Formatter;
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
-use IAWP_SCOPED\Illuminate\Database\Query\JoinClause;
+use IAWP\Capability_Manager;
+use IAWP\Date_Range\Date_Range;
+use IAWP\Date_Range\Relative_Date_Range;
+use IAWP\Illuminate_Builder;
+use IAWP\Query;
+use IAWP\Resource_Identifier;
+use IAWP\Utils\Number_Formatter;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
+use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
 /** @internal */
 class Menu_Bar_Stats
 {
@@ -18,32 +18,26 @@ class Menu_Bar_Stats
      * @var ?Resource_Identifier
      */
     private $current_resource_identifier;
-    /**
-     * @var int
-     */
     private $views_today = 0;
-    /**
-     * @var int
-     */
     private $views_yesterday = 0;
-    /**
-     * @var int
-     */
     private $views_last_thirty = 0;
+    private $views_total = 0;
     public function __construct()
     {
         $today = new Relative_Date_Range('TODAY');
         $yesterday = new Relative_Date_Range('YESTERDAY');
         $last_thirty = new Relative_Date_Range('LAST_THIRTY');
+        $all_time = new Relative_Date_Range('ALL_TIME');
         if (\is_admin()) {
             $this->current_resource_identifier = Resource_Identifier::for_resource_being_edited();
         } else {
-            $this->current_resource_identifier = Resource_Identifier::for_viewed_resource();
+            $this->current_resource_identifier = Resource_Identifier::for_resource_being_viewed();
         }
         if (!\is_null($this->current_resource_identifier)) {
             $this->views_today = self::get_views_in_date_range($today);
             $this->views_yesterday = self::get_views_in_date_range($yesterday);
             $this->views_last_thirty = self::get_views_in_date_range($last_thirty);
+            $this->views_total = self::get_views_in_date_range($all_time);
         }
     }
     /**
@@ -67,7 +61,8 @@ class Menu_Bar_Stats
         $today = Number_Formatter::decimal($this->views_today);
         $yesterday = Number_Formatter::decimal($this->views_yesterday);
         $last_thirty = Number_Formatter::decimal($this->views_last_thirty);
-        return [['id' => 'iawp_admin_bar', 'title' => '<span class="ab-icon dashicons-analytics"></span>' . \sprintf('%s Views', \esc_html_x($today, 'X Views', 'independent-analytics')), 'meta' => ['class' => 'iawp_admin_bar_button']], ['id' => 'iawp_admin_bar_group_title', 'title' => '<span>' . \esc_html__('Date', 'independent-analytics') . '</span> ' . '<span>' . \esc_html__('Views', 'independent-analytics') . '</span>', 'parent' => 'iawp_admin_bar'], ['id' => 'iawp_admin_bar_today', 'title' => '<span>' . \esc_html__('Today:', 'independent-analytics') . '</span> <span>' . \esc_html__($today) . '</span>', 'parent' => 'iawp_admin_bar'], ['id' => 'iawp_admin_bar_yesterday', 'title' => '<span>' . \esc_html__('Yesterday:', 'independent-analytics') . '</span> <span>' . \esc_html__($yesterday) . '</span>', 'parent' => 'iawp_admin_bar'], ['id' => 'iawp_admin_bar_last_thirty', 'title' => '<span>' . \esc_html__('Last 30 Days:', 'independent-analytics') . '</span> <span>' . \esc_html__($last_thirty) . '</span>', 'parent' => 'iawp_admin_bar'], ['id' => 'iawp_admin_bar_dashboard_group', 'parent' => 'iawp_admin_bar', 'is_group' => \true], ['id' => 'iawp_admin_bar_dashboard_link', 'title' => \esc_html__('Analytics Dashboard', 'independent-analytics') . ' &rarr;', 'href' => \esc_url(\IAWP_SCOPED\iawp_dashboard_url()), 'parent' => 'iawp_admin_bar_dashboard_group']];
+        $total = Number_Formatter::decimal($this->views_total);
+        return [['id' => 'iawp_admin_bar', 'title' => '<span class="ab-icon dashicons-analytics"></span>' . \sprintf('%s Views', \esc_html_x($today, 'X Views', 'independent-analytics')), 'meta' => ['class' => 'iawp_admin_bar_button']], ['id' => 'iawp_admin_bar_group_title', 'title' => '<span>' . \esc_html__('Date', 'independent-analytics') . '</span> ' . '<span>' . \esc_html__('Views', 'independent-analytics') . '</span>', 'parent' => 'iawp_admin_bar'], ['id' => 'iawp_admin_bar_today', 'title' => '<span>' . \esc_html__('Today:', 'independent-analytics') . '</span> <span>' . \esc_html__($today) . '</span>', 'parent' => 'iawp_admin_bar'], ['id' => 'iawp_admin_bar_yesterday', 'title' => '<span>' . \esc_html__('Yesterday:', 'independent-analytics') . '</span> <span>' . \esc_html__($yesterday) . '</span>', 'parent' => 'iawp_admin_bar'], ['id' => 'iawp_admin_bar_last_thirty', 'title' => '<span>' . \esc_html__('Last 30 Days:', 'independent-analytics') . '</span> <span>' . \esc_html__($last_thirty) . '</span>', 'parent' => 'iawp_admin_bar'], ['id' => 'iawp_admin_bar_total', 'title' => '<span>' . \esc_html__('All Time:', 'independent-analytics') . '</span> <span>' . \esc_html__($total) . '</span>', 'parent' => 'iawp_admin_bar'], ['id' => 'iawp_admin_bar_dashboard_group', 'parent' => 'iawp_admin_bar', 'is_group' => \true], ['id' => 'iawp_admin_bar_dashboard_link', 'title' => \esc_html__('Analytics Dashboard', 'independent-analytics') . ' &rarr;', 'href' => \esc_url(\IAWPSCOPED\iawp_dashboard_url()), 'parent' => 'iawp_admin_bar_dashboard_group']];
     }
     private function get_views_in_date_range(Date_Range $date_range) : int
     {
@@ -85,7 +80,7 @@ class Menu_Bar_Stats
     }
     public static function is_option_enabled() : bool
     {
-        return \IAWP_SCOPED\iawp()->get_option('iawp_disable_admin_toolbar_analytics', \false) === \false && Capability_Manager::can_view();
+        return \IAWPSCOPED\iawp()->get_option('iawp_disable_admin_toolbar_analytics', \false) === \false && Capability_Manager::can_view();
     }
     public static function register()
     {

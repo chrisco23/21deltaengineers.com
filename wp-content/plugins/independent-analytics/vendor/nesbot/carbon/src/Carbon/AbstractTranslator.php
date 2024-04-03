@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon;
+namespace IAWPSCOPED\Carbon;
 
-use IAWP_SCOPED\Carbon\MessageFormatter\MessageFormatterMapper;
+use IAWPSCOPED\Carbon\MessageFormatter\MessageFormatterMapper;
 use Closure;
 use ReflectionException;
 use ReflectionFunction;
-use IAWP_SCOPED\Symfony\Component\Translation;
-use IAWP_SCOPED\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\Loader\ArrayLoader;
+use IAWPSCOPED\Symfony\Component\Translation;
+use IAWPSCOPED\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Loader\ArrayLoader;
 /** @internal */
 abstract class AbstractTranslator extends Translation\Translator
 {

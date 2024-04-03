@@ -8,7 +8,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html LGPL v3 or later
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\DeviceDetector;
+namespace IAWPSCOPED\DeviceDetector;
 
 /** @internal */
 class ClientHints
@@ -172,6 +172,7 @@ class ClientHints
             $brands = \array_column($this->fullVersionList, 'brand');
             $versions = \array_column($this->fullVersionList, 'version');
             if (\count($brands) === \count($versions)) {
+                // @phpstan-ignore-next-line
                 return \array_combine($brands, $versions);
             }
         }

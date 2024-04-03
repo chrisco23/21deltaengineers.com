@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Testing\Fakes;
+namespace IAWPSCOPED\Illuminate\Support\Testing\Fakes;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Contracts\Events\Dispatcher;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Str;
-use IAWP_SCOPED\Illuminate\Support\Traits\ReflectsClosures;
-use IAWP_SCOPED\PHPUnit\Framework\Assert as PHPUnit;
+use IAWPSCOPED\Illuminate\Contracts\Events\Dispatcher;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Support\Traits\ReflectsClosures;
+use IAWPSCOPED\PHPUnit\Framework\Assert as PHPUnit;
 use ReflectionFunction;
 /** @internal */
 class EventFake implements Dispatcher
@@ -127,12 +127,12 @@ class EventFake implements Dispatcher
     public function dispatched($event, $callback = null)
     {
         if (!$this->hasDispatched($event)) {
-            return \IAWP_SCOPED\collect();
+            return \IAWPSCOPED\collect();
         }
         $callback = $callback ?: function () {
             return \true;
         };
-        return \IAWP_SCOPED\collect($this->events[$event])->filter(function ($arguments) use($callback) {
+        return \IAWPSCOPED\collect($this->events[$event])->filter(function ($arguments) use($callback) {
             return $callback(...$arguments);
         });
     }
@@ -227,7 +227,7 @@ class EventFake implements Dispatcher
         if (empty($this->eventsToFake)) {
             return \true;
         }
-        return \IAWP_SCOPED\collect($this->eventsToFake)->filter(function ($event) use($eventName, $payload) {
+        return \IAWPSCOPED\collect($this->eventsToFake)->filter(function ($event) use($eventName, $payload) {
             return $event instanceof Closure ? $event($eventName, $payload) : $event === $eventName;
         })->isNotEmpty();
     }

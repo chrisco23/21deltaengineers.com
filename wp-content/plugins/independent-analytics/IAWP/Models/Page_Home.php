@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
 /** @internal */
-class Page_Home extends Page
+class Page_Home extends \IAWP\Models\Page
 {
     public function __construct($row)
     {

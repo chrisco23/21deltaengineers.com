@@ -1,25 +1,25 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Concerns;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Database\ClassMorphViolationException;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Builder;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Collection;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\BelongsTo;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\HasMany;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\HasOne;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\HasOneThrough;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\MorphMany;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\MorphOne;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\MorphTo;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\MorphToMany;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Relation;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Database\ClassMorphViolationException;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Builder;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Collection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\BelongsTo;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\HasMany;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\HasOne;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\MorphMany;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\MorphOne;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\MorphTo;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\MorphToMany;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Relation;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 trait HasRelationships
 {

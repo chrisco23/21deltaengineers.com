@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Models\Visitor;
-use IAWP_SCOPED\IAWP\Utils\Device;
-use IAWP_SCOPED\IAWP\Utils\Request;
-use IAWP_SCOPED\IAWP\Utils\Salt;
-use IAWP_SCOPED\IAWP\Utils\Security;
-use IAWP_SCOPED\IAWP\Utils\String_Util;
-use IAWP_SCOPED\IAWP\Utils\URL;
+use IAWP\Models\Visitor;
+use IAWP\Utils\Device;
+use IAWP\Utils\Request;
+use IAWP\Utils\Salt;
+use IAWP\Utils\Security;
+use IAWP\Utils\String_Util;
+use IAWP\Utils\URL;
 /** @internal */
 class REST_API
 {
@@ -16,8 +16,9 @@ class REST_API
     {
         \add_action('wp_footer', [$this, 'echo_tracking_script']);
         \add_action('rest_api_init', [$this, 'register_rest_api']);
-        // Support for PDF Viewer by Themencode
+        // Support for PDF Viewer by Themencode (free and pro versions)
         \add_action('tnc_pvfw_viewer_head', [$this, 'echo_tracking_script']);
+        \add_action('tnc_pvfw_head', [$this, 'echo_tracking_script']);
         // Support for Coming Soon and Maintenance by Colorlib
         \add_action('ccsm_header', [$this, 'echo_tracking_script']);
     }
@@ -35,7 +36,7 @@ class REST_API
             return;
         }
         $payload = [];
-        $current_resource = Resource_Identifier::for_viewed_resource();
+        $current_resource = \IAWP\Resource_Identifier::for_resource_being_viewed();
         if (\is_null($current_resource)) {
             return;
         }
@@ -111,10 +112,10 @@ class REST_API
         if (Device::getInstance()->is_bot() && !\defined('IAWP_TESTING')) {
             return;
         }
-        Migrations\Migrations::handle_migration_18_error();
-        Migrations\Migrations::handle_migration_22_error();
-        Migrations\Migrations::create_or_migrate();
-        if (Migrations\Migrations::is_migrating()) {
+        \IAWP\Migrations\Migrations::handle_migration_18_error();
+        \IAWP\Migrations\Migrations::handle_migration_22_error();
+        \IAWP\Migrations\Migrations::create_or_migrate();
+        if (\IAWP\Migrations\Migrations::is_migrating()) {
             return;
         }
         if ($this->blocked_ip(Request::ip())) {
@@ -123,11 +124,11 @@ class REST_API
         $visitor = new Visitor(Request::ip(), Request::user_agent());
         $signature = \md5(Salt::request_payload_salt() . \json_encode($request['payload']));
         $campaign = [];
-        if (\IAWP_SCOPED\iawp_is_pro()) {
+        if (\IAWPSCOPED\iawp_is_pro()) {
             $campaign = ['utm_source' => $this->decode_or_nullify($request['utm_source']), 'utm_medium' => $this->decode_or_nullify($request['utm_medium']), 'utm_campaign' => $this->decode_or_nullify($request['utm_campaign']), 'utm_term' => $this->decode_or_nullify($request['utm_term']), 'utm_content' => $this->decode_or_nullify($request['utm_content'])];
         }
         if ($signature == $request['signature']) {
-            new View($request['payload'], $this->calculate_referrer_url($request), $visitor, $campaign);
+            new \IAWP\View($request['payload'], $this->calculate_referrer_url($request), $visitor, $campaign);
             return new \WP_REST_Response(['success' => \true], 200, ['X-IAWP' => 'iawp']);
         } else {
             return new \WP_REST_Response(['success' => \false], 200, ['X-IAWP' => 'iawp']);
@@ -160,10 +161,10 @@ class REST_API
     }
     private function blocked_ip($visitor_ip)
     {
-        if (\defined('IAWP_SCOPED\\IAWP_TEST_IP')) {
-            $visitor_ip = IAWP_TEST_IP;
+        if (\defined('IAWP_TEST_IP')) {
+            $visitor_ip = \IAWP_TEST_IP;
         }
-        $blocked_ips = \IAWP_SCOPED\iawp()->get_option('iawp_blocked_ips', []);
+        $blocked_ips = \IAWPSCOPED\iawp()->get_option('iawp_blocked_ips', []);
         if (\count($blocked_ips) == 0) {
             return \false;
         }
@@ -179,10 +180,11 @@ class REST_API
         if (\count($wildcard_ips) == 0) {
             return \false;
         }
-        $visitor_parts = \explode('.', $visitor_ip);
+        $delimeter = String_Util::str_contains($visitor_ip, '.') ? '.' : ':';
+        $visitor_parts = \explode($delimeter, $visitor_ip);
         $goal = \count($visitor_parts);
         foreach ($wildcard_ips as $blocked_ip) {
-            $blocked_parts = \explode('.', $blocked_ip);
+            $blocked_parts = \explode($delimeter, $blocked_ip);
             $matches = 0;
             for ($i = 0; $i < \count($visitor_parts); $i++) {
                 if (!\array_key_exists($i, $blocked_parts)) {
@@ -202,7 +204,7 @@ class REST_API
     }
     private function block_user_role() : bool
     {
-        $blocked_roles = \IAWP_SCOPED\iawp()->get_option('iawp_blocked_roles', []);
+        $blocked_roles = \IAWPSCOPED\iawp()->get_option('iawp_blocked_roles', []);
         foreach (\wp_get_current_user()->roles as $visitor_role) {
             if (\in_array($visitor_role, $blocked_roles)) {
                 return \true;

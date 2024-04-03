@@ -1,14 +1,15 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
-use IAWP_SCOPED\IAWP\Illuminate_Builder;
-use IAWP_SCOPED\IAWP\Query;
-use IAWP_SCOPED\IAWP\Utils\Request;
+use IAWP\Illuminate_Builder;
+use IAWP\Query;
+use IAWP\Utils\Request;
 /** @internal */
 abstract class Page
 {
-    use View_Stats;
+    use \IAWP\Models\View_Stats;
+    use \IAWP\Models\WooCommerce_Stats;
     private $id;
     private $resource;
     private $entrances;
@@ -33,6 +34,7 @@ abstract class Page
         $this->exits = $row->exits ?? 0;
         $this->exit_percent = $row->exit_percent ?? 0;
         $this->set_view_stats($row);
+        $this->set_wc_stats($row);
     }
     //
     // Below are required and optional methods that classes extending page can define
@@ -101,6 +103,9 @@ abstract class Page
             $url = $this->cache->cached_url;
         } else {
             $url = $this->calculate_url();
+        }
+        if (\is_null($url)) {
+            return null;
         }
         if ($full_url) {
             return $url;
@@ -234,25 +239,27 @@ abstract class Page
         $query = $wpdb->prepare("SELECT * FROM {$resources_table} WHERE {$resource_key} = %s", $resource_value);
         return $wpdb->get_row($query);
     }
-    public static function from_row(object $row) : Page
+    public static function from_row(object $row) : \IAWP\Models\Page
     {
         switch ($row->resource) {
             case 'singular':
-                return new Page_Singular($row);
+                return new \IAWP\Models\Page_Singular($row);
             case 'author_archive':
-                return new Page_Author_Archive($row);
+                return new \IAWP\Models\Page_Author_Archive($row);
             case 'date_archive':
-                return new Page_Date_Archive($row);
+                return new \IAWP\Models\Page_Date_Archive($row);
             case 'post_type_archive':
-                return new Page_Post_Type_Archive($row);
+                return new \IAWP\Models\Page_Post_Type_Archive($row);
             case 'term_archive':
-                return new Page_Term_Archive($row);
+                return new \IAWP\Models\Page_Term_Archive($row);
             case 'search':
-                return new Page_Search($row);
+                return new \IAWP\Models\Page_Search($row);
             case 'home':
-                return new Page_Home($row);
+                return new \IAWP\Models\Page_Home($row);
+            case 'virtual_page':
+                return new \IAWP\Models\Page_Virtual($row);
             default:
-                return new Page_Not_Found($row);
+                return new \IAWP\Models\Page_Not_Found($row);
         }
     }
 }

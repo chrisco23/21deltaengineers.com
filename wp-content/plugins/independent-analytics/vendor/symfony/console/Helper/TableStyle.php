@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Helper;
+namespace IAWPSCOPED\Symfony\Component\Console\Helper;
 
-use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\LogicException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\LogicException;
 /**
  * Defines the styles for a Table.
  *
@@ -84,7 +84,7 @@ class TableStyle
      *
      * @return $this
      */
-    public function setHorizontalBorderChars(string $outside, string $inside = null) : self
+    public function setHorizontalBorderChars(string $outside, ?string $inside = null) : self
     {
         $this->horizontalOutsideBorderChar = $outside;
         $this->horizontalInsideBorderChar = $inside ?? $outside;
@@ -107,7 +107,7 @@ class TableStyle
      *
      * @return $this
      */
-    public function setVerticalBorderChars(string $outside, string $inside = null) : self
+    public function setVerticalBorderChars(string $outside, ?string $inside = null) : self
     {
         $this->verticalOutsideBorderChar = $outside;
         $this->verticalInsideBorderChar = $inside ?? $outside;
@@ -153,7 +153,7 @@ class TableStyle
      *
      * @return $this
      */
-    public function setCrossingChars(string $cross, string $topLeft, string $topMid, string $topRight, string $midRight, string $bottomRight, string $bottomMid, string $bottomLeft, string $midLeft, string $topLeftBottom = null, string $topMidBottom = null, string $topRightBottom = null) : self
+    public function setCrossingChars(string $cross, string $topLeft, string $topMid, string $topRight, string $midRight, string $bottomRight, string $bottomMid, string $bottomLeft, string $midLeft, ?string $topLeftBottom = null, ?string $topMidBottom = null, ?string $topRightBottom = null) : self
     {
         $this->crossingChar = $cross;
         $this->crossingTopLeftChar = $topLeft;

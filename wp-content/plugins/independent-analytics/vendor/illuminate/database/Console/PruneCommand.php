@@ -1,16 +1,16 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console;
+namespace IAWPSCOPED\Illuminate\Database\Console;
 
-use IAWP_SCOPED\Illuminate\Console\Command;
-use IAWP_SCOPED\Illuminate\Contracts\Events\Dispatcher;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\MassPrunable;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Prunable;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\SoftDeletes;
-use IAWP_SCOPED\Illuminate\Database\Events\ModelsPruned;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Console\Command;
+use IAWPSCOPED\Illuminate\Contracts\Events\Dispatcher;
+use IAWPSCOPED\Illuminate\Database\Eloquent\MassPrunable;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Prunable;
+use IAWPSCOPED\Illuminate\Database\Eloquent\SoftDeletes;
+use IAWPSCOPED\Illuminate\Database\Events\ModelsPruned;
+use IAWPSCOPED\Illuminate\Support\Str;
 use InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Finder\Finder;
+use IAWPSCOPED\Symfony\Component\Finder\Finder;
 /** @internal */
 class PruneCommand extends Command
 {
@@ -70,7 +70,7 @@ class PruneCommand extends Command
     protected function models()
     {
         if (!empty($models = $this->option('model'))) {
-            return \IAWP_SCOPED\collect($models)->filter(function ($model) {
+            return \IAWPSCOPED\collect($models)->filter(function ($model) {
                 return \class_exists($model);
             })->values();
         }
@@ -78,7 +78,7 @@ class PruneCommand extends Command
         if (!empty($models) && !empty($except)) {
             throw new InvalidArgumentException('The --models and --except options cannot be combined.');
         }
-        return \IAWP_SCOPED\collect((new Finder())->in($this->getDefaultPath())->files()->name('*.php'))->map(function ($model) {
+        return \IAWPSCOPED\collect((new Finder())->in($this->getDefaultPath())->files()->name('*.php'))->map(function ($model) {
             $namespace = $this->laravel->getNamespace();
             return $namespace . \str_replace(['/', '.php'], ['\\', ''], Str::after($model->getRealPath(), \realpath(app_path()) . \DIRECTORY_SEPARATOR));
         })->when(!empty($except), function ($models) use($except) {

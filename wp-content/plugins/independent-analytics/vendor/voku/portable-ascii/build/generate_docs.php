@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/vendor/autoload.php';
-$readmeGenerator = new \IAWP_SCOPED\voku\PhpReadmeHelper\GenerateApi();
+$readmeGenerator = new \IAWPSCOPED\voku\PhpReadmeHelper\GenerateApi();
 $readmeGenerator->templateMethod = <<<RAW
 #### %name%
 <a href="#voku-php-readme-class-methods">↑</a>

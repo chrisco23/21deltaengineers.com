@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Statistics;
+namespace IAWP\Statistics;
 
 /** @internal */
-class Campaign_Statistics extends Statistics
+class Campaign_Statistics extends \IAWP\Statistics\Statistics
 {
     protected function required_column() : ?string
     {

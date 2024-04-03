@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent;
 
-use IAWP_SCOPED\Illuminate\Contracts\Queue\EntityNotFoundException;
-use IAWP_SCOPED\Illuminate\Contracts\Queue\EntityResolver as EntityResolverContract;
+use IAWPSCOPED\Illuminate\Contracts\Queue\EntityNotFoundException;
+use IAWPSCOPED\Illuminate\Contracts\Queue\EntityResolver as EntityResolverContract;
 /** @internal */
 class QueueEntityResolver implements EntityResolverContract
 {

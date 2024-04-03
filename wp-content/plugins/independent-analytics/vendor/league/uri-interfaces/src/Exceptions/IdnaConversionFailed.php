@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri\Exceptions;
+namespace IAWPSCOPED\League\Uri\Exceptions;
 
-use IAWP_SCOPED\League\Uri\Idna\IdnaInfo;
+use IAWPSCOPED\League\Uri\Idna\IdnaInfo;
 /** @internal */
 final class IdnaConversionFailed extends SyntaxError
 {

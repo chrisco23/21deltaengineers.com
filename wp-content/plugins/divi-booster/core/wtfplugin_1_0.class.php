@@ -31,8 +31,7 @@ if (!class_exists('wtfplugin_1_0')) {
         function __construct($config) {
 
             $this->config = $config;
-            $this->slug = $config['plugin']['slug']; // used a lot, so create a shorthand
-            $this->package_slug = $config['plugin']['package_slug'];
+            $this->slug = $config['plugin']['slug'];
 
             // Enable minification
             add_filter('dbdb_cache_file_content_wp_head.css', 'booster_minify_css');

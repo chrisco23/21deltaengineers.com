@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Statistics\Intervals\Intervals;
-use IAWP_SCOPED\IAWP\Statistics\Statistics;
-use IAWP_SCOPED\IAWP\Utils\Security;
+use IAWP\Statistics\Intervals\Intervals;
+use IAWP\Statistics\Statistics;
+use IAWP\Utils\Security;
 /** @internal */
 class Chart
 {
@@ -52,7 +52,7 @@ class Chart
         <div class="chart-inner">
             <div class="legend-container">
                 <h2 class="legend-title"><?php 
-        \esc_html_e($this->title);
+        echo \esc_html($this->title);
         ?></h2>
                 <div class="legend"></div>
                 <?php 
@@ -64,13 +64,13 @@ class Chart
                 ?>
                             <option
                                     value="<?php 
-                \esc_attr_e($interval->id());
+                echo \esc_attr($interval->id());
                 ?>"
                                     <?php 
                 \selected($interval->equals($this->statistics->chart_interval()));
                 ?>
                             ><?php 
-                \esc_html_e($interval->label());
+                echo \esc_html($interval->label());
                 ?></option>
                         <?php 
             }
@@ -92,7 +92,7 @@ class Chart
         echo $this->is_preview() ? '1' : '0';
         ?>'
                     data-chart-using-woo-commerce-value='<?php 
-        echo \IAWP_SCOPED\iawp_using_woocommerce() ? '1' : '0';
+        echo \IAWPSCOPED\iawp_using_woocommerce() ? '1' : '0';
         ?>'
                     data-chart-labels-value='<?php 
         echo Security::json_encode($labels);
@@ -116,7 +116,7 @@ class Chart
         }
         ?>
                 <?php 
-        if ($this->is_full_view() && \IAWP_SCOPED\iawp_using_woocommerce()) {
+        if ($this->is_full_view() && \IAWPSCOPED\iawp_using_woocommerce()) {
             ?>
                     data-chart-currency-value="<?php 
             echo get_woocommerce_currency();

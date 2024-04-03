@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Query\Grammars;
+namespace IAWPSCOPED\Illuminate\Database\Query\Grammars;
 
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 class SQLiteGrammar extends Grammar
 {
@@ -151,7 +151,7 @@ class SQLiteGrammar extends Grammar
     protected function compileUpdateColumns(Builder $query, array $values)
     {
         $jsonGroups = $this->groupJsonColumnsForUpdate($values);
-        return \IAWP_SCOPED\collect($values)->reject(function ($value, $key) {
+        return \IAWPSCOPED\collect($values)->reject(function ($value, $key) {
             return $this->isJsonSelector($key);
         })->merge($jsonGroups)->map(function ($value, $key) use($jsonGroups) {
             $column = last(\explode('.', $key));
@@ -172,7 +172,7 @@ class SQLiteGrammar extends Grammar
     {
         $sql = $this->compileInsert($query, $values);
         $sql .= ' on conflict (' . $this->columnize($uniqueBy) . ') do update set ';
-        $columns = \IAWP_SCOPED\collect($update)->map(function ($value, $key) {
+        $columns = \IAWPSCOPED\collect($update)->map(function ($value, $key) {
             return \is_numeric($key) ? $this->wrap($value) . ' = ' . $this->wrapValue('excluded') . '.' . $this->wrap($value) : $this->wrap($key) . ' = ' . $this->parameter($value);
         })->implode(', ');
         return $sql . $columns;
@@ -229,7 +229,7 @@ class SQLiteGrammar extends Grammar
     public function prepareBindingsForUpdate(array $bindings, array $values)
     {
         $groups = $this->groupJsonColumnsForUpdate($values);
-        $values = \IAWP_SCOPED\collect($values)->reject(function ($value, $key) {
+        $values = \IAWPSCOPED\collect($values)->reject(function ($value, $key) {
             return $this->isJsonSelector($key);
         })->merge($groups)->map(function ($value) {
             return \is_array($value) ? \json_encode($value) : $value;

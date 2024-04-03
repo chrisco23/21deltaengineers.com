@@ -1,21 +1,16 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
 // App data manager?
+use IAWP\Migrations\Migrations;
 /** @internal */
 class Database_Manager
 {
     public function reset_analytics() : void
     {
-        global $wpdb;
-        $tables_to_drop = [Query::get_table_name(Query::CAMPAIGNS), Query::get_table_name(Query::CITIES), Query::get_table_name(Query::COUNTRIES), Query::get_table_name(Query::DEVICES), Query::get_table_name(Query::DEVICE_TYPES), Query::get_table_name(Query::DEVICE_OSS), Query::get_table_name(Query::DEVICE_BROWSERS), Query::get_table_name(Query::REFERRERS), Query::get_table_name(Query::RESOURCES), Query::get_table_name(Query::SESSIONS), Query::get_table_name(Query::VIEWS), Query::get_table_name(Query::VISITORS_1_16_ARCHIVE), Query::get_table_name(Query::WC_ORDERS)];
-        foreach ($tables_to_drop as $table_name) {
-            $table = $wpdb->get_row($wpdb->prepare("\n                    SELECT * FROM INFORMATION_SCHEMA.TABLES \n                    WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s\n                ", $wpdb->dbname, $table_name));
-            if (!\is_null($table)) {
-                $wpdb->query("DELETE FROM {$table_name}");
-            }
-        }
+        \delete_option('iawp_db_version');
+        Migrations::create_or_migrate();
     }
     public function delete_all_data() : void
     {
@@ -23,7 +18,7 @@ class Database_Manager
         $this->delete_all_iawp_user_metadata();
         $this->delete_all_iawp_tables();
     }
-    public function delete_all_iawp_options() : void
+    private function delete_all_iawp_options() : void
     {
         global $wpdb;
         $options = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->options} WHERE option_name LIKE %s", 'iawp_%'));
@@ -31,7 +26,7 @@ class Database_Manager
             \delete_option($option->option_name);
         }
     }
-    public function delete_all_iawp_user_metadata() : void
+    private function delete_all_iawp_user_metadata() : void
     {
         global $wpdb;
         $metadata = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->usermeta} WHERE meta_key LIKE %s", 'iawp_%'));

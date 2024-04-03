@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Traits;
+namespace IAWPSCOPED\Illuminate\Support\Traits;
 
-use IAWP_SCOPED\Illuminate\Contracts\Container\Container;
-use IAWP_SCOPED\Illuminate\Support\Fluent;
+use IAWPSCOPED\Illuminate\Contracts\Container\Container;
+use IAWPSCOPED\Illuminate\Support\Fluent;
 /** @internal */
 trait CapsuleManagerTrait
 {

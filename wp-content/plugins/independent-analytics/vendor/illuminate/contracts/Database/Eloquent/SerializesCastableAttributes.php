@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Database\Eloquent;
+namespace IAWPSCOPED\Illuminate\Contracts\Database\Eloquent;
 
 /** @internal */
 interface SerializesCastableAttributes

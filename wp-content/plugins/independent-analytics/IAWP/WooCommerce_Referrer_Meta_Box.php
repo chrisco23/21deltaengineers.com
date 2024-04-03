@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Models\Campaign;
-use IAWP_SCOPED\IAWP\Models\Referrer;
-use IAWP_SCOPED\IAWP\Utils\Security;
-use IAWP_SCOPED\Illuminate\Database\Query\JoinClause;
+use IAWP\Models\Campaign;
+use IAWP\Models\Referrer;
+use IAWP\Utils\Security;
+use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
 /** @internal */
 class WooCommerce_Referrer_Meta_Box
 {
@@ -57,12 +57,12 @@ class WooCommerce_Referrer_Meta_Box
     }
     private function get_campaign_for(\WP_Post $post) : ?object
     {
-        $wc_orders_table = Query::get_table_name(Query::WC_ORDERS);
-        $campaigns_table = Query::get_table_name(Query::CAMPAIGNS);
-        $views_table = Query::get_table_name(Query::VIEWS);
-        $sessions_table = Query::get_table_name(Query::SESSIONS);
-        $referrer_query = Illuminate_Builder::get_builder();
-        $referrer_query->select("utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content")->from($wc_orders_table, 'orders')->leftJoin("{$views_table} AS views", function (JoinClause $join) {
+        $wc_orders_table = \IAWP\Query::get_table_name(\IAWP\Query::WC_ORDERS);
+        $campaigns_table = \IAWP\Query::get_table_name(\IAWP\Query::CAMPAIGNS);
+        $views_table = \IAWP\Query::get_table_name(\IAWP\Query::VIEWS);
+        $sessions_table = \IAWP\Query::get_table_name(\IAWP\Query::SESSIONS);
+        $referrer_query = \IAWP\Illuminate_Builder::get_builder();
+        $referrer_query->select("landing_page_title AS title", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content")->from($wc_orders_table, 'orders')->leftJoin("{$views_table} AS views", function (JoinClause $join) {
             $join->on('views.id', '=', 'orders.view_id');
         })->leftJoin("{$sessions_table} AS sessions", function (JoinClause $join) {
             $join->on('sessions.session_id', '=', 'views.session_id');
@@ -74,11 +74,11 @@ class WooCommerce_Referrer_Meta_Box
     }
     private function get_referrer_for(\WP_Post $post) : ?object
     {
-        $wc_orders_table = Query::get_table_name(Query::WC_ORDERS);
-        $views_table = Query::get_table_name(Query::VIEWS);
-        $sessions_table = Query::get_table_name(Query::SESSIONS);
-        $referrer_table = Query::get_table_name(Query::REFERRERS);
-        $referrer_query = Illuminate_Builder::get_builder();
+        $wc_orders_table = \IAWP\Query::get_table_name(\IAWP\Query::WC_ORDERS);
+        $views_table = \IAWP\Query::get_table_name(\IAWP\Query::VIEWS);
+        $sessions_table = \IAWP\Query::get_table_name(\IAWP\Query::SESSIONS);
+        $referrer_table = \IAWP\Query::get_table_name(\IAWP\Query::REFERRERS);
+        $referrer_query = \IAWP\Illuminate_Builder::get_builder();
         $referrer_query->select('sessions.referrer_id', 'referrer', 'type AS referrer_type', 'domain')->from($wc_orders_table, 'orders')->leftJoin("{$views_table} AS views", function (JoinClause $join) {
             $join->on('views.id', '=', 'orders.view_id');
         })->leftJoin("{$sessions_table} AS sessions", function (JoinClause $join) {

@@ -1,24 +1,25 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Tables;
+namespace IAWP\Tables;
 
-use IAWP_SCOPED\IAWP\Campaign_Builder;
-use IAWP_SCOPED\IAWP\Dashboard_Options;
-use IAWP_SCOPED\IAWP\Date_Range\Relative_Date_Range;
-use IAWP_SCOPED\IAWP\Filters;
-use IAWP_SCOPED\IAWP\Icon_Directory_Factory;
-use IAWP_SCOPED\IAWP\Sort_Configuration;
-use IAWP_SCOPED\IAWP\Statistics\Statistics;
-use IAWP_SCOPED\IAWP\Tables\Columns\Column;
-use IAWP_SCOPED\IAWP\Tables\Groups\Group;
-use IAWP_SCOPED\IAWP\Tables\Groups\Groups;
-use IAWP_SCOPED\IAWP\Utils\CSV;
-use IAWP_SCOPED\IAWP\Utils\Currency;
-use IAWP_SCOPED\IAWP\Utils\Number_Formatter;
-use IAWP_SCOPED\IAWP\Utils\Security;
-use IAWP_SCOPED\IAWP\Utils\URL;
-use IAWP_SCOPED\IAWP\Utils\WordPress_Site_Date_Format_Pattern;
-use IAWP_SCOPED\Proper\Timezone;
+use IAWP\Campaign_Builder;
+use IAWP\Dashboard_Options;
+use IAWP\Date_Range\Relative_Date_Range;
+use IAWP\Filters;
+use IAWP\Icon_Directory_Factory;
+use IAWP\Rows\Filter;
+use IAWP\Sort_Configuration;
+use IAWP\Statistics\Statistics;
+use IAWP\Tables\Columns\Column;
+use IAWP\Tables\Groups\Group;
+use IAWP\Tables\Groups\Groups;
+use IAWP\Utils\CSV;
+use IAWP\Utils\Currency;
+use IAWP\Utils\Number_Formatter;
+use IAWP\Utils\Security;
+use IAWP\Utils\URL;
+use IAWP\Utils\WordPress_Site_Date_Format_Pattern;
+use IAWPSCOPED\Proper\Timezone;
 /** @internal */
 abstract class Table
 {
@@ -37,7 +38,7 @@ abstract class Table
         $this->visible_columns = $visible_columns;
         $this->group = $this->groups()->find_by_id($group_id);
         $this->is_new_group = $is_new_group;
-        $this->filters = new Filters($this->group->plural());
+        $this->filters = new Filters();
     }
     protected abstract function groups() : Groups;
     /**
@@ -61,7 +62,7 @@ abstract class Table
     }
     public function column_picker_html() : string
     {
-        return \IAWP_SCOPED\iawp_blade()->run('tables.column-picker', ['columns' => $this->get_columns()]);
+        return \IAWPSCOPED\iawp_blade()->run('tables.column-picker-modal', ['columns' => $this->get_columns()]);
     }
     public function group_picker_html() : ?string
     {
@@ -69,19 +70,19 @@ abstract class Table
         if (!$has_group_options) {
             return null;
         }
-        return \IAWP_SCOPED\iawp_blade()->run('tables.group-picker', ['buttons' => $this->groups()->buttons(), 'group' => $this->group()]);
+        return \IAWPSCOPED\iawp_blade()->run('tables.group-select', ['options' => $this->groups()->buttons(), 'group' => $this->group()]);
+    }
+    public function get_table_toolbar_markup()
+    {
+        return \IAWPSCOPED\iawp_blade()->run('tables.table-toolbar', ['all_columns' => $this->get_columns(), 'group_html' => $this->group_picker_html()]);
     }
     public function get_table_markup(string $sort_column, string $sort_direction)
     {
-        return \IAWP_SCOPED\iawp_blade()->run('tables.table', ['table' => $this, 'table_name' => $this->table_name(), 'all_columns' => $this->get_columns(), 'visible_column_count' => $this->visible_column_count(), 'row_count' => 0, 'rows' => [], 'render_skeleton' => \true, 'page_size' => \IAWP_SCOPED\iawp()->pagination_page_size(), 'sort_column' => $sort_column, 'sort_direction' => $sort_direction, 'has_campaigns' => Campaign_Builder::has_campaigns()]);
+        return \IAWPSCOPED\iawp_blade()->run('tables.table', ['table' => $this, 'table_name' => $this->table_name(), 'all_columns' => $this->get_columns(), 'visible_column_count' => $this->visible_column_count(), 'number_of_shown_rows' => 0, 'rows' => [], 'render_skeleton' => \true, 'page_size' => \IAWPSCOPED\iawp()->pagination_page_size(), 'sort_column' => $sort_column, 'sort_direction' => $sort_direction, 'has_campaigns' => Campaign_Builder::has_campaigns()]);
     }
     public function set_statistics(Statistics $statistics)
     {
         $this->statistics = $statistics;
-    }
-    public function get_row_markup($rows, $just_rows = \true, string $sort_column = 'visitors', string $sort_direction = 'desc')
-    {
-        return $this->get_rendered_template($rows, $just_rows, $sort_column, $sort_direction);
     }
     public function get_row_data_attributes($row)
     {
@@ -164,25 +165,29 @@ abstract class Table
     public function output_toolbar()
     {
         $options = new Dashboard_Options();
+        $exact_start = $options->get_date_range()->start()->setTimezone(Timezone::site_timezone())->format('Y-m-d');
+        $exact_end = $options->get_date_range()->end()->setTimezone(Timezone::site_timezone())->format('Y-m-d');
         ?>
-        <div class="toolbar">
-        <div class="buttons primary-buttons">
+        <div id="toolbar" class="toolbar" data-filter-count="<?php 
+        echo \count($options->filters());
+        ?>">
+        <div class="date-picker-parent">
             <div class="modal-parent"
                  data-controller="dates"
                  data-dates-relative-range-id-value="<?php 
-        \esc_html_e($options->relative_range_id());
+        echo \esc_attr($options->relative_range_id());
         ?>"
                  data-dates-exact-start-value="<?php 
-        \esc_html_e($options->get_date_range()->start()->setTimezone(Timezone::site_timezone())->format('Y-m-d'));
+        echo \esc_attr($exact_start);
         ?>"
                  data-dates-exact-end-value="<?php 
-        \esc_html_e($options->get_date_range()->end()->setTimezone(Timezone::site_timezone())->format('Y-m-d'));
+        echo \esc_attr($exact_end);
         ?>"
                  data-dates-first-day-of-week-value="<?php 
-        echo \absint(\IAWP_SCOPED\iawp()->get_option('iawp_dow', 0));
+        echo \absint(\IAWPSCOPED\iawp()->get_option('iawp_dow', 0));
         ?>"
                  data-dates-css-url-value="<?php 
-        echo \esc_url(\IAWP_SCOPED\iawp_url_to('dist/styles/easepick/datepicker.css'));
+        echo \esc_url(\IAWPSCOPED\iawp_url_to('dist/styles/easepick/datepicker.css'));
         ?>"
                  data-dates-format-value="<?php 
         echo \esc_attr(WordPress_Site_Date_Format_Pattern::for_javascript());
@@ -190,13 +195,13 @@ abstract class Table
             >
                 <button id="dates-button"
                         data-testid="open-calendar"
-                        class="iawp-button ghost-white toolbar-button"
+                        class="iawp-button"
                         data-action="dates#toggleModal"
                         data-dates-target="modalButton"
                 >
                     <span class="dashicons dashicons-calendar-alt"></span>
                     <span class="iawp-label"><?php 
-        \esc_html_e($options->get_date_range()->label());
+        echo \esc_html($options->get_date_range()->label());
         ?></span>
                 </button>
                 <div id="modal-dates"
@@ -213,34 +218,37 @@ abstract class Table
                             <?php 
         foreach (Relative_Date_Range::ranges() as $date_range) {
             ?>
-                                <button class="iawp-button ghost-purple"
+                             <?php 
+            $exact_start = $date_range->start()->setTimezone(Timezone::site_timezone())->format('Y-m-d');
+            ?>
+                             <?php 
+            $exact_end = $date_range->end()->setTimezone(Timezone::site_timezone())->format('Y-m-d');
+            ?>
+                                <button class="iawp-button"
                                         data-dates-target="relativeRange"
                                         data-action="dates#relativeRangeSelected"
                                         data-relative-range-id="<?php 
-            \esc_html_e($date_range->relative_range_id());
+            echo \esc_attr($date_range->relative_range_id());
             ?>"
                                         data-relative-range-label="<?php 
-            \esc_html_e($date_range->label());
+            echo \esc_attr($date_range->label());
             ?>"
                                         data-relative-range-start="<?php 
-            \esc_html_e($date_range->start()->setTimezone(Timezone::site_timezone())->format('Y-m-d'));
+            echo \esc_attr($exact_start);
             ?>"
                                         data-relative-range-end="<?php 
-            \esc_html_e($date_range->end()->setTimezone(Timezone::site_timezone())->format('Y-m-d'));
+            echo \esc_attr($exact_end);
             ?>"
                                 >
                                     <?php 
-            \esc_html_e($date_range->label());
+            echo \esc_html($date_range->label());
             ?>
                                 </button>
                             <?php 
         }
         ?>
                         </div>
-                        <div>
-                            <hr/>
-                        </div>
-                        <div>
+                        <div class="apply-buttons">
                             <button class="iawp-button purple"
                                     data-dates-target="apply"
                                     data-action="dates#apply"
@@ -262,27 +270,53 @@ abstract class Table
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="filter-parent">
             <?php 
-        echo $this->group_picker_html();
         echo $this->filters()->get_filters_html($this->get_columns());
-        echo $this->column_picker_html();
         ?>
         </div>
-        <div class="buttons secondary-buttons">
-            <button class="iawp-button ghost-white toolbar-button" data-report-target="export" data-action="report#export">
-                <span class="dashicons dashicons-download"></span>
-                <span class="iawp-label">
+        <div class="download-options-parent" data-controller="modal">
+            <div class="modal-parent downloads">
+                <button id="download-options" data-modal-target="modalButton" data-action="click->modal#toggleModal" class="download-options">
                     <?php 
+        \esc_html_e('Download Report', 'independent-analytics');
+        ?>
+                </button>
+                <div class="modal small downloads" data-modal-target="modal">
+                    <div class="modal-inner">
+                        <div class="title-small"><?php 
+        \esc_html_e('Choose a format', 'independent-analytics');
+        ?></div>
+                        <button id="download-csv" class="iawp-button" data-report-target="exportCSV" data-action="report#exportCSV">
+                            <span class="dashicons dashicons-media-spreadsheet"></span>
+                            <span class="iawp-label">
+                                <?php 
         \esc_html_e('Download CSV', 'independent-analytics');
         ?>
-                </span>
-            </button>
+                            </span>
+                        </button>
+                        <button id="download-pdf" class="iawp-button" data-report-target="exportPDF" data-action="report#exportPDF" disabled="disabled">
+                            <span class="dashicons dashicons-pdf"></span>
+                            <span class="iawp-label">
+                                <?php 
+        \esc_html_e('Download PDF', 'independent-analytics');
+        ?>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
         </div><?php 
     }
     public function filters_template_html() : string
     {
         return $this->filters()->get_condition_html($this->get_columns());
+    }
+    public function filters_condition_buttons_html(array $filters) : string
+    {
+        return $this->filters()->condition_buttons_html($filters);
     }
     public final function csv(array $rows, bool $is_dashboard_export = \false) : CSV
     {
@@ -322,13 +356,18 @@ abstract class Table
         $csv = new CSV($csv_header, $csv_rows);
         return $csv;
     }
+    /**
+     * @param array[] $filters Raw filter associative arrays
+     *
+     * @return Filter[]
+     */
     public function sanitize_filters(array $filters) : array
     {
         return \array_values(\array_filter(\array_map(function ($filter) {
             return $this->sanitize_filter($filter);
         }, $filters)));
     }
-    public function sanitize_filter(array $filter) : ?array
+    public function sanitize_filter(array $filter) : ?Filter
     {
         $column = $this->get_column($filter['column']);
         if (\is_null($column)) {
@@ -354,15 +393,7 @@ abstract class Table
                 $filter['operand'] = \site_url($filter['operand']);
             }
         }
-        if ($column->database_column() === 'cached_date') {
-            try {
-                $date = \DateTime::createFromFormat('U', $filter['operand']);
-                $filter['operand'] = $date->format('Y-m-d');
-            } catch (\Throwable $e) {
-                return null;
-            }
-        }
-        return ['inclusion' => Security::string($filter['inclusion']), 'column' => $column->id(), 'operator' => Security::string($filter['operator']), 'operand' => Security::string($filter['operand']), 'database_column' => $column->database_column()];
+        return new Filter(['inclusion' => Security::string($filter['inclusion']), 'column' => $column->id(), 'operator' => Security::string($filter['operator']), 'operand' => Security::string($filter['operand']), 'database_column' => $column->database_column()]);
     }
     public function get_column(string $id) : ?Column
     {
@@ -379,6 +410,13 @@ abstract class Table
         }
         return new Sort_Configuration($sort_column, $sort_direction, $column->is_nullable());
     }
+    public function get_rendered_template($rows, $just_rows = \false, string $sort_column = 'visitors', string $sort_direction = 'desc')
+    {
+        if ($just_rows) {
+            return \IAWPSCOPED\iawp_blade()->run('tables.rows', ['table' => $this, 'table_name' => $this->table_name(), 'all_columns' => $this->get_columns(), 'visible_column_count' => $this->visible_column_count(), 'number_of_shown_rows' => \count($rows), 'rows' => $rows, 'render_skeleton' => \false, 'page_size' => \IAWPSCOPED\iawp()->pagination_page_size(), 'sort_column' => $sort_column, 'sort_direction' => $sort_direction, 'has_campaigns' => Campaign_Builder::has_campaigns()]);
+        }
+        return \IAWPSCOPED\iawp_blade()->run('tables.table', ['table' => $this, 'table_name' => $this->table_name(), 'all_columns' => $this->get_columns(), 'visible_column_count' => $this->visible_column_count(), 'number_of_shown_rows' => \count($rows), 'rows' => $rows, 'render_skeleton' => \false, 'page_size' => \IAWPSCOPED\iawp()->pagination_page_size(), 'sort_column' => $sort_column, 'sort_direction' => $sort_direction, 'has_campaigns' => Campaign_Builder::has_campaigns()]);
+    }
     private function include_column_in_csv(Column $column, bool $is_dashboard_export) : bool
     {
         if (!$column->visible() && $is_dashboard_export) {
@@ -387,7 +425,7 @@ abstract class Table
         if (!$column->exportable() && !$is_dashboard_export) {
             return \false;
         }
-        if ($column->requires_woocommerce() && \IAWP_SCOPED\iawp_is_free()) {
+        if ($column->requires_woocommerce() && \IAWPSCOPED\iawp_is_free()) {
             return \false;
         }
         return \true;
@@ -433,15 +471,25 @@ abstract class Table
         }
         return $visible_columns;
     }
-    private function get_rendered_template($rows, $just_rows = \false, string $sort_column = 'visitors', string $sort_direction = 'desc')
-    {
-        if ($just_rows) {
-            return \IAWP_SCOPED\iawp_blade()->run('tables.rows', ['table' => $this, 'table_name' => $this->table_name(), 'all_columns' => $this->get_columns(), 'visible_column_count' => $this->visible_column_count(), 'row_count' => \count($rows), 'rows' => $rows, 'render_skeleton' => \false, 'page_size' => \IAWP_SCOPED\iawp()->pagination_page_size(), 'sort_column' => $sort_column, 'sort_direction' => $sort_direction, 'has_campaigns' => Campaign_Builder::has_campaigns()]);
-        }
-        return \IAWP_SCOPED\iawp_blade()->run('tables.table', ['table' => $this, 'table_name' => $this->table_name(), 'all_columns' => $this->get_columns(), 'visible_column_count' => $this->visible_column_count(), 'row_count' => \count($rows), 'rows' => $rows, 'render_skeleton' => \false, 'page_size' => \IAWP_SCOPED\iawp()->pagination_page_size(), 'sort_column' => $sort_column, 'sort_direction' => $sort_direction, 'has_campaigns' => Campaign_Builder::has_campaigns()]);
-    }
     private function filters()
     {
         return $this->filters;
+    }
+    public static function get_table_by_type(string $type) : ?string
+    {
+        switch ($type) {
+            case 'views':
+                return \IAWP\Tables\Table_Pages::class;
+            case 'referrers':
+                return \IAWP\Tables\Table_Referrers::class;
+            case 'geo':
+                return \IAWP\Tables\Table_Geo::class;
+            case 'campaigns':
+                return \IAWP\Tables\Table_Campaigns::class;
+            case 'devices':
+                return \IAWP\Tables\Table_Devices::class;
+            default:
+                return null;
+        }
     }
 }

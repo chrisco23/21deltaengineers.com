@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console\Migrations;
+namespace IAWPSCOPED\Illuminate\Database\Console\Migrations;
 
-use IAWP_SCOPED\Illuminate\Console\Command;
-use IAWP_SCOPED\Illuminate\Database\Migrations\MigrationRepositoryInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputOption;
+use IAWPSCOPED\Illuminate\Console\Command;
+use IAWPSCOPED\Illuminate\Database\Migrations\MigrationRepositoryInterface;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputOption;
 /** @internal */
 class InstallCommand extends Command
 {

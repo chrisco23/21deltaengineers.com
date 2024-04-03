@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Traits;
+namespace IAWPSCOPED\Carbon\Traits;
 
-use IAWP_SCOPED\Carbon\CarbonConverterInterface;
-use IAWP_SCOPED\Carbon\CarbonInterface;
-use IAWP_SCOPED\Carbon\CarbonInterval;
-use IAWP_SCOPED\Carbon\Exceptions\UnitException;
+use IAWPSCOPED\Carbon\CarbonConverterInterface;
+use IAWPSCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonInterval;
+use IAWPSCOPED\Carbon\Exceptions\UnitException;
 use Closure;
 use DateInterval;
-use IAWP_SCOPED\DateMalformedStringException;
+use IAWPSCOPED\DateMalformedStringException;
 use ReturnTypeWillChange;
 /**
  * Trait Units.
@@ -165,7 +165,7 @@ trait Units
     public function add($unit, $value = 1, $overflow = null)
     {
         if (\is_string($unit) && \func_num_args() === 1) {
-            $unit = CarbonInterval::make($unit);
+            $unit = CarbonInterval::make($unit, [], \true);
         }
         if ($unit instanceof CarbonConverterInterface) {
             return $this->resolveCarbon($unit->convertDate($this, \false));
@@ -299,7 +299,7 @@ trait Units
     public function sub($unit, $value = 1, $overflow = null)
     {
         if (\is_string($unit) && \func_num_args() === 1) {
-            $unit = CarbonInterval::make($unit);
+            $unit = CarbonInterval::make($unit, [], \true);
         }
         if ($unit instanceof CarbonConverterInterface) {
             return $this->resolveCarbon($unit->convertDate($this, \true));
@@ -329,7 +329,7 @@ trait Units
     public function subtract($unit, $value = 1, $overflow = null)
     {
         if (\is_string($unit) && \func_num_args() === 1) {
-            $unit = CarbonInterval::make($unit);
+            $unit = CarbonInterval::make($unit, [], \true);
         }
         return $this->sub($unit, $value, $overflow);
     }

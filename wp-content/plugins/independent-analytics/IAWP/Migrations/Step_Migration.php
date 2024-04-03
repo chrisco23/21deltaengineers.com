@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Migrations;
+namespace IAWP\Migrations;
 
 /** @internal */
 abstract class Step_Migration
@@ -33,7 +33,7 @@ abstract class Step_Migration
             if ($wpdb->last_error !== '') {
                 $is_connected = $wpdb->check_connection(\false);
                 if (!$is_connected) {
-                    \IAWP_SCOPED\iawp_log('Independent Analytics: Your database connection was temporarily lost');
+                    \IAWPSCOPED\iawp_log('Independent Analytics: Your database connection was temporarily lost');
                     return \false;
                 }
                 $wpdb->query($query);

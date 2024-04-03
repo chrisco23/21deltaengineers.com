@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
-use IAWP_SCOPED\Dotenv\Repository\Adapter\PutenvAdapter;
-use IAWP_SCOPED\Dotenv\Repository\RepositoryBuilder;
-use IAWP_SCOPED\PhpOption\Option;
+use IAWPSCOPED\Dotenv\Repository\Adapter\PutenvAdapter;
+use IAWPSCOPED\Dotenv\Repository\RepositoryBuilder;
+use IAWPSCOPED\PhpOption\Option;
 /** @internal */
 class Env
 {
@@ -85,7 +85,7 @@ class Env
             }
             return $value;
         })->getOrCall(function () use($default) {
-            return \IAWP_SCOPED\value($default);
+            return \IAWPSCOPED\value($default);
         });
     }
 }

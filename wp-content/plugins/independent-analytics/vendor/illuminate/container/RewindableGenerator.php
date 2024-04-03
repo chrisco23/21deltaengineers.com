@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Container;
+namespace IAWPSCOPED\Illuminate\Container;
 
 use Countable;
 use IteratorAggregate;

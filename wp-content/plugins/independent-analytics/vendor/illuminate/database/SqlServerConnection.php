@@ -1,16 +1,16 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
 use Closure;
-use IAWP_SCOPED\Doctrine\DBAL\Driver\PDOSqlsrv\Driver as DoctrineDriver;
-use IAWP_SCOPED\Doctrine\DBAL\Version;
-use IAWP_SCOPED\Illuminate\Database\PDO\SqlServerDriver;
-use IAWP_SCOPED\Illuminate\Database\Query\Grammars\SqlServerGrammar as QueryGrammar;
-use IAWP_SCOPED\Illuminate\Database\Query\Processors\SqlServerProcessor;
-use IAWP_SCOPED\Illuminate\Database\Schema\Grammars\SqlServerGrammar as SchemaGrammar;
-use IAWP_SCOPED\Illuminate\Database\Schema\SqlServerBuilder;
-use IAWP_SCOPED\Illuminate\Filesystem\Filesystem;
+use IAWPSCOPED\Doctrine\DBAL\Driver\PDOSqlsrv\Driver as DoctrineDriver;
+use IAWPSCOPED\Doctrine\DBAL\Version;
+use IAWPSCOPED\Illuminate\Database\PDO\SqlServerDriver;
+use IAWPSCOPED\Illuminate\Database\Query\Grammars\SqlServerGrammar as QueryGrammar;
+use IAWPSCOPED\Illuminate\Database\Query\Processors\SqlServerProcessor;
+use IAWPSCOPED\Illuminate\Database\Schema\Grammars\SqlServerGrammar as SchemaGrammar;
+use IAWPSCOPED\Illuminate\Database\Schema\SqlServerBuilder;
+use IAWPSCOPED\Illuminate\Filesystem\Filesystem;
 use RuntimeException;
 use Throwable;
 /** @internal */

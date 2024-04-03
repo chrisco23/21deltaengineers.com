@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Command;
+namespace IAWPSCOPED\Symfony\Component\Console\Command;
 
-use IAWP_SCOPED\Symfony\Component\Console\Application;
-use IAWP_SCOPED\Symfony\Component\Console\Attribute\AsCommand;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionInput;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\ExceptionInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\LogicException;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\HelperSet;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputArgument;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputDefinition;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputOption;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Application;
+use IAWPSCOPED\Symfony\Component\Console\Attribute\AsCommand;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionInput;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
+use IAWPSCOPED\Symfony\Component\Console\Exception\ExceptionInterface;
+use IAWPSCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\LogicException;
+use IAWPSCOPED\Symfony\Component\Console\Helper\HelperSet;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputArgument;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputDefinition;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputOption;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Base class for all commands.
  *
@@ -83,7 +83,7 @@ class Command
      *
      * @throws LogicException When the command name is empty
      */
-    public function __construct(string $name = null)
+    public function __construct(?string $name = null)
     {
         $this->definition = new InputDefinition();
         if (null === $name && null !== ($name = static::getDefaultName())) {
@@ -111,7 +111,7 @@ class Command
     {
         $this->ignoreValidationErrors = \true;
     }
-    public function setApplication(Application $application = null)
+    public function setApplication(?Application $application = null)
     {
         $this->application = $application;
         if ($application) {
@@ -380,7 +380,7 @@ class Command
      *
      * @throws InvalidArgumentException When argument mode is not valid
      */
-    public function addArgument(string $name, int $mode = null, string $description = '', $default = null)
+    public function addArgument(string $name, ?int $mode = null, string $description = '', $default = null)
     {
         $this->definition->addArgument(new InputArgument($name, $mode, $description, $default));
         if (null !== $this->fullDefinition) {
@@ -399,7 +399,7 @@ class Command
      *
      * @throws InvalidArgumentException If option mode is invalid or incompatible
      */
-    public function addOption(string $name, $shortcut = null, int $mode = null, string $description = '', $default = null)
+    public function addOption(string $name, $shortcut = null, ?int $mode = null, string $description = '', $default = null)
     {
         $this->definition->addOption(new InputOption($name, $shortcut, $mode, $description, $default));
         if (null !== $this->fullDefinition) {

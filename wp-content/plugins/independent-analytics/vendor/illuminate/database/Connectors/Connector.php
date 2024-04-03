@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Connectors;
+namespace IAWPSCOPED\Illuminate\Database\Connectors;
 
-use IAWP_SCOPED\Doctrine\DBAL\Driver\PDOConnection;
+use IAWPSCOPED\Doctrine\DBAL\Driver\PDOConnection;
 use Exception;
-use IAWP_SCOPED\Illuminate\Database\DetectsLostConnections;
+use IAWPSCOPED\Illuminate\Database\DetectsLostConnections;
 use PDO;
 use Throwable;
 /** @internal */

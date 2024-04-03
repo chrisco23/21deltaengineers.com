@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Traits;
+namespace IAWPSCOPED\Illuminate\Support\Traits;
 
-use IAWP_SCOPED\Illuminate\Container\Container;
+use IAWPSCOPED\Illuminate\Container\Container;
 /** @internal */
 trait Localizable
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Migrations;
+namespace IAWP\Migrations;
 
 /** @internal */
 abstract class Migration

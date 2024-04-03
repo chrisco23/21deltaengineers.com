@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Extractor;
+namespace IAWPSCOPED\Symfony\Component\Translation\Extractor;
 
-use IAWP_SCOPED\Symfony\Component\Finder\Finder;
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogue;
+use IAWPSCOPED\Symfony\Component\Finder\Finder;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogue;
 /**
  * PhpExtractor extracts translation messages from a PHP template.
  *
@@ -30,7 +30,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
     /**
      * The sequence that captures translation messages.
      */
-    protected $sequences = [['->', 'trans', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['->', 'trans', '(', self::MESSAGE_TOKEN], ['new', 'TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', 'TranslatableMessage', '(', self::MESSAGE_TOKEN], ['new', '\\', 'Symfony', '\\', 'Component', '\\', 'Translation', '\\', 'TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', 'IAWP_SCOPED\\Symfony\\Component\\Translation\\TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', '\\', 'Symfony', '\\', 'Component', '\\', 'Translation', '\\', 'TranslatableMessage', '(', self::MESSAGE_TOKEN], ['new', 'IAWP_SCOPED\\Symfony\\Component\\Translation\\TranslatableMessage', '(', self::MESSAGE_TOKEN], ['t', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['t', '(', self::MESSAGE_TOKEN]];
+    protected $sequences = [['->', 'trans', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['->', 'trans', '(', self::MESSAGE_TOKEN], ['new', 'TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', 'TranslatableMessage', '(', self::MESSAGE_TOKEN], ['new', '\\', 'Symfony', '\\', 'Component', '\\', 'Translation', '\\', 'TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', 'IAWPSCOPED\\Symfony\\Component\\Translation\\TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', '\\', 'Symfony', '\\', 'Component', '\\', 'Translation', '\\', 'TranslatableMessage', '(', self::MESSAGE_TOKEN], ['new', 'IAWPSCOPED\\Symfony\\Component\\Translation\\TranslatableMessage', '(', self::MESSAGE_TOKEN], ['t', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['t', '(', self::MESSAGE_TOKEN]];
     /**
      * {@inheritdoc}
      */

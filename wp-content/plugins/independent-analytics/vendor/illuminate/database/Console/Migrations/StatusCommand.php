@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console\Migrations;
+namespace IAWPSCOPED\Illuminate\Database\Console\Migrations;
 
-use IAWP_SCOPED\Illuminate\Database\Migrations\Migrator;
-use IAWP_SCOPED\Illuminate\Support\Collection;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputOption;
+use IAWPSCOPED\Illuminate\Database\Migrations\Migrator;
+use IAWPSCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputOption;
 /** @internal */
 class StatusCommand extends BaseCommand
 {

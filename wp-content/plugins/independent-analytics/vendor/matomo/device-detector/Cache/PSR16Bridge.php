@@ -8,9 +8,9 @@
  * @license http://www.gnu.org/licenses/lgpl.html LGPL v3 or later
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\DeviceDetector\Cache;
+namespace IAWPSCOPED\DeviceDetector\Cache;
 
-use IAWP_SCOPED\Psr\SimpleCache\CacheInterface as PsrCacheInterface;
+use IAWPSCOPED\Psr\SimpleCache\CacheInterface as PsrCacheInterface;
 /** @internal */
 class PSR16Bridge implements CacheInterface
 {

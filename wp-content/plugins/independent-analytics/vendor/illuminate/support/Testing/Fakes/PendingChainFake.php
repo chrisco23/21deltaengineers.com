@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Testing\Fakes;
+namespace IAWPSCOPED\Illuminate\Support\Testing\Fakes;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Foundation\Bus\PendingChain;
-use IAWP_SCOPED\Illuminate\Queue\CallQueuedClosure;
+use IAWPSCOPED\Illuminate\Foundation\Bus\PendingChain;
+use IAWPSCOPED\Illuminate\Queue\CallQueuedClosure;
 /** @internal */
 class PendingChainFake extends PendingChain
 {

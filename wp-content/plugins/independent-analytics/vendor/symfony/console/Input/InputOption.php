@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Input;
+namespace IAWPSCOPED\Symfony\Component\Console\Input;
 
-use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\LogicException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\LogicException;
 /**
  * Represents a command line option.
  *
@@ -52,7 +52,7 @@ class InputOption
      *
      * @throws InvalidArgumentException If option mode is invalid or incompatible
      */
-    public function __construct(string $name, $shortcut = null, int $mode = null, string $description = '', $default = null)
+    public function __construct(string $name, $shortcut = null, ?int $mode = null, string $description = '', $default = null)
     {
         if (\str_starts_with($name, '--')) {
             $name = \substr($name, 2);
@@ -60,7 +60,7 @@ class InputOption
         if (empty($name)) {
             throw new InvalidArgumentException('An option name cannot be empty.');
         }
-        if (empty($shortcut)) {
+        if ('' === $shortcut || [] === $shortcut || \false === $shortcut) {
             $shortcut = null;
         }
         if (null !== $shortcut) {
@@ -68,9 +68,9 @@ class InputOption
                 $shortcut = \implode('|', $shortcut);
             }
             $shortcuts = \preg_split('{(\\|)-?}', \ltrim($shortcut, '-'));
-            $shortcuts = \array_filter($shortcuts);
+            $shortcuts = \array_filter($shortcuts, 'strlen');
             $shortcut = \implode('|', $shortcuts);
-            if (empty($shortcut)) {
+            if ('' === $shortcut) {
                 throw new InvalidArgumentException('An option shortcut cannot be empty.');
             }
         }

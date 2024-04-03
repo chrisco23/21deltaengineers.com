@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Capability_Manager;
-use IAWP_SCOPED\IAWP\Database_Manager;
+use IAWP\Capability_Manager;
+use IAWP\Database_Manager;
 /** @internal */
-class Reset_Analytics extends AJAX
+class Reset_Analytics extends \IAWP\AJAX\AJAX
 {
     protected function action_name() : string
     {

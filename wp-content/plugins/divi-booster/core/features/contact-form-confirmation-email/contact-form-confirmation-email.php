@@ -81,7 +81,7 @@ class DBDB_ContactForm_Confirmation {
                 'default'           => 'Thank you for your submission! We will get back to you soon.',
                 'tab_slug'          => 'general',
                 'toggle_slug'       => 'email',
-                'description'       => esc_html__('Content for the confirmation email.', 'divi-booster'),
+                'description'       => esc_html__('Enter the message content for the confirmation email. Like the main message pattern field, you can include the values of contact form fields using following format, <strong>%%field_id%%</strong>. For example if you want to include the field with id = <strong>phone</strong> and field with id = <strong>message</strong>, then you can use the following pattern: <strong>You entered message %%message%% and phone number %%phone%%</strong>.', 'divi-booster'),
                 'show_if' => array(
                     'dbdb_send_confirmation_email' => 'on',
                 ),
@@ -114,7 +114,7 @@ class DBDB_ContactForm_Confirmation {
         if (isset($processed_fields_values[$email_field_id]['value'])) {
             $email = $processed_fields_values[$email_field_id]['value'];
             $subject = isset($this->attrs['dbdb_confirmation_subject']) ? $this->attrs['dbdb_confirmation_subject'] : 'We have received your contact form submission';
-            $content = $this->email_content(empty($this->attrs['dbdb_confirmation_content']) ? '' : $this->attrs['dbdb_confirmation_content']);
+            $content = $this->email_content(empty($this->attrs['dbdb_confirmation_content']) ? '' : $this->attrs['dbdb_confirmation_content'], $processed_fields_values);
 
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 wp_mail($email, $subject, $content, $this->email_headers());
@@ -130,7 +130,7 @@ class DBDB_ContactForm_Confirmation {
         return 'Content-Type: text/html';
     }
 
-    public function email_content($message) {
+    public function email_content($message, $processed_fields_values) {
         // If empty, set default message
         if (empty($message)) {
             $message = $this->default_email_content();
@@ -143,6 +143,12 @@ class DBDB_ContactForm_Confirmation {
         if (substr($message, -3) === '<p>') {
             $message = substr($message, 0, -3);
         }
+
+        // Replace the placeholder fields in the message
+        foreach ($processed_fields_values as $key => $value) {
+            $message = str_ireplace("%%{$key}%%", wp_strip_all_tags($value['value']), $message);
+        }
+
         return $message;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema;
+namespace IAWPSCOPED\Illuminate\Database\Schema;
 
 /** @internal */
 class SqlServerBuilder extends Builder

@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent;
 
 /**
  * @method static static|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder withTrashed(bool $withTrashed = true)
@@ -171,7 +171,7 @@ trait SoftDeletes
      */
     public function getDeletedAtColumn()
     {
-        return \defined('IAWP_SCOPED\\static::DELETED_AT') ? static::DELETED_AT : 'deleted_at';
+        return \defined('IAWPSCOPED\\static::DELETED_AT') ? static::DELETED_AT : 'deleted_at';
     }
     /**
      * Get the fully qualified "deleted at" column.

@@ -8,9 +8,9 @@
  * @license http://www.gnu.org/licenses/lgpl.html LGPL v3 or later
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\DeviceDetector\Cache;
+namespace IAWPSCOPED\DeviceDetector\Cache;
 
-use IAWP_SCOPED\Doctrine\Common\Cache\CacheProvider;
+use IAWPSCOPED\Doctrine\Common\Cache\CacheProvider;
 /** @internal */
 class DoctrineBridge implements CacheInterface
 {

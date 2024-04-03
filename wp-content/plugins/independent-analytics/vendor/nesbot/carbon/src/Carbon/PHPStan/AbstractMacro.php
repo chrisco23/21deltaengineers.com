@@ -9,17 +9,17 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\PHPStan;
+namespace IAWPSCOPED\Carbon\PHPStan;
 
 use Closure;
 use InvalidArgumentException;
-use IAWP_SCOPED\PHPStan\BetterReflection\Reflection\Adapter\ReflectionParameter as AdapterReflectionParameter;
-use IAWP_SCOPED\PHPStan\BetterReflection\Reflection\Adapter\ReflectionType as AdapterReflectionType;
-use IAWP_SCOPED\PHPStan\BetterReflection\Reflection\ReflectionClass as BetterReflectionClass;
-use IAWP_SCOPED\PHPStan\BetterReflection\Reflection\ReflectionFunction as BetterReflectionFunction;
-use IAWP_SCOPED\PHPStan\BetterReflection\Reflection\ReflectionParameter as BetterReflectionParameter;
-use IAWP_SCOPED\PHPStan\Reflection\Php\BuiltinMethodReflection;
-use IAWP_SCOPED\PHPStan\TrinaryLogic;
+use IAWPSCOPED\PHPStan\BetterReflection\Reflection\Adapter\ReflectionParameter as AdapterReflectionParameter;
+use IAWPSCOPED\PHPStan\BetterReflection\Reflection\Adapter\ReflectionType as AdapterReflectionType;
+use IAWPSCOPED\PHPStan\BetterReflection\Reflection\ReflectionClass as BetterReflectionClass;
+use IAWPSCOPED\PHPStan\BetterReflection\Reflection\ReflectionFunction as BetterReflectionFunction;
+use IAWPSCOPED\PHPStan\BetterReflection\Reflection\ReflectionParameter as BetterReflectionParameter;
+use IAWPSCOPED\PHPStan\Reflection\Php\BuiltinMethodReflection;
+use IAWPSCOPED\PHPStan\TrinaryLogic;
 use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -63,11 +63,9 @@ abstract class AbstractMacro implements BuiltinMethodReflection
     /**
      * Macro constructor.
      *
-     * @param string $className
-     * @phpstan-param class-string $className
-     *
-     * @param string   $methodName
-     * @param callable $macro
+     * @param class-string $className
+     * @param string       $methodName
+     * @param callable     $macro
      */
     public function __construct(string $className, string $methodName, $macro)
     {

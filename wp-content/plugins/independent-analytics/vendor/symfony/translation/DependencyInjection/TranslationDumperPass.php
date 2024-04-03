@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\DependencyInjection;
+namespace IAWPSCOPED\Symfony\Component\Translation\DependencyInjection;
 
-use IAWP_SCOPED\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use IAWP_SCOPED\Symfony\Component\DependencyInjection\ContainerBuilder;
-use IAWP_SCOPED\Symfony\Component\DependencyInjection\Reference;
+use IAWPSCOPED\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use IAWPSCOPED\Symfony\Component\DependencyInjection\ContainerBuilder;
+use IAWPSCOPED\Symfony\Component\DependencyInjection\Reference;
 /**
  * Adds tagged translation.formatter services to translation writer.
  * @internal

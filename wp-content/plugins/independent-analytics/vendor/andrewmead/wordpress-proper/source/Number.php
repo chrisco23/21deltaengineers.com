@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Proper;
+namespace IAWPSCOPED\Proper;
 
 /** @internal */
 class Number

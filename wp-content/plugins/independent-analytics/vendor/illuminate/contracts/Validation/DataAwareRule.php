@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Validation;
+namespace IAWPSCOPED\Illuminate\Contracts\Validation;
 
 /** @internal */
 interface DataAwareRule

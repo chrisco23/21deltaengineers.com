@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\View;
+namespace IAWPSCOPED\Illuminate\Contracts\View;
 
 /** @internal */
 interface Engine

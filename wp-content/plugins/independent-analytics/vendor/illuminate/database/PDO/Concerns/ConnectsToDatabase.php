@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\PDO\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\PDO\Concerns;
 
-use IAWP_SCOPED\Illuminate\Database\PDO\Connection;
+use IAWPSCOPED\Illuminate\Database\PDO\Connection;
 use InvalidArgumentException;
 use PDO;
 /** @internal */

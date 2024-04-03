@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Migrations;
+namespace IAWPSCOPED\Illuminate\Database\Migrations;
 
 /** @internal */
 interface MigrationRepositoryInterface

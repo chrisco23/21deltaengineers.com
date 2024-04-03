@@ -8,9 +8,9 @@
  * @license http://www.gnu.org/licenses/lgpl.html LGPL v3 or later
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\DeviceDetector\Parser\Client\Browser\Engine;
+namespace IAWPSCOPED\DeviceDetector\Parser\Client\Browser\Engine;
 
-use IAWP_SCOPED\DeviceDetector\Parser\Client\AbstractClientParser;
+use IAWPSCOPED\DeviceDetector\Parser\Client\AbstractClientParser;
 /**
  * Class Version
  *
@@ -50,9 +50,9 @@ class Version extends AbstractClientParser
         }
         $engineToken = $this->engine;
         if ('Blink' === $this->engine) {
-            $engineToken = 'Chrome';
+            $engineToken = 'Chrome|Cronet';
         }
-        \preg_match("~{$engineToken}\\s*/?\\s*((?(?=\\d+\\.\\d)\\d+[.\\d]*|\\d{1,7}(?=(?:\\D|\$))))~i", $this->userAgent, $matches);
+        \preg_match("~(?:{$engineToken})\\s*/?\\s*((?(?=\\d+\\.\\d)\\d+[.\\d]*|\\d{1,7}(?=(?:\\D|\$))))~i", $this->userAgent, $matches);
         if (!$matches) {
             return null;
         }

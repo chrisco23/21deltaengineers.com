@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations;
 
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Collection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Collection;
 /** @internal */
 class MorphMany extends MorphOneOrMany
 {

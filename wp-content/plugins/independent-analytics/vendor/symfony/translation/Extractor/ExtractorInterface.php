@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Extractor;
+namespace IAWPSCOPED\Symfony\Component\Translation\Extractor;
 
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogue;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogue;
 /**
  * Extracts translation messages from a directory or files to the catalogue.
  * New found messages are injected to the catalogue using the prefix.

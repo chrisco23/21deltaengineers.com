@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Tables\Groups;
+namespace IAWP\Tables\Groups;
 
 /** @internal */
 class Groups
@@ -13,11 +13,11 @@ class Groups
     {
         $this->groups = $groups;
     }
-    public function add(Group $group) : void
+    public function add(\IAWP\Tables\Groups\Group $group) : void
     {
         $this->groups[] = $group;
     }
-    public function find_by_id(?string $id = null) : Group
+    public function find_by_id(?string $id = null) : \IAWP\Tables\Groups\Group
     {
         if (\is_null($id)) {
             return $this->default_group();
@@ -48,7 +48,7 @@ class Groups
     {
         return $this->groups;
     }
-    private function default_group() : Group
+    private function default_group() : \IAWP\Tables\Groups\Group
     {
         return $this->groups()[0];
     }

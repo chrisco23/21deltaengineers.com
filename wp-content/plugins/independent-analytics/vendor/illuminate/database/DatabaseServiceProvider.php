@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
-use IAWP_SCOPED\Faker\Factory as FakerFactory;
-use IAWP_SCOPED\Faker\Generator as FakerGenerator;
-use IAWP_SCOPED\Illuminate\Contracts\Queue\EntityResolver;
-use IAWP_SCOPED\Illuminate\Database\Connectors\ConnectionFactory;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\QueueEntityResolver;
-use IAWP_SCOPED\Illuminate\Support\ServiceProvider;
+use IAWPSCOPED\Faker\Factory as FakerFactory;
+use IAWPSCOPED\Faker\Generator as FakerGenerator;
+use IAWPSCOPED\Illuminate\Contracts\Queue\EntityResolver;
+use IAWPSCOPED\Illuminate\Database\Connectors\ConnectionFactory;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Database\Eloquent\QueueEntityResolver;
+use IAWPSCOPED\Illuminate\Support\ServiceProvider;
 /** @internal */
 class DatabaseServiceProvider extends ServiceProvider
 {

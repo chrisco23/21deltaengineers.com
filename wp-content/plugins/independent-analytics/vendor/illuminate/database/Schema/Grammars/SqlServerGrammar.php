@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema\Grammars;
+namespace IAWPSCOPED\Illuminate\Database\Schema\Grammars;
 
-use IAWP_SCOPED\Illuminate\Database\Schema\Blueprint;
-use IAWP_SCOPED\Illuminate\Support\Fluent;
+use IAWPSCOPED\Illuminate\Database\Schema\Blueprint;
+use IAWPSCOPED\Illuminate\Support\Fluent;
 /** @internal */
 class SqlServerGrammar extends Grammar
 {

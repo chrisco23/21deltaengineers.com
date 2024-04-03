@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Extractor;
+namespace IAWPSCOPED\Symfony\Component\Translation\Extractor;
 
 /*
  * The following is derived from code at http://github.com/nikic/PHP-Parser
@@ -76,7 +76,7 @@ class PhpStringTokenParser
      *
      * @return string
      */
-    public static function parseEscapeSequences(string $str, string $quote = null)
+    public static function parseEscapeSequences(string $str, ?string $quote = null)
     {
         if (null !== $quote) {
             $str = \str_replace('\\' . $quote, $quote, $str);

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Command;
+namespace IAWPSCOPED\Symfony\Component\Translation\Command;
 
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogue;
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogueInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\TranslatorBag;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogue;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogueInterface;
+use IAWPSCOPED\Symfony\Component\Translation\TranslatorBag;
 /**
  * @internal
  */

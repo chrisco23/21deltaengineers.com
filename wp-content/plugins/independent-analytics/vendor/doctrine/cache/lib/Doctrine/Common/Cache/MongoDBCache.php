@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache;
+namespace IAWPSCOPED\Doctrine\Common\Cache;
 
 use InvalidArgumentException;
 use MongoCollection;
-use IAWP_SCOPED\MongoDB\Collection;
+use IAWPSCOPED\MongoDB\Collection;
 use function trigger_error;
 use const E_USER_DEPRECATED;
 /**

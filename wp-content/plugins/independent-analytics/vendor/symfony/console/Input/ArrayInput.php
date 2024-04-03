@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Input;
+namespace IAWPSCOPED\Symfony\Component\Console\Input;
 
-use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidOptionException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\InvalidOptionException;
 /**
  * ArrayInput represents an input provided as an array.
  *
@@ -25,7 +25,7 @@ use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidOptionException;
 class ArrayInput extends Input
 {
     private $parameters;
-    public function __construct(array $parameters, InputDefinition $definition = null)
+    public function __construct(array $parameters, ?InputDefinition $definition = null)
     {
         $this->parameters = $parameters;
         parent::__construct($definition);

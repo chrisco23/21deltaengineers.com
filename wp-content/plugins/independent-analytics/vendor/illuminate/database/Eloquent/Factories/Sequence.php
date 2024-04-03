@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Factories;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Factories;
 
 use Countable;
 /** @internal */
@@ -51,7 +51,7 @@ class Sequence implements Countable
      */
     public function __invoke()
     {
-        return tap(\IAWP_SCOPED\value($this->sequence[$this->index % $this->count], $this), function () {
+        return tap(\IAWPSCOPED\value($this->sequence[$this->index % $this->count], $this), function () {
             $this->index = $this->index + 1;
         });
     }

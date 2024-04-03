@@ -9,10 +9,10 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\PHPStan;
+namespace IAWPSCOPED\Carbon\PHPStan;
 
-use IAWP_SCOPED\PHPStan\BetterReflection\Reflection\Adapter;
-use IAWP_SCOPED\PHPStan\Reflection\Php\BuiltinMethodReflection;
+use IAWPSCOPED\PHPStan\BetterReflection\Reflection\Adapter;
+use IAWPSCOPED\PHPStan\Reflection\Php\BuiltinMethodReflection;
 use ReflectionMethod;
 $method = new ReflectionMethod(BuiltinMethodReflection::class, 'getReflection');
 require $method->hasReturnType() && $method->getReturnType()->getName() === Adapter\ReflectionMethod::class ? __DIR__ . '/../../../lazy/Carbon/PHPStan/AbstractMacroStatic.php' : __DIR__ . '/../../../lazy/Carbon/PHPStan/AbstractMacroBuiltin.php';

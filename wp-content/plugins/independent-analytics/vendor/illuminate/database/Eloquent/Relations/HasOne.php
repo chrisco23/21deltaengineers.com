@@ -1,15 +1,15 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations;
 
-use IAWP_SCOPED\Illuminate\Contracts\Database\Eloquent\SupportsPartialRelations;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Builder;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Collection;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns\CanBeOneOfMany;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns\ComparesRelatedModels;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns\SupportsDefaultModels;
-use IAWP_SCOPED\Illuminate\Database\Query\JoinClause;
+use IAWPSCOPED\Illuminate\Contracts\Database\Eloquent\SupportsPartialRelations;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Builder;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Collection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns\CanBeOneOfMany;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns\ComparesRelatedModels;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns\SupportsDefaultModels;
+use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
 /** @internal */
 class HasOne extends HasOneOrMany implements SupportsPartialRelations
 {

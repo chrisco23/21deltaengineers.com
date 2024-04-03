@@ -8,14 +8,14 @@
  * @license http://www.gnu.org/licenses/lgpl.html LGPL v3 or later
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\DeviceDetector\Parser;
+namespace IAWPSCOPED\DeviceDetector\Parser;
 
-use IAWP_SCOPED\DeviceDetector\Cache\CacheInterface;
-use IAWP_SCOPED\DeviceDetector\Cache\StaticCache;
-use IAWP_SCOPED\DeviceDetector\ClientHints;
-use IAWP_SCOPED\DeviceDetector\DeviceDetector;
-use IAWP_SCOPED\DeviceDetector\Yaml\ParserInterface as YamlParser;
-use IAWP_SCOPED\DeviceDetector\Yaml\Spyc;
+use IAWPSCOPED\DeviceDetector\Cache\CacheInterface;
+use IAWPSCOPED\DeviceDetector\Cache\StaticCache;
+use IAWPSCOPED\DeviceDetector\ClientHints;
+use IAWPSCOPED\DeviceDetector\DeviceDetector;
+use IAWPSCOPED\DeviceDetector\Yaml\ParserInterface as YamlParser;
+use IAWPSCOPED\DeviceDetector\Yaml\Spyc;
 /**
  * Class AbstractParser
  * @internal
@@ -94,13 +94,13 @@ abstract class AbstractParser
      */
     public const VERSION_TRUNCATION_NONE = -1;
     /**
-     * @var CacheInterface
+     * @var CacheInterface|null
      */
-    protected $cache;
+    protected $cache = null;
     /**
-     * @var YamlParser
+     * @var YamlParser|null
      */
-    protected $yamlParser;
+    protected $yamlParser = null;
     /**
      * parses the currently set useragents and returns possible results
      *
@@ -208,9 +208,16 @@ abstract class AbstractParser
         if (empty($this->regexList)) {
             $cacheKey = 'DeviceDetector-' . DeviceDetector::VERSION . 'regexes-' . $this->getName();
             $cacheKey = (string) \preg_replace('/([^a-z0-9_-]+)/i', '', $cacheKey);
-            $this->regexList = $this->getCache()->fetch($cacheKey);
+            $cacheContent = $this->getCache()->fetch($cacheKey);
+            if (\is_array($cacheContent)) {
+                $this->regexList = $cacheContent;
+            }
             if (empty($this->regexList)) {
-                $this->regexList = $this->getYamlParser()->parseFile($this->getRegexesDirectory() . \DIRECTORY_SEPARATOR . $this->fixtureFile);
+                $parsedContent = $this->getYamlParser()->parseFile($this->getRegexesDirectory() . \DIRECTORY_SEPARATOR . $this->fixtureFile);
+                if (!\is_array($parsedContent)) {
+                    $parsedContent = [];
+                }
+                $this->regexList = $parsedContent;
                 $this->getCache()->save($cacheKey, $this->regexList);
             }
         }
@@ -255,7 +262,7 @@ abstract class AbstractParser
     {
         $matches = [];
         // only match if useragent begins with given regex or there is no letter before it
-        $regex = '/(?:^|[^A-Z0-9\\-_]|[^A-Z0-9\\-]_|sprd-|MZ-)(?:' . \str_replace('/', '\\/', $regex) . ')/i';
+        $regex = '/(?:^|[^A-Z0-9_-]|[^A-Z0-9-]_|sprd-|MZ-)(?:' . \str_replace('/', '\\/', $regex) . ')/i';
         try {
             if (\preg_match($regex, $this->userAgent, $matches)) {
                 return $matches;
@@ -321,7 +328,10 @@ abstract class AbstractParser
         $cacheKey = $this->parserName . DeviceDetector::VERSION . '-all';
         $cacheKey = (string) \preg_replace('/([^a-z0-9_-]+)/i', '', $cacheKey);
         if (empty($this->overAllMatch)) {
-            $this->overAllMatch = $this->getCache()->fetch($cacheKey);
+            $overAllMatch = $this->getCache()->fetch($cacheKey);
+            if (\is_string($overAllMatch)) {
+                $this->overAllMatch = $overAllMatch;
+            }
         }
         if (empty($this->overAllMatch)) {
             // reverse all regexes, so we have the generic one first, which already matches most patterns

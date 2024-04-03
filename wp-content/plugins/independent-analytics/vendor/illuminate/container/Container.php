@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Container;
+namespace IAWPSCOPED\Illuminate\Container;
 
 use ArrayAccess;
 use Closure;
 use Exception;
-use IAWP_SCOPED\Illuminate\Contracts\Container\BindingResolutionException;
-use IAWP_SCOPED\Illuminate\Contracts\Container\CircularDependencyException;
-use IAWP_SCOPED\Illuminate\Contracts\Container\Container as ContainerContract;
+use IAWPSCOPED\Illuminate\Contracts\Container\BindingResolutionException;
+use IAWPSCOPED\Illuminate\Contracts\Container\CircularDependencyException;
+use IAWPSCOPED\Illuminate\Contracts\Container\Container as ContainerContract;
 use LogicException;
 use ReflectionClass;
 use ReflectionException;

@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Illuminate_Builder;
-use IAWP_SCOPED\IAWP\Query;
-use IAWP_SCOPED\IAWP\Report;
-use IAWP_SCOPED\IAWP\Report_Finder;
+use IAWP\Illuminate_Builder;
+use IAWP\Query;
+use IAWP\Report;
+use IAWP\Report_Finder;
 /** @internal */
-class Delete_Report extends AJAX
+class Delete_Report extends \IAWP\AJAX\AJAX
 {
     /**
      * @return array

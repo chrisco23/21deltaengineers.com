@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation;
+namespace IAWPSCOPED\Symfony\Component\Translation;
 
-use IAWP_SCOPED\Psr\Log\LoggerInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
-use IAWP_SCOPED\Symfony\Contracts\Translation\TranslatorInterface;
+use IAWPSCOPED\Psr\Log\LoggerInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
+use IAWPSCOPED\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  * @internal
@@ -36,7 +36,7 @@ class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface, 
     /**
      * {@inheritdoc}
      */
-    public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null)
+    public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null)
     {
         $trans = $this->translator->trans($id = (string) $id, $parameters, $domain, $locale);
         $this->log($id, $domain, $locale);
@@ -64,7 +64,7 @@ class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface, 
     /**
      * {@inheritdoc}
      */
-    public function getCatalogue(string $locale = null)
+    public function getCatalogue(?string $locale = null)
     {
         return $this->translator->getCatalogue($locale);
     }

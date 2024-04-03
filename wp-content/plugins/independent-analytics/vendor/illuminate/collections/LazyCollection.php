@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
 use ArrayIterator;
 use Closure;
 use DateTimeInterface;
-use IAWP_SCOPED\Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
-use IAWP_SCOPED\Illuminate\Support\Traits\EnumeratesValues;
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
+use IAWPSCOPED\Illuminate\Support\Traits\EnumeratesValues;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
 use IteratorAggregate;
 use stdClass;
 /** @internal */
@@ -348,7 +348,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
         $iterator = $this->getIterator();
         if (\is_null($callback)) {
             if (!$iterator->valid()) {
-                return \IAWP_SCOPED\value($default);
+                return \IAWPSCOPED\value($default);
             }
             return $iterator->current();
         }
@@ -357,7 +357,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
                 return $value;
             }
         }
-        return \IAWP_SCOPED\value($default);
+        return \IAWPSCOPED\value($default);
     }
     /**
      * Get a flattened list of the items in the collection.
@@ -410,7 +410,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
                 return $outerValue;
             }
         }
-        return \IAWP_SCOPED\value($default);
+        return \IAWPSCOPED\value($default);
     }
     /**
      * Group an associative array by a field or using a callback.
@@ -563,7 +563,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
                 $needle = $value;
             }
         }
-        return $needle === $placeholder ? \IAWP_SCOPED\value($default) : $needle;
+        return $needle === $placeholder ? \IAWPSCOPED\value($default) : $needle;
     }
     /**
      * Get the values of a given key.

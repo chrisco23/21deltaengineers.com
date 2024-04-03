@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Dumper;
+namespace IAWPSCOPED\Symfony\Component\Translation\Dumper;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\LogicException;
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogue;
-use IAWP_SCOPED\Symfony\Component\Translation\Util\ArrayConverter;
-use IAWP_SCOPED\Symfony\Component\Yaml\Yaml;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\LogicException;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogue;
+use IAWPSCOPED\Symfony\Component\Translation\Util\ArrayConverter;
+use IAWPSCOPED\Symfony\Component\Yaml\Yaml;
 /**
  * YamlFileDumper generates yaml files from a message catalogue.
  *

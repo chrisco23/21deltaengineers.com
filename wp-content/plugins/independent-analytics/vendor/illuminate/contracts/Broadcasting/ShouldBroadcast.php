@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Broadcasting;
+namespace IAWPSCOPED\Illuminate\Contracts\Broadcasting;
 
 /** @internal */
 interface ShouldBroadcast

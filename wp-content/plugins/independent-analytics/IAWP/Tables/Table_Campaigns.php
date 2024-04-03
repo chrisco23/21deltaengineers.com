@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Tables;
+namespace IAWP\Tables;
 
-use IAWP_SCOPED\IAWP\Rows\Campaigns;
-use IAWP_SCOPED\IAWP\Statistics\Campaign_Statistics;
-use IAWP_SCOPED\IAWP\Tables\Columns\Column;
-use IAWP_SCOPED\IAWP\Tables\Groups\Group;
-use IAWP_SCOPED\IAWP\Tables\Groups\Groups;
+use IAWP\Rows\Campaigns;
+use IAWP\Statistics\Campaign_Statistics;
+use IAWP\Tables\Columns\Column;
+use IAWP\Tables\Groups\Group;
+use IAWP\Tables\Groups\Groups;
 /** @internal */
-class Table_Campaigns extends Table
+class Table_Campaigns extends \IAWP\Tables\Table
 {
     protected function table_name() : string
     {
@@ -17,7 +17,7 @@ class Table_Campaigns extends Table
     protected function groups() : Groups
     {
         $groups = [];
-        $groups[] = new Group('campaign', \__('Campaign', 'independent-analytics'), \__('Campaigns', 'independent-analytics'), Campaigns::class, Campaign_Statistics::class);
+        $groups[] = new Group('campaign', \__('Campaign', 'independent-analytics'), Campaigns::class, Campaign_Statistics::class);
         return new Groups($groups);
     }
     protected function local_columns() : array

@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Command;
+namespace IAWPSCOPED\Symfony\Component\Translation\Command;
 
-use IAWP_SCOPED\Symfony\Component\Console\Command\Command;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionInput;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputArgument;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputOption;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Style\SymfonyStyle;
-use IAWP_SCOPED\Symfony\Component\Translation\Catalogue\TargetOperation;
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogue;
-use IAWP_SCOPED\Symfony\Component\Translation\Provider\TranslationProviderCollection;
-use IAWP_SCOPED\Symfony\Component\Translation\Reader\TranslationReaderInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\Writer\TranslationWriterInterface;
+use IAWPSCOPED\Symfony\Component\Console\Command\Command;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionInput;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputArgument;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputOption;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Style\SymfonyStyle;
+use IAWPSCOPED\Symfony\Component\Translation\Catalogue\TargetOperation;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogue;
+use IAWPSCOPED\Symfony\Component\Translation\Provider\TranslationProviderCollection;
+use IAWPSCOPED\Symfony\Component\Translation\Reader\TranslationReaderInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Writer\TranslationWriterInterface;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
  * @internal

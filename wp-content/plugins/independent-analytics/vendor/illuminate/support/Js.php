@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Htmlable;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Jsonable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Htmlable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
 /** @internal */
 class Js implements Htmlable

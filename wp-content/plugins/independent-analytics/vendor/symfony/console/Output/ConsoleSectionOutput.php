@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Output;
+namespace IAWPSCOPED\Symfony\Component\Console\Output;
 
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\Helper;
-use IAWP_SCOPED\Symfony\Component\Console\Terminal;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use IAWPSCOPED\Symfony\Component\Console\Helper\Helper;
+use IAWPSCOPED\Symfony\Component\Console\Terminal;
 /**
  * @author Pierre du Plessis <pdples@gmail.com>
  * @author Gabriel Ostrolucký <gabriel.ostrolucky@gmail.com>
@@ -40,7 +40,7 @@ class ConsoleSectionOutput extends StreamOutput
      *
      * @param int $lines Number of lines to clear. If null, then the entire output of this section is cleared
      */
-    public function clear(int $lines = null)
+    public function clear(?int $lines = null)
     {
         if (empty($this->content) || !$this->isDecorated()) {
             return;

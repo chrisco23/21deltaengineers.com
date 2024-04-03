@@ -1,18 +1,18 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Statistics;
+namespace IAWP\Statistics;
 
 use DatePeriod;
 use DateTime;
-use IAWP_SCOPED\IAWP\Date_Range\Date_Range;
-use IAWP_SCOPED\IAWP\Illuminate_Builder;
-use IAWP_SCOPED\IAWP\Query;
-use IAWP_SCOPED\IAWP\Rows\Rows;
-use IAWP_SCOPED\IAWP\Statistics\Intervals\Daily;
-use IAWP_SCOPED\IAWP\Statistics\Intervals\Interval;
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
-use IAWP_SCOPED\Illuminate\Database\Query\JoinClause;
-use IAWP_SCOPED\Proper\Timezone;
+use IAWP\Date_Range\Date_Range;
+use IAWP\Illuminate_Builder;
+use IAWP\Query;
+use IAWP\Rows\Rows;
+use IAWP\Statistics\Intervals\Daily;
+use IAWP\Statistics\Intervals\Interval;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
+use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
+use IAWPSCOPED\Proper\Timezone;
 /** @internal */
 abstract class Statistics
 {
@@ -48,38 +48,38 @@ abstract class Statistics
         $this->woocommerce_orders = $this->get_statistic('wc_orders');
         $this->woocommerce_net_sales = $this->get_statistic('wc_net_sales');
         $this->average_session_duration = $this->get_statistic('average_session_duration');
-        $this->bounce_rate = new Statistic($this->calculate_percent($this->statistics->bounces, $this->statistics->sessions), $this->calculate_percent($this->previous_period_statistics->bounces, $this->previous_period_statistics->sessions));
-        $this->views_per_session = new Statistic($this->divide($this->statistics->total_views, $this->statistics->sessions, 2), $this->divide($this->previous_period_statistics->total_views, $this->previous_period_statistics->sessions, 2));
+        $this->bounce_rate = new \IAWP\Statistics\Statistic($this->calculate_percent($this->statistics->bounces, $this->statistics->sessions), $this->calculate_percent($this->previous_period_statistics->bounces, $this->previous_period_statistics->sessions));
+        $this->views_per_session = new \IAWP\Statistics\Statistic($this->divide($this->statistics->total_views, $this->statistics->sessions, 2), $this->divide($this->previous_period_statistics->total_views, $this->previous_period_statistics->sessions, 2));
     }
-    public function views() : Statistic
+    public function views() : \IAWP\Statistics\Statistic
     {
         return $this->views;
     }
-    public function visitors() : Statistic
+    public function visitors() : \IAWP\Statistics\Statistic
     {
         return $this->visitors;
     }
-    public function sessions() : Statistic
+    public function sessions() : \IAWP\Statistics\Statistic
     {
         return $this->sessions;
     }
-    public function average_session_duration() : Statistic
+    public function average_session_duration() : \IAWP\Statistics\Statistic
     {
         return $this->average_session_duration;
     }
-    public function woocommerce_orders() : Statistic
+    public function woocommerce_orders() : \IAWP\Statistics\Statistic
     {
         return $this->woocommerce_orders;
     }
-    public function woocommerce_net_sales() : Statistic
+    public function woocommerce_net_sales() : \IAWP\Statistics\Statistic
     {
         return $this->woocommerce_net_sales;
     }
-    public function bounce_rate() : Statistic
+    public function bounce_rate() : \IAWP\Statistics\Statistic
     {
         return $this->bounce_rate;
     }
-    public function view_per_session() : Statistic
+    public function view_per_session() : \IAWP\Statistics\Statistic
     {
         return $this->views_per_session;
     }
@@ -93,7 +93,7 @@ abstract class Statistics
      *
      * @return int|null
      */
-    public function total_table_rows() : ?int
+    public function total_number_of_rows() : ?int
     {
         $sessions_table = Query::get_table_name(Query::SESSIONS);
         $views_table = Query::get_table_name(Query::VIEWS);
@@ -125,9 +125,9 @@ abstract class Statistics
     {
         return null;
     }
-    private function get_statistic(string $name) : Statistic
+    private function get_statistic(string $name) : \IAWP\Statistics\Statistic
     {
-        return new Statistic($this->statistics->{$name}, $this->previous_period_statistics->{$name}, $this->fill_in_partial_day_range($this->statistics_by_day, $name));
+        return new \IAWP\Statistics\Statistic($this->statistics->{$name}, $this->previous_period_statistics->{$name}, $this->fill_in_partial_day_range($this->statistics_by_day, $name));
     }
     private function query(Date_Range $range, bool $as_daily_statistics)
     {
@@ -155,7 +155,7 @@ abstract class Statistics
             } elseif ($this->chart_interval->id() === 'monthly') {
                 $query->selectRaw("DATE_FORMAT(CONVERT_TZ(sessions.created_at, '{$utc_offset}', '{$site_offset}'), '%Y-%m-01 00:00:00') AS date");
             } elseif ($this->chart_interval->id() === 'weekly') {
-                $day_of_week = \IAWP_SCOPED\iawp()->get_option('iawp_dow', 0) + 1;
+                $day_of_week = \IAWPSCOPED\iawp()->get_option('iawp_dow', 0) + 1;
                 $query->selectRaw("\n                               IF (\n                                  DAYOFWEEK(CONVERT_TZ(sessions.created_at, '{$utc_offset}', '{$site_offset}')) - {$day_of_week} < 0,\n                                  DATE_FORMAT(SUBDATE(CONVERT_TZ(sessions.created_at, '{$utc_offset}', '{$site_offset}'), DAYOFWEEK(CONVERT_TZ(sessions.created_at, '{$utc_offset}', '{$site_offset}')) - {$day_of_week} + 7), '%Y-%m-%d 00:00:00'),\n                                  DATE_FORMAT(SUBDATE(CONVERT_TZ(sessions.created_at, '{$utc_offset}', '{$site_offset}'), DAYOFWEEK(CONVERT_TZ(sessions.created_at, '{$utc_offset}', '{$site_offset}')) - {$day_of_week}), '%Y-%m-%d 00:00:00')\n                               ) AS date\n                           ");
             } else {
                 $query->selectRaw("DATE_FORMAT(CONVERT_TZ(sessions.created_at, '{$utc_offset}', '{$site_offset}'), '%Y-%m-%d %H:00:00') AS date");

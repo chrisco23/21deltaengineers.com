@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Foundation;
+namespace IAWPSCOPED\Illuminate\Contracts\Foundation;
 
-use IAWP_SCOPED\Illuminate\Contracts\Container\Container;
+use IAWPSCOPED\Illuminate\Contracts\Container\Container;
 /** @internal */
 interface Application extends Container
 {

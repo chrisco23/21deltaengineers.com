@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Statistics\Intervals;
+namespace IAWP\Statistics\Intervals;
 
 /** @internal */
 class Intervals
@@ -10,7 +10,7 @@ class Intervals
      */
     public static function all() : array
     {
-        return [new Hourly(), new Daily(), new Weekly(), new Monthly()];
+        return [new \IAWP\Statistics\Intervals\Hourly(), new \IAWP\Statistics\Intervals\Daily(), new \IAWP\Statistics\Intervals\Weekly(), new \IAWP\Statistics\Intervals\Monthly()];
     }
     /**
      * Find an interval by its id. Will return the default interval if provided id is invalid.
@@ -19,25 +19,25 @@ class Intervals
      *
      * @return Interval
      */
-    public static function find_by_id(?string $interval_id) : Interval
+    public static function find_by_id(?string $interval_id) : \IAWP\Statistics\Intervals\Interval
     {
         foreach (self::all() as $interval) {
             if ($interval->id() === $interval_id) {
                 return $interval;
             }
         }
-        return new Daily();
+        return new \IAWP\Statistics\Intervals\Daily();
     }
-    public static function default_for(int $days) : Interval
+    public static function default_for(int $days) : \IAWP\Statistics\Intervals\Interval
     {
         if ($days <= 3) {
-            return new Hourly();
+            return new \IAWP\Statistics\Intervals\Hourly();
         } elseif ($days <= 84) {
-            return new Daily();
+            return new \IAWP\Statistics\Intervals\Daily();
         } elseif ($days <= 182) {
-            return new Weekly();
+            return new \IAWP\Statistics\Intervals\Weekly();
         } else {
-            return new Monthly();
+            return new \IAWP\Statistics\Intervals\Monthly();
         }
     }
     // public static function create_interval(?string $interval_id): Interval

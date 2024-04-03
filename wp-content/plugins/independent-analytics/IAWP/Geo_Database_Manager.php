@@ -1,19 +1,20 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
 use DateInterval;
 use DateTime;
-use IAWP_SCOPED\Proper\Timezone;
+use IAWPSCOPED\Proper\Timezone;
 use Throwable;
 use ZipArchive;
 /** @internal */
 class Geo_Database_Manager
 {
-    private $zip_download_url = 'https://assets.independentwp.com/iawp-geo-db-3.mmdb.zip';
-    private $raw_download_url = 'https://assets.independentwp.com/iawp-geo-db-3.mmdb';
-    // Calculated using `md5 iawp-geo-db-3.mmdb`
-    private $database_checksum = 'c78f1a702cda45ae2c3443d1b9911822';
+    // Updating the database? Read the Wiki page "Updating The Geo Database"
+    // https://github.com/andrewjmead/independent-analytics/wiki/Updating-The-Geo-Database
+    private $zip_download_url = 'https://assets.independentwp.com/iawp-geo-db-5.mmdb.zip';
+    private $raw_download_url = 'https://assets.independentwp.com/iawp-geo-db-5.mmdb';
+    private $database_checksum = '6fc58b0047547e4a7f718e4d3552491c';
     public function download() : void
     {
         if (!$this->should_download()) {
@@ -52,7 +53,7 @@ class Geo_Database_Manager
         try {
             $zip = new ZipArchive();
             if ($zip->open($this->path_to_database_zip()) === \true) {
-                $zip->extractTo(\IAWP_SCOPED\iawp_upload_path_to(''));
+                $zip->extractTo(\IAWPSCOPED\iawp_upload_path_to(''));
                 $zip->close();
             }
         } catch (Throwable $e) {
@@ -108,10 +109,10 @@ class Geo_Database_Manager
     }
     private function path_to_database_zip() : string
     {
-        return \IAWP_SCOPED\iawp_upload_path_to('iawp-geo-db.zip');
+        return \IAWPSCOPED\iawp_upload_path_to('iawp-geo-db.zip');
     }
     private function path_to_database() : string
     {
-        return \IAWP_SCOPED\iawp_upload_path_to('iawp-geo-db.mmdb');
+        return \IAWPSCOPED\iawp_upload_path_to('iawp-geo-db.mmdb');
     }
 }

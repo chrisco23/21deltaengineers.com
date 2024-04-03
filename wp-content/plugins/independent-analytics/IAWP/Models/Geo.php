@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
 /** @internal */
 class Geo
 {
-    use View_Stats;
-    use WooCommerce_Stats;
+    use \IAWP\Models\View_Stats;
+    use \IAWP\Models\WooCommerce_Stats;
     private $continent;
     private $country;
     private $country_code;

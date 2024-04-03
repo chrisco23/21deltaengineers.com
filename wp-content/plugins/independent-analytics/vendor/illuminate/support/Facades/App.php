@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
 /**
  * @method static \Illuminate\Contracts\Foundation\Application loadEnvironmentFrom(string $file)

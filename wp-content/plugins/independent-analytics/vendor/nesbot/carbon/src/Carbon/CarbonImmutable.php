@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon;
+namespace IAWPSCOPED\Carbon;
 
-use IAWP_SCOPED\Carbon\Traits\Date;
-use IAWP_SCOPED\Carbon\Traits\DeprecatedProperties;
+use IAWPSCOPED\Carbon\Traits\Date;
+use IAWPSCOPED\Carbon\Traits\DeprecatedProperties;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;

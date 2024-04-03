@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
 /**
  * Intentionally empty. Used as an alternative to null in Report_Options_Parser.

@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Support\Testing\Fakes\EventFake;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Support\Testing\Fakes\EventFake;
 /**
  * @method static \Closure createClassListener(string $listener, bool $wildcard = false)
  * @method static \Closure makeListener(\Closure|string $listener, bool $wildcard = false)

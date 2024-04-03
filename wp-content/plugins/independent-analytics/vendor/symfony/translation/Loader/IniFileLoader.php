@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Loader;
+namespace IAWPSCOPED\Symfony\Component\Translation\Loader;
 
 /**
  * IniFileLoader loads translations from an ini file.

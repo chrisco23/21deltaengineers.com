@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\PHPStan;
+namespace IAWPSCOPED\Carbon\PHPStan;
 
 if (!\class_exists(LazyMacro::class, \false)) {
     /** @internal */

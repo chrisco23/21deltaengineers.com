@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\String;
+namespace IAWPSCOPED\Symfony\Component\String;
 
-use IAWP_SCOPED\Symfony\Component\String\Exception\ExceptionInterface;
-use IAWP_SCOPED\Symfony\Component\String\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\String\Exception\RuntimeException;
+use IAWPSCOPED\Symfony\Component\String\Exception\ExceptionInterface;
+use IAWPSCOPED\Symfony\Component\String\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a string of abstract Unicode characters.
  *
@@ -162,7 +162,7 @@ abstract class AbstractUnicodeString extends AbstractString
     public function folded(bool $compat = \true) : parent
     {
         $str = clone $this;
-        if (!$compat || \PHP_VERSION_ID < 70300 || !\defined('IAWP_SCOPED\\Normalizer::NFKC_CF')) {
+        if (!$compat || \PHP_VERSION_ID < 70300 || !\defined('IAWPSCOPED\\Normalizer::NFKC_CF')) {
             $str->string = \normalizer_normalize($str->string, $compat ? \Normalizer::NFKC : \Normalizer::NFC);
             $str->string = \mb_strtolower(\str_replace(self::FOLD_FROM, self::FOLD_TO, $this->string), 'UTF-8');
         } else {
@@ -170,7 +170,7 @@ abstract class AbstractUnicodeString extends AbstractString
         }
         return $str;
     }
-    public function join(array $strings, string $lastGlue = null) : parent
+    public function join(array $strings, ?string $lastGlue = null) : parent
     {
         $str = clone $this;
         $tail = null !== $lastGlue && 1 < \count($strings) ? $lastGlue . \array_pop($strings) : '';
@@ -300,7 +300,7 @@ abstract class AbstractUnicodeString extends AbstractString
     public function snake() : parent
     {
         $str = $this->camel();
-        $str->string = \mb_strtolower(\preg_replace(['/(\\p{Lu}+)(\\p{Lu}\\p{Ll})/u', '/([\\p{Ll}0-9])(\\p{Lu})/u'], 'IAWP_SCOPED\\1_\\2', $str->string), 'UTF-8');
+        $str->string = \mb_strtolower(\preg_replace(['/(\\p{Lu}+)(\\p{Lu}\\p{Ll})/u', '/([\\p{Ll}0-9])(\\p{Lu})/u'], 'IAWPSCOPED\\1_\\2', $str->string), 'UTF-8');
         return $str;
     }
     public function title(bool $allWords = \false) : parent

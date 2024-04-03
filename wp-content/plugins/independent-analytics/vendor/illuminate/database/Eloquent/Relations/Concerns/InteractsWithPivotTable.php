@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns;
 
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Collection;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Pivot;
-use IAWP_SCOPED\Illuminate\Support\Collection as BaseCollection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Collection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Pivot;
+use IAWPSCOPED\Illuminate\Support\Collection as BaseCollection;
 /** @internal */
 trait InteractsWithPivotTable
 {
@@ -100,7 +100,7 @@ trait InteractsWithPivotTable
      */
     public function syncWithPivotValues($ids, array $values, bool $detaching = \true)
     {
-        return $this->sync(\IAWP_SCOPED\collect($this->parseIds($ids))->mapWithKeys(function ($id) use($values) {
+        return $this->sync(\IAWPSCOPED\collect($this->parseIds($ids))->mapWithKeys(function ($id) use($values) {
             return [$id => $values];
         }), $detaching);
     }
@@ -112,7 +112,7 @@ trait InteractsWithPivotTable
      */
     protected function formatRecordsList(array $records)
     {
-        return \IAWP_SCOPED\collect($records)->mapWithKeys(function ($attributes, $id) {
+        return \IAWPSCOPED\collect($records)->mapWithKeys(function ($attributes, $id) {
             if (!\is_array($attributes)) {
                 [$id, $attributes] = [$attributes, []];
             }

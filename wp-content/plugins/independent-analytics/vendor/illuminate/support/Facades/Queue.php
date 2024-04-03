@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Illuminate\Queue\Worker;
-use IAWP_SCOPED\Illuminate\Support\Testing\Fakes\QueueFake;
+use IAWPSCOPED\Illuminate\Queue\Worker;
+use IAWPSCOPED\Illuminate\Support\Testing\Fakes\QueueFake;
 /**
  * @method static \Illuminate\Contracts\Queue\Job|null pop(string $queue = null)
  * @method static \Illuminate\Contracts\Queue\Queue setConnectionName(string $name)

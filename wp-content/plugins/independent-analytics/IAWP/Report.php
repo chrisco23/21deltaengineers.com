@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
 /** @internal */
 class Report
@@ -26,9 +26,9 @@ class Report
     public function url() : string
     {
         if (!$this->is_saved_report()) {
-            return \IAWP_SCOPED\iawp_dashboard_url(['tab' => $this->row->type]);
+            return \IAWPSCOPED\iawp_dashboard_url(['tab' => $this->row->type]);
         }
-        return \IAWP_SCOPED\iawp_dashboard_url(['tab' => $this->row->type, 'report' => $this->row->report_id]);
+        return \IAWPSCOPED\iawp_dashboard_url(['tab' => $this->row->type, 'report' => $this->row->report_id]);
     }
     public function is_saved_report() : bool
     {

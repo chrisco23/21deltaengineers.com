@@ -1,18 +1,18 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Testing\Fakes;
+namespace IAWPSCOPED\Illuminate\Support\Testing\Fakes;
 
 use Closure;
 use Exception;
-use IAWP_SCOPED\Illuminate\Contracts\Notifications\Dispatcher as NotificationDispatcher;
-use IAWP_SCOPED\Illuminate\Contracts\Notifications\Factory as NotificationFactory;
-use IAWP_SCOPED\Illuminate\Contracts\Translation\HasLocalePreference;
-use IAWP_SCOPED\Illuminate\Notifications\AnonymousNotifiable;
-use IAWP_SCOPED\Illuminate\Support\Collection;
-use IAWP_SCOPED\Illuminate\Support\Str;
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
-use IAWP_SCOPED\Illuminate\Support\Traits\ReflectsClosures;
-use IAWP_SCOPED\PHPUnit\Framework\Assert as PHPUnit;
+use IAWPSCOPED\Illuminate\Contracts\Notifications\Dispatcher as NotificationDispatcher;
+use IAWPSCOPED\Illuminate\Contracts\Notifications\Factory as NotificationFactory;
+use IAWPSCOPED\Illuminate\Contracts\Translation\HasLocalePreference;
+use IAWPSCOPED\Illuminate\Notifications\AnonymousNotifiable;
+use IAWPSCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\Illuminate\Support\Traits\ReflectsClosures;
+use IAWPSCOPED\PHPUnit\Framework\Assert as PHPUnit;
 /** @internal */
 class NotificationFake implements NotificationDispatcher, NotificationFactory
 {
@@ -139,7 +139,7 @@ class NotificationFake implements NotificationDispatcher, NotificationFactory
      */
     public function assertSentTimes($notification, $expectedCount)
     {
-        $actualCount = \IAWP_SCOPED\collect($this->notifications)->flatten(1)->reduce(function ($count, $sent) use($notification) {
+        $actualCount = \IAWPSCOPED\collect($this->notifications)->flatten(1)->reduce(function ($count, $sent) use($notification) {
             return $count + \count($sent[$notification] ?? []);
         }, 0);
         PHPUnit::assertSame($expectedCount, $actualCount, "Expected [{$notification}] to be sent {$expectedCount} times, but was sent {$actualCount} times.");
@@ -168,12 +168,12 @@ class NotificationFake implements NotificationDispatcher, NotificationFactory
     public function sent($notifiable, $notification, $callback = null)
     {
         if (!$this->hasSent($notifiable, $notification)) {
-            return \IAWP_SCOPED\collect();
+            return \IAWPSCOPED\collect();
         }
         $callback = $callback ?: function () {
             return \true;
         };
-        $notifications = \IAWP_SCOPED\collect($this->notificationsFor($notifiable, $notification));
+        $notifications = \IAWPSCOPED\collect($this->notificationsFor($notifiable, $notification));
         return $notifications->filter(function ($arguments) use($callback) {
             return $callback(...\array_values($arguments));
         })->pluck('notification');
@@ -237,7 +237,7 @@ class NotificationFake implements NotificationDispatcher, NotificationFactory
                     continue;
                 }
             }
-            $this->notifications[\get_class($notifiable)][$notifiable->getKey()][\get_class($notification)][] = ['notification' => $notification, 'channels' => $notifiableChannels, 'notifiable' => $notifiable, 'locale' => $notification->locale ?? $this->locale ?? \IAWP_SCOPED\value(function () use($notifiable) {
+            $this->notifications[\get_class($notifiable)][$notifiable->getKey()][\get_class($notification)][] = ['notification' => $notification, 'channels' => $notifiableChannels, 'notifiable' => $notifiable, 'locale' => $notification->locale ?? $this->locale ?? \IAWPSCOPED\value(function () use($notifiable) {
                 if ($notifiable instanceof HasLocalePreference) {
                     return $notifiable->preferredLocale();
                 }

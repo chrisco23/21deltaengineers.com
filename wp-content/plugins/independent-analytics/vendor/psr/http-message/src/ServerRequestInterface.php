@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Psr\Http\Message;
+namespace IAWPSCOPED\Psr\Http\Message;
 
 /**
  * Representation of an incoming, server-side HTTP request.

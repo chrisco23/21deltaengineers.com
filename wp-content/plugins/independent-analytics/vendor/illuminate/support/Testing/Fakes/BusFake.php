@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Testing\Fakes;
+namespace IAWPSCOPED\Illuminate\Support\Testing\Fakes;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Bus\PendingBatch;
-use IAWP_SCOPED\Illuminate\Contracts\Bus\QueueingDispatcher;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Collection;
-use IAWP_SCOPED\Illuminate\Support\Traits\ReflectsClosures;
-use IAWP_SCOPED\PHPUnit\Framework\Assert as PHPUnit;
+use IAWPSCOPED\Illuminate\Bus\PendingBatch;
+use IAWPSCOPED\Illuminate\Contracts\Bus\QueueingDispatcher;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Support\Traits\ReflectsClosures;
+use IAWPSCOPED\PHPUnit\Framework\Assert as PHPUnit;
 /** @internal */
 class BusFake implements QueueingDispatcher
 {
@@ -220,7 +220,7 @@ class BusFake implements QueueingDispatcher
             };
         }
         PHPUnit::assertTrue($this->dispatched($command, $callback)->isNotEmpty(), "The expected [{$command}] job was not dispatched.");
-        PHPUnit::assertTrue(\IAWP_SCOPED\collect($expectedChain)->isNotEmpty(), 'The expected chain can not be empty.');
+        PHPUnit::assertTrue(\IAWPSCOPED\collect($expectedChain)->isNotEmpty(), 'The expected chain can not be empty.');
         $this->isChainOfObjects($expectedChain) ? $this->assertDispatchedWithChainOfObjects($command, $expectedChain, $callback) : $this->assertDispatchedWithChainOfClasses($command, $expectedChain, $callback);
     }
     /**
@@ -263,7 +263,7 @@ class BusFake implements QueueingDispatcher
      */
     protected function assertDispatchedWithChainOfObjects($command, $expectedChain, $callback)
     {
-        $chain = \IAWP_SCOPED\collect($expectedChain)->map(function ($job) {
+        $chain = \IAWPSCOPED\collect($expectedChain)->map(function ($job) {
             return \serialize($job);
         })->all();
         PHPUnit::assertTrue($this->dispatched($command, $callback)->filter(function ($job) use($chain) {
@@ -281,7 +281,7 @@ class BusFake implements QueueingDispatcher
     protected function assertDispatchedWithChainOfClasses($command, $expectedChain, $callback)
     {
         $matching = $this->dispatched($command, $callback)->map->chained->map(function ($chain) {
-            return \IAWP_SCOPED\collect($chain)->map(function ($job) {
+            return \IAWPSCOPED\collect($chain)->map(function ($job) {
                 return \get_class(\unserialize($job));
             });
         })->filter(function ($chain) use($expectedChain) {
@@ -297,7 +297,7 @@ class BusFake implements QueueingDispatcher
      */
     protected function isChainOfObjects($chain)
     {
-        return !\IAWP_SCOPED\collect($chain)->contains(function ($job) {
+        return !\IAWPSCOPED\collect($chain)->contains(function ($job) {
             return !\is_object($job);
         });
     }
@@ -331,12 +331,12 @@ class BusFake implements QueueingDispatcher
     public function dispatched($command, $callback = null)
     {
         if (!$this->hasDispatched($command)) {
-            return \IAWP_SCOPED\collect();
+            return \IAWPSCOPED\collect();
         }
         $callback = $callback ?: function () {
             return \true;
         };
-        return \IAWP_SCOPED\collect($this->commands[$command])->filter(function ($command) use($callback) {
+        return \IAWPSCOPED\collect($this->commands[$command])->filter(function ($command) use($callback) {
             return $callback($command);
         });
     }
@@ -350,12 +350,12 @@ class BusFake implements QueueingDispatcher
     public function dispatchedSync(string $command, $callback = null)
     {
         if (!$this->hasDispatchedSync($command)) {
-            return \IAWP_SCOPED\collect();
+            return \IAWPSCOPED\collect();
         }
         $callback = $callback ?: function () {
             return \true;
         };
-        return \IAWP_SCOPED\collect($this->commandsSync[$command])->filter(function ($command) use($callback) {
+        return \IAWPSCOPED\collect($this->commandsSync[$command])->filter(function ($command) use($callback) {
             return $callback($command);
         });
     }
@@ -369,12 +369,12 @@ class BusFake implements QueueingDispatcher
     public function dispatchedAfterResponse(string $command, $callback = null)
     {
         if (!$this->hasDispatchedAfterResponse($command)) {
-            return \IAWP_SCOPED\collect();
+            return \IAWPSCOPED\collect();
         }
         $callback = $callback ?: function () {
             return \true;
         };
-        return \IAWP_SCOPED\collect($this->commandsAfterResponse[$command])->filter(function ($command) use($callback) {
+        return \IAWPSCOPED\collect($this->commandsAfterResponse[$command])->filter(function ($command) use($callback) {
             return $callback($command);
         });
     }
@@ -387,9 +387,9 @@ class BusFake implements QueueingDispatcher
     public function batched(callable $callback)
     {
         if (empty($this->batches)) {
-            return \IAWP_SCOPED\collect();
+            return \IAWPSCOPED\collect();
         }
-        return \IAWP_SCOPED\collect($this->batches)->filter(function ($batch) use($callback) {
+        return \IAWPSCOPED\collect($this->batches)->filter(function ($batch) use($callback) {
             return $callback($batch);
         });
     }
@@ -550,7 +550,7 @@ class BusFake implements QueueingDispatcher
         if (empty($this->jobsToFake)) {
             return \true;
         }
-        return \IAWP_SCOPED\collect($this->jobsToFake)->filter(function ($job) use($command) {
+        return \IAWPSCOPED\collect($this->jobsToFake)->filter(function ($job) use($command) {
             return $job instanceof Closure ? $job($command) : $job === \get_class($command);
         })->isNotEmpty();
     }

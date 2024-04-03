@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Tester;
+namespace IAWPSCOPED\Symfony\Component\Console\Tester;
 
-use IAWP_SCOPED\Symfony\Component\Console\Command\Command;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionInput;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
+use IAWPSCOPED\Symfony\Component\Console\Command\Command;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionInput;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
 /**
  * Eases the testing of command completion.
  *

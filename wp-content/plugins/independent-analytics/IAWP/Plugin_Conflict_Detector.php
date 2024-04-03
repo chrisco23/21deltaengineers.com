@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Utils\String_Util;
+use IAWP\Utils\String_Util;
 /** @internal */
 class Plugin_Conflict_Detector
 {
@@ -121,6 +121,29 @@ class Plugin_Conflict_Detector
                             }
                         }
                     }
+                }
+            }
+        }
+        if (\in_array('wp-hide-security-enhancer/wp-hide.php', $active_plugins)) {
+            $settings = \get_option('wph_settings');
+            if (\array_key_exists('module_settings', $settings)) {
+                if (\array_key_exists('disable_json_rest_v2', $settings['module_settings'])) {
+                    if ($settings['module_settings']['disable_json_rest_v2'] == 'yes') {
+                        return \__('The "WP Hide" plugin is blocking the REST API, which Independent Analytics needs to record views. Please visit the WP Hide > Rewrite URLs menu and switch the "Disable JSON REST V2 service" option to "No."', 'independent-analytics');
+                    }
+                }
+                if (\array_key_exists('block_json_rest', $settings['module_settings'])) {
+                    if ($settings['module_settings']['block_json_rest'] == 'yes' || $settings['module_settings']['block_json_rest'] == 'non-logged-in') {
+                        return \__('The "WP Hide" plugin is blocking the REST API, which Independent Analytics needs to record views. Please visit the WP Hide > Rewrite URLs menu and switch the "Block any JSON REST calls" option to "No."', 'independent-analytics');
+                    }
+                }
+            }
+        }
+        if (\in_array('admin-site-enhancements/admin-site-enhancements.php', $active_plugins)) {
+            $settings = \get_option('admin_site_enhancements');
+            if (\array_key_exists('disable_rest_api', $settings)) {
+                if ($settings['disable_rest_api']) {
+                    return \__('The "Admin and Site Enhancements" plugin is blocking the REST API, which Independent Analytics needs to record views. Please visit the Tools > Enhancements menu, click on the "Disable Components" section, and deselect the "Disable REST API" setting to allow Independent Analytics to track your visitors.', 'independent-analytics');
                 }
             }
         }

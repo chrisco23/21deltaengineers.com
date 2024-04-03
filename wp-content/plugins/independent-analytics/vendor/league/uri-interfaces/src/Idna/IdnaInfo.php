@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri\Idna;
+namespace IAWPSCOPED\League\Uri\Idna;
 
 use function array_filter;
 use const ARRAY_FILTER_USE_KEY;

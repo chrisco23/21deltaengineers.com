@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Collection;
-if (!\function_exists('IAWP_SCOPED\\collect')) {
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Collection;
+if (!\function_exists('IAWPSCOPED\\collect')) {
     /**
      * Create a collection from the given value.
      *
@@ -17,7 +17,7 @@ if (!\function_exists('IAWP_SCOPED\\collect')) {
         return new Collection($value);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\data_fill')) {
+if (!\function_exists('IAWPSCOPED\\data_fill')) {
     /**
      * Fill in data where it's missing.
      *
@@ -32,7 +32,7 @@ if (!\function_exists('IAWP_SCOPED\\data_fill')) {
         return data_set($target, $key, $value, \false);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\data_get')) {
+if (!\function_exists('IAWPSCOPED\\data_get')) {
     /**
      * Get an item from an array or object using "dot" notation.
      *
@@ -57,7 +57,7 @@ if (!\function_exists('IAWP_SCOPED\\data_get')) {
                 if ($target instanceof Collection) {
                     $target = $target->all();
                 } elseif (!\is_array($target)) {
-                    return \IAWP_SCOPED\value($default);
+                    return \IAWPSCOPED\value($default);
                 }
                 $result = [];
                 foreach ($target as $item) {
@@ -70,13 +70,13 @@ if (!\function_exists('IAWP_SCOPED\\data_get')) {
             } elseif (\is_object($target) && isset($target->{$segment})) {
                 $target = $target->{$segment};
             } else {
-                return \IAWP_SCOPED\value($default);
+                return \IAWPSCOPED\value($default);
             }
         }
         return $target;
     }
 }
-if (!\function_exists('IAWP_SCOPED\\data_set')) {
+if (!\function_exists('IAWPSCOPED\\data_set')) {
     /**
      * Set an item on an array or object using dot notation.
      *
@@ -132,7 +132,7 @@ if (!\function_exists('IAWP_SCOPED\\data_set')) {
         return $target;
     }
 }
-if (!\function_exists('IAWP_SCOPED\\head')) {
+if (!\function_exists('IAWPSCOPED\\head')) {
     /**
      * Get the first element of an array. Useful for method chaining.
      *
@@ -145,7 +145,7 @@ if (!\function_exists('IAWP_SCOPED\\head')) {
         return \reset($array);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\last')) {
+if (!\function_exists('IAWPSCOPED\\last')) {
     /**
      * Get the last element from an array.
      *
@@ -158,7 +158,7 @@ if (!\function_exists('IAWP_SCOPED\\last')) {
         return \end($array);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\value')) {
+if (!\function_exists('IAWPSCOPED\\value')) {
     /**
      * Return the default value of the given value.
      *

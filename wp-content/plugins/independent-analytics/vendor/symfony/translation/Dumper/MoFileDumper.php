@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Dumper;
+namespace IAWPSCOPED\Symfony\Component\Translation\Dumper;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Loader\MoFileLoader;
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogue;
+use IAWPSCOPED\Symfony\Component\Translation\Loader\MoFileLoader;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogue;
 /**
  * MoFileDumper generates a gettext formatted string representation of a message catalogue.
  *

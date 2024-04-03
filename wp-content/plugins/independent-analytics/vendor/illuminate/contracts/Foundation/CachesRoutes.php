@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Foundation;
+namespace IAWPSCOPED\Illuminate\Contracts\Foundation;
 
 /** @internal */
 interface CachesRoutes

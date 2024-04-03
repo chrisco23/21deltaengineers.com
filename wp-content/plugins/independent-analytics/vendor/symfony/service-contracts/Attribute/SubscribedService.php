@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Contracts\Service\Attribute;
+namespace IAWPSCOPED\Symfony\Contracts\Service\Attribute;
 
-use IAWP_SCOPED\Symfony\Contracts\Service\ServiceSubscriberTrait;
+use IAWPSCOPED\Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Use with {@see ServiceSubscriberTrait} to mark a method's return type
  * as a subscribed service.

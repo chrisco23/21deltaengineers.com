@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Psr\Container;
+namespace IAWPSCOPED\Psr\Container;
 
 /**
  * No entry was found in the container.

@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation;
+namespace IAWPSCOPED\Symfony\Component\Translation;
 
-use IAWP_SCOPED\Symfony\Component\Config\ConfigCacheFactory;
-use IAWP_SCOPED\Symfony\Component\Config\ConfigCacheFactoryInterface;
-use IAWP_SCOPED\Symfony\Component\Config\ConfigCacheInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\NotFoundResourceException;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\RuntimeException;
-use IAWP_SCOPED\Symfony\Component\Translation\Formatter\IntlFormatterInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\Formatter\MessageFormatter;
-use IAWP_SCOPED\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\Loader\LoaderInterface;
-use IAWP_SCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
-use IAWP_SCOPED\Symfony\Contracts\Translation\TranslatorInterface;
+use IAWPSCOPED\Symfony\Component\Config\ConfigCacheFactory;
+use IAWPSCOPED\Symfony\Component\Config\ConfigCacheFactoryInterface;
+use IAWPSCOPED\Symfony\Component\Config\ConfigCacheInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\NotFoundResourceException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\RuntimeException;
+use IAWPSCOPED\Symfony\Component\Translation\Formatter\IntlFormatterInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Formatter\MessageFormatter;
+use IAWPSCOPED\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Loader\LoaderInterface;
+use IAWPSCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
+use IAWPSCOPED\Symfony\Contracts\Translation\TranslatorInterface;
 // Help opcache.preload discover always-needed symbols
 \class_exists(MessageCatalogue::class);
 /**
@@ -75,7 +75,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     /**
      * @throws InvalidArgumentException If a locale contains invalid characters
      */
-    public function __construct(string $locale, MessageFormatterInterface $formatter = null, string $cacheDir = null, bool $debug = \false, array $cacheVary = [])
+    public function __construct(string $locale, ?MessageFormatterInterface $formatter = null, ?string $cacheDir = null, bool $debug = \false, array $cacheVary = [])
     {
         $this->setLocale($locale);
         if (null === $formatter) {
@@ -108,7 +108,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
      *
      * @throws InvalidArgumentException If the locale contains invalid characters
      */
-    public function addResource(string $format, $resource, string $locale, string $domain = null)
+    public function addResource(string $format, $resource, string $locale, ?string $domain = null)
     {
         if (null === $domain) {
             $domain = 'messages';
@@ -165,7 +165,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     /**
      * {@inheritdoc}
      */
-    public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null)
+    public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null)
     {
         if (null === $id || '' === $id) {
             return '';
@@ -192,7 +192,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     /**
      * {@inheritdoc}
      */
-    public function getCatalogue(string $locale = null)
+    public function getCatalogue(?string $locale = null)
     {
         if (!$locale) {
             $locale = $this->getLocale();

@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
-use IAWP_SCOPED\Carbon\Carbon as BaseCarbon;
-use IAWP_SCOPED\Carbon\CarbonImmutable as BaseCarbonImmutable;
+use IAWPSCOPED\Carbon\Carbon as BaseCarbon;
+use IAWPSCOPED\Carbon\CarbonImmutable as BaseCarbonImmutable;
 /** @internal */
 class Carbon extends BaseCarbon
 {

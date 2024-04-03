@@ -8,22 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Traits;
+namespace IAWPSCOPED\Carbon\Traits;
 
-use IAWP_SCOPED\Carbon\CarbonInterface;
-use IAWP_SCOPED\Carbon\Exceptions\InvalidTypeException;
-use IAWP_SCOPED\Carbon\Exceptions\NotLocaleAwareException;
-use IAWP_SCOPED\Carbon\Language;
-use IAWP_SCOPED\Carbon\Translator;
-use IAWP_SCOPED\Carbon\TranslatorStrongTypeInterface;
+use IAWPSCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\Exceptions\InvalidTypeException;
+use IAWPSCOPED\Carbon\Exceptions\NotLocaleAwareException;
+use IAWPSCOPED\Carbon\Language;
+use IAWPSCOPED\Carbon\Translator;
+use IAWPSCOPED\Carbon\TranslatorStrongTypeInterface;
 use Closure;
-use IAWP_SCOPED\Symfony\Component\Translation\TranslatorBagInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\TranslatorInterface;
-use IAWP_SCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
-use IAWP_SCOPED\Symfony\Contracts\Translation\TranslatorInterface as ContractsTranslatorInterface;
-if (\interface_exists('IAWP_SCOPED\\Symfony\\Contracts\\Translation\\TranslatorInterface') && !\interface_exists('IAWP_SCOPED\\Symfony\\Component\\Translation\\TranslatorInterface')) {
-    \class_alias('IAWP_SCOPED\\Symfony\\Contracts\\Translation\\TranslatorInterface', 'IAWP_SCOPED\\Symfony\\Component\\Translation\\TranslatorInterface');
+use IAWPSCOPED\Symfony\Component\Translation\TranslatorBagInterface;
+use IAWPSCOPED\Symfony\Component\Translation\TranslatorInterface;
+use IAWPSCOPED\Symfony\Contracts\Translation\LocaleAwareInterface;
+use IAWPSCOPED\Symfony\Contracts\Translation\TranslatorInterface as ContractsTranslatorInterface;
+// @codeCoverageIgnoreStart
+if (\interface_exists('IAWPSCOPED\\Symfony\\Contracts\\Translation\\TranslatorInterface') && !\interface_exists('IAWPSCOPED\\Symfony\\Component\\Translation\\TranslatorInterface')) {
+    \class_alias('IAWPSCOPED\\Symfony\\Contracts\\Translation\\TranslatorInterface', 'IAWPSCOPED\\Symfony\\Component\\Translation\\TranslatorInterface');
 }
+// @codeCoverageIgnoreEnd
 /**
  * Trait Localization.
  *

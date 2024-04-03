@@ -1,25 +1,25 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Query;
+namespace IAWPSCOPED\Illuminate\Database\Query;
 
 use BackedEnum;
 use Closure;
 use DateTimeInterface;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
-use IAWP_SCOPED\Illuminate\Database\Concerns\BuildsQueries;
-use IAWP_SCOPED\Illuminate\Database\Concerns\ExplainsQueries;
-use IAWP_SCOPED\Illuminate\Database\ConnectionInterface;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Relation;
-use IAWP_SCOPED\Illuminate\Database\Query\Grammars\Grammar;
-use IAWP_SCOPED\Illuminate\Database\Query\Processors\Processor;
-use IAWP_SCOPED\Illuminate\Pagination\Paginator;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Collection;
-use IAWP_SCOPED\Illuminate\Support\LazyCollection;
-use IAWP_SCOPED\Illuminate\Support\Str;
-use IAWP_SCOPED\Illuminate\Support\Traits\ForwardsCalls;
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Database\Concerns\BuildsQueries;
+use IAWPSCOPED\Illuminate\Database\Concerns\ExplainsQueries;
+use IAWPSCOPED\Illuminate\Database\ConnectionInterface;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Relation;
+use IAWPSCOPED\Illuminate\Database\Query\Grammars\Grammar;
+use IAWPSCOPED\Illuminate\Database\Query\Processors\Processor;
+use IAWPSCOPED\Illuminate\Pagination\Paginator;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Support\LazyCollection;
+use IAWPSCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Support\Traits\ForwardsCalls;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
@@ -1981,7 +1981,7 @@ class Builder
      */
     public function get($columns = ['*'])
     {
-        return \IAWP_SCOPED\collect($this->onceWithColumns(Arr::wrap($columns), function () {
+        return \IAWPSCOPED\collect($this->onceWithColumns(Arr::wrap($columns), function () {
             return $this->processor->processSelect($this, $this->runSelect());
         }));
     }
@@ -2007,7 +2007,7 @@ class Builder
     {
         $page = $page ?: Paginator::resolveCurrentPage($pageName);
         $total = $this->getCountForPagination();
-        $results = $total ? $this->forPage($page, $perPage)->get($columns) : \IAWP_SCOPED\collect();
+        $results = $total ? $this->forPage($page, $perPage)->get($columns) : \IAWPSCOPED\collect();
         return $this->paginator($results, $total, $perPage, $page, ['path' => Paginator::resolveCurrentPath(), 'pageName' => $pageName]);
     }
     /**
@@ -2051,7 +2051,7 @@ class Builder
     protected function ensureOrderForCursorPagination($shouldReverse = \false)
     {
         $this->enforceOrderBy();
-        return \IAWP_SCOPED\collect($this->orders ?? $this->unionOrders ?? [])->filter(function ($order) {
+        return \IAWPSCOPED\collect($this->orders ?? $this->unionOrders ?? [])->filter(function ($order) {
             return Arr::has($order, 'direction');
         })->when($shouldReverse, function (Collection $orders) {
             return $orders->map(function ($order) {
@@ -2161,7 +2161,7 @@ class Builder
             return $this->processor->processSelect($this, $this->runSelect());
         });
         if (empty($queryResult)) {
-            return \IAWP_SCOPED\collect();
+            return \IAWPSCOPED\collect();
         }
         // If the columns are qualified with a table or have an alias, we cannot use
         // those directly in the "pluck" operations since the results from the DB
@@ -2204,7 +2204,7 @@ class Builder
                 $results[$row->{$key}] = $row->{$column};
             }
         }
-        return \IAWP_SCOPED\collect($results);
+        return \IAWPSCOPED\collect($results);
     }
     /**
      * Retrieve column values from rows represented as arrays.
@@ -2226,7 +2226,7 @@ class Builder
                 $results[$row[$key]] = $row[$column];
             }
         }
-        return \IAWP_SCOPED\collect($results);
+        return \IAWPSCOPED\collect($results);
     }
     /**
      * Concatenate values of a given column as a string.
@@ -2568,7 +2568,7 @@ class Builder
             $update = \array_keys(\reset($values));
         }
         $this->applyBeforeQueryCallbacks();
-        $bindings = $this->cleanBindings(\array_merge(Arr::flatten($values, 1), \IAWP_SCOPED\collect($update)->reject(function ($value, $key) {
+        $bindings = $this->cleanBindings(\array_merge(Arr::flatten($values, 1), \IAWPSCOPED\collect($update)->reject(function ($value, $key) {
             return \is_int($key);
         })->all()));
         return $this->connection->affectingStatement($this->grammar->compileUpsert($this, $values, (array) $uniqueBy, $update), $bindings);
@@ -2756,7 +2756,7 @@ class Builder
      */
     public function cleanBindings(array $bindings)
     {
-        return \IAWP_SCOPED\collect($bindings)->reject(function ($binding) {
+        return \IAWPSCOPED\collect($bindings)->reject(function ($binding) {
             return $binding instanceof Expression;
         })->map([$this, 'castBinding'])->values()->all();
     }

@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Date_Range;
+namespace IAWP\Date_Range;
 
 use DateTime;
-use IAWP_SCOPED\IAWP\Utils\WordPress_Site_Date_Format_Pattern;
-use IAWP_SCOPED\Proper\Timezone;
+use IAWP\Utils\WordPress_Site_Date_Format_Pattern;
+use IAWPSCOPED\Proper\Timezone;
 /** @internal */
-class Exact_Date_Range extends Date_Range
+class Exact_Date_Range extends \IAWP\Date_Range\Date_Range
 {
     /**
      * Generate a range using exact start and end dates
@@ -35,8 +35,8 @@ class Exact_Date_Range extends Date_Range
      *
      * @return Exact_Date_Range
      */
-    public static function comprehensive_range() : Exact_Date_Range
+    public static function comprehensive_range() : \IAWP\Date_Range\Exact_Date_Range
     {
-        return new Exact_Date_Range(new DateTime('1991-01-06'), new DateTime());
+        return new \IAWP\Date_Range\Exact_Date_Range(new DateTime('1991-01-06'), new DateTime());
     }
 }

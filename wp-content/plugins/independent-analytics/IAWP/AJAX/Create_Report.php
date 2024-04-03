@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Report_Finder;
+use IAWP\Report_Finder;
 /** @internal */
-class Create_Report extends AJAX
+class Create_Report extends \IAWP\AJAX\AJAX
 {
     /**
      * @inheritDoc

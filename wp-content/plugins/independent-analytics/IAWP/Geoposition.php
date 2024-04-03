@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\MaxMind\Db\Reader;
+use IAWPSCOPED\MaxMind\Db\Reader;
 /**
  * Give an ip address, get the ip addresses' city, subdivision, country, continent, and country_code
  * @internal

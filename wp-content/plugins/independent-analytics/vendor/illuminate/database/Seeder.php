@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
-use IAWP_SCOPED\Illuminate\Console\Command;
-use IAWP_SCOPED\Illuminate\Container\Container;
-use IAWP_SCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Console\Command;
+use IAWPSCOPED\Illuminate\Container\Container;
+use IAWPSCOPED\Illuminate\Support\Arr;
 use InvalidArgumentException;
 /** @internal */
 abstract class Seeder

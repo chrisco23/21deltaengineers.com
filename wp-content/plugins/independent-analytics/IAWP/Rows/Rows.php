@@ -1,15 +1,16 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Rows;
+namespace IAWP\Rows;
 
-use IAWP_SCOPED\IAWP\Date_Range\Date_Range;
-use IAWP_SCOPED\IAWP\Sort_Configuration;
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
+use IAWP\Date_Range\Date_Range;
+use IAWP\Sort_Configuration;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
 /** @internal */
 abstract class Rows
 {
     protected $date_range;
     protected $number_of_rows;
+    /** @var Filter[] */
     protected $filters;
     protected $sort_configuration;
     private $rows = null;

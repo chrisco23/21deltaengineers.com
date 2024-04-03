@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Descriptor;
+namespace IAWPSCOPED\Symfony\Component\Console\Descriptor;
 
-use IAWP_SCOPED\Symfony\Component\Console\Application;
-use IAWP_SCOPED\Symfony\Component\Console\Command\Command;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputArgument;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputDefinition;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputOption;
+use IAWPSCOPED\Symfony\Component\Console\Application;
+use IAWPSCOPED\Symfony\Component\Console\Command\Command;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputArgument;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputDefinition;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputOption;
 /**
  * XML descriptor.
  *
@@ -64,7 +64,7 @@ class XmlDescriptor extends Descriptor
         }
         return $dom;
     }
-    public function getApplicationDocument(Application $application, string $namespace = null, bool $short = \false) : \DOMDocument
+    public function getApplicationDocument(Application $application, ?string $namespace = null, bool $short = \false) : \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($rootXml = $dom->createElement('symfony'));

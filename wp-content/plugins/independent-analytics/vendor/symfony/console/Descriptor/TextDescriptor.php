@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Descriptor;
+namespace IAWPSCOPED\Symfony\Component\Console\Descriptor;
 
-use IAWP_SCOPED\Symfony\Component\Console\Application;
-use IAWP_SCOPED\Symfony\Component\Console\Command\Command;
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\Helper;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputArgument;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputDefinition;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputOption;
+use IAWPSCOPED\Symfony\Component\Console\Application;
+use IAWPSCOPED\Symfony\Component\Console\Command\Command;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
+use IAWPSCOPED\Symfony\Component\Console\Helper\Helper;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputArgument;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputDefinition;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputOption;
 /**
  * Text descriptor.
  *

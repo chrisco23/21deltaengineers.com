@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Statistics\Intervals;
+namespace IAWP\Statistics\Intervals;
 
 /** @internal */
 abstract class Interval
@@ -12,7 +12,7 @@ abstract class Interval
     public abstract function get_label_for(\DateTime $date_time) : array;
     // Todo - Maybe have an option to pass in either the class or the id for Statistics.php equality checks
     //  that currently rely on the interval method
-    public function equals(Interval $interval) : bool
+    public function equals(\IAWP\Statistics\Intervals\Interval $interval) : bool
     {
         return $this->id() === $interval->id();
     }

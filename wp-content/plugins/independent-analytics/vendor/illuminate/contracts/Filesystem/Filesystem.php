@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Filesystem;
+namespace IAWPSCOPED\Illuminate\Contracts\Filesystem;
 
 /** @internal */
 interface Filesystem

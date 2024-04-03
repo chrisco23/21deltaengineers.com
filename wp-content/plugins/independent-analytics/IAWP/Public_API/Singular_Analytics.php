@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Public_API;
+namespace IAWP\Public_API;
 
-use IAWP_SCOPED\IAWP\Date_Range\Date_Range;
-use IAWP_SCOPED\IAWP\Illuminate_Builder;
-use IAWP_SCOPED\IAWP\Query;
-use IAWP_SCOPED\Illuminate\Database\Query\JoinClause;
+use IAWP\Date_Range\Date_Range;
+use IAWP\Illuminate_Builder;
+use IAWP\Query;
+use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
 /** @internal */
 class Singular_Analytics
 {

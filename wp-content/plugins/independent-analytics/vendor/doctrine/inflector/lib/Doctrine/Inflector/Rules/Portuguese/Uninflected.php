@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Inflector\Rules\Portuguese;
+namespace IAWPSCOPED\Doctrine\Inflector\Rules\Portuguese;
 
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Pattern;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Pattern;
 /** @internal */
 final class Uninflected
 {

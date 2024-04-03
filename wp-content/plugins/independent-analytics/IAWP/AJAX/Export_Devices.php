@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Capability_Manager;
-use IAWP_SCOPED\IAWP\Date_Range\Exact_Date_Range;
-use IAWP_SCOPED\IAWP\Rows\Device_Types;
-use IAWP_SCOPED\IAWP\Tables\Table_Devices;
+use IAWP\Capability_Manager;
+use IAWP\Date_Range\Exact_Date_Range;
+use IAWP\Rows\Device_Types;
+use IAWP\Tables\Table_Devices;
 /** @internal */
-class Export_Devices extends AJAX
+class Export_Devices extends \IAWP\AJAX\AJAX
 {
     protected function action_name() : string
     {

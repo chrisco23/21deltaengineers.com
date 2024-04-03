@@ -3,7 +3,7 @@
 /**
  * WP Async Request
  */
-namespace IAWP_SCOPED\IAWP\Utils;
+namespace IAWP\Utils;
 
 /**
  * Abstract WP_Async_Request class.

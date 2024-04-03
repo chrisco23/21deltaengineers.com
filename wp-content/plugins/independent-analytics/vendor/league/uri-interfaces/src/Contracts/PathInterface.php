@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri\Contracts;
+namespace IAWPSCOPED\League\Uri\Contracts;
 
-use IAWP_SCOPED\League\Uri\Exceptions\SyntaxError;
+use IAWPSCOPED\League\Uri\Exceptions\SyntaxError;
 /** @internal */
 interface PathInterface extends UriComponentInterface
 {

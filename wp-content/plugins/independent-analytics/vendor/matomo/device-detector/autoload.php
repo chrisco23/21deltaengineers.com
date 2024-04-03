@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /**
  * PSR-4 autoloader implementation for the DeviceDetector namespace.
@@ -34,4 +34,4 @@ function dd_autoload(string $class) : void
         @(include $path);
     }
 }
-\spl_autoload_register('IAWP_SCOPED\\dd_autoload');
+\spl_autoload_register('IAWPSCOPED\\dd_autoload');

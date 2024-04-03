@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\PHPStan;
+namespace IAWPSCOPED\Carbon\PHPStan;
 
-use IAWP_SCOPED\Carbon\CarbonInterface;
-use IAWP_SCOPED\PHPStan\Reflection\ReflectionProvider;
+use IAWPSCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\PHPStan\Reflection\ReflectionProvider;
 use ReflectionClass;
 use ReflectionException;
 /** @internal */
@@ -33,10 +33,8 @@ final class MacroScanner
     /**
      * Return true if the given pair class-method is a Carbon macro.
      *
-     * @param string $className
-     * @phpstan-param class-string $className
-     *
-     * @param string $methodName
+     * @param class-string $className
+     * @param string       $methodName
      *
      * @return bool
      */
@@ -51,10 +49,8 @@ final class MacroScanner
     /**
      * Return the Macro for a given pair class-method.
      *
-     * @param string $className
-     * @phpstan-param class-string $className
-     *
-     * @param string $methodName
+     * @param class-string $className
+     * @param string       $methodName
      *
      * @throws ReflectionException
      *

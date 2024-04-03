@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation;
+namespace IAWPSCOPED\Symfony\Component\Translation;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Catalogue\AbstractOperation;
-use IAWP_SCOPED\Symfony\Component\Translation\Catalogue\TargetOperation;
+use IAWPSCOPED\Symfony\Component\Translation\Catalogue\AbstractOperation;
+use IAWPSCOPED\Symfony\Component\Translation\Catalogue\TargetOperation;
 /** @internal */
 final class TranslatorBag implements TranslatorBagInterface
 {
@@ -33,7 +33,7 @@ final class TranslatorBag implements TranslatorBagInterface
     /**
      * {@inheritdoc}
      */
-    public function getCatalogue(string $locale = null) : MessageCatalogueInterface
+    public function getCatalogue(?string $locale = null) : MessageCatalogueInterface
     {
         if (null === $locale || !isset($this->catalogues[$locale])) {
             $this->catalogues[$locale] = new MessageCatalogue($locale);

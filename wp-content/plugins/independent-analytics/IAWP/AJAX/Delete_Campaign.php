@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Campaign_Builder;
+use IAWP\Campaign_Builder;
 /** @internal */
-class Delete_Campaign extends AJAX
+class Delete_Campaign extends \IAWP\AJAX\AJAX
 {
     protected function action_name() : string
     {

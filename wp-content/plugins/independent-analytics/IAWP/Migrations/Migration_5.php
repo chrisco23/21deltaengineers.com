@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Migrations;
+namespace IAWP\Migrations;
 
-use IAWP_SCOPED\IAWP\Known_Referrers;
+use IAWP\Known_Referrers;
 /** @internal */
-class Migration_5 extends Migration
+class Migration_5 extends \IAWP\Migrations\Migration
 {
     /**
      * @var string

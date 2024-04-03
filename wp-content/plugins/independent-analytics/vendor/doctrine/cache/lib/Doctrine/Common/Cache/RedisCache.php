@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache;
+namespace IAWPSCOPED\Doctrine\Common\Cache;
 
 use Redis;
 use function array_combine;
@@ -147,7 +147,7 @@ class RedisCache extends CacheProvider
      */
     protected function getSerializerValue()
     {
-        if (defined('IAWP_SCOPED\\Redis::SERIALIZER_IGBINARY') && extension_loaded('igbinary')) {
+        if (defined('IAWPSCOPED\\Redis::SERIALIZER_IGBINARY') && extension_loaded('igbinary')) {
             return Redis::SERIALIZER_IGBINARY;
         }
         return Redis::SERIALIZER_PHP;

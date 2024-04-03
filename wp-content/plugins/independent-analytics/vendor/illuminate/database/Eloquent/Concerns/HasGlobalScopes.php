@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Concerns;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Scope;
-use IAWP_SCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Scope;
+use IAWPSCOPED\Illuminate\Support\Arr;
 use InvalidArgumentException;
 /** @internal */
 trait HasGlobalScopes

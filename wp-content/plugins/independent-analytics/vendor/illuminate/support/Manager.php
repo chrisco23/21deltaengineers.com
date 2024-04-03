@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Contracts\Container\Container;
+use IAWPSCOPED\Illuminate\Contracts\Container\Container;
 use InvalidArgumentException;
 /** @internal */
 abstract class Manager

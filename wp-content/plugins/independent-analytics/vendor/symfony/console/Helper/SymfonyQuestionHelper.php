@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Helper;
+namespace IAWPSCOPED\Symfony\Component\Console\Helper;
 
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Question\ChoiceQuestion;
-use IAWP_SCOPED\Symfony\Component\Console\Question\ConfirmationQuestion;
-use IAWP_SCOPED\Symfony\Component\Console\Question\Question;
-use IAWP_SCOPED\Symfony\Component\Console\Style\SymfonyStyle;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Question\ChoiceQuestion;
+use IAWPSCOPED\Symfony\Component\Console\Question\ConfirmationQuestion;
+use IAWPSCOPED\Symfony\Component\Console\Question\Question;
+use IAWPSCOPED\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Symfony Style Guide compliant question helper.
  *

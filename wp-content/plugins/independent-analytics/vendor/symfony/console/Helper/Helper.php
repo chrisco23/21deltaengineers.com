@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Helper;
+namespace IAWPSCOPED\Symfony\Component\Console\Helper;
 
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use IAWP_SCOPED\Symfony\Component\String\UnicodeString;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use IAWPSCOPED\Symfony\Component\String\UnicodeString;
 /**
  * Helper is the base class for all helper classes.
  *
@@ -24,7 +24,7 @@ abstract class Helper implements HelperInterface
     /**
      * {@inheritdoc}
      */
-    public function setHelperSet(HelperSet $helperSet = null)
+    public function setHelperSet(?HelperSet $helperSet = null)
     {
         $this->helperSet = $helperSet;
     }
@@ -82,7 +82,7 @@ abstract class Helper implements HelperInterface
      *
      * @return string
      */
-    public static function substr(?string $string, int $from, int $length = null)
+    public static function substr(?string $string, int $from, ?int $length = null)
     {
         $string ?? ($string = '');
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {

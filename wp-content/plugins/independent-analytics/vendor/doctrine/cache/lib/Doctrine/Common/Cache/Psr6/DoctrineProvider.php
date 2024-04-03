@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Doctrine\Common\Cache\Psr6;
+namespace IAWPSCOPED\Doctrine\Common\Cache\Psr6;
 
-use IAWP_SCOPED\Doctrine\Common\Cache\Cache;
-use IAWP_SCOPED\Doctrine\Common\Cache\CacheProvider;
-use IAWP_SCOPED\Psr\Cache\CacheItemPoolInterface;
-use IAWP_SCOPED\Symfony\Component\Cache\Adapter\DoctrineAdapter as SymfonyDoctrineAdapter;
-use IAWP_SCOPED\Symfony\Contracts\Service\ResetInterface;
+use IAWPSCOPED\Doctrine\Common\Cache\Cache;
+use IAWPSCOPED\Doctrine\Common\Cache\CacheProvider;
+use IAWPSCOPED\Psr\Cache\CacheItemPoolInterface;
+use IAWPSCOPED\Symfony\Component\Cache\Adapter\DoctrineAdapter as SymfonyDoctrineAdapter;
+use IAWPSCOPED\Symfony\Contracts\Service\ResetInterface;
 use function rawurlencode;
 /**
  * This class was copied from the Symfony Framework, see the original copyright

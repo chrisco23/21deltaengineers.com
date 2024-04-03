@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent;
 
-use IAWP_SCOPED\Illuminate\Broadcasting\InteractsWithSockets;
-use IAWP_SCOPED\Illuminate\Broadcasting\PrivateChannel;
-use IAWP_SCOPED\Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use IAWP_SCOPED\Illuminate\Queue\SerializesModels;
+use IAWPSCOPED\Illuminate\Broadcasting\InteractsWithSockets;
+use IAWPSCOPED\Illuminate\Broadcasting\PrivateChannel;
+use IAWPSCOPED\Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use IAWPSCOPED\Illuminate\Queue\SerializesModels;
 /** @internal */
 class BroadcastableModelEventOccurred implements ShouldBroadcast
 {
@@ -60,7 +60,7 @@ class BroadcastableModelEventOccurred implements ShouldBroadcast
     public function broadcastOn()
     {
         $channels = empty($this->channels) ? $this->model->broadcastOn($this->event) ?: [] : $this->channels;
-        return \IAWP_SCOPED\collect($channels)->map(function ($channel) {
+        return \IAWPSCOPED\collect($channels)->map(function ($channel) {
             return $channel instanceof Model ? new PrivateChannel($channel) : $channel;
         })->all();
     }

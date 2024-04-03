@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Utils\Request;
-use IAWP_SCOPED\IAWP\Utils\String_Util;
+use IAWP\Utils\Request;
+use IAWP\Utils\String_Util;
 /** @internal */
 class Settings
 {
@@ -13,26 +13,33 @@ class Settings
         \add_action('admin_init', [$this, 'register_view_counter_settings']);
         \add_action('admin_init', [$this, 'register_blocked_ip_settings']);
         \add_action('admin_init', [$this, 'register_block_by_role_settings']);
-        if (\IAWP_SCOPED\iawp_is_pro()) {
+        if (\IAWPSCOPED\iawp_is_pro()) {
             \add_action('admin_init', [$this, 'register_email_report_settings']);
         }
     }
     public function render_settings()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.index');
-        if (\IAWP_SCOPED\iawp_is_pro()) {
-            echo \IAWP_SCOPED\iawp_blade()->run('settings.email-reports', ['time' => \IAWP_SCOPED\iawp()->get_option('iawp_email_report_time', 9), 'emails' => \IAWP_SCOPED\iawp()->get_option('iawp_email_report_email_addresses', []), 'saved_colors' => \IAWP_SCOPED\iawp()->get_option('iawp_email_report_colors', $this->email_report_colors()), 'default_colors' => $this->email_report_colors()]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.index');
+        if (\IAWPSCOPED\iawp_is_pro()) {
+            $defaults = $this->email_report_colors();
+            $saved = \IAWPSCOPED\iawp()->get_option('iawp_email_report_colors', $defaults);
+            // There were 6 colors and now 9, so there is a saved value but 7-9 don't exist
+            $input_defaults = $defaults;
+            for ($i = 0; $i < \count($saved); $i++) {
+                $input_defaults[$i] = $saved[$i];
+            }
+            echo \IAWPSCOPED\iawp_blade()->run('settings.email-reports', ['time' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_time', 9), 'emails' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_email_addresses', []), 'default_colors' => $defaults, 'input_default' => $input_defaults]);
         }
         $ip = Request::ip();
-        $ips = \IAWP_SCOPED\iawp()->get_option('iawp_blocked_ips', []);
+        $ips = \IAWPSCOPED\iawp()->get_option('iawp_blocked_ips', []);
         $ip_is_blocked = \in_array($ip, $ips);
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.block-ips', ['current_ip' => $ip, 'ip_is_blocked' => $ip_is_blocked, 'ips' => $ips]);
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.block-by-role', ['roles' => \wp_roles()->roles, 'blocked' => \IAWP_SCOPED\iawp()->get_option('iawp_blocked_roles', [])]);
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.capabilities', ['editable_roles' => $this->get_editable_roles(), 'capabilities' => Capability_Manager::all_capabilities()]);
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.view-counter');
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.export-reports', ['report_finder' => new Report_Finder()]);
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.export-data');
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.delete', ['site_name' => \get_bloginfo('name'), 'site_url' => \site_url()]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.block-ips', ['current_ip' => $ip, 'ip_is_blocked' => $ip_is_blocked, 'ips' => $ips]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.block-by-role', ['roles' => \wp_roles()->roles, 'blocked' => \IAWPSCOPED\iawp()->get_option('iawp_blocked_roles', [])]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.capabilities', ['editable_roles' => $this->get_editable_roles(), 'capabilities' => \IAWP\Capability_Manager::all_capabilities()]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter');
+        echo \IAWPSCOPED\iawp_blade()->run('settings.export-reports', ['report_finder' => new \IAWP\Report_Finder()]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.export-data');
+        echo \IAWPSCOPED\iawp_blade()->run('settings.delete', ['site_name' => \get_bloginfo('name'), 'site_url' => \site_url()]);
     }
     public function register_settings()
     {
@@ -56,27 +63,27 @@ class Settings
     }
     public function dark_mode_callback()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.dark-mode', ['dark_mode' => \IAWP_SCOPED\iawp()->get_option('iawp_dark_mode', \false)]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.dark-mode', ['dark_mode' => \IAWPSCOPED\iawp()->get_option('iawp_dark_mode', \false)]);
     }
     public function track_authenticated_users_callback()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.track-authenticated-users', ['track_authenticated_users' => \IAWP_SCOPED\iawp()->get_option('iawp_track_authenticated_users', \false)]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.track-authenticated-users', ['track_authenticated_users' => \IAWPSCOPED\iawp()->get_option('iawp_track_authenticated_users', \false)]);
     }
     public function disable_admin_toolbar_analytics_callback()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.disable-admin-toolbar-analytics', ['value' => \IAWP_SCOPED\iawp()->get_option('iawp_disable_admin_toolbar_analytics', \false)]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.disable-admin-toolbar-analytics', ['value' => \IAWPSCOPED\iawp()->get_option('iawp_disable_admin_toolbar_analytics', \false)]);
     }
     public function disable_widget_callback()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.disable-widget', ['value' => \IAWP_SCOPED\iawp()->get_option('iawp_disable_widget', \false)]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.disable-widget', ['value' => \IAWPSCOPED\iawp()->get_option('iawp_disable_widget', \false)]);
     }
     public function starting_dow_callback()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.first-day-of-week', ['day_of_week' => \IAWP_SCOPED\iawp()->get_option('iawp_dow', 0), 'days' => [0 => \esc_html__('Sunday', 'independent-analytics'), 1 => \esc_html__('Monday', 'independent-analytics'), 2 => \esc_html__('Tuesday', 'independent-analytics'), 3 => \esc_html__('Wednesday', 'independent-analytics'), 4 => \esc_html__('Thursday', 'independent-analytics'), 5 => \esc_html__('Friday', 'independent-analytics'), 6 => \esc_html__('Saturday', 'independent-analytics')]]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.first-day-of-week', ['day_of_week' => \IAWPSCOPED\iawp()->get_option('iawp_dow', 0), 'days' => [0 => \esc_html__('Sunday', 'independent-analytics'), 1 => \esc_html__('Monday', 'independent-analytics'), 2 => \esc_html__('Tuesday', 'independent-analytics'), 3 => \esc_html__('Wednesday', 'independent-analytics'), 4 => \esc_html__('Thursday', 'independent-analytics'), 5 => \esc_html__('Friday', 'independent-analytics'), 6 => \esc_html__('Saturday', 'independent-analytics')]]);
     }
     public function refresh_salt_callback()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.refresh-salt', ['refresh_salt' => \IAWP_SCOPED\iawp()->get_option('iawp_refresh_salt', \false)]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.refresh-salt', ['refresh_salt' => \IAWPSCOPED\iawp()->get_option('iawp_refresh_salt', \false)]);
     }
     public function register_view_counter_settings()
     {
@@ -88,30 +95,43 @@ class Settings
         $args = ['type' => 'array', 'default' => [], 'sanitize_callback' => [$this, 'sanitize_view_counter_post_types']];
         \register_setting('iawp_view_counter_settings', 'iawp_view_counter_post_types', $args);
         \add_settings_field('iawp_view_counter_post_types', \esc_html__('Display on these post types', 'independent-analytics'), [$this, 'view_counter_post_types_callback'], 'independent-analytics-view-counter-settings', 'iawp-view-counter-settings-section', ['class' => 'post-types']);
+        // Position
         $args = ['type' => 'string', 'default' => 'after', 'sanitize_callback' => [$this, 'sanitize_view_counter_position']];
         \register_setting('iawp_view_counter_settings', 'iawp_view_counter_position', $args);
         \add_settings_field('iawp_view_counter_position', \esc_html__('Show it in this location', 'independent-analytics'), [$this, 'view_counter_position_callback'], 'independent-analytics-view-counter-settings', 'iawp-view-counter-settings-section', ['class' => 'position']);
+        // Views to count
+        \register_setting('iawp_view_counter_settings', 'iawp_view_counter_views_to_count', ['type' => 'string', 'default' => 'total', 'sanitize_callback' => [$this, 'sanitize_view_counter_views_to_count']]);
+        \add_settings_field('iawp_view_counter_views_to_count', \esc_html__('Date range to count views', 'independent-analytics'), [$this, 'view_counter_views_to_count_callback'], 'independent-analytics-view-counter-settings', 'iawp-view-counter-settings-section', ['class' => 'views-to-count']);
+        // Exclude
         $args = ['type' => 'string', 'default' => '', 'sanitize_callback' => [$this, 'sanitize_view_counter_exclude']];
         \register_setting('iawp_view_counter_settings', 'iawp_view_counter_exclude', $args);
         \add_settings_field('iawp_view_counter_exclude', \esc_html__('Exclude these pages', 'independent-analytics'), [$this, 'view_counter_exclude_callback'], 'independent-analytics-view-counter-settings', 'iawp-view-counter-settings-section', ['class' => 'exclude']);
-        $default = \function_exists('IAWP_SCOPED\\pll__') ? pll__('Views:', 'independent-analytics') : \__('Views:', 'independent-analytics');
+        // Label
+        $default = \function_exists('IAWPSCOPED\\pll__') ? pll__('Views:', 'independent-analytics') : \__('Views:', 'independent-analytics');
         $args = ['type' => 'string', 'default' => $default, 'sanitize_callback' => 'sanitize_text_field'];
         \register_setting('iawp_view_counter_settings', 'iawp_view_counter_label', $args);
         \add_settings_field('iawp_view_counter_label', \esc_html__('Edit the label', 'independent-analytics'), [$this, 'view_counter_label_callback'], 'independent-analytics-view-counter-settings', 'iawp-view-counter-settings-section', ['class' => 'counter-label']);
+        // Icon
         $args = ['type' => 'boolean', 'default' => \true, 'sanitize_callback' => 'rest_sanitize_boolean'];
         \register_setting('iawp_view_counter_settings', 'iawp_view_counter_icon', $args);
         \add_settings_field('iawp_view_counter_icon', \esc_html__('Display the icon', 'independent-analytics'), [$this, 'view_counter_icon_callback'], 'independent-analytics-view-counter-settings', 'iawp-view-counter-settings-section', ['class' => 'icon']);
+        // Private
+        \register_setting('iawp_view_counter_settings', 'iawp_view_counter_private', ['type' => 'boolean', 'default' => \false, 'sanitize_callback' => 'rest_sanitize_boolean']);
+        \add_settings_field('iawp_view_counter_private', \esc_html__('Make the view counter private?', 'independent-analytics'), [$this, 'view_counter_private_callback'], 'independent-analytics-view-counter-settings', 'iawp-view-counter-settings-section', ['class' => 'private']);
+        // Allow manual adjustment
+        \register_setting('iawp_view_counter_settings', 'iawp_view_counter_manual_adjustment', ['type' => 'boolean', 'default' => \false, 'sanitize_callback' => 'rest_sanitize_boolean']);
+        \add_settings_field('iawp_view_counter_manual_adjustment', \esc_html__('Allow manual adjustment?', 'independent-analytics'), [$this, 'view_counter_manual_adjustment_callback'], 'independent-analytics-view-counter-settings', 'iawp-view-counter-settings-section', ['class' => 'manual-adjustment']);
     }
     public function view_counter_enable_callback()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.view-counter.enable', ['enable' => \IAWP_SCOPED\iawp()->get_option('iawp_view_counter_enable', \false)]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter.enable', ['enable' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_enable', \false)]);
     }
     public function view_counter_post_types_callback()
     {
         $site_post_types = \get_post_types(['public' => \true], 'objects');
         $counter = 0;
         foreach ($site_post_types as $post_type) {
-            echo \IAWP_SCOPED\iawp_blade()->run('settings.view-counter.post-types', ['counter' => $counter, 'post_type' => $post_type, 'saved' => \IAWP_SCOPED\iawp()->get_option('iawp_view_counter_post_types', [])]);
+            echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter.post-types', ['counter' => $counter, 'post_type' => $post_type, 'saved' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_post_types', [])]);
             $counter++;
         }
         ?>
@@ -122,20 +142,32 @@ class Settings
     }
     public function view_counter_position_callback()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.view-counter.position', ['position' => \IAWP_SCOPED\iawp()->get_option('iawp_view_counter_position', 'after')]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter.position', ['position' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_position', 'after')]);
+    }
+    public function view_counter_views_to_count_callback()
+    {
+        echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter.views-to-count', ['value' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_views_to_count', 'total')]);
     }
     public function view_counter_exclude_callback()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.view-counter.exclude', ['exclude' => \IAWP_SCOPED\iawp()->get_option('iawp_view_counter_exclude', '')]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter.exclude', ['exclude' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_exclude', '')]);
     }
     public function view_counter_label_callback()
     {
-        $default = \function_exists('IAWP_SCOPED\\pll__') ? pll__('Views:', 'independent-analytics') : \__('Views:', 'independent-analytics');
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.view-counter.label', ['label' => \IAWP_SCOPED\iawp()->get_option('iawp_view_counter_label', $default)]);
+        $default = \function_exists('IAWPSCOPED\\pll__') ? pll__('Views:', 'independent-analytics') : \__('Views:', 'independent-analytics');
+        echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter.label', ['label' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_label', $default)]);
     }
     public function view_counter_icon_callback()
     {
-        echo \IAWP_SCOPED\iawp_blade()->run('settings.view-counter.icon', ['icon' => \get_option('iawp_view_counter_icon', \true)]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter.icon', ['icon' => \get_option('iawp_view_counter_icon', \true)]);
+    }
+    public function view_counter_private_callback()
+    {
+        echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter.private', ['private' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_private', \false)]);
+    }
+    public function view_counter_manual_adjustment_callback()
+    {
+        echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter.manual-adjustment', ['value' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_manual_adjustment', \false)]);
     }
     public function register_blocked_ip_settings()
     {
@@ -181,6 +213,14 @@ class Settings
             return 'after';
         }
     }
+    public function sanitize_view_counter_views_to_count($user_input)
+    {
+        if (\in_array($user_input, ['total', 'today', 'last_thirty', 'this_month', 'last_month'])) {
+            return $user_input;
+        } else {
+            return 'total';
+        }
+    }
     public function sanitize_view_counter_exclude($user_input)
     {
         $user_input = \explode(',', $user_input);
@@ -198,27 +238,15 @@ class Settings
     {
         $to_save = [];
         foreach ($user_input as $ip) {
-            if (!String_Util::str_contains($ip, '*')) {
-                if (\filter_var($ip, \FILTER_VALIDATE_IP)) {
-                    $to_save[] = $ip;
-                }
-            } else {
-                $subs = \explode('.', $ip);
-                $built_ip = [];
-                for ($i = 0; $i < \count($subs); $i++) {
-                    if ($subs[$i] == '*') {
-                        $built_ip[] = $subs[$i];
-                    } else {
-                        $int = \absint($subs[$i]);
-                        if ($int < 0 || $int > 255) {
-                            break;
-                        }
-                        $built_ip[] = $int;
-                    }
-                    if ($i == \count($subs) - 1) {
-                        $to_save[] = \implode('.', $built_ip);
-                    }
-                }
+            // Limit to two wildcards
+            if (\substr_count($ip, '*') > 2) {
+                continue;
+            }
+            // If it's safe with wildcard replacements, it's safe with them
+            $safe_replacement = String_Util::str_contains($ip, '.') ? '172' : '2601';
+            $wildcards_replaced = \str_replace('*', $safe_replacement, $ip);
+            if (\filter_var($wildcards_replaced, \FILTER_VALIDATE_IP)) {
+                $to_save[] = $ip;
             }
         }
         return $to_save;
@@ -288,6 +316,6 @@ class Settings
     }
     private function email_report_colors()
     {
-        return ['#5123a0', '#fafafa', '#3a1e6b', '#fafafa', '#5123a0', '#a985e6'];
+        return ['#5123a0', '#fafafa', '#3a1e6b', '#fafafa', '#5123a0', '#a985e6', '#ece9f2', '#f7f5fa', '#ece9f2', '#dedae6'];
     }
 }

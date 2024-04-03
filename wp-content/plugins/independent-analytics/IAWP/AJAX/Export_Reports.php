@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Report_Finder;
+use IAWP\Report_Finder;
 /** @internal */
-class Export_Reports extends AJAX
+class Export_Reports extends \IAWP\AJAX\AJAX
 {
     /**
      * @inheritDoc
@@ -34,6 +34,6 @@ class Export_Reports extends AJAX
         $reports_array = \array_map(function ($report) {
             return $report->to_array();
         }, $reports);
-        \wp_send_json_success(['json' => \json_encode(['plugin_version' => '2.1.6', 'database_version' => '26', 'export_version' => '1', 'reports' => $reports_array])]);
+        \wp_send_json_success(['json' => \json_encode(['plugin_version' => '2.3.2', 'database_version' => '27', 'export_version' => '1', 'reports' => $reports_array])]);
     }
 }

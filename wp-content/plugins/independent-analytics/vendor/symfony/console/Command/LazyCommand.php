@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Command;
+namespace IAWPSCOPED\Symfony\Component\Console\Command;
 
-use IAWP_SCOPED\Symfony\Component\Console\Application;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionInput;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\HelperSet;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputDefinition;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Application;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionInput;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
+use IAWPSCOPED\Symfony\Component\Console\Helper\HelperSet;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputDefinition;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  * @internal
@@ -35,7 +35,7 @@ final class LazyCommand extends Command
     {
         $this->getCommand()->ignoreValidationErrors();
     }
-    public function setApplication(Application $application = null) : void
+    public function setApplication(?Application $application = null) : void
     {
         if ($this->command instanceof parent) {
             $this->command->setApplication($application);
@@ -95,7 +95,7 @@ final class LazyCommand extends Command
     /**
      * @return $this
      */
-    public function addArgument(string $name, int $mode = null, string $description = '', $default = null) : self
+    public function addArgument(string $name, ?int $mode = null, string $description = '', $default = null) : self
     {
         $this->getCommand()->addArgument($name, $mode, $description, $default);
         return $this;
@@ -103,7 +103,7 @@ final class LazyCommand extends Command
     /**
      * @return $this
      */
-    public function addOption(string $name, $shortcut = null, int $mode = null, string $description = '', $default = null) : self
+    public function addOption(string $name, $shortcut = null, ?int $mode = null, string $description = '', $default = null) : self
     {
         $this->getCommand()->addOption($name, $shortcut, $mode, $description, $default);
         return $this;

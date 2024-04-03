@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Exception;
+namespace IAWPSCOPED\Symfony\Component\Translation\Exception;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Bridge;
-use IAWP_SCOPED\Symfony\Component\Translation\Provider\Dsn;
+use IAWPSCOPED\Symfony\Component\Translation\Bridge;
+use IAWPSCOPED\Symfony\Component\Translation\Provider\Dsn;
 /** @internal */
 class UnsupportedSchemeException extends LogicException
 {
     private const SCHEME_TO_PACKAGE_MAP = ['crowdin' => ['class' => Bridge\Crowdin\CrowdinProviderFactory::class, 'package' => 'symfony/crowdin-translation-provider'], 'loco' => ['class' => Bridge\Loco\LocoProviderFactory::class, 'package' => 'symfony/loco-translation-provider'], 'lokalise' => ['class' => Bridge\Lokalise\LokaliseProviderFactory::class, 'package' => 'symfony/lokalise-translation-provider']];
-    public function __construct(Dsn $dsn, string $name = null, array $supported = [])
+    public function __construct(Dsn $dsn, ?string $name = null, array $supported = [])
     {
         $provider = $dsn->getScheme();
         if (\false !== ($pos = \strpos($provider, '+'))) {

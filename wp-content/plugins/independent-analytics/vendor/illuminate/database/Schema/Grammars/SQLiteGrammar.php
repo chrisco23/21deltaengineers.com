@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema\Grammars;
+namespace IAWPSCOPED\Illuminate\Database\Schema\Grammars;
 
-use IAWP_SCOPED\Doctrine\DBAL\Schema\Index;
-use IAWP_SCOPED\Illuminate\Database\Connection;
-use IAWP_SCOPED\Illuminate\Database\Schema\Blueprint;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Fluent;
+use IAWPSCOPED\Doctrine\DBAL\Schema\Index;
+use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Database\Schema\Blueprint;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Fluent;
 use RuntimeException;
 /** @internal */
 class SQLiteGrammar extends Grammar
@@ -62,7 +62,7 @@ class SQLiteGrammar extends Grammar
     protected function addForeignKeys(Blueprint $blueprint)
     {
         $foreigns = $this->getCommandsByName($blueprint, 'foreign');
-        return \IAWP_SCOPED\collect($foreigns)->reduce(function ($sql, $foreign) {
+        return \IAWPSCOPED\collect($foreigns)->reduce(function ($sql, $foreign) {
             // Once we have all the foreign key commands for the table creation statement
             // we'll loop through each of them and add them to the create table SQL we
             // are building, since SQLite needs foreign keys on the tables creation.
@@ -114,7 +114,7 @@ class SQLiteGrammar extends Grammar
     public function compileAdd(Blueprint $blueprint, Fluent $command)
     {
         $columns = $this->prefixArray('add column', $this->getColumns($blueprint));
-        return \IAWP_SCOPED\collect($columns)->reject(function ($column) {
+        return \IAWPSCOPED\collect($columns)->reject(function ($column) {
             return \preg_match('/as \\(.*\\) stored/', $column) > 0;
         })->map(function ($column) use($blueprint) {
             return 'alter table ' . $this->wrapTable($blueprint) . ' ' . $column;

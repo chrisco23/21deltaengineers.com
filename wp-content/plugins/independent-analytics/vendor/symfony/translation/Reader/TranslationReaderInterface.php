@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Reader;
+namespace IAWPSCOPED\Symfony\Component\Translation\Reader;
 
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogue;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogue;
 /**
  * TranslationReader reads translation messages from translation files.
  *

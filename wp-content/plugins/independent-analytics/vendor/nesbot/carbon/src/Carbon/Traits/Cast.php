@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Traits;
+namespace IAWPSCOPED\Carbon\Traits;
 
-use IAWP_SCOPED\Carbon\Exceptions\InvalidCastException;
+use IAWPSCOPED\Carbon\Exceptions\InvalidCastException;
 use DateTimeInterface;
 /**
  * Trait Cast.

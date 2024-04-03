@@ -1,24 +1,20 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
 use DateTime;
-use IAWP_SCOPED\IAWP\Chart;
-use IAWP_SCOPED\IAWP\Chart_Geo;
-use IAWP_SCOPED\IAWP\Date_Range\Date_Range;
-use IAWP_SCOPED\IAWP\Date_Range\Exact_Date_Range;
-use IAWP_SCOPED\IAWP\Date_Range\Relative_Date_Range;
-use IAWP_SCOPED\IAWP\Quick_Stats;
-use IAWP_SCOPED\IAWP\Statistics\Intervals\Intervals;
-use IAWP_SCOPED\IAWP\Tables\Table_Campaigns;
-use IAWP_SCOPED\IAWP\Tables\Table_Devices;
-use IAWP_SCOPED\IAWP\Tables\Table_Geo;
-use IAWP_SCOPED\IAWP\Tables\Table_Pages;
-use IAWP_SCOPED\IAWP\Tables\Table_Referrers;
-use IAWP_SCOPED\Proper\Timezone;
+use IAWP\Chart;
+use IAWP\Chart_Geo;
+use IAWP\Date_Range\Date_Range;
+use IAWP\Date_Range\Exact_Date_Range;
+use IAWP\Date_Range\Relative_Date_Range;
+use IAWP\Quick_Stats;
+use IAWP\Statistics\Intervals\Intervals;
+use IAWP\Tables\Table;
+use IAWPSCOPED\Proper\Timezone;
 use Throwable;
 /** @internal */
-class Filter extends AJAX
+class Filter extends \IAWP\AJAX\AJAX
 {
     protected function action_name() : string
     {
@@ -42,10 +38,10 @@ class Filter extends AJAX
         $is_new_group = $this->get_field('is_new_group') === 'true';
         $chart_interval = $is_new_date_range ? Intervals::default_for($date_range->number_of_days()) : Intervals::find_by_id($this->get_field('chart_interval'));
         $page = \intval($this->get_field('page') ?? 1);
-        $number_of_rows = $page * \IAWP_SCOPED\iawp()->pagination_page_size();
+        $number_of_rows = $page * \IAWPSCOPED\iawp()->pagination_page_size();
         $table_type = $this->get_field('table_type');
         $is_geo_table = $table_type === 'geo';
-        $table_class = $this->get_table_by_type($table_type);
+        $table_class = Table::get_table_by_type($this->get_field('table_type'));
         if (\is_null($table_class)) {
             return;
         }
@@ -70,11 +66,11 @@ class Filter extends AJAX
         if (empty($filters)) {
             $filtered_statistics = null;
             $unfiltered_statistics = new $statistics_class($date_range, null, $chart_interval);
-            $total_table_rows = $unfiltered_statistics->total_table_rows();
+            $total_number_of_rows = $unfiltered_statistics->total_number_of_rows();
         } else {
             $unfiltered_statistics = new $statistics_class($date_range, null, $chart_interval);
             $filtered_statistics = new $statistics_class($date_range, $rows_query, $chart_interval);
-            $total_table_rows = $filtered_statistics->total_table_rows();
+            $total_number_of_rows = $filtered_statistics->total_number_of_rows();
         }
         if ($is_geo_table) {
             $chart = new Chart_Geo($rows, $date_range->label());
@@ -84,7 +80,7 @@ class Filter extends AJAX
         }
         $table->set_statistics($filtered_statistics ?? $unfiltered_statistics);
         $quick_stats = new Quick_Stats($filtered_statistics, $unfiltered_statistics);
-        \wp_send_json_success(['rows' => $table->get_row_markup($rows), 'table' => $table->get_row_markup($rows, \false, $sort_configuration->column(), $sort_configuration->direction()), 'totalRowCount' => $total_table_rows, 'chart' => $chart->get_html($visible_datasets), 'stats' => $quick_stats->get_html(), 'label' => $date_range->label(), 'isLastPage' => \count($rows) < \IAWP_SCOPED\iawp()->pagination_page_size() * $page, 'columns' => $table->visible_column_ids(), 'columnsHTML' => $table->column_picker_html(), 'groupId' => $table->group()->id(), 'groupName' => $table->group()->singular(), 'pluralGroupName' => $table->group()->plural(), 'filters' => $filters, 'filtersTemplateHTML' => $table->filters_template_html(), 'chartInterval' => $chart_interval->id()]);
+        \wp_send_json_success(['rows' => $table->get_rendered_template($rows, \true, $sort_configuration->column(), $sort_configuration->direction()), 'table' => $table->get_rendered_template($rows, \false, $sort_configuration->column(), $sort_configuration->direction()), 'totalNumberOfRows' => $total_number_of_rows, 'chart' => $chart->get_html($visible_datasets), 'stats' => $quick_stats->get_html(), 'label' => $date_range->label(), 'isLastPage' => \count($rows) < \IAWPSCOPED\iawp()->pagination_page_size() * $page, 'columns' => $table->visible_column_ids(), 'columnsHTML' => $table->column_picker_html(), 'groupId' => $table->group()->id(), 'filters' => $filters, 'filtersTemplateHTML' => $table->filters_template_html(), 'filtersButtonsHTML' => $table->filters_condition_buttons_html($filters), 'chartInterval' => $chart_interval->id()]);
     }
     /**
      * Get the date range for the filter request
@@ -112,22 +108,5 @@ class Filter extends AJAX
             }
         }
         return new Relative_Date_Range($relative_range_id);
-    }
-    private function get_table_by_type(string $type) : ?string
-    {
-        switch ($this->get_field('table_type')) {
-            case 'views':
-                return Table_Pages::class;
-            case 'referrers':
-                return Table_Referrers::class;
-            case 'geo':
-                return Table_Geo::class;
-            case 'campaigns':
-                return Table_Campaigns::class;
-            case 'devices':
-                return Table_Devices::class;
-            default:
-                return null;
-        }
     }
 }

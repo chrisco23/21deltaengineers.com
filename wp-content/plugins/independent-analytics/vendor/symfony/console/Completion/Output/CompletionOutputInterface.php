@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Completion\Output;
+namespace IAWPSCOPED\Symfony\Component\Console\Completion\Output;
 
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Transforms the {@see CompletionSuggestions} object into output readable by the shell completion.
  *

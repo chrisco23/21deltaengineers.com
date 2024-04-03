@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Concerns;
 
 use Closure;
 use RuntimeException;

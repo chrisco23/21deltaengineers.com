@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /*
  * This file is part of the Symfony package.
@@ -10,7 +10,7 @@ namespace IAWP_SCOPED;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-if (!\function_exists('IAWP_SCOPED\\trigger_deprecation')) {
+if (!\function_exists('IAWPSCOPED\\trigger_deprecation')) {
     /**
      * Triggers a silenced deprecation notice.
      *

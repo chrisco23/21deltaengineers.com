@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Statistics;
+namespace IAWP\Statistics;
 
 /** @internal */
 class Statistic

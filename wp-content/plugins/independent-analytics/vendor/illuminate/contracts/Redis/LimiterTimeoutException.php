@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Redis;
+namespace IAWPSCOPED\Illuminate\Contracts\Redis;
 
 use Exception;
 /** @internal */

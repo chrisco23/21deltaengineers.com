@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /**
  * This file is part of the Carbon package.
@@ -11,8 +11,8 @@ namespace IAWP_SCOPED;
  * file that was distributed with this source code.
  */
 // @codeCoverageIgnoreStart
-use IAWP_SCOPED\Symfony\Component\Translation\PluralizationRules;
-if (\class_exists('IAWP_SCOPED\\Symfony\\Component\\Translation\\PluralizationRules')) {
+use IAWPSCOPED\Symfony\Component\Translation\PluralizationRules;
+if (\class_exists('IAWPSCOPED\\Symfony\\Component\\Translation\\PluralizationRules')) {
     PluralizationRules::set(static function ($number) {
         return $number % 10 == 1 && $number % 100 != 11 ? 0 : ($number % 10 >= 2 && $number % 10 <= 4 && ($number % 100 < 10 || $number % 100 >= 20) ? 1 : 2);
     }, 'sh');

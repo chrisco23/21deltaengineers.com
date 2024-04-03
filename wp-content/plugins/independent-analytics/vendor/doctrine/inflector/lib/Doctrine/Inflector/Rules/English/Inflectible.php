@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Inflector\Rules\English;
+namespace IAWPSCOPED\Doctrine\Inflector\Rules\English;
 
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Pattern;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Substitution;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Transformation;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Word;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Pattern;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Substitution;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Transformation;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Word;
 /** @internal */
 class Inflectible
 {
     /** @return Transformation[] */
     public static function getSingular() : iterable
     {
-        (yield new Transformation(new Pattern('(s)tatuses$'), 'IAWP_SCOPED\\1\\2tatus'));
-        (yield new Transformation(new Pattern('(s)tatus$'), 'IAWP_SCOPED\\1\\2tatus'));
-        (yield new Transformation(new Pattern('(c)ampus$'), 'IAWP_SCOPED\\1\\2ampus'));
-        (yield new Transformation(new Pattern('^(.*)(menu)s$'), 'IAWP_SCOPED\\1\\2'));
+        (yield new Transformation(new Pattern('(s)tatuses$'), 'IAWPSCOPED\\1\\2tatus'));
+        (yield new Transformation(new Pattern('(s)tatus$'), 'IAWPSCOPED\\1\\2tatus'));
+        (yield new Transformation(new Pattern('(c)ampus$'), 'IAWPSCOPED\\1\\2ampus'));
+        (yield new Transformation(new Pattern('^(.*)(menu)s$'), 'IAWPSCOPED\\1\\2'));
         (yield new Transformation(new Pattern('(quiz)zes$'), '\\1'));
         (yield new Transformation(new Pattern('(matr)ices$'), '\\1ix'));
         (yield new Transformation(new Pattern('(vert|ind)ices$'), '\\1ex'));
@@ -32,8 +32,8 @@ class Inflectible
         (yield new Transformation(new Pattern('([^a])uses$'), '\\1us'));
         (yield new Transformation(new Pattern('([m|l])ice$'), '\\1ouse'));
         (yield new Transformation(new Pattern('(x|ch|ss|sh)es$'), '\\1'));
-        (yield new Transformation(new Pattern('(m)ovies$'), 'IAWP_SCOPED\\1\\2ovie'));
-        (yield new Transformation(new Pattern('(s)eries$'), 'IAWP_SCOPED\\1\\2eries'));
+        (yield new Transformation(new Pattern('(m)ovies$'), 'IAWPSCOPED\\1\\2ovie'));
+        (yield new Transformation(new Pattern('(s)eries$'), 'IAWPSCOPED\\1\\2eries'));
         (yield new Transformation(new Pattern('([^aeiouy]|qu)ies$'), '\\1y'));
         (yield new Transformation(new Pattern('([lr])ves$'), '\\1f'));
         (yield new Transformation(new Pattern('(tive)s$'), '\\1'));
@@ -43,15 +43,15 @@ class Inflectible
         (yield new Transformation(new Pattern('(olive)s$'), '\\1'));
         (yield new Transformation(new Pattern('([^fo])ves$'), '\\1fe'));
         (yield new Transformation(new Pattern('(^analy)ses$'), '\\1sis'));
-        (yield new Transformation(new Pattern('(analy|diagno|^ba|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$'), 'IAWP_SCOPED\\1\\2sis'));
+        (yield new Transformation(new Pattern('(analy|diagno|^ba|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$'), 'IAWPSCOPED\\1\\2sis'));
         (yield new Transformation(new Pattern('(tax)a$'), '\\1on'));
         (yield new Transformation(new Pattern('(c)riteria$'), '\\1riterion'));
-        (yield new Transformation(new Pattern('([ti])a$'), '\\1um'));
-        (yield new Transformation(new Pattern('(p)eople$'), 'IAWP_SCOPED\\1\\2erson'));
+        (yield new Transformation(new Pattern('([ti])a(?<!regatta)$'), '\\1um'));
+        (yield new Transformation(new Pattern('(p)eople$'), 'IAWPSCOPED\\1\\2erson'));
         (yield new Transformation(new Pattern('(m)en$'), '\\1an'));
-        (yield new Transformation(new Pattern('(c)hildren$'), 'IAWP_SCOPED\\1\\2hild'));
+        (yield new Transformation(new Pattern('(c)hildren$'), 'IAWPSCOPED\\1\\2hild'));
         (yield new Transformation(new Pattern('(f)eet$'), '\\1oot'));
-        (yield new Transformation(new Pattern('(n)ews$'), 'IAWP_SCOPED\\1\\2ews'));
+        (yield new Transformation(new Pattern('(n)ews$'), 'IAWPSCOPED\\1\\2ews'));
         (yield new Transformation(new Pattern('eaus$'), 'eau'));
         (yield new Transformation(new Pattern('^tights$'), 'tights'));
         (yield new Transformation(new Pattern('^shorts$'), 'shorts'));
@@ -60,15 +60,15 @@ class Inflectible
     /** @return Transformation[] */
     public static function getPlural() : iterable
     {
-        (yield new Transformation(new Pattern('(s)tatus$'), 'IAWP_SCOPED\\1\\2tatuses'));
+        (yield new Transformation(new Pattern('(s)tatus$'), 'IAWPSCOPED\\1\\2tatuses'));
         (yield new Transformation(new Pattern('(quiz)$'), '\\1zes'));
-        (yield new Transformation(new Pattern('^(ox)$'), 'IAWP_SCOPED\\1\\2en'));
+        (yield new Transformation(new Pattern('^(ox)$'), 'IAWPSCOPED\\1\\2en'));
         (yield new Transformation(new Pattern('([m|l])ouse$'), '\\1ice'));
         (yield new Transformation(new Pattern('(matr|vert|ind)(ix|ex)$'), '\\1ices'));
         (yield new Transformation(new Pattern('(x|ch|ss|sh)$'), '\\1es'));
         (yield new Transformation(new Pattern('([^aeiouy]|qu)y$'), '\\1ies'));
         (yield new Transformation(new Pattern('(hive|gulf)$'), '\\1s'));
-        (yield new Transformation(new Pattern('(?:([^f])fe|([lr])f)$'), 'IAWP_SCOPED\\1\\2ves'));
+        (yield new Transformation(new Pattern('(?:([^f])fe|([lr])f)$'), 'IAWPSCOPED\\1\\2ves'));
         (yield new Transformation(new Pattern('sis$'), 'ses'));
         (yield new Transformation(new Pattern('([ti])um$'), '\\1a'));
         (yield new Transformation(new Pattern('(tax)on$'), '\\1a'));
@@ -77,7 +77,7 @@ class Inflectible
         (yield new Transformation(new Pattern('(m)an$'), '\\1en'));
         (yield new Transformation(new Pattern('(c)hild$'), '\\1hildren'));
         (yield new Transformation(new Pattern('(f)oot$'), '\\1eet'));
-        (yield new Transformation(new Pattern('(buffal|her|potat|tomat|volcan)o$'), 'IAWP_SCOPED\\1\\2oes'));
+        (yield new Transformation(new Pattern('(buffal|her|potat|tomat|volcan)o$'), 'IAWPSCOPED\\1\\2oes'));
         (yield new Transformation(new Pattern('(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|vir)us$'), '\\1i'));
         (yield new Transformation(new Pattern('us$'), 'uses'));
         (yield new Transformation(new Pattern('(alias)$'), '\\1es'));
@@ -90,16 +90,19 @@ class Inflectible
     public static function getIrregular() : iterable
     {
         (yield new Substitution(new Word('atlas'), new Word('atlases')));
+        (yield new Substitution(new Word('axis'), new Word('axes')));
         (yield new Substitution(new Word('axe'), new Word('axes')));
         (yield new Substitution(new Word('beef'), new Word('beefs')));
         (yield new Substitution(new Word('blouse'), new Word('blouses')));
         (yield new Substitution(new Word('brother'), new Word('brothers')));
         (yield new Substitution(new Word('cafe'), new Word('cafes')));
+        (yield new Substitution(new Word('cave'), new Word('caves')));
         (yield new Substitution(new Word('chateau'), new Word('chateaux')));
         (yield new Substitution(new Word('niveau'), new Word('niveaux')));
         (yield new Substitution(new Word('child'), new Word('children')));
         (yield new Substitution(new Word('canvas'), new Word('canvases')));
         (yield new Substitution(new Word('cookie'), new Word('cookies')));
+        (yield new Substitution(new Word('brownie'), new Word('brownies')));
         (yield new Substitution(new Word('corpus'), new Word('corpuses')));
         (yield new Substitution(new Word('cow'), new Word('cows')));
         (yield new Substitution(new Word('criterion'), new Word('criteria')));
@@ -107,6 +110,7 @@ class Inflectible
         (yield new Substitution(new Word('demo'), new Word('demos')));
         (yield new Substitution(new Word('domino'), new Word('dominoes')));
         (yield new Substitution(new Word('echo'), new Word('echoes')));
+        (yield new Substitution(new Word('epoch'), new Word('epochs')));
         (yield new Substitution(new Word('foot'), new Word('feet')));
         (yield new Substitution(new Word('fungus'), new Word('fungi')));
         (yield new Substitution(new Word('ganglion'), new Word('ganglions')));

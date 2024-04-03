@@ -1,18 +1,18 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Utils;
+namespace IAWP\Utils;
 
-use IAWP_SCOPED\DeviceDetector\Cache\DoctrineBridge;
-use IAWP_SCOPED\DeviceDetector\DeviceDetector;
-use IAWP_SCOPED\DeviceDetector\Parser\Client\Browser;
-use IAWP_SCOPED\Doctrine\Common\Cache\PhpFileCache;
-use IAWP_SCOPED\IAWP\Illuminate_Builder;
-use IAWP_SCOPED\IAWP\Query;
+use IAWPSCOPED\DeviceDetector\Cache\DoctrineBridge;
+use IAWPSCOPED\DeviceDetector\DeviceDetector;
+use IAWPSCOPED\DeviceDetector\Parser\Client\Browser;
+use IAWPSCOPED\Doctrine\Common\Cache\PhpFileCache;
+use IAWP\Illuminate_Builder;
+use IAWP\Query;
 use Throwable;
 /** @internal */
 class Device
 {
-    use Singleton;
+    use \IAWP\Utils\Singleton;
     private $detector;
     private $type;
     private $os;
@@ -26,7 +26,7 @@ class Device
         //         new FilesystemAdapter('devices-cache', 0, trailingslashit(wp_upload_dir()['basedir']) . 'iawp-cache')
         //     )
         // );
-        $this->detector->setCache(new DoctrineBridge(new PhpFileCache(\IAWP_SCOPED\iawp_temp_path_to('device-data-cache'))));
+        $this->detector->setCache(new DoctrineBridge(new PhpFileCache(\IAWPSCOPED\iawp_temp_path_to('device-data-cache'))));
         try {
             @$this->detector->parse();
             $this->type = $this->detect_type($this->detector);

@@ -8,11 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon;
+namespace IAWPSCOPED\Carbon;
 
 /** @internal */
 class CarbonPeriodImmutable extends CarbonPeriod
 {
+    /**
+     * Default date class of iteration items.
+     *
+     * @var string
+     */
+    protected const DEFAULT_DATE_CLASS = CarbonImmutable::class;
     /**
      * Date class of iteration items.
      *

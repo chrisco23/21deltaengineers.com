@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Traits;
+namespace IAWPSCOPED\Carbon\Traits;
 
-use IAWP_SCOPED\Carbon\Carbon;
-use IAWP_SCOPED\Carbon\CarbonImmutable;
-use IAWP_SCOPED\Carbon\CarbonInterface;
-use IAWP_SCOPED\Carbon\CarbonInterval;
-use IAWP_SCOPED\Carbon\CarbonPeriod;
-use IAWP_SCOPED\Carbon\CarbonPeriodImmutable;
-use IAWP_SCOPED\Carbon\Exceptions\UnitException;
+use IAWPSCOPED\Carbon\Carbon;
+use IAWPSCOPED\Carbon\CarbonImmutable;
+use IAWPSCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonInterval;
+use IAWPSCOPED\Carbon\CarbonPeriod;
+use IAWPSCOPED\Carbon\CarbonPeriodImmutable;
+use IAWPSCOPED\Carbon\Exceptions\UnitException;
 use Closure;
 use DateTime;
 use DateTimeImmutable;
@@ -80,7 +80,7 @@ trait Converter
     public function __toString()
     {
         $format = $this->localToStringFormat ?? static::$toStringFormat;
-        return $format instanceof Closure ? $format($this) : $this->rawFormat($format ?: (\defined('IAWP_SCOPED\\static::DEFAULT_TO_STRING_FORMAT') ? static::DEFAULT_TO_STRING_FORMAT : CarbonInterface::DEFAULT_TO_STRING_FORMAT));
+        return $format instanceof Closure ? $format($this) : $this->rawFormat($format ?: (\defined('IAWPSCOPED\\static::DEFAULT_TO_STRING_FORMAT') ? static::DEFAULT_TO_STRING_FORMAT : CarbonInterface::DEFAULT_TO_STRING_FORMAT));
     }
     /**
      * Format the instance as date
@@ -400,7 +400,7 @@ trait Converter
      */
     public function toRfc7231String()
     {
-        return $this->avoidMutation()->setTimezone('GMT')->rawFormat(\defined('IAWP_SCOPED\\static::RFC7231_FORMAT') ? static::RFC7231_FORMAT : CarbonInterface::RFC7231_FORMAT);
+        return $this->avoidMutation()->setTimezone('GMT')->rawFormat(\defined('IAWPSCOPED\\static::RFC7231_FORMAT') ? static::RFC7231_FORMAT : CarbonInterface::RFC7231_FORMAT);
     }
     /**
      * Get default array representation.
@@ -414,7 +414,7 @@ trait Converter
      */
     public function toArray()
     {
-        return ['year' => $this->year, 'month' => $this->month, 'day' => $this->day, 'dayOfWeek' => $this->dayOfWeek, 'dayOfYear' => $this->dayOfYear, 'hour' => $this->hour, 'minute' => $this->minute, 'second' => $this->second, 'micro' => $this->micro, 'timestamp' => $this->timestamp, 'formatted' => $this->rawFormat(\defined('IAWP_SCOPED\\static::DEFAULT_TO_STRING_FORMAT') ? static::DEFAULT_TO_STRING_FORMAT : CarbonInterface::DEFAULT_TO_STRING_FORMAT), 'timezone' => $this->timezone];
+        return ['year' => $this->year, 'month' => $this->month, 'day' => $this->day, 'dayOfWeek' => $this->dayOfWeek, 'dayOfYear' => $this->dayOfYear, 'hour' => $this->hour, 'minute' => $this->minute, 'second' => $this->second, 'micro' => $this->micro, 'timestamp' => $this->timestamp, 'formatted' => $this->rawFormat(\defined('IAWPSCOPED\\static::DEFAULT_TO_STRING_FORMAT') ? static::DEFAULT_TO_STRING_FORMAT : CarbonInterface::DEFAULT_TO_STRING_FORMAT), 'timezone' => $this->timezone];
     }
     /**
      * Get default object representation.

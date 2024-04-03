@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\PHPStan;
+namespace IAWPSCOPED\Carbon\PHPStan;
 
-use IAWP_SCOPED\PHPStan\Reflection\Assertions;
-use IAWP_SCOPED\PHPStan\Reflection\ClassReflection;
-use IAWP_SCOPED\PHPStan\Reflection\MethodReflection;
-use IAWP_SCOPED\PHPStan\Reflection\MethodsClassReflectionExtension;
-use IAWP_SCOPED\PHPStan\Reflection\Php\PhpMethodReflectionFactory;
-use IAWP_SCOPED\PHPStan\Reflection\ReflectionProvider;
-use IAWP_SCOPED\PHPStan\Type\TypehintHelper;
+use IAWPSCOPED\PHPStan\Reflection\Assertions;
+use IAWPSCOPED\PHPStan\Reflection\ClassReflection;
+use IAWPSCOPED\PHPStan\Reflection\MethodReflection;
+use IAWPSCOPED\PHPStan\Reflection\MethodsClassReflectionExtension;
+use IAWPSCOPED\PHPStan\Reflection\Php\PhpMethodReflectionFactory;
+use IAWPSCOPED\PHPStan\Reflection\ReflectionProvider;
+use IAWPSCOPED\PHPStan\Type\TypehintHelper;
 /**
  * Class MacroExtension.
  *

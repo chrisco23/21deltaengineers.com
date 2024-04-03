@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Concerns;
 
-use IAWP_SCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Support\Collection;
 /** @internal */
 trait ExplainsQueries
 {

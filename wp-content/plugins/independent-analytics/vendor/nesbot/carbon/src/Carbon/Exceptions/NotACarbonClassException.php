@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Exceptions;
+namespace IAWPSCOPED\Carbon\Exceptions;
 
-use IAWP_SCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonInterface;
 use InvalidArgumentException as BaseInvalidArgumentException;
 use Throwable;
 /** @internal */

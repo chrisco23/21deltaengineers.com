@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Real_Time;
+use IAWP\Real_Time;
 /** @internal */
-class Real_Time_Data extends AJAX
+class Real_Time_Data extends \IAWP\AJAX\AJAX
 {
     protected function action_name() : string
     {

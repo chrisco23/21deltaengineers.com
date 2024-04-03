@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
 /**
  * Reads a list of icons from a directory allowing them to be searched. Supports defaults.
@@ -16,31 +16,31 @@ class Icon_Directory_Factory
     {
         // Cannot be initialized
     }
-    public static function flags() : Icon_Directory
+    public static function flags() : \IAWP\Icon_Directory
     {
         if (\is_null(self::$flags)) {
-            self::$flags = new Icon_Directory('img/flags/', 'Country flag');
+            self::$flags = new \IAWP\Icon_Directory('img/flags/', 'Country flag');
         }
         return self::$flags;
     }
-    public static function device_types() : Icon_Directory
+    public static function device_types() : \IAWP\Icon_Directory
     {
         if (\is_null(self::$device_types)) {
-            self::$device_types = new Icon_Directory('img/device-types/', 'Device type icon');
+            self::$device_types = new \IAWP\Icon_Directory('img/device-types/', 'Device type icon');
         }
         return self::$device_types;
     }
-    public static function operating_systems() : Icon_Directory
+    public static function operating_systems() : \IAWP\Icon_Directory
     {
         if (\is_null(self::$operating_systems)) {
-            self::$operating_systems = new Icon_Directory('img/operating-systems/', 'Operating system icon');
+            self::$operating_systems = new \IAWP\Icon_Directory('img/operating-systems/', 'Operating system icon');
         }
         return self::$operating_systems;
     }
-    public static function browsers() : Icon_Directory
+    public static function browsers() : \IAWP\Icon_Directory
     {
         if (\is_null(self::$browser)) {
-            self::$browser = new Icon_Directory('img/browsers/', 'Browser icon');
+            self::$browser = new \IAWP\Icon_Directory('img/browsers/', 'Browser icon');
         }
         return self::$browser;
     }

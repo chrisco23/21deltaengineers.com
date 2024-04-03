@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Events;
+namespace IAWPSCOPED\Illuminate\Database\Events;
 
 /** @internal */
 class SchemaLoaded

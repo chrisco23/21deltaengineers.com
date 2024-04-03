@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Loader;
+namespace IAWPSCOPED\Symfony\Component\Translation\Loader;
 
-use IAWP_SCOPED\Symfony\Component\Config\Resource\FileResource;
-use IAWP_SCOPED\Symfony\Component\Config\Util\Exception\InvalidXmlException;
-use IAWP_SCOPED\Symfony\Component\Config\Util\Exception\XmlParsingException;
-use IAWP_SCOPED\Symfony\Component\Config\Util\XmlUtils;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidResourceException;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\NotFoundResourceException;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\RuntimeException;
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogue;
-use IAWP_SCOPED\Symfony\Component\Translation\Util\XliffUtils;
+use IAWPSCOPED\Symfony\Component\Config\Resource\FileResource;
+use IAWPSCOPED\Symfony\Component\Config\Util\Exception\InvalidXmlException;
+use IAWPSCOPED\Symfony\Component\Config\Util\Exception\XmlParsingException;
+use IAWPSCOPED\Symfony\Component\Config\Util\XmlUtils;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidResourceException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\NotFoundResourceException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\RuntimeException;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogue;
+use IAWPSCOPED\Symfony\Component\Translation\Util\XliffUtils;
 /**
  * XliffFileLoader loads translations from XLIFF files.
  *
@@ -92,6 +92,9 @@ class XliffFileLoader implements LoaderInterface
                 if (!(isset($attributes['resname']) || isset($translation->source))) {
                     continue;
                 }
+                if (isset($translation->target) && 'needs-translation' === (string) $translation->target->attributes()['state']) {
+                    continue;
+                }
                 $source = isset($attributes['resname']) && $attributes['resname'] ? $attributes['resname'] : $translation->source;
                 // If the xlf file has another encoding specified, try to convert it because
                 // simple_xml will always return utf-8 encoded values
@@ -152,14 +155,14 @@ class XliffFileLoader implements LoaderInterface
     /**
      * Convert a UTF8 string to the specified encoding.
      */
-    private function utf8ToCharset(string $content, string $encoding = null) : string
+    private function utf8ToCharset(string $content, ?string $encoding = null) : string
     {
         if ('UTF-8' !== $encoding && !empty($encoding)) {
             return \mb_convert_encoding($content, $encoding, 'UTF-8');
         }
         return $content;
     }
-    private function parseNotesMetadata(\SimpleXMLElement $noteElement = null, string $encoding = null) : array
+    private function parseNotesMetadata(?\SimpleXMLElement $noteElement = null, ?string $encoding = null) : array
     {
         $notes = [];
         if (null === $noteElement) {

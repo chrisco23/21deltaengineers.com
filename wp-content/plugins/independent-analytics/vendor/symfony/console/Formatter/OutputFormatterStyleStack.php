@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Formatter;
+namespace IAWPSCOPED\Symfony\Component\Console\Formatter;
 
-use IAWP_SCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Contracts\Service\ResetInterface;
+use IAWPSCOPED\Symfony\Component\Console\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Contracts\Service\ResetInterface;
 /**
  * @author Jean-François Simon <contact@jfsimon.fr>
  * @internal
@@ -23,7 +23,7 @@ class OutputFormatterStyleStack implements ResetInterface
      */
     private $styles;
     private $emptyStyle;
-    public function __construct(OutputFormatterStyleInterface $emptyStyle = null)
+    public function __construct(?OutputFormatterStyleInterface $emptyStyle = null)
     {
         $this->emptyStyle = $emptyStyle ?? new OutputFormatterStyle();
         $this->reset();
@@ -49,7 +49,7 @@ class OutputFormatterStyleStack implements ResetInterface
      *
      * @throws InvalidArgumentException When style tags incorrectly nested
      */
-    public function pop(OutputFormatterStyleInterface $style = null)
+    public function pop(?OutputFormatterStyleInterface $style = null)
     {
         if (empty($this->styles)) {
             return $this->emptyStyle;

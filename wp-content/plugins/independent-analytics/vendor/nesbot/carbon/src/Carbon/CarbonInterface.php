@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon;
+namespace IAWPSCOPED\Carbon;
 
 use BadMethodCallException;
-use IAWP_SCOPED\Carbon\Exceptions\BadComparisonUnitException;
-use IAWP_SCOPED\Carbon\Exceptions\ImmutableException;
-use IAWP_SCOPED\Carbon\Exceptions\InvalidDateException;
-use IAWP_SCOPED\Carbon\Exceptions\InvalidFormatException;
-use IAWP_SCOPED\Carbon\Exceptions\UnknownGetterException;
-use IAWP_SCOPED\Carbon\Exceptions\UnknownMethodException;
-use IAWP_SCOPED\Carbon\Exceptions\UnknownSetterException;
+use IAWPSCOPED\Carbon\Exceptions\BadComparisonUnitException;
+use IAWPSCOPED\Carbon\Exceptions\ImmutableException;
+use IAWPSCOPED\Carbon\Exceptions\InvalidDateException;
+use IAWPSCOPED\Carbon\Exceptions\InvalidFormatException;
+use IAWPSCOPED\Carbon\Exceptions\UnknownGetterException;
+use IAWPSCOPED\Carbon\Exceptions\UnknownMethodException;
+use IAWPSCOPED\Carbon\Exceptions\UnknownSetterException;
 use Closure;
 use DateInterval;
 use DateTime;
@@ -27,7 +27,7 @@ use DateTimeZone;
 use JsonSerializable;
 use ReflectionException;
 use ReturnTypeWillChange;
-use IAWP_SCOPED\Symfony\Component\Translation\TranslatorInterface;
+use IAWPSCOPED\Symfony\Component\Translation\TranslatorInterface;
 use Throwable;
 /**
  * Common interface for Carbon and CarbonImmutable.
@@ -4748,8 +4748,7 @@ interface CarbonInterface extends DateTimeInterface, JsonSerializable
      * @param DateTimeInterface|Closure|static|string|false|null $testNow  real or mock Carbon instance
      * @param Closure(): T                                       $callback
      *
-     * @return mixed
-     * @phpstan-return T
+     * @return T
      */
     public static function withTestNow($testNow, $callback);
     /**

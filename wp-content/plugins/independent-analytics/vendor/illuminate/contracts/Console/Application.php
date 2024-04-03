@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Console;
+namespace IAWPSCOPED\Illuminate\Contracts\Console;
 
 /** @internal */
 interface Application

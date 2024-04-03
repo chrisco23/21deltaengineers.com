@@ -1,18 +1,18 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Concerns;
 
-use IAWP_SCOPED\Illuminate\Container\Container;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Builder;
-use IAWP_SCOPED\Illuminate\Database\MultipleRecordsFoundException;
-use IAWP_SCOPED\Illuminate\Database\RecordsNotFoundException;
-use IAWP_SCOPED\Illuminate\Pagination\Cursor;
-use IAWP_SCOPED\Illuminate\Pagination\CursorPaginator;
-use IAWP_SCOPED\Illuminate\Pagination\LengthAwarePaginator;
-use IAWP_SCOPED\Illuminate\Pagination\Paginator;
-use IAWP_SCOPED\Illuminate\Support\Collection;
-use IAWP_SCOPED\Illuminate\Support\LazyCollection;
-use IAWP_SCOPED\Illuminate\Support\Traits\Conditionable;
+use IAWPSCOPED\Illuminate\Container\Container;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Builder;
+use IAWPSCOPED\Illuminate\Database\MultipleRecordsFoundException;
+use IAWPSCOPED\Illuminate\Database\RecordsNotFoundException;
+use IAWPSCOPED\Illuminate\Pagination\Cursor;
+use IAWPSCOPED\Illuminate\Pagination\CursorPaginator;
+use IAWPSCOPED\Illuminate\Pagination\LengthAwarePaginator;
+use IAWPSCOPED\Illuminate\Pagination\Paginator;
+use IAWPSCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Support\LazyCollection;
+use IAWPSCOPED\Illuminate\Support\Traits\Conditionable;
 use InvalidArgumentException;
 use RuntimeException;
 /** @internal */
@@ -284,7 +284,7 @@ trait BuildsQueries
         $orders = $this->ensureOrderForCursorPagination(!\is_null($cursor) && $cursor->pointsToPreviousItems());
         if (!\is_null($cursor)) {
             $addCursorConditions = function (self $builder, $previousColumn, $i) use(&$addCursorConditions, $cursor, $orders) {
-                $unionBuilders = isset($builder->unions) ? \IAWP_SCOPED\collect($builder->unions)->pluck('query') : \IAWP_SCOPED\collect();
+                $unionBuilders = isset($builder->unions) ? \IAWPSCOPED\collect($builder->unions)->pluck('query') : \IAWPSCOPED\collect();
                 if (!\is_null($previousColumn)) {
                     $builder->where($this->getOriginalColumnNameForCursorPagination($this, $previousColumn), '=', $cursor->parameter($previousColumn));
                     $unionBuilders->each(function ($unionBuilder) use($previousColumn, $cursor) {

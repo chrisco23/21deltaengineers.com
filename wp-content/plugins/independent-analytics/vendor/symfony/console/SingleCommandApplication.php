@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console;
+namespace IAWPSCOPED\Symfony\Component\Console;
 
-use IAWP_SCOPED\Symfony\Component\Console\Command\Command;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Command\Command;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  * @internal
@@ -40,7 +40,7 @@ class SingleCommandApplication extends Command
         $this->autoExit = $autoExit;
         return $this;
     }
-    public function run(InputInterface $input = null, OutputInterface $output = null) : int
+    public function run(?InputInterface $input = null, ?OutputInterface $output = null) : int
     {
         if ($this->running) {
             return parent::run($input, $output);

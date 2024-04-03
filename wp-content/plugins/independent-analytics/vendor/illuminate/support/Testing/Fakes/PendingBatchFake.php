@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Testing\Fakes;
+namespace IAWPSCOPED\Illuminate\Support\Testing\Fakes;
 
-use IAWP_SCOPED\Illuminate\Bus\PendingBatch;
-use IAWP_SCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Bus\PendingBatch;
+use IAWPSCOPED\Illuminate\Support\Collection;
 /** @internal */
 class PendingBatchFake extends PendingBatch
 {

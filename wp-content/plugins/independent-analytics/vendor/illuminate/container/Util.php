@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Container;
+namespace IAWPSCOPED\Illuminate\Container;
 
 use Closure;
 use ReflectionNamedType;
@@ -27,7 +27,7 @@ class Util
     /**
      * Return the default value of the given value.
      *
-     * From global value() helper in Illuminate\Support.
+     * From global \IAWPSCOPED\value() helper in Illuminate\Support.
      *
      * @param  mixed  $value
      * @return mixed

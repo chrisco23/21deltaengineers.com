@@ -1,15 +1,15 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Date_Range\Exact_Date_Range;
-use IAWP_SCOPED\IAWP\Date_Range\Relative_Date_Range;
-use IAWP_SCOPED\IAWP\Rows\Campaigns;
-use IAWP_SCOPED\IAWP\Rows\Countries;
-use IAWP_SCOPED\IAWP\Rows\Pages;
-use IAWP_SCOPED\IAWP\Rows\Referrers;
-use IAWP_SCOPED\IAWP\Statistics\Page_Statistics;
-use IAWP_SCOPED\IAWP\Utils\URL;
+use IAWP\Date_Range\Exact_Date_Range;
+use IAWP\Date_Range\Relative_Date_Range;
+use IAWP\Rows\Campaigns;
+use IAWP\Rows\Countries;
+use IAWP\Rows\Pages;
+use IAWP\Rows\Referrers;
+use IAWP\Statistics\Page_Statistics;
+use IAWP\Utils\URL;
 /** @internal */
 class Email_Reports
 {
@@ -26,11 +26,11 @@ class Email_Reports
     public function schedule_email_report()
     {
         $this->unschedule_email_report();
-        if (empty(\IAWP_SCOPED\iawp()->get_option('iawp_email_report_email_addresses', []))) {
+        if (empty(\IAWPSCOPED\iawp()->get_option('iawp_email_report_email_addresses', []))) {
             return;
         }
         $delivery_time = new \DateTime('first day of +1 month', new \DateTimeZone(\wp_timezone_string()));
-        $delivery_time->setTime(\IAWP_SCOPED\iawp()->get_option('iawp_email_report_time', 9), 0);
+        $delivery_time->setTime(\IAWPSCOPED\iawp()->get_option('iawp_email_report_time', 9), 0);
         \wp_schedule_event($delivery_time->getTimestamp(), 'monthly', 'iawp_send_email_report');
     }
     public function unschedule_email_report()
@@ -45,7 +45,7 @@ class Email_Reports
     }
     public function send_email_report(bool $test = \false)
     {
-        $to = \IAWP_SCOPED\iawp()->get_option('iawp_email_report_email_addresses', []);
+        $to = \IAWPSCOPED\iawp()->get_option('iawp_email_report_email_addresses', []);
         if (empty($to)) {
             return;
         }
@@ -61,9 +61,9 @@ class Email_Reports
     private function get_email_body()
     {
         $statistics = new Page_Statistics(new Relative_Date_Range('LAST_MONTH'));
-        $quick_stats = (new Quick_Stats(null, $statistics))->get_stats();
-        $chart = new Email_Chart($statistics);
-        return \IAWP_SCOPED\iawp_blade()->run('email.email', ['site_title' => \get_bloginfo('name'), 'site_url' => (new URL(\get_site_url()))->get_domain(), 'date' => (new \DateTime('Last month', new \DateTimeZone(\wp_timezone_string())))->format('F Y'), 'stats' => $quick_stats, 'top_ten' => $this->get_top_ten(), 'chart_views' => $chart->daily_views, 'most_views' => $chart->most_views, 'y_labels' => $chart->y_labels, 'x_labels' => $chart->x_labels, 'colors' => \get_option('iawp_email_report_colors', ['#5123a0', '#fafafa', '#3a1e6b', '#fafafa', '#5123a0', '#a985e6'])]);
+        $quick_stats = (new \IAWP\Quick_Stats(null, $statistics))->get_stats();
+        $chart = new \IAWP\Email_Chart($statistics);
+        return \IAWPSCOPED\iawp_blade()->run('email.email', ['site_title' => \get_bloginfo('name'), 'site_url' => (new URL(\get_site_url()))->get_domain(), 'date' => (new \DateTime('Last month', new \DateTimeZone(\wp_timezone_string())))->format('F Y'), 'stats' => $quick_stats, 'top_ten' => $this->get_top_ten(), 'chart_views' => $chart->daily_views, 'most_views' => $chart->most_views, 'y_labels' => $chart->y_labels, 'x_labels' => $chart->x_labels, 'colors' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_colors', ['#5123a0', '#fafafa', '#3a1e6b', '#fafafa', '#5123a0', '#a985e6', '#ece9f2', '#f7f5fa', '#ece9f2', '#dedae6'])]);
     }
     private function get_top_ten() : array
     {
@@ -72,7 +72,7 @@ class Email_Reports
         $date_range = new Exact_Date_Range($start, $end);
         $queries = ['pages' => 'title', 'referrers' => 'referrer', 'countries' => 'country', 'campaigns' => 'title'];
         $top_ten = [];
-        $sort_configuration = new Sort_Configuration('views', 'desc');
+        $sort_configuration = new \IAWP\Sort_Configuration('views', 'desc');
         foreach ($queries as $type => $title) {
             if ($type === 'pages') {
                 $query = new Pages($date_range, 10, null, $sort_configuration);

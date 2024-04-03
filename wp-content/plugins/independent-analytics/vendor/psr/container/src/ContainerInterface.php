@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Psr\Container;
+namespace IAWPSCOPED\Psr\Container;
 
 /**
  * Describes the interface of a container that exposes methods to read its entries.

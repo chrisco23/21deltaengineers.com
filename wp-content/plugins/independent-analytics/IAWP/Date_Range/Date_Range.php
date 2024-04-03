@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Date_Range;
+namespace IAWP\Date_Range;
 
 use DateTime;
-use IAWP_SCOPED\Proper\Timezone;
+use IAWPSCOPED\Proper\Timezone;
 /** @internal */
 abstract class Date_Range
 {
@@ -44,12 +44,12 @@ abstract class Date_Range
     {
         return $this->end->format('Y-m-d\\TH:i:s');
     }
-    public function previous_period() : Date_Range
+    public function previous_period() : \IAWP\Date_Range\Date_Range
     {
         $range_size = $this->range_size_in_days();
         $previous_start = (clone $this->start)->modify("-{$range_size} days");
         $previous_end = (clone $this->end)->modify("-{$range_size} days");
-        return new Exact_Date_Range($previous_start, $previous_end, \false);
+        return new \IAWP\Date_Range\Exact_Date_Range($previous_start, $previous_end, \false);
     }
     public function number_of_days() : int
     {

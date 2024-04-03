@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Connectors;
+namespace IAWPSCOPED\Illuminate\Database\Connectors;
 
 use InvalidArgumentException;
 /** @internal */

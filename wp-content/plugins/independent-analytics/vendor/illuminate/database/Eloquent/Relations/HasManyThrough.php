@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations;
 
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Builder;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Collection;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\ModelNotFoundException;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\SoftDeletes;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Builder;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Collection;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Database\Eloquent\ModelNotFoundException;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use IAWPSCOPED\Illuminate\Database\Eloquent\SoftDeletes;
 /** @internal */
 class HasManyThrough extends Relation
 {

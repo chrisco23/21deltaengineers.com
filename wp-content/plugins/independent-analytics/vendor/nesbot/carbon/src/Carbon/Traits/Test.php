@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Traits;
+namespace IAWPSCOPED\Carbon\Traits;
 
-use IAWP_SCOPED\Carbon\CarbonInterface;
-use IAWP_SCOPED\Carbon\CarbonTimeZone;
+use IAWPSCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonTimeZone;
 use Closure;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -111,8 +111,7 @@ trait Test
      * @param DateTimeInterface|Closure|static|string|false|null $testNow  real or mock Carbon instance
      * @param Closure(): T                                       $callback
      *
-     * @return mixed
-     * @phpstan-return T
+     * @return T
      */
     public static function withTestNow($testNow, $callback)
     {

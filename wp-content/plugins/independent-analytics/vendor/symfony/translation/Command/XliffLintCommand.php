@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Command;
+namespace IAWPSCOPED\Symfony\Component\Translation\Command;
 
-use IAWP_SCOPED\Symfony\Component\Console\CI\GithubActionReporter;
-use IAWP_SCOPED\Symfony\Component\Console\Command\Command;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionInput;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\RuntimeException;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputArgument;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputOption;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Style\SymfonyStyle;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Translation\Util\XliffUtils;
+use IAWPSCOPED\Symfony\Component\Console\CI\GithubActionReporter;
+use IAWPSCOPED\Symfony\Component\Console\Command\Command;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionInput;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
+use IAWPSCOPED\Symfony\Component\Console\Exception\RuntimeException;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputArgument;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputOption;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Style\SymfonyStyle;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Translation\Util\XliffUtils;
 /**
  * Validates XLIFF files syntax and outputs encountered errors.
  *
@@ -39,7 +39,7 @@ class XliffLintCommand extends Command
     private $directoryIteratorProvider;
     private $isReadableProvider;
     private $requireStrictFileNames;
-    public function __construct(string $name = null, callable $directoryIteratorProvider = null, callable $isReadableProvider = null, bool $requireStrictFileNames = \true)
+    public function __construct(?string $name = null, ?callable $directoryIteratorProvider = null, ?callable $isReadableProvider = null, bool $requireStrictFileNames = \true)
     {
         parent::__construct($name);
         $this->directoryIteratorProvider = $directoryIteratorProvider;
@@ -94,7 +94,7 @@ EOF
         }
         return $this->display($io, $filesInfo);
     }
-    private function validate(string $content, string $file = null) : array
+    private function validate(string $content, ?string $file = null) : array
     {
         $errors = [];
         // Avoid: Warning DOMDocument::loadXML(): Empty string supplied as input

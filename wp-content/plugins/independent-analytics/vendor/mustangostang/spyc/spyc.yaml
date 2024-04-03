@@ -120,7 +120,7 @@ all languages:
 - [a, ['1', "2"], b]
 
 # Add in .5.2: Quoted new line values.
-- "First IAWP_SCOPED\line\nSecond IAWP_SCOPED\line\nThird line"
+- "First IAWPSCOPED\line\nSecond IAWPSCOPED\line\nThird line"
 
 # Added in .2.4: malformed YAML
 all

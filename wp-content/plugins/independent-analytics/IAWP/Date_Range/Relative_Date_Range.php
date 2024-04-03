@@ -1,13 +1,16 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Date_Range;
+namespace IAWP\Date_Range;
 
 use DateTime;
-use IAWP_SCOPED\Proper\Timezone;
+use IAWP\Illuminate_Builder;
+use IAWP\Query;
+use IAWPSCOPED\Proper\Timezone;
 /** @internal */
-class Relative_Date_Range extends Date_Range
+class Relative_Date_Range extends \IAWP\Date_Range\Date_Range
 {
-    private const VALID_RELATIVE_RANGE_IDS = ['TODAY', 'YESTERDAY', 'LAST_SEVEN', 'LAST_THIRTY', 'THIS_WEEK', 'LAST_WEEK', 'THIS_MONTH', 'LAST_MONTH', 'THIS_YEAR', 'LAST_YEAR'];
+    private const VALID_RELATIVE_RANGE_IDS = ['TODAY', 'YESTERDAY', 'THIS_WEEK', 'LAST_WEEK', 'LAST_SEVEN', 'LAST_THIRTY', 'LAST_SIXTY', 'LAST_NINETY', 'THIS_MONTH', 'LAST_MONTH', 'LAST_THREE_MONTHS', 'LAST_SIX_MONTHS', 'LAST_TWELVE_MONTHS', 'THIS_YEAR', 'LAST_YEAR', 'ALL_TIME'];
+    private static $beginning_of_time = null;
     /**
      * @var string
      */
@@ -70,6 +73,20 @@ class Relative_Date_Range extends Date_Range
         $thirty_days_ago = new DateTime('-29 days', $tz);
         return [$thirty_days_ago, $today, \__('Last 30 Days', 'independent-analytics')];
     }
+    private function last_sixty() : array
+    {
+        $tz = Timezone::site_timezone();
+        $today = new DateTime('now', $tz);
+        $sixty_days_ago = new DateTime('-59 days', $tz);
+        return [$sixty_days_ago, $today, \__('Last 60 Days', 'independent-analytics')];
+    }
+    private function last_ninety() : array
+    {
+        $tz = Timezone::site_timezone();
+        $today = new DateTime('now', $tz);
+        $ninety_days_ago = new DateTime('-89 days', $tz);
+        return [$ninety_days_ago, $today, \__('Last 90 Days', 'independent-analytics')];
+    }
     private function this_week() : array
     {
         $tz = Timezone::site_timezone();
@@ -109,6 +126,30 @@ class Relative_Date_Range extends Date_Range
         $end_of_last_month = (clone $start_of_last_month)->modify("+{$days_in_last_month} days");
         return [$start_of_last_month, $end_of_last_month, \__('Last Month', 'independent-analytics')];
     }
+    private function last_three_months() : array
+    {
+        $tz = Timezone::site_timezone();
+        $first_of_three_months_ago = new DateTime('first day of last month', $tz);
+        $first_of_three_months_ago = $first_of_three_months_ago->modify('-2 months');
+        $last_of_last_month = new DateTime('last day of last month', $tz);
+        return [$first_of_three_months_ago, $last_of_last_month, \__('Last 3 Months', 'independent-analytics')];
+    }
+    private function last_six_months() : array
+    {
+        $tz = Timezone::site_timezone();
+        $first_of_six_months_ago = new DateTime('first day of last month', $tz);
+        $first_of_six_months_ago = $first_of_six_months_ago->modify('-5 months');
+        $last_of_last_month = new DateTime('last day of last month', $tz);
+        return [$first_of_six_months_ago, $last_of_last_month, \__('Last 6 Months', 'independent-analytics')];
+    }
+    private function last_twelve_months() : array
+    {
+        $tz = Timezone::site_timezone();
+        $first_of_twelve_months_ago = new DateTime('first day of last month', $tz);
+        $first_of_twelve_months_ago = $first_of_twelve_months_ago->modify('-11 months');
+        $last_of_last_month = new DateTime('last day of last month', $tz);
+        return [$first_of_twelve_months_ago, $last_of_last_month, \__('Last 12 Months', 'independent-analytics')];
+    }
     private function this_year() : array
     {
         $tz = Timezone::site_timezone();
@@ -126,6 +167,12 @@ class Relative_Date_Range extends Date_Range
         $start_of_last_year = (clone $today)->setDate($last_year, 1, 1);
         $end_of_last_year = (clone $today)->setDate($last_year, 12, 31);
         return [$start_of_last_year, $end_of_last_year, \__('Last Year', 'independent-analytics')];
+    }
+    private function all_time() : array
+    {
+        $tz = Timezone::site_timezone();
+        $today = new DateTime('now', $tz);
+        return [self::beginning_of_time(), $today, \__('All Time', 'independent-analytics')];
     }
     /**
      * Returns an array of relative ranges representing all supported ranges
@@ -149,5 +196,24 @@ class Relative_Date_Range extends Date_Range
             return \true;
         }
         return \false;
+    }
+    private static function beginning_of_time() : DateTime
+    {
+        if (!\is_null(self::$beginning_of_time)) {
+            return self::$beginning_of_time;
+        }
+        $tz = Timezone::site_timezone();
+        $views_table = Query::get_table_name(Query::VIEWS);
+        $first_view_at = Illuminate_Builder::get_builder()->select('viewed_at')->from($views_table, 'views')->orderBy('viewed_at')->value('viewed_at');
+        if (!\is_null($first_view_at)) {
+            try {
+                self::$beginning_of_time = new DateTime($first_view_at);
+            } catch (\Throwable $e) {
+                self::$beginning_of_time = new DateTime('now', $tz);
+            }
+        } else {
+            self::$beginning_of_time = new DateTime('now', $tz);
+        }
+        return self::$beginning_of_time;
     }
 }

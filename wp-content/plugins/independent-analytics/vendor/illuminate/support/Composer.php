@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
-use IAWP_SCOPED\Illuminate\Filesystem\Filesystem;
-use IAWP_SCOPED\Symfony\Component\Process\PhpExecutableFinder;
-use IAWP_SCOPED\Symfony\Component\Process\Process;
+use IAWPSCOPED\Illuminate\Filesystem\Filesystem;
+use IAWPSCOPED\Symfony\Component\Process\PhpExecutableFinder;
+use IAWPSCOPED\Symfony\Component\Process\Process;
 /** @internal */
 class Composer
 {

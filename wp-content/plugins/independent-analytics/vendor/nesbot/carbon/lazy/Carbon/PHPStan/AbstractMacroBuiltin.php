@@ -9,9 +9,9 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\PHPStan;
+namespace IAWPSCOPED\Carbon\PHPStan;
 
-use IAWP_SCOPED\PHPStan\BetterReflection\Reflection;
+use IAWPSCOPED\PHPStan\BetterReflection\Reflection;
 use ReflectionMethod;
 if (!\class_exists(AbstractReflectionMacro::class, \false)) {
     /** @internal */

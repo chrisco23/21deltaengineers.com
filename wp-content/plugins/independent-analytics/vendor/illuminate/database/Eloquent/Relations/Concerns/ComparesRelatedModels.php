@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Concerns;
 
-use IAWP_SCOPED\Illuminate\Contracts\Database\Eloquent\SupportsPartialRelations;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Model;
+use IAWPSCOPED\Illuminate\Contracts\Database\Eloquent\SupportsPartialRelations;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Model;
 /** @internal */
 trait ComparesRelatedModels
 {

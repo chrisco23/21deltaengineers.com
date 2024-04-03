@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Connectors;
+namespace IAWPSCOPED\Illuminate\Database\Connectors;
 
-use IAWP_SCOPED\Illuminate\Contracts\Container\Container;
-use IAWP_SCOPED\Illuminate\Database\Connection;
-use IAWP_SCOPED\Illuminate\Database\MySqlConnection;
-use IAWP_SCOPED\Illuminate\Database\PostgresConnection;
-use IAWP_SCOPED\Illuminate\Database\SQLiteConnection;
-use IAWP_SCOPED\Illuminate\Database\SqlServerConnection;
-use IAWP_SCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Contracts\Container\Container;
+use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Database\MySqlConnection;
+use IAWPSCOPED\Illuminate\Database\PostgresConnection;
+use IAWPSCOPED\Illuminate\Database\SQLiteConnection;
+use IAWPSCOPED\Illuminate\Database\SqlServerConnection;
+use IAWPSCOPED\Illuminate\Support\Arr;
 use InvalidArgumentException;
 use PDOException;
 /** @internal */

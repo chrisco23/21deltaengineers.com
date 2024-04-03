@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema;
+namespace IAWPSCOPED\Illuminate\Database\Schema;
 
 use Exception;
-use IAWP_SCOPED\Illuminate\Database\Connection;
-use IAWP_SCOPED\Illuminate\Support\Str;
-use IAWP_SCOPED\Symfony\Component\Process\Process;
+use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Symfony\Component\Process\Process;
 /** @internal */
 class MySqlSchemaState extends SchemaState
 {

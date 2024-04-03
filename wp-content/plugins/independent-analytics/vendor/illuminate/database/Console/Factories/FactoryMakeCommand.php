@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console\Factories;
+namespace IAWPSCOPED\Illuminate\Database\Console\Factories;
 
-use IAWP_SCOPED\Illuminate\Console\GeneratorCommand;
-use IAWP_SCOPED\Illuminate\Support\Str;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputOption;
+use IAWPSCOPED\Illuminate\Console\GeneratorCommand;
+use IAWPSCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputOption;
 /** @internal */
 class FactoryMakeCommand extends GeneratorCommand
 {
@@ -59,7 +59,7 @@ class FactoryMakeCommand extends GeneratorCommand
         if (Str::startsWith($namespaceModel, $this->rootNamespace() . 'Models')) {
             $namespace = Str::beforeLast('Database\\Factories\\' . Str::after($namespaceModel, $this->rootNamespace() . 'Models\\'), '\\');
         } else {
-            $namespace = 'IAWP_SCOPED\\Database\\Factories';
+            $namespace = 'IAWPSCOPED\\Database\\Factories';
         }
         $replace = ['{{ factoryNamespace }}' => $namespace, 'NamespacedDummyModel' => $namespaceModel, '{{ namespacedModel }}' => $namespaceModel, '{{namespacedModel}}' => $namespaceModel, 'DummyModel' => $model, '{{ model }}' => $model, '{{model}}' => $model, '{{ factory }}' => $factory, '{{factory}}' => $factory];
         return \str_replace(\array_keys($replace), \array_values($replace), parent::buildClass($name));

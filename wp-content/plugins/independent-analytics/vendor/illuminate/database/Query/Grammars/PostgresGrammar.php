@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Query\Grammars;
+namespace IAWPSCOPED\Illuminate\Database\Query\Grammars;
 
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 class PostgresGrammar extends Grammar
 {
@@ -97,7 +97,7 @@ class PostgresGrammar extends Grammar
         if (!\in_array($language, $this->validFullTextLanguages())) {
             $language = 'english';
         }
-        $columns = \IAWP_SCOPED\collect($where['columns'])->map(function ($column) use($language) {
+        $columns = \IAWPSCOPED\collect($where['columns'])->map(function ($column) use($language) {
             return "to_tsvector('{$language}', {$this->wrap($column)})";
         })->implode(' || ');
         $mode = 'plainto_tsquery';
@@ -252,7 +252,7 @@ class PostgresGrammar extends Grammar
      */
     protected function compileUpdateColumns(Builder $query, array $values)
     {
-        return \IAWP_SCOPED\collect($values)->map(function ($value, $key) {
+        return \IAWPSCOPED\collect($values)->map(function ($value, $key) {
             $column = last(\explode('.', $key));
             if ($this->isJsonSelector($key)) {
                 return $this->compileJsonUpdateColumn($column, $value);
@@ -273,7 +273,7 @@ class PostgresGrammar extends Grammar
     {
         $sql = $this->compileInsert($query, $values);
         $sql .= ' on conflict (' . $this->columnize($uniqueBy) . ') do update set ';
-        $columns = \IAWP_SCOPED\collect($update)->map(function ($value, $key) {
+        $columns = \IAWPSCOPED\collect($update)->map(function ($value, $key) {
             return \is_numeric($key) ? $this->wrap($value) . ' = ' . $this->wrapValue('excluded') . '.' . $this->wrap($value) : $this->wrap($key) . ' = ' . $this->parameter($value);
         })->implode(', ');
         return $sql . $columns;
@@ -311,7 +311,7 @@ class PostgresGrammar extends Grammar
             // When using Postgres, updates with joins list the joined tables in the from
             // clause, which is different than other systems like MySQL. Here, we will
             // compile out the tables that are joined and add them to a from clause.
-            $froms = \IAWP_SCOPED\collect($query->joins)->map(function ($join) {
+            $froms = \IAWPSCOPED\collect($query->joins)->map(function ($join) {
                 return $this->wrapTable($join->table);
             })->all();
             if (\count($froms) > 0) {
@@ -371,7 +371,7 @@ class PostgresGrammar extends Grammar
      */
     public function prepareBindingsForUpdateFrom(array $bindings, array $values)
     {
-        $values = \IAWP_SCOPED\collect($values)->map(function ($value, $column) {
+        $values = \IAWPSCOPED\collect($values)->map(function ($value, $column) {
             return \is_array($value) || $this->isJsonSelector($column) && !$this->isExpression($value) ? \json_encode($value) : $value;
         })->all();
         $bindingsWithoutWhere = Arr::except($bindings, ['select', 'where']);
@@ -401,7 +401,7 @@ class PostgresGrammar extends Grammar
      */
     public function prepareBindingsForUpdate(array $bindings, array $values)
     {
-        $values = \IAWP_SCOPED\collect($values)->map(function ($value, $column) {
+        $values = \IAWPSCOPED\collect($values)->map(function ($value, $column) {
             return \is_array($value) || $this->isJsonSelector($column) && !$this->isExpression($value) ? \json_encode($value) : $value;
         })->all();
         $cleanBindings = Arr::except($bindings, 'select');

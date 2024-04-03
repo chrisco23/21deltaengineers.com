@@ -12,20 +12,20 @@
                 <select id="user-role-select">
                     <option><?php esc_html_e('Select a user role to edit', 'independent-analytics'); ?></option>
                     <?php foreach ($editable_roles as $role): ?>
-                        <option value="<?php esc_attr_e($role['key']); ?>"><?php esc_html_e($role['name']); ?></option>
+                        <option value="<?php echo esc_attr($role['key']); ?>"><?php echo esc_html($role['name']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="user-roles">
                 <?php foreach ($editable_roles as $role): ?>
-                    <div class="role role-<?php esc_attr_e($role['key']); ?>">
-                        <select name="<?php esc_attr_e($role['key']); ?>">
+                    <div class="role role-<?php echo esc_attr($role['key']); ?>">
+                        <select name="<?php echo esc_attr($role['key']); ?>">
                             <option value=""><?php esc_html_e('No access', 'independent-analytics'); ?></option>
                             <?php foreach ($capabilities as $capability_key => $capability_label): ?>
-                                <option value="<?php esc_attr_e($capability_key) ?>"
+                                <option value="<?php echo esc_attr($capability_key) ?>"
                                     <?php selected($role[$capability_key]) ?>
                                 >
-                                    <?php esc_html_e($capability_label) ?>
+                                    <?php echo esc_html($capability_label) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>

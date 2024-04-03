@@ -1,5 +1,0 @@
-SELECT *
-FROM wp_independent_analytics_countries
-    WHERE country_code = :country_code
-    AND country = :country
-    AND continent = :continent

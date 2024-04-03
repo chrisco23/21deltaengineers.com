@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Traits;
+namespace IAWPSCOPED\Carbon\Traits;
 
-use IAWP_SCOPED\Carbon\Carbon;
-use IAWP_SCOPED\Carbon\CarbonImmutable;
-use IAWP_SCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\Carbon;
+use IAWPSCOPED\Carbon\CarbonImmutable;
+use IAWPSCOPED\Carbon\CarbonInterface;
 use Closure;
 use DateTimeImmutable;
 use DateTimeInterface;

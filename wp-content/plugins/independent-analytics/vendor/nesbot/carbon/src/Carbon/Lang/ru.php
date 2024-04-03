@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /**
  * This file is part of the Carbon package.
@@ -36,7 +36,7 @@ namespace IAWP_SCOPED;
  * - Vladislav UnsealedOne
  * - dima-bzz
  */
-use IAWP_SCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonInterface;
 $transformDiff = function ($input) {
     return \strtr($input, ['неделя' => 'неделю', 'секунда' => 'секунду', 'минута' => 'минуту']);
 };

@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Models\Page;
-use IAWP_SCOPED\IAWP\Models\Visitor;
-use IAWP_SCOPED\IAWP\Utils\Device;
-use IAWP_SCOPED\IAWP\Utils\String_Util;
-use IAWP_SCOPED\IAWP\Utils\URL;
+use IAWP\Models\Page;
+use IAWP\Models\Visitor;
+use IAWP\Utils\Device;
+use IAWP\Utils\String_Util;
+use IAWP\Utils\URL;
 /** @internal */
 class View
 {
@@ -44,19 +44,46 @@ class View
      */
     public function create_session() : int
     {
-        $sessions_table = Query::get_table_name(Query::SESSIONS);
-        return Illuminate_Builder::get_builder()->from($sessions_table)->insertGetId(['visitor_id' => $this->visitor->id(), 'referrer_id' => $this->fetch_or_create_referrer(), 'country_id' => $this->fetch_or_create_country(), 'city_id' => $this->fetch_or_create_city(), 'campaign_id' => $this->get_campaign(), 'device_type_id' => Device::getInstance()->type_id(), 'device_os_id' => Device::getInstance()->os_id(), 'device_browser_id' => Device::getInstance()->browser_id(), 'created_at' => $this->viewed_at()]);
+        $sessions_table = \IAWP\Query::get_table_name(\IAWP\Query::SESSIONS);
+        return \IAWP\Illuminate_Builder::get_builder()->from($sessions_table)->insertGetId(['visitor_id' => $this->visitor->id(), 'referrer_id' => $this->fetch_or_create_referrer(), 'country_id' => $this->fetch_or_create_country(), 'city_id' => $this->fetch_or_create_city(), 'campaign_id' => $this->get_campaign(), 'device_type_id' => Device::getInstance()->type_id(), 'device_os_id' => Device::getInstance()->os_id(), 'device_browser_id' => Device::getInstance()->browser_id(), 'created_at' => $this->viewed_at()]);
+    }
+    public function fetch_or_create_country() : ?int
+    {
+        if (!$this->visitor->geoposition()->valid_location()) {
+            return null;
+        }
+        $countries_table = \IAWP\Query::get_table_name(\IAWP\Query::COUNTRIES);
+        $country_id = \IAWP\Illuminate_Builder::get_builder()->from($countries_table)->where('country_code', '=', $this->visitor->geoposition()->country_code())->where('country', '=', $this->visitor->geoposition()->country())->where('continent', '=', $this->visitor->geoposition()->continent())->value('country_id');
+        if (!\is_null($country_id)) {
+            return $country_id;
+        }
+        \IAWP\Illuminate_Builder::get_builder()->from($countries_table)->insertOrIgnore(['country_code' => $this->visitor->geoposition()->country_code(), 'country' => $this->visitor->geoposition()->country(), 'continent' => $this->visitor->geoposition()->continent()]);
+        return \IAWP\Illuminate_Builder::get_builder()->from($countries_table)->where('country_code', '=', $this->visitor->geoposition()->country_code())->where('country', '=', $this->visitor->geoposition()->country())->where('continent', '=', $this->visitor->geoposition()->continent())->value('country_id');
+    }
+    public function fetch_or_create_city() : ?int
+    {
+        if (!$this->visitor->geoposition()->valid_location()) {
+            return null;
+        }
+        $country_id = $this->fetch_or_create_country();
+        $cities_table = \IAWP\Query::get_table_name(\IAWP\Query::CITIES);
+        $city_id = \IAWP\Illuminate_Builder::get_builder()->from($cities_table)->where('country_id', $country_id)->where('subdivision', '=', $this->visitor->geoposition()->subdivision())->where('city', '=', $this->visitor->geoposition()->city())->value('city_id');
+        if (!\is_null($city_id)) {
+            return $city_id;
+        }
+        \IAWP\Illuminate_Builder::get_builder()->from($cities_table)->insertOrIgnore(['country_id' => $country_id, 'subdivision' => $this->visitor->geoposition()->subdivision(), 'city' => $this->visitor->geoposition()->city()]);
+        return \IAWP\Illuminate_Builder::get_builder()->from($cities_table)->where('country_id', $country_id)->where('subdivision', '=', $this->visitor->geoposition()->subdivision())->where('city', '=', $this->visitor->geoposition()->city())->value('city_id');
     }
     /**
      * Fetch the last view, if any.
      *
      * @return int|null
      */
-    public function fetch_last_viewed_resource() : ?int
+    private function fetch_last_viewed_resource() : ?int
     {
         global $wpdb;
-        $views_table = Query::get_table_name(Query::VIEWS);
-        $session = Query::query('sessions/get_current_session', ['visitor_id' => $this->visitor->id()])->row();
+        $views_table = \IAWP\Query::get_table_name(\IAWP\Query::VIEWS);
+        $session = $this->get_current_session();
         if (\is_null($session)) {
             return null;
         }
@@ -66,32 +93,6 @@ class View
         }
         return $view->resource_id;
     }
-    public function fetch_or_create_country() : ?int
-    {
-        if (!$this->visitor->geoposition()->valid_location()) {
-            return null;
-        }
-        Query::query('create_country', ['country_code' => $this->visitor->geoposition()->country_code(), 'country' => $this->visitor->geoposition()->country(), 'continent' => $this->visitor->geoposition()->continent()]);
-        $country = Query::query('get_country', ['country_code' => $this->visitor->geoposition()->country_code(), 'country' => $this->visitor->geoposition()->country(), 'continent' => $this->visitor->geoposition()->continent()])->row();
-        if (\is_null($country)) {
-            return null;
-        }
-        return $country->country_id;
-    }
-    public function fetch_or_create_city() : ?int
-    {
-        if (!$this->visitor->geoposition()->valid_location()) {
-            return null;
-        }
-        $country_id = $this->fetch_or_create_country();
-        $cities_table = Query::get_table_name(Query::CITIES);
-        $city_id = Illuminate_Builder::get_builder()->from($cities_table)->where('country_id', $country_id)->where('subdivision', $this->visitor->geoposition()->subdivision())->where('city', $this->visitor->geoposition()->city())->value('city_id');
-        if (!\is_null($city_id)) {
-            return $city_id;
-        }
-        Illuminate_Builder::get_builder()->from($cities_table)->insertOrIgnore(['country_id' => $country_id, 'subdivision' => $this->visitor->geoposition()->subdivision(), 'city' => $this->visitor->geoposition()->city()]);
-        return Illuminate_Builder::get_builder()->from($cities_table)->where('country_id', $country_id)->where('subdivision', $this->visitor->geoposition()->subdivision())->where('city', $this->visitor->geoposition()->city())->value('city_id');
-    }
     private function viewed_at() : string
     {
         return $this->viewed_at->format('Y-m-d\\TH:i:s');
@@ -99,8 +100,9 @@ class View
     private function link_with_previous_view($view_id) : void
     {
         global $wpdb;
-        $views_tables = Query::get_table_name(Query::VIEWS);
-        $session = Query::query('sessions/get_session', ['session_id' => $this->session])->row();
+        $views_tables = \IAWP\Query::get_table_name(\IAWP\Query::VIEWS);
+        $sessions_tables = \IAWP\Query::get_table_name(\IAWP\Query::SESSIONS);
+        $session = \IAWP\Illuminate_Builder::get_builder()->from($sessions_tables)->where('session_id', '=', $this->session)->first();
         if (\is_null($session)) {
             return;
         }
@@ -115,30 +117,31 @@ class View
     private function set_session_total_views()
     {
         global $wpdb;
-        $sessions_table = Query::get_table_name(Query::SESSIONS);
-        $views_table = Query::get_table_name(Query::VIEWS);
+        $sessions_table = \IAWP\Query::get_table_name(\IAWP\Query::SESSIONS);
+        $views_table = \IAWP\Query::get_table_name(\IAWP\Query::VIEWS);
         $wpdb->query($wpdb->prepare("\n                    UPDATE {$sessions_table} AS sessions\n                    LEFT JOIN (\n                        SELECT\n                            session_id,\n                            COUNT(*) AS view_count\n                        FROM\n                            {$views_table} AS views\n                        WHERE\n                            views.session_id = %d\n                        GROUP BY\n                            session_id) AS view_counts ON sessions.session_id = view_counts.session_id\n                    SET\n                        sessions.total_views = COALESCE(view_counts.view_count, 0)\n                    WHERE sessions.session_id = %d\n                ", $this->session, $this->session));
     }
     private function set_sessions_initial_view(int $view_id)
     {
         global $wpdb;
-        $sessions_table = Query::get_table_name(Query::SESSIONS);
+        $sessions_table = \IAWP\Query::get_table_name(\IAWP\Query::SESSIONS);
         $wpdb->query($wpdb->prepare("UPDATE {$sessions_table} SET initial_view_id = %d WHERE session_id = %d AND initial_view_id IS NULL", $view_id, $this->session));
     }
     private function set_sessions_final_view(int $view_id)
     {
         global $wpdb;
-        $sessions_table = Query::get_table_name(Query::SESSIONS);
+        $sessions_table = \IAWP\Query::get_table_name(\IAWP\Query::SESSIONS);
         $wpdb->query($wpdb->prepare("\n                    UPDATE {$sessions_table} AS sessions\n                    SET\n                        sessions.final_view_id = %d,\n                        sessions.ended_at = %s\n                    WHERE sessions.session_id = %d AND sessions.initial_view_id IS NOT NULL AND sessions.initial_view_id != %d\n                ", $view_id, $this->viewed_at(), $this->session, $view_id));
     }
-    private function create_view() : ?int
+    private function create_view() : int
     {
-        return Query::query('create_view', ['resource_id' => $this->resource->id(), 'viewed_at' => $this->viewed_at(), 'page' => $this->payload['page'], 'session_id' => $this->session])->last_inserted_id();
+        $views_table = \IAWP\Query::get_table_name(\IAWP\Query::VIEWS);
+        return \IAWP\Illuminate_Builder::get_builder()->from($views_table)->insertGetId(['resource_id' => $this->resource->id(), 'viewed_at' => $this->viewed_at(), 'page' => $this->payload['page'], 'session_id' => $this->session]);
     }
     private function fetch_resource()
     {
         global $wpdb;
-        $resources_table = Query::get_table_name(Query::RESOURCES);
+        $resources_table = \IAWP\Query::get_table_name(\IAWP\Query::RESOURCES);
         $query = '';
         $payload_copy = \array_merge($this->payload);
         unset($payload_copy['page']);
@@ -167,6 +170,9 @@ class View
             case '404':
                 $query = $wpdb->prepare("SELECT * FROM {$resources_table} WHERE resource = %s AND not_found_url = %s", $payload_copy['resource'], $payload_copy['not_found_url']);
                 break;
+            case 'virtual_page':
+                $query = $wpdb->prepare("SELECT * FROM {$resources_table} WHERE resource = %s AND virtual_page_id = %s", $payload_copy['resource'], $payload_copy['virtual_page_id']);
+                break;
         }
         $resource = $wpdb->get_row($query);
         if (\is_null($resource)) {
@@ -177,7 +183,7 @@ class View
     private function fetch_or_create_resource() : Page
     {
         global $wpdb;
-        $resources_table = Query::get_table_name(Query::RESOURCES);
+        $resources_table = \IAWP\Query::get_table_name(\IAWP\Query::RESOURCES);
         $resource = $this->fetch_resource();
         if (\is_null($resource)) {
             $payload_copy = \array_merge($this->payload);
@@ -194,13 +200,13 @@ class View
      */
     private function fetch_or_create_session() : ?int
     {
-        $session = Query::query('sessions/get_current_session', ['visitor_id' => $this->visitor->id()])->row();
+        $session = $this->get_current_session();
         if (\is_null($session)) {
             return $this->create_session();
         }
-        $same_referrer = $this->fetch_or_create_referrer() === $session->referrer_id;
-        $same_resource = \intval($this->fetch_resource()->id) === $this->fetch_last_viewed_resource();
-        $same_as_previous_view = $same_referrer && $same_resource;
+        $is_same_referrer = $this->fetch_or_create_referrer() === $session->referrer_id;
+        $is_same_resource = \intval($this->fetch_resource()->id) === $this->fetch_last_viewed_resource();
+        $same_as_previous_view = $is_same_referrer && $is_same_resource;
         // The goal here is to prevent a page refresh from creating another session
         if (!$this->is_internal_referrer($this->referrer_url) && !$same_as_previous_view) {
             return $this->create_session();
@@ -218,10 +224,10 @@ class View
     }
     private function fetch_referrer(array $referrer) : int
     {
-        $referrers_table = Query::get_table_name(Query::REFERRERS);
-        $id = Illuminate_Builder::get_builder()->select('id')->from($referrers_table)->where('domain', '=', $referrer['domain'])->value('id');
+        $referrers_table = \IAWP\Query::get_table_name(\IAWP\Query::REFERRERS);
+        $id = \IAWP\Illuminate_Builder::get_builder()->select('id')->from($referrers_table)->where('domain', '=', $referrer['domain'])->value('id');
         if (\is_null($id)) {
-            $id = Illuminate_Builder::get_builder()->from($referrers_table)->insertGetId(['domain' => $referrer['domain'], 'type' => $referrer['type'], 'referrer' => $referrer['referrer']]);
+            $id = \IAWP\Illuminate_Builder::get_builder()->from($referrers_table)->insertGetId(['domain' => $referrer['domain'], 'type' => $referrer['type'], 'referrer' => $referrer['referrer']]);
         }
         return $id;
     }
@@ -230,8 +236,8 @@ class View
         $url = new URL($this->referrer_url);
         if (!$url->is_valid_url() || $this->is_internal_referrer($this->referrer_url)) {
             return $this->fetch_referrer(['domain' => '', 'type' => 'Direct', 'referrer' => 'Direct']);
-        } elseif (!\is_null(Known_Referrers::get_group_for($url->get_domain()))) {
-            $group = Known_Referrers::get_group_for($url->get_domain());
+        } elseif (!\is_null(\IAWP\Known_Referrers::get_group_for($url->get_domain()))) {
+            $group = \IAWP\Known_Referrers::get_group_for($url->get_domain());
             return $this->fetch_referrer(['domain' => $group['domain'], 'type' => $group['type'], 'referrer' => $group['name']]);
         } else {
             return $this->fetch_referrer(['domain' => $url->get_domain(), 'type' => 'Referrer', 'referrer' => $this->strip_www($url->get_domain())]);
@@ -257,7 +263,7 @@ class View
         if (!$valid) {
             return null;
         }
-        $campaigns_table = Query::get_table_name(Query::CAMPAIGNS);
+        $campaigns_table = \IAWP\Query::get_table_name(\IAWP\Query::CAMPAIGNS);
         $campaign = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$campaigns_table} WHERE landing_page_title = %s AND utm_source = %s AND utm_medium = %s AND utm_campaign = %s AND (utm_term = %s OR (%d = 0 AND utm_term IS NULL)) AND (utm_content = %s OR (%d = 0 AND utm_content IS NULL))", $this->resource->title(), $this->campaign_fields['utm_source'], $this->campaign_fields['utm_medium'], $this->campaign_fields['utm_campaign'], $this->campaign_fields['utm_term'], isset($this->campaign_fields['utm_term']) ? 1 : 0, $this->campaign_fields['utm_content'], isset($this->campaign_fields['utm_content']) ? 1 : 0));
         if (!\is_null($campaign)) {
             return $campaign->campaign_id;
@@ -268,5 +274,10 @@ class View
             return $campaign->campaign_id;
         }
         return null;
+    }
+    private function get_current_session()
+    {
+        $sessions_table = \IAWP\Query::get_table_name(\IAWP\Query::SESSIONS);
+        return \IAWP\Illuminate_Builder::get_builder()->from($sessions_table)->where('visitor_id', '=', $this->visitor->id())->whereRaw('created_at > DATE_SUB(UTC_TIMESTAMP(), INTERVAL 30 MINUTE)')->orderBy('created_at', 'desc')->first();
     }
 }

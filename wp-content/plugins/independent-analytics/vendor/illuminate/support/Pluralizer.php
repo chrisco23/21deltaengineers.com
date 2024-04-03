@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
-use IAWP_SCOPED\Doctrine\Inflector\Inflector;
-use IAWP_SCOPED\Doctrine\Inflector\InflectorFactory;
+use IAWPSCOPED\Doctrine\Inflector\Inflector;
+use IAWPSCOPED\Doctrine\Inflector\InflectorFactory;
 /** @internal */
 class Pluralizer
 {

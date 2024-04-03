@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation;
+namespace IAWPSCOPED\Symfony\Component\Translation;
 
-use IAWP_SCOPED\Symfony\Component\Config\Resource\ResourceInterface;
+use IAWPSCOPED\Symfony\Component\Config\Resource\ResourceInterface;
 /**
  * MessageCatalogueInterface.
  *
@@ -41,7 +41,7 @@ interface MessageCatalogueInterface
      *
      * @return array
      */
-    public function all(string $domain = null);
+    public function all(?string $domain = null);
     /**
      * Sets a message translation.
      *

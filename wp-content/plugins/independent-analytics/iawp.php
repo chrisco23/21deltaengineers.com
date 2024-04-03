@@ -4,9 +4,9 @@
  * Plugin Name:       Independent Analytics
  * Plugin URI:        https://independentwp.com/
  * Description:       User-friendly website analytics built for WordPress
- * Version:           2.1.6
+ * Version:           2.3.2
  * Requires at least: 5.9
- * Tested up to:      6.4.2
+ * Tested up to:      6.4.3
  * Requires PHP:      7.3.33
  * Author:            Independent Analytics
  * Author URI:        https://independentwp.com/
@@ -48,7 +48,10 @@ if ( function_exists( 'IAWP_FS' ) ) {
                     'has_addons'     => false,
                     'has_paid_plans' => true,
                     'menu'           => [
-                    'slug' => 'independent-analytics',
+                    'slug'    => 'independent-analytics',
+                    'contact' => false,
+                    'support' => false,
+                    'pricing' => false,
                 ],
                     'is_live'        => true,
                 ] );

@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Container;
+namespace IAWPSCOPED\Illuminate\Container;
 
 use Exception;
-use IAWP_SCOPED\Psr\Container\NotFoundExceptionInterface;
+use IAWPSCOPED\Psr\Container\NotFoundExceptionInterface;
 /** @internal */
 class EntryNotFoundException extends Exception implements NotFoundExceptionInterface
 {

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Provider;
+namespace IAWPSCOPED\Symfony\Component\Translation\Provider;
 
-use IAWP_SCOPED\Symfony\Component\Translation\TranslatorBag;
-use IAWP_SCOPED\Symfony\Component\Translation\TranslatorBagInterface;
+use IAWPSCOPED\Symfony\Component\Translation\TranslatorBag;
+use IAWPSCOPED\Symfony\Component\Translation\TranslatorBagInterface;
 /**
  * Filters domains and locales between the Translator config values and those specific to each provider.
  *

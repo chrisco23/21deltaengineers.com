@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
-use IAWP_SCOPED\IAWP\Geoposition;
-use IAWP_SCOPED\IAWP\Query;
-use IAWP_SCOPED\IAWP\Utils\Salt;
+use IAWP\Geoposition;
+use IAWP\Query;
+use IAWP\Utils\Salt;
 /**
  * How to use:
  *

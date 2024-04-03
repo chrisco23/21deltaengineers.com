@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
 /** @internal */
-class Page_Term_Archive extends Page
+class Page_Term_Archive extends \IAWP\Models\Page
 {
     private $term_id;
     public function __construct($row)

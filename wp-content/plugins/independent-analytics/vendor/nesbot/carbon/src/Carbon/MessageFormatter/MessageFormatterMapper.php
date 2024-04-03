@@ -8,13 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\MessageFormatter;
+namespace IAWPSCOPED\Carbon\MessageFormatter;
 
 use ReflectionMethod;
-use IAWP_SCOPED\Symfony\Component\Translation\Formatter\MessageFormatter;
-use IAWP_SCOPED\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Formatter\MessageFormatter;
+use IAWPSCOPED\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+// @codeCoverageIgnoreStart
 $transMethod = new ReflectionMethod(MessageFormatterInterface::class, 'format');
 require $transMethod->getParameters()[0]->hasType() ? __DIR__ . '/../../../lazy/Carbon/MessageFormatter/MessageFormatterMapperStrongType.php' : __DIR__ . '/../../../lazy/Carbon/MessageFormatter/MessageFormatterMapperWeakType.php';
+// @codeCoverageIgnoreEnd
 /** @internal */
 final class MessageFormatterMapper extends LazyMessageFormatter
 {

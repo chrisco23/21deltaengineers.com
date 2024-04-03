@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Concerns;
 
 use Closure;
 /** @internal */
@@ -82,7 +82,7 @@ trait HidesAttributes
      */
     public function makeVisibleIf($condition, $attributes)
     {
-        return \IAWP_SCOPED\value($condition, $this) ? $this->makeVisible($attributes) : $this;
+        return \IAWPSCOPED\value($condition, $this) ? $this->makeVisible($attributes) : $this;
     }
     /**
      * Make the given, typically visible, attributes hidden.
@@ -104,6 +104,6 @@ trait HidesAttributes
      */
     public function makeHiddenIf($condition, $attributes)
     {
-        return \IAWP_SCOPED\value($condition, $this) ? $this->makeHidden($attributes) : $this;
+        return \IAWPSCOPED\value($condition, $this) ? $this->makeHidden($attributes) : $this;
     }
 }

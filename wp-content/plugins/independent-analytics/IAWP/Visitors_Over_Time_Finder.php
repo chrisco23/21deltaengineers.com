@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Date_Range\Date_Range;
-use IAWP_SCOPED\IAWP\Interval\Interval;
+use IAWP\Date_Range\Date_Range;
+use IAWP\Interval\Interval;
 /** @internal */
 class Visitors_Over_Time_Finder
 {
@@ -22,7 +22,7 @@ class Visitors_Over_Time_Finder
     }
     public function fetch()
     {
-        $rows = Query::query($this->interval->get_query_name(), ['start' => $this->date_range->iso_start(), 'end' => $this->date_range->iso_end()])->rows();
+        $rows = $this->interval->fetch($this->date_range);
         return $this->rows_to_class($rows);
     }
     private function rows_to_class(array $rows) : object

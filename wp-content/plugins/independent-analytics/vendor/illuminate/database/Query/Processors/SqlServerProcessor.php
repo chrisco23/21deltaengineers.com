@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Query\Processors;
+namespace IAWPSCOPED\Illuminate\Database\Query\Processors;
 
 use Exception;
-use IAWP_SCOPED\Illuminate\Database\Connection;
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
+use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
 /** @internal */
 class SqlServerProcessor extends Processor
 {

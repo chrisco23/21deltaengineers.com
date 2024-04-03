@@ -1,3 +1,0 @@
-INSERT INTO wp_independent_analytics_views
-    (resource_id, session_id, viewed_at, page)
-VALUES (:resource_id, :session_id, :viewed_at, :page)

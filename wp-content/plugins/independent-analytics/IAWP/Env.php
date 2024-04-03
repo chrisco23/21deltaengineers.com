@@ -1,41 +1,47 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
 /** @internal */
 class Env
 {
     public function is_free() : bool
     {
-        return \IAWP_SCOPED\iawp_is_free();
+        return \IAWPSCOPED\iawp_is_free();
     }
     public function is_pro() : bool
     {
-        return \IAWP_SCOPED\iawp_is_pro();
+        return \IAWPSCOPED\iawp_is_pro();
     }
     public function is_white_labeled() : bool
     {
-        return Capability_Manager::white_labeled();
+        return \IAWP\Capability_Manager::white_labeled();
     }
     public function can_write() : bool
     {
-        return Capability_Manager::can_edit();
+        return \IAWP\Capability_Manager::can_edit();
     }
-    public function get_tab_class_for(string ...$tabs) : string
+    public static function get_page() : ?string
     {
-        foreach ($tabs as $tab) {
-            if ($this->get_tab() === $tab) {
-                return 'active';
-            }
+        if (!\is_admin()) {
+            return null;
         }
-        return '';
+        $page = $_GET['page'] ?? null;
+        $valid_pages = ['independent-analytics', 'independent-analytics-settings', 'independent-analytics-campaign-builder', 'independent-analytics-support-center', 'independent-analytics-updates'];
+        if (\in_array($page, $valid_pages)) {
+            return $page;
+        }
+        return null;
     }
-    public function get_tab() : string
+    public static function get_tab() : ?string
     {
-        if (\IAWP_SCOPED\iawp_is_pro()) {
-            $valid_tabs = ['views', 'referrers', 'geo', 'devices', 'campaigns', 'campaign-builder', 'real-time', 'settings', 'learn'];
+        if (self::get_page() !== 'independent-analytics') {
+            return null;
+        }
+        if (\IAWPSCOPED\iawp_is_pro()) {
+            $valid_tabs = ['views', 'referrers', 'geo', 'devices', 'campaigns', 'real-time'];
         } else {
-            $valid_tabs = ['views', 'referrers', 'geo', 'devices', 'settings', 'learn'];
+            $valid_tabs = ['views', 'referrers', 'geo', 'devices'];
         }
         $default_tab = $valid_tabs[0];
         $tab = \array_key_exists('tab', $_GET) ? \sanitize_text_field($_GET['tab']) : \false;

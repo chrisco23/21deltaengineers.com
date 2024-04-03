@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Encryption;
+namespace IAWPSCOPED\Illuminate\Contracts\Encryption;
 
 use RuntimeException;
 /** @internal */

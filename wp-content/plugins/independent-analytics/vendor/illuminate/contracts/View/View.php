@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\View;
+namespace IAWPSCOPED\Illuminate\Contracts\View;
 
-use IAWP_SCOPED\Illuminate\Contracts\Support\Renderable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Renderable;
 /** @internal */
 interface View extends Renderable
 {

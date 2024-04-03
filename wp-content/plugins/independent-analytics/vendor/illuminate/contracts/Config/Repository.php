@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Config;
+namespace IAWPSCOPED\Illuminate\Contracts\Config;
 
 /** @internal */
 interface Repository

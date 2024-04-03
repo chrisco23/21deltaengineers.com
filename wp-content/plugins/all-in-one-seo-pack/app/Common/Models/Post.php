@@ -73,6 +73,17 @@ class Post extends Model {
 	];
 
 	/**
+	 * Fields that can be null when saved.
+	 *
+	 * @since 4.5.7
+	 *
+	 * @var array
+	 */
+	protected $nullFields = [
+		'priority'
+	];
+
+	/**
 	 * Returns a Post with a given ID.
 	 *
 	 * @since 4.0.0
@@ -418,7 +429,7 @@ class Post extends Model {
 		$thePost->robots_nosnippet            = isset( $data['nosnippet'] ) ? rest_sanitize_boolean( $data['nosnippet'] ) : 0;
 		$thePost->robots_noodp                = isset( $data['noodp'] ) ? rest_sanitize_boolean( $data['noodp'] ) : 0;
 		$thePost->robots_max_snippet          = ! empty( $data['maxSnippet'] ) ? (int) sanitize_text_field( $data['maxSnippet'] ) : -1;
-		$thePost->robots_max_videopreview     = ! empty( $data['maxVideoPreview'] ) ? (int) sanitize_text_field( $data['maxVideoPreview'] ) : -1;
+		$thePost->robots_max_videopreview     = isset( $data['maxVideoPreview'] ) && is_numeric( $data['maxVideoPreview'] ) ? (int) sanitize_text_field( $data['maxVideoPreview'] ) : -1;
 		$thePost->robots_max_imagepreview     = ! empty( $data['maxImagePreview'] ) ? sanitize_text_field( $data['maxImagePreview'] ) : 'large';
 		// Open Graph Meta
 		$thePost->og_title                    = ! empty( $data['og_title'] ) ? sanitize_text_field( $data['og_title'] ) : null;

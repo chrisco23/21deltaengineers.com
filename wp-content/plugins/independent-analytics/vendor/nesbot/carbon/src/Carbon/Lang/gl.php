@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /**
  * This file is part of the Carbon package.
@@ -18,7 +18,7 @@ namespace IAWP_SCOPED;
  * - Diego Vilariño
  * - Sebastian Thierer
  */
-use IAWP_SCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonInterface;
 return ['year' => ':count ano|:count anos', 'a_year' => 'un ano|:count anos', 'y' => ':count a.', 'month' => ':count mes|:count meses', 'a_month' => 'un mes|:count meses', 'm' => ':count mes.', 'week' => ':count semana|:count semanas', 'a_week' => 'unha semana|:count semanas', 'w' => ':count sem.', 'day' => ':count día|:count días', 'a_day' => 'un día|:count días', 'd' => ':count d.', 'hour' => ':count hora|:count horas', 'a_hour' => 'unha hora|:count horas', 'h' => ':count h.', 'minute' => ':count minuto|:count minutos', 'a_minute' => 'un minuto|:count minutos', 'min' => ':count min.', 'second' => ':count segundo|:count segundos', 'a_second' => 'uns segundos|:count segundos', 's' => ':count seg.', 'ago' => 'hai :time', 'from_now' => function ($time) {
     if (\str_starts_with($time, 'un')) {
         return "n{$time}";

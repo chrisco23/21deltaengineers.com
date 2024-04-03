@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Contracts\Service;
+namespace IAWPSCOPED\Symfony\Contracts\Service;
 
-use IAWP_SCOPED\Psr\Container\ContainerExceptionInterface;
-use IAWP_SCOPED\Psr\Container\NotFoundExceptionInterface;
+use IAWPSCOPED\Psr\Container\ContainerExceptionInterface;
+use IAWPSCOPED\Psr\Container\NotFoundExceptionInterface;
 // Help opcache.preload discover always-needed symbols
 \class_exists(ContainerExceptionInterface::class);
 \class_exists(NotFoundExceptionInterface::class);

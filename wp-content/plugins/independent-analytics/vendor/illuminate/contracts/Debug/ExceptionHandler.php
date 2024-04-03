@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Debug;
+namespace IAWPSCOPED\Illuminate\Contracts\Debug;
 
 use Throwable;
 /** @internal */

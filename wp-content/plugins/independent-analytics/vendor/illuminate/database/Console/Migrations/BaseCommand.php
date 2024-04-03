@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console\Migrations;
+namespace IAWPSCOPED\Illuminate\Database\Console\Migrations;
 
-use IAWP_SCOPED\Illuminate\Console\Command;
+use IAWPSCOPED\Illuminate\Console\Command;
 /** @internal */
 class BaseCommand extends Command
 {
@@ -17,7 +17,7 @@ class BaseCommand extends Command
         // use the path relative to the root of the installation folder so our database
         // migrations may be run for any customized path from within the application.
         if ($this->input->hasOption('path') && $this->option('path')) {
-            return \IAWP_SCOPED\collect($this->option('path'))->map(function ($path) {
+            return \IAWPSCOPED\collect($this->option('path'))->map(function ($path) {
                 return !$this->usingRealPath() ? $this->laravel->basePath() . '/' . $path : $path;
             })->all();
         }

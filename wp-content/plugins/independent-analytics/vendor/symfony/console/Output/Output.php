@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Output;
+namespace IAWPSCOPED\Symfony\Component\Console\Output;
 
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * Base class for output classes.
  *
@@ -35,7 +35,7 @@ abstract class Output implements OutputInterface
      * @param bool                          $decorated Whether to decorate messages
      * @param OutputFormatterInterface|null $formatter Output formatter instance (null to use default OutputFormatter)
      */
-    public function __construct(?int $verbosity = self::VERBOSITY_NORMAL, bool $decorated = \false, OutputFormatterInterface $formatter = null)
+    public function __construct(?int $verbosity = self::VERBOSITY_NORMAL, bool $decorated = \false, ?OutputFormatterInterface $formatter = null)
     {
         $this->verbosity = $verbosity ?? self::VERBOSITY_NORMAL;
         $this->formatter = $formatter ?? new OutputFormatter();

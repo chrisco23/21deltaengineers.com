@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
-use IAWP_SCOPED\Illuminate\Database\Query\Expression;
-use IAWP_SCOPED\Illuminate\Support\Traits\Macroable;
+use IAWPSCOPED\Illuminate\Database\Query\Expression;
+use IAWPSCOPED\Illuminate\Support\Traits\Macroable;
 /** @internal */
 abstract class Grammar
 {
@@ -83,7 +83,7 @@ abstract class Grammar
      */
     protected function wrapSegments($segments)
     {
-        return \IAWP_SCOPED\collect($segments)->map(function ($segment, $key) use($segments) {
+        return \IAWPSCOPED\collect($segments)->map(function ($segment, $key) use($segments) {
             return $key == 0 && \count($segments) > 1 ? $this->wrapTable($segment) : $this->wrapValue($segment);
         })->implode('.');
     }

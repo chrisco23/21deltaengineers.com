@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri;
+namespace IAWPSCOPED\League\Uri;
 
-use IAWP_SCOPED\League\Uri\Contracts\UriException;
-use IAWP_SCOPED\League\Uri\Contracts\UriInterface;
-use IAWP_SCOPED\League\Uri\Exceptions\SyntaxError;
-use IAWP_SCOPED\League\Uri\Exceptions\TemplateCanNotBeExpanded;
-use IAWP_SCOPED\League\Uri\UriTemplate\Template;
-use IAWP_SCOPED\League\Uri\UriTemplate\VariableBag;
+use IAWPSCOPED\League\Uri\Contracts\UriException;
+use IAWPSCOPED\League\Uri\Contracts\UriInterface;
+use IAWPSCOPED\League\Uri\Exceptions\SyntaxError;
+use IAWPSCOPED\League\Uri\Exceptions\TemplateCanNotBeExpanded;
+use IAWPSCOPED\League\Uri\UriTemplate\Template;
+use IAWPSCOPED\League\Uri\UriTemplate\VariableBag;
 /**
  * Defines the URI Template syntax and the process for expanding a URI Template into a URI reference.
  *

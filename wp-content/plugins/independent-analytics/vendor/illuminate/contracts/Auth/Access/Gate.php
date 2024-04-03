@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Auth\Access;
+namespace IAWPSCOPED\Illuminate\Contracts\Auth\Access;
 
 /** @internal */
 interface Gate

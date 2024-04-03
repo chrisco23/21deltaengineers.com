@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Catalogue;
+namespace IAWPSCOPED\Symfony\Component\Translation\Catalogue;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\LogicException;
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogue;
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogueInterface;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\LogicException;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogue;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogueInterface;
 /**
  * Base catalogues binary operation class.
  *

@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
-use IAWP_SCOPED\Illuminate\Contracts\Support\Htmlable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Htmlable;
 /** @internal */
 class HtmlString implements Htmlable
 {

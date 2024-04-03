@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Utils\Salt;
-use IAWP_SCOPED\Proper\Timezone;
+use IAWP\Utils\Salt;
+use IAWPSCOPED\Proper\Timezone;
 /** @internal */
 class Cron_Manager
 {

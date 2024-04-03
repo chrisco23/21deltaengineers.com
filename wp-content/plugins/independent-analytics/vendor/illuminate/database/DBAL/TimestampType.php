@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\DBAL;
+namespace IAWPSCOPED\Illuminate\Database\DBAL;
 
-use IAWP_SCOPED\Doctrine\DBAL\Platforms\AbstractPlatform;
-use IAWP_SCOPED\Doctrine\DBAL\Types\PhpDateTimeMappingType;
-use IAWP_SCOPED\Doctrine\DBAL\Types\Type;
+use IAWPSCOPED\Doctrine\DBAL\Platforms\AbstractPlatform;
+use IAWPSCOPED\Doctrine\DBAL\Types\PhpDateTimeMappingType;
+use IAWPSCOPED\Doctrine\DBAL\Types\Type;
 use RuntimeException;
 /** @internal */
 class TimestampType extends Type implements PhpDateTimeMappingType

@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support;
+namespace IAWPSCOPED\Illuminate\Support;
 
 use ArrayAccess;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Arrayable;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Jsonable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Arrayable;
+use IAWPSCOPED\Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
 /** @internal */
 class Fluent implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
@@ -39,7 +39,7 @@ class Fluent implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
         if (\array_key_exists($key, $this->attributes)) {
             return $this->attributes[$key];
         }
-        return \IAWP_SCOPED\value($default);
+        return \IAWPSCOPED\value($default);
     }
     /**
      * Get the attributes from the fluent instance.

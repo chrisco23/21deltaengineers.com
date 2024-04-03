@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Style;
+namespace IAWPSCOPED\Symfony\Component\Console\Style;
 
 /**
  * Output style helpers.
@@ -75,13 +75,13 @@ interface StyleInterface
      *
      * @return mixed
      */
-    public function ask(string $question, string $default = null, callable $validator = null);
+    public function ask(string $question, ?string $default = null, ?callable $validator = null);
     /**
      * Asks a question with the user input hidden.
      *
      * @return mixed
      */
-    public function askHidden(string $question, callable $validator = null);
+    public function askHidden(string $question, ?callable $validator = null);
     /**
      * Asks for confirmation.
      *

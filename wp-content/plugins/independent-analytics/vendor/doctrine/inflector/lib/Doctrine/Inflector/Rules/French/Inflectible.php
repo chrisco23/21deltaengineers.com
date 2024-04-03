@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Inflector\Rules\French;
+namespace IAWPSCOPED\Doctrine\Inflector\Rules\French;
 
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Pattern;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Substitution;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Transformation;
-use IAWP_SCOPED\Doctrine\Inflector\Rules\Word;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Pattern;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Substitution;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Transformation;
+use IAWPSCOPED\Doctrine\Inflector\Rules\Word;
 /** @internal */
 class Inflectible
 {

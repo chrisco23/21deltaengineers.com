@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Loader;
+namespace IAWPSCOPED\Symfony\Component\Translation\Loader;
 
-use IAWP_SCOPED\Symfony\Component\Config\Resource\FileResource;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidResourceException;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\NotFoundResourceException;
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogue;
+use IAWPSCOPED\Symfony\Component\Config\Resource\FileResource;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidResourceException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\NotFoundResourceException;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogue;
 /**
  * IcuResFileLoader loads translations from a resource bundle.
  *

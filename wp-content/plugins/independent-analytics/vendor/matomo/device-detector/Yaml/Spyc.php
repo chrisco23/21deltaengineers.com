@@ -8,9 +8,9 @@
  * @license http://www.gnu.org/licenses/lgpl.html LGPL v3 or later
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\DeviceDetector\Yaml;
+namespace IAWPSCOPED\DeviceDetector\Yaml;
 
-use IAWP_SCOPED\Spyc as SpycParser;
+use IAWPSCOPED\Spyc as SpycParser;
 /** @internal */
 class Spyc implements ParserInterface
 {

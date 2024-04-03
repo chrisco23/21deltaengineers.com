@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Console;
+namespace IAWPSCOPED\Illuminate\Database\Console;
 
-use IAWP_SCOPED\Illuminate\Console\Command;
-use IAWP_SCOPED\Illuminate\Contracts\Events\Dispatcher;
-use IAWP_SCOPED\Illuminate\Database\Connection;
-use IAWP_SCOPED\Illuminate\Database\ConnectionResolverInterface;
-use IAWP_SCOPED\Illuminate\Database\Events\SchemaDumped;
-use IAWP_SCOPED\Illuminate\Filesystem\Filesystem;
-use IAWP_SCOPED\Illuminate\Support\Facades\Config;
+use IAWPSCOPED\Illuminate\Console\Command;
+use IAWPSCOPED\Illuminate\Contracts\Events\Dispatcher;
+use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Database\ConnectionResolverInterface;
+use IAWPSCOPED\Illuminate\Database\Events\SchemaDumped;
+use IAWPSCOPED\Illuminate\Filesystem\Filesystem;
+use IAWPSCOPED\Illuminate\Support\Facades\Config;
 /** @internal */
 class DumpCommand extends Command
 {

@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Logger;
+namespace IAWPSCOPED\Symfony\Component\Console\Logger;
 
-use IAWP_SCOPED\Psr\Log\AbstractLogger;
-use IAWP_SCOPED\Psr\Log\InvalidArgumentException;
-use IAWP_SCOPED\Psr\Log\LogLevel;
-use IAWP_SCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Psr\Log\AbstractLogger;
+use IAWPSCOPED\Psr\Log\InvalidArgumentException;
+use IAWPSCOPED\Psr\Log\LogLevel;
+use IAWPSCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
 /**
  * PSR-3 compliant console logger.
  *

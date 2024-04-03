@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+use IAWPSCOPED\Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 /**
  * @method static \Illuminate\Foundation\Bus\PendingDispatch queue(string $command, array $parameters = [])
  * @method static \Illuminate\Foundation\Console\ClosureCommand command(string $command, callable $callback)

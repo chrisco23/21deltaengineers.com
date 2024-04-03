@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Session;
+namespace IAWPSCOPED\Illuminate\Contracts\Session;
 
 /** @internal */
 interface Session

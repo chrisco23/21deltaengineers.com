@@ -1,41 +1,38 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Tables\Columns\Column;
-use IAWP_SCOPED\IAWP\Utils\WordPress_Site_Date_Format_Pattern;
+use IAWP\Tables\Columns\Column;
+use IAWP\Utils\WordPress_Site_Date_Format_Pattern;
 /** @internal */
 class Filters
 {
-    private $label;
-    public function __construct(string $label)
-    {
-        $this->label = $label;
-    }
     public function get_filters_html(array $columns) : string
     {
-        $opts = new Dashboard_Options();
+        $opts = new \IAWP\Dashboard_Options();
         \ob_start();
         ?>
-    <div class="modal-parent"
+    <div class="modal-parent filters"
          data-controller="filters"
          data-filters-filters-value="<?php 
-        \esc_html_e(\json_encode($opts->filters()));
+        echo \esc_attr(\json_encode($opts->filters()));
         ?>"
     >
-        <button id="filters-button" class="iawp-button ghost-white toolbar-button"
+        <span class="dashicons dashicons-filter"></span>
+        <div id="filter-condition-buttons" data-filters-target="conditionButtons" class="filter-condition-buttons">
+            <?php 
+        echo $this->condition_buttons_html($opts->filters());
+        ?>
+        </div>
+        <button id="filters-button" class="filters-button"
                 data-action="filters#toggleModal"
                 data-filters-target="modalButton"
         >
-            <span class="dashicons dashicons-filter"></span>
             <span class="iawp-label"><?php 
-        echo ' ' . \esc_html__('Filter', 'independent-analytics') . ' ';
-        ?><span data-filters-target="groupName"><?php 
-        echo \esc_html($this->label);
-        ?></span></span>
-            <span class="count" data-filters-target="filterCount"></span>
+        \esc_html_e('+ Add Filter', 'independent-analytics');
+        ?></span>
         </button>
-        <div id="modal-filters" 
+        <div id="modal-filters"
              class="modal large"
              data-filters-target="modal"
         >
@@ -51,7 +48,7 @@ class Filters
         ?>
                 </template>
                 <div>
-                    <button id="add-condition" class="iawp-button text"
+                    <button id="add-condition" class="iawp-text-button"
                             data-action="filters#addCondition"
                     >
                         <?php 
@@ -119,6 +116,22 @@ class Filters
         \ob_end_clean();
         return $html;
     }
+    public function condition_buttons_html(array $filters) : string
+    {
+        \ob_start();
+        foreach ($filters as $filter) {
+            ?>
+            <button class="filters-condition-button"
+                data-action="filters#toggleModal"
+                data-filters-target="modalButton"><?php 
+            echo \wp_kses_post($filter->html_description());
+            ?></button>
+        <?php 
+        }
+        $html = \ob_get_contents();
+        \ob_end_clean();
+        return $html;
+    }
     private function get_inclusion_selects()
     {
         $html = '<select class="filters-include" data-filters-target="inclusion">';
@@ -147,7 +160,7 @@ class Filters
         foreach ($columns as $column) {
             ?>
                 <?php 
-            if ($column->requires_woocommerce() && !\IAWP_SCOPED\iawp_using_woocommerce()) {
+            if ($column->requires_woocommerce() && !\IAWPSCOPED\iawp_using_woocommerce()) {
                 continue;
             }
             ?>
@@ -197,7 +210,7 @@ class Filters
                         data-action="keydown->filters#operandKeyDown filters#operandChange"
                         data-column="' . \esc_attr($column->id()) . '"
                         data-controller="easepick"
-                        data-css="' . \esc_url(\IAWP_SCOPED\iawp_url_to('dist/styles/easepick/datepicker.css')) . '" data-dow="' . \absint(\IAWP_SCOPED\iawp()->get_option('iawp_dow', 1)) . '" 
+                        data-css="' . \esc_url(\IAWPSCOPED\iawp_url_to('dist/styles/easepick/datepicker.css')) . '" data-dow="' . \absint(\IAWPSCOPED\iawp()->get_option('iawp_dow', 1)) . '" 
                         data-format="' . \esc_attr(WordPress_Site_Date_Format_Pattern::for_javascript()) . '" 
                         data-testid="' . \esc_attr($column->id()) . '-operand" />';
                     break;

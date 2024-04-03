@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
-use IAWP_SCOPED\Illuminate\Support\ConfigurationUrlParser as BaseConfigurationUrlParser;
+use IAWPSCOPED\Illuminate\Support\ConfigurationUrlParser as BaseConfigurationUrlParser;
 /** @internal */
 class ConfigurationUrlParser extends BaseConfigurationUrlParser
 {

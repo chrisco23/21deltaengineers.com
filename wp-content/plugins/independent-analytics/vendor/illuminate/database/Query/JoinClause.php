@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Query;
+namespace IAWPSCOPED\Illuminate\Database\Query;
 
 use Closure;
 /** @internal */

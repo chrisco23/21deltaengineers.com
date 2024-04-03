@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Traits;
+namespace IAWPSCOPED\Carbon\Traits;
 
-use IAWP_SCOPED\Carbon\Exceptions\InvalidFormatException;
+use IAWPSCOPED\Carbon\Exceptions\InvalidFormatException;
 use ReturnTypeWillChange;
 use Throwable;
 /**
@@ -128,7 +128,7 @@ trait Serialization
     public function __serialize() : array
     {
         // @codeCoverageIgnoreStart
-        if (isset($this->timezone_type)) {
+        if (isset($this->timezone_type, $this->timezone, $this->date)) {
             return ['date' => $this->date ?? null, 'timezone_type' => $this->timezone_type, 'timezone' => $this->timezone ?? null];
         }
         // @codeCoverageIgnoreEnd

@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache\Psr6;
+namespace IAWPSCOPED\Doctrine\Common\Cache\Psr6;
 
 use DateInterval;
 use DateTime;
 use DateTimeInterface;
-use IAWP_SCOPED\Psr\Cache\CacheItemInterface;
+use IAWPSCOPED\Psr\Cache\CacheItemInterface;
 use TypeError;
 use function get_class;
 use function gettype;

@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema;
+namespace IAWPSCOPED\Illuminate\Database\Schema;
 
-use IAWP_SCOPED\Illuminate\Database\Connection;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 class PostgresSchemaState extends SchemaState
 {
@@ -16,7 +16,7 @@ class PostgresSchemaState extends SchemaState
      */
     public function dump(Connection $connection, $path)
     {
-        $excludedTables = \IAWP_SCOPED\collect($connection->getSchemaBuilder()->getAllTables())->map->tablename->reject(function ($table) {
+        $excludedTables = \IAWPSCOPED\collect($connection->getSchemaBuilder()->getAllTables())->map->tablename->reject(function ($table) {
             return $table === $this->migrationTable;
         })->map(function ($table) {
             return '--exclude-table-data="*.' . $table . '"';

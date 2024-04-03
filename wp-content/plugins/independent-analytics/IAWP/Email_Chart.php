@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Statistics\Page_Statistics;
-use IAWP_SCOPED\Proper\Number;
+use IAWP\Statistics\Page_Statistics;
+use IAWPSCOPED\Proper\Number;
 /** @internal */
 class Email_Chart
 {

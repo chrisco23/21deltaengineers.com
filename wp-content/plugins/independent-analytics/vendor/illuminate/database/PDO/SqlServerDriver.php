@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\PDO;
+namespace IAWPSCOPED\Illuminate\Database\PDO;
 
-use IAWP_SCOPED\Doctrine\DBAL\Driver\AbstractSQLServerDriver;
+use IAWPSCOPED\Doctrine\DBAL\Driver\AbstractSQLServerDriver;
 /** @internal */
 class SqlServerDriver extends AbstractSQLServerDriver
 {

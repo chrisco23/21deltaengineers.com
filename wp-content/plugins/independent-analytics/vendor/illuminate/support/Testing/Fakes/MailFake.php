@@ -1,15 +1,15 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Testing\Fakes;
+namespace IAWPSCOPED\Illuminate\Support\Testing\Fakes;
 
 use Closure;
-use IAWP_SCOPED\Illuminate\Contracts\Mail\Factory;
-use IAWP_SCOPED\Illuminate\Contracts\Mail\Mailable;
-use IAWP_SCOPED\Illuminate\Contracts\Mail\Mailer;
-use IAWP_SCOPED\Illuminate\Contracts\Mail\MailQueue;
-use IAWP_SCOPED\Illuminate\Contracts\Queue\ShouldQueue;
-use IAWP_SCOPED\Illuminate\Support\Traits\ReflectsClosures;
-use IAWP_SCOPED\PHPUnit\Framework\Assert as PHPUnit;
+use IAWPSCOPED\Illuminate\Contracts\Mail\Factory;
+use IAWPSCOPED\Illuminate\Contracts\Mail\Mailable;
+use IAWPSCOPED\Illuminate\Contracts\Mail\Mailer;
+use IAWPSCOPED\Illuminate\Contracts\Mail\MailQueue;
+use IAWPSCOPED\Illuminate\Contracts\Queue\ShouldQueue;
+use IAWPSCOPED\Illuminate\Support\Traits\ReflectsClosures;
+use IAWPSCOPED\PHPUnit\Framework\Assert as PHPUnit;
 /** @internal */
 class MailFake implements Factory, Mailer, MailQueue
 {
@@ -104,7 +104,7 @@ class MailFake implements Factory, Mailer, MailQueue
      */
     public function assertNothingSent()
     {
-        $mailableNames = \IAWP_SCOPED\collect($this->mailables)->map(function ($mailable) {
+        $mailableNames = \IAWPSCOPED\collect($this->mailables)->map(function ($mailable) {
             return \get_class($mailable);
         })->join(', ');
         PHPUnit::assertEmpty($this->mailables, 'The following mailables were sent unexpectedly: ' . $mailableNames);
@@ -155,7 +155,7 @@ class MailFake implements Factory, Mailer, MailQueue
      */
     public function assertNothingQueued()
     {
-        $mailableNames = \IAWP_SCOPED\collect($this->queuedMailables)->map(function ($mailable) {
+        $mailableNames = \IAWPSCOPED\collect($this->queuedMailables)->map(function ($mailable) {
             return \get_class($mailable);
         })->join(', ');
         PHPUnit::assertEmpty($this->queuedMailables, 'The following mailables were queued unexpectedly: ' . $mailableNames);
@@ -171,7 +171,7 @@ class MailFake implements Factory, Mailer, MailQueue
     {
         [$mailable, $callback] = $this->prepareMailableAndCallback($mailable, $callback);
         if (!$this->hasSent($mailable)) {
-            return \IAWP_SCOPED\collect();
+            return \IAWPSCOPED\collect();
         }
         $callback = $callback ?: function () {
             return \true;
@@ -201,7 +201,7 @@ class MailFake implements Factory, Mailer, MailQueue
     {
         [$mailable, $callback] = $this->prepareMailableAndCallback($mailable, $callback);
         if (!$this->hasQueued($mailable)) {
-            return \IAWP_SCOPED\collect();
+            return \IAWPSCOPED\collect();
         }
         $callback = $callback ?: function () {
             return \true;
@@ -228,7 +228,7 @@ class MailFake implements Factory, Mailer, MailQueue
      */
     protected function mailablesOf($type)
     {
-        return \IAWP_SCOPED\collect($this->mailables)->filter(function ($mailable) use($type) {
+        return \IAWPSCOPED\collect($this->mailables)->filter(function ($mailable) use($type) {
             return $mailable instanceof $type;
         });
     }
@@ -240,7 +240,7 @@ class MailFake implements Factory, Mailer, MailQueue
      */
     protected function queuedMailablesOf($type)
     {
-        return \IAWP_SCOPED\collect($this->queuedMailables)->filter(function ($mailable) use($type) {
+        return \IAWPSCOPED\collect($this->queuedMailables)->filter(function ($mailable) use($type) {
             return $mailable instanceof $type;
         });
     }

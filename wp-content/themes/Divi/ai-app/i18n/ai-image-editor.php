@@ -55,4 +55,7 @@ return [
 	'$modificationTypeHelp'          => esc_html__( 'To modify or add to an element that already exists in the image, choose Modify Element. To add something brand new and unrelated to the original image, choose Add Element.', 'Divi' ),
 	'$backgroundImageRequired'       => esc_html__( 'Background image URL or base64 string is required.', 'Divi' ),
 	'$imageRequired'                 => esc_html__( 'Image URL or base64 string is required.', 'Divi' ),
+	'$imageSelectionRequired'        => esc_html__( 'Before generating a new image, you must paint the area of the image you want to modify.', 'Divi' ),
+	'$imageSketchRequired'           => esc_html__( 'Before generating a new image, you must make a rough sketch of the object you want to add.', 'Divi' ),
+	'$imageExtendRequired'           => esc_html__( 'Before generating a new image, you must extend the image canvas using the draggable anchors.', 'Divi' ),
 ];

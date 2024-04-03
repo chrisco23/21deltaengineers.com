@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon;
+namespace IAWPSCOPED\Carbon;
 
-use IAWP_SCOPED\Carbon\Exceptions\InvalidCastException;
-use IAWP_SCOPED\Carbon\Exceptions\InvalidTimeZoneException;
+use IAWPSCOPED\Carbon\Exceptions\InvalidCastException;
+use IAWPSCOPED\Carbon\Exceptions\InvalidTimeZoneException;
 use DateTimeInterface;
 use DateTimeZone;
 use Throwable;

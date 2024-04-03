@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Events;
+namespace IAWPSCOPED\Illuminate\Contracts\Events;
 
 /** @internal */
 interface Dispatcher

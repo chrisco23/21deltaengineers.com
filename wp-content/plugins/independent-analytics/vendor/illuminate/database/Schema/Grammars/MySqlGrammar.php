@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Schema\Grammars;
+namespace IAWPSCOPED\Illuminate\Database\Schema\Grammars;
 
-use IAWP_SCOPED\Illuminate\Database\Connection;
-use IAWP_SCOPED\Illuminate\Database\Schema\Blueprint;
-use IAWP_SCOPED\Illuminate\Support\Fluent;
+use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Database\Schema\Blueprint;
+use IAWPSCOPED\Illuminate\Support\Fluent;
 use RuntimeException;
 /** @internal */
 class MySqlGrammar extends Grammar
@@ -157,7 +157,7 @@ class MySqlGrammar extends Grammar
      */
     public function compileAutoIncrementStartingValues(Blueprint $blueprint)
     {
-        return \IAWP_SCOPED\collect($blueprint->autoIncrementingStartingValues())->map(function ($value, $column) use($blueprint) {
+        return \IAWPSCOPED\collect($blueprint->autoIncrementingStartingValues())->map(function ($value, $column) use($blueprint) {
             return 'alter table ' . $this->wrapTable($blueprint->getTable()) . ' auto_increment = ' . $value;
         })->all();
     }

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Formatter;
+namespace IAWPSCOPED\Symfony\Component\Translation\Formatter;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\LogicException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\LogicException;
 /**
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>

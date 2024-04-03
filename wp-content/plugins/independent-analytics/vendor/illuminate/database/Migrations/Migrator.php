@@ -1,21 +1,21 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Migrations;
+namespace IAWPSCOPED\Illuminate\Database\Migrations;
 
-use IAWP_SCOPED\Doctrine\DBAL\Schema\SchemaException;
-use IAWP_SCOPED\Illuminate\Contracts\Events\Dispatcher;
-use IAWP_SCOPED\Illuminate\Database\ConnectionResolverInterface as Resolver;
-use IAWP_SCOPED\Illuminate\Database\Events\MigrationEnded;
-use IAWP_SCOPED\Illuminate\Database\Events\MigrationsEnded;
-use IAWP_SCOPED\Illuminate\Database\Events\MigrationsStarted;
-use IAWP_SCOPED\Illuminate\Database\Events\MigrationStarted;
-use IAWP_SCOPED\Illuminate\Database\Events\NoPendingMigrations;
-use IAWP_SCOPED\Illuminate\Filesystem\Filesystem;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Collection;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Doctrine\DBAL\Schema\SchemaException;
+use IAWPSCOPED\Illuminate\Contracts\Events\Dispatcher;
+use IAWPSCOPED\Illuminate\Database\ConnectionResolverInterface as Resolver;
+use IAWPSCOPED\Illuminate\Database\Events\MigrationEnded;
+use IAWPSCOPED\Illuminate\Database\Events\MigrationsEnded;
+use IAWPSCOPED\Illuminate\Database\Events\MigrationsStarted;
+use IAWPSCOPED\Illuminate\Database\Events\MigrationStarted;
+use IAWPSCOPED\Illuminate\Database\Events\NoPendingMigrations;
+use IAWPSCOPED\Illuminate\Filesystem\Filesystem;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Collection;
+use IAWPSCOPED\Illuminate\Support\Str;
 use ReflectionClass;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
 /** @internal */
 class Migrator
 {
@@ -266,7 +266,7 @@ class Migrator
         // Since the getRan method that retrieves the migration name just gives us the
         // migration name, we will format the names into objects with the name as a
         // property on the objects so that we can pass it to the rollback method.
-        $migrations = \IAWP_SCOPED\collect($migrations)->map(function ($m) {
+        $migrations = \IAWPSCOPED\collect($migrations)->map(function ($m) {
             return (object) ['migration' => $m];
         })->all();
         return $this->rollbackMigrations($migrations, $paths, \compact('pretend'));

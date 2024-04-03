@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Command;
+namespace IAWPSCOPED\Symfony\Component\Console\Command;
 
-use IAWP_SCOPED\Symfony\Component\Console\Exception\LogicException;
-use IAWP_SCOPED\Symfony\Component\Lock\LockFactory;
-use IAWP_SCOPED\Symfony\Component\Lock\LockInterface;
-use IAWP_SCOPED\Symfony\Component\Lock\Store\FlockStore;
-use IAWP_SCOPED\Symfony\Component\Lock\Store\SemaphoreStore;
+use IAWPSCOPED\Symfony\Component\Console\Exception\LogicException;
+use IAWPSCOPED\Symfony\Component\Lock\LockFactory;
+use IAWPSCOPED\Symfony\Component\Lock\LockInterface;
+use IAWPSCOPED\Symfony\Component\Lock\Store\FlockStore;
+use IAWPSCOPED\Symfony\Component\Lock\Store\SemaphoreStore;
 /**
  * Basic lock feature for commands.
  *
@@ -28,7 +28,7 @@ trait LockableTrait
     /**
      * Locks a command.
      */
-    private function lock(string $name = null, bool $blocking = \false) : bool
+    private function lock(?string $name = null, bool $blocking = \false) : bool
     {
         if (!\class_exists(SemaphoreStore::class)) {
             throw new LogicException('To enable the locking feature you must install the symfony/lock component.');

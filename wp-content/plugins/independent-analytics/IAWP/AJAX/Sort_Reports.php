@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Capability_Manager;
-use IAWP_SCOPED\IAWP\Illuminate_Builder;
-use IAWP_SCOPED\IAWP\Query;
+use IAWP\Capability_Manager;
+use IAWP\Illuminate_Builder;
+use IAWP\Query;
 /** @internal */
-class Sort_Reports extends AJAX
+class Sort_Reports extends \IAWP\AJAX\AJAX
 {
     /**
      * @return array

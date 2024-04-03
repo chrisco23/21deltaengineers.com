@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Illuminate\Notifications\AnonymousNotifiable;
-use IAWP_SCOPED\Illuminate\Notifications\ChannelManager;
-use IAWP_SCOPED\Illuminate\Support\Testing\Fakes\NotificationFake;
+use IAWPSCOPED\Illuminate\Notifications\AnonymousNotifiable;
+use IAWPSCOPED\Illuminate\Notifications\ChannelManager;
+use IAWPSCOPED\Illuminate\Support\Testing\Fakes\NotificationFake;
 /**
  * @method static \Illuminate\Notifications\ChannelManager locale(string|null $locale)
  * @method static \Illuminate\Support\Collection sent(mixed $notifiable, string $notification, callable $callback = null)

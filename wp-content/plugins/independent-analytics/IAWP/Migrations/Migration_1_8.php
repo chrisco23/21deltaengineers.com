@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Migrations;
+namespace IAWP\Migrations;
 
-use IAWP_SCOPED\IAWP\Known_Referrers;
-use IAWP_SCOPED\IAWP\Query;
-use IAWP_SCOPED\IAWP\Utils\URL;
+use IAWP\Known_Referrers;
+use IAWP\Query;
+use IAWP\Utils\URL;
 /** @internal */
-class Migration_1_8 extends Migration
+class Migration_1_8 extends \IAWP\Migrations\Migration
 {
     /**
      * @var string

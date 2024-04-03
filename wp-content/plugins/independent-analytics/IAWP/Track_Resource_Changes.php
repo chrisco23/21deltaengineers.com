@@ -1,12 +1,12 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Models\Page_Author_Archive;
-use IAWP_SCOPED\IAWP\Models\Page_Post_Type_Archive;
-use IAWP_SCOPED\IAWP\Models\Page_Singular;
-use IAWP_SCOPED\IAWP\Models\Page_Term_Archive;
-use IAWP_SCOPED\Proper\Periodic;
+use IAWP\Models\Page_Author_Archive;
+use IAWP\Models\Page_Post_Type_Archive;
+use IAWP\Models\Page_Singular;
+use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
+use IAWPSCOPED\Proper\Periodic;
 /** @internal */
 class Track_Resource_Changes
 {
@@ -14,7 +14,6 @@ class Track_Resource_Changes
     {
         \add_action('wp_after_insert_post', [$this, 'handle_updated_post'], 10, 1);
         \add_action('profile_update', [$this, 'handle_updated_author']);
-        \add_action('edit_term', [$this, 'handle_updated_term']);
         if (Periodic::check('iawp_last_updated_post_type_cache', 'PT1M')) {
             \add_action('registered_post_type', [$this, 'handle_registered_post_type']);
         }
@@ -28,12 +27,17 @@ class Track_Resource_Changes
         $row = (object) ['resource' => 'singular', 'singular_id' => $post_id];
         $page = new Page_Singular($row);
         $page->update_cache();
-        global $wpdb;
-        $campaigns_table = Query::get_table_name(Query::CAMPAIGNS);
-        $sessions_table = Query::get_table_name(Query::SESSIONS);
-        $views_table = Query::get_table_name(Query::VIEWS);
-        $resources_table = Query::get_table_name(Query::RESOURCES);
-        $wpdb->query($wpdb->prepare("\n                UPDATE {$campaigns_table} AS campaigns\n                JOIN {$sessions_table} AS sessions ON campaigns.campaign_id = sessions.campaign_id\n                JOIN {$views_table} AS views ON sessions.session_id = views.session_id\n                JOIN {$resources_table} AS resources ON views.resource_id = resources.id\n                SET campaigns.landing_page_title = resources.cached_title\n                WHERE resources.singular_id = %d \n            ", $post_id));
+        $campaigns_table = \IAWP\Query::get_table_name(\IAWP\Query::CAMPAIGNS);
+        $sessions_table = \IAWP\Query::get_table_name(\IAWP\Query::SESSIONS);
+        $views_table = \IAWP\Query::get_table_name(\IAWP\Query::VIEWS);
+        $resources_table = \IAWP\Query::get_table_name(\IAWP\Query::RESOURCES);
+        \IAWP\Illuminate_Builder::get_builder()->from($campaigns_table, 'campaigns')->join("{$sessions_table} AS sessions", function (JoinClause $join) {
+            $join->on('sessions.campaign_id', '=', 'campaigns.campaign_id');
+        })->join("{$views_table} AS views", function (JoinClause $join) {
+            $join->on('views.id', '=', 'sessions.initial_view_id');
+        })->join("{$resources_table} AS resources", function (JoinClause $join) {
+            $join->on('resources.id', '=', 'views.resource_id');
+        })->where('resources.singular_id', '=', $post_id)->update(['campaigns.landing_page_title' => $page->title()]);
     }
     public function handle_updated_author($user_id)
     {
@@ -47,23 +51,6 @@ class Track_Resource_Changes
         if ($post_type_object->_builtin == \false) {
             $row = (object) ['resource' => 'post_type_archive', 'post_type' => $post_type];
             $page = new Page_Post_Type_Archive($row);
-            $page->update_cache();
-        }
-    }
-    // Works for tag, categories, and custom taxonomies. Keep in mind that terms for custom taxonomies might just
-    //   disappear if the custom taxonomy is not registered the next time around.
-    public function handle_updated_term($term_id)
-    {
-        // Term must be cleared from the cache in order to use the new term data
-        \clean_term_cache($term_id);
-        $row = (object) ['term_id' => $term_id];
-        $page = new Page_Term_Archive($row);
-        $page->update_cache();
-        $posts = \get_posts(['post_type' => \get_post_types(), 'category' => $term_id, 'numberposts' => -1]);
-        // Update cache for all singulars associated with a given term
-        foreach ($posts as $post) {
-            $row = (object) ['resource' => 'singular', 'singular_id' => $post->ID];
-            $page = new Page_Singular($row);
             $page->update_cache();
         }
     }

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Contracts\Translation\Test;
+namespace IAWPSCOPED\Symfony\Contracts\Translation\Test;
 
-use IAWP_SCOPED\PHPUnit\Framework\TestCase;
-use IAWP_SCOPED\Symfony\Contracts\Translation\TranslatorInterface;
-use IAWP_SCOPED\Symfony\Contracts\Translation\TranslatorTrait;
+use IAWPSCOPED\PHPUnit\Framework\TestCase;
+use IAWPSCOPED\Symfony\Contracts\Translation\TranslatorInterface;
+use IAWPSCOPED\Symfony\Contracts\Translation\TranslatorTrait;
 /**
  * Test should cover all languages mentioned on http://translate.sourceforge.net/wiki/l10n/pluralforms
  * and Plural forms mentioned on http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms.

@@ -1,9 +1,9 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Utils;
+namespace IAWP\Utils;
 
-use IAWP_SCOPED\League\Uri\Contracts\UriException;
-use IAWP_SCOPED\League\Uri\Uri;
+use IAWPSCOPED\League\Uri\Contracts\UriException;
+use IAWPSCOPED\League\Uri\Uri;
 /** @internal */
 class URL
 {

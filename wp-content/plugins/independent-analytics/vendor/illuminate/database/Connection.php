@@ -1,24 +1,24 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database;
+namespace IAWPSCOPED\Illuminate\Database;
 
 use Closure;
 use DateTimeInterface;
-use IAWP_SCOPED\Doctrine\DBAL\Connection as DoctrineConnection;
-use IAWP_SCOPED\Doctrine\DBAL\Types\Type;
+use IAWPSCOPED\Doctrine\DBAL\Connection as DoctrineConnection;
+use IAWPSCOPED\Doctrine\DBAL\Types\Type;
 use Exception;
-use IAWP_SCOPED\Illuminate\Contracts\Events\Dispatcher;
-use IAWP_SCOPED\Illuminate\Database\Events\QueryExecuted;
-use IAWP_SCOPED\Illuminate\Database\Events\StatementPrepared;
-use IAWP_SCOPED\Illuminate\Database\Events\TransactionBeginning;
-use IAWP_SCOPED\Illuminate\Database\Events\TransactionCommitted;
-use IAWP_SCOPED\Illuminate\Database\Events\TransactionRolledBack;
-use IAWP_SCOPED\Illuminate\Database\Query\Builder as QueryBuilder;
-use IAWP_SCOPED\Illuminate\Database\Query\Expression;
-use IAWP_SCOPED\Illuminate\Database\Query\Grammars\Grammar as QueryGrammar;
-use IAWP_SCOPED\Illuminate\Database\Query\Processors\Processor;
-use IAWP_SCOPED\Illuminate\Database\Schema\Builder as SchemaBuilder;
-use IAWP_SCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Contracts\Events\Dispatcher;
+use IAWPSCOPED\Illuminate\Database\Events\QueryExecuted;
+use IAWPSCOPED\Illuminate\Database\Events\StatementPrepared;
+use IAWPSCOPED\Illuminate\Database\Events\TransactionBeginning;
+use IAWPSCOPED\Illuminate\Database\Events\TransactionCommitted;
+use IAWPSCOPED\Illuminate\Database\Events\TransactionRolledBack;
+use IAWPSCOPED\Illuminate\Database\Query\Builder as QueryBuilder;
+use IAWPSCOPED\Illuminate\Database\Query\Expression;
+use IAWPSCOPED\Illuminate\Database\Query\Grammars\Grammar as QueryGrammar;
+use IAWPSCOPED\Illuminate\Database\Query\Processors\Processor;
+use IAWPSCOPED\Illuminate\Database\Schema\Builder as SchemaBuilder;
+use IAWPSCOPED\Illuminate\Support\Arr;
 use LogicException;
 use PDO;
 use PDOStatement;
@@ -811,7 +811,7 @@ class Connection implements ConnectionInterface
      */
     public function isDoctrineAvailable()
     {
-        return \class_exists('IAWP_SCOPED\\Doctrine\\DBAL\\Connection');
+        return \class_exists('IAWPSCOPED\\Doctrine\\DBAL\\Connection');
     }
     /**
      * Get a Doctrine Schema Column instance.

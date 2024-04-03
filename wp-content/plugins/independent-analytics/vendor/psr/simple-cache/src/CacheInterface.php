@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Psr\SimpleCache;
+namespace IAWPSCOPED\Psr\SimpleCache;
 
 /** @internal */
 interface CacheInterface

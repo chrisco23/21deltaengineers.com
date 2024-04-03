@@ -8,49 +8,49 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console;
+namespace IAWPSCOPED\Symfony\Component\Console;
 
-use IAWP_SCOPED\Symfony\Component\Console\Command\Command;
-use IAWP_SCOPED\Symfony\Component\Console\Command\CompleteCommand;
-use IAWP_SCOPED\Symfony\Component\Console\Command\DumpCompletionCommand;
-use IAWP_SCOPED\Symfony\Component\Console\Command\HelpCommand;
-use IAWP_SCOPED\Symfony\Component\Console\Command\LazyCommand;
-use IAWP_SCOPED\Symfony\Component\Console\Command\ListCommand;
-use IAWP_SCOPED\Symfony\Component\Console\Command\SignalableCommandInterface;
-use IAWP_SCOPED\Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionInput;
-use IAWP_SCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
-use IAWP_SCOPED\Symfony\Component\Console\Event\ConsoleCommandEvent;
-use IAWP_SCOPED\Symfony\Component\Console\Event\ConsoleErrorEvent;
-use IAWP_SCOPED\Symfony\Component\Console\Event\ConsoleSignalEvent;
-use IAWP_SCOPED\Symfony\Component\Console\Event\ConsoleTerminateEvent;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\CommandNotFoundException;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\ExceptionInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\LogicException;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\NamespaceNotFoundException;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\RuntimeException;
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\DebugFormatterHelper;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\FormatterHelper;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\Helper;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\HelperSet;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\ProcessHelper;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\QuestionHelper;
-use IAWP_SCOPED\Symfony\Component\Console\Input\ArgvInput;
-use IAWP_SCOPED\Symfony\Component\Console\Input\ArrayInput;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputArgument;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputAwareInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputDefinition;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Input\InputOption;
-use IAWP_SCOPED\Symfony\Component\Console\Output\ConsoleOutput;
-use IAWP_SCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\SignalRegistry\SignalRegistry;
-use IAWP_SCOPED\Symfony\Component\Console\Style\SymfonyStyle;
-use IAWP_SCOPED\Symfony\Component\ErrorHandler\ErrorHandler;
-use IAWP_SCOPED\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use IAWP_SCOPED\Symfony\Contracts\Service\ResetInterface;
+use IAWPSCOPED\Symfony\Component\Console\Command\Command;
+use IAWPSCOPED\Symfony\Component\Console\Command\CompleteCommand;
+use IAWPSCOPED\Symfony\Component\Console\Command\DumpCompletionCommand;
+use IAWPSCOPED\Symfony\Component\Console\Command\HelpCommand;
+use IAWPSCOPED\Symfony\Component\Console\Command\LazyCommand;
+use IAWPSCOPED\Symfony\Component\Console\Command\ListCommand;
+use IAWPSCOPED\Symfony\Component\Console\Command\SignalableCommandInterface;
+use IAWPSCOPED\Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionInput;
+use IAWPSCOPED\Symfony\Component\Console\Completion\CompletionSuggestions;
+use IAWPSCOPED\Symfony\Component\Console\Event\ConsoleCommandEvent;
+use IAWPSCOPED\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use IAWPSCOPED\Symfony\Component\Console\Event\ConsoleSignalEvent;
+use IAWPSCOPED\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use IAWPSCOPED\Symfony\Component\Console\Exception\CommandNotFoundException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\ExceptionInterface;
+use IAWPSCOPED\Symfony\Component\Console\Exception\LogicException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\NamespaceNotFoundException;
+use IAWPSCOPED\Symfony\Component\Console\Exception\RuntimeException;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatter;
+use IAWPSCOPED\Symfony\Component\Console\Helper\DebugFormatterHelper;
+use IAWPSCOPED\Symfony\Component\Console\Helper\FormatterHelper;
+use IAWPSCOPED\Symfony\Component\Console\Helper\Helper;
+use IAWPSCOPED\Symfony\Component\Console\Helper\HelperSet;
+use IAWPSCOPED\Symfony\Component\Console\Helper\ProcessHelper;
+use IAWPSCOPED\Symfony\Component\Console\Helper\QuestionHelper;
+use IAWPSCOPED\Symfony\Component\Console\Input\ArgvInput;
+use IAWPSCOPED\Symfony\Component\Console\Input\ArrayInput;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputArgument;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputAwareInterface;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputDefinition;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Input\InputOption;
+use IAWPSCOPED\Symfony\Component\Console\Output\ConsoleOutput;
+use IAWPSCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\SignalRegistry\SignalRegistry;
+use IAWPSCOPED\Symfony\Component\Console\Style\SymfonyStyle;
+use IAWPSCOPED\Symfony\Component\ErrorHandler\ErrorHandler;
+use IAWPSCOPED\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use IAWPSCOPED\Symfony\Contracts\Service\ResetInterface;
 /**
  * An Application is the container for a collection of commands.
  *
@@ -126,7 +126,7 @@ class Application implements ResetInterface
      *
      * @throws \Exception When running fails. Bypass this when {@link setCatchExceptions()}.
      */
-    public function run(InputInterface $input = null, OutputInterface $output = null)
+    public function run(?InputInterface $input = null, ?OutputInterface $output = null)
     {
         if (\function_exists('putenv')) {
             @\putenv('LINES=' . $this->terminal->getHeight());
@@ -653,7 +653,7 @@ class Application implements ResetInterface
      *
      * @return Command[]
      */
-    public function all(string $namespace = null)
+    public function all(?string $namespace = null)
     {
         $this->init();
         if (null === $namespace) {
@@ -951,7 +951,7 @@ class Application implements ResetInterface
      *
      * @return string
      */
-    public function extractNamespace(string $name, int $limit = null)
+    public function extractNamespace(string $name, ?int $limit = null)
     {
         $parts = \explode(':', $name, -1);
         return \implode(':', null === $limit ? $parts : \array_slice($parts, 0, $limit));

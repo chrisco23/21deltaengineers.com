@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1a85fd0c887b972309fbb2b7f67e343a
+class ComposerStaticInitbc9c690d911c37a140f4139d4472cff0
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -33,28 +33,30 @@ class ComposerStaticInit1a85fd0c887b972309fbb2b7f67e343a
         ),
         'I' => 
         array (
-            'IAWP_SCOPED\\voku\\' => 17,
-            'IAWP_SCOPED\\eftec\\bladeone\\' => 27,
-            'IAWP_SCOPED\\Symfony\\Contracts\\Translation\\' => 42,
-            'IAWP_SCOPED\\Symfony\\Contracts\\Service\\' => 38,
-            'IAWP_SCOPED\\Symfony\\Component\\Translation\\' => 42,
-            'IAWP_SCOPED\\Symfony\\Component\\String\\' => 37,
-            'IAWP_SCOPED\\Symfony\\Component\\Console\\' => 38,
-            'IAWP_SCOPED\\Psr\\SimpleCache\\' => 28,
-            'IAWP_SCOPED\\Psr\\Http\\Message\\' => 29,
-            'IAWP_SCOPED\\Psr\\Container\\' => 26,
-            'IAWP_SCOPED\\Proper\\' => 19,
-            'IAWP_SCOPED\\MaxMind\\Db\\' => 23,
-            'IAWP_SCOPED\\League\\Uri\\' => 23,
-            'IAWP_SCOPED\\Illuminate\\Support\\' => 31,
-            'IAWP_SCOPED\\Illuminate\\Database\\' => 32,
-            'IAWP_SCOPED\\Illuminate\\Contracts\\' => 33,
-            'IAWP_SCOPED\\Illuminate\\Container\\' => 33,
-            'IAWP_SCOPED\\IAWP\\' => 17,
-            'IAWP_SCOPED\\Doctrine\\Inflector\\' => 31,
-            'IAWP_SCOPED\\Doctrine\\Common\\Cache\\' => 34,
-            'IAWP_SCOPED\\DeviceDetector\\' => 27,
-            'IAWP_SCOPED\\Carbon\\' => 19,
+            'IAWP\\' => 5,
+            'IAWPSCOPED\\voku\\' => 16,
+            'IAWPSCOPED\\eftec\\bladeone\\' => 26,
+            'IAWPSCOPED\\Symfony\\Contracts\\Translation\\' => 41,
+            'IAWPSCOPED\\Symfony\\Contracts\\Service\\' => 37,
+            'IAWPSCOPED\\Symfony\\Component\\Translation\\' => 41,
+            'IAWPSCOPED\\Symfony\\Component\\String\\' => 36,
+            'IAWPSCOPED\\Symfony\\Component\\Console\\' => 37,
+            'IAWPSCOPED\\Psr\\SimpleCache\\' => 27,
+            'IAWPSCOPED\\Psr\\Http\\Message\\' => 28,
+            'IAWPSCOPED\\Psr\\Container\\' => 25,
+            'IAWPSCOPED\\Psr\\Clock\\' => 21,
+            'IAWPSCOPED\\Proper\\' => 18,
+            'IAWPSCOPED\\MaxMind\\Db\\' => 22,
+            'IAWPSCOPED\\League\\Uri\\' => 22,
+            'IAWPSCOPED\\Illuminate\\Support\\' => 30,
+            'IAWPSCOPED\\Illuminate\\Database\\' => 31,
+            'IAWPSCOPED\\Illuminate\\Contracts\\' => 32,
+            'IAWPSCOPED\\Illuminate\\Container\\' => 32,
+            'IAWPSCOPED\\Doctrine\\Inflector\\' => 30,
+            'IAWPSCOPED\\Doctrine\\Common\\Cache\\' => 33,
+            'IAWPSCOPED\\DeviceDetector\\' => 26,
+            'IAWPSCOPED\\Carbon\\Doctrine\\' => 27,
+            'IAWPSCOPED\\Carbon\\' => 18,
         ),
     );
 
@@ -83,95 +85,103 @@ class ComposerStaticInit1a85fd0c887b972309fbb2b7f67e343a
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
-        'IAWP_SCOPED\\voku\\' => 
+        'IAWP\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/IAWP',
+        ),
+        'IAWPSCOPED\\voku\\' => 
         array (
             0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
         ),
-        'IAWP_SCOPED\\eftec\\bladeone\\' => 
+        'IAWPSCOPED\\eftec\\bladeone\\' => 
         array (
             0 => __DIR__ . '/..' . '/eftec/bladeone/lib',
         ),
-        'IAWP_SCOPED\\Symfony\\Contracts\\Translation\\' => 
+        'IAWPSCOPED\\Symfony\\Contracts\\Translation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/translation-contracts',
         ),
-        'IAWP_SCOPED\\Symfony\\Contracts\\Service\\' => 
+        'IAWPSCOPED\\Symfony\\Contracts\\Service\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/service-contracts',
         ),
-        'IAWP_SCOPED\\Symfony\\Component\\Translation\\' => 
+        'IAWPSCOPED\\Symfony\\Component\\Translation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
         ),
-        'IAWP_SCOPED\\Symfony\\Component\\String\\' => 
+        'IAWPSCOPED\\Symfony\\Component\\String\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/string',
         ),
-        'IAWP_SCOPED\\Symfony\\Component\\Console\\' => 
+        'IAWPSCOPED\\Symfony\\Component\\Console\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
         ),
-        'IAWP_SCOPED\\Psr\\SimpleCache\\' => 
+        'IAWPSCOPED\\Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
-        'IAWP_SCOPED\\Psr\\Http\\Message\\' => 
+        'IAWPSCOPED\\Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'IAWP_SCOPED\\Psr\\Container\\' => 
+        'IAWPSCOPED\\Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'IAWP_SCOPED\\Proper\\' => 
+        'IAWPSCOPED\\Psr\\Clock\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/clock/src',
+        ),
+        'IAWPSCOPED\\Proper\\' => 
         array (
             0 => __DIR__ . '/..' . '/andrewmead/wordpress-proper/source',
             1 => __DIR__ . '/..' . '/andrewmead/wordpress-proper/tests',
         ),
-        'IAWP_SCOPED\\MaxMind\\Db\\' => 
+        'IAWPSCOPED\\MaxMind\\Db\\' => 
         array (
             0 => __DIR__ . '/..' . '/maxmind-db/reader/src/MaxMind/Db',
         ),
-        'IAWP_SCOPED\\League\\Uri\\' => 
+        'IAWPSCOPED\\League\\Uri\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/uri/src',
             1 => __DIR__ . '/..' . '/league/uri-interfaces/src',
         ),
-        'IAWP_SCOPED\\Illuminate\\Support\\' => 
+        'IAWPSCOPED\\Illuminate\\Support\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/collections',
             1 => __DIR__ . '/..' . '/illuminate/macroable',
             2 => __DIR__ . '/..' . '/illuminate/support',
         ),
-        'IAWP_SCOPED\\Illuminate\\Database\\' => 
+        'IAWPSCOPED\\Illuminate\\Database\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/database',
         ),
-        'IAWP_SCOPED\\Illuminate\\Contracts\\' => 
+        'IAWPSCOPED\\Illuminate\\Contracts\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/contracts',
         ),
-        'IAWP_SCOPED\\Illuminate\\Container\\' => 
+        'IAWPSCOPED\\Illuminate\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
         ),
-        'IAWP_SCOPED\\IAWP\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/IAWP',
-        ),
-        'IAWP_SCOPED\\Doctrine\\Inflector\\' => 
+        'IAWPSCOPED\\Doctrine\\Inflector\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector',
         ),
-        'IAWP_SCOPED\\Doctrine\\Common\\Cache\\' => 
+        'IAWPSCOPED\\Doctrine\\Common\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
         ),
-        'IAWP_SCOPED\\DeviceDetector\\' => 
+        'IAWPSCOPED\\DeviceDetector\\' => 
         array (
             0 => __DIR__ . '/..' . '/matomo/device-detector',
         ),
-        'IAWP_SCOPED\\Carbon\\' => 
+        'IAWPSCOPED\\Carbon\\Doctrine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine',
+        ),
+        'IAWPSCOPED\\Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
@@ -191,9 +201,9 @@ class ComposerStaticInit1a85fd0c887b972309fbb2b7f67e343a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1a85fd0c887b972309fbb2b7f67e343a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1a85fd0c887b972309fbb2b7f67e343a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1a85fd0c887b972309fbb2b7f67e343a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbc9c690d911c37a140f4139d4472cff0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbc9c690d911c37a140f4139d4472cff0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbc9c690d911c37a140f4139d4472cff0::$classMap;
 
         }, null, ClassLoader::class);
     }

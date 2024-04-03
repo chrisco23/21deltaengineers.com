@@ -1,17 +1,17 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\Eloquent\Concerns;
+namespace IAWPSCOPED\Illuminate\Database\Eloquent\Concerns;
 
 use BadMethodCallException;
 use Closure;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Builder;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\RelationNotFoundException;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\BelongsTo;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\MorphTo;
-use IAWP_SCOPED\Illuminate\Database\Eloquent\Relations\Relation;
-use IAWP_SCOPED\Illuminate\Database\Query\Builder as QueryBuilder;
-use IAWP_SCOPED\Illuminate\Database\Query\Expression;
-use IAWP_SCOPED\Illuminate\Support\Str;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Builder;
+use IAWPSCOPED\Illuminate\Database\Eloquent\RelationNotFoundException;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\BelongsTo;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\MorphTo;
+use IAWPSCOPED\Illuminate\Database\Eloquent\Relations\Relation;
+use IAWPSCOPED\Illuminate\Database\Query\Builder as QueryBuilder;
+use IAWPSCOPED\Illuminate\Database\Query\Expression;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 trait QueriesRelationships
 {

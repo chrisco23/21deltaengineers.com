@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Illuminate\Contracts\Bus\Dispatcher as BusDispatcherContract;
-use IAWP_SCOPED\Illuminate\Foundation\Bus\PendingChain;
-use IAWP_SCOPED\Illuminate\Support\Testing\Fakes\BusFake;
+use IAWPSCOPED\Illuminate\Contracts\Bus\Dispatcher as BusDispatcherContract;
+use IAWPSCOPED\Illuminate\Foundation\Bus\PendingChain;
+use IAWPSCOPED\Illuminate\Support\Testing\Fakes\BusFake;
 /**
  * @method static \Illuminate\Bus\Batch|null findBatch(string $batchId)
  * @method static \Illuminate\Bus\PendingBatch batch(array|mixed $jobs)

@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\IAWP\Statistics\Statistics;
-use IAWP_SCOPED\IAWP\Utils\Currency;
-use IAWP_SCOPED\IAWP\Utils\Number_Formatter;
-use IAWP_SCOPED\Proper\Number;
+use IAWP\Statistics\Statistics;
+use IAWP\Utils\Currency;
+use IAWP\Utils\Number_Formatter;
+use IAWPSCOPED\Proper\Number;
 /** @internal */
 class Quick_Stats
 {
@@ -34,11 +34,11 @@ class Quick_Stats
         $stats = [['title' => \__('Visitors', 'independent-analytics'), 'class' => 'visitors', 'count' => $this->maybe_abbreviate($statistics->visitors()->value()), 'growth' => $statistics->visitors()->growth(), 'formatted_growth' => $this->format_growth($statistics->visitors()->growth()), 'unfiltered' => $this->maybe_abbreviate($this->statistics->visitors()->value())], ['title' => \__('Views', 'independent-analytics'), 'class' => 'views', 'count' => $this->maybe_abbreviate($statistics->views()->value()), 'growth' => $statistics->views()->growth(), 'formatted_growth' => $this->format_growth($statistics->views()->growth()), 'unfiltered' => $this->maybe_abbreviate($this->statistics->views()->value())]];
         if ($this->is_full_view()) {
             $stats[] = ['title' => \__('Sessions', 'independent-analytics'), 'class' => 'sessions', 'count' => $this->maybe_abbreviate($statistics->sessions()->value()), 'growth' => $statistics->sessions()->growth(), 'formatted_growth' => $this->format_growth($statistics->sessions()->growth()), 'unfiltered' => $this->maybe_abbreviate($this->statistics->sessions()->value())];
-            $stats[] = ['title' => \__('Session Duration', 'independent-analytics'), 'class' => 'average-session-duration', 'count' => Number_Formatter::second_to_minute_timestamp($statistics->average_session_duration()->value()), 'growth' => $statistics->average_session_duration()->growth(), 'formatted_growth' => $this->format_growth($statistics->average_session_duration()->growth()), 'unfiltered' => Number_Formatter::second_to_minute_timestamp($this->statistics->average_session_duration()->value())];
+            $stats[] = ['title' => \__('Average Session Duration', 'independent-analytics'), 'class' => 'average-session-duration', 'count' => Number_Formatter::second_to_minute_timestamp($statistics->average_session_duration()->value()), 'growth' => $statistics->average_session_duration()->growth(), 'formatted_growth' => $this->format_growth($statistics->average_session_duration()->growth()), 'unfiltered' => Number_Formatter::second_to_minute_timestamp($this->statistics->average_session_duration()->value())];
             $stats[] = ['title' => \__('Bounce Rate', 'independent-analytics'), 'class' => 'bounce-rate', 'count' => Number_Formatter::percent($statistics->bounce_rate()->value()), 'growth' => $statistics->bounce_rate()->growth(), 'formatted_growth' => $this->format_growth($statistics->bounce_rate()->growth()), 'unfiltered' => Number_Formatter::percent($this->statistics->bounce_rate()->value())];
             $stats[] = ['title' => \__('Views Per Session', 'independent-analytics'), 'class' => 'views-per-session', 'count' => Number_Formatter::decimal($statistics->view_per_session()->value(), 2), 'growth' => $statistics->view_per_session()->growth(), 'formatted_growth' => $this->format_growth($statistics->view_per_session()->growth()), 'unfiltered' => Number_Formatter::decimal($this->statistics->view_per_session()->value(), 2)];
         }
-        if ($this->is_full_view() && \IAWP_SCOPED\iawp_using_woocommerce()) {
+        if ($this->is_full_view() && \IAWPSCOPED\iawp_using_woocommerce()) {
             $stats[] = ['title' => \__('Orders', 'independent-analytics'), 'class' => 'orders', 'count' => $this->maybe_abbreviate($statistics->woocommerce_orders()->value()), 'growth' => $statistics->woocommerce_orders()->growth(), 'formatted_growth' => $this->format_growth($statistics->woocommerce_orders()->growth()), 'unfiltered' => $this->maybe_abbreviate($this->statistics->woocommerce_orders()->value())];
             $stats[] = ['title' => \__('Net Sales', 'independent-analytics'), 'class' => 'net-sales', 'count' => Currency::format($statistics->woocommerce_net_sales()->value(), \true, \false), 'growth' => $statistics->woocommerce_net_sales()->growth(), 'formatted_growth' => $this->format_growth($statistics->woocommerce_net_sales()->growth()), 'unfiltered' => Currency::format($this->statistics->woocommerce_net_sales()->value(), \true, \false)];
         }
@@ -48,7 +48,7 @@ class Quick_Stats
     {
         $stats = $this->get_stats();
         $is_filtered = !\is_null($this->filtered_statistics);
-        return \IAWP_SCOPED\iawp_blade()->run('quick-stats', ['is_filtered' => $is_filtered, 'stats' => $stats]);
+        return \IAWPSCOPED\iawp_blade()->run('quick-stats', ['is_filtered' => $is_filtered, 'stats' => $stats]);
     }
     private function format_growth($growth) : string
     {

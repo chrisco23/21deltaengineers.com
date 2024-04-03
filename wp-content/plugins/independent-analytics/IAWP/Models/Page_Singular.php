@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Models;
+namespace IAWP\Models;
 
-use IAWP_SCOPED\IAWP\Utils\String_Util;
+use IAWP\Utils\String_Util;
 /** @internal */
-class Page_Singular extends Page
+class Page_Singular extends \IAWP\Models\Page
 {
     private $singular_id;
     private $comments;

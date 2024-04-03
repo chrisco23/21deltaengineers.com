@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace IAWP_SCOPED\Doctrine\Inflector\Rules;
+namespace IAWPSCOPED\Doctrine\Inflector\Rules;
 
-use IAWP_SCOPED\Doctrine\Inflector\WordInflector;
+use IAWPSCOPED\Doctrine\Inflector\WordInflector;
 use function strtolower;
 use function strtoupper;
 use function substr;

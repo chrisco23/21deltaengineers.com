@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /**
  * This file is part of the Carbon package.
@@ -10,8 +10,8 @@ namespace IAWP_SCOPED;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use IAWP_SCOPED\Carbon\CarbonInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\PluralizationRules;
+use IAWPSCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Symfony\Component\Translation\PluralizationRules;
 // @codeCoverageIgnoreStart
 if (\class_exists(PluralizationRules::class)) {
     PluralizationRules::set(static function ($number) {

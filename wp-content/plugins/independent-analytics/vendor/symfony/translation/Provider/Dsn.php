@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Provider;
+namespace IAWPSCOPED\Symfony\Component\Translation\Provider;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\MissingRequiredOptionException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\MissingRequiredOptionException;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Oskar Stark <oskarstark@googlemail.com>
@@ -30,22 +30,22 @@ final class Dsn
     public function __construct(string $dsn)
     {
         $this->originalDsn = $dsn;
-        if (\false === ($parsedDsn = \parse_url($dsn))) {
-            throw new InvalidArgumentException(\sprintf('The "%s" translation provider DSN is invalid.', $dsn));
+        if (\false === ($params = \parse_url($dsn))) {
+            throw new InvalidArgumentException('The translation provider DSN is invalid.');
         }
-        if (!isset($parsedDsn['scheme'])) {
-            throw new InvalidArgumentException(\sprintf('The "%s" translation provider DSN must contain a scheme.', $dsn));
+        if (!isset($params['scheme'])) {
+            throw new InvalidArgumentException('The translation provider DSN must contain a scheme.');
         }
-        $this->scheme = $parsedDsn['scheme'];
-        if (!isset($parsedDsn['host'])) {
-            throw new InvalidArgumentException(\sprintf('The "%s" translation provider DSN must contain a host (use "default" by default).', $dsn));
+        $this->scheme = $params['scheme'];
+        if (!isset($params['host'])) {
+            throw new InvalidArgumentException('The translation provider DSN must contain a host (use "default" by default).');
         }
-        $this->host = $parsedDsn['host'];
-        $this->user = '' !== ($parsedDsn['user'] ?? '') ? \urldecode($parsedDsn['user']) : null;
-        $this->password = '' !== ($parsedDsn['pass'] ?? '') ? \urldecode($parsedDsn['pass']) : null;
-        $this->port = $parsedDsn['port'] ?? null;
-        $this->path = $parsedDsn['path'] ?? null;
-        \parse_str($parsedDsn['query'] ?? '', $this->options);
+        $this->host = $params['host'];
+        $this->user = '' !== ($params['user'] ?? '') ? \rawurldecode($params['user']) : null;
+        $this->password = '' !== ($params['pass'] ?? '') ? \rawurldecode($params['pass']) : null;
+        $this->port = $params['port'] ?? null;
+        $this->path = $params['path'] ?? null;
+        \parse_str($params['query'] ?? '', $this->options);
     }
     public function getScheme() : string
     {
@@ -63,7 +63,7 @@ final class Dsn
     {
         return $this->password;
     }
-    public function getPort(int $default = null) : ?int
+    public function getPort(?int $default = null) : ?int
     {
         return $this->port ?? $default;
     }

@@ -48,7 +48,7 @@ $utm_content        = $utm_content ?? null;
                                    name="path"
                                    id="iawp_path"
                                    placeholder="blog/some-post"
-                                   value="<?php esc_attr_e($path) ?>"
+                                   value="<?php echo esc_attr($path) ?>"
                             />
                             <p class="description"><?php esc_html_e('Leave empty to use your homepage', 'independent-analytics'); ?></p>
                         </td>
@@ -63,12 +63,12 @@ $utm_content        = $utm_content ?? null;
                                    name="utm_source"
                                    id="iawp_utm_source"
                                    placeholder="Twitter"
-                                   value="<?php esc_attr_e($utm_source); ?>"
+                                   value="<?php echo esc_attr($utm_source); ?>"
                                    class="<?php echo isset($utm_source_error) ? 'error' : '' ?>"
                             />
                             <p class="description"><?php esc_html_e('Name of the website the link will be placed on', 'independent-analytics'); ?></p>
                             <?php if (isset($utm_source_error)): ?>
-                                <p class="error"><?php esc_html_e($utm_source_error) ?></p>
+                                <p class="error"><?php echo esc_html($utm_source_error) ?></p>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -82,12 +82,12 @@ $utm_content        = $utm_content ?? null;
                                    name="utm_medium"
                                    id="iawp_utm_medium"
                                    placeholder="<?php esc_attr_e('Social Media', 'independent-analytics'); ?>"
-                                   value="<?php esc_attr_e($utm_medium) ?>"
+                                   value="<?php echo esc_attr($utm_medium) ?>"
                                    class="<?php echo isset($utm_medium_error) ? 'error' : '' ?>"
                             />
                             <p class="description"><?php esc_html_e('Type of website e.g. Search, Social, Ad', 'independent-analytics'); ?></p>
                             <?php if (isset($utm_medium_error)): ?>
-                                <p class="error"><?php esc_html_e($utm_medium_error) ?></p>
+                                <p class="error"><?php echo esc_html($utm_medium_error) ?></p>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -100,12 +100,12 @@ $utm_content        = $utm_content ?? null;
                                    name="utm_campaign"
                                    id="iawp_utm_campaign"
                                    placeholder="<?php esc_attr_e('5 Ways to Get More Traffic', 'independent-analytics'); ?>"
-                                   value="<?php esc_attr_e($utm_campaign) ?>"
+                                   value="<?php echo esc_attr($utm_campaign) ?>"
                                    class="<?php echo isset($utm_campaign_error) ? 'error' : '' ?>"
                             />
                             <p class="description"><?php esc_html_e('Title of the page or ad', 'independent-analytics'); ?></p>
                             <?php if (isset($utm_campaign_error)): ?>
-                                <p class="error"><?php esc_html_e($utm_campaign_error) ?></p>
+                                <p class="error"><?php echo esc_html($utm_campaign_error) ?></p>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -118,7 +118,7 @@ $utm_content        = $utm_content ?? null;
                                    name="utm_term"
                                    id="iawp_utm_term"
                                    placeholder="<?php esc_attr_e('Get website traffic', 'independent-analytics'); ?>"
-                                   value="<?php esc_attr_e($utm_term) ?>"
+                                   value="<?php echo esc_attr($utm_term) ?>"
                             />
                             <p class="description"><?php esc_html_e('Keyword used in paid advertising', 'independent-analytics'); ?></p>
                         </td>
@@ -132,7 +132,7 @@ $utm_content        = $utm_content ?? null;
                                    name="utm_content"
                                    id="iawp_utm_content"
                                    placeholder="<?php esc_attr_e('Bio link', 'independent-analytics'); ?>"
-                                   value="<?php esc_attr_e($utm_content) ?>"
+                                   value="<?php echo esc_attr($utm_content) ?>"
                             />
                             <p class="description"><?php esc_html_e('Position of the link on the page e.g. author bio', 'independent-analytics'); ?></p>
                         </td>
@@ -161,14 +161,14 @@ $utm_content        = $utm_content ?? null;
                         <input readonly class="campaign-url"
                                data-controller="select-input"
                                data-action="click->select-input#selectInput"
-                               value="<?php esc_attr_e($new_campaign_url); ?>"
+                               value="<?php echo esc_attr($new_campaign_url); ?>"
                                data-testid="new-campaign" />
                     </div>
                     <div class="campaign-actions">
                         <button class="iawp-button purple"
                                 data-controller="clipboard"
                                 data-action="clipboard#copy"
-                                data-clipboard-text-value="<?php esc_attr_e($new_campaign_url); ?>"
+                                data-clipboard-text-value="<?php echo esc_attr($new_campaign_url); ?>"
                                 data-testid="copy-new-campaign"
                         >
                             <?php esc_html_e('Copy URL', 'independent-analytics'); ?>
@@ -189,7 +189,7 @@ $utm_content        = $utm_content ?? null;
                         <input readonly type="text" class="campaign-url"
                                data-controller="select-input"
                                data-action="click->select-input#selectInput"
-                               value="<?php esc_attr_e($campaign['url']); ?>">
+                               value="<?php echo esc_attr($campaign['url']); ?>">
                         <p class="campaign-created-at">
                             <?php printf(esc_html_x('Created %s', 'Created five minutes ago', 'independent-analytics'), esc_html__($campaign['created_at'])); ?>
                         </p>
@@ -198,19 +198,19 @@ $utm_content        = $utm_content ?? null;
                         <button class="iawp-button purple"
                                 data-controller="clipboard"
                                 data-action="clipboard#copy"
-                                data-clipboard-text-value="<?php esc_attr_e($campaign['url']); ?>"
+                                data-clipboard-text-value="<?php echo esc_attr($campaign['url']); ?>"
                         >
                             <?php esc_html_e('Copy URL', 'independent-analytics'); ?>
                         </button>
                         <button class="iawp-button ghost-purple"
                                 data-action="campaign-builder#reuse"
-                                data-result="<?php esc_attr_e($campaign['result']) ?>"
+                                data-result="<?php echo esc_attr($campaign['result']) ?>"
                         >
-                            <?php esc_html_e('Reuse', 'independent-analytics'); ?>
+                            <?php esc_html_e('Copy to Form', 'independent-analytics'); ?>
                         </button>
                         <button class="iawp-button ghost-red"
                                 data-action="campaign-builder#delete"
-                                data-campaign-url-id="<?php esc_attr_e($campaign['campaign_url_id']); ?>"
+                                data-campaign-url-id="<?php echo esc_attr($campaign['campaign_url_id']); ?>"
                         >
                             <?php esc_html_e('Delete', 'independent-analytics'); ?>
                         </button>

@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Carbon\Traits;
+namespace IAWPSCOPED\Carbon\Traits;
 
 use BadMethodCallException;
-use IAWP_SCOPED\Carbon\Carbon;
-use IAWP_SCOPED\Carbon\CarbonInterface;
-use IAWP_SCOPED\Carbon\CarbonPeriod;
-use IAWP_SCOPED\Carbon\CarbonTimeZone;
-use IAWP_SCOPED\Carbon\Exceptions\BadComparisonUnitException;
-use IAWP_SCOPED\Carbon\Exceptions\ImmutableException;
-use IAWP_SCOPED\Carbon\Exceptions\InvalidTimeZoneException;
-use IAWP_SCOPED\Carbon\Exceptions\InvalidTypeException;
-use IAWP_SCOPED\Carbon\Exceptions\UnknownGetterException;
-use IAWP_SCOPED\Carbon\Exceptions\UnknownMethodException;
-use IAWP_SCOPED\Carbon\Exceptions\UnknownSetterException;
-use IAWP_SCOPED\Carbon\Exceptions\UnknownUnitException;
+use IAWPSCOPED\Carbon\Carbon;
+use IAWPSCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonPeriod;
+use IAWPSCOPED\Carbon\CarbonTimeZone;
+use IAWPSCOPED\Carbon\Exceptions\BadComparisonUnitException;
+use IAWPSCOPED\Carbon\Exceptions\ImmutableException;
+use IAWPSCOPED\Carbon\Exceptions\InvalidTimeZoneException;
+use IAWPSCOPED\Carbon\Exceptions\InvalidTypeException;
+use IAWPSCOPED\Carbon\Exceptions\UnknownGetterException;
+use IAWPSCOPED\Carbon\Exceptions\UnknownMethodException;
+use IAWPSCOPED\Carbon\Exceptions\UnknownSetterException;
+use IAWPSCOPED\Carbon\Exceptions\UnknownUnitException;
 use Closure;
 use DateInterval;
 use DatePeriod;
@@ -1937,7 +1937,7 @@ trait Date
             $replacements = ['d' => \true, 'D' => 'ddd', 'j' => \true, 'l' => 'dddd', 'N' => \true, 'S' => function ($date) {
                 $day = $date->rawFormat('j');
                 return \str_replace((string) $day, '', $date->isoFormat('Do'));
-            }, 'w' => \true, 'z' => \true, 'W' => \true, 'F' => 'MMMM', 'm' => \true, 'M' => 'MMM', 'n' => \true, 't' => \true, 'L' => \true, 'o' => \true, 'Y' => \true, 'y' => \true, 'a' => 'a', 'A' => 'A', 'B' => \true, 'g' => \true, 'G' => \true, 'h' => \true, 'H' => \true, 'i' => \true, 's' => \true, 'u' => \true, 'v' => \true, 'E' => \true, 'I' => \true, 'O' => \true, 'P' => \true, 'Z' => \true, 'c' => \true, 'r' => \true, 'U' => \true];
+            }, 'w' => \true, 'z' => \true, 'W' => \true, 'F' => 'MMMM', 'm' => \true, 'M' => 'MMM', 'n' => \true, 't' => \true, 'L' => \true, 'o' => \true, 'Y' => \true, 'y' => \true, 'a' => 'a', 'A' => 'A', 'B' => \true, 'g' => \true, 'G' => \true, 'h' => \true, 'H' => \true, 'i' => \true, 's' => \true, 'u' => \true, 'v' => \true, 'E' => \true, 'I' => \true, 'O' => \true, 'P' => \true, 'Z' => \true, 'c' => \true, 'r' => \true, 'U' => \true, 'T' => \true];
         }
         return $replacements;
     }

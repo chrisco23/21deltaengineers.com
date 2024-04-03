@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Routing;
+namespace IAWPSCOPED\Illuminate\Contracts\Routing;
 
 /** @internal */
 interface BindingRegistrar

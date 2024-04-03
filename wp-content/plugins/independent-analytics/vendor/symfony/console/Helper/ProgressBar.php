@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Helper;
+namespace IAWPSCOPED\Symfony\Component\Console\Helper;
 
-use IAWP_SCOPED\Symfony\Component\Console\Cursor;
-use IAWP_SCOPED\Symfony\Component\Console\Exception\LogicException;
-use IAWP_SCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\ConsoleSectionOutput;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Terminal;
+use IAWPSCOPED\Symfony\Component\Console\Cursor;
+use IAWPSCOPED\Symfony\Component\Console\Exception\LogicException;
+use IAWPSCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\ConsoleSectionOutput;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Terminal;
 /**
  * The ProgressBar provides helpers to display progress output.
  *
@@ -250,7 +250,7 @@ final class ProgressBar
      *
      * @param int|null $max Number of steps to complete the bar (0 if indeterminate), if null it will be inferred from $iterable
      */
-    public function iterate(iterable $iterable, int $max = null) : iterable
+    public function iterate(iterable $iterable, ?int $max = null) : iterable
     {
         $this->start($max ?? (\is_countable($iterable) ? \count($iterable) : 0));
         foreach ($iterable as $key => $value) {
@@ -264,7 +264,7 @@ final class ProgressBar
      *
      * @param int|null $max Number of steps to complete the bar (0 if indeterminate), null to leave unchanged
      */
-    public function start(int $max = null)
+    public function start(?int $max = null)
     {
         $this->startTime = \time();
         $this->step = 0;

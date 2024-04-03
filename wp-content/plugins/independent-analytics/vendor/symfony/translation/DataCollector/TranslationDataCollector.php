@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\DataCollector;
+namespace IAWPSCOPED\Symfony\Component\Translation\DataCollector;
 
-use IAWP_SCOPED\Symfony\Component\HttpFoundation\Request;
-use IAWP_SCOPED\Symfony\Component\HttpFoundation\Response;
-use IAWP_SCOPED\Symfony\Component\HttpKernel\DataCollector\DataCollector;
-use IAWP_SCOPED\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
-use IAWP_SCOPED\Symfony\Component\Translation\DataCollectorTranslator;
-use IAWP_SCOPED\Symfony\Component\VarDumper\Cloner\Data;
+use IAWPSCOPED\Symfony\Component\HttpFoundation\Request;
+use IAWPSCOPED\Symfony\Component\HttpFoundation\Response;
+use IAWPSCOPED\Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use IAWPSCOPED\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
+use IAWPSCOPED\Symfony\Component\Translation\DataCollectorTranslator;
+use IAWPSCOPED\Symfony\Component\VarDumper\Cloner\Data;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  *
@@ -42,7 +42,7 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
     /**
      * {@inheritdoc}
      */
-    public function collect(Request $request, Response $response, \Throwable $exception = null)
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null)
     {
         $this->data['locale'] = $this->translator->getLocale();
         $this->data['fallback_locales'] = $this->translator->getFallbackLocales();

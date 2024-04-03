@@ -1,13 +1,13 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Testing\Fakes;
+namespace IAWPSCOPED\Illuminate\Support\Testing\Fakes;
 
 use BadMethodCallException;
 use Closure;
-use IAWP_SCOPED\Illuminate\Contracts\Queue\Queue;
-use IAWP_SCOPED\Illuminate\Queue\QueueManager;
-use IAWP_SCOPED\Illuminate\Support\Traits\ReflectsClosures;
-use IAWP_SCOPED\PHPUnit\Framework\Assert as PHPUnit;
+use IAWPSCOPED\Illuminate\Contracts\Queue\Queue;
+use IAWPSCOPED\Illuminate\Queue\QueueManager;
+use IAWPSCOPED\Illuminate\Support\Traits\ReflectsClosures;
+use IAWPSCOPED\PHPUnit\Framework\Assert as PHPUnit;
 /** @internal */
 class QueueFake extends QueueManager implements Queue
 {
@@ -78,7 +78,7 @@ class QueueFake extends QueueManager implements Queue
     public function assertPushedWithChain($job, $expectedChain = [], $callback = null)
     {
         PHPUnit::assertTrue($this->pushed($job, $callback)->isNotEmpty(), "The expected [{$job}] job was not pushed.");
-        PHPUnit::assertTrue(\IAWP_SCOPED\collect($expectedChain)->isNotEmpty(), 'The expected chain can not be empty.');
+        PHPUnit::assertTrue(\IAWPSCOPED\collect($expectedChain)->isNotEmpty(), 'The expected chain can not be empty.');
         $this->isChainOfObjects($expectedChain) ? $this->assertPushedWithChainOfObjects($job, $expectedChain, $callback) : $this->assertPushedWithChainOfClasses($job, $expectedChain, $callback);
     }
     /**
@@ -103,7 +103,7 @@ class QueueFake extends QueueManager implements Queue
      */
     protected function assertPushedWithChainOfObjects($job, $expectedChain, $callback)
     {
-        $chain = \IAWP_SCOPED\collect($expectedChain)->map(function ($job) {
+        $chain = \IAWPSCOPED\collect($expectedChain)->map(function ($job) {
             return \serialize($job);
         })->all();
         PHPUnit::assertTrue($this->pushed($job, $callback)->filter(function ($job) use($chain) {
@@ -121,7 +121,7 @@ class QueueFake extends QueueManager implements Queue
     protected function assertPushedWithChainOfClasses($job, $expectedChain, $callback)
     {
         $matching = $this->pushed($job, $callback)->map->chained->map(function ($chain) {
-            return \IAWP_SCOPED\collect($chain)->map(function ($job) {
+            return \IAWPSCOPED\collect($chain)->map(function ($job) {
                 return \get_class(\unserialize($job));
             });
         })->filter(function ($chain) use($expectedChain) {
@@ -137,7 +137,7 @@ class QueueFake extends QueueManager implements Queue
      */
     protected function isChainOfObjects($chain)
     {
-        return !\IAWP_SCOPED\collect($chain)->contains(function ($job) {
+        return !\IAWPSCOPED\collect($chain)->contains(function ($job) {
             return !\is_object($job);
         });
     }
@@ -174,12 +174,12 @@ class QueueFake extends QueueManager implements Queue
     public function pushed($job, $callback = null)
     {
         if (!$this->hasPushed($job)) {
-            return \IAWP_SCOPED\collect();
+            return \IAWPSCOPED\collect();
         }
         $callback = $callback ?: function () {
             return \true;
         };
-        return \IAWP_SCOPED\collect($this->jobs[$job])->filter(function ($data) use($callback) {
+        return \IAWPSCOPED\collect($this->jobs[$job])->filter(function ($data) use($callback) {
             return $callback($data['job'], $data['queue']);
         })->pluck('job');
     }
@@ -211,7 +211,7 @@ class QueueFake extends QueueManager implements Queue
      */
     public function size($queue = null)
     {
-        return \IAWP_SCOPED\collect($this->jobs)->flatten(1)->filter(function ($job) use($queue) {
+        return \IAWPSCOPED\collect($this->jobs)->flatten(1)->filter(function ($job) use($queue) {
             return $job['queue'] === $queue;
         })->count();
     }

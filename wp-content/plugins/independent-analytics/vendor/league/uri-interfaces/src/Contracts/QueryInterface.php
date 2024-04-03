@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace IAWP_SCOPED\League\Uri\Contracts;
+namespace IAWPSCOPED\League\Uri\Contracts;
 
 /**
  * @extends \IteratorAggregate<array{0:string, 1:string|null}>

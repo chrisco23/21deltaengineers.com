@@ -1,11 +1,11 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\AJAX;
+namespace IAWP\AJAX;
 
-use IAWP_SCOPED\IAWP\Campaign_Builder;
-use IAWP_SCOPED\IAWP\Utils\Security;
+use IAWP\Campaign_Builder;
+use IAWP\Utils\Security;
 /** @internal */
-class Create_Campaign extends AJAX
+class Create_Campaign extends \IAWP\AJAX\AJAX
 {
     protected function action_name() : string
     {

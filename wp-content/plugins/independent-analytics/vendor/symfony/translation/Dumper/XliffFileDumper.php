@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Translation\Dumper;
+namespace IAWPSCOPED\Symfony\Component\Translation\Dumper;
 
-use IAWP_SCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
-use IAWP_SCOPED\Symfony\Component\Translation\MessageCatalogue;
+use IAWPSCOPED\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use IAWPSCOPED\Symfony\Component\Translation\MessageCatalogue;
 /**
  * XliffFileDumper generates xliff files from a message catalogue.
  *
@@ -160,7 +160,7 @@ class XliffFileDumper extends FileDumper
         }
         return $dom->saveXML();
     }
-    private function hasMetadataArrayInfo(string $key, array $metadata = null) : bool
+    private function hasMetadataArrayInfo(string $key, ?array $metadata = null) : bool
     {
         return \is_iterable($metadata[$key] ?? null);
     }

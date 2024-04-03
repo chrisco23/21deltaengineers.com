@@ -251,11 +251,10 @@ class Url_Fetcher {
 		Util::debug_log( "Fetching URL: " . $url );
 
 		$args = array(
-			'timeout'             => self::TIMEOUT,
-			'sslverify'           => false,
-			'redirection'         => 0, // disable redirection.
-			'blocking'            => false, // don't wait for the request to complete.
-			'limit_response_size' => 2097152, // 2 MB
+			'timeout'     => self::TIMEOUT,
+			'sslverify'   => false,
+			'redirection' => 0, // disable redirection.
+			'blocking'    => true,
 		);
 
 		if ( $filename ) {

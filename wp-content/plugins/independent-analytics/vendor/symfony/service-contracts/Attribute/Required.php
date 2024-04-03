@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Contracts\Service\Attribute;
+namespace IAWPSCOPED\Symfony\Contracts\Service\Attribute;
 
 /**
  * A required dependency.

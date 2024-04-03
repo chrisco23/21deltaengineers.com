@@ -1,10 +1,10 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
-use IAWP_SCOPED\Illuminate\Database\Capsule\Manager as Capsule;
-use IAWP_SCOPED\Illuminate\Database\Connection;
-use IAWP_SCOPED\Illuminate\Database\Query\Builder;
+use IAWPSCOPED\Illuminate\Database\Capsule\Manager as Capsule;
+use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Database\Query\Builder;
 /**
  * Connects to the WordPress database using Illuminate from Laravel
  *

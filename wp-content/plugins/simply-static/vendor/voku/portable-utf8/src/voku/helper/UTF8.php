@@ -1845,7 +1845,7 @@ final class UTF8
         $context = null,
         int $offset = null,
         int $max_length = null,
-        int $timeout = 10,
+        int $timeout = 30,
         bool $convert_to_utf8 = true,
         string $from_encoding = ''
     ) {

@@ -1,8 +1,8 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Support\Facades;
+namespace IAWPSCOPED\Illuminate\Support\Facades;
 
-use IAWP_SCOPED\Illuminate\Support\Testing\Fakes\MailFake;
+use IAWPSCOPED\Illuminate\Support\Testing\Fakes\MailFake;
 /**
  * @method static \Illuminate\Mail\Mailer mailer(string|null $name = null)
  * @method static void alwaysFrom(string $address, string|null $name = null)

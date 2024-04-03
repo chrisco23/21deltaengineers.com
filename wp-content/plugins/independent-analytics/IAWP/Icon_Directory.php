@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP;
+namespace IAWP;
 
 /**
  * Reads a list of icons from a directory allowing them to be searched. Supports defaults.
@@ -42,11 +42,11 @@ class Icon_Directory
     }
     private function get_url_for_file(string $file_name) : string
     {
-        return \IAWP_SCOPED\iawp_url_to($this->directory . $file_name) . '?version=' . \IAWP_VERSION;
+        return \IAWPSCOPED\iawp_url_to($this->directory . $file_name) . '?version=' . \IAWP_VERSION;
     }
     private function get_files_in_directory(string $directory) : array
     {
-        $files = \scandir(\IAWP_SCOPED\iawp_path_to($directory));
+        $files = \scandir(\IAWPSCOPED\iawp_path_to($directory));
         if ($files === \false) {
             return [];
         }

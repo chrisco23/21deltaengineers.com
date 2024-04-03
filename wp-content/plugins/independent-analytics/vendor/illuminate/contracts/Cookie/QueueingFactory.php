@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Contracts\Cookie;
+namespace IAWPSCOPED\Illuminate\Contracts\Cookie;
 
 /** @internal */
 interface QueueingFactory extends Factory

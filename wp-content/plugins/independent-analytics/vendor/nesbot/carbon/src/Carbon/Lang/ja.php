@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
 /**
  * This file is part of the Carbon package.
@@ -22,7 +22,7 @@ namespace IAWP_SCOPED;
  * - toyama satoshi
  * - atakigawa
  */
-use IAWP_SCOPED\Carbon\CarbonInterface;
+use IAWPSCOPED\Carbon\CarbonInterface;
 return ['year' => ':count年', 'y' => ':count年', 'month' => ':countヶ月', 'm' => ':countヶ月', 'week' => ':count週間', 'w' => ':count週間', 'day' => ':count日', 'd' => ':count日', 'hour' => ':count時間', 'h' => ':count時間', 'minute' => ':count分', 'min' => ':count分', 'second' => ':count秒', 'a_second' => '{1}数秒|]1,Inf[:count秒', 's' => ':count秒', 'ago' => ':time前', 'from_now' => ':time後', 'after' => ':time後', 'before' => ':time前', 'diff_now' => '今', 'diff_today' => '今日', 'diff_yesterday' => '昨日', 'diff_tomorrow' => '明日', 'formats' => ['LT' => 'HH:mm', 'LTS' => 'HH:mm:ss', 'L' => 'YYYY/MM/DD', 'LL' => 'YYYY年M月D日', 'LLL' => 'YYYY年M月D日 HH:mm', 'LLLL' => 'YYYY年M月D日 dddd HH:mm'], 'calendar' => ['sameDay' => '[今日] LT', 'nextDay' => '[明日] LT', 'nextWeek' => function (CarbonInterface $current, CarbonInterface $other) {
     if ($other->week !== $current->week) {
         return '[来週]dddd LT';

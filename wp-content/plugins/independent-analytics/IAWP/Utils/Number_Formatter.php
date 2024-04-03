@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\IAWP\Utils;
+namespace IAWP\Utils;
 
 use DateTime;
 /** @internal */

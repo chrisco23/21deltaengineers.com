@@ -1,6 +1,6 @@
 <?php
 
-namespace IAWP_SCOPED\Psr\SimpleCache;
+namespace IAWPSCOPED\Psr\SimpleCache;
 
 /**
  * Exception interface for invalid cache arguments.

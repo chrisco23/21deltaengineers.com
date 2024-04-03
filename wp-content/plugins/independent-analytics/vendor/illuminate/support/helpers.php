@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED;
+namespace IAWPSCOPED;
 
-use IAWP_SCOPED\Illuminate\Contracts\Support\DeferringDisplayableValue;
-use IAWP_SCOPED\Illuminate\Contracts\Support\Htmlable;
-use IAWP_SCOPED\Illuminate\Support\Arr;
-use IAWP_SCOPED\Illuminate\Support\Env;
-use IAWP_SCOPED\Illuminate\Support\HigherOrderTapProxy;
-use IAWP_SCOPED\Illuminate\Support\Optional;
-if (!\function_exists('IAWP_SCOPED\\append_config')) {
+use IAWPSCOPED\Illuminate\Contracts\Support\DeferringDisplayableValue;
+use IAWPSCOPED\Illuminate\Contracts\Support\Htmlable;
+use IAWPSCOPED\Illuminate\Support\Arr;
+use IAWPSCOPED\Illuminate\Support\Env;
+use IAWPSCOPED\Illuminate\Support\HigherOrderTapProxy;
+use IAWPSCOPED\Illuminate\Support\Optional;
+if (!\function_exists('IAWPSCOPED\\append_config')) {
     /**
      * Assign high numeric IDs to a config item to force appending.
      *
@@ -28,7 +28,7 @@ if (!\function_exists('IAWP_SCOPED\\append_config')) {
         return $array;
     }
 }
-if (!\function_exists('IAWP_SCOPED\\blank')) {
+if (!\function_exists('IAWPSCOPED\\blank')) {
     /**
      * Determine if the given value is "blank".
      *
@@ -53,7 +53,7 @@ if (!\function_exists('IAWP_SCOPED\\blank')) {
         return empty($value);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\class_basename')) {
+if (!\function_exists('IAWPSCOPED\\class_basename')) {
     /**
      * Get the class "basename" of the given object / class.
      *
@@ -67,7 +67,7 @@ if (!\function_exists('IAWP_SCOPED\\class_basename')) {
         return \basename(\str_replace('\\', '/', $class));
     }
 }
-if (!\function_exists('IAWP_SCOPED\\class_uses_recursive')) {
+if (!\function_exists('IAWPSCOPED\\class_uses_recursive')) {
     /**
      * Returns all traits used by a class, its parent classes and trait of their traits.
      *
@@ -87,7 +87,7 @@ if (!\function_exists('IAWP_SCOPED\\class_uses_recursive')) {
         return \array_unique($results);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\e')) {
+if (!\function_exists('IAWPSCOPED\\e')) {
     /**
      * Encode HTML special characters in a string.
      *
@@ -107,7 +107,7 @@ if (!\function_exists('IAWP_SCOPED\\e')) {
         return \htmlspecialchars($value ?? '', \ENT_QUOTES, 'UTF-8', $doubleEncode);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\env')) {
+if (!\function_exists('IAWPSCOPED\\env')) {
     /**
      * Gets the value of an environment variable.
      *
@@ -121,7 +121,7 @@ if (!\function_exists('IAWP_SCOPED\\env')) {
         return Env::get($key, $default);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\filled')) {
+if (!\function_exists('IAWPSCOPED\\filled')) {
     /**
      * Determine if a value is "filled".
      *
@@ -134,7 +134,7 @@ if (!\function_exists('IAWP_SCOPED\\filled')) {
         return !blank($value);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\object_get')) {
+if (!\function_exists('IAWPSCOPED\\object_get')) {
     /**
      * Get an item from an object using "dot" notation.
      *
@@ -151,14 +151,14 @@ if (!\function_exists('IAWP_SCOPED\\object_get')) {
         }
         foreach (\explode('.', $key) as $segment) {
             if (!\is_object($object) || !isset($object->{$segment})) {
-                return \IAWP_SCOPED\value($default);
+                return \IAWPSCOPED\value($default);
             }
             $object = $object->{$segment};
         }
         return $object;
     }
 }
-if (!\function_exists('IAWP_SCOPED\\optional')) {
+if (!\function_exists('IAWPSCOPED\\optional')) {
     /**
      * Provide access to optional objects.
      *
@@ -176,7 +176,7 @@ if (!\function_exists('IAWP_SCOPED\\optional')) {
         }
     }
 }
-if (!\function_exists('IAWP_SCOPED\\preg_replace_array')) {
+if (!\function_exists('IAWPSCOPED\\preg_replace_array')) {
     /**
      * Replace a given pattern with each value in the array in sequentially.
      *
@@ -195,7 +195,7 @@ if (!\function_exists('IAWP_SCOPED\\preg_replace_array')) {
         }, $subject);
     }
 }
-if (!\function_exists('IAWP_SCOPED\\retry')) {
+if (!\function_exists('IAWPSCOPED\\retry')) {
     /**
      * Retry an operation a given number of times.
      *
@@ -221,13 +221,13 @@ if (!\function_exists('IAWP_SCOPED\\retry')) {
                 throw $e;
             }
             if ($sleepMilliseconds) {
-                \usleep(\IAWP_SCOPED\value($sleepMilliseconds, $attempts) * 1000);
+                \usleep(\IAWPSCOPED\value($sleepMilliseconds, $attempts) * 1000);
             }
             goto beginning;
         }
     }
 }
-if (!\function_exists('IAWP_SCOPED\\tap')) {
+if (!\function_exists('IAWPSCOPED\\tap')) {
     /**
      * Call the given Closure with the given value then return the value.
      *
@@ -245,7 +245,7 @@ if (!\function_exists('IAWP_SCOPED\\tap')) {
         return $value;
     }
 }
-if (!\function_exists('IAWP_SCOPED\\throw_if')) {
+if (!\function_exists('IAWPSCOPED\\throw_if')) {
     /**
      * Throw the given exception if the given condition is true.
      *
@@ -268,7 +268,7 @@ if (!\function_exists('IAWP_SCOPED\\throw_if')) {
         return $condition;
     }
 }
-if (!\function_exists('IAWP_SCOPED\\throw_unless')) {
+if (!\function_exists('IAWPSCOPED\\throw_unless')) {
     /**
      * Throw the given exception unless the given condition is true.
      *
@@ -286,7 +286,7 @@ if (!\function_exists('IAWP_SCOPED\\throw_unless')) {
         return $condition;
     }
 }
-if (!\function_exists('IAWP_SCOPED\\trait_uses_recursive')) {
+if (!\function_exists('IAWPSCOPED\\trait_uses_recursive')) {
     /**
      * Returns all traits used by a trait and its traits.
      *
@@ -303,7 +303,7 @@ if (!\function_exists('IAWP_SCOPED\\trait_uses_recursive')) {
         return $traits;
     }
 }
-if (!\function_exists('IAWP_SCOPED\\transform')) {
+if (!\function_exists('IAWPSCOPED\\transform')) {
     /**
      * Transform the given value if it is present.
      *
@@ -324,7 +324,7 @@ if (!\function_exists('IAWP_SCOPED\\transform')) {
         return $default;
     }
 }
-if (!\function_exists('IAWP_SCOPED\\windows_os')) {
+if (!\function_exists('IAWPSCOPED\\windows_os')) {
     /**
      * Determine whether the current environment is Windows based.
      *
@@ -336,7 +336,7 @@ if (!\function_exists('IAWP_SCOPED\\windows_os')) {
         return \PHP_OS_FAMILY === 'Windows';
     }
 }
-if (!\function_exists('IAWP_SCOPED\\with')) {
+if (!\function_exists('IAWPSCOPED\\with')) {
     /**
      * Return the given value, optionally passed through the given callback.
      *

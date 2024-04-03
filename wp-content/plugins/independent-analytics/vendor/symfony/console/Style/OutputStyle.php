@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace IAWP_SCOPED\Symfony\Component\Console\Style;
+namespace IAWPSCOPED\Symfony\Component\Console\Style;
 
-use IAWP_SCOPED\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Helper\ProgressBar;
-use IAWP_SCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use IAWP_SCOPED\Symfony\Component\Console\Output\OutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use IAWPSCOPED\Symfony\Component\Console\Helper\ProgressBar;
+use IAWPSCOPED\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use IAWPSCOPED\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Decorates output to add console style guide helpers.
  *

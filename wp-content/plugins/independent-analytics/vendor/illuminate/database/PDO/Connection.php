@@ -1,14 +1,14 @@
 <?php
 
-namespace IAWP_SCOPED\Illuminate\Database\PDO;
+namespace IAWPSCOPED\Illuminate\Database\PDO;
 
-use IAWP_SCOPED\Doctrine\DBAL\Driver\PDO\Exception;
-use IAWP_SCOPED\Doctrine\DBAL\Driver\PDO\Result;
-use IAWP_SCOPED\Doctrine\DBAL\Driver\PDO\Statement;
-use IAWP_SCOPED\Doctrine\DBAL\Driver\Result as ResultInterface;
-use IAWP_SCOPED\Doctrine\DBAL\Driver\ServerInfoAwareConnection;
-use IAWP_SCOPED\Doctrine\DBAL\Driver\Statement as StatementInterface;
-use IAWP_SCOPED\Doctrine\DBAL\ParameterType;
+use IAWPSCOPED\Doctrine\DBAL\Driver\PDO\Exception;
+use IAWPSCOPED\Doctrine\DBAL\Driver\PDO\Result;
+use IAWPSCOPED\Doctrine\DBAL\Driver\PDO\Statement;
+use IAWPSCOPED\Doctrine\DBAL\Driver\Result as ResultInterface;
+use IAWPSCOPED\Doctrine\DBAL\Driver\ServerInfoAwareConnection;
+use IAWPSCOPED\Doctrine\DBAL\Driver\Statement as StatementInterface;
+use IAWPSCOPED\Doctrine\DBAL\ParameterType;
 use PDO;
 use PDOException;
 use PDOStatement;

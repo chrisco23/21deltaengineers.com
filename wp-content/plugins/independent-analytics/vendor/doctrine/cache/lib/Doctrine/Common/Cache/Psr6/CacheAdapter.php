@@ -1,15 +1,15 @@
 <?php
 
-namespace IAWP_SCOPED\Doctrine\Common\Cache\Psr6;
+namespace IAWPSCOPED\Doctrine\Common\Cache\Psr6;
 
-use IAWP_SCOPED\Doctrine\Common\Cache\Cache;
-use IAWP_SCOPED\Doctrine\Common\Cache\ClearableCache;
-use IAWP_SCOPED\Doctrine\Common\Cache\MultiDeleteCache;
-use IAWP_SCOPED\Doctrine\Common\Cache\MultiGetCache;
-use IAWP_SCOPED\Doctrine\Common\Cache\MultiPutCache;
-use IAWP_SCOPED\Psr\Cache\CacheItemInterface;
-use IAWP_SCOPED\Psr\Cache\CacheItemPoolInterface;
-use IAWP_SCOPED\Symfony\Component\Cache\DoctrineProvider as SymfonyDoctrineProvider;
+use IAWPSCOPED\Doctrine\Common\Cache\Cache;
+use IAWPSCOPED\Doctrine\Common\Cache\ClearableCache;
+use IAWPSCOPED\Doctrine\Common\Cache\MultiDeleteCache;
+use IAWPSCOPED\Doctrine\Common\Cache\MultiGetCache;
+use IAWPSCOPED\Doctrine\Common\Cache\MultiPutCache;
+use IAWPSCOPED\Psr\Cache\CacheItemInterface;
+use IAWPSCOPED\Psr\Cache\CacheItemPoolInterface;
+use IAWPSCOPED\Symfony\Component\Cache\DoctrineProvider as SymfonyDoctrineProvider;
 use function array_key_exists;
 use function assert;
 use function count;

@@ -32,13 +32,17 @@ class UploadsDirectory extends DirectoryAbstract {
 			return trim( UPLOADS, '/\\' );
 		}
 
-		$upload_path = get_option( 'upload_path' );
-		if ( $upload_path ) {
-			return ( strpos( $upload_path, ABSPATH ) !== 0 )
-				? trim( $upload_path, '/\\' )
-				: trim( substr( $upload_path, strlen( ABSPATH ) ), '/\\' );
+		$upload_path = trim( get_option( 'upload_path' ) ?: '' );
+		if ( $upload_path === '' ) {
+			return sprintf( self::DIRECTORY_PATH, basename( WP_CONTENT_DIR ) );
 		}
 
-		return sprintf( self::DIRECTORY_PATH, basename( WP_CONTENT_DIR ) );
+		if ( strpos( $upload_path, ABSPATH ) === 0 ) {
+			return trim( substr( $upload_path, strlen( ABSPATH ) ), '/\\' );
+		} elseif ( path_is_absolute( $upload_path ) ) {
+			return sprintf( self::DIRECTORY_PATH, basename( WP_CONTENT_DIR ) );
+		}
+
+		return trim( $upload_path, '/\\' );
 	}
 }

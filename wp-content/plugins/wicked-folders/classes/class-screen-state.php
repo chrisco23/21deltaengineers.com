@@ -130,7 +130,7 @@ final class Screen_State extends JSON_Serializable_Object {
 			}
         }
 
-		$this->expanded_folders = array_unique( $this->expanded_folders );
+		$this->expanded_folders = array_values( array_unique( $this->expanded_folders ) );
 
 		// Filter tree pane width
 		$this->tree_pane_width = apply_filters( 'wicked_folders_screen_state_tree_pane_width', $this->tree_pane_width, $this );

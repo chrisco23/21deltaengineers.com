@@ -58,4 +58,5 @@ return [
 	'$imageSelectionRequired'        => esc_html__( 'Before generating a new image, you must paint the area of the image you want to modify.', 'Divi' ),
 	'$imageSketchRequired'           => esc_html__( 'Before generating a new image, you must make a rough sketch of the object you want to add.', 'Divi' ),
 	'$imageExtendRequired'           => esc_html__( 'Before generating a new image, you must extend the image canvas using the draggable anchors.', 'Divi' ),
+	'$imageUpscaleRequired'          => esc_html__( 'Maximum canvas size is 8192px', 'Divi' ),
 ];

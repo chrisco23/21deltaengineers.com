@@ -4,6 +4,11 @@ if ( ! defined( 'ET_AI_SERVER_URL' ) ) {
 	define( 'ET_AI_SERVER_URL', 'https://ai.elegantthemes.com/api/v1' );
 }
 
+if ( ! defined( 'ET_AI_PLACEHOLDER_LANDSCAPE_IMAGE_DATA' ) ) {
+	define( 'ET_AI_PLACEHOLDER_LANDSCAPE_IMAGE_DATA', 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA4MCIgaGVpZ2h0PSI1NDAiIHZpZXdCb3g9IjAgMCAxMDgwIDU0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZmlsbD0iI0VCRUJFQiIgZD0iTTAgMGgxMDgwdjU0MEgweiIvPgogICAgICAgIDxwYXRoIGQ9Ik00NDUuNjQ5IDU0MGgtOTguOTk1TDE0NC42NDkgMzM3Ljk5NSAwIDQ4Mi42NDR2LTk4Ljk5NWwxMTYuMzY1LTExNi4zNjVjMTUuNjItMTUuNjIgNDAuOTQ3LTE1LjYyIDU2LjU2OCAwTDQ0NS42NSA1NDB6IiBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz4KICAgICAgICA8Y2lyY2xlIGZpbGwtb3BhY2l0eT0iLjA1IiBmaWxsPSIjMDAwIiBjeD0iMzMxIiBjeT0iMTQ4IiByPSI3MCIvPgogICAgICAgIDxwYXRoIGQ9Ik0xMDgwIDM3OXYxMTMuMTM3TDcyOC4xNjIgMTQwLjMgMzI4LjQ2MiA1NDBIMjE1LjMyNEw2OTkuODc4IDU1LjQ0NmMxNS42Mi0xNS42MiA0MC45NDgtMTUuNjIgNTYuNTY4IDBMMTA4MCAzNzl6IiBmaWxsLW9wYWNpdHk9Ii4yIiBmaWxsPSIjMDAwIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz4KICAgIDwvZz4KPC9zdmc+Cg==' );
+}
+
+
 class ET_AI_App {
 	/**
 	 * @var ET_AI_App
@@ -65,7 +70,13 @@ class ET_AI_App {
 	 * @return Array
 	 */
 	public static function update_ajax_calls_list() {
-		return [ 'action' => array( 'et_builder_update_et_account_local', 'et_ai_upload_image' ) ];
+		return [
+			'action' => array(
+				'et_builder_update_et_account_local',
+				'et_ai_upload_image',
+				'et_ai_layout_save_defaults',
+			),
+		];
 	}
 
 	/**
@@ -95,8 +106,8 @@ class ET_AI_App {
 			}
 
 			// Get attachment ID and image URL
-			$attachment_id  = is_wp_error( $upload ) ? 0 : $upload;
-			$image_url      = get_attached_file( $attachment_id );
+			$attachment_id = is_wp_error( $upload ) ? 0 : $upload;
+			$image_url     = get_attached_file( $attachment_id );
 
 			// Convert image to JPG and compress with quality of 80
 			$image_editor = wp_get_image_editor( $image_url );
@@ -106,21 +117,45 @@ class ET_AI_App {
 
 				if ( ! is_wp_error( $saved ) ) {
 					wp_delete_attachment( $attachment_id, true );
-					$attachment_id = wp_insert_attachment([
-						'post_mime_type' => 'image/jpeg',
-						'post_title'     => preg_replace('/\.[^.]+$/', '', basename($saved['path'])),
-						'post_content'   => '',
-						'post_status'    => 'inherit'
-					], $saved['path']);
-					wp_update_attachment_metadata($attachment_id, wp_generate_attachment_metadata($attachment_id, $saved['path']));
+					$attachment_id = wp_insert_attachment(
+						[
+							'post_mime_type' => 'image/jpeg',
+							'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $saved['path'] ) ),
+							'post_content'   => '',
+							'post_status'    => 'inherit',
+						],
+						$saved['path']
+					);
+					wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $saved['path'] ) );
 				}
 			}
 
 			// Send success response with attachment ID and URL
-			wp_send_json_success([
-				'localImageID'  => $attachment_id,
-				'localImageURL' => wp_get_attachment_url( $attachment_id ),
-			]);
+			wp_send_json_success(
+				[
+					'localImageID'  => $attachment_id,
+					'localImageURL' => wp_get_attachment_url( $attachment_id ),
+				]
+			);
+		}
+	}
+
+	/**
+	 * AJAX Callback: Delete images.
+	 *
+	 * @since ??
+	 *
+	 * @return void
+	 */
+	public static function et_ai_delete_images() {
+		et_core_security_check( 'manage_options', 'et_ai_delete_images', 'wp_nonce' );
+
+		$image_ids = isset( $_POST['image_ids'] ) ? array_map( 'intval', $_POST['image_ids'] ) : [];
+
+		if ( ! empty( $image_ids ) ) {
+			foreach ( $image_ids as $image_id ) {
+				wp_delete_attachment( $image_id, true );
+			}
 		}
 	}
 
@@ -136,6 +171,37 @@ class ET_AI_App {
 
 		add_action( 'wp_ajax_et_builder_update_et_account_local', [ 'ET_AI_App', 'et_builder_update_et_account_local' ] );
 		add_action( 'wp_ajax_et_ai_upload_image', [ 'ET_AI_App', 'et_ai_upload_image' ] );
+		add_action( 'wp_ajax_et_ai_layout_save_defaults', [ 'ET_AI_App', 'et_ai_layout_save_defaults' ] );
+		add_action( 'wp_ajax_et_ai_delete_images', [ 'ET_AI_App', 'et_ai_delete_images' ] );
+	}
+
+	/**
+	 * AJAX Callback: Save layout prompt fonts and colors settings.
+	 *
+	 * @since ??
+	 *
+	 * @return void
+	 */
+	public static function et_ai_layout_save_defaults() {
+		et_core_security_check( 'manage_options', 'et_ai_layout_save_defaults', 'wp_nonce' );
+
+		$options = [
+			'heading_font'       => 'et_ai_layout_heading_font',
+			'body_font'          => 'et_ai_layout_body_font',
+			'heading_font_color' => 'et_ai_layout_heading_font_color',
+			'body_font_color'    => 'et_ai_layout_body_font_color',
+			'primary_color'      => 'et_ai_layout_primary_color',
+			'secondary_color'    => 'et_ai_layout_secondary_color',
+			'site_description'   => 'et_ai_layout_site_description',
+		];
+
+		foreach ( $options as $post_key => $option_name ) {
+			if ( isset( $_POST[ $post_key ] ) ) {
+				et_update_option( $option_name, sanitize_text_field( $_POST[ $post_key ] ) );
+			}
+		}
+
+		wp_send_json_success();
 	}
 
 	/**
@@ -165,6 +231,72 @@ class ET_AI_App {
 		}
 
 		return $available_languages;
+	}
+
+	/**
+	 * Gets the available fonts.
+	 *
+	 * @return array Available fonts.
+	 */
+	public static function get_available_fonts() {
+		$user_fonts   = et_builder_get_custom_fonts();
+		$ai_app_fonts = et_builder_get_fonts(
+			array(
+				'prepend_standard_fonts' => false,
+			)
+		);
+
+		// combine google fonts with custom user fonts.
+		$ai_app_fonts = array_merge( $user_fonts, $ai_app_fonts );
+
+		$et_domain_fonts = array(
+			'ru_RU' => 'cyrillic',
+			'uk'    => 'cyrillic',
+			'bg_BG' => 'cyrillic',
+			'vi'    => 'vietnamese',
+			'el'    => 'greek',
+			'ar'    => 'arabic',
+			'he_IL' => 'hebrew',
+			'th'    => 'thai',
+			'si_lk' => 'sinhala',
+			'bn_bd' => 'bengali',
+			'ta_lk' => 'tamil',
+			'te'    => 'telegu',
+			'km'    => 'khmer',
+			'kn'    => 'kannada',
+			'ml_in' => 'malayalam',
+			'ja'    => 'japanese',
+			'ko_KR' => 'korean',
+			'ml_IN' => 'malayalam',
+			'zh_CN' => 'chinese-simplified',
+		);
+
+		$font_choices          = array();
+		$site_domain           = get_locale();
+		$removed_fonts_mapping = et_builder_old_fonts_mapping();
+
+		foreach ( $ai_app_fonts as $font_name => $font_properties ) {
+			$use_parent_font = false;
+
+			if ( isset( $removed_fonts_mapping[ $font_name ] ) ) {
+				$parent_font                      = $removed_fonts_mapping[ $font_name ]['parent_font'];
+				$font_properties['character_set'] = $ai_app_fonts[ $parent_font ]['character_set'];
+				$use_parent_font                  = true;
+			}
+
+			if (
+				'' !== $site_domain &&
+				isset( $et_domain_fonts[ $site_domain ] ) &&
+				isset( $font_properties['character_set'] ) &&
+				false === strpos( $font_properties['character_set'], $et_domain_fonts[ $site_domain ] )
+			) {
+				continue;
+			}
+
+			$font_choices[ $font_name ] = $font_name;
+		}
+
+		return $font_choices;
 	}
 
 	/**
@@ -199,25 +331,54 @@ class ET_AI_App {
 			define( 'ET_AI_PLUGIN_DIR', get_template_directory() . '/ai-app' );
 		}
 
-		$attributes            = array(
-			'i18n'    => [
+		$ai_default_heading_font    = et_get_option( 'et_ai_layout_heading_font', '' );
+		$ai_default_body_font       = et_get_option( 'et_ai_layout_body_font', '' );
+		$heading_font_color         = et_get_option( 'et_ai_layout_heading_font_color', '' );
+		$body_font_color            = et_get_option( 'et_ai_layout_body_font_color', '' );
+		$primary_color              = et_get_option( 'et_ai_layout_primary_color', '' );
+		$secondary_color            = et_get_option( 'et_ai_layout_secondary_color', '' );
+		$default_site_description   = wp_unslash( et_get_option( 'et_ai_layout_site_description' ) );
+		$website_body_font_color    = et_get_option( 'font_color', '' );
+		$website_heading_font_color = et_get_option( 'header_color', '' );
+		$website_body_font          = et_get_option( 'body_font', '' );
+		$website_heading_font       = et_get_option( 'heading_font', '' );
+
+		$attributes = array(
+			'i18n'                       => [
 				'userPrompt'    => require ET_AI_PLUGIN_DIR . '/i18n/user-prompt.php',
 				'authorization' => require ET_AI_PLUGIN_DIR . '/i18n/authorization.php',
 				'aiCode'        => require ET_AI_PLUGIN_DIR . '/i18n/ai-code.php',
 				'aiImageEditor' => require ET_AI_PLUGIN_DIR . '/i18n/ai-image-editor.php',
 			],
-			'ajaxurl' => is_ssl() ? admin_url( 'admin-ajax.php' ) : admin_url( 'admin-ajax.php', 'http' ),
-			'nonces'  => [
+			'ajaxurl'                    => is_ssl() ? admin_url( 'admin-ajax.php' ) : admin_url( 'admin-ajax.php', 'http' ),
+			'nonces'                     => [
 				'et_builder_update_et_account' => wp_create_nonce( 'et_builder_update_et_account' ),
-				'et_ai_upload_image' => wp_create_nonce( 'et_ai_upload_image' ),
+				'et_ai_upload_image'           => wp_create_nonce( 'et_ai_upload_image' ),
+				'et_ai_layout_save_defaults'   => wp_create_nonce( 'et_ai_layout_save_defaults' ),
+				'et_ai_delete_images'          => wp_create_nonce( 'et_ai_delete_images' ),
 			],
-			'site_name'           => '',
-			'site_description'    => '',
-			'site_language'       => self::get_language_english_name(),
-			'available_languages' => self::get_available_languages(),
-			'images_uri'          => ET_AI_PLUGIN_URI . '/app/images',
-			'ai_server_url'       => ET_AI_SERVER_URL,
-			'product_version'     => ET_BUILDER_PRODUCT_VERSION,
+			'site_name'                  => '',
+			'site_description'           => '',
+			'page_name'                  => get_the_title(),
+			'post_type'                  => get_post_type(),
+			'site_language'              => self::get_language_english_name(),
+			'available_languages'        => self::get_available_languages(),
+			'available_fonts'            => self::get_available_fonts(),
+			'images_uri'                 => ET_AI_PLUGIN_URI . '/images',
+			'ai_server_url'              => ET_AI_SERVER_URL,
+			'ai_default_heading_font'    => $ai_default_heading_font,
+			'ai_default_body_font'       => $ai_default_body_font,
+			'heading_font_color'         => $heading_font_color,
+			'body_font_color'            => $body_font_color,
+			'website_body_font_color'    => $website_body_font_color,
+			'website_heading_font_color' => $website_heading_font_color,
+			'website_body_font'          => $website_body_font,
+			'website_heading_font'       => $website_heading_font,
+			'primary_color'              => $primary_color,
+			'secondary_color'            => $secondary_color,
+			'default_site_desc'          => $default_site_description,
+			'placeholder_image'          => ET_AI_PLACEHOLDER_LANDSCAPE_IMAGE_DATA,
+			'product_version'            => ET_BUILDER_PRODUCT_VERSION,
 		);
 
 		if ( get_post_type() === 'page' ) {
@@ -249,7 +410,7 @@ class ET_AI_App {
 			}
 
 			if ( ! defined( 'ET_AI_PLUGIN_DIR' ) ) {
-				define( 'ET_AI_PLUGIN_DIR',  untrailingslashit( plugin_dir_path( __FILE__ ) ) );
+				define( 'ET_AI_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 			}
 		} else {
 			if ( ! defined( 'ET_AI_PLUGIN_URI' ) ) {
@@ -295,7 +456,7 @@ class ET_AI_App {
 			}
 
 			wp_enqueue_script( 'et-ai-app', $BUNDLE_URI, $BUNDLE_DEPS, (string) $cache_buster, true );
-			wp_localize_script( 'et-ai-app', 'et_ai_data', ET_AI_App::get_ai_app_helpers());
+			wp_localize_script( 'et-ai-app', 'et_ai_data', self::get_ai_app_helpers() );
 		}
 	}
 }

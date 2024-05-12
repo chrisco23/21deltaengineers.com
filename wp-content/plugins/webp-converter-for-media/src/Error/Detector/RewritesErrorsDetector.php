@@ -242,7 +242,7 @@ class RewritesErrorsDetector implements DetectorInterface {
 			__FUNCTION__
 		);
 
-		return ( $file_status === 403 );
+		return ( in_array( $file_status, [ 403, 404 ] ) );
 	}
 
 	/**

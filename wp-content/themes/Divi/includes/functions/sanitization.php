@@ -305,3 +305,29 @@ function et_sanitize_background_attachment( $choosen ) {
 		apply_filters( 'et_sanitize_background_attachment_default', 'scroll' )
 	);
 }
+
+/**
+ * Sanitize font weight choices
+ *
+ * @param string $choosen Selected value.
+ *
+ * @since ??
+ *
+ * @return string|bool
+ */
+function et_sanitize_global_font_weight( $choosen ) {
+	return et_sanitize_key_based_option( $choosen, et_builder_get_font_weight_list() );
+}
+
+/**
+ * Sanitize Header font style choices.
+ *
+ * @param string $choosen Selected value.
+ *
+ * @since ??
+ *
+ * @return string|bool
+ */
+function et_divi_global_font_style( $choosen ) {
+	return et_sanitize_key_based_option( $choosen, et_divi_global_font_style_choices() );
+}

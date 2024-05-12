@@ -976,7 +976,7 @@ class ET_Builder_Library {
 
 		if ( count( $categories ) > 1 ) {
 			// Sort categories (post_type in this case) by slug.
-			uasort( $categories, array( 'self', 'compare_by_slug' ) );
+			uasort( $categories, array( 'ET_Builder_Library', 'compare_by_slug' ) );
 		}
 
 		return array(

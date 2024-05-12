@@ -1,3 +1,16 @@
+##### [Version 3.3.20](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.19...v3.3.20) (2024-04-16)
+
+fix required params on sprintf
+
+##### [Version 3.3.19](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.18...v3.3.19) (2024-04-15)
+
+Add full translation support
+
+##### [Version 3.3.18](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.17...v3.3.18) (2024-04-05)
+
+### Big Fixes
+- Fix rollback for Themes
+
 ##### [Version 3.3.17](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.16...v3.3.17) (2024-04-01)
 
 ### Improvements

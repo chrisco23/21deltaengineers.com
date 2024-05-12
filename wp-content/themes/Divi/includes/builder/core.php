@@ -7,6 +7,26 @@
  */
 
 /**
+ * Sanitizes the post content before saving it.
+ *
+ * This function is used as a filter callback for the 'pre_post_content' filter hook.
+ * It removes the 'data-et-multi-view' attribute from the post content, unless the current user has the 'unfiltered_html' capability.
+ *
+ * @since 4.25.1
+ *
+ * @param string $post_content The post content to be sanitized.
+ * @return string The sanitized post content.
+ */
+function et_builder_sanitize_post_content_before_saving( $post_content ) {
+	if ( current_user_can( 'unfiltered_html' ) ) {
+		return $post_content;
+	}
+
+	return str_ireplace( 'data-et-multi-view', '', $post_content );
+}
+add_filter( 'pre_post_content', 'et_builder_sanitize_post_content_before_saving' );
+
+/**
  * Render a builder layout to string.
  *
  * @since 4.0.8
@@ -2612,6 +2632,8 @@ function et_fb_get_nonces() {
 		'defaultColorsUpdate'             => wp_create_nonce( 'et_builder_default_colors_update' ),
 		'saveDomainToken'                 => wp_create_nonce( 'et_builder_ajax_save_domain_token' ),
 		'beforeAfterComponents'           => wp_create_nonce( 'et_fb_fetch_before_after_components_nonce' ),
+		'aiLayoutSaveDefaults'            => wp_create_nonce( 'et_ai_layout_save_defaults' ),
+		'saveCustomizerFonts'             => wp_create_nonce( 'et_pb_save_customizer_fonts_nonce' ),
 	);
 
 	return array_merge( $nonces, $fb_nonces );
@@ -5123,6 +5145,8 @@ if ( ! function_exists( 'et_builder_get_font_family' ) ) :
 	 * @return string
 	 */
 	function et_builder_get_font_family( $font_name, $use_important = false ) {
+		$is_global_font        = in_array( $font_name, array( '--et_global_heading_font', '--et_global_body_font' ), true );
+		$font_name             = $is_global_font ? '--et_global_heading_font' === $font_name ? et_get_option( 'heading_font', '' ) : et_get_option( 'body_font', '' ) : $font_name;
 		$user_fonts            = et_builder_get_custom_fonts();
 		$fonts                 = isset( $user_fonts[ $font_name ] ) ? $user_fonts : et_builder_get_fonts();
 		$removed_fonts_mapping = et_builder_old_fonts_mapping();
@@ -5138,7 +5162,9 @@ if ( ! function_exists( 'et_builder_get_font_family' ) ) :
 		}
 
 		if ( '' !== $font_style ) {
-			$font_weight = sprintf( ' font-weight: %1$s;', esc_html( $font_style ) );
+			$is_global_font_weigth = in_array( $font_style, array( '--et_global_heading_font_weight', '--et_global_body_font_weight' ), true );
+			$font_weight_value     = $is_global_font_weigth ? '--et_global_heading_font_weight' === $font_style ? et_get_option( 'heading_font_weight', '' ) : et_get_option( 'body_font_weight', '' ) : $font_style;
+			$font_weight           = sprintf( ' font-weight: %1$s;', esc_html( $font_style ) );
 		}
 
 		$style = sprintf(
@@ -7355,4 +7381,63 @@ function et_light_debug_backtrace() {
 	}
 
 	return array_slice( $light_debug_backtrace, 1 );
+}
+
+/**
+ * Get all global colors.
+ *
+ * @since 4.9.0
+ *
+ * @return array
+ */
+function et_builder_get_all_global_colors( $include_customizer = false ) {
+	if ( $include_customizer ) {
+		$primary_color   = et_get_option( 'accent_color', '#2ea3f2' );
+		$secondary_color = et_get_option( 'secondary_accent_color', '#2ea3f2' );
+		$heading_color   = et_get_option( 'header_color', '#666666' );
+		$body_color      = et_get_option( 'font_color', '#666666' );
+
+		$saved_global_colors = et_get_option( 'et_global_colors' );
+
+		if ( empty( $saved_global_colors ) ) {
+			$saved_global_colors = [];
+		}
+
+		// Remove customizer global colors if exist for any reason.
+		// For example if user imported global colors on old version of Divi which doesn't support customizer colors.
+		$excluded_keys = [
+			'gcid-primary-color',
+			'gcid-secondary-color',
+			'gcid-heading-color',
+			'gcid-body-color',
+		];
+
+		foreach ( $excluded_keys as $excluded_key ) {
+			unset( $saved_global_colors[ $excluded_key ] );
+		}
+
+		return array_merge(
+			[
+				'gcid-primary-color'   => [
+					'color'  => $primary_color,
+					'active' => 'yes',
+				],
+				'gcid-secondary-color' => [
+					'color'  => $secondary_color,
+					'active' => 'yes',
+				],
+				'gcid-heading-color'   => [
+					'color'  => $heading_color,
+					'active' => 'yes',
+				],
+				'gcid-body-color'      => [
+					'color'  => $body_color,
+					'active' => 'yes',
+				],
+			],
+			$saved_global_colors
+		);
+	}
+
+	return et_get_option( 'et_global_colors' );
 }

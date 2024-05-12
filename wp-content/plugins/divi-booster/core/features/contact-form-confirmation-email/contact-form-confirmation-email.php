@@ -135,6 +135,10 @@ class DBDB_ContactForm_Confirmation {
         if (empty($message)) {
             $message = $this->default_email_content();
         }
+
+        // URL decode the message
+        $message = urldecode($message);
+
         // If message starts with '</p>', remove it:
         if (substr($message, 0, 4) === '</p>') {
             $message = substr($message, 4);
@@ -148,6 +152,8 @@ class DBDB_ContactForm_Confirmation {
         foreach ($processed_fields_values as $key => $value) {
             $message = str_ireplace("%%{$key}%%", wp_strip_all_tags($value['value']), $message);
         }
+
+        error_log($message);
 
         return $message;
     }

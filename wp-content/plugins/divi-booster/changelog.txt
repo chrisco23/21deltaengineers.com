@@ -1,3 +1,34 @@
+= 4.4.9 (8 May 2024) =
+* Added option to fix divi gallery layout bug to main settings
+* Improved cursor-following arrows scroll behavior
+* Added option to set "aria-label" attribute on the logo
+
+= 4.4.8 (7 May 2024) =
+* Fixed gallery image counter not updating when cursor-following arrow effect used
+* Fixed divi gallery layout bug affecting gallery image counter on first slide change
+* Added option to change gallery image count separator
+
+= 4.4.7 (2 May 2024) =
+* Added centered header layout support for mobile button on desktop feature
+
+= 4.4.6 (28 Apr 2024) =
+* Added option to enable cursor-following arrow effect in gallery module
+
+= 4.4.5 (25 Apr 2024) =
+* Added color option for mobile header on desktop feature
+
+= 4.4.4 (22 Apr 2024) =
+* Fixed slider randomization not working correctly when main header is semi-transparent
+
+= 4.4.3 (17 Apr 2024) =
+* Slider randomization option now also available in the fullwidth slider module
+
+= 4.4.2 (9 Apr 2024) =
+* Fixed images not showing in contact form confirmation email
+
+= 4.4.1 (1 Apr 2024) =
+* Added option to disable slide title link in slider module
+
 = 4.4.0 (26 Feb 2024) =
 * Added support for field placeholders in contact form confirmation message.
 * Added new social icons: Rumble, Truth Social and Gab

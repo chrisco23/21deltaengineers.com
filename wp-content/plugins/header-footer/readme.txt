@@ -1,7 +1,7 @@
 === Head, Footer and Post Injections ===
 Tags: header, footer, ads, analytics, facebook pixel, amp
-Tested up to: 6.3.2
-Stable tag: 3.2.7
+Tested up to: 6.5.2
+Stable tag: 3.2.8
 Donate link: https://www.satollo.net/donations
 Contributors: satollo
 
@@ -9,12 +9,6 @@ Contributors: satollo
 Header and Footer plugin let you to add html code to the head and footer sections of your blog page, inside posts... and more!
 
 == Description ==
-
-About WordPress SEO and Facebook Open Graph: I was very unpleased by Yoast invitation to
-remove my plugin, and it's not the case.
-[Read more here](https://www.satollo.net/yoast-and-wordpress-seo-this-is-too-much-conflict-with-header-and-footer).
-
-= Head and Footer Codes =
 
 Why you have to install 10 plugins to add Google Analytics, Facebook Pixel, custom
 tracking code, Google DFP code, Google Webmaster/Alexa/Bing/Tradedoubler verification code and so on...
@@ -88,6 +82,10 @@ FAQs are answered on [Header and Footer](http://www.satollo.net/plugins/header-f
 
 
 == Changelog ==
+
+= 3.2.8 =
+
+* WP 6.5.2
 
 = 3.2.7 =
 

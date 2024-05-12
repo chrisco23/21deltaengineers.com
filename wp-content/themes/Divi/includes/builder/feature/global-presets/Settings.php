@@ -395,7 +395,7 @@ class ET_Builder_Global_Presets_Settings {
 		$gc_info = json_decode( $attrs['global_colors_info'], true );
 
 		// Gather system-wide Global Colors info (including CSS color values and 'active' status).
-		$all_global_colors_info = et_get_option( 'et_global_colors' );
+		$all_global_colors_info = et_builder_get_all_global_colors( true );
 
 		foreach ( $gc_info as $color_id => $option_names ) {
 			foreach ( $option_names as $option_name ) {
@@ -828,7 +828,7 @@ class ET_Builder_Global_Presets_Settings {
 						 */
 
 						// Gather system-wide Global Colors info (including CSS color values and 'active' status).
-						$all_global_colors_info = et_get_option( 'et_global_colors' );
+						$all_global_colors_info = et_builder_get_all_global_colors( true );
 
 						$fixed_global_colors_info = array();
 
@@ -846,7 +846,7 @@ class ET_Builder_Global_Presets_Settings {
 							$fixed_global_colors_info[ $gcid ] = $settings_that_use_this_gcid;
 
 							// Get the CSS color value assiciated with this GCID.
-							if ( ! empty( $all_global_colors_info[ $gcid ]['color'] ) ) {
+							if ( ! empty( $all_global_colors_info[ $gcid ]['color'] ) && 'yes' === $all_global_colors_info[ $gcid ]['active'] ) {
 								$gcid_color_value = $all_global_colors_info[ $gcid ]['color'];
 							} else {
 								// We can't inject the CSS color value if we don't have record of it.
@@ -859,7 +859,8 @@ class ET_Builder_Global_Presets_Settings {
 									$settings_match = $settings_filtered[ $uses_this_gcid ];
 
 									// Replace CSS color value with GCID wherever it's found within the settings string.
-									$injected_gcid = str_replace( $gcid, $gcid_color_value, $settings_match );
+									// If string contains multiple values use strp_replace, otherwise just replace the value.
+									$injected_gcid = false === strpos( $settings_match, '|' ) ? $gcid : str_replace( $gcid_color_value, $gcid, $settings_match );
 
 									// Pass the GCID-injected string back to the preset setting.
 									$result->$module->presets->$preset_id->settings->$uses_this_gcid = $injected_gcid;

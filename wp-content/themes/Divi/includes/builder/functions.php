@@ -8,7 +8,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '4.24.2' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '4.25.1' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -977,14 +977,15 @@ if ( ! function_exists( 'et_builder_page_creation_options' ) ) :
 					'value_index' => 2,
 				),
 			),
-			'clone_existing_page'   => array(
-				'className'       => 'accent-green',
-				'imgSrc'          => 'clone.png',
-				'imgSrcHover'     => 'clone.gif',
-				'titleText'       => esc_html__( 'Clone Existing page', 'et_builder' ),
-				'descriptionText' => esc_html__( 'Jump start your layout design by duplicating another page that you’ve already built.', 'et_builder' ),
-				'buttonText'      => esc_html__( 'Choose Page', 'et_builder' ),
-				'permission'      => array( 'load_layout', 'divi_library', 'edit_module' ),
+			'build_with_ai'         => array(
+				'className'       => 'accent-dark-blue',
+				'imgSrc'          => 'layout-insert-build-with-ai.svg',
+				'imgSrcHover'     => 'layout-insert-build-with-ai.svg',
+				'titleText'       => esc_html__( 'Build With AI', 'et_builder' ),
+				'bannerText'      => esc_html__( 'Brand New', 'et_builder' ),
+				'descriptionText' => esc_html__( 'Simply describe your page content, sit back, relax, and let Divi AI build your page with the click of a button.', 'et_builder' ),
+				'buttonText'      => esc_html__( 'Generate Layout', 'et_builder' ),
+				'permission'      => array( 'divi_ai' ),
 				'setting'         => array(
 					'value_index' => 3,
 				),
@@ -3240,6 +3241,10 @@ if ( ! function_exists( 'et_builder_set_element_font' ) ) :
 
 				$style .= "$font_family ";
 			}
+
+			// Parse global font weight value.
+			$is_global_font_weigth = in_array( $font_weight, array( '--et_global_heading_font_weight', '--et_global_body_font_weight' ), true );
+			$font_weight           = $is_global_font_weigth ? '--et_global_heading_font_weight' === $font_weight ? et_get_option( 'heading_font_weight', '' ) : et_get_option( 'body_font_weight', '' ) : $font_weight;
 
 			$style .= et_builder_set_element_font_style( 'font-weight', ( '' !== $font_weight_default && ( '' === $font_weight || $font_weight_default === $font_weight ) ), ( '' !== $font_weight ), 'normal', $font_weight, $use_important );
 
@@ -11536,7 +11541,7 @@ function et_fb_add_additional_attrs( $processed_attrs, $output ) {
 			continue;
 		}
 
-		$global_color_info = et_builder_get_all_global_colors();
+		$global_color_info = et_builder_get_all_global_colors( true );
 
 		// If there are no matching Global Colors, return null.
 		if ( ! is_array( $global_color_info ) ) {
@@ -13252,8 +13257,28 @@ if ( ! function_exists( 'et_builder_global_colors_ajax_save_handler' ) ) :
 			wp_send_json_error();
 		}
 
+		/**
+		 * Fires after global colors are processed.
+		 *
+		 * @since 4.25.0
+		 */
+		do_action( 'et_global_colors_saved', $global_colors );
+
+		// Do not save customizer colors into Global Colors setting.
+		$excluded_keys = [
+			'gcid-primary-color',
+			'gcid-secondary-color',
+			'gcid-heading-color',
+			'gcid-body-color',
+		];
+
+		foreach ( $excluded_keys as $excluded_key ) {
+			unset( $global_colors[ $excluded_key ] );
+		}
+
 		// Global Color data has been sanitized above.
 		et_update_option( 'et_global_colors', $global_colors );
+
 		ET_Core_PageResource::remove_static_resources( 'all', 'all' );
 
 		wp_send_json_success();
@@ -13261,17 +13286,6 @@ if ( ! function_exists( 'et_builder_global_colors_ajax_save_handler' ) ) :
 endif;
 
 add_action( 'wp_ajax_et_builder_global_colors_save', 'et_builder_global_colors_ajax_save_handler' );
-
-/**
- * Get all global colors.
- *
- * @since 4.9.0
- *
- * @return array
- */
-function et_builder_get_all_global_colors() {
-	return et_get_option( 'et_global_colors' );
-}
 
 if ( ! function_exists( 'et_builder_global_colors_ajax_get_handler' ) ) :
 	/**
@@ -13282,7 +13296,7 @@ if ( ! function_exists( 'et_builder_global_colors_ajax_get_handler' ) ) :
 	function et_builder_global_colors_ajax_get_handler() {
 		// Get nonce from $_GET.
 		et_core_security_check( 'edit_posts', 'et_builder_global_colors_get', 'et_builder_global_colors_get_nonce', '_GET' );
-		wp_send_json_success( [ 'global_colors' => et_builder_get_all_global_colors() ] );
+		wp_send_json_success( [ 'global_colors' => et_builder_get_all_global_colors( true ) ] );
 	}
 endif;
 
@@ -13298,7 +13312,7 @@ add_action( 'wp_ajax_et_builder_global_colors_get', 'et_builder_global_colors_aj
  * @return array
  */
 function et_builder_get_global_color_info( $color_id ) {
-	$colors = et_builder_get_all_global_colors();
+	$colors = et_builder_get_all_global_colors( true );
 
 	if ( empty( $colors ) || ! array_key_exists( $color_id, $colors ) ) {
 		return null;
@@ -13467,3 +13481,72 @@ if ( ! function_exists( 'et_pb_validate_youtube_url' ) ) :
 	}
 endif;
 
+if ( ! function_exists( 'et_update_customizer_colors' ) ) :
+	/**
+	 * Update customizer colors.
+	 *
+	 * @param array $global_colors Global colors.
+	 *
+	 * @since 4.25.0
+	 *
+	 * @return void
+	 */
+	function et_update_customizer_colors( $global_colors ) {
+		$primary_color   = isset( $global_colors['gcid-primary-color']['color'] )
+			? $global_colors['gcid-primary-color']['color']
+			: '';
+		$secondary_color = isset( $global_colors['gcid-secondary-color']['color'] )
+			? $global_colors['gcid-secondary-color']['color']
+			: '';
+		$heading_color   = isset( $global_colors['gcid-header-color']['color'] )
+			? $global_colors['gcid-header-color']['color']
+			: '';
+		$body_color      = isset( $global_colors['gcid-font-color']['color'] )
+			? $global_colors['gcid-font-color']['color']
+			: '';
+
+		if ( ! empty( $primary_color ) ) {
+			et_update_option( 'accent_color', $primary_color );
+		}
+
+		if ( ! empty( $secondary_color ) ) {
+			et_update_option( 'secondary_accent_color', $secondary_color );
+		}
+
+		if ( ! empty( $heading_color ) ) {
+			et_update_option( 'header_color', $heading_color );
+		}
+
+		if ( ! empty( $body_color ) ) {
+			et_update_option( 'font_color', $body_color );
+		}
+	}
+endif;
+
+add_action( 'et_global_colors_saved', 'et_update_customizer_colors' );
+
+/**
+ * Ajax Callback :: Update cusomizer fonts.
+ */
+function et_update_customizer_fonts() {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['nonce'] ), 'et_pb_save_customizer_fonts_nonce' ) ) {
+		die( -1 );
+	}
+
+	if ( ! current_user_can( 'edit_theme_options' ) ) {
+		die( -1 );
+	}
+
+	$new_heading_font = isset( $_POST['et_pb_heading_font'] ) ? sanitize_text_field( $_POST['et_pb_heading_font'] ) : '';
+	$new_body_font   = isset( $_POST['et_pb_body_font'] ) ? sanitize_text_field( $_POST['et_pb_body_font'] ) : '';
+
+	if ( $new_heading_font ) {
+		et_update_option( 'heading_font', $new_heading_font );
+	}
+
+	if ( $new_body_font ) {
+		et_update_option( 'body_font', $new_body_font );
+	}
+}
+
+add_action( 'wp_ajax_et_update_customizer_fonts', 'et_update_customizer_fonts' );

@@ -278,6 +278,7 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'et_fb_fetch_before_after_components',
 			'et_code_snippets_library_get_items',
 			'et_builder_global_colors_get',
+			'et_update_customizer_fonts',
 		),
 	);
 

@@ -14,6 +14,24 @@ function et_divi_font_style_choices() {
 }
 endif;
 
+if ( ! function_exists( 'et_divi_global_font_style_choices' ) ) :
+	/**
+	 * Returns global font style options.
+	 *
+	 * @return array
+	 */
+	function et_divi_global_font_style_choices() {
+		return apply_filters(
+			'et_divi_global_font_style_choices',
+			[
+				'italic'    => esc_html__( 'Italic', 'Divi' ),
+				'uppercase' => esc_html__( 'Uppercase', 'Divi' ),
+				'underline' => esc_html__( 'Underline', 'Divi' ),
+			]
+		);
+	}
+endif;
+
 if ( ! function_exists( 'et_divi_color_scheme_choices' ) ) :
 /**
  * Returns list of color scheme used by Divi

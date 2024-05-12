@@ -29,6 +29,13 @@ class ET_Builder_Element {
 	public $name;
 
 	/**
+	 * Legacy template name (Extra).
+	 *
+	 * @var string
+	 */
+	public $template_name;
+
+	/**
 	 * Module plural name.
 	 *
 	 * @var string
@@ -134,6 +141,13 @@ class ET_Builder_Element {
 	 * @var array
 	 */
 	public $defaults;
+
+	/**
+	 * Legacy fields defaults.
+	 *
+	 * @var array
+	 */
+	public $fields_defaults;
 
 	/**
 	 * Additional shortcode slugs.
@@ -12579,7 +12593,7 @@ class ET_Builder_Element {
 
 		// Sort fields within tabs by priority.
 		foreach ( $tabs_fields as $tab_fields ) {
-			uasort( $tab_fields, array( 'self', 'compare_by_priority' ) );
+			uasort( $tab_fields, array( 'ET_Builder_Element', 'compare_by_priority' ) );
 			$sorted_fields = array_merge( $sorted_fields, $tab_fields );
 		}
 
@@ -13459,7 +13473,7 @@ class ET_Builder_Element {
 				continue;
 			}
 
-			$global_color_info = et_builder_get_all_global_colors();
+			$global_color_info = et_builder_get_all_global_colors( true );
 
 			// If there are no matching Global Colors, return null.
 			if ( ! is_array( $global_color_info ) ) {
@@ -18254,7 +18268,7 @@ class ET_Builder_Element {
 			 */
 			$sorted_modules = $parent_modules;
 
-			uasort( $sorted_modules, array( 'self', 'compare_by_name' ) );
+			uasort( $sorted_modules, array( 'ET_Builder_Element', 'compare_by_name' ) );
 
 			foreach ( $sorted_modules as $module ) {
 				/**

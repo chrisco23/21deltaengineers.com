@@ -1,3 +1,102 @@
+version 4.25.1 ( updated 05-07-2024 )
+- Security Update: Fixed a stored XSS vulnerability that could allow users with the Contributor role or above to execute unfiltered HTML via the Divi Countdown module using encoded HTML saved in the WordPress post editor.
+- Security Update: Fixed a stored XSS vulnerability that could allow users with the Contributor role or above to execute unfiltered HTML via the Divi Responsive Content script using encoded HTML saved in the WordPress post editor.
+- Updated Divi AI page creation card styles to avoid confusion with the Use Existing Page card that shard a similar style.
+	* ai-app/build/et-ai-app.bundle.css
+	* ai-app/build/et-ai-app.bundle.js
+	* ai-app/images/card-1.png
+	* ai-app/images/card-1.svg
+	* ai-app/images/card-2.png
+	* ai-app/images/card-2.svg
+	* ai-app/images/card-3.png
+	* ai-app/images/card-3.svg
+	* includes/builder/core.php
+	* includes/builder/feature/dynamic-assets/assets/js/countdown_timer.js
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/functions.php
+	* includes/builder/images/layout-insert-build-with-ai.svg
+	* includes/builder/images/layout-insert-saved-layout.svg
+	* includes/builder/languages/ar.po
+	* includes/builder/languages/bg_BG.po
+	* includes/builder/languages/cs_CZ.po
+	* includes/builder/languages/da_DK.po
+	* includes/builder/languages/de_DE.po
+	* includes/builder/languages/el.po
+	* includes/builder/languages/en_US.po
+	* includes/builder/languages/es_ES.po
+	* includes/builder/languages/fi.po
+	* includes/builder/languages/fr_FR.po
+	* includes/builder/languages/he_IL.po
+	* includes/builder/languages/hu_HU.po
+	* includes/builder/languages/id_ID.po
+	* includes/builder/languages/it_IT.po
+	* includes/builder/languages/ja.po
+	* includes/builder/languages/ko_KR.po
+	* includes/builder/languages/ms_MY.po
+	* includes/builder/languages/nb_NO.po
+	* includes/builder/languages/nl_NL.po
+	* includes/builder/languages/pl_PL.po
+	* includes/builder/languages/pt_BR.po
+	* includes/builder/languages/ro_RO.po
+	* includes/builder/languages/ru_RU.po
+	* includes/builder/languages/sk_SK.po
+	* includes/builder/languages/sr_RS.po
+	* includes/builder/languages/sv_SE.po
+	* includes/builder/languages/th.po
+	* includes/builder/languages/tl.po
+	* includes/builder/languages/tr_TR.po
+	* includes/builder/languages/uk.po
+	* includes/builder/languages/vi.po
+	* includes/builder/languages/zh_CN.po
+
+version 4.25 ( updated 04-18-2024 )
+- Introduced Divi Layouts AI: Generate entire Divi pages with a simple prompt using AI.
+- Fixed a fatal error that can occur with WordPress 6.5 while using a 3rd-party Divi extension which does not properly set the domain property when extending the DiviExtension base class.
+	* ai-app/ai-app.php
+	* ai-app/build/et-ai-app.bundle.js
+	* ai-app/build/et-ai-app.bundle.css
+	* ai-app/i18n/ai-image-editor.php
+	* ai-app/i18n/user-prompt.php
+	* ai-app/images/card-1.png
+	* ai-app/images/card-2.png
+	* ai-app/images/card-3.png
+	* core/components/Portability.php
+	* functions.php
+	* includes/builder/api/DiviExtension.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/class-et-builder-settings.php
+	* includes/builder/core.php
+	* includes/builder/feature/Library.php
+	* includes/builder/feature/global-presets/Settings.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/functions.php
+	* includes/builder/images/ai.png
+	* includes/builder/images/layout-insert-build-with-ai.svg
+	* includes/builder/images/layout-insert-premade-layout.svg
+	* includes/builder/images/layout-insert-saved-layout.svg
+	* includes/builder/module/helpers/Background.php
+	* includes/builder/scripts/src/builder.js
+	* includes/functions/choices.php
+	* includes/functions/sanitization.php
+	* js/src/theme-customizer.js
+
+version 4.24.3 ( updated 04-02-2024 )
+- Fixed several compatibility issues with PHP 8.2.
+- Fix deprecated messages when editing existing post with Divi Layout block in WordPress 6.5.
+- Fix deprecated messages when adding new post or edit existing post in WordPress 6.5.
+- Fixed image refinement issues by correcting endpoint usage and prompt handling.
+- Added multiple upscaling and canvas limit to 8192px.
+	* ai-app/build/et-ai-app.bundle.js
+	* ai-app/build/et-ai-app.bundle.css
+	* ai-app/i18n/ai-image-editor.php
+	* includes/builder/api/DiviExtension.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/feature/Library.php
+	* includes/builder/frontend-builder/bundle.js
+
 version 4.24.2 ( updated 02-20-2024 )
 - Fixed an issue in the Divi Builder that caused fields in the module settings modal to crash.
 	* core/code-snippets/app/boot.js

@@ -2,8 +2,8 @@
 Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
-Tested up to: 6.4
-Stable tag: 3.0.1
+Tested up to: 6.5
+Stable tag: 3.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,19 @@ The folder toggle arrow is greyed out when a folder doesn't have any child folde
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 3.0.4 (April 29, 2024) =
+* Fix: folder pane not appearing in some instances due to JavaScript error caused by expanded folders data being encoded as an object instead of an array
+
+= 3.0.3 (April 10, 2024) =
+* Fix: HTML character entities (e.g. &amp;) appearing in folder names
+* Fix: item count wrong after cloning folder
+* Fix: folder appears in wrong position after cloning
+
+= 3.0.2 (April 5, 2024) =
+* Fix: remove newly-added post types that don't support dynamic folders from Dynamic Folders section on Settings page
+* Tweak: minor adjustment to CSS to make folder toolbar line up with media toolbar
+* Tweak: updated tested-up-to version
 
 = 3.0.1 (March 4, 2024) =
 * New: add support for Restrict Content Pro membership levels (Wicked Folders Pro)

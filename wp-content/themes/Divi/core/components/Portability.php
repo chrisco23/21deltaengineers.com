@@ -295,7 +295,7 @@ class ET_Core_Portability {
 
 		if ( ! empty( $import['global_colors'] ) ) {
 			$this->import_global_colors( $import['global_colors'] );
-			$success['globalColors'] = et_builder_get_all_global_colors();
+			$success['globalColors'] = et_builder_get_all_global_colors( true );
 		}
 
 		return $success;
@@ -1223,10 +1223,17 @@ class ET_Core_Portability {
 	 * @return void
 	 */
 	public function import_global_colors( $incoming_global_colors ) {
-		$global_colors = array();
+		$excluded_colors = array( 'gcid-primary-color', 'gcid-secondary-color', 'gcid-heading-color', 'gcid-body-color' );
+		$global_colors   = array();
 
 		foreach ( $incoming_global_colors as $incoming_gcolor ) {
 			$key                   = et_()->sanitize_text_fields( $incoming_gcolor[0] );
+
+			// Skip excluded colors.
+			if ( in_array( $key, $excluded_colors, true ) ) {
+				continue;
+			}
+
 			$global_colors[ $key ] = et_()->sanitize_text_fields( $incoming_gcolor[1] );
 		}
 

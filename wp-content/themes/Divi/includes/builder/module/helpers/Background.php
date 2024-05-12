@@ -1863,7 +1863,7 @@ class ET_Builder_Module_Helper_Background {
 			return $color;
 		}
 
-		$global_colors = et_builder_get_all_global_colors();
+		$global_colors = et_builder_get_all_global_colors( true );
 
 		// If there are no matching Global Colors, return null.
 		if ( ! is_array( $global_colors ) ) {

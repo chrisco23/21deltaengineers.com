@@ -1,3 +1,8 @@
+#####   Version 4.7.10 (2024-04-17)
+
+### Improvements
+- **Updated internal dependencies:** Enhanced performance and security.
+
 #####   Version 4.7.9 (2024-04-01)
 
 ### Improvements

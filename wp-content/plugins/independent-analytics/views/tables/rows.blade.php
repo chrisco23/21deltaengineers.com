@@ -36,10 +36,10 @@
         <?php $class = $table_name == 'views' && $row->is_deleted() ? 'iawp-row deleted' : 'iawp-row'; ?>
         <div class="<?php echo esc_attr($class); ?>" <?php echo $table->get_row_data_attributes($row) ?>>
             <?php foreach ($all_columns as $column): ?>
-            <?php $class = $column->visible() ? 'cell' : 'cell hide'; ?>
+            <?php $class = $column->is_visible() ? 'cell' : 'cell hide'; ?>
         <div class="<?php echo esc_attr($class); ?>"
              data-column="<?php echo esc_attr($column->id()); ?>"
-             data-test-visibility="<?php echo $column->visible() ? 'visible' : 'hidden'; ?>"
+             data-test-visibility="<?php echo $column->is_visible() ? 'visible' : 'hidden'; ?>"
         >
             <div class="row-number"><?php echo $index + 1; ?></div>
             <span class="cell-content"><?php echo wp_kses_post($table->get_cell_content($row, $column)); ?></span>

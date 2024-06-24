@@ -1,3 +1,25 @@
+version 4.25.2 ( updated 06-12-2024 )
+- Security Update: Fixed a stored XSS vulnerability that made it possible for users with Contributor role or above to insert JavaScript code onto the page via the Divi Builder Gallery module's shortcode. Props to Ngô Thiên An (ancorn_) for the responsible disclosure.
+- Hide Role Editor settings related to Theme Options, Theme Builder, Theme Customizer, Divi Library, and Support Center for roles without edit_theme_options capability. By default, this changes effected Editor, Author, and Contributor roles, unless they have edit_theme_options capability.
+- Fixed a PHP fatal error that occurred in some cases when importing Theme Builder layouts.
+- Fixed a PHP notice that occurred during Social Media module Twitter to X migration.
+- Fixed a PHP warning (Undefined array key 0).
+	* core/components/Portability.php
+	* core/components/SupportCenter.php
+	* core/components/Updates.php
+	* core/components/init.php
+	* core/functions.php
+	* epanel/core_functions.php
+	* epanel/custom_functions.php
+	* functions.php
+	* includes/builder/class-et-builder-value.php
+	* includes/builder/core.php
+	* includes/builder/frontend-builder/theme-builder/admin.php
+	* includes/builder/functions.php
+	* includes/builder/module/Gallery.php
+	* includes/builder/module/settings/migration/SocialMediaFollowNetworkTwitterToX.php
+	* includes/builder/scripts/frontend/scripts.js
+
 version 4.25.1 ( updated 05-07-2024 )
 - Security Update: Fixed a stored XSS vulnerability that could allow users with the Contributor role or above to execute unfiltered HTML via the Divi Countdown module using encoded HTML saved in the WordPress post editor.
 - Security Update: Fixed a stored XSS vulnerability that could allow users with the Contributor role or above to execute unfiltered HTML via the Divi Responsive Content script using encoded HTML saved in the WordPress post editor.

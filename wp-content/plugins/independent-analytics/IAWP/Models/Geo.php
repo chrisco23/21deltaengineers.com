@@ -5,8 +5,8 @@ namespace IAWP\Models;
 /** @internal */
 class Geo
 {
-    use \IAWP\Models\View_Stats;
-    use \IAWP\Models\WooCommerce_Stats;
+    use \IAWP\Models\Universal_Model_Columns;
+    protected $row;
     private $continent;
     private $country;
     private $country_code;
@@ -14,13 +14,12 @@ class Geo
     private $city;
     public function __construct($row)
     {
+        $this->row = $row;
         $this->continent = $row->continent;
         $this->country = $row->country;
         $this->country_code = $row->country_code;
         $this->subdivision = $row->subdivision ?? '';
         $this->city = $row->city ?? '';
-        $this->set_view_stats($row);
-        $this->set_wc_stats($row);
     }
     public function continent()
     {

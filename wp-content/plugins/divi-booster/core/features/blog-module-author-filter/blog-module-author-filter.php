@@ -21,8 +21,7 @@ class BlogModuleAuthorFilterFeature {
             return $attrs;
         }
         add_filter('pre_get_posts', array($this, 'filter_the_posts'), 10, 2);
-        //$this->author = $attrs['dbdb_author_id'];
-        $this->author = isset($attrs['dbdb_author_id'])?$attrs['dbdb_author_id']:'';
+        $this->author = isset($attrs['dbdb_author_id']) ? $attrs['dbdb_author_id'] : '';
         return $attrs;
     }
 
@@ -34,12 +33,14 @@ class BlogModuleAuthorFilterFeature {
     }
 
     function remove_author_filter($output, $attrs) {
-        remove_filter('the_posts', array($this, 'filter_the_posts'), 10, 2);
+        remove_filter('pre_get_posts', array($this, 'filter_the_posts'), 10, 2);
         return $output;
     }
-    
+
     function add_fields($fields) {
-        if (!is_array($fields)) { return $fields; }
+        if (!is_array($fields)) {
+            return $fields;
+        }
 
         $fields['dbdb_author_id'] = array(
             'label' => 'Author ID',
@@ -54,5 +55,3 @@ class BlogModuleAuthorFilterFeature {
         return $fields;
     }
 }
-
-

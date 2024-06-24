@@ -30,10 +30,8 @@ class Settings
             }
             echo \IAWPSCOPED\iawp_blade()->run('settings.email-reports', ['is_scheduled' => \wp_next_scheduled('iawp_send_email_report'), 'scheduled_date' => \IAWPSCOPED\iawp()->email_reports->get_next_scheduled_email_date_formatted(), 'date_comparison' => \IAWPSCOPED\iawp()->email_reports->get_next_scheduled_email_date_formatted(\false), 'interval' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_interval', 'monthly'), 'time' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_time', 9), 'emails' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_email_addresses', []), 'default_colors' => $defaults, 'input_default' => $input_defaults]);
         }
-        $ip = Request::ip();
         $ips = \IAWPSCOPED\iawp()->get_option('iawp_blocked_ips', []);
-        $ip_is_blocked = \in_array($ip, $ips);
-        echo \IAWPSCOPED\iawp_blade()->run('settings.block-ips', ['current_ip' => $ip, 'ip_is_blocked' => $ip_is_blocked, 'ips' => $ips]);
+        echo \IAWPSCOPED\iawp_blade()->run('settings.block-ips', ['current_ip' => Request::ip(), 'ip_is_blocked' => Request::is_ip_address_blocked($ips), 'ips' => $ips]);
         echo \IAWPSCOPED\iawp_blade()->run('settings.block-by-role', ['roles' => \wp_roles()->roles, 'blocked' => \IAWPSCOPED\iawp()->get_option('iawp_blocked_roles', [])]);
         echo \IAWPSCOPED\iawp_blade()->run('settings.capabilities', ['editable_roles' => $this->get_editable_roles(), 'capabilities' => \IAWP\Capability_Manager::all_capabilities()]);
         echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter');
@@ -200,6 +198,9 @@ class Settings
     }
     public function sanitize_view_counter_post_types($user_input)
     {
+        if (\is_null($user_input)) {
+            return [];
+        }
         $site_post_types = \get_post_types(['public' => \true]);
         $to_save = [];
         foreach ($user_input as $post_type) {

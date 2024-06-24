@@ -1,11 +1,23 @@
-<div class="group-select-container">
-    <select id="group-select" class="group-select" data-controller="group" data-action="group#changeGroup">
-        <?php foreach($options as $option) : ?>
-            <option id="<?php echo esc_attr($option->id()) ?>" 
-                value="<?php echo esc_attr($option->id()) ?>"
-                <?php selected($option->id(), $group->id(), true); ?>
-                data-testid="group-by-<?php echo esc_attr($option->id()) ?>"><?php echo esc_html($option->singular()); ?></option>
-        <?php endforeach; ?>
-    </select>
-    <label><span class="dashicons dashicons-open-folder"></span></label>
-</div>
+@php /** @var \IAWP\Tables\Groups\Groups $groups */ @endphp
+@php /** @var \IAWP\Tables\Groups\Group $current_group */ @endphp
+
+@if($groups->has_grouping_options())
+    <div class="group-select-container">
+        <select id="group-select"
+                class="group-select"
+                data-controller="group"
+                data-action="group#changeGroup"
+        >
+            @foreach($groups->groups() as $group)
+                <option id="{{ esc_attr($group->id()) }}"
+                        value="{{ esc_attr($group->id()) }}"
+                        data-testid="group-by-{{ esc_attr($group->id()) }}"
+                        {{ selected($group->id(), $current_group->id(), true) }}
+                >
+                    {{ esc_html($group->singular()) }}
+                </option>
+            @endforeach
+        </select>
+        <label><span class="dashicons dashicons-open-folder"></span></label>
+    </div>
+@endif

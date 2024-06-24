@@ -18,7 +18,7 @@
                 @endif
             </a>
             @if($can_edit)
-                <div class="modal small" data-rename-report-target="modal">
+                <div class="iawp-modal small" data-rename-report-target="modal">
                     <div class="modal-inner">
                         <div class="title-small">
                             {{__('Rename report', 'independent-analytics')}}
@@ -67,7 +67,7 @@
                         data-action="click->copy-report#toggleModal"
                         data-copy-report-target="modalButton"
                         class="save-as-report-button iawp-button">{{__('Save As', 'independent-analytics')}}</button>
-                <div class="modal small" data-copy-report-target="modal">
+                <div class="iawp-modal small" data-copy-report-target="modal">
                     <div class="modal-inner">
                         <div class="title-small">
                             {{__('Create new report', 'independent-analytics')}}
@@ -103,7 +103,7 @@
                             data-delete-report-target="modalButton" class="iawp-button">
                         <span class="dashicons dashicons-trash"></span>
                     </button>
-                    <div class="modal small" data-delete-report-target="modal">
+                    <div class="iawp-modal small" data-delete-report-target="modal">
                         <div class="modal-inner">
                             <div class="title-small">
                                 {{__('Confirm', 'independent-analytics')}}

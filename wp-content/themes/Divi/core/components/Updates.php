@@ -854,15 +854,28 @@ final class ET_Core_Updates {
 	 * Delete Elegant Themes update products transient, whenever default WordPress update transient gets removed
 	 */
 	function maybe_reset_et_products_update_transient( $transient_name ) {
+		// Transient names for update transients we're interested in.
 		$update_transients_names = array(
 			'update_themes'  => 'et_update_themes',
 			'update_plugins' => 'et_update_all_plugins',
 		);
 
+		// Check if the transient name is one of the update transients we're interested in.
 		if ( empty( $update_transients_names[ $transient_name ] ) ) {
 			return;
 		}
 
+		// Check the last_checked time in the transient, and only delete it if it's older than 24 hours.
+		$et_update_transient = get_site_transient( $update_transients_names[ $transient_name ] );
+
+		if (
+			! empty( $et_update_transient->last_checked )
+			&& $et_update_transient->last_checked > ( time() - DAY_IN_SECONDS )
+		) {
+			return;
+		}
+
+		// Delete the ET update transient, because it's older than 24 hours.
 		delete_site_transient( $update_transients_names[ $transient_name ] );
 	}
 }

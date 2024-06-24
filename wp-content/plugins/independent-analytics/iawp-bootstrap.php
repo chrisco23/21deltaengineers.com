@@ -7,6 +7,7 @@ use IAWP\Dashboard_Options;
 use IAWP\Database;
 use IAWP\Date_Range\Exact_Date_Range;
 use IAWP\Env;
+use IAWP\Form;
 use IAWP\Geo_Database_Background_Job;
 use IAWP\Independent_Analytics;
 use IAWP\Interrupt;
@@ -17,8 +18,8 @@ use IAWP\Utils\BladeOne;
 use IAWP\WP_Option_Cache_Bust;
 \define( 'IAWP_DIRECTORY', \rtrim( \plugin_dir_path( __FILE__ ), \DIRECTORY_SEPARATOR ) );
 \define( 'IAWP_URL', \rtrim( \plugin_dir_url( __FILE__ ), '/' ) );
-\define( 'IAWP_VERSION', '2.4.3' );
-\define( 'IAWP_DATABASE_VERSION', '30' );
+\define( 'IAWP_VERSION', '2.5.1' );
+\define( 'IAWP_DATABASE_VERSION', '32' );
 \define( 'IAWP_LANGUAGES_DIRECTORY', \dirname( \plugin_basename( __FILE__ ) ) . '/languages' );
 \define( 'IAWP_PLUGIN_FILE', __DIR__ . '/iawp.php' );
 if ( \file_exists( \IAWPSCOPED\iawp_path_to( 'vendor/scoper-autoload.php' ) ) ) {
@@ -152,6 +153,14 @@ function iawp_using_woocommerce() : bool {
 }
 
 /** @internal */
+function iawp_using_a_form_plugin() : bool {
+    if ( \IAWPSCOPED\iawp_is_free() ) {
+        return \false;
+    }
+    return Form::has_any_active_form_plugins();
+}
+
+/** @internal */
 function iawp_dashboard_url(  array $query_arguments = []  ) : string {
     $default_query_arguments = [
         'page' => 'independent-analytics',
@@ -167,6 +176,15 @@ function iawp_blade() {
     $blade = BladeOne::create();
     $blade->share( 'env', new Env() );
     return $blade;
+}
+
+/** @internal */
+function iawp_icon(  string $icon  ) : string {
+    try {
+        return \IAWPSCOPED\iawp_blade()->run( 'icons.plugins.' . $icon );
+    } catch ( \Throwable $e ) {
+        return '';
+    }
 }
 
 /**
@@ -290,7 +308,7 @@ function iawp() {
     Migrations\Migrations::handle_migration_18_error();
     Migrations\Migrations::handle_migration_22_error();
     Migrations\Migrations::handle_migration_29_error();
-    $options = new Dashboard_Options();
+    $options = Dashboard_Options::getInstance();
     $options->maybe_redirect();
     new Migrations\Migration_Job();
     if ( \get_option( 'iawp_db_version', '0' ) === '0' ) {

@@ -83,7 +83,9 @@ class Schema {
 	public $nullableFields = [
 		'price',       // Needs to be 0 if free for Software Application.
 		'ratingValue', // Needs to be 0 for 0 star ratings.
-		'value'        // Needs to be 0 if free for product shipping details.
+		'value',       // Needs to be 0 if free for product shipping details.
+		'minValue',    // Needs to be 0 for product delivery time.
+		'maxValue'     // Needs to be 0 for product delivery time.
 	];
 
 	/**
@@ -99,6 +101,15 @@ class Schema {
 			'text'
 		]
 	];
+
+	/**
+	 * Whether we are generating the validator output.
+	 *
+	 * @since 4.6.3
+	 *
+	 * @var bool
+	 */
+	public $generatingValidatorOutput = false;
 
 	/**
 	 * Class constructor.
@@ -209,10 +220,9 @@ class Schema {
 	 *
 	 * @since 4.2.5
 	 *
-	 * @param  bool $isValidator Whether the current call is for the validator.
 	 * @return void
 	 */
-	protected function determineSmartGraphsAndContext( $isValidator = false ) {
+	protected function determineSmartGraphsAndContext() {
 		$this->graphs = array_merge( $this->graphs, $this->getDefaultGraphs() );
 
 		$contextInstance = new Context();
@@ -233,7 +243,7 @@ class Schema {
 		}
 
 		if ( is_singular() ) {
-			$this->determineContextSingular( $contextInstance, $isValidator );
+			$this->determineContextSingular( $contextInstance );
 		}
 
 		if ( is_category() || is_tag() || is_tax() ) {
@@ -281,10 +291,9 @@ class Schema {
 	 * @since 4.2.6
 	 *
 	 * @param  Context $contextInstance The Context class instance.
-	 * @param  bool    $isValidator     Whether we're getting the output for the validator.
 	 * @return void
 	 */
-	protected function determineContextSingular( $contextInstance, $isValidator ) {
+	protected function determineContextSingular( $contextInstance ) {
 		// Check if we're on a BuddyPress member page.
 		if ( function_exists( 'bp_is_user' ) && bp_is_user() ) {
 			$this->graphs[] = 'ProfilePage';
@@ -293,7 +302,7 @@ class Schema {
 		// If the current request is for the validator, we can't include the default graph here.
 		// We need to include the default graph that the validator sent.
 		// Don't do this if we're in Pro since we then need to get it from the post meta.
-		if ( ! $isValidator ) {
+		if ( ! $this->generatingValidatorOutput ) {
 			$this->graphs[] = $this->getDefaultPostGraph();
 		}
 

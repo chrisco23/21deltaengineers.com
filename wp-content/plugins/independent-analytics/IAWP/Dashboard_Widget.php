@@ -42,7 +42,7 @@ class Dashboard_Widget
         $date_range = new Relative_Date_Range('LAST_THIRTY');
         $statistics = new Page_Statistics($date_range);
         $chart = new \IAWP\Chart($statistics, null, \true);
-        $stats = new \IAWP\Quick_Stats(null, $statistics, \true);
+        $stats = new \IAWP\Quick_Stats($statistics, null, \true);
         echo $chart->get_html();
         echo $stats->get_html();
     }

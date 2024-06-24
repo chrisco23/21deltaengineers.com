@@ -1,3 +1,7 @@
+= 4.5.0 (3 Jun 2024) =
+* Disable related youtube videos to same channel feature now applied to playlists
+* Fixed blog module author filter not correctly removed after use
+
 = 4.4.9 (8 May 2024) =
 * Added option to fix divi gallery layout bug to main settings
 * Improved cursor-following arrows scroll behavior

@@ -1148,6 +1148,9 @@ if ( 'themes.php' === $pagenow && isset( $_GET['page'] ) && ( $_GET['page'] === 
 function et_epanel_register_portability() {
 	global $shortname, $themename, $options;
 
+	// get all the roles that can edit theme options.
+	$applicability_roles = et_core_get_roles_by_capabilities( [ 'edit_theme_options' ] );
+
 	// Make sure the Portability is loaded.
 	et_core_load_component( 'portability' );
 
@@ -1180,6 +1183,7 @@ function et_epanel_register_portability() {
 			'target'  => "et_{$shortname}",
 			'include' => $include,
 			'view'    => ( isset( $_GET['page'] ) && "et_{$shortname}_options" === $_GET['page'] ),
+			'applicability' => $applicability_roles,
 		)
 	);
 
@@ -1196,6 +1200,7 @@ function et_epanel_register_portability() {
 			'target'  => "et_{$shortname}_" . get_current_user_id(),
 			'include' => $include,
 			'view'    => ( isset( $_GET['page'] ) && "et_{$shortname}_options" === $_GET['page'] ),
+			'applicability' => $applicability_roles,
 		)
 	);
 	// phpcs:enable

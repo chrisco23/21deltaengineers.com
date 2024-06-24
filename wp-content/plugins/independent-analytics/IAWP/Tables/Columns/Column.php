@@ -2,34 +2,39 @@
 
 namespace IAWP\Tables\Columns;
 
+use IAWP\Plugin_Group_Option;
 use IAWP\Tables\Groups\Group;
 /** @internal */
-class Column
+class Column implements Plugin_Group_Option
 {
     private $id;
-    private $label;
+    private $name;
+    private $plugin_group;
+    private $plugin_group_header;
     private $visible;
     private $type;
-    private $requires_woocommerce;
     private $exportable;
     private $options;
     private $filter_placeholder;
     private $unavailable_for;
     private $database_column;
     private $is_nullable;
-    public function __construct($options)
+    private $is_plugin_active;
+    public function __construct($attributes)
     {
-        $this->id = $options['id'];
-        $this->label = $options['label'];
-        $this->visible = $options['visible'];
-        $this->type = $options['type'];
-        $this->requires_woocommerce = $options['requires_woocommerce'] ?? \false;
-        $this->exportable = $options['exportable'] ?? \true;
-        $this->options = $options['options'] ?? [];
-        $this->filter_placeholder = $options['filter_placeholder'] ?? '';
-        $this->unavailable_for = $options['unavailable_for'] ?? [];
-        $this->database_column = $options['database_column'] ?? null;
-        $this->is_nullable = $options['is_nullable'] ?? \false;
+        $this->id = $attributes['id'];
+        $this->name = $attributes['name'];
+        $this->plugin_group = $attributes['plugin_group'] ?? 'general';
+        $this->plugin_group_header = $attributes['plugin_group_header'] ?? null;
+        $this->visible = $attributes['visible'] ?? \false;
+        $this->type = $attributes['type'];
+        $this->exportable = $attributes['exportable'] ?? \true;
+        $this->options = $attributes['options'] ?? [];
+        $this->filter_placeholder = $attributes['filter_placeholder'] ?? '';
+        $this->unavailable_for = $attributes['unavailable_for'] ?? [];
+        $this->database_column = $attributes['database_column'] ?? null;
+        $this->is_nullable = $attributes['is_nullable'] ?? \false;
+        $this->is_plugin_active = $attributes['is_plugin_active'] ?? \true;
     }
     public function is_enabled_for_group(Group $group) : bool
     {
@@ -43,17 +48,44 @@ class Column
     {
         return $this->id;
     }
+    public function name() : string
+    {
+        return $this->name;
+    }
+    public function plugin_group() : string
+    {
+        return $this->plugin_group;
+    }
+    public function is_member_of_plugin_group(string $plugin_group) : bool
+    {
+        return $this->plugin_group === $plugin_group;
+    }
     public function database_column() : string
     {
         return !\is_null($this->database_column) ? $this->database_column : $this->id;
     }
-    public function label() : string
-    {
-        return $this->label;
-    }
-    public function visible() : bool
+    public function is_visible() : bool
     {
         return $this->visible;
+    }
+    public function is_enabled() : bool
+    {
+        switch ($this->plugin_group) {
+            case "woocommerce":
+                return \IAWPSCOPED\iawp_using_woocommerce();
+            case "forms":
+                return \IAWPSCOPED\iawp_using_a_form_plugin();
+            default:
+                return \true;
+        }
+    }
+    public function is_plugin_active() : bool
+    {
+        return $this->is_plugin_active;
+    }
+    public function plugin_group_header() : ?string
+    {
+        return $this->plugin_group_header;
     }
     public function type() : string
     {
@@ -88,10 +120,6 @@ class Column
     public function set_visibility(bool $visible) : void
     {
         $this->visible = $visible;
-    }
-    public function requires_woocommerce() : bool
-    {
-        return $this->requires_woocommerce;
     }
     public function exportable() : bool
     {

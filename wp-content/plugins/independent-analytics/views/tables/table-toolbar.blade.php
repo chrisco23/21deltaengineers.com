@@ -1,14 +1,14 @@
-<div class="table-toolbar">
-    <div class="button-modal-container" data-controller="columns">   
-        <button id="table-column-toggle-button" class="table-column-toggle-button iawp-button" data-action="columns#toggleModal" data-columns-target="modalButton">
-            <span class="dashicons dashicons-columns"></span><?php esc_html_e('Toggle Columns', 'independent-analytics'); ?>
-        </button>
-        <?php echo iawp_blade()->run('tables.column-picker-modal', [
-            'columns' => $all_columns
-        ]); ?>
-    </div><?php
-    if ($group_html) {
-        echo $group_html;
-    }
-    ?>
+<div id="table-toolbar" class="table-toolbar">
+    @include('plugin-group-options', [
+        'option_type' => 'columns',
+        'option_name' => __('Toggle Columns', 'independent-analytics'),
+        'option_icon' => 'columns',
+        'plugin_groups' => $plugin_groups,
+        'options' => $columns,
+    ])
+
+    @include('tables.group-select', [
+        'groups' => $groups,
+        'current_group' => $current_group,
+    ])
 </div>

@@ -17,7 +17,7 @@ class Chart_Geo
         $this->countries = $this->parse($geos);
         $this->title = $title;
     }
-    public function get_html($unused_visible_datasets = null)
+    public function get_html()
     {
         $chart_data = \array_map(function ($country) {
             return [$country['country_code'], $country['views'], $this->get_tooltip($country)];

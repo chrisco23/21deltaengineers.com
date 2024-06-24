@@ -6,7 +6,9 @@ use IAWP\Campaign_Builder;
 use IAWP\Dashboard_Options;
 use IAWP\Date_Range\Relative_Date_Range;
 use IAWP\Filters;
+use IAWP\Form;
 use IAWP\Icon_Directory_Factory;
+use IAWP\Plugin_Group;
 use IAWP\Rows\Filter;
 use IAWP\Sort_Configuration;
 use IAWP\Statistics\Statistics;
@@ -19,6 +21,7 @@ use IAWP\Utils\Number_Formatter;
 use IAWP\Utils\Security;
 use IAWP\Utils\URL;
 use IAWP\Utils\WordPress_Site_Date_Format_Pattern;
+use IAWPSCOPED\Illuminate\Support\Str;
 use IAWPSCOPED\Proper\Timezone;
 /** @internal */
 abstract class Table
@@ -29,13 +32,12 @@ abstract class Table
     private $is_new_group;
     private $statistics;
     /**
-     * @param string[]|null $visible_columns
      * @param string|null $group_id
      * @param bool $is_new_group
      */
-    public function __construct(array $visible_columns = null, ?string $group_id = null, bool $is_new_group = \false)
+    public function __construct(?string $group_id = null, bool $is_new_group = \false)
     {
-        $this->visible_columns = $visible_columns;
+        $this->visible_columns = Dashboard_Options::getInstance()->visible_columns();
         $this->group = $this->groups()->find_by_id($group_id);
         $this->is_new_group = $is_new_group;
         $this->filters = new Filters();
@@ -50,7 +52,7 @@ abstract class Table
     {
         $visible_columns = [];
         foreach ($this->get_columns() as $column) {
-            if ($column->visible()) {
+            if ($column->is_visible()) {
                 $visible_columns[] = $column->id();
             }
         }
@@ -62,19 +64,11 @@ abstract class Table
     }
     public function column_picker_html() : string
     {
-        return \IAWPSCOPED\iawp_blade()->run('tables.column-picker-modal', ['columns' => $this->get_columns()]);
-    }
-    public function group_picker_html() : ?string
-    {
-        $has_group_options = \count($this->groups()->buttons()) > 0;
-        if (!$has_group_options) {
-            return null;
-        }
-        return \IAWPSCOPED\iawp_blade()->run('tables.group-select', ['options' => $this->groups()->buttons(), 'group' => $this->group()]);
+        return \IAWPSCOPED\iawp_blade()->run('plugin-group-options', ['option_type' => 'columns', 'option_name' => \__('Toggle Columns', 'independent-analytics'), 'option_icon' => 'columns', 'plugin_groups' => Plugin_Group::get_plugin_groups(), 'options' => $this->get_columns(\true)]);
     }
     public function get_table_toolbar_markup()
     {
-        return \IAWPSCOPED\iawp_blade()->run('tables.table-toolbar', ['all_columns' => $this->get_columns(), 'group_html' => $this->group_picker_html()]);
+        return \IAWPSCOPED\iawp_blade()->run('tables.table-toolbar', ['plugin_groups' => Plugin_Group::get_plugin_groups(), 'columns' => $this->get_columns(\true), 'groups' => $this->groups(), 'current_group' => $this->group()]);
     }
     public function get_table_markup(string $sort_column, string $sort_direction)
     {
@@ -128,7 +122,7 @@ abstract class Table
             return Security::string(Number_Formatter::percent($row->bounce_rate()));
         } elseif ($column_id === 'average_session_duration' || $column_id === 'average_view_duration') {
             return Number_Formatter::second_to_minute_timestamp($row->{$column_id}());
-        } elseif ($column_id === 'views_growth' || $column_id === 'visitors_growth' || $column_id === 'wc_conversion_rate' || $column_id === 'exit_percent') {
+        } elseif ($column_id === 'views_growth' || $column_id === 'visitors_growth' || $column_id === 'wc_conversion_rate' || $column_id === 'exit_percent' || Str::startsWith($column_id, 'form_conversion_rate')) {
             return Number_Formatter::percent($row->{$column_id}(), 2);
         } elseif ($column_id == 'url') {
             if ($row->is_deleted()) {
@@ -162,9 +156,9 @@ abstract class Table
             return Security::string($row->{$column_id}());
         }
     }
-    public function output_toolbar()
+    public function output_report_toolbar()
     {
-        $options = new Dashboard_Options();
+        $options = Dashboard_Options::getInstance();
         $exact_start = $options->get_date_range()->start()->setTimezone(Timezone::site_timezone())->format('Y-m-d');
         $exact_end = $options->get_date_range()->end()->setTimezone(Timezone::site_timezone())->format('Y-m-d');
         ?>
@@ -172,7 +166,7 @@ abstract class Table
         echo \count($options->filters());
         ?>">
         <div class="date-picker-parent">
-            <div class="modal-parent"
+            <div class="modal-parent dates"
                  data-controller="dates"
                  data-dates-relative-range-id-value="<?php 
         echo \esc_attr($options->relative_range_id());
@@ -205,7 +199,7 @@ abstract class Table
         ?></span>
                 </button>
                 <div id="modal-dates"
-                     class="modal large dates"
+                     class="iawp-modal large dates"
                      data-dates-target="modal"
                 >
                     <div class="modal-inner">
@@ -283,7 +277,7 @@ abstract class Table
         \esc_html_e('Download Report', 'independent-analytics');
         ?>
                 </button>
-                <div class="modal small downloads" data-modal-target="modal">
+                <div class="iawp-modal small downloads" data-modal-target="modal">
                     <div class="modal-inner">
                         <div class="title-small"><?php 
         \esc_html_e('Choose a format', 'independent-analytics');
@@ -327,7 +321,7 @@ abstract class Table
             if (!$this->include_column_in_csv($column, $is_dashboard_export)) {
                 continue;
             }
-            $csv_header[] = $column->label();
+            $csv_header[] = $column->name();
         }
         foreach ($rows as $row) {
             $csv_row = [];
@@ -405,7 +399,7 @@ abstract class Table
     public function sanitize_sort_parameters(?string $sort_column, ?string $sort_direction) : Sort_Configuration
     {
         $column = $this->get_column($sort_column);
-        if (\is_null($column)) {
+        if (\is_null($column) || !$column->is_enabled_for_group($this->group)) {
             return new Sort_Configuration();
         }
         return new Sort_Configuration($sort_column, $sort_direction, $column->is_nullable());
@@ -417,15 +411,28 @@ abstract class Table
         }
         return \IAWPSCOPED\iawp_blade()->run('tables.table', ['table' => $this, 'table_name' => $this->table_name(), 'all_columns' => $this->get_columns(), 'visible_column_count' => $this->visible_column_count(), 'number_of_shown_rows' => \count($rows), 'rows' => $rows, 'render_skeleton' => \false, 'page_size' => \IAWPSCOPED\iawp()->pagination_page_size(), 'sort_column' => $sort_column, 'sort_direction' => $sort_direction, 'has_campaigns' => Campaign_Builder::has_campaigns()]);
     }
+    protected function get_woocommerce_columns() : array
+    {
+        return [new Column(['id' => 'wc_orders', 'name' => \__('Orders', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_gross_sales', 'name' => \__('Gross Sales', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_refunds', 'name' => \__('Refunds', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_refunded_amount', 'name' => \__('Refunded Amount', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_net_sales', 'name' => \__('Net Sales', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_conversion_rate', 'name' => \__('Conversion Rate', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_earnings_per_visitor', 'name' => \__('Earnings Per Visitor', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_average_order_volume', 'name' => \__('Average Order Volume', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int'])];
+    }
+    protected function get_form_columns() : array
+    {
+        $columns = [new Column(['id' => 'form_submissions', 'name' => \__('Submissions', 'independent-analytics'), 'plugin_group' => 'forms', 'type' => 'int']), new Column(['id' => 'form_conversion_rate', 'name' => \__('Conversion Rate', 'independent-analytics'), 'plugin_group' => 'forms', 'type' => 'int'])];
+        foreach (Form::get_forms() as $form) {
+            $columns[] = new Column(['id' => $form->submissions_column(), 'name' => $form->title() . ' ' . \__('Submissions', 'independent-analytics'), 'plugin_group' => 'forms', 'is_plugin_active' => $form->is_plugin_active(), 'plugin_group_header' => $form->plugin_name(), 'type' => 'int']);
+            $columns[] = new Column(['id' => $form->conversion_rate_column(), 'name' => $form->title() . ' ' . \__('Conversion Rate', 'independent-analytics'), 'plugin_group' => 'forms', 'is_plugin_active' => $form->is_plugin_active(), 'plugin_group_header' => $form->plugin_name(), 'type' => 'int']);
+        }
+        return $columns;
+    }
     private function include_column_in_csv(Column $column, bool $is_dashboard_export) : bool
     {
-        if (!$column->visible() && $is_dashboard_export) {
+        if (!$column->is_visible() && $is_dashboard_export) {
             return \false;
         }
         if (!$column->exportable() && !$is_dashboard_export) {
             return \false;
         }
-        if ($column->requires_woocommerce() && \IAWPSCOPED\iawp_is_free()) {
+        if (!$column->is_enabled()) {
             return \false;
         }
         return \true;
@@ -433,11 +440,17 @@ abstract class Table
     /**
      * @return Column[]
      */
-    private function get_columns() : array
+    private function get_columns($show_disabled_columns = \false) : array
     {
         $columns_for_group = \array_filter($this->local_columns(), function (Column $column) {
-            return $column->is_enabled_for_group($this->group);
+            return $column->is_enabled_for_group($this->group) && $column->is_plugin_active();
         });
+        if ($show_disabled_columns === \true) {
+        } else {
+            $columns_for_group = \array_filter($columns_for_group, function (Column $column) {
+                return $column->is_enabled();
+            });
+        }
         if (\is_null($this->visible_columns) || \count($this->visible_columns) === 0) {
             return $columns_for_group;
         }
@@ -465,7 +478,7 @@ abstract class Table
     {
         $visible_columns = 0;
         foreach ($this->get_columns() as $column) {
-            if ($column->visible()) {
+            if ($column->is_visible()) {
                 $visible_columns++;
             }
         }

@@ -9,6 +9,8 @@ use IAWP\Date_Range\Relative_Date_Range;
 use IAWP\Statistics\Intervals\Interval;
 use IAWP\Statistics\Intervals\Intervals;
 use IAWP\Tables\Table;
+use IAWP\Utils\Request;
+use IAWP\Utils\Singleton;
 use IAWPSCOPED\Proper\Timezone;
 use Throwable;
 /**
@@ -20,12 +22,13 @@ use Throwable;
  */
 class Dashboard_Options
 {
-    private $report_id;
+    use Singleton;
     private $report;
-    public function __construct()
+    private static $default_visible_quick_stats = ['visitors', 'views', 'sessions', 'average_session_duration', 'bounce_rate', 'views_per_session', 'wc_orders', 'wc_net_sales'];
+    private static $default_visible_datasets = ['visitors', 'views'];
+    private function __construct()
     {
-        $this->report_id = \array_key_exists('report', $_GET) ? \sanitize_text_field($_GET['report']) : null;
-        $this->report = $this->fetch_report_by_id($this->report_id);
+        $this->report = $this->fetch_current_report();
     }
     public function report_name() : ?string
     {
@@ -34,20 +37,37 @@ class Dashboard_Options
         }
         return $this->report->name;
     }
-    public function columns() : ?array
+    public function visible_columns() : ?array
     {
+        if (Request::get_post_array('columns')) {
+            return Request::get_post_array('columns');
+        }
         if (\is_null($this->report) || \is_null($this->report->columns)) {
             return null;
         }
         return \json_decode($this->report->columns, \true);
     }
+    public function visible_quick_stats() : array
+    {
+        if (Request::get_post_array('quick_stats')) {
+            return Request::get_post_array('quick_stats');
+        }
+        $decoded_value = \json_decode($this->report->quick_stats ?? 'null', \true);
+        if (\is_array($decoded_value)) {
+            return $decoded_value;
+        }
+        return self::$default_visible_quick_stats;
+    }
     public function visible_datasets() : array
     {
-        if (\is_null($this->report) || \is_null($this->report->visible_datasets)) {
-            return ['visitors', 'views'];
+        if (Request::get_post_array('visible_datasets')) {
+            return Request::get_post_array('visible_datasets');
         }
-        $visible_datasets = \json_decode($this->report->visible_datasets, \true);
-        return \is_null($visible_datasets) ? ['visitors', 'views'] : $visible_datasets;
+        $decoded_value = \json_decode($this->report->visible_datasets ?? 'null', \true);
+        if (\is_array($decoded_value)) {
+            return $decoded_value;
+        }
+        return self::$default_visible_datasets;
     }
     public function filters() : array
     {
@@ -55,7 +75,7 @@ class Dashboard_Options
             return [];
         }
         $table_class = Table::get_table_by_type($this->report->type);
-        $table = new $table_class(null, $this->report->group_name ?? null);
+        $table = new $table_class($this->report->group_name ?? null);
         $filters = \json_decode($this->report->filters, \true);
         return \is_null($filters) ? [] : $table->sanitize_filters($filters);
     }
@@ -136,7 +156,7 @@ class Dashboard_Options
             \wp_safe_redirect($favorite_report->url());
             exit;
         }
-        if (!\is_null($this->report_id) && \is_null($this->report)) {
+        if (!empty($_GET['report']) && \is_null($this->report)) {
             \wp_safe_redirect(\IAWPSCOPED\iawp_dashboard_url(['tab' => \IAWP\Env::get_tab()]));
             exit;
         }
@@ -150,10 +170,11 @@ class Dashboard_Options
         $is_sidebar_collapsed = \get_user_meta(\get_current_user_id(), 'iawp_is_sidebar_collapsed', \true) === '1';
         return $is_sidebar_collapsed;
     }
-    private function fetch_report_by_id($report_id) : ?object
+    private function fetch_current_report() : ?object
     {
         $reports_table = \IAWP\Query::get_table_name(\IAWP\Query::REPORTS);
-        if (\is_null($report_id)) {
+        $report_id = \filter_input(\INPUT_GET, 'report', \FILTER_VALIDATE_INT);
+        if (!\is_int($report_id)) {
             return null;
         }
         return \IAWP\Illuminate_Builder::get_builder()->from($reports_table)->where('report_id', '=', $report_id)->first();

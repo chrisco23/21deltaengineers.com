@@ -24,46 +24,45 @@ class Analytics_Page extends \IAWP\Admin_Page\Admin_Page
 {
     protected function render_page()
     {
-        $options = new Dashboard_Options();
+        $options = Dashboard_Options::getInstance();
         $date_rage = $options->get_date_range();
         $date_label = $date_rage->label();
-        $columns = $options->columns();
         $tab = (new Env())->get_tab();
         if ($tab === 'views') {
-            $table = new Table_Pages($columns);
+            $table = new Table_Pages();
             $statistics_class = $table->group()->statistics_class();
             $statistics = new $statistics_class($date_rage, null, $options->chart_interval());
-            $stats = new Quick_Stats(null, $statistics);
+            $stats = new Quick_Stats($statistics);
             $chart = new Chart($statistics, $date_label);
             $this->interface($table, $stats, $chart);
         } elseif ($tab === 'referrers') {
-            $table = new Table_Referrers($columns);
+            $table = new Table_Referrers();
             $statistics_class = $table->group()->statistics_class();
             $statistics = new $statistics_class($date_rage, null, $options->chart_interval());
-            $stats = new Quick_Stats(null, $statistics);
+            $stats = new Quick_Stats($statistics);
             $chart = new Chart($statistics, $date_label);
             $this->interface($table, $stats, $chart);
         } elseif ($tab === 'geo') {
-            $table = new Table_Geo($columns, $options->group());
+            $table = new Table_Geo($options->group());
             $statistics_class = $table->group()->statistics_class();
             $statistics = new $statistics_class($date_rage, null, $options->chart_interval());
-            $stats = new Quick_Stats(null, $statistics);
+            $stats = new Quick_Stats($statistics);
             $table_data_class = $table->group()->rows_class();
             $geo_data = new $table_data_class($date_rage);
             $chart = new Chart_Geo($geo_data->rows(), $date_label);
             $this->interface($table, $stats, $chart);
         } elseif ($tab === 'campaigns') {
-            $table = new Table_Campaigns($columns);
+            $table = new Table_Campaigns();
             $statistics_class = $table->group()->statistics_class();
             $statistics = new $statistics_class($date_rage, null, $options->chart_interval());
-            $stats = new Quick_Stats(null, $statistics);
+            $stats = new Quick_Stats($statistics);
             $chart = new Chart($statistics, $date_label);
             $this->interface($table, $stats, $chart);
         } elseif ($tab === 'devices') {
-            $table = new Table_Devices($columns, $options->group());
+            $table = new Table_Devices($options->group());
             $statistics_class = $table->group()->statistics_class();
             $statistics = new $statistics_class($date_rage, null, $options->chart_interval());
-            $stats = new Quick_Stats(null, $statistics);
+            $stats = new Quick_Stats($statistics);
             $chart = new Chart($statistics, $date_label);
             $this->interface($table, $stats, $chart);
         } elseif ($tab === 'real-time') {
@@ -72,7 +71,7 @@ class Analytics_Page extends \IAWP\Admin_Page\Admin_Page
     }
     private function interface(Table $table, $stats, $chart)
     {
-        $options = new Dashboard_Options();
+        $options = Dashboard_Options::getInstance();
         $sort_configuration = $table->sanitize_sort_parameters($options->sort_column(), $options->sort_direction());
         ?>
         <div data-controller="report"
@@ -106,17 +105,21 @@ class Analytics_Page extends \IAWP\Admin_Page\Admin_Page
              data-report-columns-value="<?php 
         echo \esc_attr(Security::json_encode($table->visible_column_ids()));
         ?>"
+             data-report-quick-stats-value="<?php 
+        echo \esc_attr(Security::json_encode($options->visible_quick_stats()));
+        ?>"
              data-report-visible-datasets-value="<?php 
         echo \esc_attr(Security::json_encode($options->visible_datasets()));
         ?>"
         >
-            <div class="report-header-container">
+            <div id="report-header-container" class="report-header-container">
                 <?php 
         echo \IAWPSCOPED\iawp_blade()->run('partials.report-header', ['report' => (new Report_Finder())->current(), 'can_edit' => Capability_Manager::can_edit()]);
         ?>
                 <?php 
-        $table->output_toolbar();
+        $table->output_report_toolbar();
         ?>
+                <div class="modal-background"></div>
             </div>
             <?php 
         echo $stats->get_html();

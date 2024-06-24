@@ -67,18 +67,6 @@ class Database
         $row = $wpdb->get_row($wpdb->prepare("\n                SHOW INDEX FROM {$table} WHERE Key_name = %s\n            ", $index));
         return !\is_null($row);
     }
-    public static function get_character_set_and_collation_for(string $table_name) : string
-    {
-        global $wpdb;
-        $query = \IAWP\Illuminate_Builder::get_builder()->selectRaw('CCSA.CHARACTER_SET_NAME AS character_set_name')->selectRaw('CCSA.COLLATION_NAME AS collation_name')->from('information_schema.TABLES', 'THE_TABLES')->leftJoin('information_schema.COLLATION_CHARACTER_SET_APPLICABILITY AS CCSA', 'CCSA.COLLATION_NAME', '=', 'THE_TABLES.TABLE_COLLATION')->where('THE_TABLES.TABLE_SCHEMA', '=', $wpdb->dbname)->where('THE_TABLES.TABLE_NAME', '=', $table_name);
-        $result = $query->first();
-        $character_set = $result->character_set_name ?? null;
-        $collation = $result->collation_name ?? null;
-        if ($character_set === null || $collation === null) {
-            return '';
-        }
-        return "DEFAULT CHARACTER SET {$character_set} COLLATE {$collation}";
-    }
     /**
      * From MySQL: It is not possible to deny a privilege granted at a higher level by absence of that privilege at a lower level.
      *
@@ -113,7 +101,7 @@ class Database
     private static function populate_character_set_and_collation() : void
     {
         global $wpdb;
-        $query = \IAWP\Illuminate_Builder::get_builder()->selectRaw('CCSA.CHARACTER_SET_NAME AS character_set_name')->selectRaw('CCSA.COLLATION_NAME AS collation_name')->from('information_schema.TABLES', 'THE_TABLES')->leftJoin('information_schema.COLLATION_CHARACTER_SET_APPLICABILITY AS CCSA', 'CCSA.COLLATION_NAME', '=', 'THE_TABLES.TABLE_COLLATION')->where('THE_TABLES.TABLE_SCHEMA', '=', $wpdb->dbname)->where('THE_TABLES.TABLE_NAME', '=', \IAWP\Query::get_table_name(\IAWP\Query::REFERRERS));
+        $query = \IAWP\Illuminate_Builder::get_builder()->selectRaw('CCSA.CHARACTER_SET_NAME AS character_set_name')->selectRaw('CCSA.COLLATION_NAME AS collation_name')->from('information_schema.TABLES', 'THE_TABLES')->leftJoin('information_schema.COLLATION_CHARACTER_SET_APPLICABILITY AS CCSA', 'CCSA.COLLATION_NAME', '=', 'THE_TABLES.TABLE_COLLATION')->where('THE_TABLES.TABLE_SCHEMA', '=', $wpdb->dbname)->where('THE_TABLES.TABLE_NAME', '=', \IAWP\Query::get_table_name(\IAWP\Query::SESSIONS));
         $result = $query->first();
         self::$character_set = $result->character_set_name ?? null;
         self::$collation = $result->collation_name ?? null;

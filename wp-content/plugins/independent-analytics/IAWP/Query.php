@@ -25,6 +25,8 @@ class Query
     public const DEVICE_OSS = 'device_oss';
     public const DEVICE_BROWSERS = 'device_browsers';
     public const REPORTS = 'reports';
+    public const FORMS = 'forms';
+    public const FORM_SUBMISSIONS = 'form_submissions';
     /**
      * Safe way to get the name of a table
      *

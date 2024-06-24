@@ -86,7 +86,11 @@ class Page_Singular extends \IAWP\Models\Page
     }
     protected function calculate_author_id()
     {
-        return \get_post_field('post_author', $this->singular_id);
+        $author_id = \get_post_field('post_author', $this->singular_id);
+        if ($author_id === '') {
+            return null;
+        }
+        return $author_id;
     }
     protected function calculate_author()
     {

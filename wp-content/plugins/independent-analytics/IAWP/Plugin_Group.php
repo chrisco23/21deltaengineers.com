@@ -1,0 +1,87 @@
+<?php
+
+namespace IAWP;
+
+/** @internal */
+class Plugin_Group
+{
+    private $id;
+    private $name;
+    private $requires_pro;
+    private $has_active_group_plugins;
+    private $upgrade_message;
+    private $upgrade_link;
+    private $activate_message;
+    private $activate_link;
+    private $no_tracked_data_message;
+    /**
+     * @param array{id: string, name: string, requires_pro?: bool, has_active_group_plugins?: bool, upgrade_message?: string, upgrade_link?: string, activate_message?: string, activate_link?: string, no_tracked_data_message?: string} $attributes
+     */
+    public function __construct(array $attributes)
+    {
+        $this->id = $attributes['id'];
+        $this->name = $attributes['name'];
+        $this->requires_pro = $attributes['requires_pro'] ?? \false;
+        $this->has_active_group_plugins = $attributes['has_active_group_plugins'] ?? \true;
+        $this->upgrade_message = $attributes['upgrade_message'] ?? null;
+        $this->upgrade_link = $attributes['upgrade_link'] ?? null;
+        $this->activate_message = $attributes['activate_message'] ?? null;
+        $this->activate_link = $attributes['activate_link'] ?? null;
+        $this->no_tracked_data_message = $attributes['no_tracked_data_message'] ?? null;
+    }
+    public function id() : string
+    {
+        return $this->id;
+    }
+    public function name() : string
+    {
+        return $this->name;
+    }
+    public function requires_pro() : bool
+    {
+        return $this->requires_pro;
+    }
+    public function has_active_group_plugins() : bool
+    {
+        return $this->has_active_group_plugins;
+    }
+    public function upgrade_message() : ?string
+    {
+        return $this->upgrade_message;
+    }
+    public function upgrade_link() : ?string
+    {
+        return $this->upgrade_link;
+    }
+    public function activate_message() : ?string
+    {
+        return $this->activate_message;
+    }
+    public function activate_link() : ?string
+    {
+        return $this->activate_link;
+    }
+    public function no_tracked_data_message() : ?string
+    {
+        return $this->no_tracked_data_message;
+    }
+    public function has_tracked_data() : bool
+    {
+        global $wpdb;
+        $form_submissions_table = \IAWP\Query::get_table_name(\IAWP\Query::FORM_SUBMISSIONS);
+        switch ($this->id) {
+            case 'forms':
+                $value = $wpdb->get_var("SELECT EXISTS (SELECT 1 FROM {$form_submissions_table})");
+                return $value === "1";
+            default:
+                return \true;
+        }
+    }
+    /**
+     * @return Plugin_Group[]
+     */
+    public static function get_plugin_groups() : array
+    {
+        return [new self(['id' => 'general', 'name' => \__('General', 'independent-analytics')]), new self(['id' => 'woocommerce', 'name' => \__('WooCommerce', 'independent-analytics'), 'requires_pro' => \true, 'has_active_group_plugins' => \IAWPSCOPED\iawp_using_woocommerce(), 'upgrade_message' => \__('Upgrade to Independent Analytics Pro to get WooCommerce stats.', 'independent-analytics'), 'upgrade_link' => 'https://independentwp.com/features/woocommerce-analytics/?utm_source=User+Dashboard&utm_medium=WP+Admin&utm_campaign=Stat+Toggle+Link', 'activate_message' => \__('Activate the WooCommerce plugin to display these stats.', 'independent-analytics'), 'activate_link' => 'https://independentwp.com/knowledgebase/woocommerce/woocommerce-integration/']), new self(['id' => 'forms', 'name' => \__('Forms', 'independent-analytics'), 'requires_pro' => \true, 'has_active_group_plugins' => \IAWPSCOPED\iawp_using_a_form_plugin(), 'upgrade_message' => \__('Upgrade to Independent Analytics Pro to get form submission stats.', 'independent-analytics'), 'upgrade_link' => 'https://independentwp.com/features/form-tracking/?utm_source=User+Dashboard&utm_medium=WP+Admin&utm_campaign=Stat+Toggle+Link', 'activate_message' => \__('Activate a supported form plugin to display these stats.', 'independent-analytics'), 'activate_link' => 'https://independentwp.com/knowledgebase/form-tracking/track-form-submissions/', 'no_tracked_data_message' => \__('Your forms will show up here once a submission has been recorded.', 'independent-analytics')])];
+    }
+}

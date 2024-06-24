@@ -5,20 +5,19 @@ namespace IAWP\Models;
 /** @internal */
 class Referrer
 {
-    use \IAWP\Models\View_Stats;
-    use \IAWP\Models\WooCommerce_Stats;
+    use \IAWP\Models\Universal_Model_Columns;
+    protected $row;
     private $is_direct;
     private $referrer;
     private $domain;
     private $referrer_type;
     public function __construct($row)
     {
+        $this->row = $row;
         $this->is_direct = $row->domain === '';
         $this->referrer = $row->referrer;
         $this->domain = $row->domain;
         $this->referrer_type = $row->referrer_type;
-        $this->set_view_stats($row);
-        $this->set_wc_stats($row);
     }
     /**
      * Return group name, referrer url, or direct.

@@ -53,7 +53,11 @@ class Resource_Identifier
      */
     public static function for_resource_being_viewed() : ?self
     {
-        if (\is_string(self::get_virtual_page_id())) {
+        if (self::is_searchiq_results()) {
+            $type = 'search';
+            $meta_key = 'search_query';
+            $meta_value = \get_query_var(\get_option('_siq_search_query_param_name', 'q'));
+        } elseif (\is_string(self::get_virtual_page_id())) {
             $type = 'virtual_page';
             $meta_key = 'virtual_page_id';
             $meta_value = self::get_virtual_page_id();
@@ -149,5 +153,19 @@ class Resource_Identifier
             $str = $str . '-' . \str_pad($day, 2, '0', \STR_PAD_LEFT);
         }
         return $str;
+    }
+    private static function is_searchiq_results()
+    {
+        $active_plugins = \get_option('active_plugins');
+        if (!\in_array('searchiq/searchiq.php', $active_plugins)) {
+            return \false;
+        }
+        if (\get_query_var(\get_option('_siq_search_query_param_name', 'q')) !== '') {
+            $post = \get_post(\get_queried_object_id());
+            if (\has_shortcode($post->post_content, 'siq_ajax_search')) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }

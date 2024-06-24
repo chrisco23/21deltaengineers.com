@@ -262,6 +262,8 @@ trait WpContext {
 			$postContent = aioseo()->standalone->pageBuilderIntegrations[ $pageBuilder ]->processContent( $post->ID, $postContent );
 		}
 
+		$postContent = is_string( $postContent ) ? $postContent : '';
+
 		$content[ $post->ID ] = $this->theContent( $postContent );
 
 		if ( apply_filters( 'aioseo_description_include_custom_fields', true, $post ) ) {
@@ -960,7 +962,7 @@ trait WpContext {
 	 */
 	public function getWebsiteName() {
 		return aioseo()->options->searchAppearance->global->schema->websiteName
-			? aioseo()->options->searchAppearance->global->schema->websiteName
+			? aioseo()->tags->replaceTags( aioseo()->options->searchAppearance->global->schema->websiteName )
 			: aioseo()->helpers->decodeHtmlEntities( get_bloginfo( 'name' ) );
 	}
 }

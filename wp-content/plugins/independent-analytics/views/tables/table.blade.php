@@ -1,4 +1,4 @@
-<div id="iawp-table-wrapper" class="iawp-table-wrapper">
+<div id="iawp-table-wrapper" class="iawp-table-wrapper" data-controller="table-columns">
     <div id="data-table-container" class="data-table-container">
         <div id='data-table'
              class='data-table'
@@ -17,10 +17,10 @@
                     <?php
                     foreach ($all_columns as $column): ?>
                         <?php
-                        $cell_class = $column->visible() ? 'cell' : 'cell hide'; ?>
+                        $cell_class = $column->is_visible() ? 'cell' : 'cell hide'; ?>
                     <div class="<?php echo esc_attr($cell_class); ?>"
                          data-column="<?php echo esc_attr($column->id()); ?>"
-                         data-test-visibility="<?php echo $column->visible() ? 'visible' : 'hidden'; ?>"
+                         data-test-visibility="<?php echo $column->is_visible() ? 'visible' : 'hidden'; ?>"
                     >
                         <button class="sort-button"
                                 data-sort-target="sortButton"
@@ -28,10 +28,10 @@
                                 data-default-sort-direction="<?php echo esc_attr($column->sort_direction()); ?>"
                                 data-sort-column="<?php echo esc_attr($column->id()); ?>"
                                 data-action="sort#sortColumnColumn"
-                                title="<?php echo esc_html($column->label()); ?>"
+                                title="<?php echo esc_html($column->name()); ?>"
                         >
                             <div class="row-number"></div>
-                            <span class="name"><?php echo esc_html($column->label()); ?></span>
+                            <span class="name"><?php echo esc_html($column->name()); ?></span>
                             <span class="dashicons dashicons-arrow-right"></span>
                             <span class="dashicons dashicons-arrow-up"></span>
                             <span class="dashicons dashicons-arrow-down"></span>
@@ -53,10 +53,10 @@
                         <?php
                     foreach ($all_columns as $column): ?>
                         <?php
-                        $class = $column->visible() ? 'cell' : 'cell hide'; ?>
+                        $class = $column->is_visible() ? 'cell' : 'cell hide'; ?>
                     <div class="<?php echo esc_attr($class); ?>"
                          data-column="<?php echo esc_attr($column->id()); ?>"
-                         data-test-visibility="<?php echo $column->visible() ? 'visible' : 'hidden'; ?>"
+                         data-test-visibility="<?php echo $column->is_visible() ? 'visible' : 'hidden'; ?>"
                     >
                         <div class="row-number"></div>
                         <span class="cell-content">

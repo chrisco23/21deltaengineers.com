@@ -528,6 +528,9 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 		$hover_icon_phone  = isset( $hover_icon_values['phone'] ) ? $hover_icon_values['phone'] : '';
 		$hover_icon_sticky = $sticky->get_value( 'hover_icon', $this->props );
 
+		// validate $orientation, it should be either 'landscape' or 'portrait', default to 'landscape'.
+		$orientation = 'portrait' === $orientation ? 'portrait' : 'landscape';
+
 		// Zoom Icon Color.
 		$this->generate_styles(
 			array(
@@ -698,10 +701,13 @@ class ET_Builder_Module_Gallery extends ET_Builder_Module {
 
 			$images_count++;
 
-			$output .= "
-				<div class='et_pb_gallery_image {$orientation}'>
-					$image_output
-				</div>";
+			$output .= sprintf(
+				'<div class="et_pb_gallery_image %1$s">
+					%2$s
+				</div>',
+				esc_attr( $orientation ),
+				$image_output
+			);
 
 			if ( 'on' !== $fullwidth && $multi_view->has_value( 'show_title_and_caption', 'on' ) ) {
 				if ( trim( $attachment->post_title ) ) {

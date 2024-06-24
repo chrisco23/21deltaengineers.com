@@ -3,6 +3,7 @@
 namespace IAWP\Utils;
 
 use DateTime;
+use IAWPSCOPED\Proper\Number;
 /** @internal */
 class Number_Formatter
 {
@@ -45,5 +46,12 @@ class Number_Formatter
     public static function decimal($number, int $decimals = 0) : string
     {
         return \number_format_i18n($number, $decimals);
+    }
+    public static function integer($number) : string
+    {
+        if ($number < 100000) {
+            return \number_format_i18n($number, 0);
+        }
+        return Number::abbreviate($number, \false);
     }
 }

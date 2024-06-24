@@ -2,6 +2,7 @@
 
 namespace IAWP;
 
+use DateTime;
 use IAWP\Date_Range\Exact_Date_Range;
 use IAWP\Date_Range\Relative_Date_Range;
 use IAWP\Rows\Campaigns;
@@ -12,6 +13,7 @@ use IAWP\Rows\Referrers;
 use IAWP\Statistics\Intervals\Hourly;
 use IAWP\Statistics\Page_Statistics;
 use IAWP\Utils\URL;
+use IAWPSCOPED\Proper\Timezone;
 /** @internal */
 class Email_Reports
 {
@@ -48,7 +50,7 @@ class Email_Reports
         } elseif ($interval == 'daily') {
             $date_string = 'tomorrow';
         }
-        $delivery_time = new \DateTime($date_string, new \DateTimeZone(\wp_timezone_string()));
+        $delivery_time = new DateTime($date_string, new \DateTimeZone(\wp_timezone_string()));
         $delivery_time->setTime(\IAWPSCOPED\iawp()->get_option('iawp_email_report_time', 9), 0);
         return $delivery_time;
     }
@@ -65,7 +67,7 @@ class Email_Reports
             return \esc_html__('There is no email scheduled.', 'independent-analytics');
         }
         if ($use_cron) {
-            $date = new \DateTime('now', new \DateTimeZone(\wp_timezone_string()));
+            $date = new DateTime('now', new \DateTimeZone(\wp_timezone_string()));
             $date->setTimestamp(\wp_next_scheduled('iawp_send_email_report'));
             $date->setTime(\IAWPSCOPED\iawp()->get_option('iawp_email_report_time', 9), 0);
         } else {
@@ -90,20 +92,27 @@ class Email_Reports
         }
         $this->schedule_email_report();
     }
-    public function send_email_report(bool $test = \false)
+    public function send_email_report(bool $is_test_email = \false)
     {
+        // This code was added to fix an issue with monthly email reports. When you set up a monthly
+        // email report, the first email will always be correct because we pick the exact timestamp
+        // we want to send it. The issue is with the recurring interval. It's backed by MONTH_IN_SECONDS
+        // which is a fixed constant. Months have a varying number of seconds so this caused slight
+        // differences in when subsequent monthly email reports were sent. The code below fixes this by
+        // rescheduling monthly email reports as they're sent. That allows us to pinpoint the exact
+        // correct next time to run it, while still falling back to the inaccurate monthly interval
+        // should a given email never send for some reason.
+        if (\IAWPSCOPED\iawp()->get_option('iawp_email_report_interval', 'monthly') === 'monthly') {
+            $this->schedule_email_report();
+        }
         $to = \IAWPSCOPED\iawp()->get_option('iawp_email_report_email_addresses', []);
         if (empty($to)) {
             return;
         }
-        $subject = \sprintf(\esc_html__('Analytics Report for %1$s [%2$s]', 'independent-analytics'), \get_bloginfo('name'), (new \DateTime('-1 month', new \DateTimeZone(\wp_timezone_string())))->format('F Y'));
-        if ($test) {
-            $subject = \esc_html__('[Test]', 'independent-analytics') . ' ' . $subject;
-        }
         $body = $this->get_email_body();
         $headers[] = 'From: ' . \get_bloginfo('name') . ' <' . \get_bloginfo('admin_email') . '>';
         $headers[] = 'Content-Type: text/html; charset=UTF-8';
-        return \wp_mail($to, $subject, $body, $headers);
+        return \wp_mail($to, $this->subject_line($is_test_email), $body, $headers);
     }
     public function get_email_preview($colors)
     {
@@ -112,6 +121,33 @@ class Email_Reports
     private function days_of_week()
     {
         return ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    }
+    private function subject_line(bool $is_test_email) : string
+    {
+        $subject_line = \__('Analytics Report for', 'independent-analytics');
+        $subject_line .= ' ' . \get_bloginfo('name') . ' ';
+        if ($is_test_email) {
+            $subject_line = \__('[Test]', 'independent-analytics') . ' ' . $subject_line;
+        }
+        switch ($this->interval()) {
+            case 'daily':
+                $yesterday = new Relative_Date_Range('YESTERDAY');
+                $date_text = $yesterday->start()->format('l, M jS');
+                break;
+            case 'weekly':
+                $last_week = new Relative_Date_Range('LAST_WEEK');
+                $date_text = \__('Week of', 'independent-analytics') . ' ' . $last_week->start()->format('l, M jS');
+                break;
+            default:
+                $last_month = new Relative_Date_Range('LAST_MONTH');
+                $date_text = $last_month->start()->format('F Y');
+                break;
+        }
+        return \esc_html($subject_line . '[' . $date_text . ']');
+    }
+    private function interval() : string
+    {
+        return \IAWPSCOPED\iawp()->get_option('iawp_email_report_interval', 'monthly');
     }
     private function get_email_body($colors = '')
     {
@@ -123,27 +159,31 @@ class Email_Reports
         } else {
             $statistics = new Page_Statistics(new Relative_Date_Range('YESTERDAY'), null, new Hourly());
         }
-        $quick_stats = (new \IAWP\Quick_Stats(null, $statistics))->get_stats();
+        $quick_stats = (new \IAWP\Quick_Stats($statistics))->get_quick_stats();
+        $quick_stats = \array_values(\array_filter($quick_stats, function (\IAWP\Quick_Stat $quick_stat) {
+            return $quick_stat->is_visible() && $quick_stat->is_enabled();
+        }));
         $chart = new \IAWP\Email_Chart($statistics);
+        $chart_title = $interval == 'daily' ? \esc_html__('Hourly Views', 'independent-analytics') : \esc_html__('Daily Views', 'independent-analytics');
         $colors = $colors == '' ? \IAWPSCOPED\iawp()->get_option('iawp_email_report_colors', ['#5123a0', '#fafafa', '#3a1e6b', '#fafafa', '#5123a0', '#a985e6', '#ece9f2', '#f7f5fa', '#ece9f2', '#dedae6']) : \explode(',', $colors);
-        return \IAWPSCOPED\iawp_blade()->run('email.email', ['site_title' => \get_bloginfo('name'), 'site_url' => (new URL(\get_site_url()))->get_domain(), 'date' => $this->get_email_date_subheading(), 'stats' => $quick_stats, 'top_ten' => $this->get_top_ten(), 'chart_views' => $chart->views, 'most_views' => $chart->most_views, 'y_labels' => $chart->y_labels, 'x_labels' => $chart->x_labels, 'colors' => $colors]);
+        return \IAWPSCOPED\iawp_blade()->run('email.email', ['site_title' => \get_bloginfo('name'), 'site_url' => (new URL(\get_site_url()))->get_domain(), 'date' => $this->get_email_date_subheading(), 'stats' => $quick_stats, 'top_ten' => $this->get_top_ten(), 'chart_views' => $chart->views, 'chart_title' => $chart_title, 'most_views' => $chart->most_views, 'y_labels' => $chart->y_labels, 'x_labels' => $chart->x_labels, 'colors' => $colors]);
     }
     private function get_email_start_end_dates()
     {
         $interval = \IAWPSCOPED\iawp()->get_option('iawp_email_report_interval', 'monthly');
-        $start = new \DateTime('First day of last month', new \DateTimeZone(\wp_timezone_string()));
-        $end = new \DateTime('Last day of last month', new \DateTimeZone(\wp_timezone_string()));
+        $start = new DateTime('First day of last month', new \DateTimeZone(\wp_timezone_string()));
+        $end = new DateTime('Last day of last month', new \DateTimeZone(\wp_timezone_string()));
         if ($interval == 'weekly') {
             $date_string = 'last ' . $this->days_of_week()[\IAWPSCOPED\iawp()->get_option('iawp_dow', 0)];
-            $start = new \DateTime($date_string, new \DateTimeZone(\wp_timezone_string()));
+            $start = new DateTime($date_string, new \DateTimeZone(\wp_timezone_string()));
             // -1 week if today isn't the chosen day of the week
-            if ((new \DateTime('now'))->format('w') != \IAWPSCOPED\iawp()->get_option('iawp_dow', 0)) {
+            if ((new DateTime('now'))->format('w') != \IAWPSCOPED\iawp()->get_option('iawp_dow', 0)) {
                 $start->modify('-7 days');
             }
             $end = clone $start;
             $end->modify('+6 days');
         } elseif ($interval == 'daily') {
-            $start = new \DateTime('Yesterday', new \DateTimeZone(\wp_timezone_string()));
+            $start = new DateTime('Yesterday', new \DateTimeZone(\wp_timezone_string()));
             $end = clone $start;
         }
         return [$start, $end];

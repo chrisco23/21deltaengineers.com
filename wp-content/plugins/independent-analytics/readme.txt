@@ -5,7 +5,7 @@ Donate link: https://independentwp.com
 Requires at least: 5.9
 Tested up to: 6.5.2
 Requires PHP: 7.3.33
-Stable tag: 2.4.3
+Stable tag: 2.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -193,6 +193,29 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 6. See the device types, browsers, and OSes your visitors are using
 
 == Changelog ==
+
+= 2.5.1 - May 23rd 2024 =
+
+* **Fix:** Timezone comparisons were causing warnings in the logs
+
+= 2.5.0 - May 21st, 2024 =
+
+**Feature:** Form tracking added to Independent Analytics Pro!
+**Feature:** Quick Stats can now be toggled on/off and saved
+**Feature:** Added option to change the date range in the view counter shortcode
+**Feature:** Added the Views column to custom post type menus too
+**Update:** Recognizing more WC order statuses as complete, such as “shipped” and “delivered”
+**Update:** Integrated with SearchIQ plugin to recognize its search queries
+**Update:** Changelog menu now says “New” in its notification instead of using a number
+**Update:** Unminified copies of all JS files are included to comply with OSS guidelines
+**Update:** Updated Freemius SDK to version 2.7.2
+**Fix:** Resolved conflict with the WP Activity Log plugin
+**Fix:** UI fixes for filters and save button
+**Fix:** Sorting the Views column in the Posts menu wasn’t working
+**Fix:** Renamed some elements to prevent conflicts with plugins loading Bootstrap.css
+**Fix:** Wildcards are recognized when checking if the current IP is blocked
+**Fix:** Timezone issue with Beirut could cause data to go missing from the chart
+**Fix:** Prevent error upon installation for sites with long DB prefixes
 
 = 2.4.3 - April 25th, 2024 =
 

@@ -35,11 +35,15 @@ class Groups
      */
     public function buttons() : array
     {
-        if (\count($this->groups()) === 1) {
+        if ($this->has_grouping_options()) {
             return [];
         } else {
             return $this->groups();
         }
+    }
+    public function has_grouping_options() : bool
+    {
+        return \count($this->groups()) > 1;
     }
     /**
      * @return Group[]

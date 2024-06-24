@@ -9,7 +9,7 @@ class Filters
 {
     public function get_filters_html(array $columns) : string
     {
-        $opts = new \IAWP\Dashboard_Options();
+        $opts = \IAWP\Dashboard_Options::getInstance();
         \ob_start();
         ?>
     <div class="modal-parent filters"
@@ -33,7 +33,7 @@ class Filters
         ?></span>
         </button>
         <div id="modal-filters"
-             class="modal large"
+             class="iawp-modal large"
              data-filters-target="modal"
         >
             <div class="modal-inner">
@@ -119,12 +119,21 @@ class Filters
     public function condition_buttons_html(array $filters) : string
     {
         \ob_start();
-        foreach ($filters as $filter) {
+        for ($i = 0; $i < \count($filters); $i++) {
+            if ($i == 2) {
+                ?>
+                <button class="filters-condition-button"
+                data-action="filters#toggleModal"
+                data-filters-target="modalButton"><?php 
+                \printf(\esc_html__('+%d More', 'independent-analytics'), \count($filters) - 2);
+                ?></button><?php 
+                break;
+            }
             ?>
             <button class="filters-condition-button"
                 data-action="filters#toggleModal"
                 data-filters-target="modalButton"><?php 
-            echo \wp_kses_post($filter->html_description());
+            echo \wp_kses_post($filters[$i]->html_description());
             ?></button>
         <?php 
         }
@@ -147,39 +156,30 @@ class Filters
      */
     private function get_column_select(array $columns)
     {
-        ?>
-        <select class="filters-column" data-filters-target="column"
-                data-action="filters#columnSelect"
-        >
-            <option value="">
-                <?php 
-        \esc_html_e('Choose a column', 'independent-analytics');
-        ?>
-            </option>
-            <?php 
+        $plugin_groups = \IAWP\Plugin_Group::get_plugin_groups();
+        $column_sections = [];
         foreach ($columns as $column) {
-            ?>
-                <?php 
-            if ($column->requires_woocommerce() && !\IAWPSCOPED\iawp_using_woocommerce()) {
+            $plugin_group_id = $column->plugin_group();
+            $section_name = '';
+            $plugin_group = null;
+            foreach ($plugin_groups as $a_plugin_group) {
+                if ($a_plugin_group->id() === $plugin_group_id) {
+                    $section_name = $a_plugin_group->name();
+                    $plugin_group = $a_plugin_group;
+                }
+            }
+            if (!$plugin_group->has_active_group_plugins()) {
                 continue;
             }
-            ?>
-                <option value="<?php 
-            echo \esc_attr($column->id());
-            ?>"
-                        data-type="<?php 
-            echo \esc_attr($column->type());
-            ?>"
-                >
-                    <?php 
-            echo \esc_html($column->label());
-            ?>
-                </option>
-            <?php 
+            if (!\is_null($column->plugin_group_header())) {
+                $section_name = $plugin_group->name() . ' - ' . $column->plugin_group_header();
+            }
+            if (!\array_key_exists($section_name, $column_sections)) {
+                $column_sections[$section_name] = ['plugin_group' => $plugin_group, 'columns' => []];
+            }
+            \array_push($column_sections[$section_name]['columns'], $column);
         }
-        ?>
-        </select>
-        <?php 
+        echo \IAWPSCOPED\iawp_blade()->run('partials.filter-column-select', ['column_sections' => $column_sections]);
     }
     private function get_all_operator_selects()
     {

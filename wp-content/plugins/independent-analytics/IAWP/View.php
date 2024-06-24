@@ -285,15 +285,15 @@ class View
     }
     private function update_postmeta(Page $resource) : void
     {
-        $post_id = $resource->get_post_id();
-        if ($post_id === null) {
+        $singular_id = $resource->get_singular_id();
+        if ($singular_id === null) {
             return;
         }
         $views_table = \IAWP\Query::get_table_name(\IAWP\Query::VIEWS);
         $resources_table = \IAWP\Query::get_table_name(\IAWP\Query::RESOURCES);
         $total_views = \IAWP\Illuminate_Builder::get_builder()->selectRaw('COUNT(*) AS views')->from("{$resources_table} as resources")->join("{$views_table} AS views", function (JoinClause $join) {
             $join->on('resources.id', '=', 'views.resource_id');
-        })->where('singular_id', '=', $post_id)->value('views');
-        \update_post_meta($post_id, Views_Column::$meta_key, $total_views);
+        })->where('singular_id', '=', $singular_id)->value('views');
+        \update_post_meta($singular_id, Views_Column::$meta_key, $total_views);
     }
 }

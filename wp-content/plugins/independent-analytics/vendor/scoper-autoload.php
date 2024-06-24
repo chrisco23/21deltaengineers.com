@@ -70,6 +70,7 @@ if (!function_exists('iawp_analytics')) { function iawp_analytics() { return \IA
 if (!function_exists('iawp_blade')) { function iawp_blade() { return \IAWPSCOPED\iawp_blade(...func_get_args()); } }
 if (!function_exists('iawp_dashboard_url')) { function iawp_dashboard_url() { return \IAWPSCOPED\iawp_dashboard_url(...func_get_args()); } }
 if (!function_exists('iawp_db_version')) { function iawp_db_version() { return \IAWPSCOPED\iawp_db_version(...func_get_args()); } }
+if (!function_exists('iawp_icon')) { function iawp_icon() { return \IAWPSCOPED\iawp_icon(...func_get_args()); } }
 if (!function_exists('iawp_is_free')) { function iawp_is_free() { return \IAWPSCOPED\iawp_is_free(...func_get_args()); } }
 if (!function_exists('iawp_is_pro')) { function iawp_is_pro() { return \IAWPSCOPED\iawp_is_pro(...func_get_args()); } }
 if (!function_exists('iawp_log')) { function iawp_log() { return \IAWPSCOPED\iawp_log(...func_get_args()); } }
@@ -78,6 +79,7 @@ if (!function_exists('iawp_singular_analytics')) { function iawp_singular_analyt
 if (!function_exists('iawp_temp_path_to')) { function iawp_temp_path_to() { return \IAWPSCOPED\iawp_temp_path_to(...func_get_args()); } }
 if (!function_exists('iawp_upload_path_to')) { function iawp_upload_path_to() { return \IAWPSCOPED\iawp_upload_path_to(...func_get_args()); } }
 if (!function_exists('iawp_url_to')) { function iawp_url_to() { return \IAWPSCOPED\iawp_url_to(...func_get_args()); } }
+if (!function_exists('iawp_using_a_form_plugin')) { function iawp_using_a_form_plugin() { return \IAWPSCOPED\iawp_using_a_form_plugin(...func_get_args()); } }
 if (!function_exists('iawp_using_woocommerce')) { function iawp_using_woocommerce() { return \IAWPSCOPED\iawp_using_woocommerce(...func_get_args()); } }
 if (!function_exists('is_countable')) { function is_countable() { return \IAWPSCOPED\is_countable(...func_get_args()); } }
 if (!function_exists('mb_check_encoding')) { function mb_check_encoding() { return \IAWPSCOPED\mb_check_encoding(...func_get_args()); } }

@@ -7,13 +7,12 @@
         <?php do_settings_sections('independent-analytics-view-counter-settings'); ?>
         <div class="shortcode-note">
             <h3><?php esc_html_e('Using the shortcode','independent-analytics'); ?></h3>
-            <p><?php esc_html_e('You can output the view counter in a custom location using the shortcode:', 'independent-analytics'); ?></p>
-            <p><code>[iawp_view_counter label="Views:" icon="1"]</code></p>
-            <p><?php printf(
-                esc_html__('Use %1$s to hide the icon and %2$s to hide the label.', 'independent-analytics'),
-                '<code>icon="0"</code>',
-                '<code>label=""</code>'
-            ); ?></p>
+            <p><?php esc_html_e('You can output the view counter in a custom location using the shortcode:', 'independent-analytics'); ?>
+                <code>[iawp_view_counter]</code>
+            </p>
+            <p><?php esc_html_e('You can also customize the icon display, label, and date range used by the shortcode.', 'independent-analytics'); ?> 
+                <a class="link-purple" style="text-decoration: underline;" href="https://independentwp.com/knowledgebase/dashboard/display-view-counter/" target="_blank"><?php esc_html_e('Learn more', 'independent-analytics'); ?></a>
+            </p>
         </div>
         <?php submit_button(__('Save Settings', 'independent-analytics'), 'iawp-button purple', 'save-view-counter-settings'); ?>
     </form>

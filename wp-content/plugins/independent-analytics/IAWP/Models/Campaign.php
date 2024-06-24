@@ -5,8 +5,8 @@ namespace IAWP\Models;
 /** @internal */
 class Campaign
 {
-    use \IAWP\Models\View_Stats;
-    use \IAWP\Models\WooCommerce_Stats;
+    use \IAWP\Models\Universal_Model_Columns;
+    protected $row;
     private $title;
     private $utm_source;
     private $utm_medium;
@@ -15,14 +15,13 @@ class Campaign
     private $utm_content;
     public function __construct($row)
     {
+        $this->row = $row;
         $this->title = $row->title;
         $this->utm_source = $row->utm_source;
         $this->utm_medium = $row->utm_medium;
         $this->utm_campaign = $row->utm_campaign;
         $this->utm_term = $row->utm_term;
         $this->utm_content = $row->utm_content;
-        $this->set_view_stats($row);
-        $this->set_wc_stats($row);
     }
     /*
      * Column names have shared logic between tables. So "title" for resources has the same logic

@@ -20,7 +20,7 @@ abstract class Admin_Page
             echo \IAWPSCOPED\iawp_blade()->run('interrupt.migration-is-running');
             return;
         }
-        $options = new Dashboard_Options();
+        $options = Dashboard_Options::getInstance();
         $tab = (new Env())->get_tab();
         ?>
         
@@ -43,6 +43,7 @@ abstract class Admin_Page
         ?>
                         </div>
                     </div>
+                    <div class="modal-background"></div>
                     <div id="loading-icon" class="loading-icon">
                         <img src="<?php 
         echo \esc_url(\IAWPSCOPED\iawp_url_to('img/loading.svg'));

@@ -2,6 +2,7 @@
 
 namespace IAWP\Migrations;
 
+use IAWP\Query;
 /** @internal */
 abstract class Step_Migration
 {
@@ -18,6 +19,10 @@ abstract class Step_Migration
             \update_option('iawp_db_version', $this->database_version());
         }
         return $completed;
+    }
+    protected function drop_table_if_exists(string $table_name) : string
+    {
+        return "\n            DROP TABLE IF EXISTS {$table_name};\n        ";
     }
     private function run_queries() : bool
     {

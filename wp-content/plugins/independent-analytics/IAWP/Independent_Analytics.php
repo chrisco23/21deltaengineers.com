@@ -8,6 +8,7 @@ use IAWP\Admin_Page\Settings_Page;
 use IAWP\Admin_Page\Support_Page;
 use IAWP\Admin_Page\Updates_Page;
 use IAWP\AJAX\AJAX_Manager;
+use IAWP\Form_Submissions\Submission_Listener;
 use IAWP\Menu_Bar_Stats\Menu_Bar_Stats;
 use IAWP\Migrations\Migrations;
 use IAWP\Utils\Singleton;
@@ -26,6 +27,7 @@ class Independent_Analytics
         new \IAWP\REST_API();
         new \IAWP\Dashboard_Widget();
         new \IAWP\View_Counter();
+        new Submission_Listener();
         AJAX_Manager::getInstance();
         if (!Migrations::is_migrating()) {
             new \IAWP\Track_Resource_Changes();
@@ -48,6 +50,7 @@ class Independent_Analytics
         // Called at 110 to dequeue other scripts
         \add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts_and_styles_front_end']);
         \add_action('admin_menu', [$this, 'add_admin_menu_pages']);
+        \add_action('admin_init', [$this, 'remove_freemius_pricing_menu']);
         \add_filter('plugin_action_links_independent-analytics/iawp.php', [$this, 'plugin_action_links']);
         \add_filter('admin_footer_text', [$this, 'ip_db_attribution'], 1, 1);
         \add_action('init', [$this, 'polylang_translations']);
@@ -121,9 +124,8 @@ class Independent_Analytics
             });
         }
         if (!\IAWP\Capability_Manager::white_labeled()) {
-            $count = $this->get_update_notification_count();
             $menu_html = '<span class="menu-name">' . \esc_html__('Changelog', 'independent-analytics') . '</span>';
-            $menu_html = $count > 0 ? $menu_html . ' <span class="menu-counter">' . \absint($count) . '</span>' : $menu_html;
+            $menu_html = $this->changelog_viewed_since_update() ? $menu_html . ' <span class="menu-counter">' . \esc_html__('New', 'independent-analytics') . '</span>' : $menu_html;
             \add_submenu_page('independent-analytics', \esc_html__('Changelog', 'independent-analytics'), $menu_html, \IAWP\Capability_Manager::can_view_string(), 'independent-analytics-updates', function () {
                 $updates_page = new Updates_Page();
                 $updates_page->render(\false);
@@ -132,6 +134,11 @@ class Independent_Analytics
         if (\IAWPSCOPED\iawp_is_free() && !\IAWP\Capability_Manager::white_labeled()) {
             \add_submenu_page('independent-analytics', \esc_html__('Upgrade to Pro &rarr;', 'independent-analytics'), '<span style="color: #F69D0A;">' . \esc_html__('Upgrade to Pro &rarr;', 'independent-analytics') . '</span>', \IAWP\Capability_Manager::can_view_string(), \esc_url('https://independentwp.com/pricing/?utm_source=User+Dashboard&utm_medium=WP+Admin&utm_campaign=Upgrade+to+Pro&utm_content=Sidebar'));
         }
+    }
+    // The menu link is removed in the SDK setup, but this makes it completely inaccessible
+    public function remove_freemius_pricing_menu()
+    {
+        \remove_submenu_page('independent-analytics', 'independent-analytics-pricing');
     }
     public function register_scripts_and_styles() : void
     {
@@ -259,48 +266,26 @@ class Independent_Analytics
         // https://wordpress.org/plugins/morepuzzles/
         \wp_dequeue_style('bscss');
         \wp_dequeue_style('mypluginstyle');
-        $this->dequeue_bootstrap_stylesheets();
-    }
-    // Dequeue any stylesheets loading Twitter Bootstrap. It shouldn't be loaded in our menu and makes all modals inaccessible among other issues.
-    public function dequeue_bootstrap_stylesheets()
-    {
-        global $wp_styles;
-        $bootstrap_strings = ['/bootstrap.css', '/bootstrap.min.css', '/bootstrap.bundle.css', '/bootstrap.bundle.min.css'];
-        foreach ($wp_styles->queue as $key => $handle) {
-            if (\array_key_exists($handle, $wp_styles->registered)) {
-                $url = $wp_styles->registered[$handle]->src;
-                // WP Core scripts can return boolean
-                if (\is_string($url)) {
-                    foreach ($bootstrap_strings as $bootstrap) {
-                        if (String_Util::str_contains($url, $bootstrap)) {
-                            \wp_dequeue_style($handle);
-                            continue;
-                        }
-                    }
-                }
-            }
-        }
     }
     public function maybe_override_adminify_styles()
     {
         if (\in_array('adminify/adminify.php', \get_option('active_plugins'))) {
             $settings = \get_option('_wpadminify');
-            if (\array_key_exists('admin_ui', $settings)) {
-                if ($settings['admin_ui']) {
-                    \wp_register_style('iawp-adminify-styles', \IAWPSCOPED\iawp_url_to('dist/styles/adminify.css'), [], \IAWP_VERSION);
-                    \wp_enqueue_style('iawp-adminify-styles');
+            if ($settings) {
+                if (\array_key_exists('admin_ui', $settings)) {
+                    if ($settings['admin_ui']) {
+                        \wp_register_style('iawp-adminify-styles', \IAWPSCOPED\iawp_url_to('dist/styles/adminify.css'), [], \IAWP_VERSION);
+                        \wp_enqueue_style('iawp-adminify-styles');
+                    }
                 }
             }
         }
     }
-    public function get_update_notification_count()
+    public function changelog_viewed_since_update() : bool
     {
-        // https://api.wordpress.org/plugins/info/1.0/independent-analytics.json
-        $version_history = ['2.4.0', '2.3.0', '2.2.0', '2.1.0'];
-        $last_update_viewed = $this->get_option('iawp_last_update_viewed', '0');
-        $unseen_versions = \array_filter($version_history, function ($version) use($last_update_viewed) {
-            return \version_compare($last_update_viewed, $version, '<');
-        });
-        return \count($unseen_versions);
+        if (\number_format(\floatval(\IAWP_VERSION), 1) > \floatval($this->get_option('iawp_last_update_viewed', '0'))) {
+            return \true;
+        }
+        return \false;
     }
 }

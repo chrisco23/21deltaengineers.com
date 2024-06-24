@@ -29,8 +29,6 @@ class Filter extends \IAWP\AJAX\AJAX
         $date_range = $this->get_date_range();
         $is_new_date_range = $this->get_field('is_new_date_range') === 'true';
         $filters = $this->get_field('filters') ?? [];
-        $visible_columns = $this->get_field('columns');
-        $visible_datasets = $this->get_field('visible_datasets') ?? [];
         $sort_column = $this->get_field('sort_column') ?? null;
         $sort_direction = $this->get_field('sort_direction') ?? null;
         $group = $this->get_field('group') ?? null;
@@ -45,7 +43,7 @@ class Filter extends \IAWP\AJAX\AJAX
         if (\is_null($table_class)) {
             return;
         }
-        $table = new $table_class($visible_columns, $group, $is_new_group);
+        $table = new $table_class($group, $is_new_group);
         $filters = $table->sanitize_filters($filters);
         $sort_configuration = $table->sanitize_sort_parameters($sort_column, $sort_direction);
         $rows_class = $table->group()->rows_class();
@@ -79,8 +77,12 @@ class Filter extends \IAWP\AJAX\AJAX
             $chart = new Chart($filtered_statistics ?? $unfiltered_statistics, $date_range->label());
         }
         $table->set_statistics($filtered_statistics ?? $unfiltered_statistics);
-        $quick_stats = new Quick_Stats($filtered_statistics, $unfiltered_statistics);
-        \wp_send_json_success(['rows' => $table->get_rendered_template($rows, \true, $sort_configuration->column(), $sort_configuration->direction()), 'table' => $table->get_rendered_template($rows, \false, $sort_configuration->column(), $sort_configuration->direction()), 'totalNumberOfRows' => $total_number_of_rows, 'chart' => $chart->get_html($visible_datasets), 'stats' => $quick_stats->get_html(), 'label' => $date_range->label(), 'isLastPage' => \count($rows) < \IAWPSCOPED\iawp()->pagination_page_size() * $page, 'columns' => $table->visible_column_ids(), 'columnsHTML' => $table->column_picker_html(), 'groupId' => $table->group()->id(), 'filters' => $filters, 'filtersTemplateHTML' => $table->filters_template_html(), 'filtersButtonsHTML' => $table->filters_condition_buttons_html($filters), 'chartInterval' => $chart_interval->id()]);
+        if (\is_null($filtered_statistics)) {
+            $quick_stats = new Quick_Stats($unfiltered_statistics);
+        } else {
+            $quick_stats = new Quick_Stats($filtered_statistics, $unfiltered_statistics);
+        }
+        \wp_send_json_success(['rows' => $table->get_rendered_template($rows, \true, $sort_configuration->column(), $sort_configuration->direction()), 'table' => $table->get_rendered_template($rows, \false, $sort_configuration->column(), $sort_configuration->direction()), 'totalNumberOfRows' => $total_number_of_rows, 'chart' => $chart->get_html(), 'stats' => $quick_stats->get_html(), 'label' => $date_range->label(), 'isLastPage' => \count($rows) < \IAWPSCOPED\iawp()->pagination_page_size() * $page, 'columns' => $table->visible_column_ids(), 'columnsHTML' => $table->column_picker_html(), 'groupId' => $table->group()->id(), 'filters' => $filters, 'filtersTemplateHTML' => $table->filters_template_html(), 'filtersButtonsHTML' => $table->filters_condition_buttons_html($filters), 'chartInterval' => $chart_interval->id()]);
     }
     /**
      * Get the date range for the filter request

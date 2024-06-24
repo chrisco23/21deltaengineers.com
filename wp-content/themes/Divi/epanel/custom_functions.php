@@ -1143,7 +1143,7 @@ if ( ! function_exists( 'elegant_titles_filter' ) ) {
 			global $wp_query;
 			$postid = elegant_is_blog_posts_page() ? intval( get_option( 'page_for_posts' ) ) : $wp_query->post->ID;
 			$key = et_get_option( $shortname . '_seo_single_field_title' );
-			$exists3 = get_post_meta( $postid, '' . $key . '', true );
+			$exists3 = $key ? get_post_meta( $postid, $key, true ) : '';
 			if ( 'on' === et_get_option( $shortname . '_seo_single_title' ) && '' !== $exists3 ) {
 				$custom_title = $exists3;
 			} else {
@@ -1247,9 +1247,8 @@ if ( ! function_exists( 'elegant_description' ) ) {
 				$postid = elegant_is_blog_posts_page() ? intval( get_option( 'page_for_posts' ) ) : $wp_query->post->ID;
 			}
 
-			$key2 = et_get_option( $shortname.'_seo_single_field_description' );
-
-			if ( isset( $postid ) ) $exists = get_post_meta( $postid, ''.$key2.'', true );
+			$key2   = et_get_option( $shortname . '_seo_single_field_description' );
+			$exists = ( $postid && $key2 ) ? get_post_meta( $postid, $key2, true ) : '';
 
 			if ( $exists !== '' ) {
 				echo '<meta name="description" content="' . esc_attr( $exists ) . '" />';
@@ -1322,11 +1321,10 @@ if ( ! function_exists( 'elegant_keywords' ) ) {
 				$postid = elegant_is_blog_posts_page() ? intval( get_option( 'page_for_posts' ) ) : $wp_query->post->ID;
 			}
 
-			$key3 = et_get_option( $shortname.'_seo_single_field_keywords' );
+			$key3    = et_get_option( $shortname . '_seo_single_field_keywords' );
+			$exists4 = ( $postid && $key3 ) ? get_post_meta( $postid, $key3, true ) : '';
 
-			if (isset( $postid )) $exists4 = get_post_meta( $postid, ''.$key3.'', true );
-
-			if ( isset( $exists4 ) && $exists4 !== '' ) {
+			if ( '' !== $exists4 ) {
 				if ( is_single() || is_page() || elegant_is_blog_posts_page() ) echo '<meta name="keywords" content="' . esc_attr( $exists4 ) . '" />';
 			}
 		}

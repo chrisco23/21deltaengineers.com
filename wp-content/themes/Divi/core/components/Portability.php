@@ -757,7 +757,7 @@ class ET_Core_Portability {
 			);
 
 			if ( ! empty( $post_title ) ) {
-				$args['post_title'] = current_user_can( 'unfiltered_html' ) ? $post_title : wp_kses( $post_title );
+				$args['post_title'] = current_user_can( 'unfiltered_html' ) ? $post_title : wp_kses( $post_title, 'entities' );
 			}
 
 			$post_id = et_theme_builder_insert_layout( $args );
@@ -2216,6 +2216,10 @@ class ET_Core_Portability {
 		}
 
 		foreach ( $data as $key => $value ) {
+			if ( empty( $value ) ) {
+				continue;
+			}
+
 			if ( is_array( $value ) ) {
 				$data[$key] = $this->validate( $value, $fields_validation );
 			} else {

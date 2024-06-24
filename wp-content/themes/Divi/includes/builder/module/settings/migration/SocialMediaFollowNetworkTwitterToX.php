@@ -66,8 +66,8 @@ class ET_Builder_Migration_SocialMediaFollowNetworkTwitterToX extends ET_Builder
 		$content,
 		$module_address
 	) {
-		if ( 'twitter' === $attrs['social_network'] && 'background_color' === $saved_field_name && '#00aced' === $saved_value ) {
-				return '#000000';
+		if ( isset( $attrs['social_network'] ) && 'twitter' === $attrs['social_network'] && 'background_color' === $saved_field_name && '#00aced' === $saved_value ) {
+			return '#000000';
 		}
 
 		return $saved_value;

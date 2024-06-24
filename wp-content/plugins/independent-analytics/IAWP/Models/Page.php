@@ -8,8 +8,8 @@ use IAWP\Utils\Request;
 /** @internal */
 abstract class Page
 {
-    use \IAWP\Models\View_Stats;
-    use \IAWP\Models\WooCommerce_Stats;
+    use \IAWP\Models\Universal_Model_Columns;
+    protected $row;
     private $id;
     private $resource;
     private $entrances;
@@ -28,6 +28,7 @@ abstract class Page
     private $cached_category;
     public function __construct($row)
     {
+        $this->row = $row;
         $this->id = $row->id ?? null;
         $this->resource = $row->resource ?? null;
         $this->entrances = $row->entrances ?? 0;
@@ -39,8 +40,6 @@ abstract class Page
         if (\is_string($row->cached_title ?? null)) {
             $this->cache = $row;
         }
-        $this->set_view_stats($row);
-        $this->set_wc_stats($row);
     }
     protected abstract function resource_key();
     protected abstract function resource_value();
@@ -77,17 +76,9 @@ abstract class Page
     {
         return null;
     }
-    /**
-     * Get the id for the post. Null if the resource is not a post.
-     *
-     * @return int|null
-     */
-    public function get_post_id() : ?int
+    public function get_singular_id() : ?int
     {
         if ($this->resource_key() !== 'singular_id') {
-            return null;
-        }
-        if (\get_post_type($this->resource_value()) !== 'post') {
             return null;
         }
         return $this->resource_value();

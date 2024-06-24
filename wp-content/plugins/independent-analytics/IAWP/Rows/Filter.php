@@ -9,6 +9,8 @@ use IAWP\Filter_Lists\Device_OS_Filter_List;
 use IAWP\Filter_Lists\Device_Type_Filter_List;
 use IAWP\Filter_Lists\Page_Type_Filter_List;
 use IAWP\Filter_Lists\Referrer_Type_Filter_List;
+use IAWP\Form;
+use IAWP\Utils\String_Util;
 use IAWP\Utils\WordPress_Site_Date_Format_Pattern;
 use IAWPSCOPED\Illuminate\Database\Query\Builder;
 use JsonSerializable;
@@ -31,6 +33,10 @@ class Filter implements JsonSerializable
         } else {
             $method = $this->method();
             $query->{$method}($this->column(), $this->operator(), $this->value());
+        }
+        // If a filter is based on comments, remove all non-singular pages
+        if ($this->filter['column'] === 'comments') {
+            $query->whereNotNull('pages.singular_id');
         }
     }
     public function html_description() : string
@@ -131,6 +137,10 @@ class Filter implements JsonSerializable
             } elseif ($key == 'column' && \str_contains($value, 'wc')) {
                 $condition_string = \str_replace(['_', '-'], ' ', $value);
                 $condition_string = \str_replace('wc', 'WC', $condition_string);
+            } elseif ($key == 'column' && String_Util::str_starts_with($condition['column'], 'form_submissions_for_')) {
+                $condition_string = \__('Submissions for', 'independent-analytics') . ' ' . Form::find_form_by_column_name($condition['column'])->title();
+            } elseif ($key == 'column' && String_Util::str_starts_with($condition['column'], 'form_conversion_rate_for_')) {
+                $condition_string = \__('Conversion rate for', 'independent-analytics') . ' ' . Form::find_form_by_column_name($condition['column'])->title();
             } else {
                 $condition_string .= \ucwords(\str_replace(['_', '-'], ' ', $value)) . ' ';
             }

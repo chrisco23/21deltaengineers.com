@@ -5,6 +5,7 @@ namespace IAWP\Models;
 use IAWP\Geoposition;
 use IAWP\Illuminate_Builder;
 use IAWP\Query;
+use IAWP\Utils\Request;
 use IAWP\Utils\Salt;
 /**
  * How to use:
@@ -23,6 +24,7 @@ class Visitor
 {
     private $id;
     private $geoposition;
+    private $current_session;
     /**
      * New instances should be created with a string ip address
      *
@@ -33,42 +35,41 @@ class Visitor
     {
         $this->id = $this->fetch_visitor_id($this->calculate_hash($ip, $user_agent));
         $this->geoposition = new Geoposition($ip);
+        $this->current_session = $this->fetch_current_session();
     }
     public function geoposition() : Geoposition
     {
         return $this->geoposition;
     }
-    /**
-     * Get the id for the most recent view for a visitor
-     *
-     * @return int|null
-     */
-    public function current_view_id() : ?int
+    public function has_recorded_session() : bool
     {
-        global $wpdb;
-        $views_table = Query::get_table_name(Query::VIEWS);
-        $sessions_table = Query::get_table_name(Query::SESSIONS);
-        $id = $wpdb->get_var($wpdb->prepare("\n                SELECT views.id as id\n                FROM {$views_table} AS views\n                         LEFT JOIN {$sessions_table} AS sessions ON sessions.session_id = views.session_id\n                WHERE sessions.visitor_id = %s\n                ORDER BY views.viewed_at DESC\n                LIMIT 1\n                ", $this->id()));
-        if (\is_null($id)) {
-            return null;
-        }
-        return \intval($id);
+        return \is_object($this->current_session);
     }
-    /**
-     * Get the id for the most recent view for a visitor
-     *
-     * @return int|null
-     */
-    public function current_session_initial_view_id() : ?int
+    public function most_recent_session_id() : ?int
     {
-        global $wpdb;
-        $views_table = Query::get_table_name(Query::VIEWS);
-        $sessions_table = Query::get_table_name(Query::SESSIONS);
-        $id = $wpdb->get_var($wpdb->prepare("\n                    SELECT sessions.initial_view_id as id\n                    FROM {$views_table} AS views\n                             LEFT JOIN {$sessions_table} AS sessions ON sessions.session_id = views.session_id\n                    WHERE sessions.visitor_id = %s\n                    ORDER BY views.viewed_at DESC\n                    LIMIT 1\n                    ", $this->id()));
-        if (\is_null($id)) {
+        if ($this->has_recorded_session() && \is_int($this->current_session->session_id)) {
+            return $this->current_session->session_id;
+        } else {
             return null;
         }
-        return \intval($id);
+    }
+    public function most_recent_initial_view_id() : ?int
+    {
+        if ($this->has_recorded_session() && \is_int($this->current_session->initial_view_id)) {
+            return $this->current_session->initial_view_id;
+        } else {
+            return null;
+        }
+    }
+    public function most_recent_view_id() : ?int
+    {
+        if (!$this->has_recorded_session()) {
+            return null;
+        }
+        if (\is_int($this->current_session->final_view_id)) {
+            return $this->current_session->final_view_id;
+        }
+        return $this->current_session->initial_view_id;
     }
     /**
      * Return the database id for a visitor
@@ -95,5 +96,14 @@ class Visitor
         $visitors_table = Query::get_table_name(Query::VISITORS);
         Illuminate_Builder::get_builder()->from($visitors_table)->insertOrIgnore([['hash' => $hash]]);
         return Illuminate_Builder::get_builder()->from($visitors_table)->where('hash', '=', $hash)->value('visitor_id');
+    }
+    private function fetch_current_session()
+    {
+        $sessions_table = Query::get_table_name(Query::SESSIONS);
+        return Illuminate_Builder::get_builder()->from($sessions_table)->where('visitor_id', '=', $this->id)->whereRaw('created_at > DATE_SUB(UTC_TIMESTAMP(), INTERVAL 30 MINUTE)')->orderBy('created_at', 'desc')->first();
+    }
+    public static function fetch_current_visitor() : self
+    {
+        return new \IAWP\Models\Visitor(Request::ip(), Request::user_agent());
     }
 }

@@ -27,10 +27,6 @@ function et_core_init() {
 	if ( get_option( 'et_core_page_resource_remove_all' ) ) {
 		ET_Core_PageResource::remove_static_resources( 'all', 'all', true );
 	}
-
-	if ( ! wp_next_scheduled( 'et_core_page_resource_auto_clear' ) ) {
-		wp_schedule_event( time() + MONTH_IN_SECONDS, 'monthly', 'et_core_page_resource_auto_clear' );
-	}
 }
 endif;
 
@@ -275,7 +271,6 @@ function et_core_page_resource_auto_clear() {
 add_action( 'switch_theme', 'et_core_page_resource_auto_clear' );
 add_action( 'activated_plugin', 'et_core_page_resource_auto_clear', 10, 0 );
 add_action( 'deactivated_plugin', 'et_core_page_resource_auto_clear', 10, 0 );
-add_action( 'et_core_page_resource_auto_clear', 'et_core_page_resource_auto_clear' );
 endif;
 
 

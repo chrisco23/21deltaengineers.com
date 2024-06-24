@@ -18,11 +18,9 @@ class Chart
         $this->title = $title;
     }
     /**
-     * @param string[] $visible_datasets
-     *
      * @return false|string
      */
-    public function get_html(array $visible_datasets = ['visitors', 'views'])
+    public function get_html()
     {
         $labels = \array_map(function ($data_point) {
             return Security::json_encode($this->statistics->chart_interval()->get_label_for($data_point[0]));
@@ -38,11 +36,11 @@ class Chart
         }, $this->statistics->sessions()->daily_summary());
         $woocommerce_orders_data = \array_map(function ($data_point) {
             return $data_point[1];
-        }, $this->statistics->woocommerce_orders()->daily_summary());
+        }, $this->statistics->wc_orders()->daily_summary());
         $woocommerce_net_sales_data = \array_map(function ($data_point) {
             return $data_point[1];
-        }, $this->statistics->woocommerce_net_sales()->daily_summary());
-        return $this->chart_html($labels, $views_data, $visitors_data, $sessions_data, $woocommerce_orders_data, $woocommerce_net_sales_data, $visible_datasets);
+        }, $this->statistics->wc_net_sales()->daily_summary());
+        return $this->chart_html($labels, $views_data, $visitors_data, $sessions_data, $woocommerce_orders_data, $woocommerce_net_sales_data, \IAWP\Dashboard_Options::getInstance()->visible_datasets());
     }
     private function chart_html(array $labels, array $views, array $visitors, array $sessions, array $woocommerce_orders_data, array $woocommerce_net_sales_data, array $visible_datasets)
     {

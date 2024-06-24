@@ -32,18 +32,22 @@ class View_Counter
         }
         return $content;
     }
-    public function get_counter_html($label = null, $icon = null)
+    public function get_counter_html($label = null, $icon = null, $range = null)
     {
         $current_resource = \IAWP\Resource_Identifier::for_resource_being_viewed();
+        // It's critical to check because this function is called erroneously by Gutenberg in the editor
+        if (\is_null($current_resource)) {
+            return;
+        }
         // Get stats for individual posts in the loop if shortcode added to each post
         global $post;
         if ($post->ID != $current_resource->meta_value() && \is_main_query() && \in_the_loop()) {
             $current_resource = \IAWP\Resource_Identifier::for_post_id($post->ID);
         }
-        if (\is_null($current_resource)) {
-            return;
+        if (\is_null($range)) {
+            $range = \IAWPSCOPED\iawp()->get_option('iawp_view_counter_views_to_count', 'total');
         }
-        $view_count = $this->get_view_count($current_resource);
+        $view_count = $this->get_view_count($current_resource, $range);
         if (\IAWPSCOPED\iawp()->get_option('iawp_view_counter_manual_adjustment', \false)) {
             $view_count += \intval(\get_post_meta($current_resource->meta_value(), 'iawp_view_counter_adjustment', \true));
         }
@@ -67,8 +71,8 @@ class View_Counter
     }
     public function shortcode($atts)
     {
-        $a = \shortcode_atts(['label' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_label', \esc_html__('Views:', 'independent-analytics')), 'icon' => \true], $atts);
-        return $this->get_counter_html($a['label'], $a['icon']);
+        $a = \shortcode_atts(['label' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_label', \esc_html__('Views:', 'independent-analytics')), 'icon' => \true, 'range' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_views_to_count', 'total')], $atts);
+        return $this->get_counter_html($a['label'], $a['icon'], $a['range']);
     }
     public function maybe_add_meta_box() : void
     {
@@ -122,14 +126,23 @@ class View_Counter
         }
         return \true;
     }
-    private function get_view_count(\IAWP\Resource_Identifier $resource) : int
+    private function sanitize_range(string $range) : string
+    {
+        if (\in_array($range, ['today', 'last_thirty', 'this_month', 'last_month', 'total'])) {
+            return $range;
+        } else {
+            return 'total';
+        }
+    }
+    private function get_view_count(\IAWP\Resource_Identifier $resource, string $range) : int
     {
         $resources_table = \IAWP\Query::get_table_name(\IAWP\Query::RESOURCES);
         $views_table = \IAWP\Query::get_table_name(\IAWP\Query::VIEWS);
-        $is_today = \IAWPSCOPED\iawp()->get_option('iawp_view_counter_views_to_count', 'total') === 'today';
-        $is_last_thirty = \IAWPSCOPED\iawp()->get_option('iawp_view_counter_views_to_count', 'total') === 'last_thirty';
-        $is_this_month = \IAWPSCOPED\iawp()->get_option('iawp_view_counter_views_to_count', 'total') === 'this_month';
-        $is_last_month = \IAWPSCOPED\iawp()->get_option('iawp_view_counter_views_to_count', 'total') === 'last_month';
+        $range = $this->sanitize_range($range);
+        $is_today = $range === 'today';
+        $is_last_thirty = $range === 'last_thirty';
+        $is_this_month = $range === 'this_month';
+        $is_last_month = $range === 'last_month';
         $query = \IAWP\Illuminate_Builder::get_builder()->selectRaw('COUNT(views.id) AS views')->from($resources_table, 'resources')->leftJoin("{$views_table} AS views", function (JoinClause $join) {
             $join->on('resources.id', '=', 'views.resource_id');
         })->where('resource', '=', $resource->type())->when($resource->has_meta(), function (Builder $query) use($resource) {

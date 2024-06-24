@@ -592,7 +592,10 @@ class ET_Core_SupportCenter {
 		$menu_title       = esc_html__( 'Support Center', 'et-core' );
 		$menu_slug        = null;
 		$parent_menu_slug = null;
-		$capability       = 'manage_options';
+
+		// By default, only user with `manage_options` capability which is "administrator"
+		// can see Support Center menu and access the page.
+		$capability = 'manage_options';
 
 		// Define parent and child menu slugs
 		switch ( $this->parent ) {
@@ -611,6 +614,21 @@ class ET_Core_SupportCenter {
 				break;
 			case 'divi_theme':
 			case 'divi_builder_plugin':
+				// In the Roles Editor, other user roles may have access to the Support Center.
+				// But, most likely they don't have `manage_options` capability. So, if current
+				// user can't `manage_options`, we will set the submenu capability into the
+				// `edit_theme_options`, so other roles with `edit_theme_options` capability
+				// can access the Support Center.
+				if ( ! current_user_can( 'manage_options' ) ) {
+					$capability = 'edit_theme_options';
+				}
+
+				// However, that's not enough. We still need to check whether current user with
+				// `manage_options` or `edit_theme_options` is allowed to access Support Center.
+				if ( ! et_pb_is_allowed( 'support_center' ) ) {
+					return;
+				}
+
 				$menu_slug        = 'et_support_center_divi';
 				$parent_menu_slug = 'et_divi_options';
 		}
@@ -1851,9 +1869,12 @@ class ET_Core_SupportCenter {
 	 * @return array
 	 */
 	public function support_user_add_role_options( $all_role_options ) {
+		// get all the roles that can edit theme options.
+		$applicability_roles = et_core_get_roles_by_capabilities( [ 'edit_theme_options' ] );
 
 		$all_role_options['support_center'] = array(
 			'section_title' => esc_attr__( 'Support Center', 'et-core' ),
+			'applicability' => $applicability_roles,
 			'options'       => array(
 				'et_support_center'               => array(
 					'name' => esc_attr__( 'Divi Support Center Page', 'et-core' ),

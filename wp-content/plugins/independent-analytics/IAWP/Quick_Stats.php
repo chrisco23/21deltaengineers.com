@@ -3,81 +3,61 @@
 namespace IAWP;
 
 use IAWP\Statistics\Statistics;
-use IAWP\Utils\Currency;
-use IAWP\Utils\Number_Formatter;
-use IAWPSCOPED\Proper\Number;
 /** @internal */
 class Quick_Stats
 {
     private $statistics;
-    private $filtered_statistics;
-    private $preview;
+    // private $filtered_statistics;
+    private $unfiltered_statistics;
+    private $is_dashboard_widget;
     /**
-     * @param Statistics|null $statistics
-     * @param Statistics $unfiltered_statistics
-     * @param bool $preview
+     * @param ?Statistics $statistics
+     * @param ?Statistics $unfiltered_statistics
+     * @param bool $is_dashboard_widget
      */
-    public function __construct(?Statistics $statistics, Statistics $unfiltered_statistics, bool $preview = \false)
+    public function __construct(?Statistics $statistics, Statistics $unfiltered_statistics = null, bool $is_dashboard_widget = \false)
     {
-        $this->preview = $preview;
-        if (\is_null($statistics)) {
-            $this->statistics = $unfiltered_statistics;
-        } else {
-            $this->filtered_statistics = $statistics;
-            $this->statistics = $unfiltered_statistics;
-        }
+        $this->statistics = $statistics;
+        $this->unfiltered_statistics = $unfiltered_statistics;
+        $this->is_dashboard_widget = $is_dashboard_widget;
     }
-    public function get_stats()
+    public function make_quick_stat(array $attributes, array $lookup_information = null) : \IAWP\Quick_Stat
     {
-        $is_filtered = !\is_null($this->filtered_statistics);
-        $statistics = $is_filtered ? $this->filtered_statistics : $this->statistics;
-        $stats = [['title' => \__('Visitors', 'independent-analytics'), 'class' => 'visitors', 'count' => $this->maybe_abbreviate($statistics->visitors()->value()), 'growth' => $statistics->visitors()->growth(), 'formatted_growth' => $this->format_growth($statistics->visitors()->growth()), 'unfiltered' => $this->maybe_abbreviate($this->statistics->visitors()->value())], ['title' => \__('Views', 'independent-analytics'), 'class' => 'views', 'count' => $this->maybe_abbreviate($statistics->views()->value()), 'growth' => $statistics->views()->growth(), 'formatted_growth' => $this->format_growth($statistics->views()->growth()), 'unfiltered' => $this->maybe_abbreviate($this->statistics->views()->value())]];
-        if ($this->is_full_view()) {
-            $stats[] = ['title' => \__('Sessions', 'independent-analytics'), 'class' => 'sessions', 'count' => $this->maybe_abbreviate($statistics->sessions()->value()), 'growth' => $statistics->sessions()->growth(), 'formatted_growth' => $this->format_growth($statistics->sessions()->growth()), 'unfiltered' => $this->maybe_abbreviate($this->statistics->sessions()->value())];
-            $stats[] = ['title' => \__('Average Session Duration', 'independent-analytics'), 'class' => 'average-session-duration', 'count' => Number_Formatter::second_to_minute_timestamp($statistics->average_session_duration()->value()), 'growth' => $statistics->average_session_duration()->growth(), 'formatted_growth' => $this->format_growth($statistics->average_session_duration()->growth()), 'unfiltered' => Number_Formatter::second_to_minute_timestamp($this->statistics->average_session_duration()->value())];
-            $stats[] = ['title' => \__('Bounce Rate', 'independent-analytics'), 'class' => 'bounce-rate', 'count' => Number_Formatter::percent($statistics->bounce_rate()->value()), 'growth' => $statistics->bounce_rate()->growth(), 'formatted_growth' => $this->format_growth($statistics->bounce_rate()->growth()), 'unfiltered' => Number_Formatter::percent($this->statistics->bounce_rate()->value())];
-            $stats[] = ['title' => \__('Views Per Session', 'independent-analytics'), 'class' => 'views-per-session', 'count' => Number_Formatter::decimal($statistics->view_per_session()->value(), 2), 'growth' => $statistics->view_per_session()->growth(), 'formatted_growth' => $this->format_growth($statistics->view_per_session()->growth()), 'unfiltered' => Number_Formatter::decimal($this->statistics->view_per_session()->value(), 2)];
+        $the_statistic_method_name = $attributes['id'];
+        $has_filters = !\is_null($this->unfiltered_statistics);
+        if (!\is_null($lookup_information)) {
+            $the_method_name = $lookup_information[0];
+            $the_argument = $lookup_information[1];
+            $attributes['statistic'] = $this->statistics->{$the_method_name}($the_argument);
+            $attributes['unfiltered_statistic'] = $has_filters ? $this->unfiltered_statistics->{$the_method_name}($the_argument) : null;
+        } else {
+            $attributes['statistic'] = $this->statistics->{$the_statistic_method_name}();
+            $attributes['unfiltered_statistic'] = $has_filters ? $this->unfiltered_statistics->{$the_statistic_method_name}() : null;
         }
-        if ($this->is_full_view() && \IAWPSCOPED\iawp_using_woocommerce()) {
-            $stats[] = ['title' => \__('Orders', 'independent-analytics'), 'class' => 'orders', 'count' => $this->maybe_abbreviate($statistics->woocommerce_orders()->value()), 'growth' => $statistics->woocommerce_orders()->growth(), 'formatted_growth' => $this->format_growth($statistics->woocommerce_orders()->growth()), 'unfiltered' => $this->maybe_abbreviate($this->statistics->woocommerce_orders()->value())];
-            $stats[] = ['title' => \__('Net Sales', 'independent-analytics'), 'class' => 'net-sales', 'count' => Currency::format($statistics->woocommerce_net_sales()->value(), \true, \false), 'growth' => $statistics->woocommerce_net_sales()->growth(), 'formatted_growth' => $this->format_growth($statistics->woocommerce_net_sales()->growth()), 'unfiltered' => Currency::format($this->statistics->woocommerce_net_sales()->value(), \true, \false)];
+        return new \IAWP\Quick_Stat($attributes);
+    }
+    public function get_quick_stats()
+    {
+        $quick_stats = [$this->make_quick_stat(['id' => 'visitors', 'name' => \__('Visitors', 'independent-analytics'), 'plugin_group' => 'general', 'is_visible_in_dashboard_widget' => \true]), $this->make_quick_stat(['id' => 'views', 'name' => \__('Views', 'independent-analytics'), 'plugin_group' => 'general', 'is_visible_in_dashboard_widget' => \true]), $this->make_quick_stat(['id' => 'sessions', 'name' => \__('Sessions', 'independent-analytics'), 'plugin_group' => 'general']), $this->make_quick_stat(['id' => 'average_session_duration', 'name' => \__('Average Session Duration', 'independent-analytics'), 'plugin_group' => 'general', 'format' => 'time']), $this->make_quick_stat(['id' => 'bounce_rate', 'name' => \__('Bounce Rate', 'independent-analytics'), 'plugin_group' => 'general', 'format' => 'percent', 'is_growth_good' => \false]), $this->make_quick_stat(['id' => 'views_per_session', 'name' => \__('Views Per Sessions', 'independent-analytics'), 'plugin_group' => 'general', 'format' => 'decimal']), $this->make_quick_stat(['id' => 'wc_orders', 'name' => \__('Orders', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce']), $this->make_quick_stat(['id' => 'wc_gross_sales', 'name' => \__('Gross Sales', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'rounded-currency']), $this->make_quick_stat(['id' => 'wc_refunds', 'name' => \__('Refunds', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce']), $this->make_quick_stat(['id' => 'wc_refunded_amount', 'name' => \__('Refunded Amount', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'rounded-currency']), $this->make_quick_stat(['id' => 'wc_net_sales', 'name' => \__('Net Sales', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'rounded-currency']), $this->make_quick_stat(['id' => 'wc_conversion_rate', 'name' => \__('Conversion Rate', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'percent']), $this->make_quick_stat(['id' => 'wc_earnings_per_visitor', 'name' => \__('Earnings Per Visitor', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'currency']), $this->make_quick_stat(['id' => 'wc_average_order_volume', 'name' => \__('Average Order Volume', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'rounded-currency']), $this->make_quick_stat(['id' => 'form_submissions', 'name' => \__('Form Submissions', 'independent-analytics'), 'plugin_group' => 'forms']), $this->make_quick_stat(['id' => 'form_conversion_rate', 'name' => \__('Form Conversion Rate', 'independent-analytics'), 'plugin_group' => 'forms', 'format' => 'percent'])];
+        foreach (\IAWP\Form::get_forms() as $form) {
+            if (!$form->is_plugin_active()) {
+                continue;
+            }
+            $quick_stats[] = $this->make_quick_stat(['id' => 'form_submissions_for_' . $form->id(), 'name' => \sprintf(\_x('%s Submissions', 'Title of the contact form', 'independent-analytics'), $form->title()), 'plugin_group' => 'forms', 'is_plugin_active' => $form->is_plugin_active(), 'plugin_group_header' => $form->plugin_name(), 'icon' => $form->icon()], ['form_submissions_for', $form]);
+            $quick_stats[] = $this->make_quick_stat(['id' => 'form_conversion_rate_for_' . $form->id(), 'name' => \sprintf(\_x('%s Conversion Rate', 'Title of the contact form', 'independent-analytics'), $form->title()), 'plugin_group' => 'forms', 'is_plugin_active' => $form->is_plugin_active(), 'plugin_group_header' => $form->plugin_name(), 'icon' => $form->icon(), 'format' => 'percent'], ['form_conversion_rate_for', $form]);
         }
-        return $stats;
+        return $quick_stats;
     }
     public function get_html()
     {
-        $stats = $this->get_stats();
-        $is_filtered = !\is_null($this->filtered_statistics);
-        return \IAWPSCOPED\iawp_blade()->run('quick-stats', ['is_filtered' => $is_filtered, 'stats' => $stats]);
-    }
-    private function format_growth($growth) : string
-    {
-        return Number_Formatter::percent(\absint($growth));
-    }
-    /**
-     * @param int|float $number
-     *
-     * @return string
-     */
-    private function maybe_abbreviate($number) : string
-    {
-        if ($number < 100000) {
-            return \number_format_i18n($number, 0);
+        $quick_stats = $this->get_quick_stats();
+        $visible_quick_stats_count = \count(\array_filter($quick_stats, function (\IAWP\Quick_Stat $quick_stat) : bool {
+            return $quick_stat->is_visible() && $quick_stat->is_enabled();
+        }));
+        $quick_stats_html_class = "quick-stats total-of-{$visible_quick_stats_count}";
+        if (!\is_null($this->unfiltered_statistics)) {
+            $quick_stats_html_class .= ' filtered';
         }
-        return Number::abbreviate($number, \false);
-    }
-    /**
-     * @return bool
-     */
-    private function is_preview() : bool
-    {
-        return $this->preview;
-    }
-    /**
-     * @return bool
-     */
-    private function is_full_view() : bool
-    {
-        return !$this->is_preview();
+        return \IAWPSCOPED\iawp_blade()->run('quick-stats', ['is_dashboard_widget' => $this->is_dashboard_widget, 'quick_stats_html_class' => $quick_stats_html_class, 'quick_stats' => $quick_stats, 'plugin_groups' => \IAWP\Plugin_Group::get_plugin_groups()]);
     }
 }

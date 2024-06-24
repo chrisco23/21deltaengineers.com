@@ -119,10 +119,10 @@ class REST_API
         if (\IAWP\Migrations\Migrations::is_migrating()) {
             return;
         }
-        if ($this->blocked_ip(Request::ip())) {
+        if ($this->maybe_block_ip_address()) {
             return;
         }
-        $visitor = new Visitor(Request::ip(), Request::user_agent());
+        $visitor = Visitor::fetch_current_visitor();
         $signature = \md5(Salt::request_payload_salt() . \json_encode($request['payload']));
         $campaign = [];
         if (\IAWPSCOPED\iawp_is_pro()) {
@@ -160,48 +160,13 @@ class REST_API
         }
         return $safe_string;
     }
-    private function blocked_ip($visitor_ip)
+    private function maybe_block_ip_address()
     {
-        if (\defined('IAWP_TEST_IP')) {
-            $visitor_ip = \IAWP_TEST_IP;
-        }
         $blocked_ips = \IAWPSCOPED\iawp()->get_option('iawp_blocked_ips', []);
         if (\count($blocked_ips) == 0) {
             return \false;
         }
-        if (\in_array($visitor_ip, $blocked_ips)) {
-            return \true;
-        }
-        $wildcard_ips = [];
-        foreach ($blocked_ips as $blocked_ip) {
-            if (String_Util::str_contains($blocked_ip, '*')) {
-                $wildcard_ips[] = $blocked_ip;
-            }
-        }
-        if (\count($wildcard_ips) == 0) {
-            return \false;
-        }
-        $delimeter = String_Util::str_contains($visitor_ip, '.') ? '.' : ':';
-        $visitor_parts = \explode($delimeter, $visitor_ip);
-        $goal = \count($visitor_parts);
-        foreach ($wildcard_ips as $blocked_ip) {
-            $blocked_parts = \explode($delimeter, $blocked_ip);
-            $matches = 0;
-            for ($i = 0; $i < \count($visitor_parts); $i++) {
-                if (!\array_key_exists($i, $blocked_parts)) {
-                    $matches++;
-                } elseif ($visitor_parts[$i] == $blocked_parts[$i] || $blocked_parts[$i] == '*') {
-                    $matches++;
-                    continue;
-                } else {
-                    break;
-                }
-            }
-            if ($matches == $goal) {
-                return \true;
-            }
-        }
-        return \false;
+        return Request::is_ip_address_blocked($blocked_ips);
     }
     private function block_user_role() : bool
     {

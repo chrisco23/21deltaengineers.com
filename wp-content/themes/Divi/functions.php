@@ -8355,7 +8355,7 @@ function et_add_divi_menu() {
 	$core_page = add_menu_page( 'Divi', 'Divi', 'edit_theme_options', 'et_divi_options', 'et_build_epanel' );
 
 	// Add Theme Options menu only if it's enabled for current user
-	if ( et_pb_is_allowed( 'theme_options' ) ) {
+	if ( et_pb_is_allowed( 'edit_theme_options' ) ) {
 
 		if ( isset( $_GET['page'] ) && 'et_divi_options' === $_GET['page'] && isset( $_POST['action'] ) ) {
 			if (
@@ -8367,19 +8367,19 @@ function et_add_divi_menu() {
 			}
 		}
 
-		add_submenu_page( 'et_divi_options', esc_html__( 'Theme Options', 'Divi' ), esc_html__( 'Theme Options', 'Divi' ), 'manage_options', 'et_divi_options' );
+		add_submenu_page( 'et_divi_options', esc_html__( 'Theme Options', 'Divi' ), esc_html__( 'Theme Options', 'Divi' ), 'edit_theme_options', 'et_divi_options' );
 	}
 
 	et_theme_builder_add_admin_page( 'et_divi_options' );
 
 	// Add Theme Customizer menu only if it's enabled for current user
 	if ( et_pb_is_allowed( 'theme_customizer' ) ) {
-		add_submenu_page( 'et_divi_options', esc_html__( 'Theme Customizer', 'Divi' ), esc_html__( 'Theme Customizer', 'Divi' ), 'manage_options', 'customize.php?et_customizer_option_set=theme' );
+		add_submenu_page( 'et_divi_options', esc_html__( 'Theme Customizer', 'Divi' ), esc_html__( 'Theme Customizer', 'Divi' ), 'edit_theme_options', 'customize.php?et_customizer_option_set=theme' );
 	}
 	add_submenu_page( 'et_divi_options', esc_html__( 'Role Editor', 'Divi' ), esc_html__( 'Role Editor', 'Divi' ), 'manage_options', 'et_divi_role_editor', 'et_pb_display_role_editor' );
 	// Add Divi Library menu only if it's enabled for current user
-	if ( et_pb_is_allowed( 'divi_library' ) ) {
-		add_submenu_page( 'et_divi_options', esc_html__( 'Divi Library', 'Divi' ), esc_html__( 'Divi Library', 'Divi' ), 'manage_options', 'edit.php?post_type=et_pb_layout' );
+	if ( et_pb_is_allowed( 'divi_library' ) && current_user_can( 'export' ) ) {
+		add_submenu_page( 'et_divi_options', esc_html__( 'Divi Library', 'Divi' ), esc_html__( 'Divi Library', 'Divi' ), 'edit_theme_options', 'edit.php?post_type=et_pb_layout' );
 	}
 
 	add_action( "load-{$core_page}", 'et_pb_check_options_access' ); // load function to check the permissions of current user
@@ -8550,6 +8550,9 @@ add_filter( 'et_gb_gallery_to_shortcode', 'et_divi_gb_gallery_to_shortcode' );
 function et_divi_register_customizer_portability() {
 	global $options;
 
+	// get all the roles that can edit theme options.
+	$applicability_roles = et_core_get_roles_by_capabilities( [ 'edit_theme_options' ] );
+
 	// Make sure the Portability is loaded.
 	et_core_load_component( 'portability' );
 
@@ -8567,12 +8570,13 @@ function et_divi_register_customizer_portability() {
 
 	// Register the portability.
 	et_core_portability_register( 'et_divi_mods', array(
-		'title'   => esc_html__( 'Import & Export Customizer', 'Divi' ),
-		'name'    => esc_html__( 'Divi Customizer Settings', 'Divi' ),
-		'type'    => 'options',
-		'target'  => 'et_divi',
-		'exclude' => $exclude,
-		'view'    => is_customize_preview(),
+		'title'         => esc_html__( 'Import & Export Customizer', 'Divi' ),
+		'name'          => esc_html__( 'Divi Customizer Settings', 'Divi' ),
+		'type'          => 'options',
+		'target'        => 'et_divi',
+		'exclude'       => $exclude,
+		'view'          => is_customize_preview(),
+		'applicability' => $applicability_roles,
 	) );
 }
 add_action( 'admin_init', 'et_divi_register_customizer_portability' );

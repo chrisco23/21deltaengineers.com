@@ -27,7 +27,7 @@ class WPML extends Controller {
 		$this->post_translations      = $sitepress->post_translations();
 		$this->cpt_sync_options       = $this->sitepress->get_setting( 'custom_posts_sync_option', array() );
 
-		add_action( 'fbv_ids_assigned_to_folder', array( $this, 'assigned_to_folder' ), 10, 2 );
+		add_filter( 'fbv_ids_assigned_to_folder', array( $this, 'assigned_to_folder' ), 10, 2 );
 		add_filter( 'wpml_pre_parse_query', array( $this, 'preParseQuery' ) );
 		add_filter( 'wpml_post_parse_query', array( $this, 'postParseQuery' ) );
 		add_action( 'wp_ajax_fbv_sync_wpml', array( $this, 'syncWPML' ) );

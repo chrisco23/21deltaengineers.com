@@ -69,6 +69,10 @@ class SettingModel {
 				'get' => 'getSvgSupport',
 				'set' => 'setSvgSupport',
 			),
+			'IS_SEARCH_USING_API'  => array(
+				'get' => 'getFolderSearchMethod',
+				'set' => 'setFolderSearchMethod',
+			),
 		);
 	}
 
@@ -219,5 +223,13 @@ class SettingModel {
 
 	public function setSvgSupport( $value ) {
 		update_option( 'njt_fbv_allow_svg_upload', $value );
+	}
+
+	public function getFolderSearchMethod() {
+		return get_option( 'njt_fbv_is_search_using_api', '0' ) === '1';
+	}
+
+	public function setFolderSearchMethod( $value ) {
+		update_option( 'njt_fbv_is_search_using_api', $value );
 	}
 }

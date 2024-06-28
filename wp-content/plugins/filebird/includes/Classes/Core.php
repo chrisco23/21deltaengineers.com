@@ -44,6 +44,9 @@ class Core {
 
 		add_filter( 'users_have_additional_content', array( $this, 'users_have_additional_content' ), 10, 2 );
 		add_action( 'deleted_user', array( $this, 'deleted_user' ), 10, 3 );
+		// Fix WordPress VIP doesn't load CSS file correctly
+		add_filter( 'css_do_concat', array( $this, 'wordpress_vip_css_concat_filter' ), 10, 2 );
+		// -----
 	}
 
     public function checkUpdateDatabase() {
@@ -55,6 +58,13 @@ class Core {
 				}
 			}
 		}
+	}
+
+	public function wordpress_vip_css_concat_filter( $do_concat, $handle ) {
+		if ( 'filebird-ui' === $handle ) {
+			return false;
+		}
+		return $do_concat;
 	}
 
     private function loadModules() {
@@ -90,6 +100,8 @@ class Core {
 
 		wp_enqueue_script( 'jquery-ui-draggable' );
 		wp_enqueue_script( 'jquery-ui-droppable' );
+		wp_enqueue_script( 'wp-dom-ready' );
+		wp_enqueue_style( 'filebird-ui', NJFB_PLUGIN_URL . 'assets/dist/style.css', array(), NJFB_VERSION );
 
 		if ( wp_is_mobile() ) {
 			wp_enqueue_script( 'jquery-touch-punch-fixed', NJFB_PLUGIN_URL . 'assets/js/jquery.ui.touch-punch.js', array( 'jquery-ui-widget', 'jquery-ui-mouse' ), NJFB_VERSION, false );
@@ -122,7 +134,7 @@ class Core {
 					'update_database_notice' => apply_filters( 'fbv_update_database_notice', false ),
 					'is_rtl'                 => is_rtl(),
 					'tree_mode'              => 'attachment',
-					'folder_search_api'      => apply_filters( 'fbv_folder_api_search', false ),
+					'folder_search_api'      => apply_filters( 'fbv_folder_api_search', $this->settingModel->get( 'IS_SEARCH_USING_API' ) ),
 				)
 			)
 		);
@@ -193,7 +205,10 @@ class Core {
 					}
 				}
 			}
-			FolderModel::setFoldersForPosts( $post_id, $parent );
+
+			$ids = array_map( 'intval', apply_filters( 'fbv_ids_assigned_to_folder', array( $post_id ) ) );
+
+			FolderModel::setFoldersForPosts( $ids, $parent );
 		}
 	}
 

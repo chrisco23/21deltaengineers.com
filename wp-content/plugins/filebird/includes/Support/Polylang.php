@@ -23,7 +23,7 @@ class Polylang extends Controller {
 				if ( $this->lang_id != null ) {
 					add_filter( 'fbv_speedup_get_count_query', '__return_true' );
 				}
-				add_action( 'fbv_ids_assigned_to_folder', array( $this, 'assigned_to_folder' ), 10, 2 );
+				add_filter( 'fbv_ids_assigned_to_folder', array( $this, 'assigned_to_folder' ), 10, 2 );
 				add_filter( 'fbv_get_count_query', array( $this, 'fbv_get_count_query' ), 10, 3 );
 				add_filter( 'fbv_all_folders_and_count', array( $this, 'all_folders_and_count_query' ), 10, 2 );
 				add_filter( 'fbv_data', array( $this, 'fbv_data' ), 10, 1 );

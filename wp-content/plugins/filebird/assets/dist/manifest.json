@@ -1,42 +1,25 @@
 {
-  "ProBadge.css": {
-    "file": "ProBadge-4bd0ae48.css",
-    "src": "ProBadge.css"
-  },
-  "_ProBadge-fd5e1712.js": {
-    "css": [
-      "ProBadge-4bd0ae48.css"
-    ],
-    "file": "ProBadge-fd5e1712.js"
-  },
-  "admin.css": {
-    "file": "admin-dfb43762.css",
-    "src": "admin.css"
+  "_ProBadge-eda32c5a.js": {
+    "file": "ProBadge-eda32c5a.js"
   },
   "admin.tsx": {
-    "css": [
-      "admin-dfb43762.css"
-    ],
-    "file": "admin.tsx-a5a97de4.js",
+    "file": "admin.tsx-660b3de3.js",
     "imports": [
-      "_ProBadge-fd5e1712.js"
+      "_ProBadge-eda32c5a.js"
     ],
     "isEntry": true,
     "src": "admin.tsx"
   },
-  "main.css": {
-    "file": "main-b943a5e6.css",
-    "src": "main.css"
-  },
   "main.tsx": {
-    "css": [
-      "main-b943a5e6.css"
-    ],
-    "file": "main.tsx-e3b6843d.js",
+    "file": "main.tsx-b5c7e8c5.js",
     "imports": [
-      "_ProBadge-fd5e1712.js"
+      "_ProBadge-eda32c5a.js"
     ],
     "isEntry": true,
     "src": "main.tsx"
+  },
+  "style.css": {
+    "file": "style.css",
+    "src": "style.css"
   }
 }

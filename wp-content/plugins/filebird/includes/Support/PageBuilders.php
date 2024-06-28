@@ -187,6 +187,7 @@ class PageBuilders {
 		add_action(
              'wp_ajax_tb_load_editor',
             function() {
+				wp_enqueue_script( 'filebird-themify', NJFB_PLUGIN_URL . 'assets/js/themify.js', array(), NJFB_VERSION, true );
 				$this->enqueueScripts( true );
 			},
             9

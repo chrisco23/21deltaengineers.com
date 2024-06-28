@@ -4,7 +4,7 @@ Donate link: https://ninjateam.org/wordpress-media-library-folders/
 Tags: wordpress media library folders, folders, media, media folders, category, file manager
 Requires at least: 3.0
 Tested up to: 6.5
-Stable tag: 6.2.5
+Stable tag: 6.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -208,6 +208,16 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Jun 25, 2024 - Version 6.3.2 =
+- Fixed: Issue with loading media in Add New Media File page
+- Fixed: CSS hiding all admin notices
+
+= Jun 24, 2024 - Version 6.3 =
+- Added: FileBird folder column in Media list and Post Type table (PRO)
+- Improved: WordPress TableList Drag/Drop
+- Fixed: WordPress VIP service doesn't load FileBird styles
+- Fixed: WPML/Polylang not sync file to folder when add new attachment (PRO)
 
 = Jun 14, 2024 - Version 6.2.5 =
 - Fixed: Folder dropdown not showing in Featured Image upload tab when Elementor is activated

@@ -19,7 +19,7 @@ class Vite {
 	 */
 	public static function enqueue_vite( string $script = 'main.tsx' ) {
 		self::enqueue_preload( $script );
-		self::css_tag( $script );
+		// self::css_tag( $script );
 		$script_handle = self::register( $script );
 		add_filter(
 			'script_loader_tag',

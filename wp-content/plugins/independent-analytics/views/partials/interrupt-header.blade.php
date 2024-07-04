@@ -6,6 +6,6 @@
         class="iawp-button purple"
         target="_blank">
         <span class="dashicons dashicons-sos"></span>
-        <span>{{ __('Get Help', 'independent-analytics') }}</span>
+        <span><?php esc_html_e('Get Help', 'independent-analytics'); ?></span>
     </a>
 </div>

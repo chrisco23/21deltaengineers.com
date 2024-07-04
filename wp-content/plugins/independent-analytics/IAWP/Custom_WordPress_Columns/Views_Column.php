@@ -13,7 +13,7 @@ class Views_Column
             return;
         }
         \add_action('init', [self::class, 'register_custom_post_meta']);
-        \add_filter('manage_posts_columns', [self::class, 'set_column_header']);
+        \add_filter('manage_posts_columns', [self::class, 'set_column_header'], 10, 2);
         \add_action('manage_posts_custom_column', [self::class, 'echo_cell_content'], 10, 2);
         \add_action('pre_get_posts', [self::class, 'configure_sorting']);
         \add_filter('manage_pages_columns', [self::class, 'set_column_header']);
@@ -27,9 +27,12 @@ class Views_Column
             \add_filter("manage_edit-{$post_type_slug}_sortable_columns", [self::class, 'enable_sorting']);
         }
     }
-    public static function set_column_header(array $columns) : array
+    public static function set_column_header(array $columns, string $post_type = null) : array
     {
-        $columns[self::$meta_key] = \__('Views', 'independent-analytics') . ' <span class="iawp-hidden-label"><span class="hide">(</span>Independent Analytics<span class="hide">)</span></span>';
+        // manage_pages_columns doesn't set the $post_type argument, so checking is_null() works for it
+        if (\is_null($post_type) || \in_array($post_type, self::post_type_slugs())) {
+            $columns[self::$meta_key] = \__('Views', 'independent-analytics') . ' <span class="iawp-hidden-label"><span class="hide">(</span>Independent Analytics<span class="hide">)</span></span>';
+        }
         return $columns;
     }
     public static function echo_cell_content($column_id, $post_id) : void
@@ -61,6 +64,8 @@ class Views_Column
     {
         $built_in_post_type_slugs = ['post', 'page'];
         $post_type_slugs = \get_post_types(['public' => \true, '_builtin' => \false]);
-        return \array_merge($built_in_post_type_slugs, $post_type_slugs);
+        $slugs = \array_merge($built_in_post_type_slugs, $post_type_slugs);
+        $disallowed = ['elementor_library', 'e-landing-page'];
+        return \array_diff($slugs, $disallowed);
     }
 }

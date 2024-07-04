@@ -13,8 +13,7 @@
                value="/wp-admin/admin.php?page=independent-analytics-settings">
         <?php wp_nonce_field('iawp_email_report_settings-options'); ?>
         <div class="inner">
-            <p id="next-email" class="next-email <?php echo $is_scheduled ? 'scheduled' : 'no-email'; ?>" 
-                data-test-date="<?php echo wp_strip_all_tags($date_comparison); ?>">
+            <p id="next-email" class="next-email <?php echo $is_scheduled ? 'scheduled' : 'no-email'; ?>">
                 <span class="dashicons dashicons-yes-alt"></span><span class="dashicons dashicons-dismiss"></span> 
                 <?php echo wp_kses_post($scheduled_date); ?>
             </p>

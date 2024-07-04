@@ -1,3 +1,45 @@
+version 4.26 ( updated 07-02-2024 )
+- Introduced Divi Quick Sites, including AI website creation and hand-crafted starter sites.
+	* ai-app/ai-app.php
+	* ai-app/build/et-ai-app.bundle.css
+	* ai-app/build/et-ai-app.bundle.js
+	* common/admin.php
+	* core/admin/js/portability.js
+	* core/components/Portability.php
+	* core/functions.php
+	* functions.php
+	* includes/builder/core.php
+	* includes/builder/feature/I18n.php
+	* includes/builder/feature/dynamic-assets/class-dynamic-assets.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/theme-builder/admin.php
+	* includes/builder/frontend-builder/theme-builder/api.php
+	* includes/builder/frontend-builder/theme-builder/theme-builder.php
+	* includes/builder/module/Blog.php
+	* js/src/theme-customizer.js
+	* onboarding/ajax.php
+	* onboarding/functions.php
+	* onboarding/helpers.php
+	* onboarding/i18n/dashboard.php
+	* onboarding/i18n/result.php
+	* onboarding/images/ai.svg
+	* onboarding/images/animated/ai/ai-progress-images.json
+	* onboarding/images/animated/ai/ai-progress-layout.json
+	* onboarding/images/animated/ai/ai-progress-menu.json
+	* onboarding/images/animated/ai/ai-progress-styles.json
+	* onboarding/images/animated/ai/ai-progress-text.json
+	* onboarding/images/loader.png
+	* onboarding/images/loader.svg
+	* onboarding/images/offer/ai.png
+	* onboarding/images/offer/lifetime.png
+	* onboarding/images/offer/marketplace.png
+	* onboarding/images/offer/teams.png
+	* onboarding/images/offer/vip.png
+	* onboarding/images/premade.svg
+	* onboarding/onboarding.php
+
 version 4.25.2 ( updated 06-12-2024 )
 - Security Update: Fixed a stored XSS vulnerability that made it possible for users with Contributor role or above to insert JavaScript code onto the page via the Divi Builder Gallery module's shortcode. Props to Ngô Thiên An (ancorn_) for the responsible disclosure.
 - Hide Role Editor settings related to Theme Options, Theme Builder, Theme Customizer, Divi Library, and Support Center for roles without edit_theme_options capability. By default, this changes effected Editor, Author, and Contributor roles, unless they have edit_theme_options capability.

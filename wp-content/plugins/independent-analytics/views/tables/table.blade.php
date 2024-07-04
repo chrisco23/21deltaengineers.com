@@ -88,7 +88,7 @@
             esc_html_e('Showing All Rows', 'independent-analytics'); ?>
         </span>
         <span class="enabled-button-text">
-            {{sprintf(__('Load Next %d Rows', 'independent-analytics'), $page_size)}}
+            <?php printf(__('Load Next %d Rows', 'independent-analytics'), $page_size); ?>
         </span>
         </button>
     </div>

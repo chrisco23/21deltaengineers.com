@@ -18,6 +18,10 @@ class Track_Resource_Changes
         if (!$is_update) {
             return;
         }
+        // Bail if the update was for a non-public post type such as wp_navigation
+        if (!\is_post_type_viewable($post->post_type)) {
+            return;
+        }
         $post = \get_post($post_id);
         if (\is_null($post) || $post->post_status === 'trash') {
             return;

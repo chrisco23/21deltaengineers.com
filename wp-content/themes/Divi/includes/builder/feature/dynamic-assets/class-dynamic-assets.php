@@ -1300,7 +1300,7 @@ class ET_Dynamic_Assets {
 		$customizer_gutter      = intval( et_get_option( 'gutter_width', '3' ) );
 		$this->_default_gutters = array_merge( (array) $page_custom_gutter, (array) $customizer_gutter );
 		$no_of_gutters          = substr_count( $this->_all_content, 'use_custom_gutter' );
-		$preset_gutter_val      = ! empty( $this->_presets_attributes['use_custom_gutter'] ) && 'on' === $this->_presets_attributes['use_custom_gutter'] ?
+		$preset_gutter_val      = ! empty( $this->_presets_attributes['use_custom_gutter'] ) && 'on' === $this->_presets_attributes['use_custom_gutter'] && ! empty( $this->_presets_attributes['gutter_width'] ) ?
 			(array) $this->_presets_attributes['gutter_width'] : array();
 
 		if ( $no_of_gutters > count( $matches[0] ) && ! in_array( 'gutter_width="3"', $matches[0], true ) ) {

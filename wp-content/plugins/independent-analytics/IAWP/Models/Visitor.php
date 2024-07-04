@@ -47,29 +47,34 @@ class Visitor
     }
     public function most_recent_session_id() : ?int
     {
-        if ($this->has_recorded_session() && \is_int($this->current_session->session_id)) {
-            return $this->current_session->session_id;
+        $session_id = \IAWPSCOPED\iawp_intify($this->current_session->session_id);
+        if ($this->has_recorded_session() && \is_int($session_id)) {
+            return $session_id;
         } else {
             return null;
         }
     }
     public function most_recent_initial_view_id() : ?int
     {
-        if ($this->has_recorded_session() && \is_int($this->current_session->initial_view_id)) {
-            return $this->current_session->initial_view_id;
+        $initial_view_id = \IAWPSCOPED\iawp_intify($this->current_session->initial_view_id);
+        if ($this->has_recorded_session() && \is_int($initial_view_id)) {
+            return $initial_view_id;
+        } else {
+            return null;
+        }
+    }
+    public function most_recent_final_view_id() : ?int
+    {
+        $final_view_id = \IAWPSCOPED\iawp_intify($this->current_session->final_view_id);
+        if ($this->has_recorded_session() && \is_int($final_view_id)) {
+            return $final_view_id;
         } else {
             return null;
         }
     }
     public function most_recent_view_id() : ?int
     {
-        if (!$this->has_recorded_session()) {
-            return null;
-        }
-        if (\is_int($this->current_session->final_view_id)) {
-            return $this->current_session->final_view_id;
-        }
-        return $this->current_session->initial_view_id;
+        return $this->most_recent_final_view_id() ?? $this->most_recent_initial_view_id();
     }
     /**
      * Return the database id for a visitor
@@ -100,7 +105,8 @@ class Visitor
     private function fetch_current_session()
     {
         $sessions_table = Query::get_table_name(Query::SESSIONS);
-        return Illuminate_Builder::get_builder()->from($sessions_table)->where('visitor_id', '=', $this->id)->whereRaw('created_at > DATE_SUB(UTC_TIMESTAMP(), INTERVAL 30 MINUTE)')->orderBy('created_at', 'desc')->first();
+        $session = Illuminate_Builder::get_builder()->from($sessions_table, 'sessions')->selectRaw('IFNULL(ended_at, created_at) AS latest_view_at')->selectRaw('sessions.*')->where('visitor_id', '=', $this->id)->havingRaw('latest_view_at > DATE_SUB(UTC_TIMESTAMP(), INTERVAL 30 MINUTE)')->orderBy('latest_view_at', 'DESC')->first();
+        return $session;
     }
     public static function fetch_current_visitor() : self
     {

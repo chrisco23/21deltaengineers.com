@@ -2,7 +2,7 @@
 
 namespace IAWP\Rows;
 
-use IAWP\Form;
+use IAWP\Form_Submissions\Form;
 use IAWP\Illuminate_Builder;
 use IAWP\Models\Referrer;
 use IAWP\Query;

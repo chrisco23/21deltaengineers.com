@@ -2223,7 +2223,7 @@ add_action( 'admin_footer', 'et_save_to_cloud_modal' );
  * Notes: The relation between the capabilities is "AND". So, all the capabilites should
  * be available and enabled to mark current role.
  *
- * @since ??
+ * @since 4.25.2
  *
  * @param array $capabilities Specific capabilities that we want to check.
  *
@@ -2259,7 +2259,7 @@ function et_core_get_roles_by_capabilities( $capabilities ) {
 	/**
 	 * Filters the list of roles based on the specific capabilities.
 	 *
-	 * @since ??
+	 * @since 4.25.2
 	 *
 	 * @param array  $roles        List of roles based on the specific capabilities.
 	 * @param string $capabilities Specific capabilities that we want to check.

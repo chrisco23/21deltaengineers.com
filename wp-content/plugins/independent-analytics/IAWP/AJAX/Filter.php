@@ -62,26 +62,19 @@ class Filter extends \IAWP\AJAX\AJAX
         }
         $rows = $rows_query->rows();
         if (empty($filters)) {
-            $filtered_statistics = null;
-            $unfiltered_statistics = new $statistics_class($date_range, null, $chart_interval);
-            $total_number_of_rows = $unfiltered_statistics->total_number_of_rows();
+            $statistics = new $statistics_class($date_range, null, $chart_interval);
         } else {
-            $unfiltered_statistics = new $statistics_class($date_range, null, $chart_interval);
-            $filtered_statistics = new $statistics_class($date_range, $rows_query, $chart_interval);
-            $total_number_of_rows = $filtered_statistics->total_number_of_rows();
+            $statistics = new $statistics_class($date_range, $rows_query, $chart_interval);
         }
+        $total_number_of_rows = $statistics->total_number_of_rows();
         if ($is_geo_table) {
             $chart = new Chart_Geo($rows, $date_range->label());
             $rows = \array_slice($rows, 0, $number_of_rows);
         } else {
-            $chart = new Chart($filtered_statistics ?? $unfiltered_statistics, $date_range->label());
+            $chart = new Chart($statistics);
         }
-        $table->set_statistics($filtered_statistics ?? $unfiltered_statistics);
-        if (\is_null($filtered_statistics)) {
-            $quick_stats = new Quick_Stats($unfiltered_statistics);
-        } else {
-            $quick_stats = new Quick_Stats($filtered_statistics, $unfiltered_statistics);
-        }
+        $table->set_statistics($statistics);
+        $quick_stats = new Quick_Stats($statistics);
         \wp_send_json_success(['rows' => $table->get_rendered_template($rows, \true, $sort_configuration->column(), $sort_configuration->direction()), 'table' => $table->get_rendered_template($rows, \false, $sort_configuration->column(), $sort_configuration->direction()), 'totalNumberOfRows' => $total_number_of_rows, 'chart' => $chart->get_html(), 'stats' => $quick_stats->get_html(), 'label' => $date_range->label(), 'isLastPage' => \count($rows) < \IAWPSCOPED\iawp()->pagination_page_size() * $page, 'columns' => $table->visible_column_ids(), 'columnsHTML' => $table->column_picker_html(), 'groupId' => $table->group()->id(), 'filters' => $filters, 'filtersTemplateHTML' => $table->filters_template_html(), 'filtersButtonsHTML' => $table->filters_condition_buttons_html($filters), 'chartInterval' => $chart_interval->id()]);
     }
     /**

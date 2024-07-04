@@ -6,7 +6,7 @@ $divibooster_module_shortcodes = array(
     'et_pb_accordion' => 'db_pb_accordion',
     'et_pb_menu' => 'db_pb_menu',
     'et_pb_team_member' => 'db_pb_team_member',
-    'et_pb_gallery' => 'db_pb_gallery',
+    //'et_pb_gallery' => 'db_pb_gallery',
     'et_pb_portfolio' => 'db_pb_portfolio',
     'et_pb_filterable_portfolio' => 'db_pb_filterable_portfolio',
     'et_pb_fullwidth_portfolio' => 'db_pb_fullwidth_portfolio',
@@ -55,7 +55,7 @@ include_once($MODULE_OPTIONS_DIR . 'dynamic_content.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_accordion/et_pb_accordion.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_menu/et_pb_menu.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_team_member.php');
-include_once($MODULE_OPTIONS_DIR . 'et_pb_gallery.php');
+//include_once($MODULE_OPTIONS_DIR . 'et_pb_gallery.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_portfolio/et_pb_portfolio.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_signup.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_slide/et_pb_slide.php');
@@ -102,96 +102,8 @@ function dbdb_module_options_fix_missing_props($props, $attrs, $render_slug) {
     return $props;
 }
 
-/*
-// === Shortcode wrapping ===
 
-function dbmo_wrap_module_shortcodes($content) {
-	
-	// Don't yet support previewing of module option output in visual builders
-	if (db_is_divi_builder('visual')) { return $content; }
-	
-	return dbmo_shortcode_replace_callback($content, 'dbmo_wrap_module_shortcode');
-}
-
-function dbmo_wrap_global_module_shortcodes($content) {
-	return dbmo_shortcode_replace_callback($content, 'dbmo_wrap_global_module_shortcode');
-}
-
-// preg_replace_callback wrapper for shortcodes
-function dbmo_shortcode_replace_callback($content, $callback) {
-	$shortcode_pattern = '/'.get_shortcode_regex().'/s';
-	return preg_replace_callback($shortcode_pattern, $callback, $content);
-}
-
-// Process outermost shortcodes in global modules - doesn't wrap outermost shortcodes as already done externally in the_content
-function dbmo_wrap_global_module_shortcode($match) {
-	
-	global $divibooster_module_shortcodes;
-	
-	$inner = isset($match[5])?$match[5]:'';
-	$outer = isset($match[0])?$match[0]:'';
-	
-	$has_nested_shortcodes = (strpos($inner, '[et_pb_') !== false);
-	
-	// Recursively process nested shortcodes
-	if ($has_nested_shortcodes) {
-		$replacement = dbmo_wrap_module_shortcodes($inner);
-		$outer = str_replace($inner, $replacement, $outer);
-	} 
-	
-	return $outer;
-}
-
-function dbmo_wrap_module_shortcode($match) {
-	
-	global $divibooster_module_shortcodes;
-	
-	$slug = isset($match[2])?$match[2]:'';
-	$inner = isset($match[5])?$match[5]:'';
-	$outer = isset($match[0])?$match[0]:'';
-	$attr_str = isset($match[3])?$match[3]:'';
-	$attrs = shortcode_parse_atts($attr_str);
-	
-	$is_global_module = isset($attrs['global_module']);
-	$has_nested_shortcodes = (strpos($inner, '[et_pb_') !== false);
-	
-	// Recursively process nested shortcodes
-	if (!$is_global_module && $has_nested_shortcodes) {
-		$outer = str_replace($inner, dbmo_wrap_module_shortcodes($inner), $outer);
-	} 
-	
-	// Wrap the shortcode, if module options exist for it
-	if (isset($divibooster_module_shortcodes[$slug])) {
-		$wrapper = $divibooster_module_shortcodes[$slug];
-		$outer = "[{$wrapper}{$attr_str}]{$outer}[/{$wrapper}]";
-	} 
-	
-	return $outer;
-}
-
-// === Register shortcodes to add {$tag}_content filter 
-
-function divibooster_register_module_shortcodes(){
-	
-	global $divibooster_module_shortcodes;
-	
-	if (!empty($divibooster_module_shortcodes) and is_array($divibooster_module_shortcodes)) {
-		foreach($divibooster_module_shortcodes as $etsc=>$dbsc) {
-			add_shortcode($dbsc, 'divibooster_module_shortcode_callback');
-		}
-	}
-}
-
-function divibooster_module_shortcode_callback($atts, $content, $tag) {
-	$content = do_shortcode($content);
-	if (is_singular()) { // Don't apply to excerpts
-		$content = apply_filters("{$tag}_content", $content, $atts);
-	}
-	return $content;
-}
-*/
-
-// === Enable {$tag}_content filter in theme builder layouts
+// === Enable {$tag}_content filter ===
 
 foreach ($divibooster_module_shortcodes as $etsc => $dbsc) {
     DBDBModuleOutputFilterHook::create($etsc, "{$dbsc}_content")->enable();

@@ -6,7 +6,7 @@ use IAWP\Campaign_Builder;
 use IAWP\Dashboard_Options;
 use IAWP\Date_Range\Relative_Date_Range;
 use IAWP\Filters;
-use IAWP\Form;
+use IAWP\Form_Submissions\Form;
 use IAWP\Icon_Directory_Factory;
 use IAWP\Plugin_Group;
 use IAWP\Rows\Filter;
@@ -30,6 +30,7 @@ abstract class Table
     private $visible_columns;
     private $group;
     private $is_new_group;
+    /** @var ?Statistics */
     private $statistics;
     /**
      * @param string|null $group_id
@@ -100,23 +101,23 @@ abstract class Table
             $views = Number_Formatter::decimal($row->views());
             // Getting a divide by zero error from the line below?
             // It's likely an issue with $this->views which is an instance of Views. Make sure the queries there are working.
-            $views_percentage = Number_Formatter::percent($row->views() / $this->statistics->views()->value() * 100, 2);
+            $views_percentage = Number_Formatter::percent($row->views() / $this->statistics->get_statistic('views')->value() * 100, 2);
             return '<span class="no-wrap">' . Security::string($views) . '</span> <span class="percentage">(' . Security::string($views_percentage) . ')</span>';
         } elseif ($column_id == 'visitors') {
             $visitors = Number_Formatter::decimal($row->visitors());
-            $visitors_percentage = Number_Formatter::percent($row->visitors() / $this->statistics->visitors()->value() * 100, 2);
+            $visitors_percentage = Number_Formatter::percent($row->visitors() / $this->statistics->get_statistic('visitors')->value() * 100, 2);
             return '<span class="no-wrap">' . Security::string($visitors) . '</span> <span class="percentage">(' . Security::string($visitors_percentage) . ')</span>';
         } elseif ($column_id == 'sessions') {
             $sessions = Number_Formatter::decimal($row->sessions());
-            $sessions_percentage = Number_Formatter::percent($row->sessions() / $this->statistics->sessions()->value() * 100, 2);
+            $sessions_percentage = Number_Formatter::percent($row->sessions() / $this->statistics->get_statistic('sessions')->value() * 100, 2);
             return '<span class="no-wrap">' . Security::string($sessions) . '</span> <span class="percentage">(' . Security::string($sessions_percentage) . ')</span>';
         } elseif ($column_id === 'entrances') {
             $entrances = Number_Formatter::decimal($row->entrances());
-            $entrances_percentage = Number_Formatter::percent($row->entrances() / $this->statistics->sessions()->value() * 100, 2);
+            $entrances_percentage = Number_Formatter::percent($row->entrances() / $this->statistics->get_statistic('sessions')->value() * 100, 2);
             return '<span class="no-wrap">' . Security::string($entrances) . '</span> <span class="percentage">(' . Security::string($entrances_percentage) . ')</span>';
         } elseif ($column_id === 'exits') {
             $exits = Number_Formatter::decimal($row->exits());
-            $exits_percentage = Number_Formatter::percent($row->exits() / $this->statistics->sessions()->value() * 100, 2);
+            $exits_percentage = Number_Formatter::percent($row->exits() / $this->statistics->get_statistic('sessions')->value() * 100, 2);
             return '<span class="no-wrap">' . Security::string($exits) . '</span> <span class="percentage">(' . Security::string($exits_percentage) . ')</span>';
         } elseif ($column_id === 'bounce_rate') {
             return Security::string(Number_Formatter::percent($row->bounce_rate()));
@@ -419,8 +420,8 @@ abstract class Table
     {
         $columns = [new Column(['id' => 'form_submissions', 'name' => \__('Submissions', 'independent-analytics'), 'plugin_group' => 'forms', 'type' => 'int']), new Column(['id' => 'form_conversion_rate', 'name' => \__('Conversion Rate', 'independent-analytics'), 'plugin_group' => 'forms', 'type' => 'int'])];
         foreach (Form::get_forms() as $form) {
-            $columns[] = new Column(['id' => $form->submissions_column(), 'name' => $form->title() . ' ' . \__('Submissions', 'independent-analytics'), 'plugin_group' => 'forms', 'is_plugin_active' => $form->is_plugin_active(), 'plugin_group_header' => $form->plugin_name(), 'type' => 'int']);
-            $columns[] = new Column(['id' => $form->conversion_rate_column(), 'name' => $form->title() . ' ' . \__('Conversion Rate', 'independent-analytics'), 'plugin_group' => 'forms', 'is_plugin_active' => $form->is_plugin_active(), 'plugin_group_header' => $form->plugin_name(), 'type' => 'int']);
+            $columns[] = new Column(['id' => $form->submissions_column(), 'name' => $form->title() . ' ' . \__('Submissions', 'independent-analytics'), 'plugin_group' => 'forms', 'is_subgroup_plugin_active' => $form->is_plugin_active(), 'plugin_group_header' => $form->plugin_name(), 'type' => 'int']);
+            $columns[] = new Column(['id' => $form->conversion_rate_column(), 'name' => $form->title() . ' ' . \__('Conversion Rate', 'independent-analytics'), 'plugin_group' => 'forms', 'is_subgroup_plugin_active' => $form->is_plugin_active(), 'plugin_group_header' => $form->plugin_name(), 'type' => 'int']);
         }
         return $columns;
     }
@@ -432,7 +433,7 @@ abstract class Table
         if (!$column->exportable() && !$is_dashboard_export) {
             return \false;
         }
-        if (!$column->is_enabled()) {
+        if (!$column->is_group_plugin_enabled()) {
             return \false;
         }
         return \true;
@@ -443,12 +444,12 @@ abstract class Table
     private function get_columns($show_disabled_columns = \false) : array
     {
         $columns_for_group = \array_filter($this->local_columns(), function (Column $column) {
-            return $column->is_enabled_for_group($this->group) && $column->is_plugin_active();
+            return $column->is_enabled_for_group($this->group) && $column->is_subgroup_plugin_enabled();
         });
         if ($show_disabled_columns === \true) {
         } else {
             $columns_for_group = \array_filter($columns_for_group, function (Column $column) {
-                return $column->is_enabled();
+                return $column->is_group_plugin_enabled();
             });
         }
         if (\is_null($this->visible_columns) || \count($this->visible_columns) === 0) {
@@ -488,6 +489,11 @@ abstract class Table
     {
         return $this->filters;
     }
+    /**
+     * @param string $type
+     *
+     * @return ?class-string<Table>
+     */
     public static function get_table_by_type(string $type) : ?string
     {
         switch ($type) {

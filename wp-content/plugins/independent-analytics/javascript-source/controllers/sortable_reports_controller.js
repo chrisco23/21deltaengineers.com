@@ -10,6 +10,8 @@ export default class extends Controller {
         this.sortable = new Sortable(this.element, {
             animation: 150,
             ghostClass: 'iawp-sortable-ghost',
+            delay: 2000,
+            delayOnTouchOnly: true,
             onUpdate: (event) => this.updateOrder(event)
         });
     }

@@ -10,7 +10,7 @@ include_once(dirname(__FILE__).'/DBDBExtendedIcon.php');
 include_once(dirname(__FILE__).'/DBDBCustomCssBoxes.php');
 include_once(dirname(__FILE__).'/DBDBDivi.php');
 include_once(dirname(__FILE__).'/DBDBETModulesFont.php');
-include_once(dirname(__FILE__).'/DBDBGallery.php');
+//include_once(dirname(__FILE__).'/DBDBGallery.php');
 include_once(dirname(__FILE__).'/DBDBHtmlNameAttribute.php');
 include_once(dirname(__FILE__).'/DBDBOption.php');
 include_once(dirname(__FILE__).'/DBDBOption016_GallerySizes.php');

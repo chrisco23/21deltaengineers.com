@@ -5,12 +5,19 @@ namespace IAWP\Utils;
 /** @internal */
 class Request
 {
-    public static function get_post_array(string $name) : ?array
+    public static function get_post_array(string $field) : ?array
     {
-        if (!\array_key_exists($name, $_POST) || !\is_array($_POST[$name])) {
+        if (!\array_key_exists($field, $_POST) || !\is_array($_POST[$field])) {
             return null;
         }
-        return \rest_sanitize_array($_POST[$name]);
+        return \rest_sanitize_array($_POST[$field]);
+    }
+    public static function get_post_string(string $field) : ?string
+    {
+        if (!\array_key_exists($field, $_POST)) {
+            return null;
+        }
+        return \sanitize_text_field($_POST[$field]);
     }
     public static function path_relative_to_site_url($url = null)
     {
@@ -42,22 +49,6 @@ class Request
     public static function user_agent()
     {
         return $_SERVER['HTTP_USER_AGENT'];
-    }
-    private static function scheme()
-    {
-        if (!empty($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https' || !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' || !empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443') {
-            return 'https';
-        } else {
-            return 'http';
-        }
-    }
-    private static function url()
-    {
-        if (!empty($_SERVER['HTTP_HOST']) && !empty($_SERVER['REQUEST_URI'])) {
-            return \esc_url_raw(self::scheme() . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-        } else {
-            return null;
-        }
     }
     public static function is_ip_address_blocked($blocked_ips)
     {
@@ -95,5 +86,21 @@ class Request
             }
         }
         return \false;
+    }
+    private static function scheme()
+    {
+        if (!empty($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https' || !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' || !empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443') {
+            return 'https';
+        } else {
+            return 'http';
+        }
+    }
+    private static function url()
+    {
+        if (!empty($_SERVER['HTTP_HOST']) && !empty($_SERVER['REQUEST_URI'])) {
+            return \esc_url_raw(self::scheme() . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+        } else {
+            return null;
+        }
     }
 }

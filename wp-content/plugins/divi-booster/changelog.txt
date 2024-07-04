@@ -1,3 +1,18 @@
+= 4.6.0 (25 Jun 2024) =
+* Added gallery module slider arrow style options
+* Added gallery module grid open in lightbox toggle
+* Added gallery module slider dot navigation style options
+* Added gallery module lightbox arrow style options
+* Added gallery module lightbox background color option
+* Added gallery module lightbox close button style options
+* Added gallery module lightbox hide image count option
+* Added gallery module lightbox hide title option
+* Added gallery module lightbox image background color option
+* Added gallery module lightbox image count style options
+* Added gallery module lightbox title style options
+* Added gallery module enable / disable gallery slide in from side
+* Added gallery module slider arrow icon options
+
 = 4.5.0 (3 Jun 2024) =
 * Disable related youtube videos to same channel feature now applied to playlists
 * Fixed blog module author filter not correctly removed after use

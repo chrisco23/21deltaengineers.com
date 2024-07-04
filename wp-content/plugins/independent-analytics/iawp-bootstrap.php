@@ -7,19 +7,21 @@ use IAWP\Dashboard_Options;
 use IAWP\Database;
 use IAWP\Date_Range\Exact_Date_Range;
 use IAWP\Env;
-use IAWP\Form;
+use IAWP\Form_Submissions\Form;
 use IAWP\Geo_Database_Background_Job;
 use IAWP\Independent_Analytics;
 use IAWP\Interrupt;
 use IAWP\Migrations;
+use IAWP\Patch;
 use IAWP\Public_API\Analytics;
 use IAWP\Public_API\Singular_Analytics;
 use IAWP\Utils\BladeOne;
 use IAWP\WP_Option_Cache_Bust;
+use IAWPSCOPED\Illuminate\Support\Carbon;
 \define( 'IAWP_DIRECTORY', \rtrim( \plugin_dir_path( __FILE__ ), \DIRECTORY_SEPARATOR ) );
 \define( 'IAWP_URL', \rtrim( \plugin_dir_url( __FILE__ ), '/' ) );
-\define( 'IAWP_VERSION', '2.5.1' );
-\define( 'IAWP_DATABASE_VERSION', '32' );
+\define( 'IAWP_VERSION', '2.6.2' );
+\define( 'IAWP_DATABASE_VERSION', '33' );
 \define( 'IAWP_LANGUAGES_DIRECTORY', \dirname( \plugin_basename( __FILE__ ) ) . '/languages' );
 \define( 'IAWP_PLUGIN_FILE', __DIR__ . '/iawp.php' );
 if ( \file_exists( \IAWPSCOPED\iawp_path_to( 'vendor/scoper-autoload.php' ) ) ) {
@@ -137,8 +139,8 @@ function iawp_using_woocommerce() : bool {
     if ( \IAWPSCOPED\iawp_is_free() ) {
         return \false;
     }
-    $class_missing = \class_exists( '\\WooCommerce' ) === \false;
-    if ( $class_missing ) {
+    $active_plugins = \get_option( 'active_plugins' );
+    if ( !\in_array( 'woocommerce/woocommerce.php', $active_plugins ) ) {
         return \false;
     }
     $table_name = $wpdb->prefix . 'wc_order_stats';
@@ -157,7 +159,7 @@ function iawp_using_a_form_plugin() : bool {
     if ( \IAWPSCOPED\iawp_is_free() ) {
         return \false;
     }
-    return Form::has_any_active_form_plugins();
+    return Form::has_active_form_plugin();
 }
 
 /** @internal */
@@ -195,6 +197,14 @@ function iawp_icon(  string $icon  ) : string {
  */
 function iawp_db_version() : int {
     return \intval( \get_option( 'iawp_db_version', '0' ) );
+}
+
+/** @internal */
+function iawp_intify(  $value  ) {
+    if ( \is_string( $value ) && \ctype_digit( $value ) ) {
+        return \intval( $value );
+    }
+    return $value;
 }
 
 /**
@@ -285,7 +295,7 @@ function iawp() {
     \update_option( 'iawp_need_clear_cache', \true );
     \IAWPSCOPED\iawp()->cron_manager->schedule_refresh_salt();
     if ( \IAWPSCOPED\iawp_is_pro() ) {
-        \IAWPSCOPED\iawp()->email_reports->schedule_email_report();
+        \IAWPSCOPED\iawp()->email_reports->schedule();
     }
     // Set current version for changelog notifications
     \update_option( 'iawp_last_update_viewed', \IAWP_VERSION );
@@ -296,7 +306,7 @@ function iawp() {
 \register_deactivation_hook( \IAWP_PLUGIN_FILE, function () {
     \IAWPSCOPED\iawp()->cron_manager->unschedule_daily_salt_refresh();
     if ( \IAWPSCOPED\iawp_is_pro() ) {
-        \IAWPSCOPED\iawp()->email_reports->unschedule_email_report();
+        \IAWPSCOPED\iawp()->email_reports->unschedule();
     }
     \wp_delete_file( \trailingslashit( \WPMU_PLUGIN_DIR ) . 'iawp-performance-boost.php' );
     \delete_option( 'iawp_must_use_directory_not_writable' );
@@ -305,9 +315,11 @@ function iawp() {
 * The admin_init hook will fire when the dashboard is loaded or an admin ajax request is made
 */
 \add_action( 'admin_init', function () {
+    Carbon::setLocale( \get_locale() );
     Migrations\Migrations::handle_migration_18_error();
     Migrations\Migrations::handle_migration_22_error();
     Migrations\Migrations::handle_migration_29_error();
+    Patch::patch_2_6_2_incorrect_email_report_schedule();
     $options = Dashboard_Options::getInstance();
     $options->maybe_redirect();
     new Migrations\Migration_Job();

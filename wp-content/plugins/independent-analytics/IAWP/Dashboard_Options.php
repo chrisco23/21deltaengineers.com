@@ -25,7 +25,6 @@ class Dashboard_Options
     use Singleton;
     private $report;
     private static $default_visible_quick_stats = ['visitors', 'views', 'sessions', 'average_session_duration', 'bounce_rate', 'views_per_session', 'wc_orders', 'wc_net_sales'];
-    private static $default_visible_datasets = ['visitors', 'views'];
     private function __construct()
     {
         $this->report = $this->fetch_current_report();
@@ -58,16 +57,25 @@ class Dashboard_Options
         }
         return self::$default_visible_quick_stats;
     }
-    public function visible_datasets() : array
+    public function primary_chart_metric_id() : string
     {
-        if (Request::get_post_array('visible_datasets')) {
-            return Request::get_post_array('visible_datasets');
+        if (Request::get_post_string('primary_chart_metric_id')) {
+            return Request::get_post_string('primary_chart_metric_id');
         }
-        $decoded_value = \json_decode($this->report->visible_datasets ?? 'null', \true);
-        if (\is_array($decoded_value)) {
-            return $decoded_value;
+        if (\is_null($this->report->primary_chart_metric_id ?? null)) {
+            return 'visitors';
         }
-        return self::$default_visible_datasets;
+        return $this->report->primary_chart_metric_id;
+    }
+    public function secondary_chart_metric_id() : ?string
+    {
+        if (Request::get_post_string('secondary_chart_metric_id')) {
+            return Request::get_post_string('secondary_chart_metric_id');
+        }
+        if (\is_null($this->report->secondary_chart_metric_id ?? null)) {
+            return 'views';
+        }
+        return $this->report->secondary_chart_metric_id;
     }
     public function filters() : array
     {

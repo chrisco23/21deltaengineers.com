@@ -1,52 +1,79 @@
 import {Controller} from "@hotwired/stimulus"
 import corsairPlugin from '../chart_plugins/corsair_plugin'
-import htmlLegendPlugin from '../chart_plugins/html_legend_plugin'
-import {Chart, registerables} from 'chart.js';
+import {Chart, registerables} from 'chart.js'
+import color from 'color'
 
 Chart.register(...registerables);
 
 export default class extends Controller {
+    static targets = ['primaryMetricSelect', 'secondaryMetricSelect', 'adaptiveWidthSelect'];
+
     static values = {
+        labels: Array,
+        data: Object,
         locale: String,
         currency: {
             type: String,
             default: 'USD'
         },
-        preview: Boolean,
-        usingWooCommerce: Boolean,
-        labels: Array,
-        views: Array,
-        visitors: Array,
-        sessions: Array,
-        woocommerceOrders: Array,
-        woocommerceNetSales: Array,
-        visibleDatasets: Array
+        isPreview: Boolean,
+        isUsingWooCommerce: Boolean,
+        primaryChartMetricId: String,
+        primaryChartMetricName: String,
+        secondaryChartMetricId: String,
+        secondaryChartMetricName: String,
     }
 
-    get locale() {
+    metricGroups = [{
+        metrics: ['views', 'visitors', 'sessions'],
+        format: 'int'
+    }, {
+        metrics: ['average_session_duration'],
+        format: 'time'
+    }, {
+        metrics: ['bounce_rate'],
+        format: 'percent'
+    }, {
+        metrics: ['views_per_session'],
+        format: 'float'
+    }, {
+        metrics: ['wc_orders', 'wc_refunds'],
+        format: 'int'
+    }, {
+        metrics: ['wc_gross_sales', 'wc_refunded_amount', 'wc_net_sales'],
+        format: 'whole_currency'
+    }, {
+        metrics: ['wc_conversion_rate'],
+        format: 'percent'
+    }, {
+        metrics: ['wc_earnings_per_visitor'],
+        format: 'currency'
+    }, {
+        metrics: ['wc_average_order_volume'],
+        format: 'whole_currency'
+    }, {
+        metrics: ['form_submissions'],
+        prefix_to_include: 'form_submissions_for_',
+        format: 'int'
+    }, {
+        metrics: ['form_conversion_rate'],
+        prefix_to_include: 'form_conversion_rate_for_',
+        format: 'percent'
+    }]
+
+    getLocale() {
+        // Validate the locale
         try {
             new Intl.NumberFormat(this.localeValue)
+
             return this.localeValue
         } catch (e) {
             return 'en-US'
         }
     }
 
-    isPreview() {
-        return this.previewValue === true
-    }
-
-    isUsingWooCommerce() {
-        return this.usingWooCommerceValue === true
-    }
-
-    formatCurrency(value) {
-        return new Intl.NumberFormat(this.localeValue, {
-            style: 'currency',
-            currency: this.currencyValue,
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-        }).format(value);
+    hasSecondaryMetric() {
+        return this.hasSecondaryChartMetricIdValue && this.secondaryChartMetricIdValue
     }
 
     tooltipTitle(tooltip) {
@@ -55,12 +82,43 @@ export default class extends Controller {
         return label.tooltipLabel
     }
 
-    tooltipLabel(tooltip) {
+    getGroupByMetricId(metricId) {
+        return this.metricGroups.find(group => {
+            return group.metrics.includes(metricId) || (group.prefix_to_include && metricId.startsWith(group.prefix_to_include))
+        })
+    }
+
+    formatValueForMetric(metricId, value) {
+        const group = this.getGroupByMetricId(metricId)
+
+        switch (group.format) {
+            case 'whole_currency':
+                return new Intl.NumberFormat(this.localeValue, {
+                    style: 'currency',
+                    currency: this.currencyValue,
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                }).format(value);
+            case 'percent':
+                return new Intl.NumberFormat(this.localeValue, {
+                    style: 'percent',
+                }).format(value / 100);
+            case 'time':
+                const minutes = Math.floor(value / 60);
+                const seconds = value % 60
+
+                return minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+            default:
+                return value
+        }
+    }
+
+    tooltipLabel = (tooltip) => {
         if (typeof tooltip.dataset.tooltipLabel === 'function') {
             return tooltip.dataset.tooltipLabel(tooltip)
         }
 
-        return tooltip.dataset.label + ': ' + tooltip.formattedValue
+        return tooltip.dataset.label + ': ' + this.formatValueForMetric(tooltip.dataset.id, tooltip.raw)
     }
 
     tickText(value) {
@@ -69,132 +127,156 @@ export default class extends Controller {
         return label.tick
     }
 
-    currencyTickText = (value) => {
-        return this.formatCurrency(value)
+    /**
+     * This works because we have a separate hidden select with a single option. When we set the newly
+     * selected option as it's only option, we can see exactly how long the select needs to be
+     */
+    updateMetricSelectWidth(element) {
+        const option = element.options[element.selectedIndex]
+
+        this.adaptiveWidthSelectTarget[0].innerHTML = option.innerText
+        element.style.width = this.adaptiveWidthSelectTarget.getBoundingClientRect().width + 'px'
+        element.parentElement.classList.add('visible');
     }
 
-    getVisitorsDataset() {
-        return {
-            id: 'visitors',
-            label: iawpText.visitors,
-            data: this.visitorsValue,
-            borderColor: 'rgba(246,157,10,1)',
-            fill: true,
-            backgroundColor: 'rgba(246,157,10,0.2)',
-            pointBackgroundColor: 'rgba(246,157,10,1)',
-            tension: 0.4,
-            yAxisID: 'y',
-            hidden: !this.visibleDatasetsValue.includes('visitors')
-        }
-    }
+    hasSharedAxis(metricId, otherMetricId) {
+        const group = this.getGroupByMetricId(metricId)
+        const otherGroup = this.getGroupByMetricId(otherMetricId)
 
-    getViewsDataset() {
-        return {
-            id: 'views',
-            label: iawpText.views,
-            data: this.viewsValue,
-            borderColor: 'rgba(108,70,174,1)',
-            fill: true,
-            backgroundColor: 'rgba(108,70,174,0.2)',
-            pointBackgroundColor: 'rgba(108,70,174,1)',
-            tension: 0.4,
-            yAxisID: 'y',
-            hidden: !this.visibleDatasetsValue.includes('views')
-        }
-    }
-
-    getSessionsDataset() {
-        if (this.isPreview()) {
-            return null;
-        }
-
-        return {
-            id: 'sessions',
-            label: iawpText.sessions,
-            data: this.sessionsValue,
-            borderColor: 'rgba(217, 59, 41, 1)',
-            fill: true,
-            backgroundColor: 'rgba(217, 59, 41, 0.2)',
-            pointBackgroundColor: 'rgba(217, 59, 41, 1)',
-            tension: 0.4,
-            yAxisID: 'y',
-            hidden: !this.visibleDatasetsValue.includes('sessions')
-        }
-    }
-
-    getOrdersDataset() {
-        if (this.isPreview() || !this.isUsingWooCommerce()) {
-            return null;
-        }
-
-        return {
-            id: 'orders',
-            label: iawpText.orders,
-            data: this.woocommerceOrdersValue,
-            borderColor: 'rgba(35, 125, 68, 1)',
-            fill: true,
-            backgroundColor: 'rgba(35, 125, 68, .2)',
-            pointBackgroundColor: 'rgba(35, 125, 68, 1)',
-            tension: 0.4,
-            yAxisID: 'y1',
-            hidden: !this.visibleDatasetsValue.includes('orders')
-        }
-    }
-
-    getNetSalesDataset() {
-        if (this.isPreview() || !this.isUsingWooCommerce()) {
-            return null;
-        }
-
-        return {
-            id: 'net-sales',
-            label: iawpText.netSales,
-            data: this.woocommerceNetSalesValue,
-            borderColor: 'rgba(52, 152, 219, 1)',
-            fill: true,
-            backgroundColor: 'rgba(52, 152, 219, 0.2)',
-            pointBackgroundColor: 'rgba(52, 152, 219, 1)',
-            tension: 0.4,
-            yAxisID: 'y2',
-            tooltipLabel: (tooltip) => {
-                return tooltip.dataset.label + ': ' + this.formatCurrency(tooltip.raw)
-            },
-            hidden: !this.visibleDatasetsValue.includes('net-sales')
-        }
+        return JSON.stringify(group) === JSON.stringify(otherGroup)
     }
 
     connect() {
+        if(!this.isPreviewValue) {
+            this.updateMetricSelectWidth(this.primaryMetricSelectTarget)
+            this.updateMetricSelectWidth(this.secondaryMetricSelectTarget)
+        }
+        this.createChart()
+        this.updateChart()
+    }
+
+    changePrimaryMetric(e) {
+        const element = e.target
+        this.primaryChartMetricIdValue = element.value
+        this.primaryChartMetricNameValue = element.options[element.selectedIndex].innerText
+        this.updateMetricSelectWidth(element)
+        this.updateChart()
+
+        Array.from(this.secondaryMetricSelectTarget.querySelectorAll('option')).forEach((option) => {
+            option.toggleAttribute('disabled', option.value === element.value)
+        })
+
+        document.dispatchEvent(
+            new CustomEvent('iawp:changePrimaryChartMetric', {
+                detail: {
+                    primaryChartMetricId: element.value
+                }
+            })
+        )
+    }
+
+    changeSecondaryMetric(e) {
+        const element = e.target
+        const hasSelectedSecondaryMetric = element.value !== ''
+
+        if (hasSelectedSecondaryMetric) {
+            this.secondaryChartMetricIdValue = element.value
+            this.secondaryChartMetricNameValue = element.options[element.selectedIndex].innerText
+        } else {
+            this.secondaryChartMetricIdValue = ''
+            this.secondaryChartMetricNameValue = ''
+        }
+
+        this.updateMetricSelectWidth(element)
+        this.updateChart()
+
+        Array.from(this.primaryMetricSelectTarget.querySelectorAll('option')).forEach((option) => {
+            option.toggleAttribute('disabled', option.value === element.value)
+        })
+
+        document.dispatchEvent(
+            new CustomEvent('iawp:changeSecondaryChartMetric', {
+                detail: {
+                    secondaryChartMetricId: hasSelectedSecondaryMetric ? element.value : null
+                }
+            })
+        )
+    }
+
+    updateChart() {
+        const primaryDataset = window.iawp_chart.data.datasets[0]
+
+        primaryDataset.id = this.primaryChartMetricIdValue
+        primaryDataset.data = this.dataValue[this.primaryChartMetricIdValue]
+        primaryDataset.label = this.primaryChartMetricNameValue
+
+        // Always start by removing the secondary dataset
+        if (window.iawp_chart.data.datasets.length > 1) {
+            window.iawp_chart.data.datasets.pop()
+        }
+
+        if (this.hasSecondaryMetric()) {
+            const id = this.secondaryChartMetricIdValue
+            const name = this.secondaryChartMetricNameValue
+            const data = this.dataValue[id]
+            const axisId = this.hasSharedAxis(this.primaryChartMetricIdValue, id) ? 'y' : 'defaultRight'
+
+            window.iawp_chart.data.datasets.push(
+                this.makeDataset(id, name, data, axisId, 'rgba(246,157,10)')
+            )
+        }
+
+        window.iawp_chart.update();
+    }
+
+    makeDataset(id, name, data, axisId, colorValue, isPrimary = false) {
+        const accentColor = color(colorValue)
+
+        return {
+            id: id,
+            label: name,
+            data: data,
+            borderColor: accentColor.string(),
+            backgroundColor: accentColor.alpha(.1).string(),
+            pointBackgroundColor: accentColor.string(),
+            tension: 0.4,
+            yAxisID: axisId,
+            fill: true,
+            order: isPrimary ? 1 : 0, // Stack orange on top of purple
+        }
+    }
+
+    createChart() {
         Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"';
         const element = document.getElementById('myChart');
         const labels = this.labelsValue
 
+        const primaryMetricDataset = this.makeDataset(
+            this.primaryChartMetricIdValue,
+            this.primaryChartMetricNameValue,
+            this.dataValue[this.primaryChartMetricIdValue],
+            'y',
+            'rgba(108,70,174)',
+            true
+        )
+
         const data = {
             labels: labels,
             datasets: ([
-                this.getVisitorsDataset(),
-                this.getViewsDataset(),
-                this.getSessionsDataset(),
-                this.getOrdersDataset(),
-                this.getNetSalesDataset()
+                primaryMetricDataset
             ]).filter((dataset) => dataset !== null)
         };
 
         const options = {
-            locale: this.locale,
-            animation: {
-                duration: 0
-            },
+            locale: this.getLocale(),
             interaction: {
                 intersect: false,
                 mode: 'index'
             },
             scales: {
                 y: {
-                    title: {
-                        text: `${iawpText.visitors} / ${iawpText.views} / ${iawpText.sessions}`,
-                        display: this.previewValue ? false : true
-                    },
                     grid: {
+                        color: document.body.classList.contains('iawp-dark-mode') && !this.isPreviewValue ? '#9a95a6' : '#DEDAE6',
                         borderColor: '#DEDAE6',
                         tickColor: '#DEDAE6',
                         display: true,
@@ -203,72 +285,45 @@ export default class extends Controller {
                     },
                     beginAtZero: true,
                     suggestedMax: 10,
-                    // grace: '26%',
                     ticks: {
-                        color: document.body.classList.contains('iawp-dark-mode') ? '#ffffff' : '#6D6A73',
-                        font: {
-                            size: 14,
-                            weight: 400,
-                        },
-                        precision: 0
-                    },
-                },
-                y1: {
-
-                    title: {
-                        text: iawpText.orders,
-                        display: true,
-                        color: 'rgba(35, 125, 68, 1)',
-                    },
-                    position: 'right',
-                    display: 'auto',
-                    grid: {
-                        borderColor: 'rgba(35, 125, 68, 1)',
-                        tickColor: 'rgba(35, 125, 68, 1)',
-                        display: false,
-                        drawOnChartArea: false,
-                        borderDash: [2, 4]
-                    },
-                    beginAtZero: true,
-                    suggestedMax: 10,
-                    // grace: '26%',
-                    ticks: {
-                        // color: document.body.classList.contains('iawp-dark-mode') ? '#ffffff' : '#6D6A73',
-                        color: 'rgba(35, 125, 68, 1)',
+                        color: document.body.classList.contains('iawp-dark-mode') && !this.isPreviewValue ? '#ffffff' : '#6D6A73',
                         font: {
                             size: 14,
                             weight: 400,
                         },
                         precision: 0,
+                        callback: (value, index, values) => {
+                            return this.formatValueForMetric(this.primaryChartMetricIdValue, value)
+                        },
                     },
                 },
-                y2: {
-                    title: {
-                        text: iawpText.netSales,
-                        display: true,
-                        color: 'rgba(52, 152, 219, 1)',
-                    },
+                defaultRight: {
                     position: 'right',
                     display: 'auto',
                     grid: {
-                        borderColor: 'rgba(52, 152, 219, 1)',
-                        tickColor: 'rgba(52, 152, 219, 1)',
-                        display: false,
+                        color: document.body.classList.contains('iawp-dark-mode') && !this.isPreviewValue ? '#9a95a6' : '#DEDAE6',
+                        borderColor: '#DEDAE6',
+                        tickColor: '#DEDAE6',
+                        display: true,
                         drawOnChartArea: false,
                         borderDash: [2, 4]
                     },
                     beginAtZero: true,
                     suggestedMax: 10,
-                    // grace: '26%',
                     ticks: {
-                        // color: document.body.classList.contains('iawp-dark-mode') ? '#ffffff' : '#6D6A73',
-                        color: 'rgba(52, 152, 219, 1)',
+                        color: document.body.classList.contains('iawp-dark-mode') && !this.isPreviewValue ? '#ffffff' : '#6D6A73',
                         font: {
                             size: 14,
                             weight: 400,
                         },
                         precision: 0,
-                        callback: this.currencyTickText
+                        callback: (value, index, values) => {
+                            if (this.hasSecondaryMetric()) {
+                                return this.formatValueForMetric(this.secondaryChartMetricIdValue, value)
+                            } else {
+                                return value
+                            }
+                        },
                     },
                 },
                 x: {
@@ -279,7 +334,7 @@ export default class extends Controller {
                         drawOnChartArea: false,
                     },
                     ticks: {
-                        color: document.body.classList.contains('iawp-dark-mode') ? '#ffffff' : '#6D6A73',
+                        color: document.body.classList.contains('iawp-dark-mode') && !this.isPreviewValue ? '#ffffff' : '#6D6A73',
                         autoSkip: true,
                         autoSkipPadding: 16,
                         maxRotation: 0,
@@ -294,19 +349,6 @@ export default class extends Controller {
             },
             plugins: {
                 mode: String, // 'light' or 'dark'
-                htmlLegend: {
-                    container: element.parentNode.querySelector('.legend'),
-                    callback: function (visibleDatasets) {
-                        // Todo - Actually track visible datasets
-                        document.dispatchEvent(
-                            new CustomEvent('iawp:changeVisibleDatasets', {
-                                detail: {
-                                    visibleDatasets: visibleDatasets
-                                }
-                            })
-                        )
-                    }
-                },
                 legend: {
                     display: false
                 },
@@ -316,9 +358,12 @@ export default class extends Controller {
                     width: 1
                 },
                 tooltip: {
+                    itemSort: (a, b) => {
+                        return a.datasetIndex < b.datasetIndex ? -1 : 1
+                    },
                     callbacks: {
                         title: this.tooltipTitle,
-                        label: this.tooltipLabel
+                        label: this.tooltipLabel,
                     }
                 }
             },
@@ -334,7 +379,6 @@ export default class extends Controller {
             data: data,
             options: options,
             plugins: [
-                htmlLegendPlugin,
                 corsairPlugin
 
             ],

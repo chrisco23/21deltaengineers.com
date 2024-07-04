@@ -27,7 +27,7 @@ class DBDBModuleOutputFilterHook {
         if ($render_slug !== $this->render_slug) return $output;
         return $this->wp->apply_filters($this->hook, $output, $module->props, $render_slug);
     }
-
+/*
     public function enableInTb() {
         $this->wp->add_filter('et_module_shortcode_output', array($this, 'applyFiltersInTb'), 10, 3);
     }
@@ -38,4 +38,5 @@ class DBDBModuleOutputFilterHook {
         if ($render_slug !== $this->render_slug) return $output;
         return $this->wp->apply_filters($this->hook, $output, $module->props);
     }
+        */
 }

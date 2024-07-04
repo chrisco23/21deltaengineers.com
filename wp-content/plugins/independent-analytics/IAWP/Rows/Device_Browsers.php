@@ -2,7 +2,7 @@
 
 namespace IAWP\Rows;
 
-use IAWP\Form;
+use IAWP\Form_Submissions\Form;
 use IAWP\Illuminate_Builder;
 use IAWP\Models\Device;
 use IAWP\Query;
@@ -43,7 +43,7 @@ class Device_Browsers extends \IAWP\Rows\Rows
             }
         })->from($views_table, 'views')->leftJoin($device_browsers_query->raw($sessions_table . ' AS sessions'), function (JoinClause $join) {
             $join->on('views.session_id', '=', 'sessions.session_id');
-        })->leftJoin($device_browsers_query->raw($device_browsers_table . ' AS device_browsers'), function (JoinClause $join) {
+        })->join($device_browsers_query->raw($device_browsers_table . ' AS device_browsers'), function (JoinClause $join) {
             $join->on('sessions.device_browser_id', '=', 'device_browsers.device_browser_id');
         })->leftJoinSub($woo_commerce_query, 'wc', function (JoinClause $join) {
             $join->on('wc.view_id', '=', 'views.id');

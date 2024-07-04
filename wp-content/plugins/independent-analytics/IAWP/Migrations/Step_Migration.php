@@ -36,6 +36,7 @@ abstract class Step_Migration
             }
             $wpdb->query($query);
             if ($wpdb->last_error !== '') {
+                \update_option('iawp_migration_error_original_error_message', \trim($wpdb->last_error));
                 $is_connected = $wpdb->check_connection(\false);
                 if (!$is_connected) {
                     \IAWPSCOPED\iawp_log('Independent Analytics: Your database connection was temporarily lost');

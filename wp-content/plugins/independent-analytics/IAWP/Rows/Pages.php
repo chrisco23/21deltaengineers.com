@@ -3,7 +3,7 @@
 namespace IAWP\Rows;
 
 use IAWP\Database;
-use IAWP\Form;
+use IAWP\Form_Submissions\Form;
 use IAWP\Illuminate_Builder;
 use IAWP\Models\Page;
 use IAWP\Query;

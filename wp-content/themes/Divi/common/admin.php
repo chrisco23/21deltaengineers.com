@@ -49,7 +49,7 @@ function et_common_get_available_languages() {
  * Localize common app js data.
  */
 function et_common_global_js_vars() {
-	if ( ! is_admin() && ! et_core_is_fb_enabled() ) {
+	if ( ! is_admin() && ! et_core_is_fb_enabled() && ! et_builder_is_et_onboarding_page() ) {
 		return;
 	}
 
@@ -64,7 +64,7 @@ function et_common_global_js_vars() {
 		$is_layouts_library_page = isset( $current_screen->id ) && 'edit-et_pb_layout' === $current_screen->id;
 		$is_divi_library         = isset( $_GET['post_type'] ) && 'et_pb_layout' === $_GET['post_type'];
 
-		if ( ! $is_templates_page && ! $is_options_page && ! $is_layouts_library_page && ! $is_divi_library && ! et_builder_bfb_enabled() ) {
+		if ( ! $is_templates_page && ! $is_options_page && ! $is_layouts_library_page && ! $is_divi_library && ! et_builder_bfb_enabled() && ! et_builder_is_et_onboarding_page() ) {
 			return;
 		}
 	}

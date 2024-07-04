@@ -186,6 +186,13 @@ class Relative_Date_Range extends \IAWP\Date_Range\Date_Range
         }, self::VALID_RELATIVE_RANGE_IDS);
     }
     /**
+     * @return string[]
+     */
+    public static function range_ids() : array
+    {
+        return self::VALID_RELATIVE_RANGE_IDS;
+    }
+    /**
      * @param string $relative_range_id
      *
      * @return bool

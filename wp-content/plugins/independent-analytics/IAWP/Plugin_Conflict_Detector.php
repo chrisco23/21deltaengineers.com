@@ -2,7 +2,6 @@
 
 namespace IAWP;
 
-use IAWP\Utils\String_Util;
 /** @internal */
 class Plugin_Conflict_Detector
 {
@@ -73,7 +72,7 @@ class Plugin_Conflict_Detector
         if (\in_array('wp-security-hardening/wp-hardening.php', $active_plugins)) {
             $settings = \get_option('whp_fixer_option');
             if (\array_key_exists('disable_json_api', $settings)) {
-                if ($settings['disable_json_api']) {
+                if ($settings['disable_json_api'] != 'off') {
                     return \__('The "WP Hardening" plugin is blocking the REST API, which Independent Analytics needs to record views. Please visit the WP Hardening > Security Fixers menu and turn off the "Disable WP API JSON" option, so Independent Analytics can track your visitors.', 'independent-analytics');
                 }
             }
@@ -82,14 +81,6 @@ class Plugin_Conflict_Detector
             $settings = \get_option('mo_api_authentication_protectedrestapi_route_whitelist');
             if (\in_array('/iawp/search', $settings)) {
                 return \__('The "WordPress REST API Authentication" plugin is blocking the REST API, which Independent Analytics needs to record views. Please visit the miniOrange API Authentication > Protected REST APIs menu and uncheck the "/iawp/search" box to allow Independent Analytics to track your visitors.', 'independent-analytics');
-            }
-        }
-        if (\in_array('perfmatters/perfmatters.php', $active_plugins)) {
-            $settings = \get_option('perfmatters_options');
-            if (\array_key_exists('disable_rest_api', $settings)) {
-                if ($settings['disable_rest_api'] != '') {
-                    return \__('The "Perfmatters" plugin is blocking the REST API, which Independent Analytics needs to record views. Please visit the Settings > Perfmatters menu and change the "Disable REST API" setting to "Default (enabled)" to allow Independent Analytics to track your visitors.', 'independent-analytics');
-                }
             }
         }
         if (\in_array('ninjafirewall/ninjafirewall.php', $active_plugins)) {
@@ -101,17 +92,25 @@ class Plugin_Conflict_Detector
             }
         }
         if (\in_array('wp-cerber/wp-cerber.php', $active_plugins)) {
-            $settings = \get_option('cerber-hardening');
+            // This option has been renamed before. If there's an issue in here, check that it wasn't renamed again.
+            $settings = \get_option('cerber_configuration');
+            if ($settings === \false) {
+                $settings = \get_option('cerber-hardening');
+            }
             if (\array_key_exists('norest', $settings)) {
                 if ($settings['norest'] === '1') {
-                    if (!String_Util::str_contains($settings['restwhite'], 'iawp')) {
+                    if (!\in_array('iawp', $settings['restwhite'])) {
                         return \__('The "WP Cerber" plugin is blocking the REST API, which Independent Analytics needs to record views. Please visit the WP Cerber > Dashboard > Hardening menu and add "iawp" to your allowed namespaces. This will keep the REST API locked down while allowing requests for Independent Analytics.', 'independent-analytics');
                     }
                 }
             }
         }
         if (\in_array('wp-simple-firewall/icwp-wpsf.php', $active_plugins)) {
-            $settings = \get_option('icwp_wpsf_opts_free');
+            // This option has been renamed before. If there's an issue in here, check that it wasn't renamed again.
+            $settings = \get_option('icwp_wpsf_opts_all');
+            if ($settings === \false) {
+                $settings = \get_option('icwp_wpsf_opts_free');
+            }
             if (\array_key_exists('lockdown', $settings)) {
                 if (\array_key_exists('disable_anonymous_restapi', $settings['lockdown'])) {
                     if ($settings['lockdown']['disable_anonymous_restapi'] == 'Y') {

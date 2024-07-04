@@ -44,12 +44,29 @@ abstract class Date_Range
     {
         return $this->end->format('Y-m-d\\TH:i:s');
     }
+    /**
+     * TODO - Doesn't work well for units of varying size such as months
+     *
+     * @return Date_Range
+     */
     public function previous_period() : \IAWP\Date_Range\Date_Range
     {
         $range_size = $this->range_size_in_days();
         $previous_start = (clone $this->start)->modify("-{$range_size} days");
         $previous_end = (clone $this->end)->modify("-{$range_size} days");
         return new \IAWP\Date_Range\Exact_Date_Range($previous_start, $previous_end, \false);
+    }
+    /**
+     * TODO - Doesn't work well for units of varying size such as months
+     *
+     * @return Date_Range
+     */
+    public function next_period() : \IAWP\Date_Range\Date_Range
+    {
+        $range_size = $this->range_size_in_days();
+        $next_start = (clone $this->start)->modify("+{$range_size} days");
+        $next_end = (clone $this->end)->modify("+{$range_size} days");
+        return new \IAWP\Date_Range\Exact_Date_Range($next_start, $next_end, \false);
     }
     public function number_of_days() : int
     {
@@ -68,6 +85,8 @@ abstract class Date_Range
     }
     /**
      * Return the range size in days for previous period calculations
+     *
+     * TODO - Doesn't work well for units of varying size such as months
      *
      * @return int
      */

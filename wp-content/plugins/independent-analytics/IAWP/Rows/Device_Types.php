@@ -2,7 +2,7 @@
 
 namespace IAWP\Rows;
 
-use IAWP\Form;
+use IAWP\Form_Submissions\Form;
 use IAWP\Illuminate_Builder;
 use IAWP\Models\Device;
 use IAWP\Query;
@@ -43,7 +43,7 @@ class Device_Types extends \IAWP\Rows\Rows
             }
         })->from($views_table, 'views')->leftJoin($device_types_query->raw($sessions_table . ' AS sessions'), function (JoinClause $join) {
             $join->on('views.session_id', '=', 'sessions.session_id');
-        })->leftJoin($device_types_query->raw($device_types_table . ' AS device_types'), function (JoinClause $join) {
+        })->join($device_types_query->raw($device_types_table . ' AS device_types'), function (JoinClause $join) {
             $join->on('sessions.device_type_id', '=', 'device_types.device_type_id');
         })->leftJoinSub($woo_commerce_query, 'wc', function (JoinClause $join) {
             $join->on('wc.view_id', '=', 'views.id');

@@ -2,6 +2,7 @@
 
 namespace IAWP\Form_Submissions;
 
+use IAWP\Illuminate_Builder;
 use IAWP\Utils\Security;
 /** @internal */
 class Submission_Listener
@@ -125,7 +126,7 @@ class Submission_Listener
         // Amelia
         \add_action('amelia_after_appointment_booking_saved', function ($booking, $reservation) {
             try {
-                $submission = new \IAWP\Form_Submissions\Submission(12, 1, \__('Amelia Appointment', 'independent-analytics'));
+                $submission = new \IAWP\Form_Submissions\Submission(12, 1, 'Amelia ' . \__('Appointment', 'independent-analytics'));
                 $submission->record_submission();
             } catch (\Throwable $e) {
             }
@@ -133,7 +134,50 @@ class Submission_Listener
         // Amelia
         \add_action('amelia_after_event_booking_saved', function ($booking, $reservation) {
             try {
-                $submission = new \IAWP\Form_Submissions\Submission(12, 2, \__('Amelia Event', 'independent-analytics'));
+                $submission = new \IAWP\Form_Submissions\Submission(12, 2, 'Amelia ' . \__('Event', 'independent-analytics'));
+                $submission->record_submission();
+            } catch (\Throwable $e) {
+            }
+        }, 10, 2);
+        // Bricks Builder
+        \add_action('bricks/form/custom_action', function ($form) {
+            try {
+                $fields = $form->get_fields();
+                if (!\array_key_exists('iawp-form-id', $fields) || \intval($fields['iawp-form-id']) === 0) {
+                    return;
+                }
+                if (!\array_key_exists('iawp-form-title', $fields) || \strlen($fields['iawp-form-title']) === 0) {
+                    return;
+                }
+                $submission = new \IAWP\Form_Submissions\Submission(13, \intval($fields['iawp-form-id']), Security::string($fields['iawp-form-title']));
+                $submission->record_submission();
+            } catch (\Throwable $e) {
+            }
+        }, 10, 1);
+        // ARForms Pro
+        \add_action('arfaftercreateentry', function ($entry_id, $form_id) {
+            try {
+                global $wpdb;
+                $forms_table = "{$wpdb->prefix}arf_forms";
+                $form_name = Illuminate_Builder::get_builder()->from($forms_table)->where('id', $form_id)->value('name');
+                if (\is_null($form_name)) {
+                    return;
+                }
+                $submission = new \IAWP\Form_Submissions\Submission(14, \intval($form_id), Security::string($form_name));
+                $submission->record_submission();
+            } catch (\Throwable $e) {
+            }
+        }, 10, 2);
+        // ARForms Lite
+        \add_action('arfliteaftercreateentry', function ($entry_id, $form_id) {
+            try {
+                global $wpdb;
+                $forms_table = "{$wpdb->prefix}arf_forms";
+                $form_name = Illuminate_Builder::get_builder()->from($forms_table)->where('id', $form_id)->value('name');
+                if (\is_null($form_name)) {
+                    return;
+                }
+                $submission = new \IAWP\Form_Submissions\Submission(14, \intval($form_id), Security::string($form_name));
                 $submission->record_submission();
             } catch (\Throwable $e) {
             }
@@ -144,8 +188,8 @@ class Submission_Listener
         //         return;
         //         $submission = new Submission(
         //             0,
-        //             intval(0),
-        //             Security::string('')
+        //             intval(0), // Form id
+        //             Security::string('') // Form title
         //         );
         //         $submission->record_submission();
         //     } catch (\Throwable $e) {

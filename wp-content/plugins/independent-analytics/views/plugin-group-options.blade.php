@@ -25,7 +25,7 @@
     <div data-plugin-group-options-target="modal"
          class="stats-toggle"
     >
-        <div class="top title-small">{{ __('Choose Stats to Display', 'independent-analytics') }}</div>
+        <div class="top title-small"><?php esc_html_e('Choose Stats to Display', 'independent-analytics'); ?></div>
         <div class="inner">
             <div id="stats-toggle-sidebar" class="sidebar">
                 <ul>
@@ -39,7 +39,7 @@
                             >
                                 <span>{{ $plugin_group->name() }}</span>
                                 @if($plugin_group->requires_pro() && iawp_is_free())
-                                    <span class="pro-label">PRO</span>
+                                    <span class="pro-label"><?php esc_html_e('PRO', 'independent-analytics'); ?></span>
                                 @endif
                             </a>
                         </li>
@@ -56,7 +56,7 @@
                         <span class="metrics-title">{{ $plugin_group->name() }}</span>
 
                         @foreach($options as $index => $option)
-                            @if(!$option->is_plugin_active() || !$option->is_member_of_plugin_group($plugin_group->id()))
+                            @if(!$option->is_subgroup_plugin_enabled() || !$option->is_member_of_plugin_group($plugin_group->id()))
                                 @continue
                             @endif
 
@@ -64,8 +64,8 @@
                                 <span class="metrics-subtitle">{{ $option->plugin_group_header() }}</span>
                             @endif
 
-                            <label class="{{ !$option->is_enabled() ? 'disabled' : '' }}">
-                                @if(!$option->is_enabled())
+                            <label class="{{ !$option->is_group_plugin_enabled() ? 'disabled' : '' }}">
+                                @if(!$option->is_group_plugin_enabled())
                                     <input id="iawp_{{ $option_type }}_{{$option->id()}}"
                                            type="checkbox" 
                                            disabled="disabled">
@@ -87,7 +87,7 @@
                                 <p>{{ $plugin_group->upgrade_message() }}</p>
                                 <p><a href="{{ $plugin_group->upgrade_link() }}"
                                       class="link-purple"
-                                      target="_blank">{{ __('Learn more', 'independent-analytics') }}</a>
+                                      target="_blank"><?php esc_html_e('Learn more', 'independent-analytics'); ?></a>
                                 </p>
                             </div>
                         @elseif(!$plugin_group->has_active_group_plugins() && iawp_is_pro())
@@ -95,7 +95,7 @@
                                 <p>{{ $plugin_group->activate_message() }}</p>
                                 <p><a href="{{ $plugin_group->activate_link() }}"
                                       class="link-purple"
-                                      target="_blank">{{ __('Learn more', 'independent-analytics') }}</a>
+                                      target="_blank"><?php esc_html_e('Learn more', 'independent-analytics'); ?></a>
                                 </p>
                             </div>
                         @elseif(!$plugin_group->has_tracked_data())

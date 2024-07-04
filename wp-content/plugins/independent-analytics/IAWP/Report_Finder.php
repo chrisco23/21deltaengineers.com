@@ -10,7 +10,7 @@ class Report_Finder
     }
     public function fetch_reports_by_type() : array
     {
-        return [['name' => \__('Pages', 'independent-analytics'), 'reports' => $this->fetch_page_reports()], ['name' => \__('Referrers', 'independent-analytics'), 'reports' => $this->fetch_referrer_reports()], ['name' => \__('Geographic', 'independent-analytics'), 'reports' => $this->fetch_geographic_reports()], ['name' => \__('Devices', 'independent-analytics'), 'reports' => $this->fetch_device_reports()], ['name' => \__('Campaigns', 'independent-analytics'), 'reports' => $this->fetch_campaign_reports()]];
+        return [['name' => \esc_html__('Pages', 'independent-analytics'), 'reports' => $this->fetch_page_reports()], ['name' => \esc_html__('Referrers', 'independent-analytics'), 'reports' => $this->fetch_referrer_reports()], ['name' => \esc_html__('Geographic', 'independent-analytics'), 'reports' => $this->fetch_geographic_reports()], ['name' => \esc_html__('Devices', 'independent-analytics'), 'reports' => $this->fetch_device_reports()], ['name' => \esc_html__('Campaigns', 'independent-analytics'), 'reports' => $this->fetch_campaign_reports()]];
     }
     /**
      * @return Report[]
@@ -168,9 +168,6 @@ class Report_Finder
         if (\array_key_exists('filters', $attributes) && \is_array($attributes['filters'])) {
             $attributes['filters'] = \json_encode($attributes['filters']);
         }
-        if (\array_key_exists('visible_datasets', $attributes) && \is_array($attributes['visible_datasets'])) {
-            $attributes['visible_datasets'] = \json_encode($attributes['visible_datasets']);
-        }
         $report_id = \IAWP\Illuminate_Builder::get_builder()->from($reports_table)->insertGetId($attributes);
         return self::by_id($report_id);
     }
@@ -178,15 +175,15 @@ class Report_Finder
     {
         switch ($type) {
             case 'views':
-                return new \IAWP\Report((object) ['name' => 'Pages', 'type' => 'views']);
+                return new \IAWP\Report((object) ['name' => \esc_html__('Pages', 'independent-analytics'), 'type' => 'views']);
             case 'referrers':
-                return new \IAWP\Report((object) ['name' => 'Referrers', 'type' => 'referrers']);
+                return new \IAWP\Report((object) ['name' => \esc_html__('Referrers', 'independent-analytics'), 'type' => 'referrers']);
             case 'geo':
-                return new \IAWP\Report((object) ['name' => 'Geographic', 'type' => 'geo']);
+                return new \IAWP\Report((object) ['name' => \esc_html__('Geographic', 'independent-analytics'), 'type' => 'geo']);
             case 'devices':
-                return new \IAWP\Report((object) ['name' => 'Devices', 'type' => 'devices']);
+                return new \IAWP\Report((object) ['name' => \esc_html__('Devices', 'independent-analytics'), 'type' => 'devices']);
             case 'campaigns':
-                return new \IAWP\Report((object) ['name' => 'Campaigns', 'type' => 'campaigns']);
+                return new \IAWP\Report((object) ['name' => \esc_html__('Campaigns', 'independent-analytics'), 'type' => 'campaigns']);
             default:
                 return null;
         }

@@ -143,9 +143,7 @@
     }
   }
 })({"l7ZUS":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _objectSpreadJs = require("@swc/helpers/lib/_object_spread.js");
-var _objectSpreadJsDefault = parcelHelpers.interopDefault(_objectSpreadJs);
+var _objectSpread = require("@swc/helpers/_/_object_spread");
 var _userRoles = require("./modules/user-roles");
 var _duplicateField = require("./modules/duplicate-field");
 var _emailReports = require("./modules/email-reports");
@@ -160,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var button = e.target;
         button.textContent = iawpText.exportingPages;
         button.setAttribute("disabled", "disabled");
-        var data = (0, _objectSpreadJsDefault.default)({}, iawpActions.export_pages);
+        var data = (0, _objectSpread._)({}, iawpActions.export_pages);
         jQuery.post(ajaxurl, data, function(response) {
             (0, _download.downloadCSV)("exported-pages.csv", response);
             button.textContent = iawpText.exportPages;
@@ -171,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var button = e.target;
         button.textContent = iawpText.exportingReferrers;
         button.setAttribute("disabled", "disabled");
-        var data = (0, _objectSpreadJsDefault.default)({}, iawpActions.export_referrers);
+        var data = (0, _objectSpread._)({}, iawpActions.export_referrers);
         jQuery.post(ajaxurl, data, function(response) {
             (0, _download.downloadCSV)("exported-referrers.csv", response);
             button.textContent = iawpText.exportReferrers;
@@ -182,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var button = e.target;
         button.textContent = iawpText.exportingGeolocations;
         button.setAttribute("disabled", "disabled");
-        var data = (0, _objectSpreadJsDefault.default)({}, iawpActions.export_geo);
+        var data = (0, _objectSpread._)({}, iawpActions.export_geo);
         jQuery.post(ajaxurl, data, function(response) {
             (0, _download.downloadCSV)("exported-geo.csv", response);
             button.textContent = iawpText.exportGeolocations;
@@ -193,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var button = e.target;
         button.textContent = iawpText.exportingDevices;
         button.setAttribute("disabled", "disabled");
-        var data = (0, _objectSpreadJsDefault.default)({}, iawpActions.export_devices);
+        var data = (0, _objectSpread._)({}, iawpActions.export_devices);
         jQuery.post(ajaxurl, data, function(response) {
             (0, _download.downloadCSV)("exported-devices.csv", response);
             button.textContent = iawpText.exportDevices;
@@ -205,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var button = e.target;
         button.textContent = iawpText.exportingCampaigns;
         button.setAttribute("disabled", "disabled");
-        var data = (0, _objectSpreadJsDefault.default)({}, iawpActions.export_campaigns);
+        var data = (0, _objectSpread._)({}, iawpActions.export_campaigns);
         jQuery.post(ajaxurl, data, function(response) {
             (0, _download.downloadCSV)("exported-campaigns.csv", response);
             button.textContent = iawpText.exportCampaigns;
@@ -214,14 +212,17 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-},{"@swc/helpers/lib/_object_spread.js":"d5EJT","./modules/user-roles":"bYNa1","./modules/duplicate-field":"avnyp","./modules/email-reports":"iSubT","./download":"gEyye","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"d5EJT":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
+},{"@swc/helpers/_/_object_spread":"aevtD","./modules/user-roles":"bYNa1","./modules/duplicate-field":"avnyp","./modules/email-reports":"iSubT","./download":"gEyye"}],"aevtD":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "_object_spread", function() {
+    return _object_spread;
 });
-exports.default = _objectSpread;
-var _defineProperty = _interopRequireDefault(require("./_define_property"));
-function _objectSpread(target) {
+parcelHelpers.export(exports, "_", function() {
+    return _object_spread;
+});
+var _definePropertyJs = require("./_define_property.js");
+function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
         var source = arguments[i] != null ? arguments[i] : {};
         var ownKeys = Object.keys(source);
@@ -229,24 +230,22 @@ function _objectSpread(target) {
             return Object.getOwnPropertyDescriptor(source, sym).enumerable;
         }));
         ownKeys.forEach(function(key) {
-            _defineProperty.default(target, key, source[key]);
+            (0, _definePropertyJs._define_property)(target, key, source[key]);
         });
     }
     return target;
 }
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
 
-},{"./_define_property":"6IXzf"}],"6IXzf":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
+},{"./_define_property.js":"bWQmf","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"bWQmf":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "_define_property", function() {
+    return _define_property;
 });
-exports.default = _defineProperty;
-function _defineProperty(obj, key, value) {
+parcelHelpers.export(exports, "_", function() {
+    return _define_property;
+});
+function _define_property(obj, key, value) {
     if (key in obj) Object.defineProperty(obj, key, {
         value: value,
         enumerable: true,
@@ -257,14 +256,44 @@ function _defineProperty(obj, key, value) {
     return obj;
 }
 
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"jIm8e":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function get() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
 },{}],"bYNa1":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "UserRoles", function() {
     return UserRoles;
 });
-var _objectSpreadJs = require("@swc/helpers/lib/_object_spread.js");
-var _objectSpreadJsDefault = parcelHelpers.interopDefault(_objectSpreadJs);
+var _objectSpread = require("@swc/helpers/_/_object_spread");
+var _objectSpreadProps = require("@swc/helpers/_/_object_spread_props");
 var $ = jQuery;
 var UserRoles = {
     setup: function setup() {
@@ -288,7 +317,7 @@ var UserRoles = {
         });
         capabilities = JSON.stringify(capabilities);
         var whiteLabel = $("#iawp_white_label").prop("checked");
-        var data = (0, _objectSpreadJsDefault.default)({}, iawpActions.update_capabilities, {
+        var data = (0, _objectSpreadProps._)((0, _objectSpread._)({}, iawpActions.update_capabilities), {
             "capabilities": capabilities,
             "white_label": whiteLabel
         });
@@ -298,37 +327,36 @@ var UserRoles = {
     }
 };
 
-},{"@swc/helpers/lib/_object_spread.js":"d5EJT","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"jIm8e":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function get() {
-                return source[key];
-            }
+},{"@swc/helpers/_/_object_spread":"aevtD","@swc/helpers/_/_object_spread_props":"fXEan","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"fXEan":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "_object_spread_props", function() {
+    return _object_spread_props;
+});
+parcelHelpers.export(exports, "_", function() {
+    return _object_spread_props;
+});
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
         });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _object_spread_props(target, source) {
+    source = source != null ? source : {};
+    if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    else ownKeys(Object(source)).forEach(function(key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
     });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
+    return target;
+}
 
-},{}],"avnyp":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"avnyp":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "FieldDuplicator", function() {
@@ -408,8 +436,8 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "EmailReports", function() {
     return EmailReports;
 });
-var _objectSpreadJs = require("@swc/helpers/lib/_object_spread.js");
-var _objectSpreadJsDefault = parcelHelpers.interopDefault(_objectSpreadJs);
+var _objectSpread = require("@swc/helpers/_/_object_spread");
+var _objectSpreadProps = require("@swc/helpers/_/_object_spread_props");
 var $ = jQuery;
 var EmailReports = {
     setup: function setup() {
@@ -460,7 +488,7 @@ var EmailReports = {
         if ($(".email-reports .saved input").length == 0) $("#test-email").attr("disabled", true);
     },
     sendTestEmail: function sendTestEmail() {
-        var data = (0, _objectSpreadJsDefault.default)({}, iawpActions.test_email);
+        var data = (0, _objectSpread._)({}, iawpActions.test_email);
         $("#test-email").addClass("sending");
         jQuery.post(ajaxurl, data, function(response) {
             $("#test-email").removeClass("sending");
@@ -472,7 +500,7 @@ var EmailReports = {
         });
     },
     previewEmail: function previewEmail(colors) {
-        var data = (0, _objectSpreadJsDefault.default)({}, iawpActions.preview_email, {
+        var data = (0, _objectSpreadProps._)((0, _objectSpread._)({}, iawpActions.preview_email), {
             colors: colors
         });
         $("#preview-email").addClass("sending");
@@ -490,7 +518,7 @@ var EmailReports = {
     }
 };
 
-},{"@swc/helpers/lib/_object_spread.js":"d5EJT","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"gEyye":[function(require,module,exports) {
+},{"@swc/helpers/_/_object_spread":"aevtD","@swc/helpers/_/_object_spread_props":"fXEan","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"gEyye":[function(require,module,exports) {
 function downloadCSV(fileName, data) {
     var blob = new Blob([
         data

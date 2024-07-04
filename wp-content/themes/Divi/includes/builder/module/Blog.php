@@ -991,9 +991,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 							<?php if ( ! in_array( $post_format, array( 'link', 'audio' ) ) ) { ?>
 								<<?php echo et_core_esc_previously( $processed_header_level ); ?> class="entry-title">
 									<?php if ( get_permalink() ) { ?>
-										<a href="<?php the_permalink(); ?>">
-											<?php the_title(); ?>
-										</a>
+										<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 									<?php } else { ?>
 										<?php the_title(); ?>
 									<?php } ?>
@@ -1614,9 +1612,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 					<?php if ( ! in_array( $post_format, array( 'link', 'audio' ) ) || post_password_required( $post ) ) { ?>
 					<<?php echo et_core_intentionally_unescaped( $processed_header_level, 'fixed_string' ); ?> class="entry-title">
 						<?php if ( get_permalink() ) { ?>
-							<a href="<?php the_permalink(); ?>">
-								<?php the_title(); ?>
-							</a>
+							<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 						<?php } else { ?>
 							<?php the_title(); ?>
 						<?php } ?>

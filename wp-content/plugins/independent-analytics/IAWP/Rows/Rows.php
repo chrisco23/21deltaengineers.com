@@ -3,7 +3,7 @@
 namespace IAWP\Rows;
 
 use IAWP\Date_Range\Date_Range;
-use IAWP\Form;
+use IAWP\Form_Submissions\Form;
 use IAWP\Illuminate_Builder;
 use IAWP\Query;
 use IAWP\Sort_Configuration;

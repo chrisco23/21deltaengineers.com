@@ -2,6 +2,7 @@
 
 namespace IAWP;
 
+use IAWP\Form_Submissions\Form;
 /** @internal */
 class Plugin_Group
 {
@@ -77,11 +78,29 @@ class Plugin_Group
                 return \true;
         }
     }
+    public static function get_plugin_group(string $plugin_group_id) : \IAWP\Plugin_Group
+    {
+        $plugin_groups = self::get_plugin_groups();
+        foreach ($plugin_groups as $plugin_group) {
+            if ($plugin_group->id() == $plugin_group_id) {
+                return $plugin_group;
+            }
+        }
+        // Added to satisfy PHPStan
+        return $plugin_groups[0];
+    }
     /**
      * @return Plugin_Group[]
      */
     public static function get_plugin_groups() : array
     {
-        return [new self(['id' => 'general', 'name' => \__('General', 'independent-analytics')]), new self(['id' => 'woocommerce', 'name' => \__('WooCommerce', 'independent-analytics'), 'requires_pro' => \true, 'has_active_group_plugins' => \IAWPSCOPED\iawp_using_woocommerce(), 'upgrade_message' => \__('Upgrade to Independent Analytics Pro to get WooCommerce stats.', 'independent-analytics'), 'upgrade_link' => 'https://independentwp.com/features/woocommerce-analytics/?utm_source=User+Dashboard&utm_medium=WP+Admin&utm_campaign=Stat+Toggle+Link', 'activate_message' => \__('Activate the WooCommerce plugin to display these stats.', 'independent-analytics'), 'activate_link' => 'https://independentwp.com/knowledgebase/woocommerce/woocommerce-integration/']), new self(['id' => 'forms', 'name' => \__('Forms', 'independent-analytics'), 'requires_pro' => \true, 'has_active_group_plugins' => \IAWPSCOPED\iawp_using_a_form_plugin(), 'upgrade_message' => \__('Upgrade to Independent Analytics Pro to get form submission stats.', 'independent-analytics'), 'upgrade_link' => 'https://independentwp.com/features/form-tracking/?utm_source=User+Dashboard&utm_medium=WP+Admin&utm_campaign=Stat+Toggle+Link', 'activate_message' => \__('Activate a supported form plugin to display these stats.', 'independent-analytics'), 'activate_link' => 'https://independentwp.com/knowledgebase/form-tracking/track-form-submissions/', 'no_tracked_data_message' => \__('Your forms will show up here once a submission has been recorded.', 'independent-analytics')])];
+        return [new self(['id' => 'general', 'name' => \__('General', 'independent-analytics')]), new self(['id' => 'woocommerce', 'name' => \__('WooCommerce', 'independent-analytics'), 'requires_pro' => \true, 'has_active_group_plugins' => \IAWPSCOPED\iawp_using_woocommerce(), 'upgrade_message' => \__('Upgrade to Independent Analytics Pro to get WooCommerce stats.', 'independent-analytics'), 'upgrade_link' => 'https://independentwp.com/features/woocommerce-analytics/?utm_source=User+Dashboard&utm_medium=WP+Admin&utm_campaign=Stat+Toggle+Link', 'activate_message' => \__('Activate the WooCommerce plugin to display these stats.', 'independent-analytics'), 'activate_link' => 'https://independentwp.com/knowledgebase/woocommerce/woocommerce-integration/']), new self(['id' => 'forms', 'name' => \__('Forms', 'independent-analytics'), 'requires_pro' => \true, 'has_active_group_plugins' => \IAWPSCOPED\iawp_using_a_form_plugin(), 'upgrade_message' => self::form_group_upgrade_message(), 'upgrade_link' => 'https://independentwp.com/features/form-tracking/?utm_source=User+Dashboard&utm_medium=WP+Admin&utm_campaign=Stat+Toggle+Link', 'activate_message' => \__('Activate a supported form plugin to display these stats.', 'independent-analytics'), 'activate_link' => 'https://independentwp.com/knowledgebase/form-tracking/track-form-submissions/', 'no_tracked_data_message' => \__('Your forms will show up here once a submission has been recorded.', 'independent-analytics')])];
+    }
+    private static function form_group_upgrade_message() : string
+    {
+        if (Form::has_active_form_plugin()) {
+            return \sprintf(\_x('Upgrade to Independent Analytics Pro to track %s submissions.', 'Plugin name e.g. WPForms submissions', 'independent-analytics'), Form::get_active_form_plugin_name());
+        }
+        return \__('Upgrade to Independent Analytics Pro to track form submissions.', 'independent-analytics');
     }
 }

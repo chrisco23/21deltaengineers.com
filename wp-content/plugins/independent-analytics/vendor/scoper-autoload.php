@@ -71,6 +71,7 @@ if (!function_exists('iawp_blade')) { function iawp_blade() { return \IAWPSCOPED
 if (!function_exists('iawp_dashboard_url')) { function iawp_dashboard_url() { return \IAWPSCOPED\iawp_dashboard_url(...func_get_args()); } }
 if (!function_exists('iawp_db_version')) { function iawp_db_version() { return \IAWPSCOPED\iawp_db_version(...func_get_args()); } }
 if (!function_exists('iawp_icon')) { function iawp_icon() { return \IAWPSCOPED\iawp_icon(...func_get_args()); } }
+if (!function_exists('iawp_intify')) { function iawp_intify() { return \IAWPSCOPED\iawp_intify(...func_get_args()); } }
 if (!function_exists('iawp_is_free')) { function iawp_is_free() { return \IAWPSCOPED\iawp_is_free(...func_get_args()); } }
 if (!function_exists('iawp_is_pro')) { function iawp_is_pro() { return \IAWPSCOPED\iawp_is_pro(...func_get_args()); } }
 if (!function_exists('iawp_log')) { function iawp_log() { return \IAWPSCOPED\iawp_log(...func_get_args()); } }

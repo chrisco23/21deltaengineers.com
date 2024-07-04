@@ -7,7 +7,6 @@ use IAWP\Utils\Device;
 use IAWP\Utils\Request;
 use IAWP\Utils\Salt;
 use IAWP\Utils\Security;
-use IAWP\Utils\String_Util;
 use IAWP\Utils\URL;
 /** @internal */
 class REST_API

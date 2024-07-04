@@ -65,7 +65,7 @@ function et_theme_builder_add_admin_page( $parent ) {
  * @return void
  */
 function et_theme_builder_enqueue_scripts() {
-	if ( ! et_builder_is_tb_admin_screen() ) {
+	if ( ! et_builder_is_tb_admin_screen() && ! et_builder_is_et_onboarding_page() ) {
 		return;
 	}
 

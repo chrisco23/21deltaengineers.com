@@ -377,11 +377,14 @@ class ET_AI_App {
 			'primary_color'              => $primary_color,
 			'secondary_color'            => $secondary_color,
 			'default_site_desc'          => $default_site_description,
+			'woocommerce_status'         => class_exists( 'WooCommerce' ) ? 'active' : 'inactive',
 			'placeholder_image'          => ET_AI_PLACEHOLDER_LANDSCAPE_IMAGE_DATA,
 			'product_version'            => ET_BUILDER_PRODUCT_VERSION,
 		);
 
-		if ( get_post_type() === 'page' ) {
+		$is_onboarding = is_admin() && isset( $_GET['page'] ) && 'et_onboarding' === $_GET['page'];
+
+		if ( 'page' === get_post_type() || $is_onboarding ) {
 			if ( is_multisite() ) {
 				$sample_tagline = sprintf( __( 'Just another %s site' ), get_network()->site_name );
 			} else {

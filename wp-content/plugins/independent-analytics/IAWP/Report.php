@@ -55,9 +55,6 @@ class Report
         if (\array_key_exists('filters', $array) && !\is_null($array['filters'])) {
             $array['filters'] = \json_decode($array['filters'], \true);
         }
-        if (\array_key_exists('visible_datasets', $array) && !\is_null($array['visible_datasets'])) {
-            $array['visible_datasets'] = \json_decode($array['visible_datasets'], \true);
-        }
         return $array;
     }
     public static function is_valid_report_type(string $type) : bool

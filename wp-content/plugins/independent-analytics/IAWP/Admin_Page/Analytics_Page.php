@@ -26,21 +26,20 @@ class Analytics_Page extends \IAWP\Admin_Page\Admin_Page
     {
         $options = Dashboard_Options::getInstance();
         $date_rage = $options->get_date_range();
-        $date_label = $date_rage->label();
         $tab = (new Env())->get_tab();
         if ($tab === 'views') {
             $table = new Table_Pages();
             $statistics_class = $table->group()->statistics_class();
             $statistics = new $statistics_class($date_rage, null, $options->chart_interval());
             $stats = new Quick_Stats($statistics);
-            $chart = new Chart($statistics, $date_label);
+            $chart = new Chart($statistics);
             $this->interface($table, $stats, $chart);
         } elseif ($tab === 'referrers') {
             $table = new Table_Referrers();
             $statistics_class = $table->group()->statistics_class();
             $statistics = new $statistics_class($date_rage, null, $options->chart_interval());
             $stats = new Quick_Stats($statistics);
-            $chart = new Chart($statistics, $date_label);
+            $chart = new Chart($statistics);
             $this->interface($table, $stats, $chart);
         } elseif ($tab === 'geo') {
             $table = new Table_Geo($options->group());
@@ -49,21 +48,21 @@ class Analytics_Page extends \IAWP\Admin_Page\Admin_Page
             $stats = new Quick_Stats($statistics);
             $table_data_class = $table->group()->rows_class();
             $geo_data = new $table_data_class($date_rage);
-            $chart = new Chart_Geo($geo_data->rows(), $date_label);
+            $chart = new Chart_Geo($geo_data->rows());
             $this->interface($table, $stats, $chart);
         } elseif ($tab === 'campaigns') {
             $table = new Table_Campaigns();
             $statistics_class = $table->group()->statistics_class();
             $statistics = new $statistics_class($date_rage, null, $options->chart_interval());
             $stats = new Quick_Stats($statistics);
-            $chart = new Chart($statistics, $date_label);
+            $chart = new Chart($statistics);
             $this->interface($table, $stats, $chart);
         } elseif ($tab === 'devices') {
             $table = new Table_Devices($options->group());
             $statistics_class = $table->group()->statistics_class();
             $statistics = new $statistics_class($date_rage, null, $options->chart_interval());
             $stats = new Quick_Stats($statistics);
-            $chart = new Chart($statistics, $date_label);
+            $chart = new Chart($statistics);
             $this->interface($table, $stats, $chart);
         } elseif ($tab === 'real-time') {
             (new Real_Time())->render_real_time_analytics();
@@ -108,8 +107,11 @@ class Analytics_Page extends \IAWP\Admin_Page\Admin_Page
              data-report-quick-stats-value="<?php 
         echo \esc_attr(Security::json_encode($options->visible_quick_stats()));
         ?>"
-             data-report-visible-datasets-value="<?php 
-        echo \esc_attr(Security::json_encode($options->visible_datasets()));
+             data-report-primary-chart-metric-id-value="<?php 
+        echo \esc_attr($options->primary_chart_metric_id());
+        ?>"
+             data-report-secondary-chart-metric-id-value="<?php 
+        echo \esc_attr($options->secondary_chart_metric_id());
         ?>"
         >
             <div id="report-header-container" class="report-header-container">
@@ -125,7 +127,7 @@ class Analytics_Page extends \IAWP\Admin_Page\Admin_Page
         echo $stats->get_html();
         ?>
             <?php 
-        echo $chart->get_html($options->visible_datasets());
+        echo $chart->get_html();
         ?>
             <?php 
         echo $table->get_table_toolbar_markup();

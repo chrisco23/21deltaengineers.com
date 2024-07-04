@@ -2874,7 +2874,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'layout'         => array(
 				'notification' => array(
 					'How Does It Look?'       => esc_html__( 'How Does It Look?', 'et_builder' ),
-					'Would you like to save?' => esc_html__( 'Would you like to save the fonts and colors used for future Divi AI layouts?', 'et_builder' ),
+					'Would you like to save?' => esc_html__( 'Would you like to save these fonts and colors for future Divi AI layouts?', 'et_builder' ),
 					'No Thanks'               => esc_html__( 'No Thanks', 'et_builder' ),
 					'Yes Please!'             => esc_html__( 'Yes Please!', 'et_builder' ),
 				),

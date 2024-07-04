@@ -12,9 +12,9 @@ class Geo_Database_Manager
 {
     // Updating the database? Read the Wiki page "Updating The Geo Database"
     // https://github.com/andrewjmead/independent-analytics/wiki/Updating-The-Geo-Database
-    private $zip_download_url = 'https://assets.independentwp.com/iawp-geo-db-5.mmdb.zip';
-    private $raw_download_url = 'https://assets.independentwp.com/iawp-geo-db-5.mmdb';
-    private $database_checksum = '6fc58b0047547e4a7f718e4d3552491c';
+    private $zip_download_url = 'https://assets.independentwp.com/iawp-geo-db-6.mmdb.zip';
+    private $raw_download_url = 'https://assets.independentwp.com/iawp-geo-db-6.mmdb';
+    private $database_checksum = '2213359f8d395c4f1a352007af9495ae';
     public function download() : void
     {
         if (!$this->should_download()) {

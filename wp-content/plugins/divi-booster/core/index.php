@@ -38,6 +38,7 @@ include(dirname(__FILE__) . '/divi5/divi5.php');
 
 // === Load additional features ===
 include(dirname(__FILE__) . '/features/features.php');
+include(dirname(__FILE__) . '/plugins/plugins.php');
 
 // === Automatic updates ===
 function booster_enable_updates($file) {

@@ -21,14 +21,14 @@
                 <div class="iawp-modal small" data-rename-report-target="modal">
                     <div class="modal-inner">
                         <div class="title-small">
-                            {{__('Rename report', 'independent-analytics')}}
+                            <?php esc_html_e('Rename report', 'independent-analytics'); ?>
                         </div>
-                        <p>{{__('Give this report a new name', 'independent-analytics')}}</p>
+                        <p><?php esc_html_e('Give this report a new name', 'independent-analytics'); ?></p>
                         <form data-action="rename-report#rename">
                             <input type="text" data-rename-report-target="input"
                                    placeholder="Report name" required>
                             <button data-rename-report-target="renameButton"
-                                    class="iawp-button purple">{{__('Update title', 'independent-analytics')}}
+                                    class="iawp-button purple"><?php esc_html_e('Update title', 'independent-analytics'); ?>
                             </button>
                         </form>
                     </div>
@@ -47,11 +47,11 @@
                      class="save-report">
                     <p data-save-report-target="warning" style="display: none;"
                        class="unsaved-warning"><span class="dashicons dashicons-warning"></span>
-                        <span class="text">You have unsaved changes</span></p>
+                        <span class="text"><?php esc_html_e('You have unsaved changes', 'independent-analytics'); ?></span></p>
                     <button id="save-report-button" 
                             data-save-report-target="button"
                             data-action="save-report#save"
-                            class="save-report-button iawp-button">{{__('Save', 'independent-analytics')}}</button>
+                            class="save-report-button iawp-button"><?php esc_html_e('Save', 'independent-analytics'); ?></button>
                 </div>
             @endif
 
@@ -66,18 +66,18 @@
                 <button id="save-as-report-button"
                         data-action="click->copy-report#toggleModal"
                         data-copy-report-target="modalButton"
-                        class="save-as-report-button iawp-button">{{__('Save As', 'independent-analytics')}}</button>
+                        class="save-as-report-button iawp-button"><?php esc_html_e('Save As', 'independent-analytics'); ?></button>
                 <div class="iawp-modal small" data-copy-report-target="modal">
                     <div class="modal-inner">
                         <div class="title-small">
-                            {{__('Create new report', 'independent-analytics')}}
+                            <?php esc_html_e('Create new report', 'independent-analytics'); ?>
                         </div>
-                        <p>{{__('Enter a name for the new report.', 'independent-analytics')}}</p>
+                        <p><?php esc_html_e('Enter a name for the new report.', 'independent-analytics'); ?></p>
                         <form data-action="copy-report#copy">
                             <input type="text" data-copy-report-target="input"
                                    placeholder="Report name" required>
                             <button data-copy-report-target="copyButton" class="iawp-button purple">
-                                {{__('Save as', 'independent-analytics')}}
+                                <?php esc_html_e('Save as', 'independent-analytics'); ?>
                             </button>
                         </form>
                     </div>
@@ -92,7 +92,7 @@
                         class="iawp-button favorite {{$report->is_favorite() ? 'active' : '' }}"
                 >
                     <span class="dashicons dashicons-star-filled"></span>
-                    {{__('Make default', 'independent-analytics')}}
+                    <?php esc_html_e('Make default', 'independent-analytics'); ?>
                 </button>
             </div>  
             @if($report->is_saved_report())
@@ -106,12 +106,12 @@
                     <div class="iawp-modal small" data-delete-report-target="modal">
                         <div class="modal-inner">
                             <div class="title-small">
-                                {{__('Confirm', 'independent-analytics')}}
+                                <?php esc_html_e('Confirm', 'independent-analytics'); ?>
                             </div>
-                            <p>{{__('Are you sure you want to delete this report?', 'independent-analytics')}}</p>
+                            <p><?php esc_html_e('Are you sure you want to delete this report?', 'independent-analytics'); ?></p>
                             <button data-action="delete-report#delete"
                                     data-delete-report-target="deleteButton"
-                                    class="iawp-button red">{{__('Delete report', 'independent-analytics')}}
+                                    class="iawp-button red"><?php esc_html_e('Delete report', 'independent-analytics'); ?>
                             </button>
                         </div>
                     </div>

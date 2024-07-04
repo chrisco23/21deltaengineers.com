@@ -34,6 +34,10 @@ class View
         $this->campaign_fields = $campaign_fields;
         $this->viewed_at = $viewed_at instanceof \DateTime ? $viewed_at : new \DateTime();
         $this->resource = $this->fetch_or_create_resource();
+        // If a resource can't be found or created, a view cannot be recorded
+        if (\is_null($this->resource)) {
+            return;
+        }
         $this->session = $this->fetch_or_create_session();
         $view_id = $this->create_view();
         $this->link_with_previous_view($view_id);
@@ -86,7 +90,7 @@ class View
     {
         global $wpdb;
         $views_table = \IAWP\Query::get_table_name(\IAWP\Query::VIEWS);
-        $session = $this->get_current_session();
+        $session = $this->fetch_current_session();
         if (\is_null($session)) {
             return null;
         }
@@ -183,7 +187,7 @@ class View
         }
         return $resource;
     }
-    private function fetch_or_create_resource() : Page
+    private function fetch_or_create_resource() : ?Page
     {
         global $wpdb;
         $resources_table = \IAWP\Query::get_table_name(\IAWP\Query::RESOURCES);
@@ -194,6 +198,9 @@ class View
             $wpdb->insert($resources_table, $payload_copy);
             $resource = $this->fetch_resource();
         }
+        if (\is_null($resource)) {
+            return null;
+        }
         $page = Page::from_row($resource);
         $page->update_cache();
         return $page;
@@ -203,18 +210,22 @@ class View
      */
     private function fetch_or_create_session() : ?int
     {
-        $session = $this->get_current_session();
+        $session = $this->fetch_current_session();
         if (\is_null($session)) {
             return $this->create_session();
         }
         $is_same_referrer = $this->fetch_or_create_referrer() === $session->referrer_id;
         $is_same_resource = \intval($this->fetch_resource()->id) === $this->fetch_last_viewed_resource();
         $same_as_previous_view = $is_same_referrer && $is_same_resource;
-        // The goal here is to prevent a page refresh from creating another session
-        if (!$this->is_internal_referrer($this->referrer_url) && !$same_as_previous_view) {
-            return $this->create_session();
+        // The goal here is to prevent opening multiple tabs to the site from creating multiple sessions
+        if ($is_same_referrer) {
+            return $session->session_id;
         }
-        return $session->session_id;
+        // The goal here is to prevent a page refresh from creating another session
+        if ($this->is_internal_referrer($this->referrer_url) || $same_as_previous_view) {
+            return $session->session_id;
+        }
+        return $this->create_session();
     }
     /**
      * @param string|null $referrer_url
@@ -278,10 +289,11 @@ class View
         }
         return null;
     }
-    private function get_current_session()
+    private function fetch_current_session() : ?object
     {
         $sessions_table = \IAWP\Query::get_table_name(\IAWP\Query::SESSIONS);
-        return \IAWP\Illuminate_Builder::get_builder()->from($sessions_table)->where('visitor_id', '=', $this->visitor->id())->whereRaw('created_at > DATE_SUB(UTC_TIMESTAMP(), INTERVAL 30 MINUTE)')->orderBy('created_at', 'desc')->first();
+        $session = \IAWP\Illuminate_Builder::get_builder()->from($sessions_table, 'sessions')->selectRaw('IFNULL(ended_at, created_at) AS latest_view_at')->selectRaw('sessions.*')->where('visitor_id', '=', $this->visitor->id())->havingRaw('latest_view_at > DATE_SUB(UTC_TIMESTAMP(), INTERVAL 30 MINUTE)')->orderBy('latest_view_at', 'DESC')->first();
+        return $session;
     }
     private function update_postmeta(Page $resource) : void
     {

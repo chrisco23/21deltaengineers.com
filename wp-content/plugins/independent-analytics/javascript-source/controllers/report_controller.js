@@ -20,7 +20,8 @@ class Report_Controller extends Controller {
         sortDirection: String,
         columns: Array,
         quickStats: Array,
-        visibleDatasets: Array,
+        primaryChartMetricId: String,
+        secondaryChartMetricId: String,
         filters: Array
     }
 
@@ -34,7 +35,8 @@ class Report_Controller extends Controller {
     sortDirection = undefined
     group = undefined
     chartInterval = undefined
-    visibleDatasets = undefined
+    primaryChartMetricId = undefined
+    secondaryChartMetricId = undefined
     page = 1
 
     connect() {
@@ -48,7 +50,8 @@ class Report_Controller extends Controller {
         this.chartInterval = this.chartIntervalValue
         this.sortColumn = this.sortColumnValue
         this.sortDirection = this.sortDirectionValue
-        this.visibleDatasets = this.visibleDatasetsValue
+        this.primaryChartMetricId = this.primaryChartMetricIdValue
+        this.secondaryChartMetricId = this.secondaryChartMetricIdValue
         this.filters = this.filtersValue
         document.addEventListener('iawp:changeDates', this.datesChanged)
         document.addEventListener('iawp:changeColumns', this.columnsChanged)
@@ -57,7 +60,8 @@ class Report_Controller extends Controller {
         document.addEventListener('iawp:changeSort', this.sortChanged)
         document.addEventListener('iawp:changeGroup', this.changeGroup)
         document.addEventListener('iawp:changeChartInterval', this.changeChartInterval)
-        document.addEventListener('iawp:changeVisibleDatasets', this.changeVisibleDatasets)
+        document.addEventListener('iawp:changePrimaryChartMetric', this.changePrimaryChartMetric)
+        document.addEventListener('iawp:changeSecondaryChartMetric', this.changeSecondaryChartMetric)
         this.fetch({
             tableOnly: this.filters.length === 0,
             showLoadingOverlay: false
@@ -72,7 +76,8 @@ class Report_Controller extends Controller {
         document.removeEventListener('iawp:changeSort', this.sortChanged)
         document.removeEventListener('iawp:changeGroup', this.changeGroup)
         document.removeEventListener('iawp:changeChartInterval', this.changeChartInterval)
-        document.removeEventListener('iawp:changeVisibleDatasets', this.changeVisibleDatasets)
+        document.removeEventListener('iawp:changePrimaryChartMetric', this.changePrimaryChartMetric)
+        document.removeEventListener('iawp:changeSecondaryChartMetric', this.changeSecondaryChartMetric)
     }
 
     emitChangedOption(detail) {
@@ -83,10 +88,17 @@ class Report_Controller extends Controller {
         )
     }
 
-    changeVisibleDatasets = (e) => {
-        this.visibleDatasets = e.detail.visibleDatasets
+    changePrimaryChartMetric = (e) => {
+        this.primaryChartMetricId = e.detail.primaryChartMetricId
         this.emitChangedOption({
-            'visible_datasets': this.visibleDatasets
+            'primary_chart_metric_id': this.primaryChartMetricId
+        })
+    }
+
+    changeSecondaryChartMetric = (e) => {
+        this.secondaryChartMetricId = e.detail.secondaryChartMetricId
+        this.emitChangedOption({
+            'secondary_chart_metric_id': this.secondaryChartMetricId
         })
     }
 
@@ -194,7 +206,8 @@ class Report_Controller extends Controller {
             'table_type': jQuery('#data-table').data('table-name'),
             'columns': this.columns,
             'report_quick_stats': ['visitors'], // TODO
-            'visible_datasets': this.visibleDatasets,
+            'primary_chart_metric_id': this.primaryChartMetricId,
+            'secondary_chart_metric_id': this.secondaryChartMetricId,
             'sort_column': this.sortColumn,
             'quick_stats': this.quickStats,
             'sort_direction': this.sortDirection,
@@ -283,7 +296,8 @@ class Report_Controller extends Controller {
             'relative_range_id': this.relativeRangeId,
             'table_type': jQuery('#data-table').data('table-name'),
             'columns': this.columns,
-            'visible_datasets': this.visibleDatasets,
+            'primary_chart_metric_id': this.primaryChartMetricId,
+            'secondary_chart_metric_id': this.secondaryChartMetricId,
             'sort_column': this.sortColumn,
             'quick_stats': this.quickStats,
             'sort_direction': this.sortDirection,
@@ -350,6 +364,24 @@ class Report_Controller extends Controller {
 
                 element.querySelector('#myChart').replaceWith(imageElement)
             }
+
+            // Prevent stimulus controllers from firing
+            element.querySelectorAll('[data-controller]').forEach((element) => {
+                element.removeAttribute('data-controller')
+            })
+
+            // Preserve selected values in clone by manually adding "selected" to options
+            element.querySelectorAll('select').forEach((element) => {
+                if(!element.id) {
+                    return
+                }
+
+                const originalValue = document.getElementById(element.id).value
+
+                element.options.forEach((option) => {
+                    option.toggleAttribute('selected', option.value === originalValue)
+                })
+            })
 
             html2pdf().set(options).from(element).toContainer().save().then(() => {
                 this.exportPDFTarget.classList.add('sent')

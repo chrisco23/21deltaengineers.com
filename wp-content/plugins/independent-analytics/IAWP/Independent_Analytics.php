@@ -8,11 +8,11 @@ use IAWP\Admin_Page\Settings_Page;
 use IAWP\Admin_Page\Support_Page;
 use IAWP\Admin_Page\Updates_Page;
 use IAWP\AJAX\AJAX_Manager;
+use IAWP\Email_Reports\Email_Reports;
 use IAWP\Form_Submissions\Submission_Listener;
 use IAWP\Menu_Bar_Stats\Menu_Bar_Stats;
 use IAWP\Migrations\Migrations;
 use IAWP\Utils\Singleton;
-use IAWP\Utils\String_Util;
 /** @internal */
 class Independent_Analytics
 {
@@ -36,7 +36,7 @@ class Independent_Analytics
         }
         $this->cron_manager = new \IAWP\Cron_Manager();
         if (\IAWPSCOPED\iawp_is_pro()) {
-            $this->email_reports = new \IAWP\Email_Reports();
+            $this->email_reports = new Email_Reports();
             new \IAWP\Campaign_Builder();
             new \IAWP\WooCommerce_Referrer_Meta_Box();
         }
@@ -204,7 +204,7 @@ class Independent_Analytics
     {
         \wp_register_script('iawp-translations', '');
         \wp_enqueue_script('iawp-translations');
-        \wp_add_inline_script('iawp-translations', 'const iawpText = ' . \json_encode(['visitors' => \__('Visitors', 'independent-analytics'), 'views' => \__('Views', 'independent-analytics'), 'sessions' => \__('Sessions', 'independent-analytics'), 'orders' => \__('Orders', 'independent-analytics'), 'netSales' => \__('Net Sales', 'independent-analytics'), 'country' => \__('country', 'independent-analytics'), 'exactDates' => \__('Apply Exact Dates', 'independent-analytics'), 'relativeDates' => \__('Apply Relative Dates', 'independent-analytics'), 'copied' => \__('Copied', 'independent-analytics'), 'exportingPages' => \__('Exporting Pages...', 'independent-analytics'), 'exportPages' => \__('Export Pages', 'independent-analytics'), 'exportingReferrers' => \__('Exporting Referrers...', 'independent-analytics'), 'exportReferrers' => \__('Export Referrers', 'independent-analytics'), 'exportingGeolocations' => \__('Exporting Geolocations...', 'independent-analytics'), 'exportGeolocations' => \__('Export Geolocations', 'independent-analytics'), 'exportingDevices' => \__('Exporting Devices...', 'independent-analytics'), 'exportDevices' => \__('Export Devices', 'independent-analytics'), 'exportingCampaigns' => \__('Exporting Campaigns...', 'independent-analytics'), 'exportCampaigns' => \__('Export Campaigns', 'independent-analytics'), 'invalidReportArchive' => \__('This report archive is invalid. Please export your reports and try again.', 'independent-analytics'), 'openMobileMenu' => \__('Open menu', 'independent-analytics'), 'closeMobileMenu' => \__('Close menu', 'independent-analytics')]), 'before');
+        \wp_add_inline_script('iawp-translations', 'const iawpText = ' . \json_encode(['views' => \__('Views', 'independent-analytics'), 'exactDates' => \__('Apply Exact Dates', 'independent-analytics'), 'relativeDates' => \__('Apply Relative Dates', 'independent-analytics'), 'copied' => \__('Copied', 'independent-analytics'), 'exportingPages' => \__('Exporting Pages...', 'independent-analytics'), 'exportPages' => \__('Export Pages', 'independent-analytics'), 'exportingReferrers' => \__('Exporting Referrers...', 'independent-analytics'), 'exportReferrers' => \__('Export Referrers', 'independent-analytics'), 'exportingGeolocations' => \__('Exporting Geolocations...', 'independent-analytics'), 'exportGeolocations' => \__('Export Geolocations', 'independent-analytics'), 'exportingDevices' => \__('Exporting Devices...', 'independent-analytics'), 'exportDevices' => \__('Export Devices', 'independent-analytics'), 'exportingCampaigns' => \__('Exporting Campaigns...', 'independent-analytics'), 'exportCampaigns' => \__('Export Campaigns', 'independent-analytics'), 'invalidReportArchive' => \__('This report archive is invalid. Please export your reports and try again.', 'independent-analytics'), 'openMobileMenu' => \__('Open menu', 'independent-analytics'), 'closeMobileMenu' => \__('Close menu', 'independent-analytics')]), 'before');
     }
     public function enqueue_nonces()
     {

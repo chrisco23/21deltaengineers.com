@@ -675,6 +675,8 @@ function et_theme_builder_api_import_theme_builder() {
 	$uploaded_file_name                = substr( sanitize_file_name( $_FILES['file']['name'] ), 0, -5 );
 	$cloud_item_editor                 = $_->array_get( $_POST, 'cloud_item_editor', '' );
 	$temp_import                       = '1' === $_->array_get( $_POST, 'temp_import', '0' );
+	$preset_prefix                     = $_->array_get( $_POST, 'preset_prefix', '' );
+	$duplicate_presets                 = filter_var( $_->array_get( $_POST, 'duplicate_presets', true ), FILTER_VALIDATE_BOOLEAN );
 
 	// Maybe ask the user to make a decision on how to deal with global layouts.
 	if ( ( ! $override_default_website_template || ! $has_default_template ) && $has_global_layouts ) {
@@ -696,7 +698,7 @@ function et_theme_builder_api_import_theme_builder() {
 	// phpcs:enable
 
 	// Make imported preset overrides to avoid collisions with local presets.
-	if ( $import_presets && is_array( $presets ) && ! empty( $presets ) ) {
+	if ( $import_presets && is_array( $presets ) && ! empty( $presets ) && ! $preset_prefix ) {
 		$presets_rewrite_map = $portability->prepare_to_import_layout_presets( $presets );
 	}
 
@@ -761,6 +763,8 @@ function et_theme_builder_api_import_theme_builder() {
 			'presets_rewrite_map'               => $presets_rewrite_map,
 			'cloud_item_editor'                 => $cloud_item_editor,
 			'temp_import'                       => $temp_import,
+			'duplicate_presets'                 => $duplicate_presets,
+			'preset_prefix'                     => $preset_prefix,
 		),
 		60 * 60 * 24
 	);
@@ -809,16 +813,19 @@ function et_theme_builder_api_import_theme_builder_step() {
 	$file_name               = $export['file_name'];
 	$cloud_item_editor       = $export['cloud_item_editor'];
 	$temp_import             = $export['temp_import'];
+	$duplicate_presets       = $export['duplicate_presets'];
+	$preset_prefix           = $export['preset_prefix'];
 	$templates               = array();
 	$template_settings       = array();
 	$chunks                  = 1;
 	$preset_id               = 0;
 
 	if ( ! $ready ) {
-		$import_step                   = et_theme_builder_api_import_theme_builder_load_layout( $portability, $steps[ $step ]['id'], $steps[ $step ]['group'] );
-		$import_step                   = array_merge( $import_step, array( 'presets' => $presets ) );
-		$import_step                   = array_merge( $import_step, array( 'presets_rewrite_map' => $presets_rewrite_map ) );
-		$import_step['import_presets'] = $import_presets;
+		$import_step                      = et_theme_builder_api_import_theme_builder_load_layout( $portability, $steps[ $step ]['id'], $steps[ $step ]['group'] );
+		$import_step                      = array_merge( $import_step, array( 'presets' => $presets ) );
+		$import_step                      = array_merge( $import_step, array( 'presets_rewrite_map' => $presets_rewrite_map ) );
+		$import_step['import_presets']    = $import_presets;
+		$import_step['rewrite_preset_id'] = ! empty( $preset_prefix );
 
 		if ( $temp_import ) {
 			$import_step['data']['post_status'] = 'draft';
@@ -843,7 +850,13 @@ function et_theme_builder_api_import_theme_builder_step() {
 
 	if ( $ready ) {
 		if ( $import_presets && is_array( $presets ) && ! empty( $presets ) ) {
-			if ( ! $portability->import_global_presets( $presets ) ) {
+			if ( false === $duplicate_presets && ! $preset_prefix ) {
+				$presets = $portability->prepare_to_import_non_duplicate_presets( $presets );
+			}
+
+			$override_defaults = ! empty( $preset_prefix );
+
+			if ( ! $portability->import_global_presets( $presets, false, $override_defaults, $preset_prefix, true ) ) {
 				$presets_error = apply_filters( 'et_core_portability_import_error_message', '' );
 
 				if ( $presets_error ) {

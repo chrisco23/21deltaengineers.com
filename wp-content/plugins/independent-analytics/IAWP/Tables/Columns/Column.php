@@ -34,7 +34,7 @@ class Column implements Plugin_Group_Option
         $this->unavailable_for = $attributes['unavailable_for'] ?? [];
         $this->database_column = $attributes['database_column'] ?? null;
         $this->is_nullable = $attributes['is_nullable'] ?? \false;
-        $this->is_plugin_active = $attributes['is_plugin_active'] ?? \true;
+        $this->is_plugin_active = $attributes['is_subgroup_plugin_active'] ?? \true;
     }
     public function is_enabled_for_group(Group $group) : bool
     {
@@ -56,19 +56,11 @@ class Column implements Plugin_Group_Option
     {
         return $this->plugin_group;
     }
-    public function is_member_of_plugin_group(string $plugin_group) : bool
-    {
-        return $this->plugin_group === $plugin_group;
-    }
     public function database_column() : string
     {
         return !\is_null($this->database_column) ? $this->database_column : $this->id;
     }
-    public function is_visible() : bool
-    {
-        return $this->visible;
-    }
-    public function is_enabled() : bool
+    public function is_group_plugin_enabled() : bool
     {
         switch ($this->plugin_group) {
             case "woocommerce":
@@ -79,9 +71,17 @@ class Column implements Plugin_Group_Option
                 return \true;
         }
     }
-    public function is_plugin_active() : bool
+    public function is_subgroup_plugin_enabled() : bool
     {
         return $this->is_plugin_active;
+    }
+    public function is_visible() : bool
+    {
+        return $this->visible;
+    }
+    public function is_member_of_plugin_group(string $plugin_group) : bool
+    {
+        return $this->plugin_group === $plugin_group;
     }
     public function plugin_group_header() : ?string
     {

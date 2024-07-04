@@ -28,7 +28,7 @@ class Settings
             for ($i = 0; $i < \count($saved); $i++) {
                 $input_defaults[$i] = $saved[$i];
             }
-            echo \IAWPSCOPED\iawp_blade()->run('settings.email-reports', ['is_scheduled' => \wp_next_scheduled('iawp_send_email_report'), 'scheduled_date' => \IAWPSCOPED\iawp()->email_reports->get_next_scheduled_email_date_formatted(), 'date_comparison' => \IAWPSCOPED\iawp()->email_reports->get_next_scheduled_email_date_formatted(\false), 'interval' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_interval', 'monthly'), 'time' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_time', 9), 'emails' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_email_addresses', []), 'default_colors' => $defaults, 'input_default' => $input_defaults]);
+            echo \IAWPSCOPED\iawp_blade()->run('settings.email-reports', ['is_scheduled' => \wp_next_scheduled('iawp_send_email_report'), 'scheduled_date' => \IAWPSCOPED\iawp()->email_reports->next_email_at_for_humans(), 'interval' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_interval', 'monthly'), 'time' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_time', 9), 'emails' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_email_addresses', []), 'default_colors' => $defaults, 'input_default' => $input_defaults]);
         }
         $ips = \IAWPSCOPED\iawp()->get_option('iawp_blocked_ips', []);
         echo \IAWPSCOPED\iawp_blade()->run('settings.block-ips', ['current_ip' => Request::ip(), 'ip_is_blocked' => Request::is_ip_address_blocked($ips), 'ips' => $ips]);
@@ -220,7 +220,7 @@ class Settings
     }
     public function sanitize_view_counter_views_to_count($user_input)
     {
-        if (\in_array($user_input, ['total', 'today', 'last_thirty', 'this_month', 'last_month'])) {
+        if (\in_array($user_input, ['total', 'today', 'yesterday', 'this_week', 'last_week', 'last_seven', 'last_thirty', 'last_sixty', 'last_ninety', 'this_month', 'last_month', 'last_three_months', 'last_six_months', 'last_twelve_months', 'this_year', 'last_year'])) {
             return $user_input;
         } else {
             return 'total';

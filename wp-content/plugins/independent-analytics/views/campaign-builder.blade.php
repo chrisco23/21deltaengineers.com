@@ -55,7 +55,7 @@ $utm_content        = $utm_content ?? null;
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="iawp_utm_source">Source <span
+                            <label for="iawp_utm_source"><?php esc_html_e('Source', 'independent-analytics'); ?><span
                                         class="required">*</span></label>
                         </th>
                         <td>
@@ -74,7 +74,7 @@ $utm_content        = $utm_content ?? null;
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="iawp_utm_medium">Medium <span
+                            <label for="iawp_utm_medium"><?php esc_html_e('Medium', 'independent-analytics'); ?> <span
                                         class="required">*</span></label>
                         </th>
                         <td>
@@ -93,7 +93,7 @@ $utm_content        = $utm_content ?? null;
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="iawp_utm_campaign">Campaign <span class="required">*</span></label>
+                            <label for="iawp_utm_campaign"><?php esc_html_e('Campaign', 'independent-analytics'); ?> <span class="required">*</span></label>
                         </th>
                         <td>
                             <input type="text"
@@ -111,7 +111,7 @@ $utm_content        = $utm_content ?? null;
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="iawp_utm_term">Term</label>
+                            <label for="iawp_utm_term"><?php esc_html_e('Term', 'independent-analytics'); ?></label>
                         </th>
                         <td>
                             <input type="text"
@@ -125,7 +125,7 @@ $utm_content        = $utm_content ?? null;
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="iawp_utm_content">Content</label>
+                            <label for="iawp_utm_content"><?php esc_html_e('Content', 'independent-analytics'); ?></label>
                         </th>
                         <td>
                             <input type="text"

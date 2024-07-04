@@ -17,13 +17,23 @@ class WooCommerce_Order
     public function __construct(int $order_id)
     {
         $order = wc_get_order($order_id);
-        $total = \floatval($order->get_total());
+        $total = $order->get_total();
+        // Total based on order currency, not shop currency
         $total_refunded = \floatval($order->get_total_refunded());
-        $base_currency_exchange_rate = $order->get_meta('_base_currency_exchange_rate');
-        // Only convert using the exchange rate if one is found (Aelia Currency Switcher)
-        if (\is_numeric($base_currency_exchange_rate)) {
-            $total = \round($total * \floatval($base_currency_exchange_rate), 2);
-            $total_refunded = \round($total_refunded * \floatval($base_currency_exchange_rate), 2);
+        // Refund amount based on order currency, not shop currency
+        // Aelia Currency Switcher
+        $aelia_exchange_rate = $order->get_meta('_base_currency_exchange_rate');
+        if (\is_numeric($aelia_exchange_rate)) {
+            // Exchange rate is from order currency to shop currency (multiply)
+            $total = \round($total * \floatval($aelia_exchange_rate), 2);
+            $total_refunded = \round($total_refunded * \floatval($aelia_exchange_rate), 2);
+        }
+        // WPML
+        $wpml_exchange_rate = $this->wpml_exchange_rate($order->get_currency());
+        if (\is_float($wpml_exchange_rate)) {
+            // Exchange rate is from shop currency to order currency (divide)
+            $total = \round($total / $wpml_exchange_rate, 2);
+            $total_refunded = \round($total_refunded / $wpml_exchange_rate, 2);
         }
         $this->order_id = $order_id;
         $this->total = $total;
@@ -51,8 +61,45 @@ class WooCommerce_Order
         }
         $wpdb->update($wc_orders_table, ['total' => $this->total, 'total_refunded' => $this->total_refunded, 'total_refunds' => $this->total_refunds, 'status' => $this->status], ['order_id' => $this->order_id]);
     }
+    private function wpml_exchange_rate(string $currency_code) : ?float
+    {
+        $active_plugins = \get_option('active_plugins');
+        if (!\in_array('woocommerce-multilingual/wpml-woocommerce.php', $active_plugins)) {
+            return null;
+        }
+        $wcml_options = \get_option('_wcml_settings');
+        if (!\is_array($wcml_options)) {
+            return null;
+        }
+        if (!\array_key_exists('currency_options', $wcml_options)) {
+            return null;
+        }
+        if (!\is_array($wcml_options['currency_options']) || !\array_key_exists($currency_code, $wcml_options['currency_options'])) {
+            return null;
+        }
+        if (!\is_array($wcml_options['currency_options'][$currency_code]) || !\array_key_exists('rate', $wcml_options['currency_options'][$currency_code])) {
+            return null;
+        }
+        $exchange_rate = \floatval($wcml_options['currency_options'][$currency_code]['rate']);
+        // Was there an error parsing value as float?
+        if ($exchange_rate === 0.0) {
+            return null;
+        }
+        return $exchange_rate;
+    }
     public static function initialize_order_tracker()
     {
+        // Required for block checkout
+        \add_action('woocommerce_store_api_checkout_order_processed', function ($order) {
+            try {
+                $woocommerce_order = new self($order->get_id());
+                $woocommerce_order->insert();
+            } catch (\Throwable $e) {
+                \error_log('Independent Analytics was unable to track the analytics for a WooCommerce order. Please report this error to Independent Analytics. The error message is below.');
+                \error_log($e->getMessage());
+            }
+        });
+        // Required for shortcode checkout
         \add_action('woocommerce_checkout_order_created', function ($order) {
             try {
                 $woocommerce_order = new self($order->get_id());

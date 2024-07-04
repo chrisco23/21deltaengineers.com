@@ -3,14 +3,12 @@
 namespace DiviBooster\DiviBooster\SliderModuleLinkSlideTitle;
 
 
-if (function_exists('add_filter')) {
+if (function_exists('add_filter') && function_exists('add_action')) {
     \add_filter('et_module_shortcode_output', __NAMESPACE__ . '\\remove_divi_slider_title_link', 20, 3);
+    \add_action('et_builder_ready', __NAMESPACE__ . '\\add_link_title_field_to_module_settings', 11);
+    add_filter('et_pb_module_shortcode_attributes', __NAMESPACE__ . '\\fix_missing_props', 10, 3);
 }
 
-\add_action('et_builder_ready', __NAMESPACE__ . '\\add_link_title_field_to_module_settings', 11);
-
-
-add_filter('et_pb_module_shortcode_attributes', __NAMESPACE__ . '\\fix_missing_props', 10, 3);
 
 function add_link_title_field_to_module_settings() {
     if (isset($GLOBALS['shortcode_tags'])) {

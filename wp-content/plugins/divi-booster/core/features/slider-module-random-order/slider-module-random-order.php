@@ -7,6 +7,7 @@ if (function_exists('add_filter')) {
     \add_filter('et_pb_all_fields_unprocessed_et_pb_fullwidth_slider', __NAMESPACE__ . '\\add_slide_random_order_field');
     \add_action('wp_footer', __NAMESPACE__ . '\\add_slide_random_order_js');
     \add_filter('et_module_shortcode_output', __NAMESPACE__ . '\\add_custom_class_to_slider', 10, 3);
+    \add_action('wp_head', __NAMESPACE__ . '\\hide_initially_active_slide_css');
 }
 
 function add_slide_random_order_field($fields) {
@@ -79,4 +80,3 @@ function hide_initially_active_slide_css() { ?>
 <?php
 }
 
-\add_action('wp_head', __NAMESPACE__ . '\\hide_initially_active_slide_css');

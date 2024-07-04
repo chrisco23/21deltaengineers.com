@@ -264,7 +264,7 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'update-theme',
 			'et_safe_mode_update',
 			'et_core_portability_export',
-			'et_core_portability_import',
+			'et_core_portability_import_default_presets',
 			'et_builder_migrate_module_customizer_phase_two',
 			'et_builder_save_global_presets_history',
 			'et_builder_retrieve_global_presets_history',
@@ -1175,6 +1175,10 @@ function et_pb_add_non_builder_comment_class( $classes, $class, $comment_ID, $co
  * @return void
  */
 function et_builder_enqueue_open_sans() {
+	if ( wp_style_is( 'et-core-main-fonts', 'enqueued' ) ) {
+		return;
+	}
+
 	$protocol   = is_ssl() ? 'https' : 'http';
 	$query_args = array(
 		'family' => 'Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800',

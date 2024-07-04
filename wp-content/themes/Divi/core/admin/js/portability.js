@@ -483,6 +483,7 @@
 				returnJson: false,
 				useTempPresets: false,
 				includeGlobalPresets: false,
+				onboarding: false,
 			}, options);
 
 			var fileSize = Math.ceil( ( file.size / ( 1024 * 1024 ) ).toFixed( 2 ) ),
@@ -498,6 +499,7 @@
 					nonce: $this.nonces.import,
 					post: postId,
 					replace: options.replace ? '1' : '0',
+					onboarding: options.onboarding ? '1' : '0',
 					context: options.context
 				};
 
@@ -527,7 +529,7 @@
 			});
 
 			var importFBAjax = function( importData ) {
-				$.ajax( {
+				return $.ajax( {
 					type: 'POST',
 					url: etCore.ajaxurl,
 					processData: false,
@@ -601,7 +603,7 @@
 				} );
 			};
 
-			importFBAjax(formData)
+			return importFBAjax(formData)
 		},
 
 		bulkImportFB: async function(files, postId, options) {
@@ -779,6 +781,44 @@
 				importFBAjax(formData);
 			}
 
+		},
+
+		importPresetsAsDefault: function( presets, presetPrefix = '' , globalColors = null, images = null ) {
+			const $this = this;
+
+			return new Promise((resolve) => {
+				$.ajax({
+					type    : 'POST',
+					url     : etCore.ajaxurl,
+					dataType: 'json',
+					data    : {
+						action      : 'et_core_portability_import_default_presets',
+						nonce       : $this.nonces.presets,
+						presetPrefix: presetPrefix,
+						presets     : JSON.stringify(presets),
+						globalColors: globalColors ? JSON.stringify(globalColors) : null,
+						images      : images ? JSON.stringify(images) : null,
+					},
+					complete: () => {
+						resolve(true);
+					},
+				});
+			});
+		},
+
+		importCustomizerSettings: function( settingsFile ) {
+			const $this = this;
+
+			return new Promise((resolve) => {
+				$this.ajaxAction( {
+					action : 'et_core_portability_import',
+					context: 'et_divi_mods',
+					file   : settingsFile,
+					nonce  : $this.nonces.import,
+				}, function() {}, true );
+
+				return resolve(true);
+			});
 		},
 
 		ajaxAction: function( data, callback, fileSupport ) {

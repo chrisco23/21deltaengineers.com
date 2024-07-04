@@ -7,10 +7,10 @@
             <?php esc_html_e('Read Tutorial', 'independent-analytics'); ?>
         </a>
     </div>
-    <p class="setting-description">{{esc_html_e('Export your custom reports, so you can import them to another website running Independent Analytics.', 'independent-analytics')}}</p>
+    <p class="setting-description"><?php esc_html_e('Export your custom reports, so you can import them to another website running Independent Analytics.', 'independent-analytics'); ?></p>
     <label>
         <input type="checkbox" data-export-reports-target="selectAllCheckbox" data-action="export-reports#handleToggleSelectAll">
-        {{__('Select all reports', 'independent-analytics')}}
+        <?php esc_html_e('Select all reports', 'independent-analytics'); ?>
     </label>
 
     <div class="reports">
@@ -27,7 +27,7 @@
                         </li>
                     @empty
                         <li class="empty">
-                            <p>No reports found</p>
+                            <p><?php esc_html_e('No reports found', 'independent-analytics'); ?></p>
                         </li>
                     @endforelse
                 </ol>
@@ -35,17 +35,17 @@
         @endforeach
     </div>
 
-    <button class="iawp-button purple" data-export-reports-target="submitButton" data-action="export-reports#export" disabled>{{__('Export Reports', 'independent-analytics')}}</button>
+    <button class="iawp-button purple" data-export-reports-target="submitButton" data-action="export-reports#export" disabled><?php esc_html_e('Export Reports', 'independent-analytics'); ?></button>
 </div>
 
-<div class="settings-container import-reports" data-controller="import-reports" data-import-reports-database-version-value="{{'30'}}">
+<div class="settings-container import-reports" data-controller="import-reports" data-import-reports-database-version-value="{{'33'}}">
     <div class="heading">
         <h2><?php esc_html_e('Import Custom Reports', 'independent-analytics'); ?></h2>
         <a class="tutorial-link" href="https://independentwp.com/knowledgebase/dashboard/export-import-custom-reports/" target="_blank">
             <?php esc_html_e('Read Tutorial', 'independent-analytics'); ?>
         </a>
     </div>
-    <button class="iawp-button purple" data-import-reports-target="submitButton" data-action="import-reports#import" disabled>{{__('Import Reports', 'independent-analytics')}}</button>
+    <button class="iawp-button purple" data-import-reports-target="submitButton" data-action="import-reports#import" disabled><?php esc_html_e('Import Reports', 'independent-analytics'); ?></button>
     <input type="file" accept="application/json" data-action="import-reports#handleFileSelected click->import-reports#clearFileInput" data-import-reports-target="fileInput">
     <p data-import-reports-target="warningMessage" style="display:none;"></p>
 </div>

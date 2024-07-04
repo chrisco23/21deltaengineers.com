@@ -20,7 +20,7 @@ class Report_Options_Parser
     }
     private function get_options() : array
     {
-        return $this->strip_empty_options(['visible_datasets' => $this->get_array_option('visible_datasets'), 'exact_start' => $this->get_string_option('exact_start'), 'exact_end' => $this->get_string_option('exact_end'), 'relative_range_id' => $this->get_string_option('relative_range_id'), 'columns' => $this->get_array_option('columns'), 'quick_stats' => $this->get_array_option('quick_stats'), 'filters' => $this->get_filters(), 'sort_column' => $this->get_string_option('sort_column'), 'sort_direction' => $this->get_string_option('sort_direction'), 'group_name' => $this->get_string_option('group_name'), 'chart_interval' => $this->get_string_option('chart_interval')]);
+        return $this->strip_empty_options(['primary_chart_metric_id' => $this->get_string_option('primary_chart_metric_id'), 'secondary_chart_metric_id' => $this->get_string_option('secondary_chart_metric_id', \true), 'exact_start' => $this->get_string_option('exact_start'), 'exact_end' => $this->get_string_option('exact_end'), 'relative_range_id' => $this->get_string_option('relative_range_id'), 'columns' => $this->get_array_option('columns'), 'quick_stats' => $this->get_array_option('quick_stats'), 'filters' => $this->get_filters(), 'sort_column' => $this->get_string_option('sort_column'), 'sort_direction' => $this->get_string_option('sort_direction'), 'group_name' => $this->get_string_option('group_name'), 'chart_interval' => $this->get_string_option('chart_interval')]);
     }
     private function add_update_side_effects(array $options) : array
     {
@@ -44,10 +44,13 @@ class Report_Options_Parser
     /**
      * @param string $key
      *
-     * @return string|Empty_Report_Option
+     * @return null|string|Empty_Report_Option
      */
-    private function get_string_option(string $key)
+    private function get_string_option(string $key, bool $is_nullable = \false)
     {
+        if ($is_nullable && \array_key_exists($key, $this->attributes) && \is_null($this->attributes[$key])) {
+            return null;
+        }
         if (!\array_key_exists($key, $this->attributes) || !\is_string($this->attributes[$key])) {
             return new \IAWP\Empty_Report_Option();
         }

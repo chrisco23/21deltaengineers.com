@@ -126,40 +126,20 @@ class View_Counter
         }
         return \true;
     }
-    private function sanitize_range(string $range) : string
+    private function get_view_count(\IAWP\Resource_Identifier $resource, string $relative_range_id) : int
     {
-        if (\in_array($range, ['today', 'last_thirty', 'this_month', 'last_month', 'total'])) {
-            return $range;
-        } else {
-            return 'total';
+        $relative_range_id = \strtoupper($relative_range_id);
+        if ($relative_range_id === 'TOTAL' || !\in_array($relative_range_id, Relative_Date_Range::range_ids())) {
+            $relative_range_id = 'ALL_TIME';
         }
-    }
-    private function get_view_count(\IAWP\Resource_Identifier $resource, string $range) : int
-    {
         $resources_table = \IAWP\Query::get_table_name(\IAWP\Query::RESOURCES);
         $views_table = \IAWP\Query::get_table_name(\IAWP\Query::VIEWS);
-        $range = $this->sanitize_range($range);
-        $is_today = $range === 'today';
-        $is_last_thirty = $range === 'last_thirty';
-        $is_this_month = $range === 'this_month';
-        $is_last_month = $range === 'last_month';
+        $relative_range = new Relative_Date_Range($relative_range_id);
         $query = \IAWP\Illuminate_Builder::get_builder()->selectRaw('COUNT(views.id) AS views')->from($resources_table, 'resources')->leftJoin("{$views_table} AS views", function (JoinClause $join) {
             $join->on('resources.id', '=', 'views.resource_id');
         })->where('resource', '=', $resource->type())->when($resource->has_meta(), function (Builder $query) use($resource) {
             $query->where($resource->meta_key(), '=', $resource->meta_value());
-        })->when($is_today, function (Builder $query) {
-            $today = new Relative_Date_Range('TODAY');
-            $query->whereBetween('viewed_at', [$today->iso_start(), $today->iso_end()]);
-        })->when($is_last_thirty, function (Builder $query) {
-            $today = new Relative_Date_Range('LAST_THIRTY');
-            $query->whereBetween('viewed_at', [$today->iso_start(), $today->iso_end()]);
-        })->when($is_this_month, function (Builder $query) {
-            $today = new Relative_Date_Range('THIS_MONTH');
-            $query->whereBetween('viewed_at', [$today->iso_start(), $today->iso_end()]);
-        })->when($is_last_month, function (Builder $query) {
-            $today = new Relative_Date_Range('LAST_MONTH');
-            $query->whereBetween('viewed_at', [$today->iso_start(), $today->iso_end()]);
-        })->groupBy('resources.id');
+        })->whereBetween('viewed_at', [$relative_range->iso_start(), $relative_range->iso_end()])->groupBy('resources.id');
         $views = $query->value('views');
         return \is_null($views) ? 0 : $views;
     }

@@ -186,7 +186,7 @@ exports.defineInteropFlag = function(a) {
 };
 exports.exportAll = function(source, dest) {
     Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
         Object.defineProperty(dest, key, {
             enumerable: true,
             get: function get() {
@@ -209,27 +209,29 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Notices", function() {
     return Notices;
 });
-var _objectSpreadJs = require("@swc/helpers/lib/_object_spread.js");
-var _objectSpreadJsDefault = parcelHelpers.interopDefault(_objectSpreadJs);
+var _objectSpread = require("@swc/helpers/_/_object_spread");
 var $ = jQuery;
 var Notices = {
     setup: function() {
         $("#dismiss-notice").on("click", function() {
-            var data = (0, _objectSpreadJsDefault.default)({}, iawpActions.confirm_cache_cleared);
+            var data = (0, _objectSpread._)({}, iawpActions.confirm_cache_cleared);
             $(".iawp-notice.iawp-warning").hide();
             jQuery.post(ajaxurl, data, function(response) {}).fail(function() {});
         });
     }
 };
 
-},{"@swc/helpers/lib/_object_spread.js":"d5EJT","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"d5EJT":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
+},{"@swc/helpers/_/_object_spread":"aevtD","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"aevtD":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "_object_spread", function() {
+    return _object_spread;
 });
-exports.default = _objectSpread;
-var _defineProperty = _interopRequireDefault(require("./_define_property"));
-function _objectSpread(target) {
+parcelHelpers.export(exports, "_", function() {
+    return _object_spread;
+});
+var _definePropertyJs = require("./_define_property.js");
+function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
         var source = arguments[i] != null ? arguments[i] : {};
         var ownKeys = Object.keys(source);
@@ -237,24 +239,22 @@ function _objectSpread(target) {
             return Object.getOwnPropertyDescriptor(source, sym).enumerable;
         }));
         ownKeys.forEach(function(key) {
-            _defineProperty.default(target, key, source[key]);
+            (0, _definePropertyJs._define_property)(target, key, source[key]);
         });
     }
     return target;
 }
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
 
-},{"./_define_property":"6IXzf"}],"6IXzf":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
+},{"./_define_property.js":"bWQmf","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"bWQmf":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "_define_property", function() {
+    return _define_property;
 });
-exports.default = _defineProperty;
-function _defineProperty(obj, key, value) {
+parcelHelpers.export(exports, "_", function() {
+    return _define_property;
+});
+function _define_property(obj, key, value) {
     if (key in obj) Object.defineProperty(obj, key, {
         value: value,
         enumerable: true,
@@ -265,14 +265,14 @@ function _defineProperty(obj, key, value) {
     return obj;
 }
 
-},{}],"dzCa7":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"dzCa7":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "StickySidebar", function() {
     return StickySidebar;
 });
-var _objectSpreadJs = require("@swc/helpers/lib/_object_spread.js");
-var _objectSpreadJsDefault = parcelHelpers.interopDefault(_objectSpreadJs);
+var _objectSpread = require("@swc/helpers/_/_object_spread");
+var _objectSpreadProps = require("@swc/helpers/_/_object_spread_props");
 var $ = jQuery;
 var StickySidebar = {
     setup: function() {
@@ -325,7 +325,7 @@ var StickySidebar = {
         this.setReportTitleMaxWidth();
     },
     saveSidebarState: function(isSidebarCollapsed) {
-        var data = (0, _objectSpreadJsDefault.default)({}, iawpActions.update_user_settings, {
+        var data = (0, _objectSpreadProps._)((0, _objectSpread._)({}, iawpActions.update_user_settings), {
             "is_sidebar_collapsed": isSidebarCollapsed
         });
         jQuery.post(ajaxurl, data, function(response) {}).fail(function() {});
@@ -343,7 +343,36 @@ var StickySidebar = {
     }
 };
 
-},{"@swc/helpers/lib/_object_spread.js":"d5EJT","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"e3uOb":[function(require,module,exports) {
+},{"@swc/helpers/_/_object_spread":"aevtD","@swc/helpers/_/_object_spread_props":"fXEan","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"fXEan":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "_object_spread_props", function() {
+    return _object_spread_props;
+});
+parcelHelpers.export(exports, "_", function() {
+    return _object_spread_props;
+});
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _object_spread_props(target, source) {
+    source = source != null ? source : {};
+    if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    else ownKeys(Object(source)).forEach(function(key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+    return target;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"e3uOb":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Support", function() {

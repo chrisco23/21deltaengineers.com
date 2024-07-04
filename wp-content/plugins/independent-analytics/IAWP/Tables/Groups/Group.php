@@ -2,6 +2,8 @@
 
 namespace IAWP\Tables\Groups;
 
+use IAWP\Rows\Rows;
+use IAWP\Statistics\Statistics;
 /** @internal */
 class Group
 {
@@ -24,10 +26,16 @@ class Group
     {
         return $this->singular;
     }
+    /**
+     * @return class-string<Rows>
+     */
     public function rows_class() : string
     {
         return $this->rows_class;
     }
+    /**
+     * @return class-string<Statistics>
+     */
     public function statistics_class() : string
     {
         return $this->statistics_class;

@@ -6,6 +6,7 @@ use IAWP\Form_Submissions\Form;
 use IAWP\Illuminate_Builder;
 use IAWP\Models\Device;
 use IAWP\Query;
+use IAWP\Query_Taps;
 use IAWP\WooCommerce_Order;
 use IAWPSCOPED\Illuminate\Database\Query\Builder;
 use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
@@ -49,7 +50,9 @@ class Device_OSS extends \IAWP\Rows\Rows
             $join->on('wc.view_id', '=', 'views.id');
         })->leftJoinSub($this->get_form_submissions_query(), 'form_submissions', function (JoinClause $join) {
             $join->on('form_submissions.view_id', '=', 'views.id');
-        })->whereBetween('views.viewed_at', $this->get_current_period_iso_range())->whereBetween('sessions.created_at', $this->get_current_period_iso_range())->when(\count($this->filters) > 0, function (Builder $query) {
+        })->whereBetween('views.viewed_at', $this->get_current_period_iso_range())->when(!$this->appears_to_be_for_real_time_analytics(), function (Builder $query) {
+            $query->whereBetween('sessions.created_at', $this->get_current_period_iso_range());
+        })->tap(Query_Taps::tap_authored_content_check())->when(\count($this->filters) > 0, function (Builder $query) {
             foreach ($this->filters as $filter) {
                 if (!$this->is_a_calculated_column($filter->column())) {
                     $filter->apply_to_query($query);

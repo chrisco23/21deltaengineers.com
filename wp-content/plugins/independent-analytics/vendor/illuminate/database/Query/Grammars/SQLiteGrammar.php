@@ -154,7 +154,7 @@ class SQLiteGrammar extends Grammar
         return \IAWPSCOPED\collect($values)->reject(function ($value, $key) {
             return $this->isJsonSelector($key);
         })->merge($jsonGroups)->map(function ($value, $key) use($jsonGroups) {
-            $column = last(\explode('.', $key));
+            $column = \IAWPSCOPED\last(\explode('.', $key));
             $value = isset($jsonGroups[$key]) ? $this->compileJsonPatch($column, $value) : $this->parameter($value);
             return $this->wrap($column) . ' = ' . $value;
         })->implode(', ');
@@ -215,7 +215,7 @@ class SQLiteGrammar extends Grammar
     {
         $table = $this->wrapTable($query->from);
         $columns = $this->compileUpdateColumns($query, $values);
-        $alias = last(\preg_split('/\\s+as\\s+/i', $query->from));
+        $alias = \IAWPSCOPED\last(\preg_split('/\\s+as\\s+/i', $query->from));
         $selectSql = $this->compileSelect($query->select($alias . '.rowid'));
         return "update {$table} set {$columns} where {$this->wrap('rowid')} in ({$selectSql})";
     }
@@ -259,7 +259,7 @@ class SQLiteGrammar extends Grammar
     protected function compileDeleteWithJoinsOrLimit(Builder $query)
     {
         $table = $this->wrapTable($query->from);
-        $alias = last(\preg_split('/\\s+as\\s+/i', $query->from));
+        $alias = \IAWPSCOPED\last(\preg_split('/\\s+as\\s+/i', $query->from));
         $selectSql = $this->compileSelect($query->select($alias . '.rowid'));
         return "delete from {$table} where {$this->wrap('rowid')} in ({$selectSql})";
     }

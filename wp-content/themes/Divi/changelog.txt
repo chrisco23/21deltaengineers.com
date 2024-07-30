@@ -1,3 +1,78 @@
+version 4.27 ( updated 07-17-2024 )
+- Introduced Divi AI Sections and Unsplash integration for all Divi AI generated content.
+- Fixed all links having underlines coming from new styles released in WordPress 6.6.
+- Fixed image use problem after generating and extending a large image.
+- Updated border radius limit in customizer button settings to allow up to 100px.
+- Fixed WordPress Choose an Image modal not appearing when editing images via Divi Settings modal.
+- Fixed a PHP error that occurred in some cases when the global presets history was split into separate database records.
+	* ai-app/ai-app.php
+	* ai-app/build/et-ai-app.bundle.css
+	* ai-app/build/et-ai-app.bundle.js
+	* ai-app/i18n/user-prompt.php
+	* ai-app/images/animated/ai/ai-progress-images.json
+	* ai-app/images/animated/ai/ai-progress-import.json
+	* ai-app/images/animated/ai/ai-progress-layout.json
+	* ai-app/images/animated/ai/ai-progress-menu.json
+	* ai-app/images/animated/ai/ai-progress-styles.json
+	* ai-app/images/animated/ai/ai-progress-text.json
+	* ai-app/images/card-1.svg
+	* ai-app/images/card-2.svg
+	* ai-app/images/card-3.svg
+	* core/admin/js/portability.js
+	* core/components/Portability.php
+	* functions.php
+	* includes/builder/autoload.php
+	* includes/builder/class-et-builder-element.php
+	* includes/builder/class-et-builder-module-shortcode-manager.php
+	* includes/builder/feature/global-presets/History.php
+	* includes/builder/framework.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/theme-builder/api.php
+	* includes/builder/images/ai-layout-image-attributions-modal-close.svg
+	* includes/builder/module/helpers/WoocommerceModules.php
+	* onboarding/app/build/et-onboarding.bundle.js
+	* onboarding/app/build/et-onboarding.bundle.css
+	* onboarding/images/animated/ai/ai-progress-images.json
+	* onboarding/images/animated/ai/ai-progress-import.json
+	* onboarding/images/animated/ai/ai-progress-layout.json
+	* onboarding/images/animated/ai/ai-progress-menu.json
+	* onboarding/images/animated/ai/ai-progress-styles.json
+	* onboarding/images/animated/ai/ai-progress-text.json
+	* theme.json
+
+version 4.26.1 ( updated 07-12-2024 )
+- Updated blurb text for "Choose a Premade Layout" option to include information about cloning an existing page.
+- Fixed icon cutoff issue in Testimonial module when overflow is set to visible.
+- Fixed unable to edit any Theme Builder templates when using WordPress 6.6.
+- Fixed the issue where the success screen in Divi Onboarding was displaying pages that were not generated during onboarding.
+- Added role editor permission for Divi Quick sites.
+- Improved Presets storage system to allow saving more presets.
+- Improved License check system on Dashboard page.
+- Fixed issue with WooCommerce installation and activation failure handling in Divi onboarding process.
+- Fixed duplicated requests on dashboard page which may lead to "Something went wrong" error.
+- Optimized the query that retrieves the post count in Quick Sites overview which could have caused an internal server error on sites with many posts.
+- Reverted a previous bug fix that fixed a problem with 14px mobile and tablet body font sizes not working. However, due to how long this bug has existed, the fix changed mobile styles on too many existing websites and is being reverted for now.
+- Introduced new hook 'et_fb_should_apply_wpautop' to filter whether to apply wpautop to content of a shortcode.
+	* ai-app/build/et-ai-app.bundle.css
+	* ai-app/build/et-ai-app.bundle.js
+	* core/admin/js/portability.js
+	* core/components/Portability.php
+	* core/components/Updates.php
+	* functions.php
+	* includes/builder/core.php
+	* includes/builder/feature/global-presets/History.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/frontend-builder/helpers.php
+	* includes/builder/frontend-builder/theme-builder/api.php
+	* includes/builder/functions.php
+	* onboarding/app/build/et-onboarding.bundle.js
+	* onboarding/app/build/et-onboarding.bundle.css
+	* onboarding/ajax.php
+	* onboarding/helpers.php
+	* onboarding/i18n/dashboard.php
+	* onboarding/onboarding.php
+
 version 4.26 ( updated 07-02-2024 )
 - Introduced Divi Quick Sites, including AI website creation and hand-crafted starter sites.
 	* ai-app/ai-app.php

@@ -21,6 +21,7 @@ import ImportReportController from "./controllers/import_reports_controller"
 import MigrationRedirectController from "./controllers/migration_redirect_controller"
 import ModalController from "./controllers/modal_controller"
 import PluginGroupOptions from "./controllers/plugin_group_options_controller"
+import PrunerController from "./controllers/pruner_controller"
 import QuickStatsController from "./controllers/quick_stats_controller"
 import RealTimeController from "./controllers/real_time_controller"
 import RenameReportController from "./controllers/rename_report_controller"
@@ -53,6 +54,7 @@ Stimulus.register('import-reports', ImportReportController)
 Stimulus.register("migration-redirect", MigrationRedirectController)
 Stimulus.register("modal", ModalController)
 Stimulus.register("plugin-group-options", PluginGroupOptions)
+Stimulus.register("pruner", PrunerController)
 Stimulus.register("quick-stats", QuickStatsController)
 Stimulus.register("create-report", CreateReportController)
 Stimulus.register("real-time", RealTimeController)

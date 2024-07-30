@@ -112,6 +112,9 @@ class ET_Onboarding {
 		add_action( 'wp_ajax_et_onboarding_result_delete_menu', [ self::class, 'result_delete_menu' ] );
 		add_action( 'wp_ajax_et_onboarding_result_delete_theme_builder_layout', [ self::class, 'result_delete_theme_builder_layout' ] );
 		add_action( 'wp_ajax_et_onboarding_update_customizer', [ self::class, 'update_customizer_design_settings' ] );
+
+		// Make sure that our Support Account's roles are set up.
+		add_filter( 'add_et_builder_role_options', [ self::class, 'onboarding_add_role_options' ], 20, 1 );
 	}
 
 	/**
@@ -183,25 +186,31 @@ class ET_Onboarding {
 				'site_description' => wp_unslash( et_get_option( 'et_ai_layout_site_description' ) ),
 			],
 			'nonces'                   => [
-				'et_onboarding_overview_status'        => wp_create_nonce( 'et_onboarding_overview_status' ),
-				'et_onboarding_account_status'         => wp_create_nonce( 'et_onboarding_account_status' ),
-				'et_onboarding_result_list'            => wp_create_nonce( 'et_onboarding_result_list' ),
-				'et_onboarding_result_delete_page'     => wp_create_nonce( 'et_onboarding_result_delete_page' ),
-				'et_onboarding_nonce'                  => wp_create_nonce( 'et_onboarding-nonce' ),
-				'updates'                              => wp_create_nonce( 'updates' ),
-				'et_onboarding_create_menu_with_pages' => wp_create_nonce( 'et_onboarding_create_menu_with_pages' ),
-				'et_onboarding_update_site_info'       => wp_create_nonce( 'et_onboarding_update_site_info' ),
-				'et_onboarding_upload_layout_image'    => wp_create_nonce( 'et_onboarding_upload_layout_image' ),
-				'et_onboarding_create_page'            => wp_create_nonce( 'et_onboarding_create_page' ),
-				'et_onboarding_update_et_account'      => wp_create_nonce( 'et_onboarding_update_et_account' ),
-				'et_onboarding_result_delete_menu'     => wp_create_nonce( 'et_onboarding_result_delete_menu' ),
+				'et_onboarding_overview_status'          => wp_create_nonce( 'et_onboarding_overview_status' ),
+				'et_onboarding_account_status'           => wp_create_nonce( 'et_onboarding_account_status' ),
+				'et_onboarding_result_list'              => wp_create_nonce( 'et_onboarding_result_list' ),
+				'et_onboarding_result_delete_page'       => wp_create_nonce( 'et_onboarding_result_delete_page' ),
+				'et_onboarding_nonce'                    => wp_create_nonce( 'et_onboarding-nonce' ),
+				'updates'                                => wp_create_nonce( 'updates' ),
+				'et_onboarding_create_menu_with_pages'   => wp_create_nonce( 'et_onboarding_create_menu_with_pages' ),
+				'et_onboarding_update_site_info'         => wp_create_nonce( 'et_onboarding_update_site_info' ),
+				'et_onboarding_upload_layout_image'      => wp_create_nonce( 'et_onboarding_upload_layout_image' ),
+				'et_onboarding_create_page'              => wp_create_nonce( 'et_onboarding_create_page' ),
+				'et_onboarding_update_et_account'        => wp_create_nonce( 'et_onboarding_update_et_account' ),
+				'et_onboarding_result_delete_menu'       => wp_create_nonce( 'et_onboarding_result_delete_menu' ),
 				'et_onboarding_result_delete_theme_builder_layout' => wp_create_nonce( 'et_onboarding_result_delete_theme_builder_layout' ),
 				'et_onboarding_restore_pre_generation_state' => wp_create_nonce( 'et_onboarding_restore_pre_generation_state' ),
-				'et_onboarding_update_customizer'      => wp_create_nonce( 'et_onboarding_update_customizer' ),
-				'et_onboarding_activate_plugin'        => wp_create_nonce( 'et_onboarding_activate_plugin' ),
-				'et_onboarding_publish_new_pages'      => wp_create_nonce( 'et_onboarding_publish_new_pages' ),
+				'et_onboarding_clear_flag_meta'          => wp_create_nonce( 'et_onboarding_clear_flag_meta' ),
+				'et_onboarding_update_customizer'        => wp_create_nonce( 'et_onboarding_update_customizer' ),
+				'et_onboarding_activate_plugin'          => wp_create_nonce( 'et_onboarding_activate_plugin' ),
+				'et_onboarding_publish_new_pages'        => wp_create_nonce( 'et_onboarding_publish_new_pages' ),
+				'et_onboarding_is_woocommerce_installed' => wp_create_nonce( 'et_onboarding_is_woocommerce_installed' ),
+				'et_onboarding_is_woocommerce_active'    => wp_create_nonce( 'et_onboarding_is_woocommerce_active' ),
 			],
 			'current_site_url'         => home_url(),
+			'permissions'              => [
+				'et_onboarding_quick_sites' => et_pb_is_allowed( 'et_onboarding_quick_sites' ) ? '1' : '0',
+			],
 		];
 	}
 
@@ -224,19 +233,21 @@ class ET_Onboarding {
 	 * @param string $post_type The post type.
 	 * @param bool   $use_meta  Whether to use meta.
 	 *
-	 * @return array
+	 * @return int
 	 */
 	public static function get_post_count( $post_type, $use_meta ) {
-		$args = [
-			'post_type'      => $post_type,
-			'posts_per_page' => -1,
-			'post_status'    => 'publish',
-			'meta_query'     => self::_get_meta_query( $post_type, $use_meta ),
-		];
+		global $wpdb;
 
-		$query = new WP_Query( $args );
+		$meta_query = new WP_Meta_Query( self::_get_meta_query( $post_type, $use_meta ) );
+		$meta_sql   = $meta_query->get_sql( 'post', $wpdb->posts, 'ID' );
 
-		return $query->have_posts() ? $query->found_posts : 0;
+		$sql = "SELECT COUNT(*) FROM {$wpdb->posts} {$meta_sql['join']} WHERE {$wpdb->posts}.post_type = %s AND {$wpdb->posts}.post_status = 'publish' {$meta_sql['where']}";
+
+		$prepare_sql = $wpdb->prepare( $sql, $post_type ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- False-positive error - it is prepared.
+
+		$count = (int) $wpdb->get_var( $prepare_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- False-positive error - it is prepared.
+
+		return $count;
 	}
 
 	/**
@@ -300,7 +311,7 @@ class ET_Onboarding {
 
 		wp_send_json_success( $overview_status );
 	}
-	
+
 	/**
 	 * Get the account status.
 	 *
@@ -312,11 +323,36 @@ class ET_Onboarding {
 		et_core_security_check( 'manage_options', 'et_onboarding_account_status', 'wp_nonce' );
 		global $wp_version;
 
-		$et_username = isset( $_POST['et_username'] ) ? sanitize_text_field( $_POST['et_username'] ) : '';
-		$et_api_key  = isset( $_POST['et_api_key'] ) ? sanitize_text_field( $_POST['et_api_key'] ) : '';
+		$et_username            = isset( $_POST['et_username'] ) ? sanitize_text_field( $_POST['et_username'] ) : '';
+		$et_api_key             = isset( $_POST['et_api_key'] ) ? sanitize_text_field( $_POST['et_api_key'] ) : '';
+		$et_force_status_update = isset( $_POST['et_force_update'] ) ? sanitize_text_field( $_POST['et_force_update'] ) : 'no';
 
+		if ( ! $et_username || ! $et_api_key ) {
+			wp_send_json_error();
+
+			return;
+		}
+
+		$cached_account_status = get_transient( 'et_onboarding_account_data', false );
+
+		// Return cached response if exist.
+		if ( 'no' === $et_force_status_update && $cached_account_status ) {
+			if ( $et_api_key === $cached_account_status['api_key'] && $et_username === $cached_account_status['username'] ) {
+				wp_send_json_success( $cached_account_status );
+
+				return;
+			} else {
+				delete_transient( 'et_onboarding_account_data' );
+			}
+		}
+
+		if ( 'yes' === $et_force_status_update ) {
+			delete_transient( 'et_onboarding_account_data' );
+		}
+
+		// Get the theme version from parent theme or current theme.
 		$themes = array(
-			'Divi' => wp_get_theme() -> get( 'Version' )
+			'Divi' => wp_get_theme()->parent() ? wp_get_theme()->parent()->get( 'Version' ) : wp_get_theme()->get( 'Version' ),
 		);
 
 		$request_options = array(
@@ -332,13 +368,31 @@ class ET_Onboarding {
 			'headers'    => array(
 				'rate_limit' => 'false',
 			),
-			'user-agent' => 'Onboarding/' . $wp_version . '; Theme Updates/' . ET_CORE_VERSION . '; ' . home_url( '/' ),
+			'user-agent' => 'WordPress/' . $wp_version . '; Onboarding/' . ET_CORE_VERSION . '; ' . home_url( '/' ),
 		);
 
 		$theme_request = wp_remote_post( 'https://www.elegantthemes.com/api/api.php', $request_options );
 
-		if ( ! is_wp_error( $theme_request ) && wp_remote_retrieve_response_code( $theme_request ) === 200 ){
+		if ( ! is_wp_error( $theme_request ) && 200 === wp_remote_retrieve_response_code( $theme_request ) ) {
 			$theme_response = maybe_unserialize( wp_remote_retrieve_body( $theme_request ) );
+
+			// Cache response for an hour if current theme is up to date and user has active subscription.
+			if ( ! empty( $theme_response['et_account_data'] ) && ! empty( $theme_response['et_account_data']->et_username_status ) && ! empty( $theme_response['et_up_to_date_products'] ) && 'active' === $theme_response['et_account_data']->et_username_status ) {
+
+				// Invalid api key.
+				if ( ! empty( $theme_response['et_account_data']->et_api_key_status ) && ( 'invalid' === $theme_response['et_account_data']->et_api_key_status || 'deactivated' === $theme_response['et_account_data']->et_api_key_status ) ) {
+					// Not sending error response as it's a valid response with required data.
+					wp_send_json_success( $theme_response );
+
+					return;
+				}
+
+				$theme_response['api_key']  = $et_api_key;
+				$theme_response['username'] = $et_username;
+
+				set_transient( 'et_onboarding_account_data', $theme_response, HOUR_IN_SECONDS );
+			}
+
 			wp_send_json_success( $theme_response );
 		} else {
 			wp_send_json_error();
@@ -373,6 +427,19 @@ class ET_Onboarding {
 				[
 					'key'     => '_et_theme_builder_marked_as_unused',
 					'compare' => 'NOT EXISTS',
+				],
+				[
+					'key'   => '_et_onboarding_created',
+					'value' => '1',
+				],
+			];
+		}
+
+		if ( 'page' === $post_type ) {
+			$args['meta_query'] = [
+				[
+					'key'   => '_et_onboarding_created',
+					'value' => '1',
 				],
 			];
 		}
@@ -659,5 +726,30 @@ class ET_Onboarding {
 		}
 
 		return $count;
+	}
+
+	/**
+	 * Add the onboarding role options.
+	 *
+	 * Especially for Quick Sites generation.
+	 *
+	 * @param array $all_role_options The role options.
+	 *
+	 * @since ??
+	 */
+	public static function onboarding_add_role_options( $all_role_options ) {
+		// get all the roles that can edit theme options.
+		$applicability_roles = et_core_get_roles_by_capabilities( [ 'manage_options' ] );
+
+		$role_options = [
+			'et_onboarding_quick_sites' => array(
+				'name'          => esc_attr__( 'Divi Quick Sites', 'Divi' ),
+				'applicability' => $applicability_roles,
+			),
+		];
+
+		$all_role_options['general_capabilities']['options'] = array_merge( $all_role_options['general_capabilities']['options'], $role_options );
+
+		return $all_role_options;
 	}
 }

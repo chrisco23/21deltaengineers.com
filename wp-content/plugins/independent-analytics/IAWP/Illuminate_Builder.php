@@ -4,6 +4,7 @@ namespace IAWP;
 
 use IAWPSCOPED\Illuminate\Database\Capsule\Manager as Capsule;
 use IAWPSCOPED\Illuminate\Database\Connection;
+use IAWPSCOPED\Illuminate\Database\ConnectionInterface;
 use IAWPSCOPED\Illuminate\Database\Query\Builder;
 use PDO;
 /**
@@ -17,10 +18,17 @@ use PDO;
 class Illuminate_Builder
 {
     private static $connection = null;
+    public static function get_connection() : ConnectionInterface
+    {
+        if (self::$connection === null) {
+            self::$connection = self::make_connection();
+        }
+        return self::$connection;
+    }
     public static function get_builder() : Builder
     {
         if (self::$connection === null) {
-            self::$connection = self::get_connection();
+            self::$connection = self::make_connection();
         }
         return new Builder(self::$connection);
     }
@@ -33,7 +41,7 @@ class Illuminate_Builder
             return ray(\vsprintf($replace_question_marks, $builder->getBindings()));
         }
     }
-    private static function get_connection() : Connection
+    private static function make_connection() : Connection
     {
         global $wpdb;
         $raw_host = $wpdb->dbhost;
@@ -71,7 +79,31 @@ class Illuminate_Builder
         $capsule->addConnection($connection_options);
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
-        return $capsule->getConnection();
+        $connection = $capsule->getConnection();
+        self::disable_mariadb_optimization($connection);
+        return $connection;
+    }
+    /**
+     * This disabled the lateral derived optimization for MariaDB users. This was cause slowdowns
+     * when filtering even with few views.
+     *
+     * https://mariadb.com/kb/en/lateral-derived-optimization/
+     *
+     * @param Connection $connection
+     *
+     * @return void
+     */
+    private static function disable_mariadb_optimization(Connection $connection)
+    {
+        $pdo = $connection->getPdo();
+        $version = $pdo->query("SELECT VERSION() AS version")->fetchColumn();
+        if (\strpos(\strtolower($version), 'mariadb') === \false) {
+            return;
+        }
+        try {
+            $pdo->exec("SET optimizer_switch='split_materialized=off'");
+        } catch (\Throwable $exception) {
+        }
     }
     private static function ssl_options() : array
     {

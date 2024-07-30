@@ -11,6 +11,7 @@ class AJAX_Manager
     private $instances = [];
     private function __construct()
     {
+        $this->instances[] = new \IAWP\AJAX\Configure_Pruner();
         $this->instances[] = new \IAWP\AJAX\Confirm_Cache_Cleared();
         $this->instances[] = new \IAWP\AJAX\Copy_Report();
         $this->instances[] = new \IAWP\AJAX\Create_Campaign();

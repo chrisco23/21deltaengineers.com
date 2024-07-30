@@ -7,11 +7,11 @@
     </div>
     <div class="button-group">
         <button id="reset-analytics-button" data-action="click->reset-analytics#open"
-                class="iawp-button ghost-red">
+                class="iawp-button red">
             <?php esc_html_e('Reset analytics', 'independent-analytics'); ?>
         </button>
         <button id="delete-everything-button" data-action="click->delete-data#open"
-                class="iawp-button ghost-red">
+                class="iawp-button red">
             <?php esc_html_e('Delete all data & deactivate plugin', 'independent-analytics'); ?>
         </button>
     </div>
@@ -27,7 +27,7 @@
                 <form data-action="submit->reset-analytics#submit">
                     <input type="text" autofocus data-reset-analytics-target="input"
                            data-action="input->reset-analytics#updateConfirmation" class="block-input">
-                    <button type="submit" class="iawp-button purple"
+                    <button type="submit" class="iawp-button red"
                             data-reset-analytics-target="submit"><?php esc_html_e('Reset analytics', 'independent-analytics'); ?></button>
                     <button type="button" class="iawp-button ghost-purple"
                             data-micromodal-close><?php esc_html_e('Cancel', 'independent-analytics'); ?></button>
@@ -50,7 +50,7 @@
                 <form data-action="submit->delete-data#submit">
                     <input type="text" autofocus data-delete-data-target="input"
                            data-action="input->delete-data#updateConfirmation" class="block-input">
-                    <button type="submit" class="iawp-button purple"
+                    <button type="submit" class="iawp-button red"
                             data-delete-data-target="submit"><?php esc_html_e('Delete all data', 'independent-analytics'); ?></button>
                     <button type="button" class="iawp-button ghost-purple"
                             data-micromodal-close><?php esc_html_e('Cancel', 'independent-analytics'); ?></button>

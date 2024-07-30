@@ -17,6 +17,6 @@ class Updates_Page extends \IAWP\Admin_Page\Admin_Page
     }
     private function update_latest_update_viewed()
     {
-        \update_option('iawp_last_update_viewed', \IAWP_VERSION);
+        \update_option('iawp_last_update_viewed', \IAWP_VERSION, \true);
     }
 }

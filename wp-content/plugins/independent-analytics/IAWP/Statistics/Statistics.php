@@ -10,6 +10,7 @@ use IAWP\Form_Submissions\Form;
 use IAWP\Illuminate_Builder;
 use IAWP\Plugin_Group;
 use IAWP\Query;
+use IAWP\Query_Taps;
 use IAWP\Rows\Rows;
 use IAWP\Statistics\Intervals\Interval;
 use IAWP\Statistics\Intervals\Intervals;
@@ -112,7 +113,7 @@ abstract class Statistics
         $column = $this->total_table_rows_column() ?? $this->required_column();
         $query = Illuminate_Builder::get_builder()->selectRaw("COUNT(DISTINCT {$column}) AS total_table_rows")->from("{$sessions_table} AS sessions")->join("{$views_table} AS views", function (JoinClause $join) {
             $join->on('sessions.session_id', '=', 'views.session_id');
-        })->when(!\is_null($this->rows), function (Builder $query) {
+        })->tap(Query_Taps::tap_authored_content_check(\true))->when(!\is_null($this->rows), function (Builder $query) {
             $this->rows->attach_filters($query);
         })->whereBetween('sessions.created_at', [$this->date_range->iso_start(), $this->date_range->iso_end()])->whereBetween('views.viewed_at', [$this->date_range->iso_start(), $this->date_range->iso_end()]);
         return $query->value('total_table_rows');
@@ -189,7 +190,7 @@ abstract class Statistics
             $join->on('sessions.session_id', '=', 'views.session_id');
         })->leftJoin("{$wc_orders_table} AS wc_orders", function (JoinClause $join) {
             $join->on('views.id', '=', 'wc_orders.initial_view_id')->whereIn('wc_orders.status', WooCommerce_Order::tracked_order_statuses());
-        })->when(!\is_null($rows), function (Builder $query) use($rows) {
+        })->tap(Query_Taps::tap_authored_content_check(\true))->when(!\is_null($rows), function (Builder $query) use($rows) {
             $rows->attach_filters($query);
         })->whereBetween('sessions.created_at', [$range->iso_start(), $range->iso_end()])->whereBetween('views.viewed_at', [$range->iso_start(), $range->iso_end()])->groupBy('sessions.session_id')->when(!\is_null($this->required_column()), function (Builder $query) {
             $query->whereNotNull($this->required_column());

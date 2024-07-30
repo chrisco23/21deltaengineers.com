@@ -814,7 +814,9 @@ final class Admin {
 
 					if ( isset( $query->tax_query->queries ) && is_array( $query->tax_query->queries ) ) {
 						foreach ( $query->tax_query->queries as $index => $tax_query ) {
-							if ( $tax_query['taxonomy'] == $taxonomy ) {
+							// $tax_query can sometimes be a relation string (e.g. 'AND' or 'OR') so
+							// make sure the taxonomy key is actually set before comparing it
+							if ( isset( $tax_query['taxonomy'] ) && $tax_query['taxonomy'] == $taxonomy ) {
 								$query->tax_query->queries[ $index ]['include_children'] = $include_children;
 							}
 						}

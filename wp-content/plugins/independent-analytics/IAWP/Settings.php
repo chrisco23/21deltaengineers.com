@@ -2,6 +2,8 @@
 
 namespace IAWP;
 
+use IAWP\Data_Pruning\Pruning_Scheduler;
+use IAWP\Email_Reports\Interval_Factory;
 use IAWP\Utils\Request;
 use IAWP\Utils\String_Util;
 /** @internal */
@@ -28,7 +30,8 @@ class Settings
             for ($i = 0; $i < \count($saved); $i++) {
                 $input_defaults[$i] = $saved[$i];
             }
-            echo \IAWPSCOPED\iawp_blade()->run('settings.email-reports', ['is_scheduled' => \wp_next_scheduled('iawp_send_email_report'), 'scheduled_date' => \IAWPSCOPED\iawp()->email_reports->next_email_at_for_humans(), 'interval' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_interval', 'monthly'), 'time' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_time', 9), 'emails' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_email_addresses', []), 'default_colors' => $defaults, 'input_default' => $input_defaults]);
+            $interval = Interval_Factory::from_option();
+            echo \IAWPSCOPED\iawp_blade()->run('settings.email-reports', ['is_scheduled' => \wp_next_scheduled('iawp_send_email_report'), 'scheduled_date' => \IAWPSCOPED\iawp()->email_reports->next_email_at_for_humans(), 'interval' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_interval', 'monthly'), 'time' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_time', 9), 'emails' => \IAWPSCOPED\iawp()->get_option('iawp_email_report_email_addresses', []), 'default_colors' => $defaults, 'input_default' => $input_defaults, 'timestamp' => $interval->next_interval_start()->getTimestamp()]);
         }
         $ips = \IAWPSCOPED\iawp()->get_option('iawp_blocked_ips', []);
         echo \IAWPSCOPED\iawp_blade()->run('settings.block-ips', ['current_ip' => Request::ip(), 'ip_is_blocked' => Request::is_ip_address_blocked($ips), 'ips' => $ips]);
@@ -37,6 +40,7 @@ class Settings
         echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter');
         echo \IAWPSCOPED\iawp_blade()->run('settings.export-reports', ['report_finder' => new \IAWP\Report_Finder()]);
         echo \IAWPSCOPED\iawp_blade()->run('settings.export-data');
+        echo \IAWPSCOPED\iawp_blade()->run('settings.pruner', ['pruner' => new Pruning_Scheduler()]);
         echo \IAWPSCOPED\iawp_blade()->run('settings.delete', ['site_name' => \get_bloginfo('name'), 'site_url' => \site_url()]);
     }
     public function register_settings()
@@ -115,6 +119,10 @@ class Settings
         $args = ['type' => 'string', 'default' => $default, 'sanitize_callback' => 'sanitize_text_field'];
         \register_setting('iawp_view_counter_settings', 'iawp_view_counter_label', $args);
         \add_settings_field('iawp_view_counter_label', \esc_html__('Edit the label', 'independent-analytics'), [$this, 'view_counter_label_callback'], 'independent-analytics-view-counter-settings', 'iawp-view-counter-settings-section', ['class' => 'counter-label']);
+        // Hide Label
+        $args = ['type' => 'boolean', 'default' => \true, 'sanitize_callback' => 'rest_sanitize_boolean'];
+        \register_setting('iawp_view_counter_settings', 'iawp_view_counter_label_show', $args);
+        \add_settings_field('iawp_view_counter_label_show', \esc_html__('Display the label', 'independent-analytics'), [$this, 'view_counter_label_show_callback'], 'independent-analytics-view-counter-settings', 'iawp-view-counter-settings-section', ['class' => 'hide-label']);
         // Icon
         $args = ['type' => 'boolean', 'default' => \true, 'sanitize_callback' => 'rest_sanitize_boolean'];
         \register_setting('iawp_view_counter_settings', 'iawp_view_counter_icon', $args);
@@ -160,6 +168,10 @@ class Settings
     {
         $default = \function_exists('IAWPSCOPED\\pll__') ? pll__('Views:', 'independent-analytics') : \__('Views:', 'independent-analytics');
         echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter.label', ['label' => \IAWPSCOPED\iawp()->get_option('iawp_view_counter_label', $default)]);
+    }
+    public function view_counter_label_show_callback()
+    {
+        echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter.label-show', ['show' => \get_option('iawp_view_counter_label_show', \true)]);
     }
     public function view_counter_icon_callback()
     {
@@ -321,9 +333,13 @@ class Settings
             if ($role_key === 'administrator') {
                 return;
             }
-            $read_only_access = $role['capabilities']['iawp_read_only_access'] ?? \false;
-            $full_access = $role['capabilities']['iawp_full_access'] ?? \false;
-            $editable_roles[] = ['key' => $role_key, 'name' => $role['name'], 'iawp_no_access' => !$read_only_access && !$full_access, 'iawp_read_only_access' => $read_only_access, 'iawp_full_access' => $full_access];
+            $capability = null;
+            foreach (\IAWP\Capability_Manager::all_capabilities() as $key => $name) {
+                if (\array_key_exists($key, $role['capabilities'])) {
+                    $capability = $key;
+                }
+            }
+            $editable_roles[] = ['key' => $role_key, 'name' => $role['name'], 'capability' => $capability];
         });
         return $editable_roles;
     }

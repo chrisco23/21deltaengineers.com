@@ -7,6 +7,7 @@ use IAWP\Date_Range\Date_Range;
 use IAWP\Date_Range\Relative_Date_Range;
 use IAWP\Utils\String_Util;
 use IAWPSCOPED\Illuminate\Support\Carbon;
+use IAWPSCOPED\Proper\Timezone;
 /** @internal */
 class Interval
 {
@@ -33,7 +34,8 @@ class Interval
         if (\strlen($prefix) > 0 && !String_Util::str_ends_with($prefix, ' ')) {
             $prefix .= ' ';
         }
-        $formatted_date = Carbon::parse($this->date_range()->start())->translatedFormat($this->datetime_format_pattern);
+        $start = $this->date_range()->start()->setTimezone(Timezone::site_timezone());
+        $formatted_date = Carbon::parse($start)->translatedFormat($this->datetime_format_pattern);
         return $prefix . $formatted_date;
     }
     public function chart_title() : string
@@ -42,7 +44,11 @@ class Interval
     }
     public function next_interval_start() : DateTime
     {
-        return $this->current_date_range()->next_period()->start();
+        $start = $this->current_date_range()->next_period()->start();
+        $delivery_hour = \intval(\IAWPSCOPED\iawp()->get_option('iawp_email_report_time', 9));
+        $start->setTimezone(Timezone::site_timezone());
+        $start->setTime($delivery_hour, 0, 0);
+        return $start;
     }
     /**
      * This is the date range that the email report covers, which is the previous period, not the

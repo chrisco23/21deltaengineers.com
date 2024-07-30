@@ -183,6 +183,8 @@ var _modalController = require("./controllers/modal_controller");
 var _modalControllerDefault = parcelHelpers.interopDefault(_modalController);
 var _pluginGroupOptionsController = require("./controllers/plugin_group_options_controller");
 var _pluginGroupOptionsControllerDefault = parcelHelpers.interopDefault(_pluginGroupOptionsController);
+var _prunerController = require("./controllers/pruner_controller");
+var _prunerControllerDefault = parcelHelpers.interopDefault(_prunerController);
 var _quickStatsController = require("./controllers/quick_stats_controller");
 var _quickStatsControllerDefault = parcelHelpers.interopDefault(_quickStatsController);
 var _realTimeController = require("./controllers/real_time_controller");
@@ -227,6 +229,7 @@ Stimulus.register("import-reports", (0, _importReportsControllerDefault.default)
 Stimulus.register("migration-redirect", (0, _migrationRedirectControllerDefault.default));
 Stimulus.register("modal", (0, _modalControllerDefault.default));
 Stimulus.register("plugin-group-options", (0, _pluginGroupOptionsControllerDefault.default));
+Stimulus.register("pruner", (0, _prunerControllerDefault.default));
 Stimulus.register("quick-stats", (0, _quickStatsControllerDefault.default));
 Stimulus.register("create-report", (0, _createReportControllerDefault.default));
 Stimulus.register("real-time", (0, _realTimeControllerDefault.default));
@@ -240,7 +243,7 @@ Stimulus.register("sort", (0, _sortControllerDefault.default));
 Stimulus.register("sortable-reports", (0, _sortableReportsControllerDefault.default));
 Stimulus.register("table-columns", (0, _tableColumnsControllerDefault.default));
 
-},{"@hotwired/stimulus":"27q4D","micromodal":"dW4sP","./controllers/campaign_builder_controller":"dFLwj","./controllers/chart_controller":"irT0c","./controllers/chart_geo_controller":"409cg","./controllers/chart_interval_controller":"ITqEz","./controllers/clipboard_controller":"45yid","./controllers/copy_report_controller":"27BlK","./controllers/create_report_controller":"6IwXK","./controllers/dates_controller":"7bCB0","./controllers/delete_data_controller":"8RmPG","./controllers/delete_report_controller":"3FTUv","./controllers/easepick_controller":"d7rHB","./controllers/export_reports_controller":"laKrp","./controllers/filters_controller":"jk1rN","./controllers/group_controller":"iv1PS","./controllers/import_reports_controller":"9gjKJ","./controllers/migration_redirect_controller":"ksbSH","./controllers/modal_controller":"4hS9d","./controllers/plugin_group_options_controller":"R6qyv","./controllers/quick_stats_controller":"dwsmt","./controllers/real_time_controller":"8e5ZG","./controllers/rename_report_controller":"17FQE","./controllers/report_controller":"k42z8","./controllers/reset_analytics_controller":"6YJuO","./controllers/save_report_controller":"6XoAE","./controllers/select_input_controller":"icACl","./controllers/set_favorite_report_controller":"eSTBr","./controllers/sort_controller":"5SN90","./controllers/sortable_reports_controller":"jZ4wj","./controllers/table_columns_controller":"2k6i3","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"27q4D":[function(require,module,exports) {
+},{"@hotwired/stimulus":"27q4D","micromodal":"dW4sP","./controllers/campaign_builder_controller":"dFLwj","./controllers/chart_controller":"irT0c","./controllers/chart_geo_controller":"409cg","./controllers/chart_interval_controller":"ITqEz","./controllers/clipboard_controller":"45yid","./controllers/copy_report_controller":"27BlK","./controllers/create_report_controller":"6IwXK","./controllers/dates_controller":"7bCB0","./controllers/delete_data_controller":"8RmPG","./controllers/delete_report_controller":"3FTUv","./controllers/easepick_controller":"d7rHB","./controllers/export_reports_controller":"laKrp","./controllers/filters_controller":"jk1rN","./controllers/group_controller":"iv1PS","./controllers/import_reports_controller":"9gjKJ","./controllers/migration_redirect_controller":"ksbSH","./controllers/modal_controller":"4hS9d","./controllers/plugin_group_options_controller":"R6qyv","./controllers/pruner_controller":"dNlte","./controllers/quick_stats_controller":"dwsmt","./controllers/real_time_controller":"8e5ZG","./controllers/rename_report_controller":"17FQE","./controllers/report_controller":"k42z8","./controllers/reset_analytics_controller":"6YJuO","./controllers/save_report_controller":"6XoAE","./controllers/select_input_controller":"icACl","./controllers/set_favorite_report_controller":"eSTBr","./controllers/sort_controller":"5SN90","./controllers/sortable_reports_controller":"jZ4wj","./controllers/table_columns_controller":"2k6i3","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"27q4D":[function(require,module,exports) {
 /*
 Stimulus 3.2.1
 Copyright © 2023 Basecamp, LLC
@@ -5900,7 +5903,7 @@ var _class = /*#__PURE__*/ function(Controller) {
         {
             key: "hasSecondaryMetric",
             value: function hasSecondaryMetric() {
-                return this.hasSecondaryChartMetricIdValue && this.secondaryChartMetricIdValue;
+                return this.hasSecondaryChartMetricIdValue && this.secondaryChartMetricIdValue && this.secondaryChartMetricIdValue !== "no_comparison";
             }
         },
         {
@@ -5927,17 +5930,35 @@ var _class = /*#__PURE__*/ function(Controller) {
                         return new Intl.NumberFormat(this.localeValue, {
                             style: "currency",
                             currency: this.currencyValue,
+                            currencyDisplay: "narrowSymbol",
                             minimumFractionDigits: 0,
                             maximumFractionDigits: 0
                         }).format(value);
+                    case "currency":
+                        return new Intl.NumberFormat(this.localeValue, {
+                            style: "currency",
+                            currency: this.currencyValue,
+                            currencyDisplay: "narrowSymbol",
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }).format(value);
                     case "percent":
                         return new Intl.NumberFormat(this.localeValue, {
-                            style: "percent"
+                            style: "percent",
+                            maximumFractionDigits: 2
                         }).format(value / 100);
                     case "time":
                         var minutes = Math.floor(value / 60);
                         var seconds = value % 60;
                         return minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
+                    case "int":
+                        return new Intl.NumberFormat(this.localeValue, {
+                            maximumFractionDigits: 0
+                        }).format(value);
+                    case "float":
+                        return new Intl.NumberFormat(this.localeValue, {
+                            maximumFractionDigits: 2
+                        }).format(value);
                     default:
                         return value;
                 }
@@ -6030,6 +6051,11 @@ var _class = /*#__PURE__*/ function(Controller) {
                 primaryDataset.id = this.primaryChartMetricIdValue;
                 primaryDataset.data = this.dataValue[this.primaryChartMetricIdValue];
                 primaryDataset.label = this.primaryChartMetricNameValue;
+                var isEmptyPrimaryDataset = primaryDataset.data.every(function(value) {
+                    return value === 0;
+                });
+                window.iawp_chart.options.scales["y"].suggestedMax = isEmptyPrimaryDataset ? 10 : null;
+                window.iawp_chart.options.scales["y"].beginAtZero = primaryDataset.id !== "bounce_rate";
                 // Always start by removing the secondary dataset
                 if (window.iawp_chart.data.datasets.length > 1) window.iawp_chart.data.datasets.pop();
                 if (this.hasSecondaryMetric()) {
@@ -6038,6 +6064,11 @@ var _class = /*#__PURE__*/ function(Controller) {
                     var data = this.dataValue[id];
                     var axisId = this.hasSharedAxis(this.primaryChartMetricIdValue, id) ? "y" : "defaultRight";
                     window.iawp_chart.data.datasets.push(this.makeDataset(id, name, data, axisId, "rgba(246,157,10)"));
+                    var isEmptySecondaryDataset = data.every(function(value) {
+                        return value === 0;
+                    });
+                    window.iawp_chart.options.scales["defaultRight"].suggestedMax = isEmptySecondaryDataset ? 10 : null;
+                    window.iawp_chart.options.scales["defaultRight"].beginAtZero = id !== "bounce_rate";
                 }
                 window.iawp_chart.update();
             }
@@ -6059,6 +6090,12 @@ var _class = /*#__PURE__*/ function(Controller) {
                     fill: true,
                     order: isPrimary ? 1 : 0
                 };
+            }
+        },
+        {
+            key: "shouldUseDarkMode",
+            value: function shouldUseDarkMode() {
+                return document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue;
             }
         },
         {
@@ -6086,7 +6123,7 @@ var _class = /*#__PURE__*/ function(Controller) {
                     scales: {
                         y: {
                             grid: {
-                                color: document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue ? "#9a95a6" : "#DEDAE6",
+                                color: this.shouldUseDarkMode() ? "#676173" : "#DEDAE6",
                                 borderColor: "#DEDAE6",
                                 tickColor: "#DEDAE6",
                                 display: true,
@@ -6097,9 +6134,9 @@ var _class = /*#__PURE__*/ function(Controller) {
                                 ]
                             },
                             beginAtZero: true,
-                            suggestedMax: 10,
+                            suggestedMax: null,
                             ticks: {
-                                color: document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue ? "#ffffff" : "#6D6A73",
+                                color: this.shouldUseDarkMode() ? "#ffffff" : "#6D6A73",
                                 font: {
                                     size: 14,
                                     weight: 400
@@ -6114,7 +6151,7 @@ var _class = /*#__PURE__*/ function(Controller) {
                             position: "right",
                             display: "auto",
                             grid: {
-                                color: document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue ? "#9a95a6" : "#DEDAE6",
+                                color: this.shouldUseDarkMode() ? "#9a95a6" : "#DEDAE6",
                                 borderColor: "#DEDAE6",
                                 tickColor: "#DEDAE6",
                                 display: true,
@@ -6125,9 +6162,9 @@ var _class = /*#__PURE__*/ function(Controller) {
                                 ]
                             },
                             beginAtZero: true,
-                            suggestedMax: 10,
+                            suggestedMax: null,
                             ticks: {
-                                color: document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue ? "#ffffff" : "#6D6A73",
+                                color: this.shouldUseDarkMode() ? "#ffffff" : "#6D6A73",
                                 font: {
                                     size: 14,
                                     weight: 400
@@ -6147,7 +6184,7 @@ var _class = /*#__PURE__*/ function(Controller) {
                                 drawOnChartArea: false
                             },
                             ticks: {
-                                color: document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue ? "#ffffff" : "#6D6A73",
+                                color: this.shouldUseDarkMode() ? "#ffffff" : "#6D6A73",
                                 autoSkip: true,
                                 autoSkipPadding: 16,
                                 maxRotation: 0,
@@ -29061,7 +29098,183 @@ var _class = /*#__PURE__*/ function(Controller) {
     optionType: String
 });
 
-},{"@swc/helpers/_/_assert_this_initialized":"kF73X","@swc/helpers/_/_class_call_check":"k6ej7","@swc/helpers/_/_create_class":"fqHsM","@swc/helpers/_/_define_property":"bWQmf","@swc/helpers/_/_inherits":"8r9Rk","@swc/helpers/_/_create_super":"i7l9c","@hotwired/stimulus":"27q4D","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"dwsmt":[function(require,module,exports) {
+},{"@swc/helpers/_/_assert_this_initialized":"kF73X","@swc/helpers/_/_class_call_check":"k6ej7","@swc/helpers/_/_create_class":"fqHsM","@swc/helpers/_/_define_property":"bWQmf","@swc/helpers/_/_inherits":"8r9Rk","@swc/helpers/_/_create_super":"i7l9c","@hotwired/stimulus":"27q4D","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"dNlte":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", function() {
+    return _class;
+});
+var _assertThisInitialized = require("@swc/helpers/_/_assert_this_initialized");
+var _asyncToGenerator = require("@swc/helpers/_/_async_to_generator");
+var _classCallCheck = require("@swc/helpers/_/_class_call_check");
+var _createClass = require("@swc/helpers/_/_create_class");
+var _defineProperty = require("@swc/helpers/_/_define_property");
+var _inherits = require("@swc/helpers/_/_inherits");
+var _objectSpread = require("@swc/helpers/_/_object_spread");
+var _objectSpreadProps = require("@swc/helpers/_/_object_spread_props");
+var _createSuper = require("@swc/helpers/_/_create_super");
+var _tsGenerator = require("@swc/helpers/_/_ts_generator");
+var _stimulus = require("@hotwired/stimulus");
+var _micromodal = require("micromodal");
+var _micromodalDefault = parcelHelpers.interopDefault(_micromodal);
+var _class = /*#__PURE__*/ function(Controller) {
+    "use strict";
+    (0, _inherits._)(_class, Controller);
+    var _super = (0, _createSuper._)(_class);
+    function _class() {
+        (0, _classCallCheck._)(this, _class);
+        var _this;
+        _this = _super.apply(this, arguments);
+        (0, _defineProperty._)((0, _assertThisInitialized._)(_this), "isModalActuallyOpen", false);
+        (0, _defineProperty._)((0, _assertThisInitialized._)(_this), "showConfirmationModal", function(confirmationText) {
+            _this.confirmationTextTarget.innerText = confirmationText;
+            _this.isModalActuallyOpen = true;
+            (0, _micromodalDefault.default).show("prune-modal", {
+                onClose: function() {
+                    _this.cancelConfirmation();
+                }
+            });
+        });
+        (0, _defineProperty._)((0, _assertThisInitialized._)(_this), "hideConfirmationModal", function(e) {
+            if (e && e.target !== e.currentTarget) return;
+            if (_this.isModalActuallyOpen) {
+                _this.isModalActuallyOpen = false;
+                (0, _micromodalDefault.default).close("prune-modal");
+            }
+        });
+        return _this;
+    }
+    (0, _createClass._)(_class, [
+        {
+            key: "saveClick",
+            value: function saveClick() {
+                this.actuallySave(false);
+            }
+        },
+        {
+            key: "confirmClick",
+            value: function confirmClick() {
+                var _this = this;
+                return (0, _asyncToGenerator._)(function() {
+                    return (0, _tsGenerator._)(this, function(_state) {
+                        switch(_state.label){
+                            case 0:
+                                _this.confirmButtonTarget.setAttribute("disabled", "disabled");
+                                _this.confirmButtonTarget.innerText = _this.confirmButtonTarget.dataset.loadingText;
+                                return [
+                                    4,
+                                    _this.actuallySave(true)
+                                ];
+                            case 1:
+                                _state.sent();
+                                _this.confirmButtonTarget.removeAttribute("disabled");
+                                _this.confirmButtonTarget.innerText = _this.confirmButtonTarget.dataset.originalText;
+                                _this.hideConfirmationModal();
+                                return [
+                                    2
+                                ];
+                        }
+                    });
+                })();
+            }
+        },
+        {
+            key: "selectChanged",
+            value: function selectChanged() {
+                this.saveButtonTarget.removeAttribute("disabled");
+            }
+        },
+        {
+            key: "cancelConfirmation",
+            value: function cancelConfirmation() {
+                this.hideConfirmationModal();
+                this.saveButtonTarget.removeAttribute("disabled");
+                this.saveButtonTarget.innerText = this.saveButtonTarget.dataset.originalText;
+            }
+        },
+        {
+            key: "actuallySave",
+            value: function actuallySave() {
+                var isConfirmed = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : false;
+                var _this = this;
+                return (0, _asyncToGenerator._)(function() {
+                    var response;
+                    return (0, _tsGenerator._)(this, function(_state) {
+                        switch(_state.label){
+                            case 0:
+                                _this.saveButtonTarget.setAttribute("disabled", "disabled");
+                                _this.saveButtonTarget.innerText = _this.saveButtonTarget.dataset.loadingText;
+                                return [
+                                    4,
+                                    _this.sendRequest({
+                                        pruningCutoff: _this.cutoffsTarget.value,
+                                        isConfirmed: isConfirmed
+                                    })
+                                ];
+                            case 1:
+                                response = _state.sent();
+                                if (!response.wasSuccessful && response.confirmationText) _this.showConfirmationModal(response.confirmationText);
+                                else {
+                                    _this.statusMessageTarget.classList.toggle("is-scheduled", response.isEnabled);
+                                    _this.statusMessageTarget.querySelector("p").innerHTML = response.statusMessage;
+                                    _this.saveButtonTarget.removeAttribute("disabled");
+                                    _this.saveButtonTarget.innerText = _this.saveButtonTarget.dataset.originalText;
+                                    _this.saveButtonTarget.setAttribute("disabled", "disabled");
+                                    _this.hideConfirmationModal();
+                                }
+                                return [
+                                    2
+                                ];
+                        }
+                    });
+                })();
+            }
+        },
+        {
+            key: "sendRequest",
+            value: function sendRequest(param) {
+                var pruningCutoff = param.pruningCutoff, isConfirmed = param.isConfirmed;
+                return (0, _asyncToGenerator._)(function() {
+                    var data, response;
+                    return (0, _tsGenerator._)(this, function(_state) {
+                        switch(_state.label){
+                            case 0:
+                                data = (0, _objectSpreadProps._)((0, _objectSpread._)({}, iawpActions.configure_pruner), {
+                                    pruningCutoff: pruningCutoff,
+                                    isConfirmed: isConfirmed
+                                });
+                                return [
+                                    4,
+                                    jQuery.post(ajaxurl, data)
+                                ];
+                            case 1:
+                                response = _state.sent();
+                                return [
+                                    2,
+                                    {
+                                        wasSuccessful: response.success,
+                                        confirmationText: response.data.confirmationText,
+                                        isEnabled: response.data.isEnabled,
+                                        statusMessage: response.data.statusMessage
+                                    }
+                                ];
+                        }
+                    });
+                })();
+            }
+        }
+    ]);
+    return _class;
+}((0, _stimulus.Controller));
+(0, _defineProperty._)(_class, "targets", [
+    "cutoffs",
+    "saveButton",
+    "confirmButton",
+    "statusMessage",
+    "confirmationText"
+]);
+
+},{"@swc/helpers/_/_assert_this_initialized":"kF73X","@swc/helpers/_/_async_to_generator":"7JktW","@swc/helpers/_/_class_call_check":"k6ej7","@swc/helpers/_/_create_class":"fqHsM","@swc/helpers/_/_define_property":"bWQmf","@swc/helpers/_/_inherits":"8r9Rk","@swc/helpers/_/_object_spread":"aevtD","@swc/helpers/_/_object_spread_props":"fXEan","@swc/helpers/_/_create_super":"i7l9c","@swc/helpers/_/_ts_generator":"jlByh","@hotwired/stimulus":"27q4D","micromodal":"dW4sP","@parcel/transformer-js/src/esmodule-helpers.js":"jIm8e"}],"dwsmt":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", function() {

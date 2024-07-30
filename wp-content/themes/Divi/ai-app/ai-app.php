@@ -75,6 +75,7 @@ class ET_AI_App {
 				'et_builder_update_et_account_local',
 				'et_ai_upload_image',
 				'et_ai_layout_save_defaults',
+				'et_ai_shortcode_string_to_object',
 			),
 		];
 	}
@@ -173,6 +174,7 @@ class ET_AI_App {
 		add_action( 'wp_ajax_et_ai_upload_image', [ 'ET_AI_App', 'et_ai_upload_image' ] );
 		add_action( 'wp_ajax_et_ai_layout_save_defaults', [ 'ET_AI_App', 'et_ai_layout_save_defaults' ] );
 		add_action( 'wp_ajax_et_ai_delete_images', [ 'ET_AI_App', 'et_ai_delete_images' ] );
+		add_action( 'wp_ajax_et_ai_shortcode_string_to_object', [ 'ET_AI_App', 'et_ai_shortcode_string_to_object' ] );
 	}
 
 	/**
@@ -352,10 +354,11 @@ class ET_AI_App {
 			],
 			'ajaxurl'                    => is_ssl() ? admin_url( 'admin-ajax.php' ) : admin_url( 'admin-ajax.php', 'http' ),
 			'nonces'                     => [
-				'et_builder_update_et_account' => wp_create_nonce( 'et_builder_update_et_account' ),
-				'et_ai_upload_image'           => wp_create_nonce( 'et_ai_upload_image' ),
-				'et_ai_layout_save_defaults'   => wp_create_nonce( 'et_ai_layout_save_defaults' ),
-				'et_ai_delete_images'          => wp_create_nonce( 'et_ai_delete_images' ),
+				'et_builder_update_et_account'     => wp_create_nonce( 'et_builder_update_et_account' ),
+				'et_ai_upload_image'               => wp_create_nonce( 'et_ai_upload_image' ),
+				'et_ai_layout_save_defaults'       => wp_create_nonce( 'et_ai_layout_save_defaults' ),
+				'et_ai_delete_images'              => wp_create_nonce( 'et_ai_delete_images' ),
+				'et_ai_shortcode_string_to_object' => wp_create_nonce( 'et_ai_shortcode_string_to_object' ),
 			],
 			'site_name'                  => '',
 			'site_description'           => '',
@@ -397,6 +400,28 @@ class ET_AI_App {
 		}
 
 		return $attributes;
+	}
+
+	/**
+	 * AJAX Callback :: Convert shortcode string to object.
+	 * 
+	 * @since ??
+	 * 
+	 * @return object
+	 */
+	public static function et_ai_shortcode_string_to_object() {
+		et_core_security_check( 'manage_options', 'et_ai_shortcode_string_to_object', 'wp_nonce' );
+
+		// phpcs:ignore ET.Sniffs.ValidatedSanitizedInput -- Value in `$_POST['shortcode_string']` is processed by `et_fb_process_shortcode`.
+		$shortcode_string = isset( $_POST['shortcode_string'] ) ? $_POST['shortcode_string'] : '';
+
+		if ( empty( $shortcode_string ) ) {
+			wp_send_json_error( esc_html__( 'Invalid shortcode string.', 'et_builder' ) );
+		}
+
+		$shortcode_obj = et_fb_process_shortcode( stripslashes( $shortcode_string ) );
+
+		wp_send_json_success( $shortcode_obj );
 	}
 
 	/**

@@ -20,13 +20,13 @@ class Geo_Database_Manager
         if (!$this->should_download()) {
             return;
         }
-        \update_option('iawp_is_database_downloading', '1');
+        \update_option('iawp_is_database_downloading', '1', \true);
         $this->download_zip_database_and_extract();
         if (!$this->is_existing_database_valid()) {
             $this->download_raw_database();
         } else {
         }
-        \update_option('iawp_is_database_downloading', '0');
+        \update_option('iawp_is_database_downloading', '0', \true);
         $this->record_attempt();
     }
     public function should_download() : bool
@@ -105,7 +105,7 @@ class Geo_Database_Manager
     {
         $now = new DateTime('now', Timezone::utc_timezone());
         $value = $now->format('Y-m-d\\TH:i:s');
-        \update_option('iawp_geo_database_download_last_attempted_at', $value);
+        \update_option('iawp_geo_database_download_last_attempted_at', $value, \true);
     }
     private function path_to_database_zip() : string
     {

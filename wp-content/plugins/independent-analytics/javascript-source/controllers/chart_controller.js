@@ -73,7 +73,7 @@ export default class extends Controller {
     }
 
     hasSecondaryMetric() {
-        return this.hasSecondaryChartMetricIdValue && this.secondaryChartMetricIdValue
+        return this.hasSecondaryChartMetricIdValue && this.secondaryChartMetricIdValue && this.secondaryChartMetricIdValue !== 'no_comparison'
     }
 
     tooltipTitle(tooltip) {
@@ -96,18 +96,36 @@ export default class extends Controller {
                 return new Intl.NumberFormat(this.localeValue, {
                     style: 'currency',
                     currency: this.currencyValue,
+                    currencyDisplay: 'narrowSymbol',
                     minimumFractionDigits: 0,
                     maximumFractionDigits: 0,
+                }).format(value);
+            case 'currency':
+                return new Intl.NumberFormat(this.localeValue, {
+                    style: 'currency',
+                    currency: this.currencyValue,
+                    currencyDisplay: 'narrowSymbol',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
                 }).format(value);
             case 'percent':
                 return new Intl.NumberFormat(this.localeValue, {
                     style: 'percent',
+                    maximumFractionDigits: 2,
                 }).format(value / 100);
             case 'time':
                 const minutes = Math.floor(value / 60);
                 const seconds = value % 60
 
                 return minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+            case 'int':
+                return new Intl.NumberFormat(this.localeValue, {
+                    maximumFractionDigits: 0
+                }).format(value);
+            case 'float':
+                return new Intl.NumberFormat(this.localeValue, {
+                    maximumFractionDigits: 2
+                }).format(value);
             default:
                 return value
         }
@@ -210,6 +228,10 @@ export default class extends Controller {
         primaryDataset.data = this.dataValue[this.primaryChartMetricIdValue]
         primaryDataset.label = this.primaryChartMetricNameValue
 
+        const isEmptyPrimaryDataset = primaryDataset.data.every((value) => value === 0)
+        window.iawp_chart.options.scales['y'].suggestedMax = isEmptyPrimaryDataset ? 10 : null
+        window.iawp_chart.options.scales['y'].beginAtZero = primaryDataset.id !== 'bounce_rate'
+
         // Always start by removing the secondary dataset
         if (window.iawp_chart.data.datasets.length > 1) {
             window.iawp_chart.data.datasets.pop()
@@ -224,6 +246,10 @@ export default class extends Controller {
             window.iawp_chart.data.datasets.push(
                 this.makeDataset(id, name, data, axisId, 'rgba(246,157,10)')
             )
+
+            const isEmptySecondaryDataset = data.every((value) => value === 0)
+            window.iawp_chart.options.scales['defaultRight'].suggestedMax = isEmptySecondaryDataset ? 10 : null
+            window.iawp_chart.options.scales['defaultRight'].beginAtZero = id !== 'bounce_rate'
         }
 
         window.iawp_chart.update();
@@ -244,6 +270,10 @@ export default class extends Controller {
             fill: true,
             order: isPrimary ? 1 : 0, // Stack orange on top of purple
         }
+    }
+
+    shouldUseDarkMode() {
+        return document.body.classList.contains('iawp-dark-mode') && !this.isPreviewValue
     }
 
     createChart() {
@@ -276,7 +306,7 @@ export default class extends Controller {
             scales: {
                 y: {
                     grid: {
-                        color: document.body.classList.contains('iawp-dark-mode') && !this.isPreviewValue ? '#9a95a6' : '#DEDAE6',
+                        color: this.shouldUseDarkMode() ? '#676173' : '#DEDAE6',
                         borderColor: '#DEDAE6',
                         tickColor: '#DEDAE6',
                         display: true,
@@ -284,9 +314,9 @@ export default class extends Controller {
                         borderDash: [2, 4]
                     },
                     beginAtZero: true,
-                    suggestedMax: 10,
+                    suggestedMax: null,
                     ticks: {
-                        color: document.body.classList.contains('iawp-dark-mode') && !this.isPreviewValue ? '#ffffff' : '#6D6A73',
+                        color: this.shouldUseDarkMode() ? '#ffffff' : '#6D6A73',
                         font: {
                             size: 14,
                             weight: 400,
@@ -301,7 +331,7 @@ export default class extends Controller {
                     position: 'right',
                     display: 'auto',
                     grid: {
-                        color: document.body.classList.contains('iawp-dark-mode') && !this.isPreviewValue ? '#9a95a6' : '#DEDAE6',
+                        color: this.shouldUseDarkMode() ? '#9a95a6' : '#DEDAE6',
                         borderColor: '#DEDAE6',
                         tickColor: '#DEDAE6',
                         display: true,
@@ -309,9 +339,9 @@ export default class extends Controller {
                         borderDash: [2, 4]
                     },
                     beginAtZero: true,
-                    suggestedMax: 10,
+                    suggestedMax: null,
                     ticks: {
-                        color: document.body.classList.contains('iawp-dark-mode') && !this.isPreviewValue ? '#ffffff' : '#6D6A73',
+                        color: this.shouldUseDarkMode() ? '#ffffff' : '#6D6A73',
                         font: {
                             size: 14,
                             weight: 400,
@@ -334,7 +364,7 @@ export default class extends Controller {
                         drawOnChartArea: false,
                     },
                     ticks: {
-                        color: document.body.classList.contains('iawp-dark-mode') && !this.isPreviewValue ? '#ffffff' : '#6D6A73',
+                        color: this.shouldUseDarkMode() ? '#ffffff' : '#6D6A73',
                         autoSkip: true,
                         autoSkipPadding: 16,
                         maxRotation: 0,

@@ -16,7 +16,7 @@ abstract class Step_Migration
         }
         $completed = $this->run_queries();
         if ($completed) {
-            \update_option('iawp_db_version', $this->database_version());
+            \update_option('iawp_db_version', $this->database_version(), \true);
         }
         return $completed;
     }
@@ -31,12 +31,12 @@ abstract class Step_Migration
         foreach ($queries as $index => $query) {
             // Skip the step if there is no query to run
             if (\is_null($query)) {
-                \update_option('iawp_last_finished_migration_step', $index + 1);
+                \update_option('iawp_last_finished_migration_step', $index + 1, \true);
                 continue;
             }
             $wpdb->query($query);
             if ($wpdb->last_error !== '') {
-                \update_option('iawp_migration_error_original_error_message', \trim($wpdb->last_error));
+                \update_option('iawp_migration_error_original_error_message', \trim($wpdb->last_error), \true);
                 $is_connected = $wpdb->check_connection(\false);
                 if (!$is_connected) {
                     \IAWPSCOPED\iawp_log('Independent Analytics: Your database connection was temporarily lost');
@@ -47,12 +47,12 @@ abstract class Step_Migration
                     $last_error = \trim($wpdb->last_error);
                     $last_query = \trim($wpdb->last_query);
                     // Must call update_option after store the last_error and last_query
-                    \update_option('iawp_migration_error', $last_error);
-                    \update_option('iawp_migration_error_query', $last_query);
+                    \update_option('iawp_migration_error', $last_error, \true);
+                    \update_option('iawp_migration_error_query', $last_query, \true);
                     return \false;
                 }
             }
-            \update_option('iawp_last_finished_migration_step', $index + 1);
+            \update_option('iawp_last_finished_migration_step', $index + 1, \true);
         }
         return \true;
     }

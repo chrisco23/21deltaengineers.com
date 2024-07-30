@@ -331,7 +331,7 @@ abstract class Relation
      */
     protected function whereInMethod(Model $model, $key)
     {
-        return $model->getKeyName() === last(\explode('.', $key)) && \in_array($model->getKeyType(), ['int', 'integer']) ? 'whereIntegerInRaw' : 'whereIn';
+        return $model->getKeyName() === \IAWPSCOPED\last(\explode('.', $key)) && \in_array($model->getKeyType(), ['int', 'integer']) ? 'whereIntegerInRaw' : 'whereIn';
     }
     /**
      * Prevent polymorphic relationships from being used without model mappings.

@@ -42,5 +42,5 @@ return [
 	'WooCommerce plugin is not activated'    => esc_html__( 'The WooCommerce plugin was installed but failed to activate during the website generation process. Visit the Plugins page to activate WooCommerce manually.', 'Divi' ),
 	'WooCommerce Plugin Status'              => esc_html__( 'WooCommerce Plugin Status', 'Divi' ),
 	'Install WooCommerce Plugin'             => esc_html__( 'Install WooCommerce Plugin', 'Divi' ),
-	'Activate  WooCommerce Plugin'           => esc_html__( 'Activate  WooCommerce Plugin', 'Divi' ),
+	'Activate WooCommerce Plugin'            => esc_html__( 'Activate WooCommerce Plugin', 'Divi' ),
 ];

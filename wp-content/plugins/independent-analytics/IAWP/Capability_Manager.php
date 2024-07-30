@@ -10,7 +10,7 @@ class Capability_Manager
      */
     public static function all_capabilities() : array
     {
-        return ['iawp_read_only_access' => \esc_html__('View analytics', 'independent-analytics'), 'iawp_full_access' => \esc_html__('View analytics and edit settings', 'independent-analytics')];
+        return ['iawp_read_only_authored_access' => \esc_html__('View analytics for authored content', 'independent-analytics'), 'iawp_read_only_access' => \esc_html__('View all analytics', 'independent-analytics'), 'iawp_full_access' => \esc_html__('View all analytics and edit settings', 'independent-analytics')];
     }
     public static function reset_capabilities() : void
     {
@@ -29,27 +29,28 @@ class Capability_Manager
      */
     public static function edit_all_capabilities($capabilities) : void
     {
-        foreach ($capabilities as $role => $cap) {
+        foreach ($capabilities as $role => $capability) {
+            if ($role === 'administrator') {
+                continue;
+            }
             $user_role = \get_role($role);
             // For the role, remove all previous capabilities
-            foreach (self::all_capabilities() as $capability => $label) {
-                $user_role->remove_cap($capability);
+            foreach (self::all_capabilities() as $possible_capability => $label) {
+                $user_role->remove_cap($possible_capability);
             }
-            if (!empty($cap)) {
-                $user_role->add_cap($cap);
+            if (\array_key_exists($capability, self::all_capabilities())) {
+                $user_role->add_cap($capability);
             }
         }
     }
-    /**
-     * @return bool
-     */
+    public static function can_only_view_authored_analytics() : bool
+    {
+        return \current_user_can('iawp_read_only_authored_access');
+    }
     public static function can_view() : bool
     {
-        return self::is_admin() || \current_user_can('iawp_read_only_access') || \current_user_can('iawp_full_access');
+        return self::is_admin() || \current_user_can('iawp_read_only_authored_access') || \current_user_can('iawp_read_only_access') || \current_user_can('iawp_full_access');
     }
-    /**
-     * @return bool
-     */
     public static function can_edit() : bool
     {
         return self::is_admin() || \current_user_can('iawp_full_access');
@@ -60,7 +61,7 @@ class Capability_Manager
      *
      * @return string
      */
-    public static function can_view_string() : string
+    public static function menu_page_capability_string() : string
     {
         if (self::is_admin()) {
             return 'manage_options';
@@ -68,22 +69,13 @@ class Capability_Manager
         if (self::can_edit()) {
             return 'iawp_full_access';
         }
+        if (self::can_only_view_authored_analytics()) {
+            return 'iawp_read_only_authored_access';
+        }
         if (self::can_view()) {
             return 'iawp_read_only_access';
         }
         return 'manage_options';
-    }
-    /**
-     * @return bool
-     */
-    public static function is_admin() : bool
-    {
-        foreach (\wp_get_current_user()->roles as $role) {
-            if ($role === 'administrator') {
-                return \true;
-            }
-        }
-        return \false;
     }
     public static function white_labeled() : bool
     {
@@ -91,5 +83,17 @@ class Capability_Manager
             return \false;
         }
         return \IAWPSCOPED\iawp()->get_option('iawp_white_label', \false);
+    }
+    /**
+     * @return bool
+     */
+    private static function is_admin() : bool
+    {
+        foreach (\wp_get_current_user()->roles as $role) {
+            if ($role === 'administrator') {
+                return \true;
+            }
+        }
+        return \false;
     }
 }

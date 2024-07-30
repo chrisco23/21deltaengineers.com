@@ -11,7 +11,7 @@ class Patch
             if (!\is_null(\IAWPSCOPED\iawp()->email_reports->next_event_scheduled_at())) {
                 \IAWPSCOPED\iawp()->email_reports->schedule();
             }
-            \update_option('iawp_patch_2_6_2_applied', '1');
+            \update_option('iawp_patch_2_6_2_applied', '1', \true);
         }
     }
 }

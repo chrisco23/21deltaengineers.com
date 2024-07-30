@@ -298,10 +298,6 @@ var $ = jQuery;
 var UserRoles = {
     setup: function setup() {
         var self = this;
-        $("#user-role-select").on("change", function() {
-            $(".role").removeClass("show");
-            $(".role-" + $(this).val()).addClass("show");
-        });
         $("#capabilities-form").on("submit", function(e) {
             e.preventDefault();
             self.save();
@@ -315,7 +311,6 @@ var UserRoles = {
             var val = $(this).find("select").val();
             capabilities[role] = val;
         });
-        capabilities = JSON.stringify(capabilities);
         var whiteLabel = $("#iawp_white_label").prop("checked");
         var data = (0, _objectSpreadProps._)((0, _objectSpread._)({}, iawpActions.update_capabilities), {
             "capabilities": capabilities,

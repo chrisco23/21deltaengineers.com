@@ -13,12 +13,13 @@ class WooCommerce_Referrer_Meta_Box
     private $campaign;
     public function __construct()
     {
-        if (\IAWPSCOPED\iawp_using_woocommerce()) {
-            \add_action('add_meta_boxes_shop_order', [$this, 'maybe_add_meta_box'], 10, 1);
-        }
+        \add_action('add_meta_boxes_shop_order', [$this, 'maybe_add_meta_box'], 10, 1);
     }
     public function maybe_add_meta_box(\WP_Post $post) : void
     {
+        if (!\IAWPSCOPED\iawp()->is_woocommerce_support_enabled()) {
+            return;
+        }
         $referrer_row = $this->get_referrer_for($post);
         $this->referrer = \is_object($referrer_row) ? new Referrer($referrer_row) : null;
         $campaign_row = $this->get_campaign_for($post);

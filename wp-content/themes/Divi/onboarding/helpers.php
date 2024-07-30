@@ -11,7 +11,6 @@ namespace Divi\Onboarding\Helpers;
 /**
  * Create a menu with pages.
  *
- * @param string $menu_name    The name of the menu.
  * @param array  $page_titles  The titles of the pages to create.
  * @return array An array containing the menu ID and an array of page IDs.
  *
@@ -36,8 +35,7 @@ function create_menu_with_pages( $page_titles ) {
 		$primary_menu = wp_get_nav_menu_object( $locations['primary-menu'] );
 
 		if ( $primary_menu ) {
-			$menu_id      = $primary_menu->term_id;
-
+			$menu_id = $primary_menu->term_id;
 			update_term_meta( $onboarding_menu_id, '_et_old_primary_menu', $menu_id );
 		}
 	}

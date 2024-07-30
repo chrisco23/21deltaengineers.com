@@ -40,22 +40,12 @@ class Email_Reports
         if (empty(\IAWPSCOPED\iawp()->get_option('iawp_email_report_email_addresses', []))) {
             return;
         }
-        $delivery_time = $this->next_email_at();
-        \wp_schedule_event($delivery_time->getTimestamp(), $this->interval->id(), 'iawp_send_email_report');
+        \wp_schedule_event($this->interval->next_interval_start()->getTimestamp(), $this->interval->id(), 'iawp_send_email_report');
     }
     public function unschedule()
     {
         $timestamp = \wp_next_scheduled('iawp_send_email_report');
         \wp_unschedule_event($timestamp, 'iawp_send_email_report');
-    }
-    public function next_email_at() : DateTime
-    {
-        $date = $this->interval->next_interval_start();
-        // Set the correct hour for the site timezone
-        $date->setTimezone(Timezone::site_timezone());
-        $date->setTime($this->delivery_hour(), 0, 0);
-        $date->setTimezone(Timezone::utc_timezone());
-        return $date;
     }
     /**
      * For testing purposes, get the
@@ -77,8 +67,7 @@ class Email_Reports
         if (!\wp_next_scheduled('iawp_send_email_report')) {
             return \esc_html__('There is no email scheduled.', 'independent-analytics');
         }
-        $date = $this->next_email_at();
-        $date->setTimezone(Timezone::site_timezone());
+        $date = $this->interval->next_interval_start();
         $day = $date->format(\get_option('date_format'));
         $time = $date->format(\get_option('time_format'));
         return \sprintf(\__('Next email scheduled for %s at %s.', 'independent-analytics'), '<span>' . $day . '</span>', '<span>' . $time . '</span>');
@@ -123,16 +112,25 @@ class Email_Reports
         }));
         $chart = new \IAWP\Email_Reports\Email_Chart($statistics);
         $colors = $colors == '' ? \IAWPSCOPED\iawp()->get_option('iawp_email_report_colors', ['#5123a0', '#fafafa', '#3a1e6b', '#fafafa', '#5123a0', '#a985e6', '#ece9f2', '#f7f5fa', '#ece9f2', '#dedae6']) : \explode(',', $colors);
-        return \IAWPSCOPED\iawp_blade()->run('email.email', ['site_title' => \get_bloginfo('name'), 'site_url' => (new URL(\get_site_url()))->get_domain(), 'date' => $this->interval->report_time_period_for_humans(), 'stats' => $quick_stats, 'top_ten' => $this->get_top_ten(), 'chart_views' => $chart->views, 'chart_title' => $this->interval->chart_title(), 'most_views' => $chart->most_views, 'y_labels' => $chart->y_labels, 'x_labels' => $chart->x_labels, 'colors' => $colors]);
+        return \IAWPSCOPED\iawp_blade()->run('email.email', [
+            'site_title' => \get_bloginfo('name'),
+            'site_url' => (new URL(\get_site_url()))->get_domain(),
+            'date' => $this->interval->report_time_period_for_humans(),
+            // The value that needs to change
+            'stats' => $quick_stats,
+            'top_ten' => $this->get_top_ten(),
+            'chart_views' => $chart->views,
+            'chart_title' => $this->interval->chart_title(),
+            'most_views' => $chart->most_views,
+            'y_labels' => $chart->y_labels,
+            'x_labels' => $chart->x_labels,
+            'colors' => $colors,
+        ]);
     }
     public function add_monthly_cron_schedule($schedules)
     {
         $schedules['monthly'] = ['interval' => \MONTH_IN_SECONDS, 'display' => \esc_html__('Once a Month', 'independent-analytics')];
         return $schedules;
-    }
-    private function delivery_hour() : int
-    {
-        return \intval(\IAWPSCOPED\iawp()->get_option('iawp_email_report_time', 9));
     }
     private function subject_line(bool $is_test_email) : string
     {

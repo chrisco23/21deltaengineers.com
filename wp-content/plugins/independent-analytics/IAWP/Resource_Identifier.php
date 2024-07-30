@@ -129,7 +129,7 @@ class Resource_Identifier
     }
     private static function get_virtual_page_id() : ?string
     {
-        if (\IAWPSCOPED\iawp_using_woocommerce() && is_checkout() && is_wc_endpoint_url('order-received')) {
+        if (\IAWPSCOPED\iawp()->is_woocommerce_support_enabled() && is_checkout() && is_wc_endpoint_url('order-received')) {
             return 'wc_checkout_success';
         }
         return null;

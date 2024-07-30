@@ -15,7 +15,7 @@ class Migrations
     public static function create_or_migrate() : void
     {
         if (self::should_migrate()) {
-            \update_option('iawp_is_migrating', '1');
+            \update_option('iawp_is_migrating', '1', \true);
             Server::increase_max_execution_time();
             new \IAWP\Migrations\Migration_1_0();
             new \IAWP\Migrations\Migration_1_6();
@@ -41,9 +41,9 @@ class Migrations
             new \IAWP\Migrations\Migration_19();
             new \IAWP\Migrations\Migration_20();
             new \IAWP\Migrations\Migration_21();
-            $completed = self::run_step_migrations([new \IAWP\Migrations\Migration_22(), new \IAWP\Migrations\Migration_23(), new \IAWP\Migrations\Migration_24(), new \IAWP\Migrations\Migration_25(), new \IAWP\Migrations\Migration_26(), new \IAWP\Migrations\Migration_27(), new \IAWP\Migrations\Migration_28(), new \IAWP\Migrations\Migration_29(), new \IAWP\Migrations\Migration_30(), new \IAWP\Migrations\Migration_31(), new \IAWP\Migrations\Migration_32(), new \IAWP\Migrations\Migration_33()]);
+            $completed = self::run_step_migrations([new \IAWP\Migrations\Migration_22(), new \IAWP\Migrations\Migration_23(), new \IAWP\Migrations\Migration_24(), new \IAWP\Migrations\Migration_25(), new \IAWP\Migrations\Migration_26(), new \IAWP\Migrations\Migration_27(), new \IAWP\Migrations\Migration_28(), new \IAWP\Migrations\Migration_29(), new \IAWP\Migrations\Migration_30(), new \IAWP\Migrations\Migration_31(), new \IAWP\Migrations\Migration_32(), new \IAWP\Migrations\Migration_33(), new \IAWP\Migrations\Migration_34()]);
             if ($completed === \true) {
-                \update_option('iawp_is_migrating', '0');
+                \update_option('iawp_is_migrating', '0', \true);
                 \delete_option('iawp_last_finished_migration_step');
                 \delete_option('iawp_migration_error');
                 \delete_option('iawp_migration_error_query');
@@ -62,14 +62,14 @@ class Migrations
     {
         $db_version = \get_option('iawp_db_version', '0');
         $is_migrating = \get_option('iawp_is_migrating') === '1';
-        $is_current = \version_compare($db_version, '33', '=');
+        $is_current = \version_compare($db_version, '34', '=');
         $is_outdated = !$is_current;
         return $is_outdated || $is_migrating;
     }
     public static function is_database_ahead_of_plugin() : bool
     {
         $db_version = \get_option('iawp_db_version', '0');
-        return \version_compare($db_version, '33', '>');
+        return \version_compare($db_version, '34', '>');
     }
     public static function is_actually_migrating() : bool
     {
@@ -82,7 +82,7 @@ class Migrations
     {
         $db_version = \get_option('iawp_db_version', '0');
         $is_migrating = \get_option('iawp_is_migrating') === '1';
-        $is_current = \version_compare($db_version, '33', '=');
+        $is_current = \version_compare($db_version, '34', '=');
         $is_outdated = !$is_current;
         return $is_outdated && !$is_migrating;
     }
@@ -92,8 +92,8 @@ class Migrations
         $db_version = \get_option('iawp_db_version', '0');
         $is_migrating = \get_option('iawp_is_migrating', '0') === '1';
         if ($db_version === '17' && $is_migrating && \is_dir($directory)) {
-            \update_option('iawp_db_version', '18');
-            \update_option('iawp_is_migrating', '0');
+            \update_option('iawp_db_version', '18', \true);
+            \update_option('iawp_is_migrating', '0', \true);
             \delete_option('iawp_last_finished_migration_step');
             \delete_option('iawp_migration_error');
             \delete_option('iawp_migration_error_query');
@@ -113,7 +113,7 @@ class Migrations
         $referrers_table = Query::get_table_name(Query::REFERRERS);
         $has_index = Database::has_index($referrers_table, 'referrers_domain_index');
         if ($db_version === '21' && $is_migrating && $last_finished_step === '0' && $has_error && !$has_index) {
-            \update_option('iawp_is_migrating', '0');
+            \update_option('iawp_is_migrating', '0', \true);
             \delete_option('iawp_last_finished_migration_step');
             \delete_option('iawp_migration_error');
             \delete_option('iawp_migration_error_query');
@@ -133,7 +133,7 @@ class Migrations
             \delete_option('iawp_last_finished_migration_step');
             \delete_option('iawp_migration_error');
             \delete_option('iawp_migration_error_query');
-            \update_option('iawp_is_migrating', '0');
+            \update_option('iawp_is_migrating', '0', \true);
         }
     }
     /**

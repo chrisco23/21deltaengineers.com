@@ -355,7 +355,7 @@ class SqlServerGrammar extends Grammar
      */
     protected function compileUpdateWithJoins(Builder $query, $table, $columns, $where)
     {
-        $alias = last(\explode(' as ', $table));
+        $alias = \IAWPSCOPED\last(\explode(' as ', $table));
         $joins = $this->compileJoins($query, $query->joins);
         return "update {$alias} set {$columns} from {$table} {$joins} {$where}";
     }

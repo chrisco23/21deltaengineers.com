@@ -384,11 +384,6 @@ class ET_Builder_Module_Shortcode_Manager {
 	 * @return void
 	 */
 	public function register_woo_modules() {
-		// Only add wooModules if woo is active.
-		if ( ! et_is_woocommerce_plugin_active() ) {
-			return;
-		}
-
 		$woo_modules = [
 			'et_pb_wc_add_to_cart'              => [
 				'classname' => 'ET_Builder_Module_Woocommerce_Add_To_Cart',

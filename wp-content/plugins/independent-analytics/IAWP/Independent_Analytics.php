@@ -8,7 +8,9 @@ use IAWP\Admin_Page\Settings_Page;
 use IAWP\Admin_Page\Support_Page;
 use IAWP\Admin_Page\Updates_Page;
 use IAWP\AJAX\AJAX_Manager;
+use IAWP\Data_Pruning\Pruner;
 use IAWP\Email_Reports\Email_Reports;
+use IAWP\Form_Submissions\Form;
 use IAWP\Form_Submissions\Submission_Listener;
 use IAWP\Menu_Bar_Stats\Menu_Bar_Stats;
 use IAWP\Migrations\Migrations;
@@ -20,6 +22,8 @@ class Independent_Analytics
     public $settings;
     public $email_reports;
     public $cron_manager;
+    private $is_woocommerce_support_enabled;
+    private $is_form_submission_support_enabled;
     // This is where we attach functions to WP hooks
     private function __construct()
     {
@@ -28,6 +32,7 @@ class Independent_Analytics
         new \IAWP\Dashboard_Widget();
         new \IAWP\View_Counter();
         new Submission_Listener();
+        Pruner::register_hook();
         AJAX_Manager::getInstance();
         if (!Migrations::is_migrating()) {
             new \IAWP\Track_Resource_Changes();
@@ -40,12 +45,6 @@ class Independent_Analytics
             new \IAWP\Campaign_Builder();
             new \IAWP\WooCommerce_Referrer_Meta_Box();
         }
-        \add_filter('admin_body_class', function ($classes) {
-            if (\get_option('iawp_dark_mode')) {
-                $classes .= ' iawp-dark-mode ';
-            }
-            return $classes;
-        });
         \add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts_and_styles'], 110);
         // Called at 110 to dequeue other scripts
         \add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts_and_styles_front_end']);
@@ -62,6 +61,18 @@ class Independent_Analytics
             return \false;
         });
         \add_action('admin_init', [$this, 'maybe_delete_mu_plugin']);
+        \add_action('admin_body_class', [$this, 'add_body_class']);
+    }
+    public function add_body_class($classes)
+    {
+        if (\get_option('iawp_dark_mode')) {
+            $classes .= ' iawp-dark-mode ';
+        }
+        $page = \IAWP\Env::get_page();
+        if (\is_string($page)) {
+            $classes .= " {$page} ";
+        }
+        return $classes;
     }
     /**
      * At one point in time, there was a must-use plugin that was created. The plugin file and the
@@ -81,7 +92,7 @@ class Independent_Analytics
         if (\file_exists($mu_plugin_file)) {
             \unlink($mu_plugin_file);
         }
-        \update_option('iawp_attempted_to_delete_mu_plugin', '1');
+        \update_option('iawp_attempted_to_delete_mu_plugin', '1', \true);
     }
     public function load_textdomain()
     {
@@ -101,24 +112,24 @@ class Independent_Analytics
     public function add_admin_menu_pages()
     {
         $title = \IAWP\Capability_Manager::white_labeled() ? \esc_html__('Analytics', 'independent-analytics') : 'Independent Analytics';
-        \add_menu_page($title, \esc_html__('Analytics', 'independent-analytics'), \IAWP\Capability_Manager::can_view_string(), 'independent-analytics', function () {
+        \add_menu_page($title, \esc_html__('Analytics', 'independent-analytics'), \IAWP\Capability_Manager::menu_page_capability_string(), 'independent-analytics', function () {
             $analytics_page = new Analytics_Page();
             $analytics_page->render();
         }, 'dashicons-analytics', 3);
         if (\IAWP\Capability_Manager::can_edit()) {
-            \add_submenu_page('independent-analytics', \esc_html__('Settings', 'independent-analytics'), \esc_html__('Settings', 'independent-analytics'), \IAWP\Capability_Manager::can_view_string(), 'independent-analytics-settings', function () {
+            \add_submenu_page('independent-analytics', \esc_html__('Settings', 'independent-analytics'), \esc_html__('Settings', 'independent-analytics'), \IAWP\Capability_Manager::menu_page_capability_string(), 'independent-analytics-settings', function () {
                 $settings_page = new Settings_Page();
                 $settings_page->render(\false);
             });
         }
         if (\IAWPSCOPED\iawp_is_pro()) {
-            \add_submenu_page('independent-analytics', \esc_html__('Campaign Builder', 'independent-analytics'), \esc_html__('Campaign Builder', 'independent-analytics'), \IAWP\Capability_Manager::can_view_string(), 'independent-analytics-campaign-builder', function () {
+            \add_submenu_page('independent-analytics', \esc_html__('Campaign Builder', 'independent-analytics'), \esc_html__('Campaign Builder', 'independent-analytics'), \IAWP\Capability_Manager::menu_page_capability_string(), 'independent-analytics-campaign-builder', function () {
                 $campaign_builder_page = new Campaign_Builder_Page();
                 $campaign_builder_page->render(\false);
             });
         }
         if (!\IAWP\Capability_Manager::white_labeled()) {
-            \add_submenu_page('independent-analytics', \esc_html__('Help & Support', 'independent-analytics'), \esc_html__('Help & Support', 'independent-analytics'), \IAWP\Capability_Manager::can_view_string(), 'independent-analytics-support-center', function () {
+            \add_submenu_page('independent-analytics', \esc_html__('Help & Support', 'independent-analytics'), \esc_html__('Help & Support', 'independent-analytics'), \IAWP\Capability_Manager::menu_page_capability_string(), 'independent-analytics-support-center', function () {
                 $support_page = new Support_Page();
                 $support_page->render(\false);
             });
@@ -126,13 +137,13 @@ class Independent_Analytics
         if (!\IAWP\Capability_Manager::white_labeled()) {
             $menu_html = '<span class="menu-name">' . \esc_html__('Changelog', 'independent-analytics') . '</span>';
             $menu_html = $this->changelog_viewed_since_update() ? $menu_html . ' <span class="menu-counter">' . \esc_html__('New', 'independent-analytics') . '</span>' : $menu_html;
-            \add_submenu_page('independent-analytics', \esc_html__('Changelog', 'independent-analytics'), $menu_html, \IAWP\Capability_Manager::can_view_string(), 'independent-analytics-updates', function () {
+            \add_submenu_page('independent-analytics', \esc_html__('Changelog', 'independent-analytics'), $menu_html, \IAWP\Capability_Manager::menu_page_capability_string(), 'independent-analytics-updates', function () {
                 $updates_page = new Updates_Page();
                 $updates_page->render(\false);
             });
         }
         if (\IAWPSCOPED\iawp_is_free() && !\IAWP\Capability_Manager::white_labeled()) {
-            \add_submenu_page('independent-analytics', \esc_html__('Upgrade to Pro &rarr;', 'independent-analytics'), '<span style="color: #F69D0A;">' . \esc_html__('Upgrade to Pro &rarr;', 'independent-analytics') . '</span>', \IAWP\Capability_Manager::can_view_string(), \esc_url('https://independentwp.com/pricing/?utm_source=User+Dashboard&utm_medium=WP+Admin&utm_campaign=Upgrade+to+Pro&utm_content=Sidebar'));
+            \add_submenu_page('independent-analytics', \esc_html__('Upgrade to Pro &rarr;', 'independent-analytics'), '<span style="color: #F69D0A;">' . \esc_html__('Upgrade to Pro &rarr;', 'independent-analytics') . '</span>', \IAWP\Capability_Manager::menu_page_capability_string(), \esc_url('https://independentwp.com/pricing/?utm_source=User+Dashboard&utm_medium=WP+Admin&utm_campaign=Upgrade+to+Pro&utm_content=Sidebar'));
         }
     }
     // The menu link is removed in the SDK setup, but this makes it completely inaccessible
@@ -287,5 +298,50 @@ class Independent_Analytics
             return \true;
         }
         return \false;
+    }
+    public function is_form_submission_support_enabled() : bool
+    {
+        if (!\is_bool($this->is_form_submission_support_enabled)) {
+            $this->is_form_submission_support_enabled = \IAWPSCOPED\iawp_is_pro() && Form::has_active_form_plugin() && !\IAWP\Capability_Manager::can_only_view_authored_analytics();
+        }
+        return $this->is_form_submission_support_enabled;
+    }
+    public function is_woocommerce_support_enabled() : bool
+    {
+        if (!\is_bool($this->is_woocommerce_support_enabled)) {
+            $this->is_woocommerce_support_enabled = $this->actually_check_if_woocommerce_support_enabled();
+        }
+        return $this->is_woocommerce_support_enabled;
+    }
+    private function actually_check_if_woocommerce_support_enabled() : bool
+    {
+        global $wpdb;
+        if (\IAWPSCOPED\iawp_is_free()) {
+            return \false;
+        }
+        if (\IAWP\Capability_Manager::can_only_view_authored_analytics()) {
+            return \false;
+        }
+        if (\is_multisite()) {
+            $active_plugins = \get_option('active_plugins');
+            $sitewide_plugins = \get_site_option('active_sitewide_plugins');
+            if (!\in_array('woocommerce/woocommerce.php', $active_plugins) && !\array_key_exists('woocommerce/woocommerce.php', $sitewide_plugins)) {
+                return \false;
+            }
+        } else {
+            $active_plugins = \get_option('active_plugins');
+            if (!\in_array('woocommerce/woocommerce.php', $active_plugins)) {
+                return \false;
+            }
+        }
+        $table_name = $wpdb->prefix . 'wc_order_stats';
+        $order_stats_table = $wpdb->get_row($wpdb->prepare('
+                SELECT * FROM INFORMATION_SCHEMA.TABLES 
+                WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s
+            ', $wpdb->dbname, $table_name));
+        if (\is_null($order_stats_table)) {
+            return \false;
+        }
+        return \true;
     }
 }

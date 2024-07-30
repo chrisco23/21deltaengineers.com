@@ -8,7 +8,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '4.26.0' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '4.27.0' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -969,7 +969,7 @@ if ( ! function_exists( 'et_builder_page_creation_options' ) ) :
 				'imgSrc'          => 'premade.png',
 				'imgSrcHover'     => 'premade.gif',
 				'titleText'       => esc_html__( 'Choose a premade Layout', 'et_builder' ),
-				'descriptionText' => esc_html__( 'Choose from hundreds of world-class premade layouts or start from any of your existing saved layouts.', 'et_builder' ),
+				'descriptionText' => esc_html__( 'Choose from hundreds of premade layouts, start from any of your saved layouts, or clone an existing page.', 'et_builder' ),
 				'buttonText'      => esc_html__( 'Browse Layouts', 'et_builder' ),
 				'permission'      => array( 'load_layout', 'divi_library' ),
 				'setting'         => array(
@@ -2118,7 +2118,23 @@ function et_fb_process_to_shortcode( $object, $options = array(), $library_item_
 					if ( et_is_builder_plugin_active() && in_array( $type, ET_Builder_Element::get_has_content_modules(), true ) ) {
 						// Wrap content in autop to avoid tagless content on FE due to content is edited on html editor and only
 						// have one-line without newline wrap which prevent `the_content`'s wpautop filter to properly wrap it.
-						$content = wpautop( $content );
+
+						/**
+						 * Filter whether to apply wpautop to content.
+						 *
+						 * This filter allows customization of whether the wpautop filter should be applied to
+						 * the content of a shortcode. It helps in wrapping content in <p> tags automatically when necessary.
+						 *
+						 * @since 4.11.4
+						 *
+						 * @param bool   $should_wpautop Whether to apply wpautop. Default true.
+						 * @param string $type           The shortcode or module type.
+						 * @param string $content        The content to be filtered.
+						 * @param array  $item           The current shortcode being processed.
+						 */
+						$should_wpautop = apply_filters( 'et_fb_should_apply_wpautop', true, $type, $content, $item );
+
+						$content = $should_wpautop ? wpautop( $content ) : $content;
 					}
 
 					$output .= $content;
@@ -2133,7 +2149,23 @@ function et_fb_process_to_shortcode( $object, $options = array(), $library_item_
 						if ( et_is_builder_plugin_active() && in_array( $type, ET_Builder_Element::get_has_content_modules(), true ) ) {
 							// Wrap content in autop to avoid tagless content on FE due to content is edited on html editor and only
 							// have one-line without newline wrap which prevent `the_content`'s wpautop filter to properly wrap it.
-							$_content = wpautop( $_content );
+
+							/**
+							 * Filter whether to apply wpautop to content.
+							 *
+							 * This filter allows customization of whether the wpautop filter should be applied to
+							 * the content of a shortcode. It helps in wrapping content in <p> tags automatically when necessary.
+							 *
+							 * @since 4.11.4
+							 *
+							 * @param bool   $should_wpautop Whether to apply wpautop. Default true.
+							 * @param string $type           The shortcode or module type.
+							 * @param string $content        The content to be filtered.
+							 * @param array  $item           The current shortcode being processed.
+							 */
+							$should_wpautop = apply_filters( 'et_fb_should_apply_wpautop', true, $type, $_content, $item );
+
+							$_content = $should_wpautop ? wpautop( $_content ) : $_content;
 						}
 
 						$output .= $_content;

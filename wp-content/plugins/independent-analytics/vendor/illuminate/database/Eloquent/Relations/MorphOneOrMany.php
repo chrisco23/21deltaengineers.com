@@ -97,7 +97,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
      */
     public function getMorphType()
     {
-        return last(\explode('.', $this->morphType));
+        return \IAWPSCOPED\last(\explode('.', $this->morphType));
     }
     /**
      * Get the class name of the parent model.

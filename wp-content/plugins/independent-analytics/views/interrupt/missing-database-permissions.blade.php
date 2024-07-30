@@ -12,11 +12,11 @@
         
     </p>
     <p>
-    <a href="https://independentwp.com/knowledgebase/common-questions/missing-database-permissions/"
-            class="link-purple"
-            target="_blank"
-            style="text-decoration:underline">
-            <span>{{ __('Missing Database Permissions: How to Fix this Error Message', 'independent-analytics') }}</span>
+        <a href="https://independentwp.com/knowledgebase/common-questions/missing-database-permissions/"
+            class="iawp-button purple"
+            target="_blank">
+            <span class="dashicons dashicons-sos"></span>
+            <span><?php esc_html_e('Follow Tutorial', 'independent-analytics'); ?></span>
         </a>
-</p>
+    </p>
 </div>

@@ -2,10 +2,4 @@
     <div class="logo">
         <img src="{{iawp_url_to('img/logo.png')}}" data-testid="logo"/>
     </div>
-    <a href="https://independentwp.com/knowledgebase/"
-        class="iawp-button purple"
-        target="_blank">
-        <span class="dashicons dashicons-sos"></span>
-        <span><?php esc_html_e('Get Help', 'independent-analytics'); ?></span>
-    </a>
 </div>

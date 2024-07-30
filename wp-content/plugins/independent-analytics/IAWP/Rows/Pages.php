@@ -7,6 +7,7 @@ use IAWP\Form_Submissions\Form;
 use IAWP\Illuminate_Builder;
 use IAWP\Models\Page;
 use IAWP\Query;
+use IAWP\Query_Taps;
 use IAWP\WooCommerce_Order;
 use IAWPSCOPED\Illuminate\Database\Query\Builder;
 use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
@@ -73,14 +74,16 @@ class Pages extends \IAWP\Rows\Rows
             $join->on('sessions.final_view_id', '=', 'final_view.id');
         })->leftJoinSub($woo_commerce_query, 'wc', function (JoinClause $join) {
             $join->on('wc.view_id', '=', 'views.id');
-        })->when($this->has_wp_comments_table(), function (Builder $query) {
+        })->tap(Query_Taps::tap_authored_content_check(\false))->when($this->has_wp_comments_table(), function (Builder $query) {
             $query->selectRaw('IFNULL(comments.comments, 0) AS comments');
             $query->leftJoinSub($this->get_comments_query(), 'comments', 'comments.resource_id', '=', 'resources.id');
         }, function (Builder $query) {
             $query->selectRaw('0 AS comments');
         })->leftJoinSub($this->get_form_submissions_query(), 'form_submissions', function (JoinClause $join) {
             $join->on('form_submissions.view_id', '=', 'views.id');
-        })->whereBetween('views.viewed_at', $this->get_current_period_iso_range())->whereBetween('sessions.created_at', $this->get_current_period_iso_range())->when(\count($this->filters) > 0, function (Builder $query) {
+        })->whereBetween('views.viewed_at', $this->get_current_period_iso_range())->when(!$this->appears_to_be_for_real_time_analytics(), function (Builder $query) {
+            $query->whereBetween('sessions.created_at', $this->get_current_period_iso_range());
+        })->when(\count($this->filters) > 0, function (Builder $query) {
             foreach ($this->filters as $filter) {
                 if (!$this->is_a_calculated_column($filter->column())) {
                     $filter->apply_to_query($query);

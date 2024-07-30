@@ -53,8 +53,12 @@ class View_Counter
         }
         $view_count = Number_Formatter::decimal($view_count);
         if (\is_null($label)) {
-            $default = \function_exists('IAWPSCOPED\\pll__') ? pll__('Views:', 'independent-analytics') : \__('Views:', 'independent-analytics');
-            $label = \IAWPSCOPED\iawp()->get_option('iawp_view_counter_label', $default);
+            if (!\get_option('iawp_view_counter_label_show', \true)) {
+                $label = '';
+            } else {
+                $default = \function_exists('IAWPSCOPED\\pll__') ? pll__('Views:', 'independent-analytics') : \__('Views:', 'independent-analytics');
+                $label = \IAWPSCOPED\iawp()->get_option('iawp_view_counter_label', $default);
+            }
         }
         if (\is_null($icon)) {
             $icon = \get_option('iawp_view_counter_icon', \true);

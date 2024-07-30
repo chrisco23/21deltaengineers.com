@@ -5798,7 +5798,7 @@ Copyright © 2023 Basecamp, LLC
                 {
                     key: "hasSecondaryMetric",
                     value: function hasSecondaryMetric() {
-                        return this.hasSecondaryChartMetricIdValue && this.secondaryChartMetricIdValue;
+                        return this.hasSecondaryChartMetricIdValue && this.secondaryChartMetricIdValue && this.secondaryChartMetricIdValue !== "no_comparison";
                     }
                 },
                 {
@@ -5825,17 +5825,35 @@ Copyright © 2023 Basecamp, LLC
                                 return new Intl.NumberFormat(this.localeValue, {
                                     style: "currency",
                                     currency: this.currencyValue,
+                                    currencyDisplay: "narrowSymbol",
                                     minimumFractionDigits: 0,
                                     maximumFractionDigits: 0
                                 }).format(value);
+                            case "currency":
+                                return new Intl.NumberFormat(this.localeValue, {
+                                    style: "currency",
+                                    currency: this.currencyValue,
+                                    currencyDisplay: "narrowSymbol",
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }).format(value);
                             case "percent":
                                 return new Intl.NumberFormat(this.localeValue, {
-                                    style: "percent"
+                                    style: "percent",
+                                    maximumFractionDigits: 2
                                 }).format(value / 100);
                             case "time":
                                 var minutes = Math.floor(value / 60);
                                 var seconds = value % 60;
                                 return minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
+                            case "int":
+                                return new Intl.NumberFormat(this.localeValue, {
+                                    maximumFractionDigits: 0
+                                }).format(value);
+                            case "float":
+                                return new Intl.NumberFormat(this.localeValue, {
+                                    maximumFractionDigits: 2
+                                }).format(value);
                             default:
                                 return value;
                         }
@@ -5928,6 +5946,11 @@ Copyright © 2023 Basecamp, LLC
                         primaryDataset.id = this.primaryChartMetricIdValue;
                         primaryDataset.data = this.dataValue[this.primaryChartMetricIdValue];
                         primaryDataset.label = this.primaryChartMetricNameValue;
+                        var isEmptyPrimaryDataset = primaryDataset.data.every(function (value) {
+                            return value === 0;
+                        });
+                        window.iawp_chart.options.scales["y"].suggestedMax = isEmptyPrimaryDataset ? 10 : null;
+                        window.iawp_chart.options.scales["y"].beginAtZero = primaryDataset.id !== "bounce_rate";
                         // Always start by removing the secondary dataset
                         if (window.iawp_chart.data.datasets.length > 1) window.iawp_chart.data.datasets.pop();
                         if (this.hasSecondaryMetric()) {
@@ -5936,6 +5959,11 @@ Copyright © 2023 Basecamp, LLC
                             var data = this.dataValue[id];
                             var axisId = this.hasSharedAxis(this.primaryChartMetricIdValue, id) ? "y" : "defaultRight";
                             window.iawp_chart.data.datasets.push(this.makeDataset(id, name, data, axisId, "rgba(246,157,10)"));
+                            var isEmptySecondaryDataset = data.every(function (value) {
+                                return value === 0;
+                            });
+                            window.iawp_chart.options.scales["defaultRight"].suggestedMax = isEmptySecondaryDataset ? 10 : null;
+                            window.iawp_chart.options.scales["defaultRight"].beginAtZero = id !== "bounce_rate";
                         }
                         window.iawp_chart.update();
                     }
@@ -5957,6 +5985,12 @@ Copyright © 2023 Basecamp, LLC
                             fill: true,
                             order: isPrimary ? 1 : 0
                         };
+                    }
+                },
+                {
+                    key: "shouldUseDarkMode",
+                    value: function shouldUseDarkMode() {
+                        return document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue;
                     }
                 },
                 {
@@ -5984,7 +6018,7 @@ Copyright © 2023 Basecamp, LLC
                             scales: {
                                 y: {
                                     grid: {
-                                        color: document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue ? "#9a95a6" : "#DEDAE6",
+                                        color: this.shouldUseDarkMode() ? "#676173" : "#DEDAE6",
                                         borderColor: "#DEDAE6",
                                         tickColor: "#DEDAE6",
                                         display: true,
@@ -5995,9 +6029,9 @@ Copyright © 2023 Basecamp, LLC
                                         ]
                                     },
                                     beginAtZero: true,
-                                    suggestedMax: 10,
+                                    suggestedMax: null,
                                     ticks: {
-                                        color: document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue ? "#ffffff" : "#6D6A73",
+                                        color: this.shouldUseDarkMode() ? "#ffffff" : "#6D6A73",
                                         font: {
                                             size: 14,
                                             weight: 400
@@ -6012,7 +6046,7 @@ Copyright © 2023 Basecamp, LLC
                                     position: "right",
                                     display: "auto",
                                     grid: {
-                                        color: document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue ? "#9a95a6" : "#DEDAE6",
+                                        color: this.shouldUseDarkMode() ? "#9a95a6" : "#DEDAE6",
                                         borderColor: "#DEDAE6",
                                         tickColor: "#DEDAE6",
                                         display: true,
@@ -6023,9 +6057,9 @@ Copyright © 2023 Basecamp, LLC
                                         ]
                                     },
                                     beginAtZero: true,
-                                    suggestedMax: 10,
+                                    suggestedMax: null,
                                     ticks: {
-                                        color: document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue ? "#ffffff" : "#6D6A73",
+                                        color: this.shouldUseDarkMode() ? "#ffffff" : "#6D6A73",
                                         font: {
                                             size: 14,
                                             weight: 400
@@ -6045,7 +6079,7 @@ Copyright © 2023 Basecamp, LLC
                                         drawOnChartArea: false
                                     },
                                     ticks: {
-                                        color: document.body.classList.contains("iawp-dark-mode") && !this.isPreviewValue ? "#ffffff" : "#6D6A73",
+                                        color: this.shouldUseDarkMode() ? "#ffffff" : "#6D6A73",
                                         autoSkip: true,
                                         autoSkipPadding: 16,
                                         maxRotation: 0,

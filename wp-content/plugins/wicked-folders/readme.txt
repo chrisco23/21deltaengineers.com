@@ -2,8 +2,8 @@
 Contributors: wickedplugins
 Tags: folders, administration, tree view, content management, page organization, custom post type organization, media library folders, media library categories, media library organization
 Requires at least: 4.6
-Tested up to: 6.5
-Stable tag: 3.0.4
+Tested up to: 6.6
+Stable tag: 3.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,10 @@ The folder toggle arrow is greyed out when a folder doesn't have any child folde
 6. Pro feature: folder permissions
 
 == Changelog ==
+
+= 3.0.5 (July 18, 2024) =
+* Fix: fatal error caused when a taxonomy query contains a relation key
+* Tweak: disable folder dragging on mobile to prevent folders from inadvertently being reorganized while scrolling (this can be turned off by using the `wicked_folders_disable_drag_drop_on_mobile` filter and returning `false`)
 
 = 3.0.4 (April 29, 2024) =
 * Fix: folder pane not appearing in some instances due to JavaScript error caused by expanded folders data being encoded as an object instead of an array

@@ -1185,7 +1185,15 @@ class ET_Builder_Element {
 			}
 
 			foreach ( $shortcode_slugs as $shortcode_slug ) {
-				add_shortcode( $shortcode_slug, array( $this, '_render' ) );
+				if ( $this->_is_woocommerce_module ) {
+					if ( et_is_woocommerce_plugin_active() ) {
+						add_shortcode( $shortcode_slug, array( $this, '_render' ) );
+					} else {
+						add_shortcode( $shortcode_slug, '__return_empty_string' );
+					}
+				} else {
+					add_shortcode( $shortcode_slug, array( $this, '_render' ) );
+				}
 			}
 
 			if ( isset( $this->additional_shortcode ) ) {

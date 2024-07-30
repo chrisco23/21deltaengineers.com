@@ -37,9 +37,7 @@
                             data-chart-target="secondaryMetricSelect"
                             data-action="chart#changeSecondaryMetric"
                     >
-                        <option value="" {!! selected(is_null($secondary_chart_metric_id)) !!}>No
-                            Comparison
-                        </option>
+                        <option value="no_comparison" {!! selected(is_null($secondary_chart_metric_id)) !!}><?php esc_html_e('No Comparison', 'independent-analytics'); ?></option>
                         @foreach($available_datasets as $group)
                             <optgroup label="{{ $group['name'] }}">
                                 @foreach($group['items'] as $item)

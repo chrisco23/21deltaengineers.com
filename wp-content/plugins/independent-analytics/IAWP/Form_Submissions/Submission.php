@@ -19,17 +19,12 @@ class Submission
     }
     public function record_submission() : void
     {
-        $form_id = $this->get_form_id();
-        $this->create_form_submission_record($form_id);
-    }
-    private function create_form_submission_record(int $form_id) : void
-    {
         $form_submissions_table = Query::get_table_name(Query::FORM_SUBMISSIONS);
         $visitor = Visitor::fetch_current_visitor();
         if (!$visitor->has_recorded_session()) {
             return;
         }
-        Illuminate_Builder::get_builder()->from($form_submissions_table)->insert(['form_id' => $form_id, 'session_id' => $visitor->most_recent_session_id(), 'view_id' => $visitor->most_recent_view_id(), 'initial_view_id' => $visitor->most_recent_initial_view_id(), 'created_at' => (new \DateTime())->format('Y-m-d\\TH:i:s')]);
+        Illuminate_Builder::get_builder()->from($form_submissions_table)->insert(['form_id' => $this->get_form_id(), 'session_id' => $visitor->most_recent_session_id(), 'view_id' => $visitor->most_recent_view_id(), 'initial_view_id' => $visitor->most_recent_initial_view_id(), 'created_at' => (new \DateTime())->format('Y-m-d\\TH:i:s')]);
     }
     private function get_form_id() : int
     {

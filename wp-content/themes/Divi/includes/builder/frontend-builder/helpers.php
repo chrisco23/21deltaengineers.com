@@ -88,6 +88,11 @@ function et_builder_add_fake_comments() {
 	return array(
 		new WP_Comment(
 			(object) array(
+				// Since WP 6.6, the `get_comment_author` typecast the `$comment_id` fallback
+				// value as `string`. It causes error in TB because we set fake comment that
+				// naturally returns `comment_ID` as `NULL`. To avoid the issue and bypass the
+				// `$comment->comment_ID` not empty check, we set the `comment_ID` as `true`.
+				'comment_ID'       => true,
 				'comment_author'   => 'Jane Doe',
 				'comment_date'     => '2019-01-01 12:00:00',
 				'comment_content'  => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pulvinar nulla eu purus pharetra mollis. Nullam fringilla, ligula sit amet placerat rhoncus, arcu dui hendrerit ligula, ac rutrum mi neque quis orci. Morbi at tortor non eros feugiat commodo.',
@@ -2112,6 +2117,7 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 				'remove'      => esc_html__( 'Remove Gradient Stop', 'et_builder' ),
 			),
 			'generate_content_with_ai'  => esc_html__( 'Generate Content With AI', 'et_builder' ),
+			'generate_section_with_ai'  => esc_html__( 'Generate Section With AI', 'et_builder' ),
 		),
 		'tooltips'                  => array(
 			'insertModule'         => esc_html__( 'Insert Module', 'et_builder' ),
@@ -2868,15 +2874,21 @@ function et_fb_get_static_backend_helpers( $post_type ) {
 			'tooltips' => array(
 				'divi_ai_options' => esc_html__( 'Divi AI Options', 'et_builder' ),
 			),
-			'title'          => esc_html__( 'Title', 'et_builder' ),
-			'excerpt'        => esc_html__( 'Excerpt', 'et_builder' ),
-			'layout_with_ai' => esc_html__( 'Layout With AI', 'et_builder' ),
-			'layout'         => array(
+			'title'           => esc_html__( 'Title', 'et_builder' ),
+			'excerpt'         => esc_html__( 'Excerpt', 'et_builder' ),
+			'layout_with_ai'  => esc_html__( 'Layout With AI', 'et_builder' ),
+			'section_with_ai' => esc_html__( 'Generate Section With AI', 'et_builder' ),
+			'layout'          => array(
 				'notification' => array(
 					'How Does It Look?'       => esc_html__( 'How Does It Look?', 'et_builder' ),
 					'Would you like to save?' => esc_html__( 'Would you like to save these fonts and colors for future Divi AI layouts?', 'et_builder' ),
 					'No Thanks'               => esc_html__( 'No Thanks', 'et_builder' ),
 					'Yes Please!'             => esc_html__( 'Yes Please!', 'et_builder' ),
+				),
+				'imageAttributions' => array(
+					'%s Images Used From Unsplash' => esc_html( '%s Images Used From Unsplash', 'et_builder' ),
+					'%s Image Used From Unsplash'  => esc_html( '%s Image Used From Unsplash', 'et_builder' ),
+					'by %s'                        => esc_html( 'by %s', 'et_builder' ),
 				),
 			),
 			'image'          => esc_html__( 'Featured Image', 'et_builder' ),

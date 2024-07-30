@@ -821,11 +821,11 @@ function et_theme_builder_api_import_theme_builder_step() {
 	$preset_id               = 0;
 
 	if ( ! $ready ) {
-		$import_step                      = et_theme_builder_api_import_theme_builder_load_layout( $portability, $steps[ $step ]['id'], $steps[ $step ]['group'] );
-		$import_step                      = array_merge( $import_step, array( 'presets' => $presets ) );
-		$import_step                      = array_merge( $import_step, array( 'presets_rewrite_map' => $presets_rewrite_map ) );
-		$import_step['import_presets']    = $import_presets;
-		$import_step['rewrite_preset_id'] = ! empty( $preset_prefix );
+		$import_step                        = et_theme_builder_api_import_theme_builder_load_layout( $portability, $steps[ $step ]['id'], $steps[ $step ]['group'] );
+		$import_step                        = array_merge( $import_step, array( 'presets' => $presets ) );
+		$import_step                        = array_merge( $import_step, array( 'presets_rewrite_map' => $presets_rewrite_map ) );
+		$import_step['import_presets']      = $import_presets;
+		$import_step['is_update_preset_id'] = ! empty( $preset_prefix );
 
 		if ( $temp_import ) {
 			$import_step['data']['post_status'] = 'draft';

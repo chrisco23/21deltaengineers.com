@@ -138,15 +138,17 @@ class Analytics_Page extends \IAWP\Admin_Page\Admin_Page
         </div>
         <div class="iawp-notices">
         <?php 
-        $plugin_conflict_detector = new Plugin_Conflict_Detector();
-        if (!$plugin_conflict_detector->has_conflict()) {
-            echo \IAWPSCOPED\iawp_blade()->run('settings.notice', ['notice_text' => $plugin_conflict_detector->get_error(), 'button_text' => \false, 'notice' => 'iawp-error', 'url' => 'https://independentwp.com/knowledgebase/tracking/secure-rest-api/']);
-        }
-        if (\get_option('iawp_need_clear_cache')) {
-            echo \IAWPSCOPED\iawp_blade()->run('settings.notice', ['notice_text' => \__('Please clear your cache to ensure tracking works properly.', 'independent-analytics'), 'button_text' => \__('I\'ve cleared the cache', 'independent-analytics'), 'notice' => 'iawp-warning', 'url' => 'https://independentwp.com/knowledgebase/common-questions/views-not-recording/']);
-        }
-        if (\IAWPSCOPED\iawp_db_version() > 0 && !Database::has_correct_database_privileges()) {
-            echo \IAWPSCOPED\iawp_blade()->run('settings.notice', ['notice_text' => \__('Your site is missing the following critical database permissions:', 'independent-analytics') . ' ' . \implode(', ', Database::missing_database_privileges()) . '. ' . \__('There is no issue at this time, but you will need to enable the missing permissions before updating the plugin to a newer version to ensure an error is avoided. Please click this link to read our tutorial:', 'independent-analytics'), 'button_text' => \false, 'notice' => 'iawp-error', 'url' => 'https://independentwp.com/knowledgebase/common-questions/missing-database-permissions/']);
+        if (Capability_Manager::can_edit()) {
+            $plugin_conflict_detector = new Plugin_Conflict_Detector();
+            if (!$plugin_conflict_detector->has_conflict()) {
+                echo \IAWPSCOPED\iawp_blade()->run('settings.notice', ['notice_text' => $plugin_conflict_detector->get_error(), 'button_text' => \false, 'notice' => 'iawp-error', 'url' => 'https://independentwp.com/knowledgebase/tracking/secure-rest-api/']);
+            }
+            if (\get_option('iawp_need_clear_cache')) {
+                echo \IAWPSCOPED\iawp_blade()->run('settings.notice', ['notice_text' => \__('Please clear your cache to ensure tracking works properly.', 'independent-analytics'), 'button_text' => \__('I\'ve cleared the cache', 'independent-analytics'), 'notice' => 'iawp-warning', 'url' => 'https://independentwp.com/knowledgebase/common-questions/views-not-recording/']);
+            }
+            if (\IAWPSCOPED\iawp_db_version() > 0 && !Database::has_correct_database_privileges()) {
+                echo \IAWPSCOPED\iawp_blade()->run('settings.notice', ['notice_text' => \__('Your site is missing the following critical database permissions:', 'independent-analytics') . ' ' . \implode(', ', Database::missing_database_privileges()) . '. ' . \__('There is no issue at this time, but you will need to enable the missing permissions before updating the plugin to a newer version to ensure an error is avoided. Please click this link to read our tutorial:', 'independent-analytics'), 'button_text' => \false, 'notice' => 'iawp-error', 'url' => 'https://independentwp.com/knowledgebase/common-questions/missing-database-permissions/']);
+            }
         }
         ?>
         </div><?php 

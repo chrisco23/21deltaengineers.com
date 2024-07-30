@@ -253,7 +253,7 @@ class PostgresGrammar extends Grammar
     protected function compileUpdateColumns(Builder $query, array $values)
     {
         return \IAWPSCOPED\collect($values)->map(function ($value, $key) {
-            $column = last(\explode('.', $key));
+            $column = \IAWPSCOPED\last(\explode('.', $key));
             if ($this->isJsonSelector($key)) {
                 return $this->compileJsonUpdateColumn($column, $value);
             }
@@ -388,7 +388,7 @@ class PostgresGrammar extends Grammar
     {
         $table = $this->wrapTable($query->from);
         $columns = $this->compileUpdateColumns($query, $values);
-        $alias = last(\preg_split('/\\s+as\\s+/i', $query->from));
+        $alias = \IAWPSCOPED\last(\preg_split('/\\s+as\\s+/i', $query->from));
         $selectSql = $this->compileSelect($query->select($alias . '.ctid'));
         return "update {$table} set {$columns} where {$this->wrap('ctid')} in ({$selectSql})";
     }
@@ -429,7 +429,7 @@ class PostgresGrammar extends Grammar
     protected function compileDeleteWithJoinsOrLimit(Builder $query)
     {
         $table = $this->wrapTable($query->from);
-        $alias = last(\preg_split('/\\s+as\\s+/i', $query->from));
+        $alias = \IAWPSCOPED\last(\preg_split('/\\s+as\\s+/i', $query->from));
         $selectSql = $this->compileSelect($query->select($alias . '.ctid'));
         return "delete from {$table} where {$this->wrap('ctid')} in ({$selectSql})";
     }

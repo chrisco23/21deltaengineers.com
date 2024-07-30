@@ -130,6 +130,10 @@ $generated_i18n_strings = [
 	// Translators: 1 - The plugin short name ("AIOSEO"), 2 - The plugin short name ("AIOSEO").
 	__( '%1$s has detected a physical robots.txt file in the root folder of your WordPress installation. We recommend removing this file as it could cause conflicts with WordPress\' dynamically generated one. %2$s can import this file and delete it, or you can simply delete it.', 'all-in-one-seo-pack' ),
 
+	// Reference: /src/vue/standalone/admin-bar-noindex-warning/App.vue:44
+	// Translators: 1 - The short plugin name ("AIOSEO"), 2 - Opening HTML anchor tag, 3 - Closing HTML anchor tag.
+	__( '%1$s has detected that you are blocking access to search engines, which will prevent your site from ranking in search results. You can re-enable indexing under %2$sSettings > Reading →%3$s', 'all-in-one-seo-pack' ),
+
 	// Reference: /src/vue/composables/SearchConsole.js:17
 	// Reference: /src/vue/pages/sitemaps/views/partials/SitemapsWithErrorsModal.vue:63
 	// Translators: 1 - The plugin short name ("AIOSEO").
@@ -255,7 +259,11 @@ $generated_i18n_strings = [
 	__( '%1$s relies on the WordPress Rest API and your site might have it disabled. %2$s.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/page-builders/Modal.vue:34
-	// Translators: 1 - The plugin short name ("AIOSEO").
+	// Reference: /src/vue/standalone/page-builders/avada/components/Sidebar.vue:20
+	// Reference: /src/vue/standalone/page-builders/siteorigin/components/Sidebar.vue:17
+	// Reference: /src/vue/standalone/page-builders/thrive-architect/components/Sidebar.vue:15
+	// Translators: 1 - Plugin short name ("AIOSEO").
+	// Translators: [DUPLICATE] 1 - The plugin short name ("AIOSEO").
 	__( '%1$s Settings', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/monsterinsights/views/Monsterinsights.vue:62
@@ -329,20 +337,20 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-appearance/views/Advanced.vue:136
 	__( '1 week', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:58
 	// Reference: /src/vue/mixins/HeadlineResult.js:48
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:15
 	__( '10-15%', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:53
 	// Reference: /src/vue/mixins/HeadlineResult.js:39
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:13
 	__( '10-20%', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordsDistributionGraph.vue:37
 	// Reference: /src/vue/pages/search-statistics/views/partials/keywords-graph/KeywordsGraph.vue:41
 	__( '11-50 Position', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:48
 	// Reference: /src/vue/mixins/HeadlineResult.js:30
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:11
 	__( '20-30%', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/search-statistics/views/partials/KeywordsDistributionGraph.vue:32
@@ -391,7 +399,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-appearance/views/GlobalSettings.vue:98
 	__( 'A name that Google may use for your homepage in mobile search results. This will default to the WordPress site title if left blank.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:317
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:368
 	__( 'A redirect already exists for this source URL. To make changes, edit the original instead.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/utils/tags.js:55
@@ -406,7 +414,8 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/feature-manager/views/FeatureManager.vue:79
 	__( 'A valid license key is required in order to use our addons.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/constants.js:15
+	// Reference: /src/vue/standalone/headline-analyzer/components/PanelNewScore.vue:14
+	// Reference: /src/vue/standalone/headline-analyzer/components/TabCurrentScore.vue:13
 	// Translators: 1 - Initial score range, 2 - Final score range.
 	__( 'A very good score is between %1$d and %2$d.', 'all-in-one-seo-pack' ),
 
@@ -556,16 +565,16 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/sitemaps/views/partials/AddAdditionalPage.vue:69
 	__( 'Add Page', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:121
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:172
 	__( 'Add Redirect', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:121
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:172
 	__( 'Add Redirects', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/tools/views/RobotsEditor.vue:88
 	__( 'Add Rule', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:77
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:71
 	__( 'Add URL', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/social-networks/views/Twitter.vue:80
@@ -639,10 +648,10 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/mixins/Wizard.js:153
 	__( 'Advanced Rich Snippets + Schema Markups', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/SeoSiteAnalysisResults.vue:30
+	// Reference: /src/vue/components/common/core/SeoSiteAnalysisResults.vue:31
 	__( 'Advanced SEO', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:83
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:77
 	// Reference: /src/vue/components/common/core/ui-element-slider/SlideContent.vue:32
 	// Reference: /src/vue/pages/search-appearance/views/Advanced.vue:50
 	// Reference: /src/vue/pages/search-appearance/views/Media.vue:62
@@ -668,7 +677,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/standalone/blocks/breadcrumbs/index.js:26
 	__( 'AIOSEO - Breadcrumbs', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/standalone/blocks/html-sitemap/index.js:41
+	// Reference: /src/vue/standalone/blocks/html-sitemap/index.js:40
 	__( 'AIOSEO - HTML Sitemap', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/blocks/business-info/index.js:42
@@ -677,7 +686,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/standalone/blocks/location-categories/index.js:31
 	__( 'AIOSEO Local - Location Categories', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/standalone/blocks/locations/index.js:41
+	// Reference: /src/vue/standalone/blocks/locations/index.js:40
 	__( 'AIOSEO Local - Locations', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/blocks/location-map/index.js:43
@@ -799,7 +808,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/tools/views/WpCode.vue:37
 	__( 'An error occurred while activating the addon. Please upload it manually or contact support for more information.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:87
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:81
 	__( 'An error occurred while adding your redirects. Please try again later.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/composables/SeoSiteScore.js:28
@@ -853,7 +862,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/seo-analysis/router/paths.js:26
 	__( 'Analyze Competitor Site', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlineTabNewScore.jsx:17
+	// Reference: /src/vue/standalone/headline-analyzer/components/TabNewScore.vue:12
 	__( 'Analyze Headline', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/post-settings/views/partials/general/FocusKeyphrase.vue:71
@@ -1024,14 +1033,14 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/mixins/HeadlineResult.js:57
 	__( 'at least one', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:60
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:17
 	__( 'At least one', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/app/tru-seo/analyzer/analysis/paragraphLength.js:24
 	__( 'At least one paragraph is long. Consider using short paragraphs.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelCharacterCount.jsx:55
 	// Reference: /src/vue/mixins/HeadlineResult.js:103
+	// Reference: /src/vue/standalone/headline-analyzer/components/CharacterCount.vue:78
 	__( 'At this length, it will get cut off in search results. Try reducing it to about 55 characters.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/plugins/constants.js:1209
@@ -1179,7 +1188,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/about/views/GettingStarted.vue:63
 	__( 'Basic Guide to Google Search Console', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/SeoSiteAnalysisResults.vue:29
+	// Reference: /src/vue/components/common/core/SeoSiteAnalysisResults.vue:30
 	// Reference: /src/vue/standalone/post-settings/views/General.vue:114
 	// Reference: /src/vue/standalone/post-settings/views/partials/general/PageAnalysis.vue:29
 	// Reference: /src/vue/standalone/seo-preview/views/SeoInspector.vue:83
@@ -1196,10 +1205,10 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/components/common/html-sitemap/ExcludeObjects.vue:34
 	__( 'Begin typing a term ID or name to search...', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelStartEndWords.jsx:7
+	// Reference: /src/vue/standalone/headline-analyzer/components/StartEndWords.vue:10
 	__( 'Beginning & Ending Words', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelStartEndWords.jsx:33
+	// Reference: /src/vue/standalone/headline-analyzer/components/StartEndWords.vue:12
 	__( 'Beginning Words', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/core/Overview.vue:47
@@ -1390,7 +1399,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/plugins/constants.js:1181
 	__( 'Cafe', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:86
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:80
 	// Reference: /src/vue/pages/sitemaps/views/partials/AddAdditionalPage.vue:72
 	// Reference: /src/vue/plugins/constants.js:26
 	__( 'Cancel', 'all-in-one-seo-pack' ),
@@ -1425,8 +1434,8 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/plugins/constants.js:1190
 	__( 'Cause', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelCharacterCount.jsx:9
 	// Reference: /src/vue/composables/HeadlineResult.js:6
+	// Reference: /src/vue/standalone/headline-analyzer/components/CharacterCount.vue:8
 	__( 'Character Count', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/dashboard/views/Main.vue:112
@@ -1607,8 +1616,8 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/plugins/constants.js:1480
 	__( 'Comedy Event', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:47
 	// Reference: /src/vue/mixins/HeadlineResult.js:24
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:10
 	__( 'Common Words', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/sitemaps/views/HtmlSitemap.vue:153
@@ -1624,7 +1633,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/seo-revisions/views/lite/Index.vue:19
 	__( 'Compare Revisions of', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:11
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:9
 	__( 'Compare the percentages of your results to the goal for each category and adjust as necessary.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/settings/views/Advanced.vue:81
@@ -1656,7 +1665,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-appearance/views/GlobalSettings.vue:92
 	__( 'Configure Local SEO', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:35
+	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:36
 	__( 'Configure Schema Markup for your content. Search engines use structured data to display rich results in SERPs.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/setup-wizard/views/Success.vue:51
@@ -1792,9 +1801,9 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/plugins/constants.js:1405
 	__( 'CORS', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelNewScore.jsx:29
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:67
-	// Reference: /src/react/headline-analyzer/components/HeadlineTabCurrentScore.jsx:21
+	// Reference: /src/vue/standalone/headline-analyzer/components/PanelNewScore.vue:73
+	// Reference: /src/vue/standalone/headline-analyzer/components/TabCurrentScore.vue:56
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:108
 	__( 'Could Be Better', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/notifications/Review.vue:62
@@ -1855,8 +1864,8 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/settings/views/Breadcrumbs.vue:99
 	__( 'Current Item', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelNewScore.jsx:12
-	// Reference: /src/react/headline-analyzer/components/HeadlineSwitcher.jsx:9
+	// Reference: /src/vue/standalone/headline-analyzer/components/Main.vue:18
+	// Reference: /src/vue/standalone/headline-analyzer/components/PanelNewScore.vue:24
 	__( 'Current Score', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/plugins/constants.js:1457
@@ -2214,9 +2223,9 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/local-seo/views/lite/opening-hours/Blur.vue:17
 	__( 'Display Opening Hours', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/standalone/blocks/business-info/index.js:251
-	// Reference: /src/vue/standalone/blocks/html-sitemap/index.js:155
-	// Reference: /src/vue/standalone/blocks/opening-hours/index.js:232
+	// Reference: /src/vue/standalone/blocks/business-info/index.js:253
+	// Reference: /src/vue/standalone/blocks/html-sitemap/index.js:154
+	// Reference: /src/vue/standalone/blocks/opening-hours/index.js:234
 	__( 'Display Settings', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/sitemaps/views/HtmlSitemap.vue:98
@@ -2259,6 +2268,7 @@ $generated_i18n_strings = [
 	__( 'Don\'t try to force keywords into sub-headings if they feel unnatural. It will send the wrong message to your readers, possibly driving them away.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/limit-modified-date/App.vue:18
+	// Reference: /src/vue/standalone/page-builders/siteorigin/components/LimitModifiedDate.vue:29
 	__( 'Don\'t update the modified date', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/blocks/table-of-contents/vue/App.vue:43
@@ -2397,12 +2407,12 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/plugins/constants.js:1310
 	__( 'Emergency Service', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:54
 	// Reference: /src/vue/mixins/HeadlineResult.js:42
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:14
 	__( 'Emotional Words', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:37
 	// Reference: /src/vue/mixins/HeadlineResult.js:43
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:92
 	__( 'Emotionally triggered headlines are likely to drive more clicks.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/user-profile-tab/partials/EeatBlur.vue:23
@@ -2473,7 +2483,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/components/common/core/add-redirection/CustomRules.vue:58
 	__( 'End Date', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelStartEndWords.jsx:37
+	// Reference: /src/vue/standalone/headline-analyzer/components/StartEndWords.vue:13
 	__( 'Ending Words', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/classes/SiteAnalysis.js:134
@@ -2485,7 +2495,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/components/common/base/Editor.vue:78
 	__( 'Enter a custom field/taxonomy name...', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlineTabNewScore.jsx:13
+	// Reference: /src/vue/standalone/headline-analyzer/components/TabNewScore.vue:11
 	__( 'Enter a different headline than your post title to see how it compares.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/core/add-redirection/CustomRules.vue:157
@@ -2495,14 +2505,14 @@ $generated_i18n_strings = [
 	// Translators: 1 - An example URL (e.g. https://aioseo.com/example).
 	__( 'Enter a page URL, e.g. %1$s', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:80
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:74
 	// Translators: 1 - Oening link tag, 2 - Closing link tag.
 	__( 'Enter a relative URL to redirect from or start by typing in page or post title, slug or ID. You can also use regex (%1$s)', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/search-appearance/views/partials/eeat/EeatBlur.vue:72
 	__( 'Enter a URL and press enter', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:76
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:70
 	__( 'Enter a URL or start by typing a page or post title, slug or ID.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/post-settings/views/Advanced.vue:47
@@ -2798,7 +2808,8 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/plugins/constants.js:1486
 	__( 'Food Event', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/constants.js:21
+	// Reference: /src/vue/standalone/headline-analyzer/components/PanelNewScore.vue:20
+	// Reference: /src/vue/standalone/headline-analyzer/components/TabCurrentScore.vue:19
 	// Translators: 1 - Score.
 	__( 'For best results, you should strive for %1$d and above.', 'all-in-one-seo-pack' ),
 
@@ -2913,7 +2924,7 @@ $generated_i18n_strings = [
 	// Translators: 1 - "Title" or "Description".
 	__( 'Generate New SEO %1$s', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:38
+	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:39
 	__( 'Generate Schema', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/post-settings/views/lite/partials-ai/Modal.vue:60
@@ -3014,9 +3025,9 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/dashboard/views/Main.vue:105
 	__( 'Getting started? Read the Beginners Guide', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelNewScore.jsx:32
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:70
-	// Reference: /src/react/headline-analyzer/components/HeadlineTabCurrentScore.jsx:24
+	// Reference: /src/vue/standalone/headline-analyzer/components/PanelNewScore.vue:76
+	// Reference: /src/vue/standalone/headline-analyzer/components/TabCurrentScore.vue:59
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:111
 	__( 'Getting There', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/notifications/Review.vue:39
@@ -3057,7 +3068,9 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/standalone/post-settings/views/General.vue:118
 	__( 'Go to the Advanced tab to add/edit meta keywords', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlineWordsBlock.jsx:5
+	// Reference: /src/vue/standalone/headline-analyzer/components/partials/WordsBlock.vue:5
+	__( 'Goal:', 'all-in-one-seo-pack' ),
+
 	// Reference: /src/vue/composables/HeadlineResult.js:10
 	__( 'Goal: ', 'all-in-one-seo-pack' ),
 
@@ -3069,8 +3082,8 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/mixins/HeadlineResult.js:98
 	__( 'Good', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelCharacterCount.jsx:48
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordCount.jsx:36
+	// Reference: /src/vue/standalone/headline-analyzer/components/CharacterCount.vue:56
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordCount.vue:53
 	__( 'Good 🙂', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/app/tru-seo/analyzer/analysis/calculateFleschReading.js:45
@@ -3213,35 +3226,35 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/components/common/core/PostColumn.vue:76
 	__( 'Headline Score', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelType.jsx:8
 	// Reference: /src/vue/composables/HeadlineResult.js:9
+	// Reference: /src/vue/standalone/headline-analyzer/components/PanelType.vue:9
 	__( 'Headline Type', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/mixins/HeadlineResult.js:142
 	__( 'Headlines are more likely to be clicked on in search results if they have about 6 words.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelCharacterCount.jsx:49
 	// Reference: /src/vue/mixins/HeadlineResult.js:99
+	// Reference: /src/vue/standalone/headline-analyzer/components/CharacterCount.vue:72
 	__( 'Headlines that are about 55 characters long will display fully in search results and tend to get more clicks.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/constants.js:8
 	// Reference: /src/vue/mixins/HeadlineResult.js:189
+	// Reference: /src/vue/standalone/headline-analyzer/components/PanelType.vue:12
 	// Translators: 1 - HTML line break tag, 2 - Opening HTML link tag, 3 - Closing HTML link tag.
 	__( 'Headlines that are lists and how-to get more engagement on average than other types of headlines. %1$s%2$sLearn More%3$s →', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:13
 	// Reference: /src/vue/mixins/HeadlineResult.js:162
+	// Reference: /src/vue/standalone/headline-analyzer/components/Sentiment.vue:9
 	__( 'Headlines that are strongly positive or negative tend to get more engagement than neutral ones.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:22
 	// Reference: /src/vue/mixins/HeadlineResult.js:25
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:56
 	__( 'Headlines with 20-30% common words are more likely to get clicks.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:43
 	// Reference: /src/vue/mixins/HeadlineResult.js:52
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:101
 	__( 'Headlines with power words are more likely to get clicks.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:31
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:75
 	__( 'Headlines with uncommon words are more likely to get clicks.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/plugins/constants.js:1316
@@ -3260,7 +3273,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/components/common/notifications/Review.vue:50
 	__( 'Help us improve', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSearchPreview.jsx:8
+	// Reference: /src/vue/standalone/headline-analyzer/components/SearchPreview.vue:12
 	__( 'Here is how your headline will look like in Google search results page.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/post-settings/views/RedirectsSideBar.vue:22
@@ -3285,7 +3298,6 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/plugins/constants.js:1535
 	__( 'High School', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/mixins/TruSeoHighlighter.js:61
 	// Reference: /src/vue/standalone/post-settings/views/partials/general/tru-seo/ToggleHighlighter.vue:27
 	__( 'Highlight sections in the Editor', 'all-in-one-seo-pack' ),
 
@@ -3418,7 +3430,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/plugins/constants.js:1294
 	__( 'Ignore & pass parameters to the target', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:360
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:411
 	// Reference: /src/vue/plugins/constants.js:1292
 	__( 'Ignore all parameters', 'all-in-one-seo-pack' ),
 
@@ -4075,7 +4087,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/standalone/blocks/business-info/index.js:143
 	// Reference: /src/vue/standalone/blocks/location-categories/index.js:53
 	// Reference: /src/vue/standalone/blocks/location-map/index.js:104
-	// Reference: /src/vue/standalone/blocks/locations/index.js:70
+	// Reference: /src/vue/standalone/blocks/locations/index.js:69
 	// Reference: /src/vue/standalone/blocks/opening-hours/index.js:125
 	__( 'Loading...', 'all-in-one-seo-pack' ),
 
@@ -4148,9 +4160,9 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/standalone/post-settings/views/General.vue:117
 	__( 'Looking for meta keywords?', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelNewScore.jsx:35
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:73
-	// Reference: /src/react/headline-analyzer/components/HeadlineTabCurrentScore.jsx:27
+	// Reference: /src/vue/standalone/headline-analyzer/components/PanelNewScore.vue:79
+	// Reference: /src/vue/standalone/headline-analyzer/components/TabCurrentScore.vue:62
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:114
 	__( 'Looks Good! 👍👍', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/search-statistics/views/partials/PostsTable.vue:168
@@ -4339,13 +4351,13 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/link-assistant/views/partials/overview/MostLinkedDomains.vue:30
 	__( 'Most Linked to Domains', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelStartEndWords.jsx:12
+	// Reference: /src/vue/standalone/headline-analyzer/components/StartEndWords.vue:11
 	__( 'Most readers only look at the first and last 3 words of a headline before deciding whether to click.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/plugins/constants.js:1503
 	__( 'Moved Online', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:359
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:410
 	// Reference: /src/vue/plugins/constants.js:1270
 	__( 'Moved Permanently', 'all-in-one-seo-pack' ),
 
@@ -4403,12 +4415,12 @@ $generated_i18n_strings = [
 	// Translators: 1 - HTML Line break tag.
 	__( 'Needs%1$sImprovement!', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:34
 	// Reference: /src/vue/mixins/HeadlineResult.js:174
+	// Reference: /src/vue/standalone/headline-analyzer/components/Sentiment.vue:33
 	__( 'Negative', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:29
 	// Reference: /src/vue/mixins/HeadlineResult.js:178
+	// Reference: /src/vue/standalone/headline-analyzer/components/Sentiment.vue:13
 	__( 'Negative headlines are attention-grabbing and tend to perform better than neutral ones.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/core/FeatureCard.vue:64
@@ -4429,9 +4441,12 @@ $generated_i18n_strings = [
 	// Translators: 1 - "PRO".
 	__( 'Network Tools is a %1$s Feature', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:34
 	// Reference: /src/vue/mixins/HeadlineResult.js:158
+	// Reference: /src/vue/standalone/headline-analyzer/components/Sentiment.vue:30
 	__( 'Neutral', 'all-in-one-seo-pack' ),
+
+	// Reference: /src/vue/standalone/headline-analyzer/components/Sentiment.vue:8
+	__( 'Neutral Sentiment', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/plugins/constants.js:23
 	__( 'never', 'all-in-one-seo-pack' ),
@@ -4442,7 +4457,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/composables/Notifications.js:6
 	__( 'New Notifications', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelNewScore.jsx:11
+	// Reference: /src/vue/standalone/headline-analyzer/components/PanelNewScore.vue:23
 	__( 'New Score', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/page-builders/elementor/introduction.js:13
@@ -4480,8 +4495,8 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/standalone/blocks/business-info/index.js:169
 	// Reference: /src/vue/standalone/blocks/location-categories/index.js:79
 	// Reference: /src/vue/standalone/blocks/location-map/index.js:130
-	// Reference: /src/vue/standalone/blocks/locations/index.js:175
-	// Reference: /src/vue/standalone/blocks/locations/index.js:96
+	// Reference: /src/vue/standalone/blocks/locations/index.js:174
+	// Reference: /src/vue/standalone/blocks/locations/index.js:95
 	// Reference: /src/vue/standalone/blocks/opening-hours/index.js:151
 	// Translators: 1 - The plural label of the custom post type.
 	__( 'No %1$s found', 'all-in-one-seo-pack' ),
@@ -4670,7 +4685,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/mixins/HeadlineResult.js:122
 	__( 'Not Enough Words', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordCount.jsx:29
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordCount.vue:51
 	__( 'Not Enough Words 🙃', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/plugins/constants.js:1279
@@ -4690,9 +4705,9 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/about/views/AboutUs.vue:83
 	__( 'Not Installed', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelNewScore.jsx:26
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:64
-	// Reference: /src/react/headline-analyzer/components/HeadlineTabCurrentScore.jsx:18
+	// Reference: /src/vue/standalone/headline-analyzer/components/PanelNewScore.vue:70
+	// Reference: /src/vue/standalone/headline-analyzer/components/TabCurrentScore.vue:53
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:105
 	__( 'Not Looking Great', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/plugins/constants.js:1273
@@ -5039,7 +5054,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/seo-analysis/views/AnalyzeCompetitorSite.vue:45
 	__( 'Perform in-depth SEO Analysis of your competitor\'s website.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/SeoSiteAnalysisResults.vue:31
+	// Reference: /src/vue/components/common/core/SeoSiteAnalysisResults.vue:32
 	__( 'Performance', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/search-statistics/views/partials/PostsTable.vue:178
@@ -5121,14 +5136,14 @@ $generated_i18n_strings = [
 	// Reference: /src/app/tru-seo/analyzer/analysis/lengthContent.js:25
 	__( 'Please add some content first.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/standalone/blocks/location-map/index.js:266
+	// Reference: /src/vue/standalone/blocks/location-map/index.js:268
 	// Translators: 1 - The title of the location.
 	__( 'Please configure the map for this location: %1$s', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/blocks/business-info/index.js:155
 	// Reference: /src/vue/standalone/blocks/location-categories/index.js:65
 	// Reference: /src/vue/standalone/blocks/location-map/index.js:116
-	// Reference: /src/vue/standalone/blocks/locations/index.js:82
+	// Reference: /src/vue/standalone/blocks/locations/index.js:81
 	// Reference: /src/vue/standalone/blocks/opening-hours/index.js:137
 	__( 'Please enable multiple locations before using this block.', 'all-in-one-seo-pack' ),
 
@@ -5172,12 +5187,12 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-statistics/views/partials/PostsTable.vue:49
 	__( 'Position', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:34
 	// Reference: /src/vue/mixins/HeadlineResult.js:166
+	// Reference: /src/vue/standalone/headline-analyzer/components/Sentiment.vue:32
 	__( 'Positive', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:21
 	// Reference: /src/vue/mixins/HeadlineResult.js:170
+	// Reference: /src/vue/standalone/headline-analyzer/components/Sentiment.vue:11
 	__( 'Positive headlines tend to get better engagement than neutral or negative ones.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/mixins/PostTypes.js:14
@@ -5265,8 +5280,8 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-appearance/views/lite/image-seo/Blur.vue:28
 	__( 'Pound (#)', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:59
 	// Reference: /src/vue/mixins/HeadlineResult.js:51
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:16
 	__( 'Power Words', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/settings/views/Breadcrumbs.vue:92
@@ -5297,7 +5312,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/seo-revisions/views/lite/partials/Controls.vue:13
 	__( 'Previous', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelPreviousScores.jsx:7
+	// Reference: /src/vue/standalone/headline-analyzer/components/PreviousScores.vue:11
 	__( 'Previous Scores', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/lite/local-business/PaymentInfo.vue:7
@@ -5371,7 +5386,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-appearance/views/Advanced.vue:88
 	__( 'Query Arg Monitoring', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:84
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:78
 	__( 'Query Parameters:', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/core/MiIntro.vue:44
@@ -5458,7 +5473,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/redirects/views/lite/redirects/Redirects.vue:35
 	__( 'Redirect Monitoring', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:74
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:68
 	__( 'Redirect Type:', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/composables/IndexStatus.js:163
@@ -5485,7 +5500,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/mixins/HeadlineResult.js:138
 	__( 'Reduce Word Count', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordCount.jsx:43
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordCount.vue:55
 	__( 'Reduce Word Count 🙂', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/tools/views/BadBotBlocker.vue:33
@@ -5649,13 +5664,14 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/standalone/page-builders/divi/limit-modified-date/main.js:13
 	// Reference: /src/vue/standalone/page-builders/elementor/limit-modified-date.js:6
 	// Reference: /src/vue/standalone/page-builders/seedprod/limit-modified-date.js:7
+	// Reference: /src/vue/standalone/page-builders/thrive-architect/limit-modified-date.js:5
 	__( 'Save (Don\'t Modify Date)', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/composables/Wizard.js:7
 	__( 'Save and Continue', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/core/PostColumn.vue:73
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:85
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:79
 	// Reference: /src/vue/components/common/core/main/Index.vue:73
 	// Reference: /src/vue/components/common/core/main/Tabs.vue:65
 	// Reference: /src/vue/standalone/posts-table/TermApp.vue:51
@@ -5680,7 +5696,7 @@ $generated_i18n_strings = [
 	// Translators: 1 - "PRO".
 	__( 'Schema Generator is a %1$s Feature', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:37
+	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:38
 	__( 'Schema In Use', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/search-appearance/views/ContentTypes.vue:52
@@ -5709,7 +5725,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/standalone/user-profile-tab/partials/EeatBlur.vue:21
 	__( 'School, college, or university URL', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlineTabCurrentScore.jsx:11
+	// Reference: /src/vue/standalone/headline-analyzer/components/TabCurrentScore.vue:22
 	__( 'Score', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/plugins/constants.js:1492
@@ -5738,6 +5754,9 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/about/views/lite/LiteVsPro.vue:56
 	__( 'Search Engine Optimization (SEO)', 'all-in-one-seo-pack' ),
 
+	// Reference: /src/vue/standalone/admin-bar-noindex-warning/App.vue:41
+	__( 'Search Engines Blocked!', 'all-in-one-seo-pack' ),
+
 	// Reference: /src/vue/pages/search-appearance/views/Advanced.vue:106
 	__( 'Search Feed', 'all-in-one-seo-pack' ),
 
@@ -5754,7 +5773,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/settings/views/Breadcrumbs.vue:106
 	__( 'search key word goes here', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSearchPreview.jsx:7
+	// Reference: /src/vue/standalone/headline-analyzer/components/SearchPreview.vue:11
 	__( 'Search Preview', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/settings/views/Breadcrumbs.vue:95
@@ -5792,7 +5811,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/sitemaps/views/AdditionalPages.vue:50
 	__( 'Search URLs', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/SeoSiteAnalysisResults.vue:32
+	// Reference: /src/vue/components/common/core/SeoSiteAnalysisResults.vue:33
 	// Reference: /src/vue/plugins/constants.js:1416
 	__( 'Security', 'all-in-one-seo-pack' ),
 
@@ -5835,10 +5854,10 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/about/views/GettingStarted.vue:53
 	__( 'See our full documentation', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/standalone/blocks/business-info/index.js:278
-	// Reference: /src/vue/standalone/blocks/location-map/index.js:245
-	// Reference: /src/vue/standalone/blocks/locations/index.js:191
-	// Reference: /src/vue/standalone/blocks/opening-hours/index.js:259
+	// Reference: /src/vue/standalone/blocks/business-info/index.js:280
+	// Reference: /src/vue/standalone/blocks/location-map/index.js:247
+	// Reference: /src/vue/standalone/blocks/locations/index.js:190
+	// Reference: /src/vue/standalone/blocks/opening-hours/index.js:261
 	// Translators: 1 - The singular label of the custom post type.
 	__( 'Select a %1$s', 'all-in-one-seo-pack' ),
 
@@ -5927,8 +5946,8 @@ $generated_i18n_strings = [
 	// Reference: /src/app/tru-seo/analyzer/analysis/sentenceLength.js:55
 	__( 'Sentences length', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:33
 	// Reference: /src/vue/composables/HeadlineResult.js:7
+	// Reference: /src/vue/standalone/headline-analyzer/components/Sentiment.vue:7
 	__( 'Sentiment', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/dashboard/views/Main.vue:111
@@ -5953,7 +5972,8 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/plugins/constants.js:1460
 	__( 'SEO for Categories, Tags and Custom Taxonomies', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/index.jsx:75
+	// Reference: /src/vue/standalone/headline-analyzer/registerHeadlineAnalyzer.js:85
+	// Reference: /src/vue/standalone/headline-analyzer/registerHeadlineAnalyzer.js:92
 	__( 'SEO Headline Analyzer', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/seo-preview/App.vue:113
@@ -6053,7 +6073,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-appearance/views/partials/eeat/EeatBlur.vue:56
 	// Reference: /src/vue/pages/search-statistics/router/paths.js:58
 	// Reference: /src/vue/pages/settings/views/partials/WebmasterTools/MicrosoftClaritySettings.vue:36
-	// Reference: /src/vue/standalone/blocks/location-map/index.js:217
+	// Reference: /src/vue/standalone/blocks/location-map/index.js:219
 	// Reference: /src/vue/standalone/local-business-seo/views/OpeningHours.vue:34
 	__( 'Settings', 'all-in-one-seo-pack' ),
 
@@ -6289,14 +6309,14 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/standalone/blocks/html-sitemap/HtmlSitemapSidebar.vue:31
 	__( 'Sort Order', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:118
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:169
 	// Reference: /src/vue/pages/redirects/views/lite/redirects/Blur.vue:36
 	__( 'Source URL', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:88
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:82
 	__( 'source url set once post is published', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:118
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:169
 	__( 'Source URLs', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/search-statistics/views/Main.vue:55
@@ -6426,9 +6446,9 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/feature-manager/views/FeatureManager.vue:100
 	__( 'Super-charge your SEO with Link Assistant! Get relevant suggestions for adding internal links to older content as well as finding any orphaned posts that have no internal links. Use our reporting feature to see all link suggestions or add them directly from any page or post.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelNewScore.jsx:38
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:76
-	// Reference: /src/react/headline-analyzer/components/HeadlineTabCurrentScore.jsx:30
+	// Reference: /src/vue/standalone/headline-analyzer/components/PanelNewScore.vue:82
+	// Reference: /src/vue/standalone/headline-analyzer/components/TabCurrentScore.vue:65
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:117
 	__( 'Super! 🔥🔥🔥', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/dashboard/views/Main.vue:96
@@ -6448,7 +6468,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/standalone/blocks/table-of-contents/sidebar-controls.js:14
 	__( 'Table of Contents Settings', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:75
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:69
 	// Reference: /src/vue/pages/redirects/views/lite/redirects/Blur.vue:40
 	__( 'Target URL', 'all-in-one-seo-pack' ),
 
@@ -7022,7 +7042,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-statistics/views/partials/SeoStatisticsOverview.vue:35
 	__( 'This graph shows the <strong>total number of times your website appeared in the search results</strong> within the selected timeframe.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/constants.js:29
+	// Reference: /src/vue/standalone/headline-analyzer/components/Main.vue:46
 	// Translators: 1 - The short plugin name ("AIOSEO"), 2 - Opening HTML link/span tag, 3 - Closing HTML span tag, 4 - Closing HTML link tag.
 	__( 'This Headline Analyzer is part of %1$s to help you increase your traffic. %2$sAnalyze your site further here%3$s →%4$s', 'all-in-one-seo-pack' ),
 
@@ -7030,7 +7050,7 @@ $generated_i18n_strings = [
 	// Translators: 1 - "PRO".
 	__( 'This is a %1$s Feature', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:374
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:425
 	__( 'This is a duplicate of a URL you are already adding. You can only add unique source URLs.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/search-appearance/views/Advanced.vue:119
@@ -7051,7 +7071,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/classes/SiteAnalysis.js:371
 	__( 'This is over our recommendation of 50 KB.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:40
+	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:41
 	__( 'This is the default graph for this post type. All data for this graph will be automatically generated.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/classes/SiteAnalysis.js:374
@@ -7244,19 +7264,20 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/mixins/HeadlineResult.js:102
 	__( 'Too Long', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelCharacterCount.jsx:54
+	// Reference: /src/vue/standalone/headline-analyzer/components/CharacterCount.vue:59
 	__( 'Too Long 😑', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/mixins/HeadlineResult.js:146
 	__( 'Too Many Words', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordCount.jsx:49
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordCount.vue:57
 	__( 'Too Many Words 😑', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/mixins/HeadlineResult.js:94
 	__( 'Too Short', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelCharacterCount.jsx:42
+	// Reference: /src/vue/standalone/headline-analyzer/components/CharacterCount.vue:53
+	// Reference: /src/vue/standalone/headline-analyzer/components/CharacterCount.vue:62
 	__( 'Too Short 🙃', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/dashboard/views/Main.vue:117
@@ -7359,8 +7380,8 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/composables/SeoSiteScore.js:75
 	__( 'Try Again', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlineSwitcher.jsx:13
-	// Reference: /src/react/headline-analyzer/components/HeadlineTabNewScore.jsx:9
+	// Reference: /src/vue/standalone/headline-analyzer/components/Main.vue:19
+	// Reference: /src/vue/standalone/headline-analyzer/components/TabNewScore.vue:10
 	__( 'Try New Headline', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/classes/SiteAnalysis.js:363
@@ -7412,8 +7433,8 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/search-appearance/views/partials/query-arg-monitor/Table.vue:112
 	__( 'Unblocked', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:49
 	// Reference: /src/vue/mixins/HeadlineResult.js:33
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:12
 	__( 'Uncommon Words', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/standalone/setup-wizard/views/SearchAppearance.vue:65
@@ -7453,6 +7474,9 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/pages/settings/views/lite/AccessControl.vue:35
 	__( 'Unlock Access Control', 'all-in-one-seo-pack' ),
+
+	// Reference: /src/vue/standalone/post-settings/views/lite/partials-ai/Modal.vue:29
+	__( 'Unlock AI Generator', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/feature-manager/views/FeatureManager.vue:78
 	__( 'Unlock All Features', 'all-in-one-seo-pack' ),
@@ -7594,9 +7618,6 @@ $generated_i18n_strings = [
 
 	// Reference: /src/vue/composables/SearchConsole.js:13
 	__( 'Upgrade to Pro to unlock Search Statistics and sync your site with Google Search Console. Get valuable insights right inside your WordPress dashboard, track keyword rankings and search performance for individual posts with actionable insights to help you rank higher in search results!', 'all-in-one-seo-pack' ),
-
-	// Reference: /src/vue/standalone/post-settings/views/lite/partials-ai/Modal.vue:29
-	__( 'Upgrade to Pro Today', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/core/Overview.vue:51
 	__( 'Upgrade to Pro Today!', 'all-in-one-seo-pack' ),
@@ -7760,7 +7781,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/tools/views/WpCode.vue:34
 	__( 'Using WPCode you can install AIOSEO code snippets with 1-click directly from this page or the WPCode library inside the WordPress admin.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:39
+	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:40
 	__( 'Validate Schema', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/search-appearance/views/partials/lite/Schema.vue:45
@@ -8017,7 +8038,7 @@ $generated_i18n_strings = [
 	// Reference: /src/app/tru-seo/analyzer/analysis/transitionWords.js:73
 	__( 'Well done!', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:81
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:75
 	__( 'what\'s this?', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/search-appearance/views/partials/eeat/EeatBlur.vue:101
@@ -8119,11 +8140,11 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/composables/HeadlineResult.js:5
 	__( 'Word balance', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:10
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:8
 	__( 'Word Balance', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordCount.jsx:9
 	// Reference: /src/vue/composables/HeadlineResult.js:8
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordCount.vue:8
 	__( 'Word Count', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/pages/tools/views/SystemStatus.vue:45
@@ -8156,7 +8177,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/standalone/blocks/faq/lite/sidebar.js:19
 	__( 'Write an answer...', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/index.jsx:76
+	// Reference: /src/vue/standalone/headline-analyzer/components/Main.vue:20
 	__( 'Write your post title to see the analyzer data. This Headline Analyzer tool enables you to write irresistible SEO headlines that drive traffic, shares, and rank better in search results.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/classes/SiteAnalysis.js:62
@@ -8353,14 +8374,15 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/classes/SiteAnalysis.js:413
 	__( 'You have no visible plugins!', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:36
+	// Reference: /src/vue/standalone/post-settings/views/lite/Schema.vue:37
 	__( 'You have not added any schema yet. You can add any schema graphs you like via the Schema Generator below.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/mixins/License.js:9
 	__( 'You have not yet added a valid license key.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelCharacterCount.jsx:43
 	// Reference: /src/vue/mixins/HeadlineResult.js:95
+	// Reference: /src/vue/standalone/headline-analyzer/components/CharacterCount.vue:66
+	// Reference: /src/vue/standalone/headline-analyzer/components/CharacterCount.vue:84
 	__( 'You have space to add more keywords and power words to boost your rankings and click-through rate.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/classes/SiteAnalysis.js:235
@@ -8426,35 +8448,34 @@ $generated_i18n_strings = [
 	// Reference: /src/app/tru-seo/analyzer/analysis/keyphraseInSubHeadings.js:102
 	__( 'Your H2 or H3 subheading reflects the topic of your copy. Good job!', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordCount.jsx:30
 	// Reference: /src/vue/mixins/HeadlineResult.js:126
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordCount.vue:66
 	__( 'Your headline doesn’t use enough words. You have more space to add keywords and power words to improve your SEO and get more engagement.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:25
 	// Reference: /src/vue/mixins/HeadlineResult.js:177
+	// Reference: /src/vue/standalone/headline-analyzer/components/Sentiment.vue:12
 	__( 'Your headline has a negative sentiment.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:9
 	// Reference: /src/vue/mixins/HeadlineResult.js:161
 	__( 'Your headline has a neutral sentiment.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelSentiment.jsx:17
 	// Reference: /src/vue/mixins/HeadlineResult.js:169
+	// Reference: /src/vue/standalone/headline-analyzer/components/Sentiment.vue:10
 	__( 'Your headline has a positive sentiment.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordCount.jsx:37
 	// Reference: /src/vue/mixins/HeadlineResult.js:134
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordCount.vue:68
 	__( 'Your headline has the right amount of words. Headlines are more likely to be clicked on in search results if they have about 6 words.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordCount.jsx:50
 	// Reference: /src/vue/mixins/HeadlineResult.js:150
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordCount.vue:70
 	__( 'Your headline has too many words. Long headlines will get cut off in search results and won’t get as many clicks.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:19
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:55
 	__( 'Your headline would be more likely to get clicks if it had more common words.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/react/headline-analyzer/components/HeadlinePanelWordBalance.jsx:28
 	// Reference: /src/vue/mixins/HeadlineResult.js:34
+	// Reference: /src/vue/standalone/headline-analyzer/components/WordBalance.vue:74
 	__( 'Your headline would be more likely to get clicks if it had more uncommon words.', 'all-in-one-seo-pack' ),
 
 	// Reference: /src/vue/components/common/core/SocialProfiles.vue:131
@@ -8593,14 +8614,14 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/pages/sitemaps/views/GeneralSitemap.vue:84
 	__( 'Your static sitemap is currently being regenerated. This may take some time based on the size of your site. This may also cause the sitemap content to look outdated.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:157
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:208
 	// Translators: 1 - Adds a html tag with an option like: <code>^</code>.
 	__( 'Your target URL contains the invalid character(s) %1$s', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:132
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:183
 	__( 'Your target URL is not valid.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:144
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:195
 	// Translators: 1 - Adds a html tag with an option like: <code>^</code>, 2 - Adds a html tag with an option like: <code>^</code>.
 	__( 'Your target URL should be an absolute URL like %1$s or start with a slash %2$s.', 'all-in-one-seo-pack' ),
 
@@ -8616,7 +8637,7 @@ $generated_i18n_strings = [
 	// Reference: /src/vue/components/common/core/SocialProfiles.vue:181
 	__( 'Your Tumblr URL is invalid. Please check the format and try again.', 'all-in-one-seo-pack' ),
 
-	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:174
+	// Reference: /src/vue/components/common/core/add-redirection/Index.vue:225
 	// Translators: 1 - Domain URL, 2 - Domain URL.
 	__( 'Your URL appears to contain a domain inside the path: %1$s. Did you mean to use %2$s instead?', 'all-in-one-seo-pack' ),
 

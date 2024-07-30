@@ -6267,7 +6267,7 @@ function et_builder_is_tb_admin_screen() {
 /**
  * Check if the current screen is the Divi Onboarding administration screen.
  *
- * @since ??
+ * @since 4.26.0
  *
  * @return bool
  */

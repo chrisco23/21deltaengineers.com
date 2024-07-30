@@ -3,10 +3,6 @@ const $ = jQuery;
 const UserRoles = {
     setup: function() {
         var self = this;
-        $('#user-role-select').on('change', function() {
-            $('.role').removeClass('show');
-            $('.role-' + $(this).val()).addClass('show');
-        });
         $('#capabilities-form').on('submit', function(e){
             e.preventDefault();
             self.save();
@@ -21,8 +17,6 @@ const UserRoles = {
             const val = $(this).find('select').val()
             capabilities[role] = val
         });
-
-        capabilities = JSON.stringify(capabilities);
 
         var whiteLabel = $('#iawp_white_label').prop('checked');
 

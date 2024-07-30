@@ -34,6 +34,7 @@ final class Screen_State extends JSON_Serializable_Object {
 	public $include_children 			= false;
 	public $sync_upload_folder_dropdown = true;
 	public $is_folder_panel_busy 		= false;
+	public $disable_drag_drop_on_mobile = true;
 	public $selected_folders 			= array();
     public $schema = array(
         'screenId' 					=> 'screen_id',
@@ -55,6 +56,7 @@ final class Screen_State extends JSON_Serializable_Object {
         'syncUploadFolderDropdown' 	=> 'sync_upload_folder_dropdown',
         'isFolderPanelBusy' 		=> 'is_folder_panel_busy',
         'selectedFolders' 			=> 'selected_folders',
+		'disableDragDropOnMobile' 	=> 'disable_drag_drop_on_mobile',
     );
 
     public function __construct( $screen_id, $user_id, $lang = false ) {
@@ -144,6 +146,8 @@ final class Screen_State extends JSON_Serializable_Object {
 		$this->enable_search = ( bool ) get_option( 'wicked_folders_show_folder_search', true );
 
 		$this->sync_upload_folder_dropdown = ( bool ) get_option( 'wicked_folders_sync_upload_folder_dropdown', true );
+
+		$this->disable_drag_drop_on_mobile = apply_filters( 'wicked_folders_disable_drag_drop_on_mobile', $this->disable_drag_drop_on_mobile );
 
 		/**
 		 * Give others a chance to override the constructed screen state object.

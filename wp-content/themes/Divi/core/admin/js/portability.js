@@ -484,6 +484,7 @@
 				useTempPresets: false,
 				includeGlobalPresets: false,
 				onboarding: false,
+				presetPrefix: '',
 			}, options);
 
 			var fileSize = Math.ceil( ( file.size / ( 1024 * 1024 ) ).toFixed( 2 ) ),
@@ -500,6 +501,7 @@
 					post: postId,
 					replace: options.replace ? '1' : '0',
 					onboarding: options.onboarding ? '1' : '0',
+					preset_prefix: options.presetPrefix,
 					context: options.context
 				};
 
@@ -584,20 +586,17 @@
 							window.et_fb_import_estimation = 0;
 
 							// trigger event to communicate with FB
-							window.dispatchEvent( event );
+							window.dispatchEvent(event);
 
-							// Allow some time for animations to animate
-							setTimeout( function() {
-								var event = document.createEvent( 'Event' );
+							window.et_fb_import_layout_response = response;
 
-								event.initEvent( 'et_fb_layout_import_finished', true, true );
+							var customEvent = new CustomEvent('et_fb_layout_import_finished', {
+								detail: {},
+								bubbles: true,
+								cancelable: true
+							});
 
-								// save the data into global variable for later use in FB
-								window.et_fb_import_layout_response = response;
-
-								// trigger event to communicate with FB (again)
-								window.dispatchEvent( event );
-							}, 1300 );
+							window.dispatchEvent(customEvent);
 						}
 					}
 				} );

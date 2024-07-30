@@ -2182,7 +2182,7 @@ class Builder
             return $column;
         }
         $separator = \strpos(\strtolower($column), ' as ') !== \false ? ' as ' : '\\.';
-        return last(\preg_split('~' . $separator . '~i', $column));
+        return \IAWPSCOPED\last(\preg_split('~' . $separator . '~i', $column));
     }
     /**
      * Retrieve column values from rows represented as objects.

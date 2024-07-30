@@ -70,9 +70,9 @@ class Statistic implements Plugin_Group_Option
     {
         switch ($this->plugin_group) {
             case "woocommerce":
-                return \IAWPSCOPED\iawp_using_woocommerce();
+                return \IAWPSCOPED\iawp()->is_woocommerce_support_enabled();
             case "forms":
-                return \IAWPSCOPED\iawp_using_a_form_plugin();
+                return \IAWPSCOPED\iawp()->is_form_submission_support_enabled();
             default:
                 return \true;
         }

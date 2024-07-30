@@ -16,7 +16,7 @@ class Migration_7 extends \IAWP\Migrations\Migration
     protected function migrate() : void
     {
         global $wpdb;
-        \update_option('iawp_need_clear_cache', \true);
+        \update_option('iawp_need_clear_cache', \true, \true);
         $charset_collate = $wpdb->get_charset_collate();
         $sessions_table = Query::get_table_name(Query::SESSIONS);
         $views_table = Query::get_table_name(Query::VIEWS);

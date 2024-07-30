@@ -29,7 +29,7 @@ class Salt
         $salt = \get_option($name);
         if (!$salt) {
             $salt = self::generate_salt();
-            \update_option($name, $salt);
+            \update_option($name, $salt, \true);
         }
         return $salt;
     }

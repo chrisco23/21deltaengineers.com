@@ -123,7 +123,7 @@
                 <label>
                     <input type="checkbox" name="include_children" value="1"<?php if ( $include_children ) echo ' checked="checked"'; ?>/>
                     <?php _e( 'Include items from child folders', 'wicked-folders' ); ?>
-                    <span class="dashicons dashicons-editor-help" title="<?php _e( "When unchecked (default) and a folder is selected, only items assigned to that folder will be displayed.  When checked, items in the selected folder *and* items in any of the folder's child folders will be displayed.  Please note: this setting does not apply to media.", 'wicked-folders' ); ?>"></span>
+                    <span class="dashicons dashicons-editor-help" title="<?php _e( "When unchecked (default) and a folder is selected, only items assigned to that folder will be displayed.  When checked, items in the selected folder *and* items in any of the folder's child folders will be displayed.  See additional/separate setting below if you'd like to enable this option for media files.", 'wicked-folders' ); ?>"></span>
                 </label>
             </td>
         </tr>

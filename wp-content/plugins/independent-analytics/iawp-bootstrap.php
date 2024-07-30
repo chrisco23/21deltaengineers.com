@@ -4,10 +4,10 @@ namespace IAWPSCOPED;
 
 use IAWP\Custom_WordPress_Columns\Views_Column;
 use IAWP\Dashboard_Options;
+use IAWP\Data_Pruning\Pruning_Scheduler;
 use IAWP\Database;
 use IAWP\Date_Range\Exact_Date_Range;
 use IAWP\Env;
-use IAWP\Form_Submissions\Form;
 use IAWP\Geo_Database_Background_Job;
 use IAWP\Independent_Analytics;
 use IAWP\Interrupt;
@@ -20,8 +20,8 @@ use IAWP\WP_Option_Cache_Bust;
 use IAWPSCOPED\Illuminate\Support\Carbon;
 \define( 'IAWP_DIRECTORY', \rtrim( \plugin_dir_path( __FILE__ ), \DIRECTORY_SEPARATOR ) );
 \define( 'IAWP_URL', \rtrim( \plugin_dir_url( __FILE__ ), '/' ) );
-\define( 'IAWP_VERSION', '2.6.2' );
-\define( 'IAWP_DATABASE_VERSION', '33' );
+\define( 'IAWP_VERSION', '2.7.1' );
+\define( 'IAWP_DATABASE_VERSION', '34' );
 \define( 'IAWP_LANGUAGES_DIRECTORY', \dirname( \plugin_basename( __FILE__ ) ) . '/languages' );
 \define( 'IAWP_PLUGIN_FILE', __DIR__ . '/iawp.php' );
 if ( \file_exists( \IAWPSCOPED\iawp_path_to( 'vendor/scoper-autoload.php' ) ) ) {
@@ -129,39 +129,6 @@ function iawp_is_free() : bool {
     return !\IAWPSCOPED\iawp_is_pro();
 }
 
-/**
- * Determines if a pro user has WooCommerce activated
- * @return bool
- * @internal
- */
-function iawp_using_woocommerce() : bool {
-    global $wpdb;
-    if ( \IAWPSCOPED\iawp_is_free() ) {
-        return \false;
-    }
-    $active_plugins = \get_option( 'active_plugins' );
-    if ( !\in_array( 'woocommerce/woocommerce.php', $active_plugins ) ) {
-        return \false;
-    }
-    $table_name = $wpdb->prefix . 'wc_order_stats';
-    $order_stats_table = $wpdb->get_row( $wpdb->prepare( '
-                SELECT * FROM INFORMATION_SCHEMA.TABLES 
-                WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s
-            ', $wpdb->dbname, $table_name ) );
-    if ( \is_null( $order_stats_table ) ) {
-        return \false;
-    }
-    return \true;
-}
-
-/** @internal */
-function iawp_using_a_form_plugin() : bool {
-    if ( \IAWPSCOPED\iawp_is_free() ) {
-        return \false;
-    }
-    return Form::has_active_form_plugin();
-}
-
 /** @internal */
 function iawp_dashboard_url(  array $query_arguments = []  ) : string {
     $default_query_arguments = [
@@ -241,6 +208,13 @@ if ( !\extension_loaded( 'pdo' ) || !\extension_loaded( 'pdo_mysql' ) ) {
     $interrupt->render();
     return;
 }
+if ( \IAWPSCOPED\iawp_db_version() === 0 && !Database::has_correct_database_privileges() ) {
+    $interrupt = new Interrupt('interrupt.missing-database-permissions');
+    $interrupt->render( [
+        'missing_privileges' => Database::missing_database_privileges(),
+    ] );
+    return;
+}
 global $wpdb;
 if ( \strlen( $wpdb->prefix ) > 25 ) {
     $interrupt = new Interrupt('interrupt.database-prefix-too-long');
@@ -253,13 +227,6 @@ if ( \strlen( $wpdb->prefix ) > 25 ) {
 if ( Migrations\Migrations::is_database_ahead_of_plugin() ) {
     $interrupt = new Interrupt('interrupt.database-ahead-of-plugin');
     $interrupt->render();
-    return;
-}
-if ( \IAWPSCOPED\iawp_db_version() === 0 && !Database::has_correct_database_privileges() ) {
-    $interrupt = new Interrupt('interrupt.missing-database-permissions');
-    $interrupt->render( [
-        'missing_privileges' => Database::missing_database_privileges(),
-    ] );
     return;
 }
 if ( \get_option( 'iawp_missing_tables' ) === '1' ) {
@@ -292,19 +259,21 @@ function iawp() {
         Migrations\Migration_Job::maybe_dispatch();
     }
     Geo_Database_Background_Job::maybe_dispatch();
-    \update_option( 'iawp_need_clear_cache', \true );
+    \update_option( 'iawp_need_clear_cache', \true, \true );
     \IAWPSCOPED\iawp()->cron_manager->schedule_refresh_salt();
+    ( new Pruning_Scheduler() )->schedule();
     if ( \IAWPSCOPED\iawp_is_pro() ) {
         \IAWPSCOPED\iawp()->email_reports->schedule();
     }
     // Set current version for changelog notifications
-    \update_option( 'iawp_last_update_viewed', \IAWP_VERSION );
+    \update_option( 'iawp_last_update_viewed', \IAWP_VERSION, \true );
     if ( \IAWPSCOPED\iawp_db_version() > 0 && Database::is_missing_all_tables() ) {
-        \update_option( 'iawp_missing_tables', '1' );
+        \update_option( 'iawp_missing_tables', '1', \true );
     }
 } );
 \register_deactivation_hook( \IAWP_PLUGIN_FILE, function () {
     \IAWPSCOPED\iawp()->cron_manager->unschedule_daily_salt_refresh();
+    ( new Pruning_Scheduler() )->unschedule();
     if ( \IAWPSCOPED\iawp_is_pro() ) {
         \IAWPSCOPED\iawp()->email_reports->unschedule();
     }

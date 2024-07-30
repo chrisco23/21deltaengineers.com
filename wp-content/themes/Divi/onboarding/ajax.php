@@ -25,7 +25,7 @@ use \Divi\Onboarding\Helpers;
  */
 function activate_plugin() {
 	\et_core_security_check( 'manage_options', 'et_onboarding_activate_plugin', '_ajax_nonce' );
-	
+
 	$allowed_plugins = array(
 		'woocommerce/woocommerce.php',
 	);
@@ -207,15 +207,14 @@ function publish_new_pages() {
 		'post_status'    => 'draft',
 		'meta_key'       => '_et_onboarding_created',
 		'posts_per_page' => -1,
+		'fields'         => 'ids',
 	);
 
 	$query = new \WP_Query( $args );
+	$posts = $query->get_posts();
 
 	if ( $query->have_posts() ) {
-		while ( $query->have_posts() ) {
-			$query->the_post();
-			$post_id = get_the_ID();
-
+		foreach ( $posts as $post_id ) {
 			wp_update_post(
 				array(
 					'ID'          => $post_id,
@@ -229,3 +228,72 @@ function publish_new_pages() {
 }
 
 add_action( 'wp_ajax_et_onboarding_publish_new_pages', __NAMESPACE__ . '\\publish_new_pages' );
+
+/**
+ * Clean up '_et_onboarding_created' meta from pages, theme builder template and menu.
+ */
+function clear_flag_meta() {
+	\et_core_security_check( 'manage_options', 'et_onboarding_clear_flag_meta', '_ajax_nonce' );
+
+	$args = array(
+		'post_type'      => [ 'page', ET_THEME_BUILDER_TEMPLATE_POST_TYPE ],
+		'post_status'    => 'publish',
+		'meta_key'       => '_et_onboarding_created',
+		'posts_per_page' => -1,
+		'fields'         => 'ids',
+	);
+
+	$posts = get_posts( $args );
+
+	if ( ! empty( $posts ) ) {
+		foreach ( $posts as $post_id ) {
+			delete_post_meta( $post_id, '_et_onboarding_created' );
+		}
+	}
+
+	$menus = wp_get_nav_menus();
+	foreach ( $menus as $menu ) {
+			delete_term_meta( $menu->term_id, '_et_onboarding_created' );
+	}
+}
+
+add_action( 'wp_ajax_et_onboarding_clear_flag_meta', __NAMESPACE__ . '\\clear_flag_meta' );
+
+/*
+ *  AJAX handler to check if WooCommerce is installed.
+ */
+function is_woocommerce_installed() {
+	\et_core_security_check( 'manage_options', 'et_onboarding_is_woocommerce_installed', '_ajax_nonce' );
+
+	$is_installed = false;
+
+	$all_plugins = get_plugins();
+
+	if ( array_key_exists( 'woocommerce/woocommerce.php', $all_plugins ) ) {
+		$is_installed = true;
+	}
+
+	wp_send_json_success( [ 'is_installed' => $is_installed ] );
+
+}
+
+add_action( 'wp_ajax_et_onboarding_is_woocommerce_installed', __NAMESPACE__ . '\\is_woocommerce_installed' );
+
+/**
+ * AJAX handler to check if WooCommerce is active.
+ */
+function is_woocommerce_active() {
+	\et_core_security_check( 'manage_options', 'et_onboarding_is_woocommerce_active', '_ajax_nonce' );
+
+	include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+	$is_active = false;
+
+	if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+		$is_active = true;
+	}
+
+	wp_send_json_success( [ 'is_active' => $is_active ] );
+}
+
+add_action( 'wp_ajax_et_onboarding_is_woocommerce_active', __NAMESPACE__ . '\\is_woocommerce_active' );

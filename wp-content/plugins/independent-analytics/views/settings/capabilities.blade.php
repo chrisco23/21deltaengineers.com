@@ -8,32 +8,27 @@
     <p><?php esc_html_e('Decide which users can view the analytics and edit the settings.', 'independent-analytics'); ?></p>
     <form id="capabilities-form" method="post" action="options.php">
         <div class="inner">
-            <div class="select-container">
-                <select id="user-role-select">
-                    <option><?php esc_html_e('Select a user role to edit', 'independent-analytics'); ?></option>
-                    <?php foreach ($editable_roles as $role): ?>
-                        <option value="<?php echo esc_attr($role['key']); ?>"><?php echo esc_html($role['name']); ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+            <p class="note"><?php esc_html_e('Admins can always view the analytics and edit the settings.', 'independent-analytics'); ?></p>
             <div class="user-roles">
                 <?php foreach ($editable_roles as $role): ?>
-                    <div class="role role-<?php echo esc_attr($role['key']); ?>">
-                        <select name="<?php echo esc_attr($role['key']); ?>">
-                            <option value=""><?php esc_html_e('No access', 'independent-analytics'); ?></option>
-                            <?php foreach ($capabilities as $capability_key => $capability_label): ?>
-                                <option value="<?php echo esc_attr($capability_key) ?>"
-                                    <?php selected($role[$capability_key]) ?>
-                                >
-                                    <?php echo esc_html($capability_label) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                    <div class="user-role">
+                        <p>{{ $role['name'] }}</p>
+                        <div class="role role-<?php echo esc_attr($role['key']); ?>">
+                            <select name="<?php echo esc_attr($role['key']); ?>">
+                                <option value=""><?php esc_html_e('No access', 'independent-analytics'); ?></option>
+                                <?php foreach ($capabilities as $capability_key => $capability_label): ?>
+                                    <option value="<?php echo esc_attr($capability_key) ?>"
+                                        <?php selected($role['capability'] === $capability_key) ?>
+                                    >
+                                        <?php echo esc_html($capability_label) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>
         </div>
-        <p class="note"><?php esc_html_e('Admins can always view the analytics and edit the settings.', 'independent-analytics'); ?></p>
         <div class="white-label-setting">
             <label name="iawp_white_label" for="iawp_white_label">
                 <input type="checkbox" name="iawp_white_label" id="iawp_white_label" <?php checked(get_option('iawp_white_label'), true, true); ?> />

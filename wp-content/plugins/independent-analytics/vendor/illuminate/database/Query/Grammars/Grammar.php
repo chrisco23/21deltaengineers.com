@@ -623,7 +623,7 @@ class Grammar extends BaseGrammar
         $between = $having['not'] ? 'not between' : 'between';
         $column = $this->wrap($having['column']);
         $min = $this->parameter(head($having['values']));
-        $max = $this->parameter(last($having['values']));
+        $max = $this->parameter(\IAWPSCOPED\last($having['values']));
         return $having['boolean'] . ' ' . $column . ' ' . $between . ' ' . $min . ' and ' . $max;
     }
     /**
@@ -932,7 +932,7 @@ class Grammar extends BaseGrammar
      */
     protected function compileDeleteWithJoins(Builder $query, $table, $where)
     {
-        $alias = last(\explode(' as ', $table));
+        $alias = \IAWPSCOPED\last(\explode(' as ', $table));
         $joins = $this->compileJoins($query, $query->joins);
         return "delete {$alias} from {$table} {$joins} {$where}";
     }

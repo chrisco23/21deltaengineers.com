@@ -9,8 +9,8 @@
             <div class="kb-inner">
                 <h2>Search the Knowledge Base for an Answer</h2>
                 <form id="search-form" class="search-container">
-                    <span class="dashicons dashicons-search"></span>
                     <input id="search-field" type="search" class="search-field" placeholder="Search the Knowledge Base" />
+                    <span class="dashicons dashicons-search"></span>
                 </form>
                 <p class="tutorial-links">
                     <a href="https://independentwp.com/knowledgebase/common-questions/views-not-recording/" target="_blank" class="link-purple">Why Aren't My Views Showing Up?</a> <span>&#8226;</span> <a href="https://independentwp.com/knowledgebase/data/what-is-a-view/" target="_blank" class="link-purple">What is a View?</a> <span>&#8226;</span> <a href="https://independentwp.com/knowledgebase/dashboard/save-reports-revisit-later/" target="_blank" class="link-purple">How to Create & Save Custom Reports</a> 

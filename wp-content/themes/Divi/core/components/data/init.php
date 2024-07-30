@@ -92,6 +92,21 @@ function et_core_sanitized_previously( $value ) {
 }
 endif;
 
+if ( ! function_exists( 'et_core_esc_image_url' ) ) :
+	/**
+	 * Escape image URL
+	 *
+	 * @since ??
+	 *
+	 * @param string $url Image URL.
+	 *
+	 * @return string
+	 */
+	function et_core_esc_image_url( $url ) {
+		return esc_url( $url, array( 'http', 'https', 'data' ) );
+	}
+endif;
+
 if ( ! function_exists( 'et_core_esc_attr' ) ):
 /**
  * Escape attribute value
@@ -104,18 +119,6 @@ if ( ! function_exists( 'et_core_esc_attr' ) ):
  * @return (string|array|WP_Error)
  */
 function et_core_esc_attr( $attr_key, $attr_value ) {
-	// Skip validation for landscape image default value.
-	$image_landscape = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA4MCIgaGVpZ2h0PSI1NDAiIHZpZXdCb3g9IjAgMCAxMDgwIDU0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZmlsbD0iI0VCRUJFQiIgZD0iTTAgMGgxMDgwdjU0MEgweiIvPgogICAgICAgIDxwYXRoIGQ9Ik00NDUuNjQ5IDU0MGgtOTguOTk1TDE0NC42NDkgMzM3Ljk5NSAwIDQ4Mi42NDR2LTk4Ljk5NWwxMTYuMzY1LTExNi4zNjVjMTUuNjItMTUuNjIgNDAuOTQ3LTE1LjYyIDU2LjU2OCAwTDQ0NS42NSA1NDB6IiBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz4KICAgICAgICA8Y2lyY2xlIGZpbGwtb3BhY2l0eT0iLjA1IiBmaWxsPSIjMDAwIiBjeD0iMzMxIiBjeT0iMTQ4IiByPSI3MCIvPgogICAgICAgIDxwYXRoIGQ9Ik0xMDgwIDM3OXYxMTMuMTM3TDcyOC4xNjIgMTQwLjMgMzI4LjQ2MiA1NDBIMjE1LjMyNEw2OTkuODc4IDU1LjQ0NmMxNS42Mi0xNS42MiA0MC45NDgtMTUuNjIgNTYuNTY4IDBMMTA4MCAzNzl6IiBmaWxsLW9wYWNpdHk9Ii4yIiBmaWxsPSIjMDAwIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz4KICAgIDwvZz4KPC9zdmc+Cg==';
-	if ( $attr_value === $image_landscape ) {
-		return $attr_value;
-	}
-
-	// Skip validation for portrait image default value.
-	$image_portrait = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxwYXRoIGZpbGw9IiNFQkVCRUIiIGQ9Ik0wIDBoNTAwdjUwMEgweiIvPgogICAgICAgIDxyZWN0IGZpbGwtb3BhY2l0eT0iLjEiIGZpbGw9IiMwMDAiIHg9IjY4IiB5PSIzMDUiIHdpZHRoPSIzNjQiIGhlaWdodD0iNTY4IiByeD0iMTgyIi8+CiAgICAgICAgPGNpcmNsZSBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIiBjeD0iMjQ5IiBjeT0iMTcyIiByPSIxMDAiLz4KICAgIDwvZz4KPC9zdmc+Cg==';
-	if ( $attr_value === $image_portrait ) {
-		return $attr_value;
-	}
-
 	$attr_key = strtolower( $attr_key );
 
 	$allowed_attrs_default = array(
@@ -156,12 +159,12 @@ function et_core_esc_attr( $attr_key, $attr_value ) {
 		// We just pick some of the HTML attributes containing a URL.
 		// @see https://developer.wordpress.org/reference/functions/wp_kses_uri_attributes/
 		'action'      => 'esc_url',
-		'background'  => 'esc_url',
+		'background'  => 'et_core_esc_image_url',
 		'formaction'  => 'esc_url',
 		'href'        => 'esc_url',
-		'icon'        => 'esc_url',
-		'poster'      => 'esc_url',
-		'src'         => 'esc_url',
+		'icon'        => 'et_core_esc_image_url',
+		'poster'      => 'et_core_esc_image_url',
+		'src'         => 'et_core_esc_image_url',
 		'usemap'      => 'esc_url',
 	);
 

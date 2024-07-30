@@ -5,7 +5,7 @@ Donate link: https://independentwp.com
 Requires at least: 5.9
 Tested up to: 6.5.2
 Requires PHP: 7.3.33
-Stable tag: 2.6.2
+Stable tag: 2.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -193,6 +193,38 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 6. See the device types, browsers, and OSes your visitors are using
 
 == Changelog ==
+
+= 2.7.1 - July 29th, 2024 =
+
+* **Fix:** some MariaDB instances don't support optimizer_switch customization
+
+= 2.7.0 - July 25th, 2024 =
+
+* **Feature:** added new option to delete data older than X days/years
+* **Feature:** added new option to allow authors (non-admins) to see stats for only their own content
+* **Feature:** added option to hide the view counter label
+* **Feature:** added support for tracking custom forms via a new PHP hook
+* **Update:** added form tracking integrations for the Bit Form, Forminator, and Hustle plugins
+* **Update:** dark mode styles added for all modal windows and sub-menus
+* **Update:** added Turkish & Vietnamese translations
+* **Update:** updated copy to make it clear that IP addresses get ignored, not blocked
+* **Update:** improved display of long column titles in the data table
+* **Update:** improved display of numerous chart metrics like conversion rate and bounce rate
+* **Fix:** filters were loading extremely slowly for some sites using MariaDB
+* **Fix:** the chart was not saving “No comparison” if selected as the second metric
+* **Fix:** the real-time analytics report was missing data in the widgets from sessions lasting longer than 5 minutes
+* **Fix:** some English text was not marked for translation
+* **Fix:** WooCommerce metrics in the chart always used the dollar sign instead of the store’s preferred currency
+
+= 2.6.4 - July 17th, 2024 =
+
+* **Fix:** WooCommerce statistics didn't show for multisite installations
+* **Fix:** WooCommerce order tracking could fail under some circumstances
+
+= 2.6.3 - July 10th, 2024 =
+
+* **Fix:** Email report heading wasn't considering timezones
+* **Fix:** Formidable Forms and MailOptin submissions going untracked
 
 = 2.6.2 - July 2nd, 2024 =
 

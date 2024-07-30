@@ -43,23 +43,17 @@ class WooCommerce_Order
     }
     public function insert() : void
     {
-        global $wpdb;
-        $wc_orders_table = \IAWP\Query::get_table_name(\IAWP\Query::WC_ORDERS);
         $visitor = Visitor::fetch_current_visitor();
         if (!$visitor->has_recorded_session()) {
             return;
         }
-        $wpdb->insert($wc_orders_table, ['order_id' => $this->order_id, 'view_id' => $visitor->most_recent_view_id(), 'initial_view_id' => $visitor->most_recent_initial_view_id(), 'total' => $this->total, 'total_refunded' => $this->total_refunded, 'total_refunds' => $this->total_refunds, 'status' => $this->status, 'created_at' => (new \DateTime())->format('Y-m-d H:i:s')]);
+        $wc_orders_table = \IAWP\Query::get_table_name(\IAWP\Query::WC_ORDERS);
+        \IAWP\Illuminate_Builder::get_builder()->from($wc_orders_table)->insertOrIgnore(['order_id' => $this->order_id, 'view_id' => $visitor->most_recent_view_id(), 'initial_view_id' => $visitor->most_recent_initial_view_id(), 'total' => $this->total, 'total_refunded' => $this->total_refunded, 'total_refunds' => $this->total_refunds, 'status' => $this->status, 'created_at' => (new \DateTime())->format('Y-m-d H:i:s')]);
     }
     public function update() : void
     {
-        global $wpdb;
         $wc_orders_table = \IAWP\Query::get_table_name(\IAWP\Query::WC_ORDERS);
-        $existing_wc_order = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wc_orders_table} WHERE order_id = %d", $this->order_id));
-        if (\is_null($existing_wc_order)) {
-            return;
-        }
-        $wpdb->update($wc_orders_table, ['total' => $this->total, 'total_refunded' => $this->total_refunded, 'total_refunds' => $this->total_refunds, 'status' => $this->status], ['order_id' => $this->order_id]);
+        \IAWP\Illuminate_Builder::get_builder()->from($wc_orders_table)->where('order_id', '=', $this->order_id)->update(['total' => $this->total, 'total_refunded' => $this->total_refunded, 'total_refunds' => $this->total_refunds, 'status' => $this->status]);
     }
     private function wpml_exchange_rate(string $currency_code) : ?float
     {

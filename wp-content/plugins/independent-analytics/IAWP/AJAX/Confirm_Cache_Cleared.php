@@ -15,6 +15,6 @@ class Confirm_Cache_Cleared extends \IAWP\AJAX\AJAX
         if (!Capability_Manager::can_edit()) {
             return;
         }
-        \update_option('iawp_need_clear_cache', \false);
+        \update_option('iawp_need_clear_cache', \false, \true);
     }
 }

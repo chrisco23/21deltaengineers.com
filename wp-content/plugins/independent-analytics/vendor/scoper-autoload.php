@@ -80,8 +80,6 @@ if (!function_exists('iawp_singular_analytics')) { function iawp_singular_analyt
 if (!function_exists('iawp_temp_path_to')) { function iawp_temp_path_to() { return \IAWPSCOPED\iawp_temp_path_to(...func_get_args()); } }
 if (!function_exists('iawp_upload_path_to')) { function iawp_upload_path_to() { return \IAWPSCOPED\iawp_upload_path_to(...func_get_args()); } }
 if (!function_exists('iawp_url_to')) { function iawp_url_to() { return \IAWPSCOPED\iawp_url_to(...func_get_args()); } }
-if (!function_exists('iawp_using_a_form_plugin')) { function iawp_using_a_form_plugin() { return \IAWPSCOPED\iawp_using_a_form_plugin(...func_get_args()); } }
-if (!function_exists('iawp_using_woocommerce')) { function iawp_using_woocommerce() { return \IAWPSCOPED\iawp_using_woocommerce(...func_get_args()); } }
 if (!function_exists('is_countable')) { function is_countable() { return \IAWPSCOPED\is_countable(...func_get_args()); } }
 if (!function_exists('mb_check_encoding')) { function mb_check_encoding() { return \IAWPSCOPED\mb_check_encoding(...func_get_args()); } }
 if (!function_exists('mb_chr')) { function mb_chr() { return \IAWPSCOPED\mb_chr(...func_get_args()); } }

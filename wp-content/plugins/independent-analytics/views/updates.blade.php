@@ -9,6 +9,21 @@
         </div>
         <div class="entry">
             <div class="video-container">
+                <iframe src="https://www.youtube-nocookie.com/embed/9Wn1gBQw-8Q?si=Z7PuiJSpz35wXX49" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div class="text">
+                <div class="title-container">
+                    <h2 class="title">Version 2.7 - Delete Old Data + Author Analytics Dashboards</h2>
+                    <span class="date">July 25th, 2024</span>
+                </div>
+                <div class="description-container">
+                    <p>Version 2.7.0 adds a new option to automatically delete data older than X days/years, and lets your authors view analytics for their own content only.</p>
+                    <p>You can review the <a href="https://feedback.independentwp.com/updates/version-2-7-delete-old-data-author-analytics-dashboards" target="_blank">full changelog here</a>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="entry">
+            <div class="video-container">
             <iframe src="https://www.youtube-nocookie.com/embed/dpH6yRsjsM8?si=cL2fj9A0VjPPpGtP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
             <div class="text">
@@ -34,21 +49,6 @@
                 <div class="description-container">
                     <p>Version 2.5.0 adds automated form tracking for Independent Analytics Pro. Also, Quick Stats toggling, more WooCommerce Quick Stats, and post view counts in custom post type menus.</p>
                     <p>You can review the <a href="https://feedback.independentwp.com/updates/version-2-5-automated-form-tracking-is-here" target="_blank">full changelog here</a>.</p>
-                </div>
-            </div>
-        </div>
-        <div class="entry">
-            <div class="video-container">
-            <iframe src="https://www.youtube-nocookie.com/embed/Z3ZOCgkYt8Y?si=xKsGIqZoZEEwChcK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-            <div class="text">
-                <div class="title-container">
-                    <h2 class="title">Version 2.4 - 45% Faster, Views in Posts Menu, and New Email Report Features</h2>
-                    <span class="date">April 15th, 2024</span>
-                </div>
-                <div class="description-container">
-                    <p>Version 2.4.0 sped up the analytics reports by 45% and added a new Views column into the Posts menu. For Pro users, the email report now includes daily and weekly sending, a quick preview, and a notice displaying the next send date.</p>
-                    <p>You can review the <a href="https://feedback.independentwp.com/updates/v2-4-45-faster-views-in-posts-menu-and-new-email-report-features" target="_blank">full changelog here</a>.</p>
                 </div>
             </div>
         </div>

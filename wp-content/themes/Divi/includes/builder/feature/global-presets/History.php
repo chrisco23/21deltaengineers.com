@@ -4,6 +4,8 @@ class ET_Builder_Global_Presets_History {
 	const CUSTOM_DEFAULTS_HISTORY_OPTION       = 'builder_custom_defaults_history';
 	const GLOBAL_PRESETS_HISTORY_OPTION_LEGACY = 'builder_global_presets_history';
 	const GLOBAL_PRESETS_HISTORY_OPTION        = 'builder_global_presets_history_ng';
+	const GLOBAL_PRESETS_HISTORY_META          = 'builder_presets_history_meta';
+	const GLOBAL_PRESETS_HISTORY_ITEM          = 'builder_presets_history_item';
 	const HISTORY_STORAGE_MIGRATED_FLAG        = 'builder_global_presets_history_migrated';
 	const GLOBAL_PRESETS_HISTORY_LENGTH        = 100;
 
@@ -11,6 +13,7 @@ class ET_Builder_Global_Presets_History {
 
 	private function __construct() {
 		$this->_migrate_history_storage();
+		$this->_split_history_storage();
 		$this->_register_ajax_callbacks();
 		$this->_register_hooks();
 	}
@@ -92,13 +95,27 @@ class ET_Builder_Global_Presets_History {
 
 		if ( $history_update->is_new_record ) {
 			$history->history[ $history->index ] = $history_update->current_state;
+
+			if ( count( $history->history ) > self::GLOBAL_PRESETS_HISTORY_LENGTH ) {
+				self::_slide_history_records();
+
+				$history->history = array_slice( $history->history, -self::GLOBAL_PRESETS_HISTORY_LENGTH );
+				$history->index   = min( $history->index, self::GLOBAL_PRESETS_HISTORY_LENGTH - 1 );
+			}
 		}
 
 		if ( self::sanitize_and_validate( $history ) ) {
 			$current_settings = $history->history[ $history->index ];
 			// Update option for product setting (last attr in args list).
 			et_update_option( ET_Builder_Global_Presets_Settings::GLOBAL_PRESETS_OPTION, $current_settings->settings, false, '', '', true );
-			et_update_option( self::GLOBAL_PRESETS_HISTORY_OPTION, $history, false, '', '', true );
+
+			$history_meta = array(
+				'index' => $history->index,
+			);
+
+			et_update_option( self::GLOBAL_PRESETS_HISTORY_META, $history_meta, false, '', '', true );
+
+			et_update_option( self::GLOBAL_PRESETS_HISTORY_ITEM . '_' . $history->index, $history->history[ $history->index ], false, '', '', true );
 
 			ET_Core_PageResource::remove_static_resources( 'all', 'all' );
 
@@ -152,19 +169,20 @@ class ET_Builder_Global_Presets_History {
 			'label'    => esc_html__( 'Imported From Layout', 'et_builder' ),
 		);
 
-		$history       = $this->_get_global_presets_history();
-		$history_index = (int) $history->index;
+		$history_index = (int) self::get_global_history_index();
+		$new_index     = (int) $history_index + 1;
 
-		$history->history = array_slice( $history->history, 0, $history_index + 1 );
-		array_push( $history->history, $new_record );
-		$history->index++;
-
-		if ( count( $history->history ) > self::GLOBAL_PRESETS_HISTORY_LENGTH ) {
-			$history->history = array_slice( $history->history, -self::GLOBAL_PRESETS_HISTORY_LENGTH );
-			$history->index   = min( $history->index, self::GLOBAL_PRESETS_HISTORY_LENGTH - 1 );
+		if ( $new_index >= self::GLOBAL_PRESETS_HISTORY_LENGTH ) {
+			self::_slide_history_records();
+			$new_index = min( $new_index, self::GLOBAL_PRESETS_HISTORY_LENGTH - 1 );
 		}
 
-		et_update_option( self::GLOBAL_PRESETS_HISTORY_OPTION, $history, false, '', '', true );
+		$history_meta = array(
+			'index' => $new_index,
+		);
+
+		et_update_option( self::GLOBAL_PRESETS_HISTORY_META, $history_meta, false, '', '', true );
+		et_update_option( self::GLOBAL_PRESETS_HISTORY_ITEM . '_' . $new_index, $new_record, false, '', '', true );
 
 		ET_Core_PageResource::remove_static_resources( 'all', 'all' );
 	}
@@ -177,8 +195,8 @@ class ET_Builder_Global_Presets_History {
 	 * @return int History index.
 	 */
 	public function get_global_history_index() {
-		$history = $this->_get_global_presets_history();
-		return is_object( $history ) ? (int) $history->index : md5( wp_json_encode( $history ) );
+		$history_meta = et_get_option( self::GLOBAL_PRESETS_HISTORY_META, false, '', false, false, '', '', true );
+		return isset( $history_meta['index'] ) ? $history_meta['index'] : -1;
 	}
 
 	/**
@@ -306,6 +324,31 @@ class ET_Builder_Global_Presets_History {
 	}
 
 	/**
+	 * Slides history records to the left.
+	 * I.e. remove the old record and recalculate indexes to fit into GLOBAL_PRESETS_HISTORY_LENGTH.
+	 *
+	 * @since 4.26.1
+	 *
+	 * @return void
+	 */
+	private function _slide_history_records() {
+		for ( $i = 1; $i <= self::GLOBAL_PRESETS_HISTORY_LENGTH; $i++ ) {
+			$history_record = et_get_option( self::GLOBAL_PRESETS_HISTORY_ITEM . '_' . $i, false, '', false, false, '', '', true );
+			$new_index      = $i - 1;
+
+			// Slide history records to the left.
+			if ( ! empty( $history_record ) ) {
+				et_update_option( self::GLOBAL_PRESETS_HISTORY_ITEM . '_' . $new_index, $history_record, false, '', '', true );
+			}
+
+			// Remove extra record.
+			if ( self::GLOBAL_PRESETS_HISTORY_LENGTH === $i ) {
+				et_delete_option( self::GLOBAL_PRESETS_HISTORY_ITEM . '_' . $i );
+			}
+		}
+	}
+
+	/**
 	 * Returns the Global Presets history object from DB
 	 *
 	 * @since 4.5.0
@@ -313,13 +356,23 @@ class ET_Builder_Global_Presets_History {
 	 * @return object
 	 */
 	private function _get_global_presets_history() {
-		$history = et_get_option( self::GLOBAL_PRESETS_HISTORY_OPTION, false, '', false, false, '', '', true );
-		if ( ! $history ) {
-			$history = (object) array(
-				'history' => array(),
-				'index'   => - 1,
-			);
+		$history_meta    = et_get_option( self::GLOBAL_PRESETS_HISTORY_META, false, '', false, false, '', '', true );
+		$history_records = array();
+
+		for ( $i = 0; $i < self::GLOBAL_PRESETS_HISTORY_LENGTH; $i++ ) {
+			$history_record = et_get_option( self::GLOBAL_PRESETS_HISTORY_ITEM . '_' . $i, false, '', false, false, '', '', true );
+
+			if ( ! $history_record ) {
+				break;
+			}
+
+			array_push( $history_records, $history_record );
 		}
+
+		$history = (object) array(
+			'history' => $history_records,
+			'index'   => isset( $history_meta['index'] ) ? $history_meta['index'] : -1,
+		);
 
 		// Ensure history is an object.
 		$history = is_object( $history ) ? $history : (object) $history;
@@ -327,6 +380,46 @@ class ET_Builder_Global_Presets_History {
 		$this->_apply_attribute_migrations( $history );
 
 		return $history;
+	}
+
+	/**
+	 * Split history storage into separate records in DB.
+	 *
+	 * @since 4.26.1
+	 *
+	 * @return void
+	 */
+	protected function _split_history_storage() {
+		if ( self::_is_history_split() ) {
+			return;
+		}
+
+		$history_meta = array(
+			'index' => -1,
+			'size'  => 0,
+		);
+
+		// Get option from product setting (last attr in args list).
+		$global_history_ng = et_get_option( self::GLOBAL_PRESETS_HISTORY_OPTION, array(), '', true, false, '', '', true );
+
+		if ( ! $global_history_ng ) {
+			et_update_option( self::GLOBAL_PRESETS_HISTORY_META, $history_meta, false, '', '', true );
+			return;
+		}
+
+		$history_index = (int) $global_history_ng->index;
+		$history_size  = ! empty( $global_history_ng->history ) ? count( $global_history_ng->history ) : 0;
+
+		$history_meta['index'] = $history_index;
+		$history_meta['size']  = $history_size;
+
+		et_update_option( self::GLOBAL_PRESETS_HISTORY_META, $history_meta, false, '', '', true );
+
+		if ( ! empty( $global_history_ng->history ) ) {
+			foreach ( $global_history_ng->history as $history_index => $presets_settings ) {
+				et_update_option( self::GLOBAL_PRESETS_HISTORY_ITEM . '_' . $history_index, $presets_settings, false, '', '', true );
+			}
+		}
 	}
 
 	/**
@@ -428,6 +521,17 @@ class ET_Builder_Global_Presets_History {
 	 */
 	protected function _is_history_storage_migrated() {
 		return et_get_option( self::HISTORY_STORAGE_MIGRATED_FLAG, false );
+	}
+
+	/**
+	 * Check whether history was migrated into separate records in DB.
+	 *
+	 * @since 4.26.1
+	 *
+	 * @return boolean
+	 */
+	protected function _is_history_split() {
+		return ! empty( et_get_option( self::GLOBAL_PRESETS_HISTORY_META, false, '', false, false, '', '', true ) );
 	}
 
 	/**

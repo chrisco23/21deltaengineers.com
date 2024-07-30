@@ -16,7 +16,7 @@ abstract class Migration
         $current_db_version = \get_option('iawp_db_version', '0');
         if (\version_compare($current_db_version, $this->database_version, '<')) {
             $this->migrate();
-            \update_option('iawp_db_version', $this->database_version);
+            \update_option('iawp_db_version', $this->database_version, \true);
         }
     }
     /**

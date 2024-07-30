@@ -94,7 +94,11 @@ abstract class AJAX
         }
         $type = \gettype($_POST[$field]);
         if ($type == 'array') {
-            return \rest_sanitize_array($_POST[$field]);
+            if ($this->array_is_list($_POST[$field])) {
+                return \rest_sanitize_array($_POST[$field]);
+            } else {
+                return \rest_sanitize_object($_POST[$field]);
+            }
         } else {
             return \stripslashes(\sanitize_text_field($_POST[$field]));
         }
@@ -110,6 +114,18 @@ abstract class AJAX
         } else {
             return null;
         }
+    }
+    // This is the recommended polyfill: https://wiki.php.net/rfc/is_list
+    private function array_is_list(array $array) : bool
+    {
+        $expectedKey = 0;
+        foreach ($array as $i => $_) {
+            if ($i !== $expectedKey) {
+                return \false;
+            }
+            $expectedKey++;
+        }
+        return \true;
     }
     private function missing_fields() : bool
     {

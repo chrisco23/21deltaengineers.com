@@ -212,7 +212,7 @@ trait CanBeOneOfMany
      */
     public function qualifySubSelectColumn($column)
     {
-        return $this->getRelationName() . '.' . last(\explode('.', $column));
+        return $this->getRelationName() . '.' . \IAWPSCOPED\last(\explode('.', $column));
     }
     /**
      * Qualify related column using the related table name if it is not already qualified.

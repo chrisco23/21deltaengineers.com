@@ -52,10 +52,10 @@ class Submission_Listener
         // MailOptin
         \add_action('mailoptin_track_conversions', function ($lead_data) {
             try {
-                if (!\class_exists('IAWPSCOPED\\MailOptin\\Core\\Repositories\\OptinCampaignsRepository')) {
+                if (!\class_exists('\\MailOptin\\Core\\Repositories\\OptinCampaignsRepository')) {
                     return;
                 }
-                $form_title = \IAWPSCOPED\MailOptin\Core\Repositories\OptinCampaignsRepository::get_optin_campaign_name($lead_data['optin_campaign_id']);
+                $form_title = \MailOptin\Core\Repositories\OptinCampaignsRepository::get_optin_campaign_name($lead_data['optin_campaign_id']);
                 if (\is_null($form_title)) {
                     return;
                 }
@@ -106,10 +106,10 @@ class Submission_Listener
         // Formidable Forms
         \add_action('frm_after_create_entry', function ($entry_id, $form_id) {
             try {
-                if (!\class_exists('IAWPSCOPED\\FrmForm')) {
+                if (!\class_exists('\\FrmForm')) {
                     return;
                 }
-                $form = \IAWPSCOPED\FrmForm::getOne($form_id);
+                $form = \FrmForm::getOne($form_id);
                 $submission = new \IAWP\Form_Submissions\Submission(10, \intval($form_id), Security::string($form->name));
                 $submission->record_submission();
             } catch (\Throwable $e) {
@@ -178,6 +178,69 @@ class Submission_Listener
                     return;
                 }
                 $submission = new \IAWP\Form_Submissions\Submission(14, \intval($form_id), Security::string($form_name));
+                $submission->record_submission();
+            } catch (\Throwable $e) {
+            }
+        }, 10, 2);
+        // Custom form submissions
+        \add_action('iawp_custom_form_submissions', function (int $form_id, string $form_title) {
+            try {
+                $submission = new \IAWP\Form_Submissions\Submission(15, \intval($form_id), Security::string($form_title));
+                $submission->record_submission();
+            } catch (\Throwable $e) {
+            }
+        }, 10, 2);
+        // Bit Form
+        \add_action('bitform_submit_success', function ($form_id, $entry_id, $form_data) {
+            try {
+                if (!\class_exists('\\BitCode\\BitForm\\Core\\Form\\FormManager')) {
+                    return;
+                }
+                $form = new \BitCode\BitForm\Core\Form\FormManager($form_id);
+                $form_name = $form->getFormName();
+                $submission = new \IAWP\Form_Submissions\Submission(16, \intval($form_id), Security::string($form_name));
+                $submission->record_submission();
+            } catch (\Throwable $e) {
+            }
+        }, 10, 3);
+        \add_action('forminator_form_submit_response', function ($response, $form_id) {
+            if (!\function_exists('IAWPSCOPED\\forminator_get_form_name')) {
+                return $response;
+            }
+            $form_name = forminator_get_form_name($form_id);
+            try {
+                $submission = new \IAWP\Form_Submissions\Submission(17, \intval($form_id), Security::string($form_name));
+                $submission->record_submission();
+            } catch (\Throwable $e) {
+            }
+            return $response;
+        }, 10, 2);
+        \add_action('forminator_form_ajax_submit_response', function ($response, $form_id) {
+            if (!\function_exists('IAWPSCOPED\\forminator_get_form_name')) {
+                return $response;
+            }
+            $form_name = forminator_get_form_name($form_id);
+            try {
+                $submission = new \IAWP\Form_Submissions\Submission(17, \intval($form_id), Security::string($form_name));
+                $submission->record_submission();
+            } catch (\Throwable $e) {
+            }
+            return $response;
+        }, 10, 2);
+        // Hustle
+        \add_action('hustle_form_after_handle_submit', function ($module_id, $response) {
+            try {
+                if ($response['success'] === \false) {
+                    return;
+                }
+                if (!\class_exists('\\Hustle_Model')) {
+                    return;
+                }
+                $module = \Hustle_Model::get_module($module_id);
+                if (\is_wp_error($module)) {
+                    return;
+                }
+                $submission = new \IAWP\Form_Submissions\Submission(18, \intval($module_id), Security::string($module->module_name));
                 $submission->record_submission();
             } catch (\Throwable $e) {
             }

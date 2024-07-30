@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect, Generic.WhiteSpace.ScopeIndent.IncorrectExact -- Until we reformat this entire file, this rule makes reviewing PRs very difficult.
 if ( ! class_exists( 'ET_Core_Updates' ) ):
 /**
  * Handles the updates workflow.
@@ -19,6 +19,9 @@ final class ET_Core_Updates {
 
 	// class version
 	protected $version;
+
+	// Is a product being upgraded in the current API request.
+	protected $upgraded_a_product = false;
 
 	private static $_this;
 
@@ -52,7 +55,7 @@ final class ET_Core_Updates {
 		add_filter( 'wp_prepare_themes_for_js', array( $this, 'replace_theme_update_notification' ) );
 		add_filter( 'upgrader_package_options', array( $this, 'check_upgrading_product' ) );
 
-		// The 4th paramenter, $hook_extra was added in WordPress 5.5.0.
+		// The 4th parameter, $hook_extra was added in WordPress 5.5.0.
 		if ( version_compare( $wp_version, '5.5.0', '>=' ) ) {
 			add_filter( 'upgrader_pre_download', array( $this, 'update_error_message' ), 20, 4 );
 		} else {
@@ -82,6 +85,8 @@ final class ET_Core_Updates {
 		add_action( 'update_option_et_automatic_updates_options', array( $this, 'force_update_requests' ) );
 
 		add_action( 'deleted_site_transient', array( $this, 'maybe_reset_et_products_update_transient' ) );
+
+		add_action( 'upgrader_process_complete', array( $this, 'upgraded_a_product' ), 9, 0 );
 	}
 
 	function check_upgrading_product( $options ) {
@@ -195,7 +200,7 @@ final class ET_Core_Updates {
 		}
 
 		$hook_name = ! empty( $hook_extra['theme'] ) ? 'theme' : 'plugin';
-		$site_transient = 'theme' === $hook_name ? get_site_transient( 'et_update_themes' ) : get_site_transient( 'et_update_all_plugins' );
+		$site_transient = 'theme' === $hook_name ? get_site_transient( 'et_update_themes' ) : get_site_transient( 'et_update_plugins' );
 
 		$changelog_url = '';
 		if ( isset( $site_transient->response ) && ! empty( $site_transient->response[ $hook_extra[ $hook_name ] ] ) ) {
@@ -228,7 +233,7 @@ final class ET_Core_Updates {
 
 		$update_transients = array(
 			'et_update_themes',
-			'et_update_all_plugins',
+			'et_update_plugins',
 		);
 
 		foreach ( $update_transients as $update_transient_name ) {
@@ -349,33 +354,80 @@ final class ET_Core_Updates {
 		return $update_data;
 	}
 
+	/**
+	 * Merges product information from cached et updates transients
+	 * to the main WordPress updates transients.
+	 *
+	 * @param array $update_transient The main WordPress themes or plugins updates transient.
+	 * @param array $et_update_products_data The cached et themes or plugins updates transient.
+	 * @return array
+	 */
 	function merge_et_products_response( $update_transient, $et_update_products_data ) {
-		if (
-			empty( $et_update_products_data )
-			|| (
-				empty( $et_update_products_data->response )
-				&& empty( $et_update_products_data->no_update )
-			)
-		) {
-			return $update_transient;
+		// If $et_update_products_data is empty or both its response and no_update arrays are empty, there is no cached data to merge and we can return the main WordPress transient.
+		if ( empty( $et_update_products_data ) || ( empty( $et_update_products_data->response ) && empty( $et_update_products_data->no_update ) ) ) {
+			return $update_transient; // Return the original transient if true.
 		}
 
+		// Fields to merge.
 		$merge_data_fields = array(
 			'response',
 			'no_update',
 		);
 
+		// Merge the fields.
 		foreach ( $merge_data_fields as $data_field_name ) {
 			if ( empty( $et_update_products_data->$data_field_name ) ) {
-				continue;
+				continue; // Skip if the field is empty.
 			}
 
+			// Get the default response data.
 			$default_response_data = ! empty( $update_transient->$data_field_name ) ? $update_transient->$data_field_name : array();
 
-			$update_transient->$data_field_name = array_merge( $default_response_data, $et_update_products_data->$data_field_name );
+			// Merge the data.
+			$update_transient->$data_field_name = array_merge( $default_response_data, (array) $et_update_products_data->$data_field_name );
 		}
 
-		return $update_transient;
+		// Check if the response array is empty in the cached transient, which is where products that need to be updated are listed. Before merging, we need to make sure the latest version isn't already installed, in which case it needs to be moved to the no_update array.
+		if ( ! empty( $et_update_products_data->response ) ) {
+			foreach ( $et_update_products_data->response as $product => $data ) {
+				// Get the currently installed product version from the primary WordPress update transient.
+				$installed_version = isset( $update_transient->checked[ $product ] ) ? $update_transient->checked[ $product ] : null;
+				// Get the latest product version from the cached transient, handling both array and object cases.
+				if ( is_array( $data ) ) {
+					$latest_version = isset( $data['new_version'] ) ? $data['new_version'] : null;
+				} elseif ( is_object( $data ) ) {
+					$latest_version = isset( $data->new_version ) ? $data->new_version : null;
+				}
+
+				// If the currently installed version is the latest version, we need to move the product to the no_update array and remove the product from the response array.
+				if ( $installed_version && $latest_version && version_compare( $installed_version, $latest_version, '>=' ) ) {
+					$update_transient->no_update[ $product ] = $data;
+					unset( $update_transient->response[ $product ] );
+				}
+			}
+		}
+
+		// Now we need to do the opposite. Check if the no_update array is empty in the cached transient, which is where products that don't need to be updated are listed. If an update is required, move the product to the response array.
+		if ( ! empty( $et_update_products_data->no_update ) ) {
+			foreach ( $et_update_products_data->no_update as $product => $data ) {
+				// Get the currently installed product version from the primary WordPress update transient.
+				$installed_version = isset( $update_transient->checked[ $product ] ) ? $update_transient->checked[ $product ] : null;
+				// Get the latest product version from the cached transient, handling both array and object cases.
+				if ( is_array( $data ) ) {
+					$latest_version = isset( $data['new_version'] ) ? $data['new_version'] : null;
+				} elseif ( is_object( $data ) ) {
+					$latest_version = isset( $data->new_version ) ? $data->new_version : null;
+				}
+
+				// If the currently installed version is not the latest version, we need to move the product to the response array and remove the product from the no_update array.
+				if ( $installed_version && $latest_version && version_compare( $installed_version, $latest_version, '<' ) ) {
+					$update_transient->response[ $product ] = $data;
+					unset( $update_transient->no_update[ $product ] );
+				}
+			}
+		}
+
+		return $update_transient; // Return the merged transient updated with the most recently cached product info.
 	}
 
 	function check_plugins_updates( $update_transient ) {
@@ -387,13 +439,14 @@ final class ET_Core_Updates {
 
 		$plugins = [];
 
-		$et_update_plugins = get_site_transient( 'et_update_all_plugins' );
+		$et_update_plugins = get_site_transient( 'et_update_plugins' );
 
 		// update_plugins transient gets set two times, so we ensure we make a request once
 		if (
-			isset( $et_update_plugins->last_checked )
+			! $this->upgraded_a_product
+			&& isset( $et_update_plugins->last_checked )
 			&& isset( $update_transient->last_checked )
-			&& $et_update_plugins->last_checked > ( $update_transient->last_checked - 60 )
+			&& $et_update_plugins->last_checked > ( $update_transient->last_checked - 10 * MINUTE_IN_SECONDS )
 		) {
 			return $this->merge_et_products_response( $update_transient, $et_update_plugins );
 		}
@@ -470,7 +523,7 @@ final class ET_Core_Updates {
 
 				$update_transient = $this->merge_et_products_response( $update_transient, $plugins_response );
 
-				set_site_transient( 'et_update_all_plugins', $last_update );
+				set_site_transient( 'et_update_plugins', $last_update );
 
 				$this->update_product_domains();
 			}
@@ -491,7 +544,7 @@ final class ET_Core_Updates {
 		}
 
 		if ( isset( $args->slug ) ) {
-			$et_update_lb_plugin = get_site_transient( 'et_update_all_plugins' );
+			$et_update_lb_plugin = get_site_transient( 'et_update_plugins' );
 
 			$plugin_basename = sprintf( '%1$s/%1$s.php', sanitize_text_field( $args->slug ) );
 
@@ -608,9 +661,10 @@ final class ET_Core_Updates {
 
 		// update_themes transient gets set two times, so we ensure we make a request once
 		if (
-			isset( $et_update_themes->last_checked )
+			! $this->upgraded_a_product
+			&& isset( $et_update_themes->last_checked )
 			&& isset( $update_transient->last_checked )
-			&& $et_update_themes->last_checked > ( $update_transient->last_checked - 60 )
+			&& $et_update_themes->last_checked > ( $update_transient->last_checked - 10 * MINUTE_IN_SECONDS )
 		) {
 			return $this->merge_et_products_response( $update_transient, $et_update_themes );
 		}
@@ -687,6 +741,11 @@ final class ET_Core_Updates {
 	}
 
 	function maybe_show_account_notice() {
+		// Don't show notice on onboarding page.
+		if ( isset( $_GET['page'] ) && 'et_onboarding' === $_GET['page'] ) {
+			return;
+		}
+
 		if ( empty( $this->options['username'] ) || empty( $this->options['api_key'] ) ) {
 			return;
 		}
@@ -760,7 +819,7 @@ final class ET_Core_Updates {
 		}
 
 		$matches                 = array();
-		$update_transient        = get_site_transient( 'et_update_all_plugins' );
+		$update_transient        = get_site_transient( 'et_update_plugins' );
 		$et_updated_plugins_data = get_transient( 'et_updated_plugins_data' );
 		$has_last_checked        = ! empty( $update_transient->last_checked ) && ! empty( $et_updated_plugins_data->last_checked );
 
@@ -813,7 +872,7 @@ final class ET_Core_Updates {
 			'update_themes',
 			'update_plugins',
 			'et_update_themes',
-			'et_update_all_plugins',
+			'et_update_plugins',
 		);
 
 		foreach ( $update_transients as $update_transient ) {
@@ -857,7 +916,7 @@ final class ET_Core_Updates {
 		// Transient names for update transients we're interested in.
 		$update_transients_names = array(
 			'update_themes'  => 'et_update_themes',
-			'update_plugins' => 'et_update_all_plugins',
+			'update_plugins' => 'et_update_plugins',
 		);
 
 		// Check if the transient name is one of the update transients we're interested in.
@@ -877,6 +936,15 @@ final class ET_Core_Updates {
 
 		// Delete the ET update transient, because it's older than 24 hours.
 		delete_site_transient( $update_transients_names[ $transient_name ] );
+	}
+
+	/**
+	 * Detects if the current API request is related to a product update.
+	 * In this case, we need to allow the request to bypass rate limiting
+	 * since the update process requests two requests.
+	 */
+	function upgraded_a_product() {
+		$this->upgraded_a_product = true;
 	}
 }
 endif;

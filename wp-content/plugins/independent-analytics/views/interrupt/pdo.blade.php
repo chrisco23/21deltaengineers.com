@@ -10,7 +10,7 @@
             class="iawp-button purple"
             target="_blank">
             <span class="dashicons dashicons-sos"></span>
-            <span>{{ __('Follow Tutorial', 'independent-analytics') }}</span>
+            <span><?php esc_html_e('Follow Tutorial', 'independent-analytics'); ?></span>
         </a>
     </p>
 </div>

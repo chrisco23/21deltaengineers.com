@@ -296,10 +296,10 @@ class DBDBGallery {
 
         // Set defaults
         $useNewDefaults = (!empty($args['dbdb_version']) && version_compare($args['dbdb_version'], '3.2.6', '>='));
-        if (!empty($args['db_images_per_row']) && !isset($args['db_image_max_width'])) {
+        if (!empty($args['db_images_per_row']) && (!isset($args['db_image_max_width']) || $args['db_image_max_width'] === '83.5')) {
             $args['db_image_max_width'] = $useNewDefaults ? '83.5%' : '100%';
         }
-        if (!empty($args['db_images_per_row']) && !isset($args['db_image_row_spacing'])) {
+        if (!empty($args['db_images_per_row']) && (!isset($args['db_image_row_spacing']) || $args['db_image_row_spacing'] === '5.5')) {
             $args['db_image_row_spacing'] = $useNewDefaults ? '5.5%' : '0%';
         }
 

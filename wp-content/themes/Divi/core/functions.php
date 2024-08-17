@@ -2122,6 +2122,10 @@ endif;
  * @return void
  */
 function et_code_snippets_admin_enqueue_scripts( $hook_suffix ) {
+	if ( ! function_exists( 'et_builder_bfb_enabled' ) ) {
+		return;
+	}
+
 	global $shortname;
 
 	// phpcs:disable WordPress.Security.NonceVerification -- This function does not change any state and is therefore not susceptible to CSRF.
@@ -2176,6 +2180,10 @@ add_action( 'wp_enqueue_scripts', 'et_code_snippets_vb_enqueue_scripts' );
  * @return void
  */
 function et_ai_admin_enqueue_scripts() {
+	if ( ! function_exists( 'et_builder_bfb_enabled' ) ) {
+		return;
+	}
+
 	if ( ! et_builder_bfb_enabled() ) {
 		return;
 	}

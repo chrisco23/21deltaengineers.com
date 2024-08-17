@@ -119,6 +119,10 @@ function _et_core_path_belongs_to_active_product( $path ) {
 		return is_plugin_active( 'monarch/monarch.php' );
 	}
 
+	if ( false !== strpos( $path, '/divi-dash/' ) ) {
+		return is_plugin_active( 'divi-dash/divi-dash.php' );
+	}
+
 	return false;
 }
 endif;
@@ -184,6 +188,10 @@ if ( ! function_exists( 'register_portability_for_code_snippets' ) ) :
 	 * @since 4.19.0
 	 */
 	function register_portability_for_code_snippets() {
+		if ( ! function_exists( 'et_pb_is_allowed' ) ) {
+			return;
+		}
+
 		// No permission, can't load library UI in the first place.
 		if ( et_pb_is_allowed( 'divi_library' ) ) {
 			// Register portability.

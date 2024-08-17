@@ -6,7 +6,6 @@ namespace DiviBooster\GalleryBooster;
 
 if (version_compare(phpversion(), '5.3', '>=')) {
     include_once(dirname(__FILE__) . '/cursor-arrows/cursor-arrows.php');
-    include_once(dirname(__FILE__) . '/image-count/image-count.php');
     include_once(dirname(__FILE__) . '/order/order.php');
     include_once(dirname(__FILE__) . '/grid-image-sizes/grid-image-sizes.php');
 
@@ -22,7 +21,10 @@ if (version_compare(phpversion(), '5.3', '>=')) {
     include_once(dirname(__FILE__) . '/lightbox-close-button-styles/lightbox-close-button-styles.php');
     include_once(dirname(__FILE__) . '/lightbox-image-count/lightbox-image-count.php');
     include_once(dirname(__FILE__) . '/lightbox-title/lightbox-title.php');
+    include_once(dirname(__FILE__) . '/image-count/image-count.php');
     include_once(dirname(__FILE__) . '/disable-grid-slide-in-effect/disable-grid-slide-in-effect.php');
+    include_once(dirname(__FILE__) . '/slider-hide-arrows/slider-hide-arrows.php');
+    include_once(dirname(__FILE__) . '/slider-hide-dots/slider-hide-dots.php');
 }
 
 // === Add the gallery module fields filter ===
@@ -59,7 +61,7 @@ function remove_vb_preview_warnings() {
 // === Wrap the gallery output filter ===
 
 if (function_exists('add_filter')) {
-\add_filter('et_module_shortcode_output', __NAMESPACE__ . '\\filter_gallery_output', 10, 3);
+    \add_filter('et_module_shortcode_output', __NAMESPACE__ . '\\filter_gallery_output', 10, 3);
 }
 
 function filter_gallery_output($output, $render_slug, $module) {
@@ -101,7 +103,7 @@ function filter_process_computed_property() {
 }
 
 if (function_exists('add_action')) {
-add_action('wp_ajax_et_pb_process_computed_property', __NAMESPACE__ . '\\filter_process_computed_property', 9);
+    add_action('wp_ajax_et_pb_process_computed_property', __NAMESPACE__ . '\\filter_process_computed_property', 9);
 }
 
 
@@ -115,7 +117,7 @@ function filter_shortcode_attributes($props, $attrs, $render_slug) {
 }
 
 if (function_exists('add_filter')) {
-add_filter('et_pb_module_shortcode_attributes', __NAMESPACE__ . '\\filter_shortcode_attributes', 10, 3);
+    add_filter('et_pb_module_shortcode_attributes', __NAMESPACE__ . '\\filter_shortcode_attributes', 10, 3);
 }
 
 // === Helper functions ===
@@ -153,20 +155,20 @@ function layout($props) {
 // === Add the module order class with prefix (e.g. dbdb_lightbox_open_et_pb_gallery_2) to the body (for targeting lightbox associated with a particular module) ===
 
 if (function_exists('add_action')) {
-add_action('wp_footer', __NAMESPACE__ . '\\add_opened_lightbox_class_to_body');
+    add_action('wp_footer', __NAMESPACE__ . '\\add_opened_lightbox_class_to_body');
 }
 
 function add_opened_lightbox_class_to_body() {
 ?>
     <script>
         jQuery(document).ready(function($) {
-            $(document).on('click', '.et_pb_gallery_grid .et_pb_gallery_image a', function() {
+            $(document).on('click', '.et_pb_gallery .et_pb_gallery_image a', function() {
 
                 // Remove the old class
                 $('body').removeClass(function(index, className) {
-                        return (className.match(/(^|\s)et_pb_gallery_\d+_dbdb_lightbox_open/g) || []).join(' ');
-                    });
-                
+                    return (className.match(/(^|\s)et_pb_gallery_\d+_dbdb_lightbox_open/g) || []).join(' ');
+                });
+
                 // Add the new class
                 var gallery_module_order = $(this).closest('.et_pb_gallery').attr('class').match(/et_pb_gallery_\d+/)[0];
                 $('body').addClass(gallery_module_order + '_dbdb_lightbox_open');

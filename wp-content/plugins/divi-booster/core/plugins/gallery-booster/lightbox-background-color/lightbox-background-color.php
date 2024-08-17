@@ -6,7 +6,7 @@ use \DiviBooster\GalleryBooster as Gallery;
 
 if (function_exists('add_filter') && function_exists('add_action')) {
     \add_filter('divi_booster/gallery_booster/gallery_module_fields', __NAMESPACE__ . '\\add_field');
-    \add_filter('divi_booster/gallery_booster/gallery_output', __NAMESPACE__ . '\\enable_feature', 10, 3);    
+    \add_filter('divi_booster/gallery_booster/gallery_output', __NAMESPACE__ . '\\enable_feature', 10, 3);
     \add_filter('et_pb_gallery_advanced_fields', __NAMESPACE__ . '\\add_advanced_fields', 10, 3);
 }
 
@@ -23,9 +23,6 @@ function add_field($fields) {
             'tab_slug' => 'advanced',
             'toggle_slug'      => 'dbdb_lightbox',
             'description'      => esc_html__('Choose the background color for lightbox.', 'divi-gallery-booster'),
-            'show_if' => array(
-                'fullwidth' => 'off',
-            ),  
         ),
     );
     return array_merge($fields, $new_fields);
@@ -40,15 +37,13 @@ function enable_feature($output, $render_slug, $module) {
     }
     $props = $module->props;
 
-    if (Gallery\layout($props) !== 'grid') {
-        return $output;
-    }
-
     if (!empty($props['dbdb_lightbox_background_color'])) {
         if (is_callable('ET_Builder_Element::set_style')) {
-            \ET_Builder_Element::set_style($render_slug, array(
-                'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-bg',
-                'declaration' => 'background-color: '.esc_html($props['dbdb_lightbox_background_color']).' !important; opacity: 1 !important;'
+            \ET_Builder_Element::set_style(
+                $render_slug,
+                array(
+                    'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-bg',
+                    'declaration' => 'background-color: ' . esc_html($props['dbdb_lightbox_background_color']) . ' !important; opacity: 1 !important;'
                 )
             );
         }
@@ -74,7 +69,7 @@ function add_advanced_fields($fields, $slug, $main_css_element) {
         'hide_text_align' => true,
         'hide_font'        => true,
         'hide_line_height' => true,
-        'hide_letter_spacing' => true,	
+        'hide_letter_spacing' => true,
     );
     return $fields;
 }

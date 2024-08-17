@@ -36,7 +36,7 @@ function add_gallery_image_count_field($fields) {
     }
     return $fields + array(
         'dbdb_image_count' => array(
-            'label'             => esc_html__('Show Image Count', 'et_builder'),
+            'label'             => esc_html__('Show Slider Image Count', 'et_builder'),
             'type'              => 'yes_no_button',
             'option_category'   => 'configuration',
             'options'           => array(
@@ -59,10 +59,6 @@ function add_gallery_image_count_field($fields) {
             'default'           => esc_html__(' of ', 'divi-booster'),
             'toggle_slug'       => 'elements',
             'description'       => esc_html__('Customize the text between the current image number and total images.', 'divi-booster'),
-            'show_if'           => array(
-                'dbdb_image_count' => 'on',
-                'fullwidth' => 'on'
-            ),
         )
     );
 }
@@ -79,6 +75,11 @@ function add_gallery_image_count($output, $render_slug, $module) {
         return $output;
     }
     $props = $module->props;
+
+    // Set a separator data attribute on the et_pb_gallery_items element
+    if (!empty($props['dbdb_image_count_separator']) && $props['dbdb_image_count_separator'] !== ' of ') {
+        $output = preg_replace('/(class="[^"]*\bet_pb_gallery_items\b[^"]*")/s', '\\1 data-dbdb-image-count-separator="' . esc_attr($props['dbdb_image_count_separator']) . '"', $output);
+    }
 
     if (Gallery\layout($props) !== 'slider') {
         return $output;
@@ -136,6 +137,17 @@ function update_gallery_image_count() { ?>
                 }, 50);
             });
 
+            // Set separator on lightbox count
+            setTimeout(
+                function() {
+                    $('.et_pb_gallery_items').each(function() {
+                        if ($(this).data('magnificPopup') && $(this).data('dbdb-image-count-separator')) {
+                            $(this).data('magnificPopup').gallery.tCounter = '%curr%' + $(this).data('dbdb-image-count-separator') + '%total%';
+                        }
+                    });
+                },
+                0
+            );
         });
     </script>
     <style>

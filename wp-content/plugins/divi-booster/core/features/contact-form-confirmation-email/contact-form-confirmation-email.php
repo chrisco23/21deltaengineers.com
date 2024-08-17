@@ -153,8 +153,6 @@ class DBDB_ContactForm_Confirmation {
             $message = str_ireplace("%%{$key}%%", wp_strip_all_tags($value['value']), $message);
         }
 
-        error_log($message);
-
         return $message;
     }
 

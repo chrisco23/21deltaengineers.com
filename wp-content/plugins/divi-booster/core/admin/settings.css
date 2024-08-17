@@ -1,61 +1,69 @@
 /* === General styles === */
 
 .dbdb_no_active_outline:active {
-    outline-style:none;
-    box-shadow:none;
-    border-color:transparent;	
+    outline-style: none;
+    box-shadow: none;
+    border-color: transparent;
 }
 
 /* === Settings form === */
-.wtf-section-head { 
-	font-weight:normal;
-	border:1px solid #bbb;
-	padding:15px 8px 16px 8px;
-	background-color:#e9e9e9;
-	margin-bottom:16px; 
+.wtf-section-head {
+    font-weight: normal;
+    border: 1px solid #bbb;
+    padding: 15px 8px 16px 8px;
+    background-color: #e9e9e9;
+    margin-bottom: 16px;
 }
-.wtf-subheading { 
-	background-color:#ded;
-	margin-left:20px;
-	margin-top:6px;
-	display:none;
+
+.wtf-subheading {
+    background-color: #ded;
+    margin-left: 20px;
+    margin-top: 6px;
+    display: none;
 }
-.wtf-subheading-group { 
-	margin-left:20px !important;
-	margin-bottom:16px !important;
-	display:none;
+
+.wtf-subheading-group {
+    margin-left: 20px !important;
+    margin-bottom: 16px !important;
+    display: none;
 }
+
 .wtf-expanded-icon {
-	height:16px;
-	margin-right:8px;
-	margin-bottom:-2px;
-	transition: all 0.15s ease-in-out 0s;
+    height: 16px;
+    margin-right: 8px;
+    margin-bottom: -2px;
+    transition: all 0.15s ease-in-out 0s;
 }
+
 .wtf-expanded-icon.rotated {
-	-webkit-transform:rotate(90deg);
-	-moz-transform:rotate(90deg);
-	-ms-transform:rotate(90deg);
-	-o-transform:rotate(90deg);
-	transform:rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
 .wtf-setting {
-	border-bottom: 1px solid #ddd;
-	padding-bottom: 0.75em;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.75em;
     padding-top: 1em;
 }
+
 .wtf-setting:first-child {
-	border-top: 1px solid #ddd;
+    border-top: 1px solid #ddd;
 }
 
 .wtf-setting-group {
-	padding:0;
-	margin:0;
-	display: none;  
-	overflow: hidden;
-	position: relative !important;
+    padding: 0;
+    margin: 0;
+    display: none;
+    overflow: hidden;
+    position: relative !important;
 }
-.wtf-setting input[type=checkbox] { margin:8px 6px 10px 6px; }
+
+.wtf-setting input[type=checkbox] {
+    margin: 8px 6px 10px 6px;
+}
 
 .wtf-setting .techlink {
     font-size: 18pt;
@@ -64,82 +72,272 @@
     margin-right: 0.4em;
 }
 
-.db_subsetting { 
-	margin: 5px 0px 10px 40px;
+.db_subsetting {
+    margin: 5px 0px 10px 40px;
 }
 
 /* image picker */
-.wtf-imagepicker-thumb { 
-    height:29px; 
-    vertical-align:top; 
-    margin:1px 2px 0; 
+.wtf-imagepicker-thumb {
+    height: 29px;
+    vertical-align: top;
+    margin: 1px 2px 0;
     filter: drop-shadow(0px 0px 1px #444444);
 }
-.wtf-imagepicker-thumb[src=""] { display: none; }
+
+.wtf-imagepicker-thumb[src=""] {
+    display: none;
+}
 
 /* textbox picker */
-.wtf-textbox { width:96%; margin-left:4%; box-sizing:border-box; height:80px; }
+.wtf-textbox {
+    width: 96%;
+    margin-left: 4%;
+    box-sizing: border-box;
+    height: 80px;
+}
 
 /* selectpicker */
-.wtf-select { display:inline; }
+.wtf-select {
+    display: inline;
+}
 
 /* responsive images */
-.wtf-responsive { 
-	width:100%;position:relative;height:0;
+.wtf-responsive {
+    width: 100%;
+    position: relative;
+    height: 0;
 }
-.wtf-responsive img { 
-	position:absolute;top:0;left:0;width:100%;height:100%;
+
+.wtf-responsive img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 /* Color picker */
-.wp-picker-container{ 
-	vertical-align:middle; 
-	display: inline-block;
-	margin-top:4px;
+.wp-picker-container {
+    vertical-align: middle;
+    display: inline-block;
+    margin-top: 4px;
     margin-left: 6px;
 }
 
-hr { clear: both; }
+hr {
+    clear: both;
+}
 
 
 /* Suppress ads and updates from unrelated plugins on Divi Booster settings page */
-.update-nag, .error, .updated, .notice { display:none !important; }
+.update-nag,
+.error,
+.updated,
+.notice {
+    display: none !important;
+}
 
 /* Show Divi Booster messages */
-.wtf.error { display:block !important; }
-.wtf.error p { 
-	word-wrap: break-word;
+.wtf.error {
+    display: block !important;
 }
-.wtf.error a:focus { outline: 0; }
+
+.wtf.error p {
+    word-wrap: break-word;
+}
+
+.wtf.error a:focus {
+    outline: 0;
+}
 
 /* === CSS Manager === */
 
 /* === sections === */
-input.wtfdivi011_enabled { float:left; }
-div.wtfdivi011_cssblock { width:100%; margin-bottom:16px; box-sizing:border-box; padding-right:30px; }
-textarea.wtfdivi011_css { width:100%; box-sizing:border-box; min-height:100px; margin:2px 0px 2px 26px; overflow-y:hidden; line-height:1.4em; padding-top:0.3em; max-height: 500px; }
+input.wtfdivi011_enabled {
+    float: left;
+}
+
+div.wtfdivi011_cssblock {
+    width: 100%;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    padding-right: 30px;
+}
+
+textarea.wtfdivi011_css {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 100px;
+    margin: 2px 0px 2px 26px;
+    overflow-y: hidden;
+    line-height: 1.4em;
+    padding-top: 0.3em;
+    max-height: 500px;
+}
 
 /* Hide first css block to use as template */
-div.wtfdivi011_cssblock:nth-of-type(1) { display:none; }
+div.wtfdivi011_cssblock:nth-of-type(1) {
+    display: none;
+}
 
 /* Adjust line height so select box doesn't affect layout */
-.wtfdivi011_selector { line-height:2.4em !important; float:left; padding:8px 8px; margin-left:30px; display:none; }
-.wtfdivi011_selector td:nth-of-type(1) { padding-right:6px !important; height:2.4em; vertical-align:bottom;}
-.wtfdivi011_selector td:nth-of-type(2) { width:260px;}
+.wtfdivi011_selector {
+    line-height: 2.4em !important;
+    float: left;
+    padding: 8px 8px;
+    margin-left: 30px;
+    display: none;
+}
+
+.wtfdivi011_selector td:nth-of-type(1) {
+    padding-right: 6px !important;
+    height: 2.4em;
+    vertical-align: bottom;
+}
+
+.wtfdivi011_selector td:nth-of-type(2) {
+    width: 260px;
+}
 
 /* === actions === */
-a.wtfdivi011_action { margin:6px; vertical-align:bottom; background-repeat:no-repeat; background-size:16px 16px; display:inline-block; text-decoration:none; background-position:left center; padding-left:24px; }
-a.wtfdivi011_delete { background-image:url('../img/delete.png'); color:#c06; float:right; margin-right:-24px; }
-a.dbdb_add_custom_css_box { background-image:url('../img/icon_plus_alt2.png'); }
+a.wtfdivi011_action {
+    margin: 6px;
+    vertical-align: bottom;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    display: inline-block;
+    text-decoration: none;
+    background-position: left center;
+    padding-left: 24px;
+}
+
+a.wtfdivi011_delete {
+    background-image: url('../img/delete.png');
+    color: #c06;
+    float: right;
+    margin-right: -24px;
+}
+
+a.dbdb_add_custom_css_box {
+    background-image: url('../img/icon_plus_alt2.png');
+}
 
 /* Padding fields */
 .dbdb-settings-padding th {
-    font-weight: normal;   
+    font-weight: normal;
     width: auto !important;
     min-width: 30px;
     color: #444;
     font-weight: 500;
 }
+
 .dbdb-settings-padding {
     margin-left: 30px;
+}
+
+/* === Icon picker improvements === */
+
+.dbdb-icons-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dbdb-icons-wrapper .dbdb-icon-picker-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 96px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f7f7f7;
+    padding: 0px;
+    cursor: pointer;
+    margin-right: 30px;
+    margin-bottom: 80px;
+}
+
+
+.dbdb-icons-wrapper .dbdb-imagepicker+input.wtf-imagepicker-btn {
+    display: none;
+}
+
+.dbdb-icons-wrapper .dbdb-delete-icon {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #fff;
+    border-radius: 4px;
+    padding: 5px;
+    display: none;
+    text-decoration: none;
+    color: #555;
+    border: 1px solid #aaa;
+}
+
+.dbdb-icons-wrapper .dbdb-delete-icon:hover {
+    color: red;
+}
+
+.dbdb-icons-wrapper .dbdb-icon-picker-wrapper:hover .dbdb-delete-icon {
+    display: block;
+}
+
+.dbdb-icons-wrapper .dbdb-add-new-icon {
+    width: 96px;
+    height: 96px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px dashed #ddd;
+    border-radius: 4px;
+    background: #f7f7f7;
+    cursor: pointer;
+}
+
+.dbdb-icons-wrapper .dbdb-add-new-icon .dashicons-plus {
+    font-size: 24px;
+    color: #999;
+}
+
+.dbdb-icons-wrapper .dbdb-icon-picker-wrapper span.wtf-imagepicker {
+    width: 100%;
+    height: 100%;
+    display: block !important;
+}
+
+.dbdb-icons-wrapper .dbdb-icon-picker-wrapper .wtf-imagepicker input[type=url] {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    margin: 0 !important;
+    border-radius: 3px;
+    border: none;
+    box-shadow: none;
+    background-color: #F1F5F9;
+    font-size: 13px;
+    color: #4c5866;
+    height: auto;
+    width: auto;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    max-width: 100%;
+}
+
+.dbdb-icons-wrapper .dbdb-icon-picker-wrapper .wtf-imagepicker .wtf-imagepicker-btn {
+    display: none;
+}
+
+.dbdb-icons-wrapper .dbdb-icon-picker-wrapper .wtf-imagepicker img.wtf-imagepicker-thumb {
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
+    margin: 0 !important;
+    border-radius: 3px;
+}
+
+.dbdb-icons-wrapper p {
+    width: 100%;
 }

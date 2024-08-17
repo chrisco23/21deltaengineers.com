@@ -29,10 +29,10 @@ function add_advanced_fields($fields, $slug, $main_css_element) {
         'hide_text_align' => true,
         'hide_font'        => true,
         'hide_line_height' => true,
-        'hide_letter_spacing' => true,				
+        'hide_letter_spacing' => true,
         'font_size'       => array(
-			'default' => '64px',
-		),
+            'default' => '64px',
+        ),
 
     );
     return $fields;
@@ -47,15 +47,13 @@ function fix_opacity($output, $render_slug, $module) {
     }
     $props = $module->props;
 
-    if (Gallery\layout($props) !== 'grid') {
-        return $output;
-    }
-
     if (!empty($props['dbdb_lightbox_close_button_text_color'])) {
         if (is_callable('ET_Builder_Element::set_style')) {
-            \ET_Builder_Element::set_style($render_slug, array(
-                'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-gallery .mfp-close',
-                'declaration' => 'opacity: 1 !important;'
+            \ET_Builder_Element::set_style(
+                $render_slug,
+                array(
+                    'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-gallery .mfp-close',
+                    'declaration' => 'opacity: 1 !important;'
                 )
             );
         }

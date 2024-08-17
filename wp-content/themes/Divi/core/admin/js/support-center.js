@@ -214,6 +214,7 @@
       // Continue only if the product is in our allowlist
       switch (safeModeProduct) {
         case 'divi_builder_plugin':
+        case 'divi_dash_plugin':
         case 'divi_theme':
         case 'extra_theme':
         case 'monarch_plugin':

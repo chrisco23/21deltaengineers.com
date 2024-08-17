@@ -702,7 +702,9 @@ class ET_Builder_Module_Shortcode_Manager {
 				}
 			}
 
-			$module['instance'] = new $module['classname']();
+			if ( class_exists( $module['classname'] ) ) {
+				$module['instance'] = new $module['classname']();
+			}
 
 			if ( ! empty( $module['deps'] ) ) {
 				foreach ( $module['deps'] as $slug ) {

@@ -344,7 +344,9 @@ class MediaStatusViewer implements HookableInterface {
 						'<option value="%1$s" %2$s disabled>%3$s</option>',
 						'',
 						( $strategy_level === null ) ? 'selected' : '',
-						__( 'Optimize Now', 'webp-converter-for-media' )
+						( $is_optimized )
+							? __( 'Re-optimize Now', 'webp-converter-for-media' )
+							: __( 'Optimize Now', 'webp-converter-for-media' )
 					),
 					sprintf(
 						'<option value="%1$s" %2$s>%3$s</option>',

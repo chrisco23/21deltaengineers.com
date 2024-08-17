@@ -750,6 +750,14 @@ final class ET_Core_Updates {
 			return;
 		}
 
+		$all_products   = $this->get_et_api_products();
+		$total_products = count( $all_products['theme'] ) + count( $all_products['plugin'] );
+
+		if ( 1 === $total_products && et_()->includes( $all_products['plugin'], 'Divi Dash' ) ) {
+			// Don't show the notice when Divi Dash is the only product
+			return;
+		}
+
 		$output = '';
 
 		$messages = array();

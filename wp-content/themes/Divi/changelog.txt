@@ -1,3 +1,79 @@
+version 4.27.1 ( updated 08-12-2024 )
+- Fixed Elegant Themes product updates showing up in the WordPress admin for a short time after updating to the latest version.
+- Fixed global color issue for scroll down icon in fullwidth modules.
+- Fixed issue where Divi Builder fails to load when Woo Products Module is used and WooCommerce Plugin is deactivated.
+- Updated the subscriber retrieval method for MailPoet to use the provided public API.
+	* ai-app/build/et-ai-app.bundle.css
+	* ai-app/build/et-ai-app.bundle.js
+	* core/admin/js/portability.js
+	* core/components/Updates.php
+	* core/components/data/init.php
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/languages/ar.po
+	* includes/builder/languages/bg_BG.po
+	* includes/builder/languages/cs_CZ.po
+	* includes/builder/languages/da_DK.po
+	* includes/builder/languages/de_DE.po
+	* includes/builder/languages/el.po
+	* includes/builder/languages/en_US.po
+	* includes/builder/languages/es_ES.po
+	* includes/builder/languages/fi.po
+	* includes/builder/languages/fr_FR.po
+	* includes/builder/languages/he_IL.po
+	* includes/builder/languages/hu_HU.po
+	* includes/builder/languages/id_ID.po
+	* includes/builder/languages/it_IT.po
+	* includes/builder/languages/ja.po
+	* includes/builder/languages/ko_KR.po
+	* includes/builder/languages/ms_MY.po
+	* includes/builder/languages/nb_NO.po
+	* includes/builder/languages/nl_NL.po
+	* includes/builder/languages/pl_PL.po
+	* includes/builder/languages/pt_BR.po
+	* includes/builder/languages/ro_RO.po
+	* includes/builder/languages/ru_RU.po
+	* includes/builder/languages/sk_SK.po
+	* includes/builder/languages/sr_RS.po
+	* includes/builder/languages/sv_SE.po
+	* includes/builder/languages/th.po
+	* includes/builder/languages/tl.po
+	* includes/builder/languages/tr_TR.po
+	* includes/builder/languages/uk.po
+	* includes/builder/languages/vi.po
+	* includes/builder/languages/zh_CN.po
+	* lang/ar.po
+	* lang/bg_BG.po
+	* lang/cs_CZ.po
+	* lang/da_DK.po
+	* lang/de_DE.po
+	* lang/el.po
+	* lang/en_US.po
+	* lang/es_ES.po
+	* lang/fi.po
+	* lang/fr_FR.po
+	* lang/he_IL.po
+	* lang/hu_HU.po
+	* lang/id_ID.po
+	* lang/it_IT.po
+	* lang/ja.po
+	* lang/ko_KR.po
+	* lang/ms_MY.po
+	* lang/nb_NO.po
+	* lang/nl_NL.po
+	* lang/pl_PL.po
+	* lang/pt_BR.po
+	* lang/ro_RO.po
+	* lang/ru_RU.po
+	* lang/sk_SK.po
+	* lang/sr_RS.po
+	* lang/sv_SE.po
+	* lang/th.po
+	* lang/tl.po
+	* lang/tr_TR.po
+	* lang/uk.po
+	* lang/vi.po
+	* lang/zh_CN.po
+
 version 4.27 ( updated 07-17-2024 )
 - Introduced Divi AI Sections and Unsplash integration for all Divi AI generated content.
 - Fixed all links having underlines coming from new styles released in WordPress 6.6.

@@ -96,7 +96,7 @@ if ( ! function_exists( 'et_core_esc_image_url' ) ) :
 	/**
 	 * Escape image URL
 	 *
-	 * @since ??
+	 * @since 4.27.1
 	 *
 	 * @param string $url Image URL.
 	 *

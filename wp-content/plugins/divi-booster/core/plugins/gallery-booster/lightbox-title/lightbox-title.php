@@ -25,10 +25,10 @@ function add_advanced_fields($fields, $slug, $main_css_element) {
             'important' => array(
                 'text_shadow'
             )
-        ),				
+        ),
         'font_size'       => array(
-			'default' => '14px',
-		),
+            'default' => '14px',
+        ),
 
     );
     return $fields;
@@ -41,16 +41,13 @@ function fix_padding($output, $render_slug, $module) {
     if (!isset($module->props) || !is_array($module->props)) {
         return $output;
     }
-    $props = $module->props;
-
-    if (Gallery\layout($props) !== 'grid') {
-        return $output;
-    }
 
     if (is_callable('ET_Builder_Element::set_style')) {
-        \ET_Builder_Element::set_style($render_slug, array(
-            'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-gallery .mfp-title',
-            'declaration' => 'padding-right: 0 !important;'
+        \ET_Builder_Element::set_style(
+            $render_slug,
+            array(
+                'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-gallery .mfp-title',
+                'declaration' => 'padding-right: 0 !important;'
             )
         );
     }

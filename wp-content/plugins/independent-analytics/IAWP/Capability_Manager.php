@@ -45,7 +45,7 @@ class Capability_Manager
     }
     public static function can_only_view_authored_analytics() : bool
     {
-        return \current_user_can('iawp_read_only_authored_access');
+        return !self::is_admin() && \current_user_can('iawp_read_only_authored_access');
     }
     public static function can_view() : bool
     {
@@ -89,6 +89,9 @@ class Capability_Manager
      */
     private static function is_admin() : bool
     {
+        if (\is_super_admin()) {
+            return \true;
+        }
         foreach (\wp_get_current_user()->roles as $role) {
             if ($role === 'administrator') {
                 return \true;

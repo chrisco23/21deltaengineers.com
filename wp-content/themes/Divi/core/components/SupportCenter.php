@@ -158,6 +158,7 @@ class ET_Core_SupportCenter {
 		'bloom/bloom.php', // ET Bloom Plugin
 		'monarch/monarch.php', // ET Monarch Plugin
 		'divi-builder/divi-builder.php', // ET Divi Builder Plugin
+		'divi-dash/divi-dash.php', // Divi Dash Plugin
 		'ari-adminer/ari-adminer.php', // ARI Adminer
 		'query-monitor/query-monitor.php', // Query Monitor
 		'woocommerce/woocommerce.php', // WooCommerce
@@ -380,6 +381,9 @@ class ET_Core_SupportCenter {
 				break;
 			case 'divi_builder_plugin':
 				return 'Divi Builder';
+				break;
+			case 'divi_dash_plugin':
+				return 'Divi Dash';
 				break;
 			default:
 				return false;
@@ -2695,6 +2699,7 @@ class ET_Core_SupportCenter {
 			case 'extra_theme':
 			case 'monarch_plugin':
 			case 'bloom_plugin':
+			case 'divi_dash_plugin':
 				return $this->get_parent_nicename( $product );
 				break;
 			default:

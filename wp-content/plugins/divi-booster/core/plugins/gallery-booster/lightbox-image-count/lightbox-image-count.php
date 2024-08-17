@@ -23,10 +23,10 @@ function add_advanced_fields($fields, $slug, $main_css_element) {
             'hover'      => "{$order_class}_dbdb_lightbox_open .mfp-gallery .mfp-counter:hover",
             'text_shadow' => "{$order_class}_dbdb_lightbox_open .mfp-gallery .mfp-counter",
             'important' => 'all'
-        ),				
+        ),
         'font_size'       => array(
-			'default' => '12px',
-		),
+            'default' => '12px',
+        ),
 
     );
     return $fields;
@@ -40,16 +40,13 @@ function fix_padding($output, $render_slug, $module) {
     if (!isset($module->props) || !is_array($module->props)) {
         return $output;
     }
-    $props = $module->props;
-
-    if (Gallery\layout($props) !== 'grid') {
-        return $output;
-    }
 
     if (is_callable('ET_Builder_Element::set_style')) {
-        \ET_Builder_Element::set_style($render_slug, array(
-            'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-gallery .mfp-counter',
-            'declaration' => 'width: 100% !important; text-align:right;'
+        \ET_Builder_Element::set_style(
+            $render_slug,
+            array(
+                'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-gallery .mfp-counter',
+                'declaration' => 'width: 100% !important; text-align:right;'
             )
         );
     }

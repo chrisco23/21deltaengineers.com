@@ -493,7 +493,7 @@ class ET_Core_PageResource {
 		self::$current_output_location = $location;
 
 		// Disable for footer inside builder if page uses Theme Builder Editor to avoid conflict with critical CSS.
-		if ( 'footer' === $location && et_fb_is_enabled() && et_fb_is_theme_builder_used_on_page() ) {
+		if ( 'footer' === $location && et_core_is_fb_enabled() && et_fb_is_theme_builder_used_on_page() ) {
 			return false;
 		}
 
@@ -750,7 +750,7 @@ class ET_Core_PageResource {
 	 * @return bool
 	 */
 	public static function can_write_to_filesystem() {
-		return et_core_cache_dir()->can_write;
+		return ET_Core_Cache_Directory::instance()->can_write;
 	}
 
 	/**

@@ -5,7 +5,7 @@ Donate link: https://independentwp.com
 Requires at least: 5.9
 Tested up to: 6.5.2
 Requires PHP: 7.3.33
-Stable tag: 2.7.1
+Stable tag: 2.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -193,6 +193,14 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 6. See the device types, browsers, and OSes your visitors are using
 
 == Changelog ==
+
+= 2.7.3 - August 1st, 2024 =
+
+* **Fix:** super admins were still limited to only viewing authored content in some situations
+
+= 2.7.2 - July 30th, 2024 =
+
+* **Fix:** super admins were limited to only viewing authored content
 
 = 2.7.1 - July 29th, 2024 =
 

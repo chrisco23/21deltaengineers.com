@@ -1,3 +1,11 @@
+= 4.6.1 (23 Jul 2024) =
+* Added option to change gallery module lightbox image count separator
+* Fixed slider randomization not applied when module id set
+* Added option to hide Divi Cloud
+* Improved custom icon uploader
+* Fixed custom icons slowing down visual builder in some cases
+* Improved site title in header styles to prevent underline being added by WordPress in some cases
+
 = 4.6.0 (25 Jun 2024) =
 * Added gallery module slider arrow style options
 * Added gallery module grid open in lightbox toggle

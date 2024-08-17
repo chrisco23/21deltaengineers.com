@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 5.13.1 (2024-08-04) =
+* `[Changed]` Optimization statistics in Media Library
+
 = 5.13.0 (2024-06-27) =
 * `[Fixed]` Filter `webpc_option_quality_levels` to change conversion quality levels
 * `[Added]` Support for WordPress 6.6

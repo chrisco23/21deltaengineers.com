@@ -29,10 +29,10 @@ function add_advanced_fields($fields, $slug, $main_css_element) {
         'hide_text_align' => true,
         'hide_font'        => true,
         'hide_line_height' => true,
-        'hide_letter_spacing' => true,				
+        'hide_letter_spacing' => true,
         'font_size'       => array(
-			'default' => '48px',
-		),
+            'default' => '48px',
+        ),
 
     );
     return $fields;
@@ -47,16 +47,13 @@ function fix_opacity($output, $render_slug, $module) {
     }
     $props = $module->props;
 
-    if (Gallery\layout($props) !== 'grid') {
-        return $output;
-    }
-
     if (!empty($props['dbdb_lightbox_arrows_text_color'])) {
         if (is_callable('ET_Builder_Element::set_style')) {
-            //$module_class = \ET_Builder_Element::get_module_order_class($render_slug);
-            \ET_Builder_Element::set_style($render_slug, array(
-                'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-gallery .mfp-arrow',
-                'declaration' => 'opacity: 1 !important;'
+            \ET_Builder_Element::set_style(
+                $render_slug,
+                array(
+                    'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-gallery .mfp-arrow',
+                    'declaration' => 'opacity: 1 !important;'
                 )
             );
         }

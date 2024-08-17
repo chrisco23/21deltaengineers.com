@@ -16,7 +16,7 @@ function add_field($fields) {
     }
     $new_fields = array(
         'dbdb_show_lightbox_title'    => array(
-            'label'            => esc_html__('Show Title on Lightbox', 'divi-gallery-booster'),
+            'label'            => esc_html__('Show Lightbox Title', 'divi-gallery-booster'),
             'type'             => 'yes_no_button',
             'option_category'  => 'configuration',
             'options'          => array(
@@ -24,11 +24,10 @@ function add_field($fields) {
                 'on'  => esc_html__('Yes', 'divi-gallery-booster'),
             ),
             'default' => 'on',
-            'toggle_slug'      => 'link_options',
+            'toggle_slug'      => 'elements',
             'description'      => esc_html__('Here you can choose whether or not the title should be shown when the gallery is open in a lightbox.', 'divi-gallery-booster'),
             'show_if' => array(
-                'fullwidth' => 'off',
-                'dbdb_show_in_lightbox'=>'on'
+                'dbdb_show_in_lightbox' => 'on'
             )
         ),
     );
@@ -44,18 +43,17 @@ function enable_feature($output, $render_slug, $module) {
         return $output;
     }
     $props = $module->props;
-    
-    if (Gallery\layout($props) !== 'grid') {
-        return $output;
-    }
+
     if (empty($props['dbdb_show_lightbox_title']) || $props['dbdb_show_lightbox_title'] === 'on') {
         return $output;
     }
 
     if (is_callable('ET_Builder_Element::set_style')) {
-        \ET_Builder_Element::set_style($render_slug, array(
-            'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-gallery .mfp-title',
-            'declaration' => 'display: none;'
+        \ET_Builder_Element::set_style(
+            $render_slug,
+            array(
+                'selector'    => '%%order_class%%_dbdb_lightbox_open .mfp-gallery .mfp-title',
+                'declaration' => 'display: none;'
             )
         );
     }

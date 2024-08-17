@@ -17,7 +17,7 @@ function add_field($fields) {
     }
     $new_fields = array(
         'dbdb_show_in_lightbox'    => array(
-            'label'            => esc_html__('Open in Lightbox', 'divi-gallery-booster'),
+            'label'            => esc_html__('Enable Lightbox', 'divi-gallery-booster'),
             'type'             => 'yes_no_button',
             'option_category'  => 'configuration',
             'options'          => array(
@@ -25,11 +25,11 @@ function add_field($fields) {
                 'on'  => esc_html__('Yes', 'divi-gallery-booster'),
             ),
             'default' => 'on',
-            'toggle_slug'      => 'link_options',
+            'toggle_slug'      => 'elements',
             'description'      => esc_html__('Here you can choose whether or not the gallery images should open in a lightbox.', 'divi-gallery-booster'),
-            'show_if' => array(
-                'fullwidth' => 'off',
-            )
+            // 'show_if' => array(
+            //     'fullwidth' => 'off',
+            // )
         )
     );
     return array_merge($fields, $new_fields);
@@ -45,9 +45,9 @@ function enable_feature($output, $render_slug, $module) {
     }
     $props = $module->props;
 
-    if (Gallery\layout($props) !== 'grid') {
-        return $output;
-    }
+    // if (Gallery\layout($props) !== 'grid') {
+    //     return $output;
+    // }
     if (empty($props['dbdb_show_in_lightbox']) || $props['dbdb_show_in_lightbox'] !== 'off') {
         return $output;
     }
@@ -63,9 +63,9 @@ function add_class($classes, $props) {
     if (!is_array($classes)) {
         return $classes;
     }
-    if (Gallery\layout($props) !== 'grid') {
-        return $classes;
-    }
+    // if (Gallery\layout($props) !== 'grid') {
+    //     return $classes;
+    // }
     if (empty($props['dbdb_show_in_lightbox']) || $props['dbdb_show_in_lightbox'] !== 'off') {
         return $classes;
     }
@@ -76,7 +76,7 @@ function add_class($classes, $props) {
 
 function add_styles() { ?>
     <style>
-        .et_pb_gallery.dbdb-lightbox-off {
+        .et_pb_gallery.dbdb-lightbox-off .et_pb_gallery_items {
             pointer-events: none;
         }
     </style>

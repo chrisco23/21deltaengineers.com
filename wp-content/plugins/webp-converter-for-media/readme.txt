@@ -5,7 +5,7 @@ Tags: convert webp, webp, optimize images, image optimization, compress images
 Requires at least: 4.9
 Tested up to: 6.6
 Requires PHP: 7.0
-Stable tag: 5.13.0
+Stable tag: 5.13.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -302,6 +302,9 @@ Current list of supported CDN servers:
 5. Ability to manually undo optimization of selected image
 
 == Changelog ==
+
+= 5.13.1 (2024-08-04) =
+* `[Changed]` Optimization statistics in Media Library
 
 = 5.13.0 (2024-06-27) =
 * `[Fixed]` Filter `webpc_option_quality_levels` to change conversion quality levels

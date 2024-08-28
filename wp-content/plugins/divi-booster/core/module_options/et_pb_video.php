@@ -1,7 +1,8 @@
 <?php
 
 add_filter('dbmo_et_pb_video_whitelisted_fields', 'dbmo_et_pb_video_register_fields');
-add_filter('dbmo_et_pb_video_fields', 'dbmo_et_pb_video_add_fields');
+//add_filter('dbmo_et_pb_video_fields', 'dbmo_et_pb_video_add_fields');
+add_filter('et_pb_all_fields_unprocessed_et_pb_video', 'dbmo_et_pb_video_add_fields');
 add_filter('db_pb_video_content', 'db_pb_video_filter_content', 10, 2);
 
 function dbmo_et_pb_video_register_fields($fields) {

@@ -6,7 +6,6 @@ $divibooster_module_shortcodes = array(
     'et_pb_accordion' => 'db_pb_accordion',
     'et_pb_menu' => 'db_pb_menu',
     'et_pb_team_member' => 'db_pb_team_member',
-    //'et_pb_gallery' => 'db_pb_gallery',
     'et_pb_portfolio' => 'db_pb_portfolio',
     'et_pb_filterable_portfolio' => 'db_pb_filterable_portfolio',
     'et_pb_fullwidth_portfolio' => 'db_pb_fullwidth_portfolio',
@@ -21,9 +20,6 @@ $divibooster_module_shortcodes = array(
     'et_pb_video' => 'db_pb_video'
 );
 
-// Register shortcodes
-//divibooster_register_module_shortcodes(); // Register shortcodes
-
 // Clear modified modules in local storage as necessary
 add_action('db-divi-booster-updated', 'divibooster_clear_module_local_storage');
 if (defined('DB_DISABLE_LOCAL_CACHING')) {
@@ -32,14 +28,6 @@ if (defined('DB_DISABLE_LOCAL_CACHING')) {
 
 // Register custom db_filter_et_pb_layout filter for global content
 add_filter('the_posts', 'divibooster_filter_global_modules');
-
-// Add filters to module fields
-add_action('et_builder_ready', 'db_add_module_field_filter', 11);
-
-// Wrap the shortcodes
-// add_filter('the_content', 'dbmo_wrap_module_shortcodes');
-// add_filter('db_filter_et_pb_layout', 'dbmo_wrap_global_module_shortcodes');
-
 
 // Remove excess <p> tags which get added around slides
 add_filter('the_content', 'dbmo_unautop_slides', 12);
@@ -55,7 +43,6 @@ include_once($MODULE_OPTIONS_DIR . 'dynamic_content.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_accordion/et_pb_accordion.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_menu/et_pb_menu.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_team_member.php');
-//include_once($MODULE_OPTIONS_DIR . 'et_pb_gallery.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_portfolio/et_pb_portfolio.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_signup.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_slide/et_pb_slide.php');
@@ -67,28 +54,6 @@ include_once($MODULE_OPTIONS_DIR . 'et_pb_countdown_timer.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_map_pin.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_video.php');
 
-// === Module option filters ===
-
-// Add filters to builder elements
-function db_add_module_field_filter() {
-    if (isset($GLOBALS['shortcode_tags'])) {
-        foreach ($GLOBALS['shortcode_tags'] as $slug => $data) {
-            if (is_array($data) && array_key_exists(0, $data)) {
-                $obj = $data[0];
-                if ($obj instanceof ET_Builder_Element) {
-
-                    // Apply field whitelist for Divi pre-3.1
-                    if (dbdb_is_divi('3.1', '<') && isset($obj->whitelisted_fields) && is_array($obj->whitelisted_fields)) {
-                        $obj->whitelisted_fields = apply_filters("dbmo_{$slug}_whitelisted_fields", $obj->whitelisted_fields);
-                    }
-
-                    $obj->fields_unprocessed = apply_filters("dbmo_{$slug}_fields", $obj->fields_unprocessed);
-                    $GLOBALS['shortcode_tags'][$slug][0] = $obj;
-                }
-            }
-        }
-    }
-}
 
 // === Fix missing props when cached ===
 add_filter('dbdb_et_pb_module_shortcode_attributes', 'dbdb_module_options_fix_missing_props', 10, 3);
@@ -108,11 +73,6 @@ function dbdb_module_options_fix_missing_props($props, $attrs, $render_slug) {
 foreach ($divibooster_module_shortcodes as $etsc => $dbsc) {
     DBDBModuleOutputFilterHook::create($etsc, "{$dbsc}_content")->enable();
 }
-/*
-DBDBModuleOutputFilterHook::create('et_pb_gallery', 'db_pb_gallery_content')->enableInTb();
-DBDBModuleOutputFilterHook::create('et_pb_menu', 'db_pb_menu_content')->enableInTb();
-DBDBModuleOutputFilterHook::create('et_pb_team_member', 'db_pb_team_member_content')->enableInTb();
-*/
 
 // === Avoid local caching === 
 
@@ -159,7 +119,6 @@ function divibooster_add_module_classes_to_content($content, $classes) {
 
 function divibooster_module_options_credit() {
     return trim((string) DBDBModuleFieldDescription::create(DBDBWp::create(), ''));
-    //return apply_filters('divibooster_module_options_credit', 'Added by Divi Booster');
 }
 
 // === Option styling === //

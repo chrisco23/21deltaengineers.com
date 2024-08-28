@@ -1,7 +1,8 @@
 <?php 
 
 add_filter('dbmo_et_pb_signup_whitelisted_fields', 'dbmo_et_pb_signup_register_fields');
-add_filter('dbmo_et_pb_signup_fields', 'dbmo_et_pb_signup_add_fields');
+//add_filter('dbmo_et_pb_signup_fields', 'dbmo_et_pb_signup_add_fields');
+add_filter('et_pb_all_fields_unprocessed_et_pb_signup', 'dbmo_et_pb_signup_add_fields');
 add_filter('db_pb_signup_content', 'db_pb_signup_filter_content', 10, 2);
 add_action('wp_head', 'db_pb_signup_css');
 

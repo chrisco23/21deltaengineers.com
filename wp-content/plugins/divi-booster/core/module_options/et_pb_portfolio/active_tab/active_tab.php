@@ -7,7 +7,8 @@ function dbmo_et_pb_portfolio_active_tab_register_fields($fields) {
 	return $fields;
 }
 
-add_filter('dbmo_et_pb_filterable_portfolio_fields', 'dbmo_et_pb_portfolio_active_tab_fields');
+//add_filter('dbmo_et_pb_filterable_portfolio_fields', 'dbmo_et_pb_portfolio_active_tab_fields');
+add_filter('et_pb_all_fields_unprocessed_et_pb_filterable_portfolio', 'dbmo_et_pb_portfolio_active_tab_fields');
 
 function dbmo_et_pb_portfolio_active_tab_fields($fields) {
 	$fields['db_active_tab'] = array(

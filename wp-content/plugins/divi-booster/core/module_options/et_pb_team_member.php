@@ -2,7 +2,8 @@
 
 if (function_exists('add_filter')) {
     add_filter('dbmo_et_pb_team_member_whitelisted_fields', 'dbmo_et_pb_team_member_register_fields');
-    add_filter('dbmo_et_pb_team_member_fields', 'dbmo_et_pb_team_member_add_fields');
+    //add_filter('dbmo_et_pb_team_member_fields', 'dbmo_et_pb_team_member_add_fields');
+    add_filter('et_pb_all_fields_unprocessed_et_pb_team_member', 'dbmo_et_pb_team_member_add_fields');
     add_filter('db_pb_team_member_content', 'db_pb_team_member_filter_content', 10, 2);
 }
 if (function_exists('add_action')) {

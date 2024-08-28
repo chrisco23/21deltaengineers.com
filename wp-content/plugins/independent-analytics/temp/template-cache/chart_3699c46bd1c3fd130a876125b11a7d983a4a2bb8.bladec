@@ -1,0 +1,81 @@
+<?php /** @var \IAWP\Chart $chart */  ?>
+<?php /** @var \IAWP\Statistics\Intervals\Interval[] $intervals */  ?>
+<?php /** @var \IAWP\Statistics\Intervals\Interval $current_interval */  ?>
+<?php /** @var array $stimulus_values */  ?>
+<?php /** @var array $available_datasets */  ?>
+<?php /** @var string $primary_chart_metric_id */  ?>
+<?php /** @var ?string $secondary_chart_metric_id */  ?>
+
+<div class="chart-container">
+ <div class="chart-inner"
+ data-testid="chart"
+ data-controller="chart"
+ <?php $__currentLoopData = $stimulus_values; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $key => $value): $loop = $this->incrementLoopIndices();  ?>
+ data-chart-<?php echo \htmlentities($key??'', ENT_QUOTES, 'UTF-8', false); ?>-value="<?php echo \htmlentities(is_array($value) ? $chart->encode_json($value) : $value??'', ENT_QUOTES, 'UTF-8', false); ?>"
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ >
+ <div class="legend-container">
+ <div class="legend" style="display: none;"></div>
+ <?php if(!$chart->is_preview()): ?>
+ <div class="primary-metric-select-container metric-select-container">
+ <select id="primary-metric-select" 
+ data-chart-target="primaryMetricSelect"
+ data-action="chart#changePrimaryMetric"
+ >
+ <?php $__currentLoopData = $available_datasets; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $group): $loop = $this->incrementLoopIndices();  ?>
+ <optgroup label="<?php echo \htmlentities($group['name']??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <?php $__currentLoopData = $group['items']; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $item): $loop = $this->incrementLoopIndices();  ?>
+ <option value="<?php echo \htmlentities($item['id']??'', ENT_QUOTES, 'UTF-8', false); ?>" <?php echo selected($primary_chart_metric_id, $item['id'], true); ?> <?php echo $secondary_chart_metric_id === $item['id'] ? 'disabled' : ''; ?>><?php echo \htmlentities($item['name']??'', ENT_QUOTES, 'UTF-8', false); ?></option>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </optgroup>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </select>
+ </div>
+
+ <div class="secondary-metric-select-container metric-select-container">
+ <select id="secondary-metric-select" 
+ data-chart-target="secondaryMetricSelect"
+ data-action="chart#changeSecondaryMetric"
+ >
+ <option value="no_comparison" <?php echo selected(is_null($secondary_chart_metric_id)); ?>><?php esc_html_e('No Comparison', 'independent-analytics'); ?></option>
+ <?php $__currentLoopData = $available_datasets; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $group): $loop = $this->incrementLoopIndices();  ?>
+ <optgroup label="<?php echo \htmlentities($group['name']??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <?php $__currentLoopData = $group['items']; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $item): $loop = $this->incrementLoopIndices();  ?>
+ <option value="<?php echo \htmlentities($item['id']??'', ENT_QUOTES, 'UTF-8', false); ?>" <?php echo selected($secondary_chart_metric_id, $item['id'], true); ?> <?php echo $primary_chart_metric_id === $item['id'] ? 'disabled' : ''; ?>><?php echo \htmlentities($item['name']??'', ENT_QUOTES, 'UTF-8', false); ?></option>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </optgroup>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </select>
+ </div>
+
+ <select class="adaptive-select-width" data-chart-target="adaptiveWidthSelect">
+ <option></option>
+ </select>
+
+ <select id="chart-interval-select" class="chart-interval-select"
+ data-controller="chart-interval"
+ data-action="chart-interval#setChartInterval">
+ <?php $__currentLoopData = $intervals; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $interval): $loop = $this->incrementLoopIndices();  ?>
+ <option value="<?php echo \htmlentities(esc_attr($interval->id())??'', ENT_QUOTES, 'UTF-8', false); ?>"
+ <?php selected($interval->equals($current_interval))  ?>
+ >
+ <?php echo \htmlentities($interval->label()??'', ENT_QUOTES, 'UTF-8', false); ?>
+
+ </option>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </select>
+ <?php endif; ?>
+ </div>
+ <canvas id="myChart"
+ width="800"
+ height="200"
+ >
+ </canvas>
+ </div>
+</div>

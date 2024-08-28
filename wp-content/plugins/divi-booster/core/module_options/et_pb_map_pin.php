@@ -1,6 +1,9 @@
 <?php
 add_filter('dbmo_et_pb_map_pin_whitelisted_fields', 'dbmo_et_pb_map_pin_register_fields');
-add_filter('dbmo_et_pb_map_pin_fields', 'dbmo_et_pb_map_pin_add_fields');
+//add_filter('dbmo_et_pb_map_pin_fields', 'dbmo_et_pb_map_pin_add_fields');
+add_filter('et_pb_all_fields_unprocessed_et_pb_map_pin', 'dbmo_et_pb_map_pin_add_fields');
+
+
 add_filter('db_pb_map_pin_content', 'db_pb_map_pin_filter_content', 10, 2);
 add_action('wp_enqueue_scripts', 'db_pb_map_pin_register_scripts');
 

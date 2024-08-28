@@ -6,9 +6,13 @@ add_filter('dbdb_portfolio_order_options', 'dbdb_portfolio_order_option_by_id');
 add_filter('dbmo_et_pb_portfolio_whitelisted_fields', 'dbmo_et_pb_portfolio_project_order_register_id_field');
 add_filter('dbmo_et_pb_filterable_portfolio_whitelisted_fields', 'dbmo_et_pb_portfolio_project_order_register_id_field');
 add_filter('dbmo_et_pb_fullwidth_portfolio_whitelisted_fields', 'dbmo_et_pb_portfolio_project_order_register_id_field');
-add_filter('dbmo_et_pb_portfolio_fields', 'dbdb_portfolio_order_option_by_id_field', 11);
-add_filter('dbmo_et_pb_filterable_portfolio_fields', 'dbdb_portfolio_order_option_by_id_field', 11);
-add_filter('dbmo_et_pb_fullwidth_portfolio_fields', 'dbdb_portfolio_order_option_by_id_field', 11);
+
+// add_filter('dbmo_et_pb_portfolio_fields', 'dbdb_portfolio_order_option_by_id_field', 11);
+// add_filter('dbmo_et_pb_filterable_portfolio_fields', 'dbdb_portfolio_order_option_by_id_field', 11);
+// add_filter('dbmo_et_pb_fullwidth_portfolio_fields', 'dbdb_portfolio_order_option_by_id_field', 11);
+add_filter('et_pb_all_fields_unprocessed_et_pb_portfolio', 'dbdb_portfolio_order_option_by_id_field', 11);
+add_filter('et_pb_all_fields_unprocessed_et_pb_filterable_portfolio', 'dbdb_portfolio_order_option_by_id_field', 11);
+add_filter('et_pb_all_fields_unprocessed_et_pb_fullwidth_portfolio', 'dbdb_portfolio_order_option_by_id_field', 11);
 
 function dbdb_portfolio_order_option_by_id($options) {
     $options['by_id'] = esc_html__('By ID', 'et_builder');

@@ -9,7 +9,9 @@ function dbmo_et_pb_portfolio_tab_order_register_fields($fields) {
 	return $fields;
 }
 
-add_filter('dbmo_et_pb_filterable_portfolio_fields', 'dbmo_et_pb_portfolio_add_tab_order_fields');
+//add_filter('dbmo_et_pb_filterable_portfolio_fields', 'dbmo_et_pb_portfolio_add_tab_order_fields');
+// Use the et_pb_all_fields_unprocessed_{$slug} filter to add the new field to the module options
+add_filter('et_pb_all_fields_unprocessed_et_pb_filterable_portfolio', 'dbmo_et_pb_portfolio_add_tab_order_fields');
 
 function dbmo_et_pb_portfolio_add_tab_order_fields($fields) {
 	$fields['db_tab_order'] = array(

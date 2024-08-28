@@ -1,7 +1,8 @@
 <?php
 
 add_filter('dbmo_et_pb_slide_whitelisted_fields', 'db_pb_slide_button_2_register_fields');
-add_filter('dbmo_et_pb_slide_fields', 'db_pb_slide_button_2_add_fields');
+//add_filter('dbmo_et_pb_slide_fields', 'db_pb_slide_button_2_add_fields');
+add_filter('et_pb_all_fields_unprocessed_et_pb_slide', 'db_pb_slide_button_2_add_fields');
 add_filter('db_pb_slide_args_button_link_2', 'db_pb_slide_canonicalize_url');
 add_filter('db_pb_slide_filter_content_classes', 'db_pb_slide_add_second_more_button_class', 10, 2);
 add_filter('db_pb_slide_filter_content_args', 'db_pb_slide_button_2_content_args');

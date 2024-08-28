@@ -8,9 +8,12 @@ add_filter('dbmo_et_pb_portfolio_whitelisted_fields', 'dbmo_et_pb_portfolio_proj
 add_filter('dbmo_et_pb_filterable_portfolio_whitelisted_fields', 'dbmo_et_pb_portfolio_project_order_register_fields'); 
 add_filter('dbmo_et_pb_fullwidth_portfolio_whitelisted_fields', 'dbmo_et_pb_portfolio_project_order_register_fields'); 
 
-add_filter('dbmo_et_pb_portfolio_fields', 'dbmo_et_pb_portfolio_add_fields');
-add_filter('dbmo_et_pb_filterable_portfolio_fields', 'dbmo_et_pb_portfolio_add_fields');
-add_filter('dbmo_et_pb_fullwidth_portfolio_fields', 'dbmo_et_pb_portfolio_add_fields');
+// add_filter('dbmo_et_pb_portfolio_fields', 'dbmo_et_pb_portfolio_add_fields');
+// add_filter('dbmo_et_pb_filterable_portfolio_fields', 'dbmo_et_pb_portfolio_add_fields');
+// add_filter('dbmo_et_pb_fullwidth_portfolio_fields', 'dbmo_et_pb_portfolio_add_fields');
+add_filter('et_pb_all_fields_unprocessed_et_pb_portfolio', 'dbmo_et_pb_portfolio_add_fields');
+add_filter('et_pb_all_fields_unprocessed_et_pb_filterable_portfolio', 'dbmo_et_pb_portfolio_add_fields');
+add_filter('et_pb_all_fields_unprocessed_et_pb_fullwidth_portfolio', 'dbmo_et_pb_portfolio_add_fields');
 
 function dbmo_et_pb_portfolio_project_order_register_fields($fields) {
 	$fields[] = 'db_project_order';

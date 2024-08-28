@@ -1,7 +1,9 @@
 <?php
 
 add_filter('dbmo_et_pb_accordion_whitelisted_fields', 'dbmo_et_pb_accordion_register_initial_state_field');
-add_filter('dbmo_et_pb_accordion_fields', 'dbmo_et_pb_accordion_add_initial_state_field');
+//add_filter('dbmo_et_pb_accordion_fields', 'dbmo_et_pb_accordion_add_initial_state_field');
+add_filter('et_pb_all_fields_unprocessed_et_pb_accordion', 'dbmo_et_pb_accordion_add_initial_state_field');
+
 add_filter('db_pb_accordion_content', 'db_pb_accordion_add_initial_state_code_to_content', 10, 2);
 
 function dbmo_et_pb_accordion_register_initial_state_field($fields) {

@@ -1,8 +1,8 @@
 <?php
 
 add_filter('dbmo_et_pb_menu_whitelisted_fields', 'dbmo_et_pb_menu_register_title_and_tagline_field');
-add_filter('dbmo_et_pb_menu_fields', 'dbmo_et_pb_menu_add_title_and_tagline_field');
-//add_filter('et_pb_all_fields_unprocessed_et_pb_menu', 'dbmo_et_pb_menu_add_title_and_tagline_field');
+//add_filter('dbmo_et_pb_menu_fields', 'dbmo_et_pb_menu_add_title_and_tagline_field');
+add_filter('et_pb_all_fields_unprocessed_et_pb_menu', 'dbmo_et_pb_menu_add_title_and_tagline_field');
 add_filter('db_pb_menu_content', 'dbdbMenuModule_add_title_and_tagline_code_to_content', 10, 2);
 
 function dbmo_et_pb_menu_register_title_and_tagline_field($fields) {

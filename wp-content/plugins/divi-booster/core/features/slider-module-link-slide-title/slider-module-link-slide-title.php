@@ -5,23 +5,8 @@ namespace DiviBooster\DiviBooster\SliderModuleLinkSlideTitle;
 
 if (function_exists('add_filter') && function_exists('add_action')) {
     \add_filter('et_module_shortcode_output', __NAMESPACE__ . '\\remove_divi_slider_title_link', 20, 3);
-    \add_action('et_builder_ready', __NAMESPACE__ . '\\add_link_title_field_to_module_settings', 11);
+    \add_action('et_pb_all_fields_unprocessed_et_pb_slide', __NAMESPACE__ . '\\add_link_title_field');
     add_filter('et_pb_module_shortcode_attributes', __NAMESPACE__ . '\\fix_missing_props', 10, 3);
-}
-
-
-function add_link_title_field_to_module_settings() {
-    if (isset($GLOBALS['shortcode_tags'])) {
-        foreach ($GLOBALS['shortcode_tags'] as $slug => $data) {
-            if ($slug === 'et_pb_slide' && isset($data[0])) {
-                $obj = $data[0];
-                if (class_exists('ET_Builder_Module_Slider_Item') && $obj instanceof \ET_Builder_Module_Slider_Item && isset($obj->fields_unprocessed)) {
-                    $obj->fields_unprocessed = add_link_title_field($obj->fields_unprocessed);
-                    $GLOBALS['shortcode_tags'][$slug][0] = $obj;
-                }
-            }
-        }
-    }
 }
 
 function fix_missing_props($props, $attrs, $render_slug) {

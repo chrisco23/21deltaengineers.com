@@ -21,8 +21,11 @@ class FullwidthSliderRunOnceFeature {
         if (function_exists('add_filter')) {
             add_filter('dbmo_et_pb_fullwidth_slider_whitelisted_fields', array($this, 'appendFieldSlugs'));
             add_filter('dbmo_et_pb_slider_whitelisted_fields', array($this, 'appendFieldSlugs'));
-            add_filter('dbmo_et_pb_fullwidth_slider_fields', array($this, 'appendFields'));
-            add_filter('dbmo_et_pb_slider_fields', array($this, 'appendFields'));
+            //add_filter('dbmo_et_pb_fullwidth_slider_fields', array($this, 'appendFields'));
+            // Use the et_pb_all_fields_unprocessed_{$slug} filter to add the new field to the module options
+            add_filter('et_pb_all_fields_unprocessed_et_pb_fullwidth_slider', array($this, 'appendFields'));
+            add_filter('et_pb_all_fields_unprocessed_et_pb_slider', array($this, 'appendFields'));
+            //add_filter('dbmo_et_pb_slider_fields', array($this, 'appendFields'));
             add_filter('db_pb_fullwidth_slider_content', array($this, 'appendFullwidthSliderScript'), 10, 2);
             add_filter('db_pb_slider_content', array($this, 'appendSliderScript'), 10, 2);
         }

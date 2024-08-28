@@ -1,6 +1,7 @@
 <?php
 add_filter('dbmo_et_pb_slider_whitelisted_fields', 'dbmo_et_pb_slider_register_fields');
-add_filter('dbmo_et_pb_slider_fields', 'dbmo_et_pb_slider_add_fields');
+//add_filter('dbmo_et_pb_slider_fields', 'dbmo_et_pb_slider_add_fields');
+add_filter('et_pb_all_fields_unprocessed_et_pb_slider', 'dbmo_et_pb_slider_add_fields');
 
 
 add_filter('dbdb_et_pb_module_shortcode_attributes', 'dbmo_et_pb_slider_migrate_db_height_to_min_height', 10, 3); 

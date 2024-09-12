@@ -1115,7 +1115,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
                 if (!\is_string($prop) && \is_callable($prop)) {
                     $result = $prop($a, $b);
                 } else {
-                    $values = [data_get($a, $prop), data_get($b, $prop)];
+                    $values = [\IAWPSCOPED\data_get($a, $prop), \IAWPSCOPED\data_get($b, $prop)];
                     if (!$ascending) {
                         $values = \array_reverse($values);
                     }

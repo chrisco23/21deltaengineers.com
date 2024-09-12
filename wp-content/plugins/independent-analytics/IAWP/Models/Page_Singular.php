@@ -2,6 +2,7 @@
 
 namespace IAWP\Models;
 
+use IAWP\Utils\Plugin;
 use IAWP\Utils\String_Util;
 /** @internal */
 class Page_Singular extends \IAWP\Models\Page
@@ -122,8 +123,7 @@ class Page_Singular extends \IAWP\Models\Page
     }
     protected function convert_wpml_url($permalink)
     {
-        $active_plugins = \get_option('active_plugins');
-        if (\in_array('sitepress-multilingual-cms/sitepress.php', $active_plugins)) {
+        if (\is_plugin_active('sitepress-multilingual-cms/sitepress.php')) {
             $language = \apply_filters('wpml_post_language_details', null, $this->singular_id);
             $permalink = \apply_filters('wpml_permalink', $permalink, $language['language_code'], \true);
         }

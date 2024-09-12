@@ -63,8 +63,8 @@ class Column implements Plugin_Group_Option
     public function is_group_plugin_enabled() : bool
     {
         switch ($this->plugin_group) {
-            case "woocommerce":
-                return \IAWPSCOPED\iawp()->is_woocommerce_support_enabled();
+            case "ecommerce":
+                return \IAWPSCOPED\iawp()->is_ecommerce_support_enabled();
             case "forms":
                 return \IAWPSCOPED\iawp()->is_form_submission_support_enabled();
             default:

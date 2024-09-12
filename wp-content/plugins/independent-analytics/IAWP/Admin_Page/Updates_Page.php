@@ -8,7 +8,7 @@ class Updates_Page extends \IAWP\Admin_Page\Admin_Page
 {
     protected function render_page()
     {
-        if (!Capability_Manager::white_labeled()) {
+        if (Capability_Manager::show_branded_ui()) {
             echo \IAWPSCOPED\iawp_blade()->run('updates');
             $this->update_latest_update_viewed();
         } else {

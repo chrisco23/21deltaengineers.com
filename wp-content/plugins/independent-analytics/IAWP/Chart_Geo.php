@@ -33,7 +33,7 @@ class Chart_Geo
         echo $this->title;
         ?></h2>
                 </div>
-                <div id="myChart"
+                <div id="independent-analytics-chart"
                      data-controller="chart-geo"
                      data-chart-geo-data-value="<?php 
         echo \esc_attr(\json_encode($chart_data));

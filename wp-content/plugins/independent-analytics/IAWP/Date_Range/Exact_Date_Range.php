@@ -3,7 +3,6 @@
 namespace IAWP\Date_Range;
 
 use DateTime;
-use IAWP\Utils\WordPress_Site_Date_Format_Pattern;
 use IAWPSCOPED\Proper\Timezone;
 /** @internal */
 class Exact_Date_Range extends \IAWP\Date_Range\Date_Range
@@ -26,8 +25,8 @@ class Exact_Date_Range extends \IAWP\Date_Range\Date_Range
      */
     public function label() : string
     {
-        $formatted_start = $this->start->setTimezone(Timezone::site_timezone())->format(WordPress_Site_Date_Format_Pattern::for_php());
-        $formatted_end = $this->end->setTimezone(Timezone::site_timezone())->format(WordPress_Site_Date_Format_Pattern::for_php());
+        $formatted_start = \IAWPSCOPED\iawp()->date_i18n(\get_option('date_format'), $this->start);
+        $formatted_end = \IAWPSCOPED\iawp()->date_i18n(\get_option('date_format'), $this->end);
         return $formatted_start . ' - ' . $formatted_end;
     }
     /**

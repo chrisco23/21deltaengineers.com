@@ -36,7 +36,7 @@ class ValidatedInput implements ValidatedData
         $input = $this->input;
         $placeholder = new stdClass();
         foreach (\is_array($keys) ? $keys : \func_get_args() as $key) {
-            $value = data_get($input, $key, $placeholder);
+            $value = \IAWPSCOPED\data_get($input, $key, $placeholder);
             if ($value !== $placeholder) {
                 Arr::set($results, $key, $value);
             }

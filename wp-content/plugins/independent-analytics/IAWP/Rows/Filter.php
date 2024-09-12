@@ -198,6 +198,9 @@ class Filter implements JsonSerializable
             }
             return $date->format('Y-m-d');
         }
+        if (\in_array($this->filter['database_column'], ['wc_gross_sales', 'wc_refunded_amount', 'wc_net_sales', 'wc_earnings_per_visitor', 'wc_average_order_volume'])) {
+            return \strval(\floatval($this->filter['operand']) * 100);
+        }
         return $this->filter['operand'];
     }
 }

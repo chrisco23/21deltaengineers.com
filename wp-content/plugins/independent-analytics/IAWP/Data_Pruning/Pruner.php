@@ -28,8 +28,8 @@ class Pruner
             $form_submissions_table = Query::get_table_name(Query::FORM_SUBMISSIONS);
             $this->delete_session_orphans($form_submissions_table, 'session_id');
             // Delete orphaned WooCommerce orders
-            $wc_orders_table = Query::get_table_name(Query::WC_ORDERS);
-            $this->delete_view_orphans($wc_orders_table, 'view_id', 'id');
+            $orders_table = Query::get_table_name(Query::ORDERS);
+            $this->delete_view_orphans($orders_table, 'view_id', 'id');
             // Delete orphaned visitors
             $visitors_table = Query::get_table_name(Query::VISITORS);
             $this->delete_session_orphans($visitors_table, 'visitor_id');

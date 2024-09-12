@@ -41,7 +41,7 @@ export default class extends Controller {
             isConfirmed: isConfirmed
         })
 
-        if(!response.wasSuccessful && response.confirmationText) {
+        if (!response.wasSuccessful && response.confirmationText) {
             this.showConfirmationModal(response.confirmationText)
         } else {
             this.statusMessageTarget.classList.toggle('is-scheduled', response.isEnabled)
@@ -55,7 +55,10 @@ export default class extends Controller {
         }
     }
 
-    async sendRequest({pruningCutoff, isConfirmed}) {
+    async sendRequest({
+                          pruningCutoff,
+                          isConfirmed
+                      }) {
         const data = {
             ...iawpActions.configure_pruner,
             pruningCutoff: pruningCutoff,
@@ -82,11 +85,11 @@ export default class extends Controller {
     }
 
     hideConfirmationModal = (e) => {
-        if(e && e.target !== e.currentTarget) {
+        if (e && e.target !== e.currentTarget) {
             return
         }
 
-        if(this.isModalActuallyOpen) {
+        if (this.isModalActuallyOpen) {
             this.isModalActuallyOpen = false
             MicroModal.close("prune-modal")
         }

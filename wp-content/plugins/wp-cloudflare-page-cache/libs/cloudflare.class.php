@@ -1465,6 +1465,20 @@ class SWCFPC_Cloudflare
         return true;
     }
 
+	function delete_legacy_page_rules( &$error ) {
+		// Delete page rule.
+		$page_rule_id = $this->main_instance->get_single_config( 'cf_page_rule_id', '' );
+		if ( ! empty( $page_rule_id ) && $this->delete_page_rule( $page_rule_id, $error_msg ) ) {
+			$this->main_instance->set_single_config( 'cf_page_rule_id', '' );
+		}
+
+		// Delete the legacy backend bypass page rule.
+		$legacy_page_rule_id = $this->main_instance->get_single_config( 'cf_bypass_backend_page_rule_id', '' );
+		if ( ! empty ( $legacy_page_rule_id ) && $this->delete_page_rule( $legacy_page_rule_id, $error_msg ) ) {
+			$this->main_instance->set_single_config( 'cf_bypass_backend_page_rule_id', '' );
+		}
+	}
+
     function enable_page_cache(&$error) {
 
         $this->modules = $this->main_instance->get_modules();
@@ -1482,20 +1496,9 @@ class SWCFPC_Cloudflare
             return false;
         }
 
-        // Step 2 - Delete the current cache configuration.
-        if ( $this->main_instance->get_single_config('cf_page_rule_id', '') != '' && $this->delete_page_rule( $this->main_instance->get_single_config('cf_page_rule_id', ''), $error_msg ) ) {
+        // Step 2 - Delete the current cache configuration and page rule.
+	    $this->delete_legacy_page_rules( $error );
 
-
-            $this->main_instance->set_single_config('cf_page_rule_id', '');
-        }
-
-        // Delete the legacy Page Rule.
-        if(
-            $this->main_instance->get_single_config('cf_bypass_backend_page_rule_id', '') != '' &&
-            $this->delete_page_rule( $this->main_instance->get_single_config('cf_bypass_backend_page_rule_id', ''), $error_msg )
-        ) {
-            $this->main_instance->set_single_config('cf_bypass_backend_page_rule_id', '');
-        }
 
         // Get existing cache ruleset id.
         if ( empty( $this->cache_ruleset_id ) ) {
@@ -1731,56 +1734,12 @@ class SWCFPC_Cloudflare
      * @return string
      */
     function get_cache_rule_expression() {
-        // Rule expression reference: https://gist.github.com/isaumya/af10e4855ac83156cc210b7148135fa2
-        $wordpress_links_to_cache  = 'http.host contains "' . $this->zone_domain_name . '"';
+	    $url = preg_replace( '#^(https?://)?#', '', $this->main_instance->home_url() );
 
-        $wordpress_links_to_ignore = '
-            and http.cookie ne "comment_"
-            and not http.cookie contains "auth_"
-            and not http.cookie contains "comment_author"
-            and not http.cookie contains "wordpress_logged_in_"
-            and not http.cookie contains "wordpress_sec_"
-            and not http.cookie contains "wordpresspass_"
-            and not http.cookie contains "wordpressuser_"
-            and not http.cookie contains "wp-resetpass-"
-            and not http.request.uri.path contains ".php"
-            and not http.request.uri.path contains ".xml"
-            and not http.request.uri.path contains ".xsl"
-            and not http.request.uri.path contains "/dashboard/"
-            and not http.request.uri.path contains "/register/"
-            and not http.request.uri.path contains "phs_downloads-mbr"
-            and not http.request.uri.query contains "nocache"
-            and not starts_with(http.request.uri.path, "/wp-json/")
-            and not starts_with(http.request.uri.path, "/wp-login")
-            and not starts_with(http.request.uri.query, "p=")
-            and not starts_with(http.request.uri.query, "s=")
-            and not starts_with(http.request.uri.path, "/wp-admin")
-        ';
-
-        $third_party_links_to_ignore = '
-            and not http.cookie contains "dshack_level"
-            and not http.cookie contains "edd_items_in_cart"
-            and not http.cookie contains "it_exchange_session_"
-            and not http.cookie contains "mp_globalcart_"
-            and not http.cookie contains "mp_session"
-            and not http.cookie contains "noaffiliate_"
-            and not http.cookie contains "upsell_customer"
-            and not http.cookie contains "wishlist_reg"
-            and not http.cookie contains "wlmapi"
-            and not http.cookie contains "woocommerce_"
-            and not http.cookie contains "xf_"
-            and not http.cookie contains "yith_wcwl_products"
-            and not http.request.uri.path contains "/checkout/"
-            and not http.request.uri.path contains "/members-area/"
-            and not http.request.uri.path contains "/wishlist-member/"
-            and not http.request.uri.query contains "nowprocket"
-            and not starts_with(http.request.uri.path, "/edd-api/")
-            and not starts_with(http.request.uri.path, "/mepr/")
-            and not starts_with(http.request.uri.path, "/wc-api/")
-        ';
+	    // Rule expression reference: https://gist.github.com/isaumya/af10e4855ac83156cc210b7148135fa2
+	    $expression = 'http.host wildcard "' . $url . '*"';
 
         // Clean up the expression so that the Cloudflare Expression Builder UI can understand it.
-        $expression = $wordpress_links_to_cache . $wordpress_links_to_ignore . $third_party_links_to_ignore;
         $expression = str_replace( array( "\n", "\r", "\t" ), '', $expression ); // Remove new lines, tabs.
         $expression = preg_replace( '/\s+/', ' ', $expression ); // Remove multiple spaces.
         $expression = '(' . trim( $expression ) . ')';
@@ -1831,7 +1790,7 @@ class SWCFPC_Cloudflare
         $is_success = isset( $response['success'] ) && $response['success'] && isset( $response['result'] ) && is_array( $response['result'] ) && ! empty( $response['result'] );
 
         if ( is_object( $modules['logs'] ) ) {
-            if( $is_success && $modules['logs']->get_verbosity() == SWCFPC_LOGS_HIGH_VERBOSITY ) {
+            if( $is_success ) {
                 $modules['logs']->add_log( 'cloudflare::create_cache_rule', 'Rule created for ' . $this->zone_domain_name . ': ' . json_encode( $response ) );
             } else {
                 $modules['logs']->add_log( 'cloudflare::create_cache_rule', 'Could not create the rule for ' . $this->zone_domain_name . ' on ruleset ' . $this->cache_ruleset_id );
@@ -1919,7 +1878,7 @@ class SWCFPC_Cloudflare
         $is_success = wp_remote_retrieve_response_code( $response ) == 204;
 
         if ( is_object( $modules['logs'] ) ) {
-            if( $is_success && $modules['logs']->get_verbosity() == SWCFPC_LOGS_HIGH_VERBOSITY ) {
+            if( $is_success ) {
                 $modules['logs']->add_log( 'cloudflare::delete_cache_rule', 'Rule ' . $this->cache_ruleset_rule_id . ' deleted for ' . $this->zone_domain_name . ': ' . json_encode( $response ) );
             } else {
                 $modules['logs']->add_log( 'cloudflare::delete_cache_rule', 'Could NOT delete the rule ' . $this->cache_ruleset_rule_id . ' for ' . $this->zone_domain_name . ' on ruleset ' . $this->cache_ruleset_id );

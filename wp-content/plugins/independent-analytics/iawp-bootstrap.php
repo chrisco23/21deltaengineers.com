@@ -7,6 +7,8 @@ use IAWP\Dashboard_Options;
 use IAWP\Data_Pruning\Pruning_Scheduler;
 use IAWP\Database;
 use IAWP\Date_Range\Exact_Date_Range;
+use IAWP\Ecommerce\SureCart_Cron_Job;
+use IAWP\Ecommerce\SureCart_Store;
 use IAWP\Env;
 use IAWP\Geo_Database_Background_Job;
 use IAWP\Independent_Analytics;
@@ -20,8 +22,8 @@ use IAWP\WP_Option_Cache_Bust;
 use IAWPSCOPED\Illuminate\Support\Carbon;
 \define( 'IAWP_DIRECTORY', \rtrim( \plugin_dir_path( __FILE__ ), \DIRECTORY_SEPARATOR ) );
 \define( 'IAWP_URL', \rtrim( \plugin_dir_url( __FILE__ ), '/' ) );
-\define( 'IAWP_VERSION', '2.7.3' );
-\define( 'IAWP_DATABASE_VERSION', '34' );
+\define( 'IAWP_VERSION', '2.8.6' );
+\define( 'IAWP_DATABASE_VERSION', '36' );
 \define( 'IAWP_LANGUAGES_DIRECTORY', \dirname( \plugin_basename( __FILE__ ) ) . '/languages' );
 \define( 'IAWP_PLUGIN_FILE', __DIR__ . '/iawp.php' );
 if ( \file_exists( \IAWPSCOPED\iawp_path_to( 'vendor/scoper-autoload.php' ) ) ) {
@@ -262,6 +264,7 @@ function iawp() {
     \update_option( 'iawp_need_clear_cache', \true, \true );
     \IAWPSCOPED\iawp()->cron_manager->schedule_refresh_salt();
     ( new Pruning_Scheduler() )->schedule();
+    \IAWP\Cron_Job_Autoloader::schedule();
     if ( \IAWPSCOPED\iawp_is_pro() ) {
         \IAWPSCOPED\iawp()->email_reports->schedule();
     }
@@ -271,9 +274,19 @@ function iawp() {
         \update_option( 'iawp_missing_tables', '1', \true );
     }
 } );
+\add_action( 'init', function () {
+    if ( \IAWPSCOPED\iawp()->is_surecart_support_enabled() && \in_array( \get_option( 'iawp_surecart_event_syncing' ), ['', \false] ) ) {
+        $job = new SureCart_Cron_Job();
+        $job->schedule();
+    }
+    if ( \IAWPSCOPED\iawp()->is_surecart_support_enabled() && \in_array( \get_option( 'iawp_surecart_currency_code' ), ['', \false] ) ) {
+        SureCart_Store::cache_currency_code();
+    }
+} );
 \register_deactivation_hook( \IAWP_PLUGIN_FILE, function () {
     \IAWPSCOPED\iawp()->cron_manager->unschedule_daily_salt_refresh();
     ( new Pruning_Scheduler() )->unschedule();
+    \IAWP\Cron_Job_Autoloader::unschedule();
     if ( \IAWPSCOPED\iawp_is_pro() ) {
         \IAWPSCOPED\iawp()->email_reports->unschedule();
     }

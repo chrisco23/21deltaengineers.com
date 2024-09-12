@@ -43,17 +43,21 @@ class Capability_Manager
             }
         }
     }
-    public static function can_only_view_authored_analytics() : bool
-    {
-        return !self::is_admin() && \current_user_can('iawp_read_only_authored_access');
-    }
     public static function can_view() : bool
     {
-        return self::is_admin() || \current_user_can('iawp_read_only_authored_access') || \current_user_can('iawp_read_only_access') || \current_user_can('iawp_full_access');
+        return self::is_admin_user() || \current_user_can('iawp_read_only_authored_access') || \current_user_can('iawp_read_only_access') || \current_user_can('iawp_full_access');
+    }
+    public static function can_only_view_authored_analytics() : bool
+    {
+        return !self::is_admin_user() && \current_user_can('iawp_read_only_authored_access');
+    }
+    public static function can_view_all_analytics() : bool
+    {
+        return self::is_admin_user() || \current_user_can('iawp_read_only_access') || \current_user_can('iawp_full_access');
     }
     public static function can_edit() : bool
     {
-        return self::is_admin() || \current_user_can('iawp_full_access');
+        return self::is_admin_user() || \current_user_can('iawp_full_access');
     }
     /**
      * Returns a capability string for admin menu pages. Admins can always see pages. Other roles
@@ -63,7 +67,7 @@ class Capability_Manager
      */
     public static function menu_page_capability_string() : string
     {
-        if (self::is_admin()) {
+        if (self::is_admin_user()) {
             return 'manage_options';
         }
         if (self::can_edit()) {
@@ -77,25 +81,27 @@ class Capability_Manager
         }
         return 'manage_options';
     }
-    public static function white_labeled() : bool
+    public static function show_branded_ui() : bool
     {
-        if (self::is_admin()) {
+        if (self::is_admin_user()) {
+            return \true;
+        }
+        if (\get_option('iawp_white_label') === '1') {
             return \false;
         }
-        return \IAWPSCOPED\iawp()->get_option('iawp_white_label', \false);
+        return \true;
+    }
+    public static function show_white_labeled_ui() : bool
+    {
+        return !self::show_branded_ui();
     }
     /**
      * @return bool
      */
-    private static function is_admin() : bool
+    private static function is_admin_user() : bool
     {
-        if (\is_super_admin()) {
+        if (\current_user_can('setup_network') || \in_array('administrator', \wp_get_current_user()->roles)) {
             return \true;
-        }
-        foreach (\wp_get_current_user()->roles as $role) {
-            if ($role === 'administrator') {
-                return \true;
-            }
         }
         return \false;
     }

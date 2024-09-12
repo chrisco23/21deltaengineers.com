@@ -175,7 +175,6 @@ class SWCFPC_Html_Cache
 
         // Time to add the URL to HTML cache
         $filename = $this->add_url_to_cache( $current_url );
-		error_log($filename);
 
         if( $this->modules['logs']->get_verbosity() == SWCFPC_LOGS_HIGH_VERBOSITY ) {
             $this->modules['logs']->add_log('html_cache::add_current_url_to_cache', "Created the file {$filename} for the URL {$current_url}" );

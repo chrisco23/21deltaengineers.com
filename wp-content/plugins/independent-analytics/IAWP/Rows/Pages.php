@@ -8,7 +8,6 @@ use IAWP\Illuminate_Builder;
 use IAWP\Models\Page;
 use IAWP\Query;
 use IAWP\Query_Taps;
-use IAWP\WooCommerce_Order;
 use IAWPSCOPED\Illuminate\Database\Query\Builder;
 use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
 /** @internal */
@@ -45,7 +44,7 @@ class Pages extends \IAWP\Rows\Rows
         $views_table = Query::get_table_name(Query::VIEWS);
         $sessions_table = Query::get_table_name(Query::SESSIONS);
         $resources_table = Query::get_table_name(Query::RESOURCES);
-        $wc_orders_table = Query::get_table_name(Query::WC_ORDERS);
+        $orders_table = Query::get_table_name(Query::ORDERS);
         $database_sort_columns = ['title' => 'cached_title', 'url' => 'cached_url', 'author' => 'cached_author', 'type' => 'cached_type_label', 'date' => 'cached_date', 'category' => 'cached_category'];
         $sort_column = $this->sort_configuration->column();
         foreach ($database_sort_columns as $key => $value) {
@@ -53,14 +52,14 @@ class Pages extends \IAWP\Rows\Rows
                 $sort_column = $value;
             }
         }
-        $woo_commerce_query = Illuminate_Builder::get_builder();
-        $woo_commerce_query->select(['sessions.initial_view_id AS view_id'])->selectRaw('IFNULL(COUNT(DISTINCT wc_orders.order_id), 0) AS wc_orders')->selectRaw('IFNULL(ROUND(CAST(SUM(wc_orders.total) AS DECIMAL(10, 2))), 0) AS wc_gross_sales')->selectRaw('IFNULL(ROUND(CAST(SUM(wc_orders.total_refunded) AS DECIMAL(10, 2))), 0) AS wc_refunded_amount')->selectRaw('IFNULL(SUM(wc_orders.total_refunds), 0) AS wc_refunds')->from($wc_orders_table, 'wc_orders')->leftJoin($woo_commerce_query->raw($views_table . ' AS views'), function (JoinClause $join) {
-            $join->on('wc_orders.view_id', '=', 'views.id');
-        })->leftJoin($woo_commerce_query->raw($sessions_table . ' AS sessions'), function (JoinClause $join) {
+        $orders_query = Illuminate_Builder::get_builder();
+        $orders_query->select(['sessions.initial_view_id AS view_id'])->selectRaw('IFNULL(COUNT(DISTINCT orders.order_id), 0) AS wc_orders')->selectRaw('IFNULL(ROUND(CAST(SUM(orders.total) AS UNSIGNED)), 0) AS wc_gross_sales')->selectRaw('IFNULL(ROUND(CAST(SUM(orders.total_refunded) AS UNSIGNED)), 0) AS wc_refunded_amount')->selectRaw('IFNULL(SUM(orders.total_refunds), 0) AS wc_refunds')->from($orders_table, 'orders')->leftJoin($orders_query->raw($views_table . ' AS views'), function (JoinClause $join) {
+            $join->on('orders.view_id', '=', 'views.id');
+        })->leftJoin($orders_query->raw($sessions_table . ' AS sessions'), function (JoinClause $join) {
             $join->on('views.session_id', '=', 'sessions.session_id');
-        })->whereIn('wc_orders.status', WooCommerce_Order::tracked_order_statuses())->whereBetween('wc_orders.created_at', $this->get_current_period_iso_range())->groupBy('wc_orders.view_id');
+        })->where('orders.is_included_in_analytics', '=', \true)->whereBetween('orders.created_at', $this->get_current_period_iso_range())->groupBy('orders.view_id');
         $pages_query = Illuminate_Builder::get_builder();
-        $pages_query->select('resources.*')->selectRaw('COUNT(DISTINCT views.id)  AS views')->selectRaw('COUNT(DISTINCT sessions.visitor_id)  AS visitors')->selectRaw('COUNT(DISTINCT IF(initial_view.resource_id = resources.id, sessions.visitor_id, NULL))  AS landing_page_visitors')->selectRaw('COUNT(DISTINCT sessions.session_id)  AS sessions')->selectRaw('COUNT(DISTINCT IF(sessions.final_view_id IS NULL, sessions.session_id, NULL))  AS bounces')->selectRaw('AVG(TIMESTAMPDIFF(SECOND, views.viewed_at, views.next_viewed_at))  AS average_view_duration')->selectRaw('COUNT(DISTINCT IF(resources.id = initial_view.resource_id, sessions.session_id, NULL))  AS entrances')->selectRaw('COUNT(DISTINCT IF((resources.id = final_view.resource_id OR (resources.id = initial_view.resource_id AND sessions.final_view_id IS NULL)), sessions.session_id, NULL))  AS exits')->selectRaw('IFNULL(SUM(wc.wc_orders), 0) AS wc_orders')->selectRaw('IFNULL(SUM(wc.wc_gross_sales), 0) AS wc_gross_sales')->selectRaw('IFNULL(SUM(wc.wc_refunded_amount), 0) AS wc_refunded_amount')->selectRaw('IFNULL(SUM(wc_refunds), 0) AS wc_refunds')->selectRaw('IFNULL(SUM(form_submissions.form_submissions), 0) AS form_submissions')->tap(function (Builder $query) {
+        $pages_query->select('resources.*')->selectRaw('COUNT(DISTINCT views.id)  AS views')->selectRaw('COUNT(DISTINCT sessions.visitor_id)  AS visitors')->selectRaw('COUNT(DISTINCT IF(initial_view.resource_id = resources.id, sessions.visitor_id, NULL))  AS landing_page_visitors')->selectRaw('COUNT(DISTINCT sessions.session_id)  AS sessions')->selectRaw('COUNT(DISTINCT IF(sessions.final_view_id IS NULL, sessions.session_id, NULL))  AS bounces')->selectRaw('AVG(TIMESTAMPDIFF(SECOND, views.viewed_at, views.next_viewed_at))  AS average_view_duration')->selectRaw('COUNT(DISTINCT IF(resources.id = initial_view.resource_id, sessions.session_id, NULL))  AS entrances')->selectRaw('COUNT(DISTINCT IF((resources.id = final_view.resource_id OR (resources.id = initial_view.resource_id AND sessions.final_view_id IS NULL)), sessions.session_id, NULL))  AS exits')->selectRaw('IFNULL(SUM(the_orders.wc_orders), 0) AS wc_orders')->selectRaw('IFNULL(SUM(the_orders.wc_gross_sales), 0) AS wc_gross_sales')->selectRaw('IFNULL(SUM(the_orders.wc_refunded_amount), 0) AS wc_refunded_amount')->selectRaw('IFNULL(SUM(wc_refunds), 0) AS wc_refunds')->selectRaw('IFNULL(SUM(form_submissions.form_submissions), 0) AS form_submissions')->tap(function (Builder $query) {
             foreach (Form::get_forms() as $form) {
                 $query->selectRaw("SUM(IF(form_submissions.form_id = ?, form_submissions.form_submissions, 0)) AS {$form->submissions_column()}", [$form->id()]);
             }
@@ -72,8 +71,8 @@ class Pages extends \IAWP\Rows\Rows
             $join->on('sessions.initial_view_id', '=', 'initial_view.id');
         })->leftJoin($pages_query->raw($views_table . ' AS final_view'), function (JoinClause $join) {
             $join->on('sessions.final_view_id', '=', 'final_view.id');
-        })->leftJoinSub($woo_commerce_query, 'wc', function (JoinClause $join) {
-            $join->on('wc.view_id', '=', 'views.id');
+        })->leftJoinSub($orders_query, 'the_orders', function (JoinClause $join) {
+            $join->on('the_orders.view_id', '=', 'views.id');
         })->tap(Query_Taps::tap_authored_content_check(\false))->when($this->has_wp_comments_table(), function (Builder $query) {
             $query->selectRaw('IFNULL(comments.comments, 0) AS comments');
             $query->leftJoinSub($this->get_comments_query(), 'comments', 'comments.resource_id', '=', 'resources.id');
@@ -99,7 +98,7 @@ class Pages extends \IAWP\Rows\Rows
         $previous_period_query = Illuminate_Builder::get_builder();
         $previous_period_query->select(['views.resource_id'])->selectRaw('COUNT(*) AS previous_period_views')->selectRaw('COUNT(DISTINCT sessions.visitor_id) AS previous_period_visitors')->from($views_table, 'views')->join($previous_period_query->raw($sessions_table . ' AS sessions'), 'views.session_id', '=', 'sessions.session_id')->whereBetween('views.viewed_at', $this->get_previous_period_iso_range())->whereBetween('sessions.created_at', $this->get_previous_period_iso_range())->groupBy('views.resource_id');
         $outer_query = Illuminate_Builder::get_builder();
-        $outer_query->selectRaw('pages.*')->selectRaw('IFNULL((views - previous_period_views) / previous_period_views * 100, 0) AS views_growth')->selectRaw('IFNULL((visitors - previous_period_visitors) / previous_period_visitors * 100, 0) AS visitors_growth')->selectRaw('IFNULL(bounces / sessions * 100, 0) AS bounce_rate')->selectRaw('IFNULL((exits / views) * 100, 0) AS exit_percent')->selectRaw('ROUND(CAST(wc_gross_sales - wc_refunded_amount AS DECIMAL(10, 2))) AS wc_net_sales')->selectRaw('IF(visitors = 0, 0, (wc_orders / landing_page_visitors) * 100) AS wc_conversion_rate')->selectRaw('IF(visitors = 0, 0, (wc_gross_sales - wc_refunded_amount) / landing_page_visitors) AS wc_earnings_per_visitor')->selectRaw('IF(wc_orders = 0, 0, ROUND(CAST(wc_gross_sales / wc_orders AS DECIMAL(10, 2)))) AS wc_average_order_volume')->selectRaw('IF(visitors = 0, 0, (form_submissions / visitors) * 100) AS form_conversion_rate')->tap(function (Builder $query) {
+        $outer_query->selectRaw('pages.*')->selectRaw('IFNULL((views - previous_period_views) / previous_period_views * 100, 0) AS views_growth')->selectRaw('IFNULL((visitors - previous_period_visitors) / previous_period_visitors * 100, 0) AS visitors_growth')->selectRaw('IFNULL(bounces / sessions * 100, 0) AS bounce_rate')->selectRaw('IFNULL((exits / views) * 100, 0) AS exit_percent')->selectRaw('ROUND(CAST(wc_gross_sales - wc_refunded_amount AS UNSIGNED)) AS wc_net_sales')->selectRaw('IF(visitors = 0, 0, (wc_orders / landing_page_visitors) * 100) AS wc_conversion_rate')->selectRaw('IF(visitors = 0, 0, (wc_gross_sales - wc_refunded_amount) / landing_page_visitors) AS wc_earnings_per_visitor')->selectRaw('IF(wc_orders = 0, 0, ROUND(CAST(wc_gross_sales / wc_orders AS UNSIGNED))) AS wc_average_order_volume')->selectRaw('IF(visitors = 0, 0, (form_submissions / visitors) * 100) AS form_conversion_rate')->tap(function (Builder $query) {
             foreach (Form::get_forms() as $form) {
                 $query->selectRaw("IF(visitors = 0, 0, ({$form->submissions_column()} / visitors) * 100) AS {$form->conversion_rate_column()}");
             }

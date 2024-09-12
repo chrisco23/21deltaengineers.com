@@ -146,7 +146,7 @@ trait EnumeratesValues
     {
         if (\func_num_args() === 2) {
             return $this->contains(function ($item) use($key, $value) {
-                return data_get($item, $key) === $value;
+                return \IAWPSCOPED\data_get($item, $key) === $value;
             });
         }
         if ($this->useAsCallable($key)) {
@@ -511,7 +511,7 @@ trait EnumeratesValues
     {
         $values = $this->getArrayableItems($values);
         return $this->filter(function ($item) use($key, $values, $strict) {
-            return \in_array(data_get($item, $key), $values, $strict);
+            return \in_array(\IAWPSCOPED\data_get($item, $key), $values, $strict);
         });
     }
     /**
@@ -546,7 +546,7 @@ trait EnumeratesValues
     public function whereNotBetween($key, $values)
     {
         return $this->filter(function ($item) use($key, $values) {
-            return data_get($item, $key) < \reset($values) || data_get($item, $key) > \end($values);
+            return \IAWPSCOPED\data_get($item, $key) < \reset($values) || \IAWPSCOPED\data_get($item, $key) > \end($values);
         });
     }
     /**
@@ -561,7 +561,7 @@ trait EnumeratesValues
     {
         $values = $this->getArrayableItems($values);
         return $this->reject(function ($item) use($key, $values, $strict) {
-            return \in_array(data_get($item, $key), $values, $strict);
+            return \in_array(\IAWPSCOPED\data_get($item, $key), $values, $strict);
         });
     }
     /**
@@ -870,7 +870,7 @@ trait EnumeratesValues
             $operator = '=';
         }
         return function ($item) use($key, $operator, $value) {
-            $retrieved = data_get($item, $key);
+            $retrieved = \IAWPSCOPED\data_get($item, $key);
             $strings = \array_filter([$retrieved, $value], function ($value) {
                 return \is_string($value) || \is_object($value) && \method_exists($value, '__toString');
             });
@@ -922,7 +922,7 @@ trait EnumeratesValues
             return $value;
         }
         return function ($item) use($value) {
-            return data_get($item, $value);
+            return \IAWPSCOPED\data_get($item, $value);
         };
     }
     /**

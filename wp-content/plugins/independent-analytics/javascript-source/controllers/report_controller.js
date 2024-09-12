@@ -8,7 +8,7 @@ class Report_Controller extends Controller {
      * current one is fetched.
      */
     static request;
-    static targets = ['loadMore', 'exportCSV', 'exportPDF']
+    static targets = ['loadMore', 'exportCSV', 'exportPDF', 'spinner']
     static values = {
         name: String,
         relativeRangeId: String,
@@ -62,10 +62,13 @@ class Report_Controller extends Controller {
         document.addEventListener('iawp:changeChartInterval', this.changeChartInterval)
         document.addEventListener('iawp:changePrimaryChartMetric', this.changePrimaryChartMetric)
         document.addEventListener('iawp:changeSecondaryChartMetric', this.changeSecondaryChartMetric)
-        this.fetch({
-            tableOnly: this.filters.length === 0,
-            showLoadingOverlay: false
-        })
+        document.addEventListener('iawp:fetchingReport', this.onFetchingReport)
+        setTimeout(() => {
+            this.fetch({
+                tableOnly: this.filters.length === 0,
+                showLoadingOverlay: false
+            })
+        }, 0)
     }
 
     disconnect() {
@@ -78,6 +81,7 @@ class Report_Controller extends Controller {
         document.removeEventListener('iawp:changeChartInterval', this.changeChartInterval)
         document.removeEventListener('iawp:changePrimaryChartMetric', this.changePrimaryChartMetric)
         document.removeEventListener('iawp:changeSecondaryChartMetric', this.changeSecondaryChartMetric)
+        document.removeEventListener('iawp:fetchingReport', this.onFetchingReport)
     }
 
     emitChangedOption(detail) {
@@ -179,6 +183,14 @@ class Report_Controller extends Controller {
         this.fetch();
     }
 
+    onFetchingReport = () => {
+        this.spinnerTarget.classList.remove('hidden')
+
+        document.addEventListener('iawp:fetchedReport', () => {
+            this.spinnerTarget.classList.add('hidden')
+        }, {once: true})
+    }
+
     loadMore = () => {
         this.page = this.page + 1
 
@@ -221,6 +233,10 @@ class Report_Controller extends Controller {
             Report_Controller.request.abort();
         }
 
+        document.dispatchEvent(
+            new CustomEvent('iawp:fetchingReport')
+        )
+
         Report_Controller.request = jQuery.post(ajaxurl, data, (response) => {
             response = response.data
 
@@ -230,6 +246,9 @@ class Report_Controller extends Controller {
 
             jQuery('#iawp-columns .row-number').text(response.totalNumberOfRows.toLocaleString());
             document.getElementById('data-table').setAttribute('data-total-number-of-rows', response.totalNumberOfRows)
+            document.dispatchEvent(
+                new CustomEvent('iawp:fetchedReport')
+            )
 
             if (newGroup) {
                 jQuery('#iawp-table-wrapper').replaceWith(response.table)
@@ -248,7 +267,7 @@ class Report_Controller extends Controller {
 
             if (!tableOnly) {
                 jQuery('#dates-button span:last-child').text(response.label)
-                jQuery('#myChart').closest('.chart-container').replaceWith(response.chart);
+                jQuery('#independent-analytics-chart').closest('.chart-container').replaceWith(response.chart);
                 jQuery('#quick-stats').replaceWith(response.stats);
             }
 
@@ -362,7 +381,7 @@ class Report_Controller extends Controller {
                 const imageElement = document.createElement('img')
                 imageElement.src = base64Image
 
-                element.querySelector('#myChart').replaceWith(imageElement)
+                element.querySelector('#independent-analytics-chart').replaceWith(imageElement)
             }
 
             // Prevent stimulus controllers from firing

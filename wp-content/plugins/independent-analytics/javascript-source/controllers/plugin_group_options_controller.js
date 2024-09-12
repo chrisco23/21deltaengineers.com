@@ -1,21 +1,39 @@
 import {Controller} from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ['modal', 'modalButton', 'checkbox', 'checkboxContainer', 'tab']
+    static targets = ['modal', 'modalButton', 'checkbox', 'checkboxContainer', 'tab', 'spinner']
     static values = {
         optionType: String
     }
 
     connect() {
         document.addEventListener('click', this.maybeClose)
+        document.addEventListener('iawp:fetchingReport', this.onFetchingReport)
     }
 
     disconnect() {
         document.removeEventListener('click', this.maybeClose)
+        document.removeEventListener('iawp:fetchingReport', this.onFetchingReport)
 
         if(this.modalTarget.classList.contains('show')) {
             this.closeModal()
         }
+    }
+
+    onFetchingReport = () => {
+        if(this.optionTypeValue !== 'columns') {
+            return;
+        }
+
+        const enabledElements = this.element.querySelectorAll('input:not([disabled])')
+
+        enabledElements.forEach(element => element.disabled = true)
+        this.spinnerTarget.classList.remove('hidden')
+
+        document.addEventListener('iawp:fetchedReport', () => {
+            enabledElements.forEach(element => element.disabled = false)
+            this.spinnerTarget.classList.add('hidden')
+        }, {once: true})
     }
 
     maybeClose = (event) => {

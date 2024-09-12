@@ -72,13 +72,13 @@ class REST_API
                     }
 
                     const params = location.search.slice(1).split('&').reduce((acc, s) => {
-                        const [k, v] = s.split('=')
-                        return Object.assign(acc, {[k]: v})
-                    }, {})
+                        const [k, v] = s.split('=');
+                        return Object.assign(acc, {[k]: v});
+                    }, {});
 
                     const url = "<?php 
         echo $url;
-        ?>"
+        ?>";
                     const body = {
                         referrer_url,
                         utm_source: params.utm_source,
@@ -90,12 +90,12 @@ class REST_API
                         ...<?php 
         echo \json_encode($data);
         ?>
-                    }
-                    const xhr = new XMLHttpRequest()
-                    xhr.open("POST", url, true)
-                    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
-                    xhr.send(JSON.stringify(body))
-                })
+                    };
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("POST", url, true);
+                    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                    xhr.send(JSON.stringify(body));
+                });
             })();
         </script>
         <?php 

@@ -10,7 +10,7 @@ class Query_Taps
     public static function tap_authored_content_check($should_join_resources = \true)
     {
         return function (Builder $query) use($should_join_resources) {
-            if (!\IAWP\Capability_Manager::can_only_view_authored_analytics()) {
+            if (!\is_user_logged_in() || \IAWP\Capability_Manager::can_view_all_analytics()) {
                 return;
             }
             if ($should_join_resources) {

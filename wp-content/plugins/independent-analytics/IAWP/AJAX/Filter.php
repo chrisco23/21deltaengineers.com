@@ -91,12 +91,12 @@ class Filter extends \IAWP\AJAX\AJAX
     private function get_date_range() : Date_Range
     {
         $relative_range_id = $this->get_field('relative_range_id');
-        $start_timestamp = $this->get_field('exact_start');
-        $end_timestamp = $this->get_field('exact_end');
-        if (!\is_null($start_timestamp) && !\is_null($end_timestamp)) {
+        $exact_start = $this->get_field('exact_start');
+        $exact_end = $this->get_field('exact_end');
+        if (!\is_null($exact_start) && !\is_null($exact_end)) {
             try {
-                $start = new DateTime($start_timestamp, Timezone::site_timezone());
-                $end = new DateTime($end_timestamp, Timezone::site_timezone());
+                $start = new DateTime($exact_start, Timezone::site_timezone());
+                $end = new DateTime($exact_end, Timezone::site_timezone());
                 return new Exact_Date_Range($start, $end);
             } catch (Throwable $e) {
                 // Do nothing and fall back to default relative date range

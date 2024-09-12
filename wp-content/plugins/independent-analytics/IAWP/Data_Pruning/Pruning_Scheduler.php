@@ -3,6 +3,8 @@
 namespace IAWP\Data_Pruning;
 
 use IAWPSCOPED\Carbon\CarbonImmutable;
+use IAWP\Illuminate_Builder;
+use IAWP\Query;
 use IAWP\Utils\WordPress_Site_Date_Format_Pattern;
 use IAWPSCOPED\Proper\Timezone;
 /** @internal */
@@ -43,8 +45,20 @@ class Pruning_Scheduler
     public function get_pruning_description(string $cutoff) : string
     {
         $date = $this->convert_cutoff_to_date($cutoff, \true);
+        $utc_date = $this->convert_cutoff_to_date($cutoff);
         $formatted_date = $date->format(WordPress_Site_Date_Format_Pattern::for_php());
-        return \sprintf(\__('All data from before %1$s will be immediately deleted. This process will repeat daily at midnight.', 'independent-analytics'), $formatted_date);
+        $estimates = $this->get_pruning_estimates($utc_date);
+        return \sprintf(\__("All data from before %1\$s will be deleted immediately. This will remove %2\$s of your %3\$s tracked sessions. \n\n This process will repeat daily at midnight.", 'independent-analytics'), $formatted_date, \number_format_i18n($estimates['sessions_to_be_deleted']), \number_format_i18n($estimates['sessions']));
+    }
+    /**
+     * @return array{sessions: int, sessions_to_be_deleted: int}
+     */
+    public function get_pruning_estimates(\DateTime $cutoff_date) : array
+    {
+        $sessions_table = Query::get_table_name(Query::SESSIONS);
+        $sessions = Illuminate_Builder::get_builder()->from($sessions_table)->selectRaw('COUNT(*) as sessions')->value('sessions');
+        $sessions_to_be_deleted = Illuminate_Builder::get_builder()->from($sessions_table)->selectRaw('COUNT(*) as sessions')->where('created_at', '<', $cutoff_date)->value('sessions');
+        return ['sessions' => $sessions, 'sessions_to_be_deleted' => $sessions_to_be_deleted];
     }
     public function update_pruning_cutoff(string $cutoff) : bool
     {

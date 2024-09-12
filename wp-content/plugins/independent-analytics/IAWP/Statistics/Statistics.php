@@ -15,7 +15,6 @@ use IAWP\Rows\Rows;
 use IAWP\Statistics\Intervals\Interval;
 use IAWP\Statistics\Intervals\Intervals;
 use IAWP\Utils\Calculations;
-use IAWP\WooCommerce_Order;
 use IAWPSCOPED\Illuminate\Database\Query\Builder;
 use IAWPSCOPED\Illuminate\Database\Query\JoinClause;
 use IAWPSCOPED\Illuminate\Support\Collection;
@@ -147,7 +146,7 @@ abstract class Statistics
             return Calculations::percentage($statistics->bounces, $statistics->sessions);
         }]), $this->make_statistic(['id' => 'views_per_session', 'name' => \__('Views Per Session', 'independent-analytics'), 'plugin_group' => 'general', 'format' => 'decimal', 'compute' => function (object $statistics) {
             return Calculations::divide($statistics->total_views, $statistics->sessions, 2);
-        }]), $this->make_statistic(['id' => 'wc_orders', 'name' => \__('Orders', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce']), $this->make_statistic(['id' => 'wc_gross_sales', 'name' => \__('Gross Sales', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'rounded-currency']), $this->make_statistic(['id' => 'wc_refunds', 'name' => \__('Refunds', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce']), $this->make_statistic(['id' => 'wc_refunded_amount', 'name' => \__('Refunded Amount', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'rounded-currency']), $this->make_statistic(['id' => 'wc_net_sales', 'name' => \__('Net Sales', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'rounded-currency']), $this->make_statistic(['id' => 'wc_conversion_rate', 'name' => \__('Conversion Rate', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'percent']), $this->make_statistic(['id' => 'wc_earnings_per_visitor', 'name' => \__('Earnings Per Visitor', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'currency']), $this->make_statistic(['id' => 'wc_average_order_volume', 'name' => \__('Average Order Volume', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'icon' => 'woocommerce', 'format' => 'rounded-currency']), $this->make_statistic(['id' => 'form_submissions', 'name' => \__('Form Submissions', 'independent-analytics'), 'plugin_group' => 'forms']), $this->make_statistic(['id' => 'form_conversion_rate', 'name' => \__('Form Conversion Rate', 'independent-analytics'), 'plugin_group' => 'forms', 'format' => 'percent', 'compute' => function (object $statistics) {
+        }]), $this->make_statistic(['id' => 'wc_orders', 'name' => \__('Orders', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'icon' => $this->get_ecommerce_icon()]), $this->make_statistic(['id' => 'wc_gross_sales', 'name' => \__('Gross Sales', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'icon' => $this->get_ecommerce_icon(), 'format' => 'rounded-currency']), $this->make_statistic(['id' => 'wc_refunds', 'name' => \__('Refunds', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'icon' => $this->get_ecommerce_icon()]), $this->make_statistic(['id' => 'wc_refunded_amount', 'name' => \__('Refunded Amount', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'icon' => $this->get_ecommerce_icon(), 'format' => 'rounded-currency']), $this->make_statistic(['id' => 'wc_net_sales', 'name' => \__('Total Sales', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'icon' => $this->get_ecommerce_icon(), 'format' => 'rounded-currency']), $this->make_statistic(['id' => 'wc_conversion_rate', 'name' => \__('Conversion Rate', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'icon' => $this->get_ecommerce_icon(), 'format' => 'percent']), $this->make_statistic(['id' => 'wc_earnings_per_visitor', 'name' => \__('Earnings Per Visitor', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'icon' => $this->get_ecommerce_icon(), 'format' => 'currency']), $this->make_statistic(['id' => 'wc_average_order_volume', 'name' => \__('Average Order Volume', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'icon' => $this->get_ecommerce_icon(), 'format' => 'rounded-currency']), $this->make_statistic(['id' => 'form_submissions', 'name' => \__('Form Submissions', 'independent-analytics'), 'plugin_group' => 'forms']), $this->make_statistic(['id' => 'form_conversion_rate', 'name' => \__('Form Conversion Rate', 'independent-analytics'), 'plugin_group' => 'forms', 'format' => 'percent', 'compute' => function (object $statistics) {
             return Calculations::percentage($statistics->form_submissions, $statistics->visitors, 2);
         }])];
         foreach (Form::get_forms() as $form) {
@@ -182,21 +181,21 @@ abstract class Statistics
         $site_offset = Timezone::site_offset();
         $sessions_table = Query::get_table_name(Query::SESSIONS);
         $views_table = Query::get_table_name(Query::VIEWS);
-        $wc_orders_table = Query::get_table_name(Query::WC_ORDERS);
+        $orders_table = Query::get_table_name(Query::ORDERS);
         $form_submissions_table = Query::get_table_name(Query::FORM_SUBMISSIONS);
         $form_submissions_query = Illuminate_Builder::get_builder()->select(['form_id', 'session_id'])->selectRaw('COUNT(*) AS form_submissions')->from($form_submissions_table, 'form_submissions')->whereBetween('created_at', [$range->iso_start(), $range->iso_end()])->groupBy(['form_id', 'session_id']);
         $session_statistics = Illuminate_Builder::get_builder();
-        $session_statistics->select('sessions.session_id')->selectRaw('COUNT(DISTINCT views.id) AS views')->selectRaw('COUNT(DISTINCT wc_orders.order_id) AS orders')->selectRaw('IFNULL(CAST(SUM(wc_orders.total) AS DECIMAL(10, 2)), 0) AS gross_sales')->selectRaw('IFNULL(CAST(SUM(wc_orders.total_refunded) AS DECIMAL(10, 2)), 0) AS total_refunded')->selectRaw('IFNULL(CAST(SUM(wc_orders.total_refunds) AS UNSIGNED), 0) AS total_refunds')->selectRaw('IFNULL(CAST(SUM(wc_orders.total - wc_orders.total_refunded) AS DECIMAL(10, 2)), 0) AS net_sales')->from("{$sessions_table} AS sessions")->join("{$views_table} AS views", function (JoinClause $join) {
+        $session_statistics->select('sessions.session_id')->selectRaw('COUNT(DISTINCT views.id) AS views')->selectRaw('COUNT(DISTINCT orders.order_id) AS orders')->selectRaw('IFNULL(CAST(SUM(orders.total) AS UNSIGNED), 0) AS gross_sales')->selectRaw('IFNULL(CAST(SUM(orders.total_refunded) AS UNSIGNED), 0) AS total_refunded')->selectRaw('IFNULL(CAST(SUM(orders.total_refunds) AS UNSIGNED), 0) AS total_refunds')->selectRaw('IFNULL(CAST(SUM(orders.total - orders.total_refunded) AS UNSIGNED), 0) AS net_sales')->from("{$sessions_table} AS sessions")->join("{$views_table} AS views", function (JoinClause $join) {
             $join->on('sessions.session_id', '=', 'views.session_id');
-        })->leftJoin("{$wc_orders_table} AS wc_orders", function (JoinClause $join) {
-            $join->on('views.id', '=', 'wc_orders.initial_view_id')->whereIn('wc_orders.status', WooCommerce_Order::tracked_order_statuses());
+        })->leftJoin("{$orders_table} AS orders", function (JoinClause $join) {
+            $join->on('views.id', '=', 'orders.initial_view_id')->where('orders.is_included_in_analytics', '=', \true);
         })->tap(Query_Taps::tap_authored_content_check(\true))->when(!\is_null($rows), function (Builder $query) use($rows) {
             $rows->attach_filters($query);
         })->whereBetween('sessions.created_at', [$range->iso_start(), $range->iso_end()])->whereBetween('views.viewed_at', [$range->iso_start(), $range->iso_end()])->groupBy('sessions.session_id')->when(!\is_null($this->required_column()), function (Builder $query) {
             $query->whereNotNull($this->required_column());
         });
         $statistics = Illuminate_Builder::get_builder();
-        $statistics->selectRaw('IFNULL(CAST(SUM(sessions.total_views) AS UNSIGNED), 0) AS total_views')->selectRaw('IFNULL(CAST(SUM(session_statistics.views) AS UNSIGNED), 0) AS views')->selectRaw('COUNT(DISTINCT sessions.visitor_id) AS visitors')->selectRaw('COUNT(DISTINCT sessions.session_id) AS sessions')->selectRaw('IFNULL(CAST(AVG(TIMESTAMPDIFF(SECOND, sessions.created_at, sessions.ended_at)) AS UNSIGNED), 0) AS average_session_duration')->selectRaw('COUNT(DISTINCT IF(sessions.final_view_id IS NULL, sessions.session_id, NULL)) AS bounces')->selectRaw('IFNULL(CAST(SUM(session_statistics.orders) AS UNSIGNED), 0) AS wc_orders')->selectRaw('IFNULL(CAST(SUM(session_statistics.gross_sales) AS DECIMAL(10, 2)), 0) AS wc_gross_sales')->selectRaw('IFNULL(CAST(SUM(session_statistics.total_refunds) AS UNSIGNED), 0) AS wc_refunds')->selectRaw('IFNULL(CAST(SUM(session_statistics.total_refunded) AS DECIMAL(10, 2)), 0) AS wc_refunded_amount')->selectRaw('IFNULL(CAST(SUM(session_statistics.net_sales) AS DECIMAL(10, 2)), 0) AS wc_net_sales')->selectRaw('IFNULL(SUM(form_submissions.form_submissions), 0) AS form_submissions')->tap(function (Builder $query) {
+        $statistics->selectRaw('IFNULL(CAST(SUM(sessions.total_views) AS UNSIGNED), 0) AS total_views')->selectRaw('IFNULL(CAST(SUM(session_statistics.views) AS UNSIGNED), 0) AS views')->selectRaw('COUNT(DISTINCT sessions.visitor_id) AS visitors')->selectRaw('COUNT(DISTINCT sessions.session_id) AS sessions')->selectRaw('IFNULL(CAST(AVG(TIMESTAMPDIFF(SECOND, sessions.created_at, sessions.ended_at)) AS UNSIGNED), 0) AS average_session_duration')->selectRaw('COUNT(DISTINCT IF(sessions.final_view_id IS NULL, sessions.session_id, NULL)) AS bounces')->selectRaw('IFNULL(CAST(SUM(session_statistics.orders) AS UNSIGNED), 0) AS wc_orders')->selectRaw('IFNULL(CAST(SUM(session_statistics.gross_sales) AS UNSIGNED), 0) AS wc_gross_sales')->selectRaw('IFNULL(CAST(SUM(session_statistics.total_refunds) AS UNSIGNED), 0) AS wc_refunds')->selectRaw('IFNULL(CAST(SUM(session_statistics.total_refunded) AS UNSIGNED), 0) AS wc_refunded_amount')->selectRaw('IFNULL(CAST(SUM(session_statistics.net_sales) AS UNSIGNED), 0) AS wc_net_sales')->selectRaw('IFNULL(SUM(form_submissions.form_submissions), 0) AS form_submissions')->tap(function (Builder $query) {
             foreach (Form::get_forms() as $form) {
                 $query->selectRaw('IFNULL(SUM(IF(form_submissions.form_id = ?, form_submissions.form_submissions, 0)), 0) AS ' . $form->submissions_column(), [$form->id()]);
             }
@@ -226,9 +225,9 @@ abstract class Statistics
     }
     private function clean_up_raw_statistic_row(object $statistic) : object
     {
-        $statistic->wc_gross_sales = \floatval($statistic->wc_gross_sales);
-        $statistic->wc_refunded_amount = \floatval($statistic->wc_refunded_amount);
-        $statistic->wc_net_sales = \floatval($statistic->wc_net_sales);
+        $statistic->wc_gross_sales = \intval($statistic->wc_gross_sales);
+        $statistic->wc_refunded_amount = \intval($statistic->wc_refunded_amount);
+        $statistic->wc_net_sales = \intval($statistic->wc_net_sales);
         foreach ($statistic as $key => $value) {
             if (Str::startsWith($key, 'form_submissions')) {
                 $statistic->{$key} = \intval($value);
@@ -249,11 +248,24 @@ abstract class Statistics
         $original_end = (clone $this->date_range->end())->setTimezone(Timezone::site_timezone());
         $end = $this->chart_interval->calculate_start_of_interval_for($original_end);
         $end->add(new DateInterval('PT1S'));
+        $is_problematic_timezone = \in_array(Timezone::site_timezone()->getName(), ['Asia/Beirut', 'America/Santiago']);
+        // Imagine a scenario where the offset for the start date is -4 and the offset for the
+        // end date is -3. In that case, the DatePeriod is actually going to have its end date
+        // short an hour, cause a date we care about to be chopped off the end. This code makes
+        // sure that the end date is still the day after the last date we care about, so it
+        // can get chopped off without consequence.
+        if ($is_problematic_timezone) {
+            $offset_difference = $end->getOffset() - $start->getOffset();
+            $interval = DateInterval::createFromDateString($offset_difference . ' seconds');
+            $end->add($interval);
+        }
         $date_range = new DatePeriod($start, $this->chart_interval->date_interval(), $end);
         $filled_in_data = [];
         foreach ($date_range as $date) {
-            // There is no 00:00:00 on 2024-03-31 as that's when Beirut switches off DST
-            if (Timezone::site_timezone()->getName() === 'Asia/Beirut' && $date->format('H:i:s') === "01:00:00") {
+            // If the timezone switches at midnight, there will be a date where there is no midnight. It'll be something
+            // like 1am instead. All dates after the day that switches will also be at 1am even though they have a
+            // midnight. This alters those back to midnight so they can be matched against correctly.
+            if ($is_problematic_timezone && $date->format('H:i:s') === "01:00:00") {
                 $date->setTime(0, 0, 0);
             }
             $stat = $this->get_statistic_for_date($partial_day_range, $date, $attributes);
@@ -291,5 +303,15 @@ abstract class Statistics
             }
         }
         return 0;
+    }
+    private function get_ecommerce_icon() : ?string
+    {
+        if (\IAWPSCOPED\iawp()->is_woocommerce_support_enabled() && !\IAWPSCOPED\iawp()->is_surecart_support_enabled()) {
+            return 'woocommerce';
+        }
+        if (\IAWPSCOPED\iawp()->is_surecart_support_enabled() && !\IAWPSCOPED\iawp()->is_woocommerce_support_enabled()) {
+            return 'surecart';
+        }
+        return null;
     }
 }

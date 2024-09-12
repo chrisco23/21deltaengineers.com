@@ -16,7 +16,7 @@ class Interrupt
             \add_action('admin_enqueue_scripts', [$this, 'enqueue_styles']);
         }
         \add_action('admin_menu', function () use($options) {
-            $title = \IAWP\Capability_Manager::white_labeled() ? \esc_html__('Analytics', 'independent-analytics') : 'Independent Analytics';
+            $title = \IAWP\Capability_Manager::show_white_labeled_ui() ? \esc_html__('Analytics', 'independent-analytics') : 'Independent Analytics';
             \add_menu_page($title, \esc_html__('Analytics', 'independent-analytics'), \IAWP\Capability_Manager::menu_page_capability_string(), 'independent-analytics', function () use($options) {
                 $this->render_page($options);
             }, 'dashicons-analytics', 3);

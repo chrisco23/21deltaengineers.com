@@ -1,3 +1,15 @@
+#####   Version 5.0.2 (2024-09-11)
+
+- Use proper versions for backend scripts and styles
+- Improve dashboard script dependency loading
+- Improve dashboard settings organization and UI
+- Fixed page cache setting not appearing in some instances
+- Fixed Cloudflare cache toggle value not being consistent in the dashboard
+- Updated Cloudflare cache rule to work regardless of the URL protocol
+- Added media lazy loading feature
+- Added javascript delayed loading feature [PRO]
+- Added javascript defer feature [PRO]
+
 #####   Version 5.0.1 (2024-08-28)
 
 - Fixed critical error produced by the Cache status bar

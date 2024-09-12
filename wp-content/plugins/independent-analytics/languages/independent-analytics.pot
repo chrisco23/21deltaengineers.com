@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-08-01 23:04+0000\n"
+"POT-Creation-Date: 2024-09-12 13:25+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -26,7 +26,15 @@ msgstr ""
 msgid "View all analytics and edit settings"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Dashboard_Widget.php:24, independent-analytics-production/IAWP/Independent_Analytics.php:114, independent-analytics-production/IAWP/Independent_Analytics.php:115, independent-analytics-production/IAWP/Interrupt.php:19, independent-analytics-production/IAWP/Interrupt.php:20
+#: independent-analytics-production/IAWP/Cron_Job_Autoloader.php:38
+msgid "Once a Month"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Cron_Job_Autoloader.php:39
+msgid "Every 5 minutes"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Dashboard_Widget.php:24, independent-analytics-production/IAWP/Independent_Analytics.php:119, independent-analytics-production/IAWP/Independent_Analytics.php:120, independent-analytics-production/IAWP/Interrupt.php:19, independent-analytics-production/IAWP/Interrupt.php:20
 msgid "Analytics"
 msgstr ""
 
@@ -38,193 +46,168 @@ msgstr ""
 msgid "+ Add Filter"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:41
+#: independent-analytics-production/IAWP/Filters.php:42
 msgid "Filters"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:55
+#: independent-analytics-production/IAWP/Filters.php:58
 msgid "+ Add another condition"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:64, independent-analytics-production/IAWP/Tables/Table.php:253
+#: independent-analytics-production/IAWP/Filters.php:67, independent-analytics-production/views/date-picker/date-picker.blade.php:23
 msgid "Apply"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:73
+#: independent-analytics-production/IAWP/Filters.php:76
 msgid "Reset"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:128
+#: independent-analytics-production/IAWP/Filters.php:131
 msgid "+%d More"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:147, independent-analytics-production/IAWP/Rows/Filter.php:93
+#: independent-analytics-production/IAWP/Filters.php:150, independent-analytics-production/IAWP/Rows/Filter.php:93
 msgid "Include"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:148, independent-analytics-production/IAWP/Rows/Filter.php:95
+#: independent-analytics-production/IAWP/Filters.php:151, independent-analytics-production/IAWP/Rows/Filter.php:95
 msgid "Exclude"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:241, independent-analytics-production/IAWP/Rows/Filter.php:105
+#: independent-analytics-production/IAWP/Filters.php:244, independent-analytics-production/IAWP/Rows/Filter.php:105
 msgid "Before"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:241, independent-analytics-production/IAWP/Rows/Filter.php:107
+#: independent-analytics-production/IAWP/Filters.php:244, independent-analytics-production/IAWP/Rows/Filter.php:107
 msgid "After"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:241, independent-analytics-production/IAWP/Rows/Filter.php:103
+#: independent-analytics-production/IAWP/Filters.php:244, independent-analytics-production/IAWP/Rows/Filter.php:103
 msgid "On"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:239, independent-analytics-production/IAWP/Rows/Filter.php:113
+#: independent-analytics-production/IAWP/Filters.php:242, independent-analytics-production/IAWP/Rows/Filter.php:113
 msgid "Is"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:239, independent-analytics-production/IAWP/Rows/Filter.php:115
+#: independent-analytics-production/IAWP/Filters.php:242, independent-analytics-production/IAWP/Rows/Filter.php:115
 msgid "Isn't"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:237
+#: independent-analytics-production/IAWP/Filters.php:240
 msgid "Greater than"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:237
+#: independent-analytics-production/IAWP/Filters.php:240
 msgid "Less than"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:237
+#: independent-analytics-production/IAWP/Filters.php:240
 msgid "Equal to"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:235, independent-analytics-production/IAWP/Rows/Filter.php:109
+#: independent-analytics-production/IAWP/Filters.php:238, independent-analytics-production/IAWP/Rows/Filter.php:109
 msgid "Contains"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Filters.php:235, independent-analytics-production/IAWP/Rows/Filter.php:111
+#: independent-analytics-production/IAWP/Filters.php:238, independent-analytics-production/IAWP/Rows/Filter.php:111
 msgid "Exactly matches"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:120, independent-analytics-production/IAWP/Independent_Analytics.php:120
+#: independent-analytics-production/IAWP/Independent_Analytics.php:125, independent-analytics-production/IAWP/Independent_Analytics.php:125
 msgid "Settings"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:126, independent-analytics-production/IAWP/Independent_Analytics.php:126
+#: independent-analytics-production/IAWP/Independent_Analytics.php:131, independent-analytics-production/IAWP/Independent_Analytics.php:131
 msgid "Campaign Builder"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:132, independent-analytics-production/IAWP/Independent_Analytics.php:132
+#: independent-analytics-production/IAWP/Independent_Analytics.php:137, independent-analytics-production/IAWP/Independent_Analytics.php:137
 msgid "Help & Support"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:138, independent-analytics-production/IAWP/Independent_Analytics.php:140
+#: independent-analytics-production/IAWP/Independent_Analytics.php:143, independent-analytics-production/IAWP/Independent_Analytics.php:145
 msgid "Changelog"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:139
+#: independent-analytics-production/IAWP/Independent_Analytics.php:144
 msgid "New"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:146, independent-analytics-production/IAWP/Independent_Analytics.php:146
+#: independent-analytics-production/IAWP/Independent_Analytics.php:151, independent-analytics-production/IAWP/Independent_Analytics.php:151
 msgid "Upgrade to Pro &rarr;"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218, independent-analytics-production/views/real_time.blade.php:67, independent-analytics-production/IAWP/Custom_WordPress_Columns/Views_Column.php:34, independent-analytics-production/IAWP/Menu_Bar_Stats/Menu_Bar_Stats.php:65, independent-analytics-production/IAWP/Menu_Bar_Stats/Menu_Bar_Stats.php:65, independent-analytics-production/IAWP/Statistics/Statistics.php:146, independent-analytics-production/IAWP/Tables/Table_Campaigns.php:25, independent-analytics-production/IAWP/Tables/Table_Devices.php:34, independent-analytics-production/IAWP/Tables/Table_Geo.php:28, independent-analytics-production/IAWP/Tables/Table_Pages.php:28, independent-analytics-production/IAWP/Tables/Table_Referrers.php:26, independent-analytics-production/views/email/email.blade.php:123
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223, independent-analytics-production/views/real_time.blade.php:67, independent-analytics-production/IAWP/Custom_WordPress_Columns/Views_Column.php:34, independent-analytics-production/IAWP/Menu_Bar_Stats/Menu_Bar_Stats.php:65, independent-analytics-production/IAWP/Menu_Bar_Stats/Menu_Bar_Stats.php:65, independent-analytics-production/IAWP/Statistics/Statistics.php:145, independent-analytics-production/IAWP/Tables/Table_Campaigns.php:25, independent-analytics-production/IAWP/Tables/Table_Devices.php:34, independent-analytics-production/IAWP/Tables/Table_Geo.php:28, independent-analytics-production/IAWP/Tables/Table_Pages.php:28, independent-analytics-production/IAWP/Tables/Table_Referrers.php:26, independent-analytics-production/views/email/email.blade.php:123
 msgid "Views"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223
 msgid "Apply Exact Dates"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223
 msgid "Apply Relative Dates"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223
 msgid "Copied"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223
 msgid "Exporting Pages..."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218, independent-analytics-production/views/settings/export-data.blade.php:11
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223, independent-analytics-production/views/settings/export-data.blade.php:11
 msgid "Export Pages"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223
 msgid "Exporting Referrers..."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218, independent-analytics-production/views/settings/export-data.blade.php:13
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223, independent-analytics-production/views/settings/export-data.blade.php:13
 msgid "Export Referrers"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223
 msgid "Exporting Geolocations..."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218, independent-analytics-production/views/settings/export-data.blade.php:15
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223, independent-analytics-production/views/settings/export-data.blade.php:15
 msgid "Export Geolocations"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223
 msgid "Exporting Devices..."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218, independent-analytics-production/views/settings/export-data.blade.php:17
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223, independent-analytics-production/views/settings/export-data.blade.php:17
 msgid "Export Devices"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223
 msgid "Exporting Campaigns..."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218, independent-analytics-production/views/settings/export-data.blade.php:20
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223, independent-analytics-production/views/settings/export-data.blade.php:20
 msgid "Export Campaigns"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223
 msgid "This report archive is invalid. Please export your reports and try again."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218, independent-analytics-production/views/partials/sidebar.blade.php:35
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223, independent-analytics-production/views/partials/sidebar.blade.php:35
 msgid "Open menu"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:218
+#: independent-analytics-production/IAWP/Independent_Analytics.php:223
 msgid "Close menu"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Independent_Analytics.php:235
-msgid "We hope you love %1$s"
-msgstr ""
-
-#: independent-analytics-production/IAWP/Independent_Analytics.php:239
-msgid "Hi, %1$s! This is an invitation to help the %2$s community."
-msgstr ""
-
-#: independent-analytics-production/IAWP/Independent_Analytics.php:241
-msgid "If you opt-in, some data about your usage of %2$s will be shared with us"
-msgstr ""
-
-#: independent-analytics-production/IAWP/Independent_Analytics.php:243
-msgid " so we can improve %2$s. We will also share some helpful info on using the plugin so you can get the most out of your sites analytics."
-msgstr ""
-
-#: independent-analytics-production/IAWP/Independent_Analytics.php:246
-msgid "And if you skip this, that's okay! %1$s will still work just fine."
-msgstr ""
-
-#: independent-analytics-production/IAWP/Independent_Analytics.php:253, independent-analytics-production/IAWP/Menu_Bar_Stats/Menu_Bar_Stats.php:65
+#: independent-analytics-production/IAWP/Independent_Analytics.php:243, independent-analytics-production/IAWP/Menu_Bar_Stats/Menu_Bar_Stats.php:65
 msgid "Analytics Dashboard"
-msgstr ""
-
-#: independent-analytics-production/IAWP/Independent_Analytics.php:261
-msgctxt "Following text is a noun: DB-IP"
-msgid "Geolocation data powered by"
 msgstr ""
 
 #: independent-analytics-production/IAWP/Plugin_Conflict_Detector.php:38
@@ -288,15 +271,11 @@ msgid "General"
 msgstr ""
 
 #: independent-analytics-production/IAWP/Plugin_Group.php:97
-msgid "WooCommerce"
+msgid "Upgrade to Independent Analytics Pro to get eCommerce stats."
 msgstr ""
 
 #: independent-analytics-production/IAWP/Plugin_Group.php:97
-msgid "Upgrade to Independent Analytics Pro to get WooCommerce stats."
-msgstr ""
-
-#: independent-analytics-production/IAWP/Plugin_Group.php:97
-msgid "Activate the WooCommerce plugin to display these stats."
+msgid "Activate a supported eCommerce plugin to display these stats."
 msgstr ""
 
 #: independent-analytics-production/IAWP/Plugin_Group.php:97
@@ -311,20 +290,24 @@ msgstr ""
 msgid "Your forms will show up here once a submission has been recorded."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Plugin_Group.php:102
+#: independent-analytics-production/IAWP/Plugin_Group.php:107
+msgid "eCommerce"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Plugin_Group.php:112
 msgctxt "Plugin name e.g. WPForms submissions"
 msgid "Upgrade to Independent Analytics Pro to track %s submissions."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Plugin_Group.php:104
+#: independent-analytics-production/IAWP/Plugin_Group.php:114
 msgid "Upgrade to Independent Analytics Pro to track form submissions."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Real_Time.php:61, independent-analytics-production/IAWP/Filter_Lists/Page_Type_Filter_List.php:13, independent-analytics-production/IAWP/Tables/Table_Pages.php:23
+#: independent-analytics-production/IAWP/Real_Time.php:61, independent-analytics-production/IAWP/Filter_Lists/Page_Type_Filter_List.php:13, independent-analytics-production/IAWP/Models/Page_Virtual.php:63, independent-analytics-production/IAWP/Tables/Table_Pages.php:23
 msgid "Page"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Real_Time.php:61, independent-analytics-production/IAWP/Report_Finder.php:13, independent-analytics-production/IAWP/Report_Finder.php:178, independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:156, independent-analytics-production/views/partials/sidebar.blade.php:63
+#: independent-analytics-production/IAWP/Real_Time.php:61, independent-analytics-production/IAWP/Report_Finder.php:13, independent-analytics-production/IAWP/Report_Finder.php:178, independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:150, independent-analytics-production/views/partials/sidebar.blade.php:63
 msgid "Pages"
 msgstr ""
 
@@ -332,7 +315,7 @@ msgstr ""
 msgid "Referrer"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Real_Time.php:62, independent-analytics-production/IAWP/Report_Finder.php:13, independent-analytics-production/IAWP/Report_Finder.php:180, independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:159, independent-analytics-production/views/partials/sidebar.blade.php:77
+#: independent-analytics-production/IAWP/Real_Time.php:62, independent-analytics-production/IAWP/Report_Finder.php:13, independent-analytics-production/IAWP/Report_Finder.php:180, independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:153, independent-analytics-production/views/partials/sidebar.blade.php:77
 msgid "Referrers"
 msgstr ""
 
@@ -340,8 +323,28 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Real_Time.php:63, independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:162
+#: independent-analytics-production/IAWP/Real_Time.php:63, independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:156
 msgid "Countries"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Real_Time.php:64
+msgid "Active Pages"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Real_Time.php:64
+msgid "Active Referrers"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Real_Time.php:64
+msgid "Active Countries"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Real_Time.php:64
+msgid "Active Campaigns"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Real_Time.php:64
+msgid "Device Types"
 msgstr ""
 
 #: independent-analytics-production/IAWP/Real_Time.php:76
@@ -356,135 +359,135 @@ msgstr ""
 msgid "Geographic"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Report_Finder.php:13, independent-analytics-production/IAWP/Report_Finder.php:184, independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:165, independent-analytics-production/views/partials/sidebar.blade.php:105
+#: independent-analytics-production/IAWP/Report_Finder.php:13, independent-analytics-production/IAWP/Report_Finder.php:184, independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:159, independent-analytics-production/views/partials/sidebar.blade.php:105
 msgid "Devices"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Report_Finder.php:13, independent-analytics-production/IAWP/Report_Finder.php:186, independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:168, independent-analytics-production/views/partials/sidebar.blade.php:120, independent-analytics-production/views/partials/sidebar.blade.php:138
+#: independent-analytics-production/IAWP/Report_Finder.php:13, independent-analytics-production/IAWP/Report_Finder.php:186, independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:162, independent-analytics-production/views/partials/sidebar.blade.php:120, independent-analytics-production/views/partials/sidebar.blade.php:138
 msgid "Campaigns"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:48
+#: independent-analytics-production/IAWP/Settings.php:52
 msgid "Basic Settings"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:52
+#: independent-analytics-production/IAWP/Settings.php:56
 msgid "Dark mode"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:54
+#: independent-analytics-production/IAWP/Settings.php:58
 msgid "Track logged in users"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:56
+#: independent-analytics-production/IAWP/Settings.php:60
 msgid "Admin toolbar stats"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:58
+#: independent-analytics-production/IAWP/Settings.php:62
 msgid "Dashboard widget"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:60
+#: independent-analytics-production/IAWP/Settings.php:64
 msgid "Views column"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:63
+#: independent-analytics-production/IAWP/Settings.php:67
 msgid "First day of week"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:66
+#: independent-analytics-production/IAWP/Settings.php:70
 msgid "Salt refresh rate"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:90
+#: independent-analytics-production/IAWP/Settings.php:94
 msgid "Sunday"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:90
+#: independent-analytics-production/IAWP/Settings.php:94
 msgid "Monday"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:90
+#: independent-analytics-production/IAWP/Settings.php:94
 msgid "Tuesday"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:90
+#: independent-analytics-production/IAWP/Settings.php:94
 msgid "Wednesday"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:90
+#: independent-analytics-production/IAWP/Settings.php:94
 msgid "Thursday"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:90
+#: independent-analytics-production/IAWP/Settings.php:94
 msgid "Friday"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:90
+#: independent-analytics-production/IAWP/Settings.php:94
 msgid "Saturday"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:98
+#: independent-analytics-production/IAWP/Settings.php:102
 msgid "Public View Counter"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:102, independent-analytics-production/views/settings/view-counter/enable.blade.php:3
+#: independent-analytics-production/IAWP/Settings.php:106, independent-analytics-production/views/settings/view-counter/enable.blade.php:3
 msgid "Enable the view counter"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:105
+#: independent-analytics-production/IAWP/Settings.php:109
 msgid "Display on these post types"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:109
+#: independent-analytics-production/IAWP/Settings.php:113
 msgid "Show it in this location"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:112
+#: independent-analytics-production/IAWP/Settings.php:116
 msgid "Date range to count views"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:116
+#: independent-analytics-production/IAWP/Settings.php:120
 msgid "Exclude these pages"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:118, independent-analytics-production/IAWP/Settings.php:169, independent-analytics-production/IAWP/View_Counter.php:59, independent-analytics-production/IAWP/View_Counter.php:78
+#: independent-analytics-production/IAWP/Settings.php:122, independent-analytics-production/IAWP/Settings.php:173, independent-analytics-production/IAWP/View_Counter.php:59, independent-analytics-production/IAWP/View_Counter.php:78
 msgid "Views:"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:121
+#: independent-analytics-production/IAWP/Settings.php:125
 msgid "Edit the label"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:125
+#: independent-analytics-production/IAWP/Settings.php:129
 msgid "Display the label"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:129
+#: independent-analytics-production/IAWP/Settings.php:133
 msgid "Display the icon"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:132
+#: independent-analytics-production/IAWP/Settings.php:136
 msgid "Make the view counter private?"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:135
+#: independent-analytics-production/IAWP/Settings.php:139
 msgid "Allow manual adjustment?"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:151
+#: independent-analytics-production/IAWP/Settings.php:155
 msgid "Uncheck all boxes to only show view count manually. See shortcode documentation below for details."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:190
+#: independent-analytics-production/IAWP/Settings.php:194
 msgid "Block IP Addresses"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:197
+#: independent-analytics-production/IAWP/Settings.php:201
 msgid "Scheduled Email Reports"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Settings.php:206
+#: independent-analytics-production/IAWP/Settings.php:210
 msgid "Block by User Role"
 msgstr ""
 
@@ -494,34 +497,6 @@ msgstr ""
 
 #: independent-analytics-production/IAWP/View_Counter.php:93
 msgid "Increase count by:"
-msgstr ""
-
-#: independent-analytics-production/IAWP/WooCommerce_Referrer_Meta_Box.php:30
-msgid "Order Referrer"
-msgstr ""
-
-#: independent-analytics-production/IAWP/WooCommerce_Referrer_Meta_Box.php:40
-msgid "Referrer:"
-msgstr ""
-
-#: independent-analytics-production/IAWP/WooCommerce_Referrer_Meta_Box.php:50
-msgid "Campaign Source"
-msgstr ""
-
-#: independent-analytics-production/IAWP/WooCommerce_Referrer_Meta_Box.php:53
-msgid "Campaign Medium"
-msgstr ""
-
-#: independent-analytics-production/IAWP/WooCommerce_Referrer_Meta_Box.php:56
-msgid "Campaign Name"
-msgstr ""
-
-#: independent-analytics-production/IAWP/WooCommerce_Referrer_Meta_Box.php:59
-msgid "Campaign Term"
-msgstr ""
-
-#: independent-analytics-production/IAWP/WooCommerce_Referrer_Meta_Box.php:62
-msgid "Campaign Content"
 msgstr ""
 
 #: independent-analytics-production/views/campaign-builder.blade.php:18
@@ -641,15 +616,15 @@ msgstr ""
 msgid "No Comparison"
 msgstr ""
 
-#: independent-analytics-production/views/plugin-group-options.blade.php:28
+#: independent-analytics-production/views/plugin-group-options.blade.php:29
 msgid "Choose Stats to Display"
 msgstr ""
 
-#: independent-analytics-production/views/plugin-group-options.blade.php:42
+#: independent-analytics-production/views/plugin-group-options.blade.php:45
 msgid "PRO"
 msgstr ""
 
-#: independent-analytics-production/views/plugin-group-options.blade.php:90, independent-analytics-production/views/plugin-group-options.blade.php:98, independent-analytics-production/views/settings/view-counter.blade.php:14
+#: independent-analytics-production/views/plugin-group-options.blade.php:93, independent-analytics-production/views/plugin-group-options.blade.php:101, independent-analytics-production/views/settings/view-counter.blade.php:14
 msgid "Learn more"
 msgstr ""
 
@@ -677,19 +652,24 @@ msgstr ""
 msgid "View all updates"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Admin_Page/Analytics_Page.php:147
+#: independent-analytics-production/IAWP/Admin_Page/Analytics_Page.php:142
+msgctxt "Following text is a noun: DB-IP"
+msgid "Geolocation data powered by"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Admin_Page/Analytics_Page.php:154
 msgid "Please clear your cache to ensure tracking works properly."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Admin_Page/Analytics_Page.php:147
+#: independent-analytics-production/IAWP/Admin_Page/Analytics_Page.php:154
 msgid "I've cleared the cache"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Admin_Page/Analytics_Page.php:150
+#: independent-analytics-production/IAWP/Admin_Page/Analytics_Page.php:157
 msgid "Your site is missing the following critical database permissions:"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Admin_Page/Analytics_Page.php:150
+#: independent-analytics-production/IAWP/Admin_Page/Analytics_Page.php:157
 msgid "There is no issue at this time, but you will need to enable the missing permissions before updating the plugin to a newer version to ensure an error is avoided. Please click this link to read our tutorial:"
 msgstr ""
 
@@ -701,103 +681,130 @@ msgstr ""
 msgid "You do not have permission to view this page."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Data_Pruning/Pruning_Scheduler.php:41
+#: independent-analytics-production/IAWP/Data_Pruning/Pruning_Scheduler.php:43
 msgid "Next data pruning scheduled for %s at %s."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Data_Pruning/Pruning_Scheduler.php:47
-msgid "All data from before %1$s will be immediately deleted. This process will repeat daily at midnight."
+#: independent-analytics-production/IAWP/Data_Pruning/Pruning_Scheduler.php:51
+msgid ""
+"All data from before %1$s will be deleted immediately. This will remove %2$s of your %3$s tracked sessions. \n"
+"\n"
+" This process will repeat daily at midnight."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:54, independent-analytics-production/IAWP/Migrations/Migration_17.php:25, independent-analytics-production/views/settings/view-counter/views-to-count.blade.php:4
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:53, independent-analytics-production/IAWP/Migrations/Migration_17.php:25, independent-analytics-production/views/settings/view-counter/views-to-count.blade.php:4
 msgid "Today"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:60, independent-analytics-production/views/settings/view-counter/views-to-count.blade.php:5
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:59, independent-analytics-production/views/settings/view-counter/views-to-count.blade.php:5
 msgid "Yesterday"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:67, independent-analytics-production/IAWP/Migrations/Migration_17.php:29, independent-analytics-production/views/settings/view-counter/views-to-count.blade.php:8
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:66, independent-analytics-production/IAWP/Migrations/Migration_17.php:29, independent-analytics-production/views/settings/view-counter/views-to-count.blade.php:8
 msgid "Last 7 Days"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:74
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:73
 msgid "Last 30 Days"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:81
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:80
 msgid "Last 60 Days"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:88
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:87
 msgid "Last 90 Days"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:102, independent-analytics-production/views/settings/view-counter/views-to-count.blade.php:6
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:101, independent-analytics-production/views/settings/view-counter/views-to-count.blade.php:6
 msgid "This Week"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:109, independent-analytics-production/views/settings/view-counter/views-to-count.blade.php:7
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:108, independent-analytics-production/views/settings/view-counter/views-to-count.blade.php:7
 msgid "Last Week"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:119
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:118
 msgid "This Month"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:127
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:126
 msgid "Last Month"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:135
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:134
 msgid "Last 3 Months"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:143
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:142
 msgid "Last 6 Months"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:151
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:150
 msgid "Last 12 Months"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:160
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:159
 msgid "This Year"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:169
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:168
 msgid "Last Year"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:175
+#: independent-analytics-production/IAWP/Date_Range/Relative_Date_Range.php:174
 msgid "All Time"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:68
+#: independent-analytics-production/IAWP/Ecommerce/WooCommerce_Referrer_Meta_Box.php:42
+msgid "Order Referrer"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Ecommerce/WooCommerce_Referrer_Meta_Box.php:53
+msgid "Referrer:"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Ecommerce/WooCommerce_Referrer_Meta_Box.php:63
+msgid "Campaign Source"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Ecommerce/WooCommerce_Referrer_Meta_Box.php:66
+msgid "Campaign Medium"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Ecommerce/WooCommerce_Referrer_Meta_Box.php:69
+msgid "Campaign Name"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Ecommerce/WooCommerce_Referrer_Meta_Box.php:72
+msgid "Campaign Term"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Ecommerce/WooCommerce_Referrer_Meta_Box.php:75
+msgid "Campaign Content"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:67
 msgid "There is no email scheduled."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:73
+#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:72
 msgid "Next email scheduled for %s at %s."
 msgstr ""
 
-#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:132
-msgid "Once a Month"
-msgstr ""
-
-#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:139
+#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:133
 msgid "[Test]"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:141
+#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:135
 msgid "Analytics Report for"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:174
+#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:168
 msgid "Exit Pages"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:171
+#: independent-analytics-production/IAWP/Email_Reports/Email_Reports.php:165
 msgid "Landing Pages"
 msgstr ""
 
@@ -966,8 +973,20 @@ msgstr ""
 msgid "Search:"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Models/Page_Virtual.php:34
+#: independent-analytics-production/IAWP/Models/Page_Virtual.php:49
 msgid "Checkout Success"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Models/Page_Virtual.php:85
+msgid "Product"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Models/Page_Virtual.php:89
+msgid "Collection"
+msgstr ""
+
+#: independent-analytics-production/IAWP/Models/Page_Virtual.php:93
+msgid "Upsell"
 msgstr ""
 
 #: independent-analytics-production/IAWP/Rows/Filter.php:143
@@ -978,72 +997,72 @@ msgstr ""
 msgid "Submissions for"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:146, independent-analytics-production/IAWP/Tables/Table_Campaigns.php:25, independent-analytics-production/IAWP/Tables/Table_Devices.php:34, independent-analytics-production/IAWP/Tables/Table_Geo.php:28, independent-analytics-production/IAWP/Tables/Table_Pages.php:28, independent-analytics-production/IAWP/Tables/Table_Referrers.php:26
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:145, independent-analytics-production/IAWP/Tables/Table_Campaigns.php:25, independent-analytics-production/IAWP/Tables/Table_Devices.php:34, independent-analytics-production/IAWP/Tables/Table_Geo.php:28, independent-analytics-production/IAWP/Tables/Table_Pages.php:28, independent-analytics-production/IAWP/Tables/Table_Referrers.php:26
 msgid "Visitors"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:146, independent-analytics-production/IAWP/Tables/Table_Campaigns.php:25, independent-analytics-production/IAWP/Tables/Table_Devices.php:34, independent-analytics-production/IAWP/Tables/Table_Geo.php:28, independent-analytics-production/IAWP/Tables/Table_Pages.php:28, independent-analytics-production/IAWP/Tables/Table_Referrers.php:26
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:145, independent-analytics-production/IAWP/Tables/Table_Campaigns.php:25, independent-analytics-production/IAWP/Tables/Table_Devices.php:34, independent-analytics-production/IAWP/Tables/Table_Geo.php:28, independent-analytics-production/IAWP/Tables/Table_Pages.php:28, independent-analytics-production/IAWP/Tables/Table_Referrers.php:26
 msgid "Sessions"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:146
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:145
 msgid "Average Session Duration"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:146, independent-analytics-production/IAWP/Tables/Table_Campaigns.php:25, independent-analytics-production/IAWP/Tables/Table_Devices.php:34, independent-analytics-production/IAWP/Tables/Table_Geo.php:28, independent-analytics-production/IAWP/Tables/Table_Pages.php:28, independent-analytics-production/IAWP/Tables/Table_Referrers.php:26
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:145, independent-analytics-production/IAWP/Tables/Table_Campaigns.php:25, independent-analytics-production/IAWP/Tables/Table_Devices.php:34, independent-analytics-production/IAWP/Tables/Table_Geo.php:28, independent-analytics-production/IAWP/Tables/Table_Pages.php:28, independent-analytics-production/IAWP/Tables/Table_Referrers.php:26
 msgid "Bounce Rate"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:148, independent-analytics-production/IAWP/Tables/Table_Campaigns.php:25, independent-analytics-production/IAWP/Tables/Table_Devices.php:34, independent-analytics-production/IAWP/Tables/Table_Geo.php:28, independent-analytics-production/IAWP/Tables/Table_Referrers.php:26
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:147, independent-analytics-production/IAWP/Tables/Table_Campaigns.php:25, independent-analytics-production/IAWP/Tables/Table_Devices.php:34, independent-analytics-production/IAWP/Tables/Table_Geo.php:28, independent-analytics-production/IAWP/Tables/Table_Referrers.php:26
 msgid "Views Per Session"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:150, independent-analytics-production/IAWP/Tables/Table.php:417
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:149, independent-analytics-production/IAWP/Tables/Table.php:343
 msgid "Orders"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:150, independent-analytics-production/IAWP/Tables/Table.php:417
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:149, independent-analytics-production/IAWP/Tables/Table.php:343
 msgid "Gross Sales"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:150, independent-analytics-production/IAWP/Tables/Table.php:417
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:149, independent-analytics-production/IAWP/Tables/Table.php:343
 msgid "Refunds"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:150, independent-analytics-production/IAWP/Tables/Table.php:417
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:149, independent-analytics-production/IAWP/Tables/Table.php:343
 msgid "Refunded Amount"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:150, independent-analytics-production/IAWP/Tables/Table.php:417
-msgid "Net Sales"
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:149, independent-analytics-production/IAWP/Tables/Table.php:343
+msgid "Total Sales"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:150, independent-analytics-production/IAWP/Tables/Table.php:417, independent-analytics-production/IAWP/Tables/Table.php:421, independent-analytics-production/IAWP/Tables/Table.php:424
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:149, independent-analytics-production/IAWP/Tables/Table.php:343, independent-analytics-production/IAWP/Tables/Table.php:347, independent-analytics-production/IAWP/Tables/Table.php:350
 msgid "Conversion Rate"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:150, independent-analytics-production/IAWP/Tables/Table.php:417
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:149, independent-analytics-production/IAWP/Tables/Table.php:343
 msgid "Earnings Per Visitor"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:150, independent-analytics-production/IAWP/Tables/Table.php:417
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:149, independent-analytics-production/IAWP/Tables/Table.php:343
 msgid "Average Order Volume"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:150
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:149
 msgid "Form Submissions"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:150
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:149
 msgid "Form Conversion Rate"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:157
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:156
 msgctxt "Title of the contact form"
 msgid "%s Submissions"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Statistics/Statistics.php:158
+#: independent-analytics-production/IAWP/Statistics/Statistics.php:157
 msgctxt "Title of the contact form"
 msgid "%s Conversion Rate"
 msgstr ""
@@ -1056,27 +1075,23 @@ msgstr ""
 msgid "(deleted)"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Tables/Table.php:261, independent-analytics-production/views/settings/delete.blade.php:33, independent-analytics-production/views/settings/delete.blade.php:56, independent-analytics-production/views/settings/pruner.blade.php:80
-msgid "Cancel"
-msgstr ""
-
-#: independent-analytics-production/IAWP/Tables/Table.php:278
+#: independent-analytics-production/IAWP/Tables/Table.php:201
 msgid "Download Report"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Tables/Table.php:284
+#: independent-analytics-production/IAWP/Tables/Table.php:208
 msgid "Choose a format"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Tables/Table.php:290
+#: independent-analytics-production/IAWP/Tables/Table.php:216
 msgid "Download CSV"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Tables/Table.php:298
+#: independent-analytics-production/IAWP/Tables/Table.php:224
 msgid "Download PDF"
 msgstr ""
 
-#: independent-analytics-production/IAWP/Tables/Table.php:421, independent-analytics-production/IAWP/Tables/Table.php:423
+#: independent-analytics-production/IAWP/Tables/Table.php:347, independent-analytics-production/IAWP/Tables/Table.php:349
 msgid "Submissions"
 msgstr ""
 
@@ -1174,6 +1189,14 @@ msgstr ""
 
 #: independent-analytics-production/IAWP/Tables/Table_Referrers.php:26
 msgid "Referrer Type"
+msgstr ""
+
+#: independent-analytics-production/views/date-picker/calendar-month.blade.php:30
+msgid "First view recorded"
+msgstr ""
+
+#: independent-analytics-production/views/date-picker/date-picker.blade.php:29, independent-analytics-production/views/settings/delete.blade.php:33, independent-analytics-production/views/settings/delete.blade.php:56, independent-analytics-production/views/settings/pruner.blade.php:73
+msgid "Cancel"
 msgstr ""
 
 #: independent-analytics-production/views/email/email.blade.php:1
@@ -1326,7 +1349,7 @@ msgstr ""
 msgid "You have unsaved changes"
 msgstr ""
 
-#: independent-analytics-production/views/partials/report-header.blade.php:54, independent-analytics-production/views/settings/pruner.blade.php:32, independent-analytics-production/views/settings/pruner.blade.php:37
+#: independent-analytics-production/views/partials/report-header.blade.php:54, independent-analytics-production/views/settings/pruner.blade.php:32, independent-analytics-production/views/settings/pruner.blade.php:37, independent-analytics-production/views/settings/woocommerce.blade.php:38
 msgid "Save"
 msgstr ""
 
@@ -1386,7 +1409,7 @@ msgstr ""
 msgid "Ignore User Roles"
 msgstr ""
 
-#: independent-analytics-production/views/settings/block-by-role.blade.php:5, independent-analytics-production/views/settings/block-ips.blade.php:5, independent-analytics-production/views/settings/capabilities.blade.php:5, independent-analytics-production/views/settings/delete.blade.php:5, independent-analytics-production/views/settings/email-reports.blade.php:5, independent-analytics-production/views/settings/export-data.blade.php:5, independent-analytics-production/views/settings/export-reports.blade.php:7, independent-analytics-production/views/settings/export-reports.blade.php:45, independent-analytics-production/views/settings/pruner.blade.php:9, independent-analytics-production/views/settings/view-counter.blade.php:3
+#: independent-analytics-production/views/settings/block-by-role.blade.php:5, independent-analytics-production/views/settings/block-ips.blade.php:5, independent-analytics-production/views/settings/capabilities.blade.php:5, independent-analytics-production/views/settings/delete.blade.php:5, independent-analytics-production/views/settings/email-reports.blade.php:5, independent-analytics-production/views/settings/export-data.blade.php:5, independent-analytics-production/views/settings/export-reports.blade.php:7, independent-analytics-production/views/settings/export-reports.blade.php:45, independent-analytics-production/views/settings/pruner.blade.php:9, independent-analytics-production/views/settings/view-counter.blade.php:3, independent-analytics-production/views/settings/woocommerce.blade.php:9
 msgid "Read Tutorial"
 msgstr ""
 
@@ -1715,18 +1738,14 @@ msgid "Enable automatic data deletion"
 msgstr ""
 
 #: independent-analytics-production/views/settings/pruner.blade.php:49
-msgid "You are about to enable automatic data deletion."
-msgstr ""
-
-#: independent-analytics-production/views/settings/pruner.blade.php:56
 msgid "This will delete all data older then the selected timeframe, reducing the size of the database tables that Independent Analytics uses."
 msgstr ""
 
-#: independent-analytics-production/views/settings/pruner.blade.php:68, independent-analytics-production/views/settings/pruner.blade.php:73
+#: independent-analytics-production/views/settings/pruner.blade.php:61, independent-analytics-production/views/settings/pruner.blade.php:66
 msgid "Enable Automatic Data Deletion"
 msgstr ""
 
-#: independent-analytics-production/views/settings/pruner.blade.php:69
+#: independent-analytics-production/views/settings/pruner.blade.php:62
 msgid "Enabling Automatic Data Deletion..."
 msgstr ""
 
@@ -1756,6 +1775,18 @@ msgstr ""
 
 #: independent-analytics-production/views/settings/view-counter.blade.php:13
 msgid "You can also customize the icon display, label, and date range used by the shortcode."
+msgstr ""
+
+#: independent-analytics-production/views/settings/woocommerce.blade.php:6
+msgid "WooCommerce Order Statuses"
+msgstr ""
+
+#: independent-analytics-production/views/settings/woocommerce.blade.php:13
+msgid "Choose which order statuses should be counted in the analytics reports."
+msgstr ""
+
+#: independent-analytics-production/views/settings/woocommerce.blade.php:46
+msgid "Reset to default statuses"
 msgstr ""
 
 #: independent-analytics-production/views/tables/rows.blade.php:20

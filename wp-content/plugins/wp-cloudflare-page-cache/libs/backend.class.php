@@ -91,9 +91,6 @@ class SWCFPC_Backend
 
         $this->modules = $this->main_instance->get_modules();
 
-        $css_version = '1.8.0';
-        $js_version = '1.6.0';
-
         $screen = ( is_admin() && function_exists('get_current_screen') ) ? get_current_screen() : false;
 
         // Don't load the scripts for Oxygen Builder visual editor pages
@@ -104,11 +101,13 @@ class SWCFPC_Backend
 
         $wp_scripts = wp_scripts();
 
-        wp_register_style('swcfpc_sweetalert_css', SWCFPC_PLUGIN_URL . 'assets/css/sweetalert2.min.css', array(), '11.7.20');
-        wp_register_style('swcfpc_admin_css', SWCFPC_PLUGIN_URL . 'assets/css/style.min.css', array('swcfpc_sweetalert_css'), $css_version);
+	    $plugin_version = $this->main_instance->get_plugin_version();
+
+	    wp_register_style('swcfpc_sweetalert_css', SWCFPC_PLUGIN_URL . 'assets/css/sweetalert2.min.css', array(), '11.7.20');
+        wp_register_style('swcfpc_admin_css', SWCFPC_PLUGIN_URL . 'assets/css/style.min.css', array('swcfpc_sweetalert_css'), $plugin_version);
 
         wp_register_script('swcfpc_sweetalert_js', SWCFPC_PLUGIN_URL . 'assets/js/sweetalert2.min.js', array(), '11.7.20', true);
-        wp_register_script('swcfpc_admin_js', SWCFPC_PLUGIN_URL . 'assets/js/backend.min.js', array('swcfpc_sweetalert_js'), $js_version, true);
+        wp_register_script('swcfpc_admin_js', SWCFPC_PLUGIN_URL . 'assets/js/backend.min.js', array('swcfpc_sweetalert_js'), $plugin_version, true);
 
         // Making sure we are not adding the following scripts for AMP endpoints as they are not gonna work anyway and will be striped out by the AMP system
         if(
@@ -121,10 +120,10 @@ class SWCFPC_Backend
                 $on_oxygen_builder_page
             )
         ) {
-            $inline_js = 'const swcfpc_ajax_url = "' . admin_url('admin-ajax.php') . '"; ';
-            $inline_js .= 'let swcfpc_cache_enabled = ' . $this->main_instance->get_single_config('cf_cache_enabled', 0) . ';';
-
-            wp_add_inline_script('swcfpc_admin_js', $inline_js, 'before');
+            wp_localize_script('swcfpc_admin_js', 'swcfpcOptions', array(
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'cacheEnabled' => $this->main_instance->get_single_config('cf_cache_enabled', 0)
+            ));
 
             wp_enqueue_style('swcfpc_admin_css');
             wp_enqueue_script('swcfpc_admin_js');
@@ -1385,12 +1384,14 @@ class SWCFPC_Backend
                 $cloudflare->enable_page_cache(  $error_msg );
             } else if (
                 isset( $_POST['swcfpc_enable_cache_rule'] ) &&
-                0 === (int) $_POST['swcfpc_enable_cache_rule'] &&
-                ! empty( $ruleset_rule_id )
+                0 === (int) $_POST['swcfpc_enable_cache_rule']
             ) {
+	            $cloudflare->delete_legacy_page_rules( $error_msg );
                 $cloudflare->disable_page_cache_rule();
             }
 
+
+	        do_action('swcfpc_after_settings_update', $_POST );
 
             // Aggiornamento htaccess
             $this->modules['cache_controller']->write_htaccess( $error_msg );

@@ -129,8 +129,18 @@ class Resource_Identifier
     }
     private static function get_virtual_page_id() : ?string
     {
+        $post = \get_post();
         if (\IAWPSCOPED\iawp()->is_woocommerce_support_enabled() && is_checkout() && is_wc_endpoint_url('order-received')) {
             return 'wc_checkout_success';
+        }
+        if (\IAWPSCOPED\iawp()->is_surecart_support_enabled() && $post->post_type === 'sc_product' && \property_exists($post, 'sc_id')) {
+            return 'sc_product_' . $post->sc_id;
+        }
+        if (\IAWPSCOPED\iawp()->is_surecart_support_enabled() && $post->post_type === 'sc_collection' && \property_exists($post, 'sc_id')) {
+            return 'sc_collection_' . $post->sc_id;
+        }
+        if (\IAWPSCOPED\iawp()->is_surecart_support_enabled() && $post->post_type === 'sc_upsell' && \property_exists($post, 'sc_id')) {
+            return 'sc_upsell_' . $post->sc_id;
         }
         return null;
     }
@@ -156,8 +166,7 @@ class Resource_Identifier
     }
     private static function is_searchiq_results()
     {
-        $active_plugins = \get_option('active_plugins');
-        if (!\in_array('searchiq/searchiq.php', $active_plugins)) {
+        if (!\is_plugin_active('searchiq/searchiq.php')) {
             return \false;
         }
         if (\get_query_var(\get_option('_siq_search_query_param_name', 'q')) !== '') {

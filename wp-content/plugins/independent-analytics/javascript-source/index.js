@@ -10,7 +10,6 @@ import ChartIntervalController from "./controllers/chart_interval_controller"
 import ClipboardController from "./controllers/clipboard_controller"
 import CopyReportController from "./controllers/copy_report_controller"
 import CreateReportController from "./controllers/create_report_controller"
-import DatesController from "./controllers/dates_controller"
 import DeleteDataController from "./controllers/delete_data_controller"
 import DeleteReportController from "./controllers/delete_report_controller"
 import EasepickController from "./controllers/easepick_controller"
@@ -33,6 +32,7 @@ import SetFavoriteReportController from "./controllers/set_favorite_report_contr
 import SortController from "./controllers/sort_controller"
 import SortableReportsController from "./controllers/sortable_reports_controller"
 import TableColumnsController from "./controllers/table_columns_controller"
+import WooCommerceSettingsController from "./controllers/woocommerce_settings_controller"
 
 window.Stimulus = Application.start()
 
@@ -43,7 +43,6 @@ Stimulus.register("chart-interval", ChartIntervalController)
 Stimulus.register("clipboard", ClipboardController)
 Stimulus.register("table-columns", TableColumnsController)
 Stimulus.register("copy-report", CopyReportController)
-Stimulus.register("dates", DatesController)
 Stimulus.register("delete-data", DeleteDataController)
 Stimulus.register('delete-report', DeleteReportController)
 Stimulus.register("easepick", EasepickController)
@@ -67,3 +66,4 @@ Stimulus.register("set-favorite-report", SetFavoriteReportController)
 Stimulus.register("sort", SortController)
 Stimulus.register("sortable-reports", SortableReportsController)
 Stimulus.register("table-columns", TableColumnsController)
+Stimulus.register("woocommerce-settings", WooCommerceSettingsController)

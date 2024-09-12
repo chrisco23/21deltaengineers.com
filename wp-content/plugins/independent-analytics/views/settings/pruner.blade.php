@@ -39,46 +39,39 @@
     </div>
     <!-- Confirmation modal -->
     <div id="prune-modal" aria-hidden="true" class="mm micromodal-slide" data-testid="prune-modal">
-        <div tabindex="-1" class="mm__overlay" data-micromodal-close>
-            <div role="dialog" aria-modal="true" aria-labelledby="raa-modal-title"
-                 class="mm__container">
-                <h1><?php
-                    esc_html_e('Enable automatic data deletion', 'independent-analytics'); ?></h1>
-                <p>
-                    <?php
-                    esc_html_e(
-                        'You are about to enable automatic data deletion.',
-                        'independent-analytics'
-                    ) ?>
-                </p>
-                <p>
-                    <?php
-                    esc_html_e(
-                        'This will delete all data older then the selected timeframe, reducing the size of the database tables that Independent Analytics uses.',
-                        'independent-analytics'
-                    ) ?>
-                </p>
-                <p>
-                    <strong data-pruner-target="confirmationText" data-testid="date-confirmation"></strong>
-                </p>
-                <button type="submit"
-                        class="iawp-button purple"
-                        data-action="pruner#confirmClick"
-                        data-pruner-target="confirmButton"
-                        data-original-text="<?php echo esc_attr__('Enable Automatic Data Deletion', 'independent-analytics'); ?>"
-                        data-loading-text="<?php echo esc_attr__('Enabling Automatic Data Deletion...', 'independent-analytics'); ?>"
-                        data-testid="submit-data-pruner"
-                >
-                    <?php
-                    esc_html_e('Enable Automatic Data Deletion', 'independent-analytics'); ?>
-                </button>
-                <button class="iawp-button ghost-purple"
-                        data-action="pruner#cancelConfirmation"
-                        data-testid="close-data-pruner"
-                >
-                    <?php
-                    esc_html_e('Cancel', 'independent-analytics') ?>
-                </button>
+        <div tabindex="-1" class="mm__overlay" data-action="click->pruner#cancelConfirmation">
+                <div role="dialog" aria-modal="true" aria-labelledby="raa-modal-title"
+                     class="mm__container">
+                    <h1><?php
+                        esc_html_e('Enable automatic data deletion', 'independent-analytics'); ?></h1>
+                    <p>
+                        <?php
+                        esc_html_e(
+                            'This will delete all data older then the selected timeframe, reducing the size of the database tables that Independent Analytics uses.',
+                            'independent-analytics'
+                        ) ?>
+                    </p>
+                    <p>
+                        <strong data-pruner-target="confirmationText" data-testid="date-confirmation"></strong>
+                    </p>
+                    <button type="submit"
+                            class="iawp-button purple"
+                            data-action="pruner#confirmClick"
+                            data-pruner-target="confirmButton"
+                            data-original-text="<?php echo esc_attr__('Enable Automatic Data Deletion', 'independent-analytics'); ?>"
+                            data-loading-text="<?php echo esc_attr__('Enabling Automatic Data Deletion...', 'independent-analytics'); ?>"
+                            data-testid="submit-data-pruner"
+                    >
+                        <?php
+                        esc_html_e('Enable Automatic Data Deletion', 'independent-analytics'); ?>
+                    </button>
+                    <button class="iawp-button ghost-purple"
+                            data-action="pruner#cancelConfirmation"
+                            data-testid="close-data-pruner"
+                    >
+                        <?php
+                        esc_html_e('Cancel', 'independent-analytics') ?>
+                    </button>
             </div>
         </div>
     </div>

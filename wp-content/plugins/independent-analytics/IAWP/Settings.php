@@ -3,6 +3,7 @@
 namespace IAWP;
 
 use IAWP\Data_Pruning\Pruning_Scheduler;
+use IAWP\Ecommerce\WooCommerce_Status_Manager;
 use IAWP\Email_Reports\Interval_Factory;
 use IAWP\Utils\Request;
 use IAWP\Utils\String_Util;
@@ -38,6 +39,9 @@ class Settings
         echo \IAWPSCOPED\iawp_blade()->run('settings.block-by-role', ['roles' => \wp_roles()->roles, 'blocked' => \IAWPSCOPED\iawp()->get_option('iawp_blocked_roles', [])]);
         echo \IAWPSCOPED\iawp_blade()->run('settings.capabilities', ['editable_roles' => $this->get_editable_roles(), 'capabilities' => \IAWP\Capability_Manager::all_capabilities()]);
         echo \IAWPSCOPED\iawp_blade()->run('settings.view-counter');
+        if (\IAWPSCOPED\iawp()->is_woocommerce_support_enabled()) {
+            echo \IAWPSCOPED\iawp_blade()->run('settings.woocommerce', ['statuses' => new WooCommerce_Status_Manager()]);
+        }
         echo \IAWPSCOPED\iawp_blade()->run('settings.export-reports', ['report_finder' => new \IAWP\Report_Finder()]);
         echo \IAWPSCOPED\iawp_blade()->run('settings.export-data');
         echo \IAWPSCOPED\iawp_blade()->run('settings.pruner', ['pruner' => new Pruning_Scheduler()]);

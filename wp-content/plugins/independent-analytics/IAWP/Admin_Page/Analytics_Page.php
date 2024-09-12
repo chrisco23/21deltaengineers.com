@@ -136,6 +136,13 @@ class Analytics_Page extends \IAWP\Admin_Page\Admin_Page
         echo $table->get_table_markup($sort_configuration->column(), $sort_configuration->direction());
         ?>
         </div>
+        <?php 
+        if (Env::get_tab() === 'geo') {
+            echo '<div class="geo-ip-attribution">';
+            echo \esc_html_x('Geolocation data powered by', 'Following text is a noun: DB-IP', 'independent-analytics') . ' ' . '<a href="https://db-ip.com" target="_blank">DB-IP</a>.';
+            echo '</div>';
+        }
+        ?>
         <div class="iawp-notices">
         <?php 
         if (Capability_Manager::can_edit()) {

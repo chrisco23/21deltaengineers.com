@@ -17,7 +17,6 @@ export default class extends Controller {
             default: 'USD'
         },
         isPreview: Boolean,
-        isUsingWooCommerce: Boolean,
         primaryChartMetricId: String,
         primaryChartMetricName: String,
         secondaryChartMetricId: String,
@@ -99,7 +98,7 @@ export default class extends Controller {
                     currencyDisplay: 'narrowSymbol',
                     minimumFractionDigits: 0,
                     maximumFractionDigits: 0,
-                }).format(value);
+                }).format(value / 100);
             case 'currency':
                 return new Intl.NumberFormat(this.localeValue, {
                     style: 'currency',
@@ -107,7 +106,7 @@ export default class extends Controller {
                     currencyDisplay: 'narrowSymbol',
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                }).format(value);
+                }).format(value / 100);
             case 'percent':
                 return new Intl.NumberFormat(this.localeValue, {
                     style: 'percent',
@@ -165,7 +164,7 @@ export default class extends Controller {
     }
 
     connect() {
-        if(!this.isPreviewValue) {
+        if (!this.isPreviewValue) {
             this.updateMetricSelectWidth(this.primaryMetricSelectTarget)
             this.updateMetricSelectWidth(this.secondaryMetricSelectTarget)
         }
@@ -278,7 +277,7 @@ export default class extends Controller {
 
     createChart() {
         Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"';
-        const element = document.getElementById('myChart');
+        const element = document.getElementById('independent-analytics-chart');
         const labels = this.labelsValue
 
         const primaryMetricDataset = this.makeDataset(

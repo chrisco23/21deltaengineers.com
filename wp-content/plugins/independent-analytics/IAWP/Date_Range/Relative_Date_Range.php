@@ -10,7 +10,6 @@ use IAWPSCOPED\Proper\Timezone;
 class Relative_Date_Range extends \IAWP\Date_Range\Date_Range
 {
     private const VALID_RELATIVE_RANGE_IDS = ['TODAY', 'YESTERDAY', 'THIS_WEEK', 'LAST_WEEK', 'LAST_SEVEN', 'LAST_THIRTY', 'LAST_SIXTY', 'LAST_NINETY', 'THIS_MONTH', 'LAST_MONTH', 'LAST_THREE_MONTHS', 'LAST_SIX_MONTHS', 'LAST_TWELVE_MONTHS', 'THIS_YEAR', 'LAST_YEAR', 'ALL_TIME'];
-    private static $beginning_of_time = null;
     /**
      * @var string
      */
@@ -204,23 +203,27 @@ class Relative_Date_Range extends \IAWP\Date_Range\Date_Range
         }
         return \false;
     }
-    private static function beginning_of_time() : DateTime
+    public static function beginning_of_time() : DateTime
     {
-        if (!\is_null(self::$beginning_of_time)) {
-            return self::$beginning_of_time;
+        $option_value = \get_option('iawp_beginning_of_time');
+        if ($option_value !== \false && $option_value !== '') {
+            try {
+                return new DateTime($option_value, Timezone::site_timezone());
+            } catch (\Throwable $e) {
+                return new DateTime('now', Timezone::site_timezone());
+            }
         }
-        $tz = Timezone::site_timezone();
         $views_table = Query::get_table_name(Query::VIEWS);
         $first_view_at = Illuminate_Builder::get_builder()->select('viewed_at')->from($views_table, 'views')->orderBy('viewed_at')->value('viewed_at');
-        if (!\is_null($first_view_at)) {
-            try {
-                self::$beginning_of_time = new DateTime($first_view_at);
-            } catch (\Throwable $e) {
-                self::$beginning_of_time = new DateTime('now', $tz);
-            }
-        } else {
-            self::$beginning_of_time = new DateTime('now', $tz);
+        if (\is_null($first_view_at)) {
+            return new DateTime('now', Timezone::site_timezone());
         }
-        return self::$beginning_of_time;
+        try {
+            $date = new DateTime($first_view_at, Timezone::site_timezone());
+            \update_option('iawp_beginning_of_time', $first_view_at);
+            return $date;
+        } catch (\Throwable $e) {
+            return new DateTime('now', Timezone::site_timezone());
+        }
     }
 }

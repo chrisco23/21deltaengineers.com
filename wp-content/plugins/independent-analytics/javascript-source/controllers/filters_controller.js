@@ -16,7 +16,8 @@ export default class extends Controller {
         'column',
         'operator',
         'operand',
-        'conditionButtons'
+        'conditionButtons',
+        'spinner',
     ]
 
     appliedConditions = 0
@@ -24,6 +25,7 @@ export default class extends Controller {
     connect() {
         document.addEventListener('click', this.maybeClose)
         document.addEventListener('iawp:filtersChanged', this.updateFilters)
+        document.addEventListener('iawp:fetchingReport', this.onFetchingReport)
 
         if (this.filtersValue.length > 0) {
             this.createInitialFilters()
@@ -36,6 +38,19 @@ export default class extends Controller {
     disconnect() {
         document.removeEventListener('click', this.maybeClose)
         document.removeEventListener('iawp:filtersChanged', this.updateFilters)
+        document.removeEventListener('iawp:fetchingReport', this.onFetchingReport)
+    }
+
+    onFetchingReport = () => {
+        const enabledElements = this.element.querySelector('#modal-filters').querySelectorAll('input:not([disabled]), button:not([disabled]), select:not([disabled])')
+
+        enabledElements.forEach(element => element.disabled = true)
+        this.spinnerTarget.classList.remove('hidden')
+
+        document.addEventListener('iawp:fetchedReport', () => {
+            enabledElements.forEach(element => element.disabled = false)
+            this.spinnerTarget.classList.add('hidden')
+        }, {once: true})
     }
 
     updateFilters = (event) => {

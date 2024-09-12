@@ -577,11 +577,11 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
         return new static(function () use($value, $key) {
             [$value, $key] = $this->explodePluckParameters($value, $key);
             foreach ($this as $item) {
-                $itemValue = data_get($item, $value);
+                $itemValue = \IAWPSCOPED\data_get($item, $value);
                 if (\is_null($key)) {
                     (yield $itemValue);
                 } else {
-                    $itemKey = data_get($item, $key);
+                    $itemKey = \IAWPSCOPED\data_get($item, $key);
                     if (\is_object($itemKey) && \method_exists($itemKey, '__toString')) {
                         $itemKey = (string) $itemKey;
                     }

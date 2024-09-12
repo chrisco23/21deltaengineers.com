@@ -13,11 +13,11 @@
                value="/wp-admin/admin.php?page=independent-analytics-settings">
         <?php wp_nonce_field('iawp_email_report_settings-options'); ?>
         <div class="inner">
-            <p id="next-email" class="schedule-notification <?php echo $is_scheduled ? 'is-scheduled' : 'is-not-scheduled'; ?>"
+            <div id="next-email" class="schedule-notification <?php echo $is_scheduled ? 'is-scheduled' : 'is-not-scheduled'; ?>"
                 data-timestamp="<?php echo absint($timestamp); ?>">
                 <span class="dashicons dashicons-yes-alt"></span><span class="dashicons dashicons-dismiss"></span> 
-                <?php echo wp_kses_post($scheduled_date); ?>
-            </p>
+                <p><?php echo wp_kses_post($scheduled_date); ?></p>
+            </div>
             <div class="delivery-interval iawp-section">
                 <h3><?php esc_html_e('Delivery Interval', 'independent-analytics'); ?></h3>
                 <select id="iawp_email_report_interval" name="iawp_email_report_interval">

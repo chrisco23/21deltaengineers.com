@@ -4,6 +4,7 @@ namespace IAWP\Form_Submissions;
 
 use IAWP\Illuminate_Builder;
 use IAWP\Query;
+use IAWP\Utils\Plugin;
 /**
  * Form tracking requires dynamic columns. If you have 2 forms, there will be 6 new columns. 2 for
  * a summary and 2 per form. This class makes it easy to get all the forms a given site has, while
@@ -127,7 +128,6 @@ class Form
     }
     private static function static_is_plugin_active(int $plugin_id) : bool
     {
-        $active_plugins = \get_option('active_plugins');
         $plugin = \IAWP\Form_Submissions\Form::find_plugin_by_id($plugin_id);
         if (!\array_key_exists('plugin_slugs', $plugin) && !\array_key_exists('theme', $plugin)) {
             return self::has_any_tracked_submissions($plugin_id);
@@ -139,7 +139,7 @@ class Form
         }
         if (\array_key_exists('plugin_slugs', $plugin)) {
             foreach ($plugin['plugin_slugs'] as $slug) {
-                if (\in_array($slug, $active_plugins)) {
+                if (\is_plugin_active($slug)) {
                     return \true;
                 }
             }

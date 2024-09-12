@@ -5,7 +5,7 @@ Donate link: https://independentwp.com
 Requires at least: 5.9
 Tested up to: 6.5.2
 Requires PHP: 7.3.33
-Stable tag: 2.7.3
+Stable tag: 2.8.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -193,6 +193,43 @@ We use best practice techniques to filter out bot visits as efficiently as possi
 6. See the device types, browsers, and OSes your visitors are using
 
 == Changelog ==
+
+= 2.8.6 - September 12th, 2024 =
+
+* **Fix:** Some data wasn't visible for the America/Santiago timezone
+
+= 2.8.5 - September 9th, 2024 =
+
+* **Fix:** Editing a comment could trigger an error in the admin panel for some sites
+
+= 2.8.4 - September 6th, 2024 =
+
+* **Fix:** Some email reports were sending with missing analytics
+
+= 2.8.3 - September 5th, 2024 =
+
+* **Fix:** Fix deprecation warning on some PHP versions
+
+= 2.8.2 - September 4th, 2024 =
+
+* **Fix:** Timezones were not reflected in parts of the date picker
+
+= 2.8.1 - September 4th, 2024 =
+
+* **Fix:** Some WooCommerce currencies were formatted incorrectly
+
+= 2.8.0 - September 4th, 2024 =
+
+* **Feature:** SureCart tracking added to Independent Analytics Pro!
+* **Feature:** you can now select which WooCommerce order statuses you want to be counted in the analytics
+* **Enhancement:** added new date picker with additional features
+* **Enhancement:** made dashboard widget taller so it’s easier to read
+* **Enhancement:** the automatic data deletion now tells you how many sessions will be deleted before activated
+* **Enhancement:** renamed the “Net Sales” metric for WooCommerce to “Total Sales” to better describe what’s tracked
+* **Enhancement:** reduced plugin size by 2MB
+* **Enhancement:** added link to new Getting Started video tutorial in the Help & Support menu
+* **Fix:** table columns and filters can’t be applied until the report is fully loaded
+* **Fix:** Real-time analytics display was broken for RTL websites
 
 = 2.7.3 - August 1st, 2024 =
 

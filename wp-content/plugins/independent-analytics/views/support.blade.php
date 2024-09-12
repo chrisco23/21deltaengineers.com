@@ -17,7 +17,8 @@
                     <span>&#8226;</span> <a href="https://independentwp.com/knowledgebase/tracking/block-ip-addresses/" target="_blank" class="link-purple">How to Block IP Addresses</a> <span>&#8226;</span> <a href="https://independentwp.com/knowledgebase/your-data/give-users-permission-view-analytics/" target="_blank" class="link-purple">How to Share Access with Non-Admins</a>
                 </p>
                 <p class="button-container">
-                    <a href="https://independentwp.com/knowledgebase/" target="_blank" class="iawp-button purple">View all tutorials</a>
+                    <a href="https://independentwp.com/knowledgebase/dashboard/getting-started/" target="_blank" class="iawp-button purple"><span class="dashicons dashicons-video-alt3"></span> Getting Started Video Tutorial</a>
+                    <a href="https://independentwp.com/knowledgebase/" target="_blank" class="iawp-button ghost-purple">View all tutorials</a>
                 </p>
             </div>
         </div>

@@ -15,7 +15,7 @@ class Env
     }
     public function is_white_labeled() : bool
     {
-        return \IAWP\Capability_Manager::white_labeled();
+        return \IAWP\Capability_Manager::show_white_labeled_ui();
     }
     public function can_write() : bool
     {

@@ -32,7 +32,7 @@ abstract class Admin_Page
         ?>">
                 <?php 
         if ($show_sidebar) {
-            echo \IAWPSCOPED\iawp_blade()->run('partials.sidebar', ['favorite_report' => Report_Finder::get_favorite(), 'report_finder' => new Report_Finder(), 'is_white_labeled' => Capability_Manager::white_labeled(), 'can_edit_settings' => Capability_Manager::can_edit(), 'is_dark_mode' => \get_option('iawp_dark_mode')]);
+            echo \IAWPSCOPED\iawp_blade()->run('partials.sidebar', ['favorite_report' => Report_Finder::get_favorite(), 'report_finder' => new Report_Finder(), 'is_white_labeled' => Capability_Manager::show_white_labeled_ui(), 'can_edit_settings' => Capability_Manager::can_edit(), 'is_dark_mode' => \get_option('iawp_dark_mode')]);
         }
         ?>
                 <div class="iawp-layout-main">

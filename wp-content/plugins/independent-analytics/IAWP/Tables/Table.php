@@ -4,7 +4,7 @@ namespace IAWP\Tables;
 
 use IAWP\Campaign_Builder;
 use IAWP\Dashboard_Options;
-use IAWP\Date_Range\Relative_Date_Range;
+use IAWP\Date_Picker\Date_Picker;
 use IAWP\Filters;
 use IAWP\Form_Submissions\Form;
 use IAWP\Icon_Directory_Factory;
@@ -160,34 +160,14 @@ abstract class Table
     public function output_report_toolbar()
     {
         $options = Dashboard_Options::getInstance();
-        $exact_start = $options->get_date_range()->start()->setTimezone(Timezone::site_timezone())->format('Y-m-d');
-        $exact_end = $options->get_date_range()->end()->setTimezone(Timezone::site_timezone())->format('Y-m-d');
+        $start = $options->get_date_range()->start()->setTimezone(Timezone::site_timezone());
+        $end = $options->get_date_range()->end()->setTimezone(Timezone::site_timezone());
         ?>
         <div id="toolbar" class="toolbar" data-filter-count="<?php 
         echo \count($options->filters());
         ?>">
         <div class="date-picker-parent">
-            <div class="modal-parent dates"
-                 data-controller="dates"
-                 data-dates-relative-range-id-value="<?php 
-        echo \esc_attr($options->relative_range_id());
-        ?>"
-                 data-dates-exact-start-value="<?php 
-        echo \esc_attr($exact_start);
-        ?>"
-                 data-dates-exact-end-value="<?php 
-        echo \esc_attr($exact_end);
-        ?>"
-                 data-dates-first-day-of-week-value="<?php 
-        echo \absint(\IAWPSCOPED\iawp()->get_option('iawp_dow', 0));
-        ?>"
-                 data-dates-css-url-value="<?php 
-        echo \esc_url(\IAWPSCOPED\iawp_url_to('dist/styles/easepick/datepicker.css'));
-        ?>"
-                 data-dates-format-value="<?php 
-        echo \esc_attr(WordPress_Site_Date_Format_Pattern::for_javascript());
-        ?>"
-            >
+            <div class="modal-parent dates">
                 <button id="dates-button"
                         data-testid="open-calendar"
                         class="iawp-button"
@@ -203,66 +183,9 @@ abstract class Table
                      class="iawp-modal large dates"
                      data-dates-target="modal"
                 >
-                    <div class="modal-inner">
-                        <div id="easepick-picker"
-                             data-dates-target="easepick"
-                             style="display: none;"
-                        >
-                        </div>
-                        <div class="relative-dates">
-                            <?php 
-        foreach (Relative_Date_Range::ranges() as $date_range) {
-            ?>
-                             <?php 
-            $exact_start = $date_range->start()->setTimezone(Timezone::site_timezone())->format('Y-m-d');
-            ?>
-                             <?php 
-            $exact_end = $date_range->end()->setTimezone(Timezone::site_timezone())->format('Y-m-d');
-            ?>
-                                <button class="iawp-button"
-                                        data-dates-target="relativeRange"
-                                        data-action="dates#relativeRangeSelected"
-                                        data-relative-range-id="<?php 
-            echo \esc_attr($date_range->relative_range_id());
-            ?>"
-                                        data-relative-range-label="<?php 
-            echo \esc_attr($date_range->label());
-            ?>"
-                                        data-relative-range-start="<?php 
-            echo \esc_attr($exact_start);
-            ?>"
-                                        data-relative-range-end="<?php 
-            echo \esc_attr($exact_end);
-            ?>"
-                                >
-                                    <?php 
-            echo \esc_html($date_range->label());
-            ?>
-                                </button>
-                            <?php 
-        }
+                    <?php 
+        echo (new Date_Picker($start, $end, $options->relative_range_id()))->calendar_html();
         ?>
-                        </div>
-                        <div class="apply-buttons">
-                            <button class="iawp-button purple"
-                                    data-dates-target="apply"
-                                    data-action="dates#apply"
-                                    data-testid="apply-dates"
-                            >
-                                <?php 
-        \esc_html_e('Apply', 'independent-analytics');
-        ?>
-                            </button>
-                            <button class="iawp-button ghost-purple"
-                                    data-action="dates#closeModal"
-                                    data-testid="close-calendar"
-                            >
-                                <?php 
-        \esc_html_e('Cancel', 'independent-analytics');
-        ?>
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -280,9 +203,12 @@ abstract class Table
                 </button>
                 <div class="iawp-modal small downloads" data-modal-target="modal">
                     <div class="modal-inner">
-                        <div class="title-small"><?php 
+                        <div class="title-small">
+                            <?php 
         \esc_html_e('Choose a format', 'independent-analytics');
-        ?></div>
+        ?>
+                            <span data-report-target="spinner" class="dashicons dashicons-update spin hidden"></span>
+                        </div>
                         <button id="download-csv" class="iawp-button" data-report-target="exportCSV" data-action="report#exportCSV">
                             <span class="dashicons dashicons-media-spreadsheet"></span>
                             <span class="iawp-label">
@@ -414,7 +340,7 @@ abstract class Table
     }
     protected function get_woocommerce_columns() : array
     {
-        return [new Column(['id' => 'wc_orders', 'name' => \__('Orders', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_gross_sales', 'name' => \__('Gross Sales', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_refunds', 'name' => \__('Refunds', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_refunded_amount', 'name' => \__('Refunded Amount', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_net_sales', 'name' => \__('Net Sales', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_conversion_rate', 'name' => \__('Conversion Rate', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_earnings_per_visitor', 'name' => \__('Earnings Per Visitor', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int']), new Column(['id' => 'wc_average_order_volume', 'name' => \__('Average Order Volume', 'independent-analytics'), 'plugin_group' => 'woocommerce', 'type' => 'int'])];
+        return [new Column(['id' => 'wc_orders', 'name' => \__('Orders', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'type' => 'int']), new Column(['id' => 'wc_gross_sales', 'name' => \__('Gross Sales', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'type' => 'int']), new Column(['id' => 'wc_refunds', 'name' => \__('Refunds', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'type' => 'int']), new Column(['id' => 'wc_refunded_amount', 'name' => \__('Refunded Amount', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'type' => 'int']), new Column(['id' => 'wc_net_sales', 'name' => \__('Total Sales', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'type' => 'int']), new Column(['id' => 'wc_conversion_rate', 'name' => \__('Conversion Rate', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'type' => 'int']), new Column(['id' => 'wc_earnings_per_visitor', 'name' => \__('Earnings Per Visitor', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'type' => 'int']), new Column(['id' => 'wc_average_order_volume', 'name' => \__('Average Order Volume', 'independent-analytics'), 'plugin_group' => 'ecommerce', 'type' => 'int'])];
     }
     protected function get_form_columns() : array
     {

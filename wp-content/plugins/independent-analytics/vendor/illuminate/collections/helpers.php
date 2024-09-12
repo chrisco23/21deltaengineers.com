@@ -61,7 +61,7 @@ if (!\function_exists('IAWPSCOPED\\data_get')) {
                 }
                 $result = [];
                 foreach ($target as $item) {
-                    $result[] = data_get($item, $key);
+                    $result[] = \IAWPSCOPED\data_get($item, $key);
                 }
                 return \in_array('*', $key) ? Arr::collapse($result) : $result;
             }

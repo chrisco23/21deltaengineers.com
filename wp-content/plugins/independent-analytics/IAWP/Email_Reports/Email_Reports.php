@@ -21,7 +21,6 @@ class Email_Reports
     public function __construct()
     {
         $this->interval = \IAWP\Email_Reports\Interval_Factory::from_option();
-        \add_filter('cron_schedules', [$this, 'add_monthly_cron_schedule']);
         $monitored_options = ['iawp_email_report_interval', 'iawp_email_report_time', 'iawp_email_report_email_addresses'];
         foreach ($monitored_options as $option) {
             \add_action('update_option_' . $option, [$this, 'schedule'], 10, 0);
@@ -126,11 +125,6 @@ class Email_Reports
             'x_labels' => $chart->x_labels,
             'colors' => $colors,
         ]);
-    }
-    public function add_monthly_cron_schedule($schedules)
-    {
-        $schedules['monthly'] = ['interval' => \MONTH_IN_SECONDS, 'display' => \esc_html__('Once a Month', 'independent-analytics')];
-        return $schedules;
     }
     private function subject_line(bool $is_test_email) : string
     {

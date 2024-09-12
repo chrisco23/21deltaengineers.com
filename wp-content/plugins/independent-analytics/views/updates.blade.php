@@ -9,6 +9,21 @@
         </div>
         <div class="entry">
             <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/zt9tY5-ARvI?si=dgidwmO4UKkLxcWq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div class="text">
+                <div class="title-container">
+                    <h2 class="title">Version 2.8 - SureCart Integration is Here!</h2>
+                    <span class="date">September 4th, 2024</span>
+                </div>
+                <div class="description-container">
+                    <p>Version 2.8.0 adds SureCart analytics for Independent Analytics Pro users. It also includes a brand new date picker and the option to choose which WooCommerce order statuses to include in the analytics.</p>
+                    <p>You can review the <a href="https://feedback.independentwp.com/updates/version-2-8-surecart-integration-is-here" target="_blank">full changelog here</a>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="entry">
+            <div class="video-container">
                 <iframe src="https://www.youtube-nocookie.com/embed/9Wn1gBQw-8Q?si=Z7PuiJSpz35wXX49" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
             <div class="text">
@@ -34,21 +49,6 @@
                 <div class="description-container">
                     <p>Version 2.6 adds every metric into the chart, so you can view bounce rate, sessions, and more over time. Plus, Bricks Builder and ARForms form submissions are now tracked in IA Pro.</p>
                     <p>You can review the <a href="https://feedback.independentwp.com/updates/version-2-6-all-metrics-added-to-the-chart-bricks-builder-integration" target="_blank">full changelog here</a>.</p>
-                </div>
-            </div>
-        </div>
-        <div class="entry">
-            <div class="video-container">
-            <iframe src="https://www.youtube-nocookie.com/embed/ulWdSLwXmsY?si=5X0zFynR-aBBd0PQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-            <div class="text">
-                <div class="title-container">
-                    <h2 class="title">Version 2.5 - Automated Form Tracking is Here!</h2>
-                    <span class="date">May 21st, 2024</span>
-                </div>
-                <div class="description-container">
-                    <p>Version 2.5.0 adds automated form tracking for Independent Analytics Pro. Also, Quick Stats toggling, more WooCommerce Quick Stats, and post view counts in custom post type menus.</p>
-                    <p>You can review the <a href="https://feedback.independentwp.com/updates/version-2-5-automated-form-tracking-is-here" target="_blank">full changelog here</a>.</p>
                 </div>
             </div>
         </div>

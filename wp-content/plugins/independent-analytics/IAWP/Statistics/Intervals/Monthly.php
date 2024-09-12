@@ -26,6 +26,6 @@ class Monthly extends \IAWP\Statistics\Intervals\Interval
     }
     public function get_label_for(\DateTime $date_time) : array
     {
-        return ['tick' => $this->format($date_time, 'F'), 'tooltipLabel' => $this->format($date_time, 'F')];
+        return ['tick' => $this->format($date_time, 'F'), 'tooltipLabel' => $this->format($date_time, 'F Y')];
     }
 }

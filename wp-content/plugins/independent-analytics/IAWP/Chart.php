@@ -2,6 +2,7 @@
 
 namespace IAWP;
 
+use IAWP\Ecommerce\SureCart_Store;
 use IAWP\Statistics\Intervals\Intervals;
 use IAWP\Statistics\Statistics;
 use IAWP\Utils\Security;
@@ -29,7 +30,7 @@ class Chart
         $options = \IAWP\Dashboard_Options::getInstance();
         $primary_statistic = $this->statistics->get_statistic($options->primary_chart_metric_id()) ?? $this->statistics->get_statistic('visitors');
         $secondary_statistic = \is_string($options->secondary_chart_metric_id()) ? $this->statistics->get_statistic($options->secondary_chart_metric_id()) : null;
-        return \IAWPSCOPED\iawp_blade()->run('chart', ['chart' => $this, 'intervals' => Intervals::all(), 'current_interval' => $this->statistics->chart_interval(), 'available_datasets' => $this->statistics->get_grouped_statistics(), 'primary_chart_metric_id' => $primary_statistic->id(), 'secondary_chart_metric_id' => \is_null($secondary_statistic) ? null : $secondary_statistic->id(), 'stimulus_values' => ['locale' => \get_bloginfo('language'), 'currency' => \IAWPSCOPED\iawp()->is_woocommerce_support_enabled() ? get_woocommerce_currency() : null, 'is-preview' => $this->is_preview() ? '1' : '0', 'is-using-woo-commerce' => \IAWPSCOPED\iawp()->is_woocommerce_support_enabled() ? '1' : '0', 'primary-chart-metric-id' => $primary_statistic->id(), 'primary-chart-metric-name' => $primary_statistic->name(), 'secondary-chart-metric-id' => \is_null($secondary_statistic) ? null : $secondary_statistic->id(), 'secondary-chart-metric-name' => \is_null($secondary_statistic) ? null : $secondary_statistic->name(), 'labels' => $labels, 'data' => $data]]);
+        return \IAWPSCOPED\iawp_blade()->run('chart', ['chart' => $this, 'intervals' => Intervals::all(), 'current_interval' => $this->statistics->chart_interval(), 'available_datasets' => $this->statistics->get_grouped_statistics(), 'primary_chart_metric_id' => $primary_statistic->id(), 'secondary_chart_metric_id' => \is_null($secondary_statistic) ? null : $secondary_statistic->id(), 'stimulus_values' => ['locale' => \get_bloginfo('language'), 'currency' => $this->get_currency_code(), 'is-preview' => $this->is_preview() ? '1' : '0', 'primary-chart-metric-id' => $primary_statistic->id(), 'primary-chart-metric-name' => $primary_statistic->name(), 'secondary-chart-metric-id' => \is_null($secondary_statistic) ? null : $secondary_statistic->id(), 'secondary-chart-metric-name' => \is_null($secondary_statistic) ? null : $secondary_statistic->name(), 'labels' => $labels, 'data' => $data]]);
     }
     public function is_preview() : bool
     {
@@ -38,5 +39,15 @@ class Chart
     public function encode_json(array $array) : string
     {
         return Security::json_encode($array);
+    }
+    private function get_currency_code() : ?string
+    {
+        if (\IAWPSCOPED\iawp()->is_woocommerce_support_enabled()) {
+            return get_woocommerce_currency();
+        }
+        if (\IAWPSCOPED\iawp()->is_surecart_support_enabled()) {
+            return SureCart_Store::get_currency_code();
+        }
+        return null;
     }
 }

@@ -37,9 +37,12 @@ class Filters
              data-filters-target="modal"
         >
             <div class="modal-inner">
-                <div class="title-small"><?php 
+                <div class="title-small">
+                    <?php 
         \esc_html_e('Filters', 'independent-analytics');
-        ?></div>
+        ?>
+                    <span data-filters-target="spinner" class="dashicons dashicons-update spin hidden"></span>
+                </div>
                 <div id="filters" data-filters-target="filters" class="filters" data-filters="[]">
                 </div>
                 <template data-filters-target="blueprint">

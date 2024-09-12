@@ -2,6 +2,7 @@
 
 namespace IAWP;
 
+use IAWP\Utils\Plugin;
 /** @internal */
 class Plugin_Conflict_Detector
 {
@@ -33,11 +34,10 @@ class Plugin_Conflict_Detector
      */
     private function run_conflict_check() : ?string
     {
-        $active_plugins = \get_option('active_plugins');
-        if (\in_array('disable-wp-rest-api/disable-wp-rest-api.php', $active_plugins)) {
+        if (\is_plugin_active('disable-wp-rest-api/disable-wp-rest-api.php')) {
             return \__('The "Disable WP REST API" plugin needs to be deactivated because Independent Analytics uses the REST API to record visits.', 'independent-analytics');
         }
-        if (\in_array('all-in-one-wp-security-and-firewall/wp-security.php', $active_plugins)) {
+        if (\is_plugin_active('all-in-one-wp-security-and-firewall/wp-security.php')) {
             $settings = \get_option('aio_wp_security_configs', []);
             if (\array_key_exists('aiowps_disallow_unauthorized_rest_requests', $settings)) {
                 if ($settings['aiowps_disallow_unauthorized_rest_requests'] == 1) {
@@ -45,7 +45,7 @@ class Plugin_Conflict_Detector
                 }
             }
         }
-        if (\in_array('disable-json-api/disable-json-api.php', $active_plugins)) {
+        if (\is_plugin_active('disable-json-api/disable-json-api.php')) {
             $settings = \get_option('disable_rest_api_options', []);
             if (\array_key_exists('roles', $settings)) {
                 if ($settings['roles']['none']['default_allow'] == \false) {
@@ -55,7 +55,7 @@ class Plugin_Conflict_Detector
                 }
             }
         }
-        if (\in_array('disable-xml-rpc-api/disable-xml-rpc-api.php', $active_plugins)) {
+        if (\is_plugin_active('disable-xml-rpc-api/disable-xml-rpc-api.php')) {
             $settings = \get_option('dsxmlrpc-settings');
             if (\array_key_exists('json-rest-api', $settings)) {
                 if ($settings['json-rest-api'] == 1) {
@@ -63,13 +63,13 @@ class Plugin_Conflict_Detector
                 }
             }
         }
-        if (\in_array('wpo-tweaks/wordpress-wpo-tweaks.php', $active_plugins)) {
+        if (\is_plugin_active('wpo-tweaks/wordpress-wpo-tweaks.php')) {
             return \__('The "WPO Tweaks & Optimizations" plugin needs to be deactivated because it is disabling the REST API, which Independent Analytics uses to record visits.', 'independent-analytics');
         }
-        if (\in_array('all-in-one-intranet/basic_all_in_one_intranet.php', $active_plugins)) {
+        if (\is_plugin_active('all-in-one-intranet/basic_all_in_one_intranet.php')) {
             return \__('The "All-In-One Intranet" plugin needs to be deactivated because it is disabling the REST API, which Independent Analytics uses to record visits. You may want to try the "My Private Site" plugin instead.', 'independent-analytics');
         }
-        if (\in_array('wp-security-hardening/wp-hardening.php', $active_plugins)) {
+        if (\is_plugin_active('wp-security-hardening/wp-hardening.php')) {
             $settings = \get_option('whp_fixer_option');
             if (\array_key_exists('disable_json_api', $settings)) {
                 if ($settings['disable_json_api'] != 'off') {
@@ -77,13 +77,13 @@ class Plugin_Conflict_Detector
                 }
             }
         }
-        if (\in_array('wp-rest-api-authentication/miniorange-api-authentication.php', $active_plugins)) {
+        if (\is_plugin_active('wp-rest-api-authentication/miniorange-api-authentication.php')) {
             $settings = \get_option('mo_api_authentication_protectedrestapi_route_whitelist');
             if (\in_array('/iawp/search', $settings)) {
                 return \__('The "WordPress REST API Authentication" plugin is blocking the REST API, which Independent Analytics needs to record views. Please visit the miniOrange API Authentication > Protected REST APIs menu and uncheck the "/iawp/search" box to allow Independent Analytics to track your visitors.', 'independent-analytics');
             }
         }
-        if (\in_array('ninjafirewall/ninjafirewall.php', $active_plugins)) {
+        if (\is_plugin_active('ninjafirewall/ninjafirewall.php')) {
             $settings = \get_option('nfw_options');
             if (\array_key_exists('no_restapi', $settings)) {
                 if ($settings['no_restapi'] == 1) {
@@ -91,7 +91,7 @@ class Plugin_Conflict_Detector
                 }
             }
         }
-        if (\in_array('wp-cerber/wp-cerber.php', $active_plugins)) {
+        if (\is_plugin_active('wp-cerber/wp-cerber.php')) {
             // This option has been renamed before. If there's an issue in here, check that it wasn't renamed again.
             $settings = \get_option('cerber_configuration');
             if ($settings === \false) {
@@ -105,7 +105,7 @@ class Plugin_Conflict_Detector
                 }
             }
         }
-        if (\in_array('wp-simple-firewall/icwp-wpsf.php', $active_plugins)) {
+        if (\is_plugin_active('wp-simple-firewall/icwp-wpsf.php')) {
             // This option has been renamed before. If there's an issue in here, check that it wasn't renamed again.
             $settings = \get_option('icwp_wpsf_opts_all');
             if ($settings === \false) {
@@ -123,7 +123,7 @@ class Plugin_Conflict_Detector
                 }
             }
         }
-        if (\in_array('wp-hide-security-enhancer/wp-hide.php', $active_plugins)) {
+        if (\is_plugin_active('wp-hide-security-enhancer/wp-hide.php')) {
             $settings = \get_option('wph_settings');
             if (\array_key_exists('module_settings', $settings)) {
                 if (\array_key_exists('disable_json_rest_v2', $settings['module_settings'])) {
@@ -138,7 +138,7 @@ class Plugin_Conflict_Detector
                 }
             }
         }
-        if (\in_array('admin-site-enhancements/admin-site-enhancements.php', $active_plugins)) {
+        if (\is_plugin_active('admin-site-enhancements/admin-site-enhancements.php')) {
             $settings = \get_option('admin_site_enhancements');
             if (\array_key_exists('disable_rest_api', $settings)) {
                 if ($settings['disable_rest_api']) {

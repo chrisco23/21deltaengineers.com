@@ -154,6 +154,7 @@ return array(
     'AIOSEO\\Plugin\\Common\\SearchStatistics\\Api\\Listener' => $baseDir . '/app/Common/SearchStatistics/Api/Listener.php',
     'AIOSEO\\Plugin\\Common\\SearchStatistics\\Api\\Request' => $baseDir . '/app/Common/SearchStatistics/Api/Request.php',
     'AIOSEO\\Plugin\\Common\\SearchStatistics\\Api\\TrustToken' => $baseDir . '/app/Common/SearchStatistics/Api/TrustToken.php',
+    'AIOSEO\\Plugin\\Common\\SearchStatistics\\KeywordRankTracker' => $baseDir . '/app/Common/SearchStatistics/KeywordRankTracker.php',
     'AIOSEO\\Plugin\\Common\\SearchStatistics\\Notices' => $baseDir . '/app/Common/SearchStatistics/Notices.php',
     'AIOSEO\\Plugin\\Common\\SearchStatistics\\SearchStatistics' => $baseDir . '/app/Common/SearchStatistics/SearchStatistics.php',
     'AIOSEO\\Plugin\\Common\\SearchStatistics\\Site' => $baseDir . '/app/Common/SearchStatistics/Site.php',

@@ -2,6 +2,7 @@
 
 namespace IAWP\Utils;
 
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 class Request
 {
@@ -38,7 +39,17 @@ class Request
         if (\defined('IAWP_TEST_IP')) {
             return \IAWP_TEST_IP;
         }
-        $headers = ['HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR', 'HTTP_CF_CONNECTING_IP', 'HTTP_CLIENT_IP', 'HTTP_INCAP_CLIENT_IP'];
+        $headers = ['HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR', 'HTTP_CF_CONNECTING_IP', 'HTTP_CLIENT_IP', 'HTTP_INCAP_CLIENT_IP', 'HTTP_CF_CONNECTING_IP'];
+        // add_filter('iawp_header_with_ip_address', function () {
+        //     return 'CUSTOM_HEADER_NAME';
+        // });
+        $user_defined_header = \apply_filters('iawp_header_with_ip_address', null);
+        if (\is_string($user_defined_header)) {
+            $user_defined_header = \IAWP\Utils\Security::string($user_defined_header);
+            if (Str::of($user_defined_header)->test('/^[a-zA-Z_]+$/')) {
+                \array_unshift($headers, $user_defined_header);
+            }
+        }
         foreach ($headers as $header) {
             if (isset($_SERVER[$header])) {
                 return \explode(',', $_SERVER[$header])[0];

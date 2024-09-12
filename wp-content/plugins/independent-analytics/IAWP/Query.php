@@ -20,6 +20,7 @@ class Query
     // Used in DB v7 migration
     public const SESSIONS = 'sessions';
     public const WC_ORDERS = 'wc_orders';
+    public const ORDERS = 'orders';
     public const CITIES = 'cities';
     public const COUNTRIES = 'countries';
     public const DEVICES = 'devices';

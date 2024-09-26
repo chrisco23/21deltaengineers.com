@@ -34,7 +34,7 @@ global $sw_cloudflare_pagecache;
 		<label><?php _e( 'Lazy Load', 'wp-cloudflare-page-cache' ); ?></label>
 		<p class="description">
 			<?php _e( 'Disables native lazy-loading and uses a custom solution for better control over image loading, potentially improving performance.', 'wp-cloudflare-page-cache' ); ?>
-			<a href="https://docs.optimole.com/article/2059-native-lazyloading-vs-spc-lazyloading" target="_blank">
+			<a href="https://docs.themeisle.com/article/2059-native-lazyloading-vs-spc-lazyloading" target="_blank">
 				<?php _e( 'More Info', 'wp-cloudflare-page-cache' ); ?>
 			</a>
 		</p>

@@ -1,5 +1,5 @@
 === Super Page Cache ===
-Contributors: optimole, salvatorefresta, isaumya
+Contributors: themeisle, salvatorefresta, isaumya
 Tags: cloudflare, caching ,performance, page caching, pagespeed
 Requires at least: 5.3
 Requires PHP: 7.4
@@ -166,6 +166,25 @@ First check the questions mentioned in the FAQ tab inside the plugin settings pa
 
 
 == Changelog ==
+
+#####   Version 5.0.4 (2024-09-16)
+
+- Fix incorrect sidebar information
+- Removes unneeded error logging
+
+
+
+
+#####   Version 5.0.3 (2024-09-16)
+
+- Fix wrong documentation link for media lazy loading setting
+- Fix error when saving settings because of conflict with the wp_lazy_loading_enabled filter
+- Fix cache test not taking into account legacy page rule
+- Fix issue where license cannot be activated on pro version
+- Fix issue with pro version requiring update even if at latest version
+
+
+
 
 #####   Version 5.0.2 (2024-09-11)
 

@@ -780,3 +780,29 @@
     align-items: center;
     font-size: 15px;
 }
+
+.spc-pro-tag {
+    background: #333;
+    color: #fff;
+    padding: 2px 5px 2px 3px;
+    margin-left: 5px;
+    border-radius: 5px;
+    font-weight: 400;
+    display: inline-flex;
+    text-decoration: none;
+    font-size: 14px;
+    text-transform: uppercase;
+    align-items: center;
+}
+
+.spc-pro-tag:hover {
+    background: #f38020;
+    color: #fff;
+}
+
+.spc-pro-tag .dashicons {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

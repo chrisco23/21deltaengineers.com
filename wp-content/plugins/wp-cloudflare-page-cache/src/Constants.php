@@ -3,24 +3,24 @@
 namespace SPC;
 
 class Constants {
-	public const SETTING_NATIVE_LAZY_LOADING = 'cf_native_lazy_loading';
-	public const SETTING_LAZY_LOADING = 'cf_lazy_loading';
+	public const SETTING_NATIVE_LAZY_LOADING    = 'cf_native_lazy_loading';
+	public const SETTING_LAZY_LOADING           = 'cf_lazy_loading';
 	public const SETTING_LAZY_LOAD_VIDEO_IFRAME = 'cf_lazy_load_video_iframe';
-	public const SETTING_LAZY_LOAD_SKIP_IMAGES = 'cf_lazy_load_skip_images';
-	public const SETTING_LAZY_EXCLUDED = 'cf_lazy_load_excluded';
-	public const SETTING_LAZY_LOAD_BG = 'cf_lazy_load_bg';
+	public const SETTING_LAZY_LOAD_SKIP_IMAGES  = 'cf_lazy_load_skip_images';
+	public const SETTING_LAZY_EXCLUDED          = 'cf_lazy_load_excluded';
+	public const SETTING_LAZY_LOAD_BG           = 'cf_lazy_load_bg';
 	public const SETTING_LAZY_LOAD_BG_SELECTORS = 'cf_lazy_load_bg_selectors';
-	public const DEFAULT_LAZY_LOAD_EXCLUSIONS = [
-		'skip-lazy'
+	public const DEFAULT_LAZY_LOAD_EXCLUSIONS   = [
+		'skip-lazy',
 	];
-	public const DEFAULT_BG_LAZYLOAD_SELECTORS = [
+	public const DEFAULT_BG_LAZYLOAD_SELECTORS  = [
 		'[style*="background-image:"]',
 		'[class*="elementor"][data-settings*="background_background"]',
 		'.elementor-section > .elementor-background-overlay',
 		'[class*="wp-block-cover"][style*="background-image"]',
 		'[class*="wp-block-group"][style*="background-image"]',
 	];
-	public const COMPAT_BG_LAZYLOAD_SELECTORS = [
+	public const COMPAT_BG_LAZYLOAD_SELECTORS   = [
 		'otter-blocks/otter-blocks.php'                 => [
 			'.o-flip-front',
 			'.o-flip-back',
@@ -51,7 +51,7 @@ class Constants {
 			'.elementor-background-slideshow__slide__image',
 		],
 		'essential-grid/essential-grid.php'             => [
-			'.esg-media-poster'
+			'.esg-media-poster',
 		],
 		'master-slider/master-slider.php'               => [
 			'.master-slider',
@@ -71,6 +71,6 @@ class Constants {
 			'.tve-content-box-background',
 			'.tve-page-section-out',
 			'.thrv_text_element',
-		]
+		],
 	];
 }

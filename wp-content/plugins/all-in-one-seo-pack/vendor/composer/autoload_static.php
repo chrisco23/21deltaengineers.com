@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdb0c8ce6caf76689ddefd0d9ab3cc8bc
+class ComposerStaticInit3686c5217f13eb8cd9be3ed79180a8df
 {
     public static $prefixLengthsPsr4 = array (
         'A' => 
@@ -106,6 +106,7 @@ class ComposerStaticInitdb0c8ce6caf76689ddefd0d9ab3cc8bc
         'AIOSEO\\Plugin\\Common\\Integrations\\Semrush' => __DIR__ . '/../..' . '/app/Common/Integrations/Semrush.php',
         'AIOSEO\\Plugin\\Common\\Integrations\\WpCode' => __DIR__ . '/../..' . '/app/Common/Integrations/WpCode.php',
         'AIOSEO\\Plugin\\Common\\Main\\Activate' => __DIR__ . '/../..' . '/app/Common/Main/Activate.php',
+        'AIOSEO\\Plugin\\Common\\Main\\CategoryBase' => __DIR__ . '/../..' . '/app/Common/Main/CategoryBase.php',
         'AIOSEO\\Plugin\\Common\\Main\\Filters' => __DIR__ . '/../..' . '/app/Common/Main/Filters.php',
         'AIOSEO\\Plugin\\Common\\Main\\Head' => __DIR__ . '/../..' . '/app/Common/Main/Head.php',
         'AIOSEO\\Plugin\\Common\\Main\\Main' => __DIR__ . '/../..' . '/app/Common/Main/Main.php',
@@ -408,10 +409,10 @@ class ComposerStaticInitdb0c8ce6caf76689ddefd0d9ab3cc8bc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdb0c8ce6caf76689ddefd0d9ab3cc8bc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdb0c8ce6caf76689ddefd0d9ab3cc8bc::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitdb0c8ce6caf76689ddefd0d9ab3cc8bc::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitdb0c8ce6caf76689ddefd0d9ab3cc8bc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3686c5217f13eb8cd9be3ed79180a8df::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3686c5217f13eb8cd9be3ed79180a8df::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit3686c5217f13eb8cd9be3ed79180a8df::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit3686c5217f13eb8cd9be3ed79180a8df::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -18,8 +18,8 @@ class Frontend implements Module_Interface {
 			return;
 		}
 
-		add_action( 'wp_print_scripts', array( $this, 'add_bg_lazyload_script' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend' ) );
+		add_action( 'wp_print_scripts', [ $this, 'add_bg_lazyload_script' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_frontend' ] );
 	}
 
 	/**
@@ -36,7 +36,7 @@ class Frontend implements Module_Interface {
 
 		<script type="text/javascript" id="spc-lazy-bg">
 		  (function () {
-			const loadedClass = '<?php echo esc_js( self::BG_LAZYLOADED_CLASS ) ?>';
+			const loadedClass = '<?php echo esc_js( self::BG_LAZYLOADED_CLASS ); ?>';
 			const bgSelectors = '<?php echo wp_strip_all_tags( join( ', ', $this->get_lazyload_background_selectors() ) ); ?>';
 
 			function observerCallback(entries, observer) {
@@ -81,7 +81,7 @@ class Frontend implements Module_Interface {
 			return;
 		}
 
-		wp_enqueue_script( 'spc-lazysizes', SWCFPC_PLUGIN_URL . 'assets/js/lazysizes.min.js', array(), '5.3.2' );
+		wp_enqueue_script( 'spc-lazysizes', SWCFPC_PLUGIN_URL . 'assets/js/lazysizes.min.js', [], '5.3.2' );
 
 		if ( ! $this->is_background_lazyload_enabled() ) {
 			return;
@@ -104,9 +104,12 @@ class Frontend implements Module_Interface {
 			return '';
 		}
 
-		$selectors = array_map( function ( $selector ) {
-			return sprintf( 'html %s:not(.%s)', $selector, self::BG_LAZYLOADED_CLASS );
-		}, $selectors );
+		$selectors = array_map(
+			function ( $selector ) {
+				return sprintf( 'html %s:not(.%s)', $selector, self::BG_LAZYLOADED_CLASS );
+			},
+			$selectors 
+		);
 
 		return strip_tags( implode( ",\n", $selectors ) . ' { background-image: none !important; }' );
 	}
@@ -120,7 +123,7 @@ class Frontend implements Module_Interface {
 		global $sw_cloudflare_pagecache;
 
 		return array_merge(
-			$sw_cloudflare_pagecache->get_single_config( Constants::SETTING_LAZY_LOAD_BG_SELECTORS, array() ),
+			$sw_cloudflare_pagecache->get_single_config( Constants::SETTING_LAZY_LOAD_BG_SELECTORS, [] ),
 			Constants::DEFAULT_BG_LAZYLOAD_SELECTORS,
 			$this->get_compatibilities_lazyload_background_selectors()
 		);

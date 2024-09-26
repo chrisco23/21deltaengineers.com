@@ -20,13 +20,19 @@ class Loader {
 
 		$modules = apply_filters( 'spc_loaded_modules', $this->modules );
 
-		$valid_modules = array_filter( $modules, function ( $module ) {
-			return $module instanceof Module_Interface;
-		} );
+		$valid_modules = array_filter(
+			$modules,
+			function ( $module ) {
+				return $module instanceof Module_Interface;
+			} 
+		);
 
-		array_walk( $valid_modules, function ( $module ) {
-			$module->init();
-		} );
+		array_walk(
+			$valid_modules,
+			function ( $module ) {
+				$module->init();
+			} 
+		);
 	}
 
 
@@ -45,6 +51,6 @@ class Loader {
 	 * @return bool
 	 */
 	public static function is_cached_page() {
-		return function_exists('swcfpc_is_this_page_cachable') && \swcfpc_is_this_page_cachable();
+		return function_exists( 'swcfpc_is_this_page_cachable' ) && \swcfpc_is_this_page_cachable();
 	}
 }

@@ -13,7 +13,7 @@
 		<a style="text-align: center; padding: 0 10px; max-width: unset"
 		   href="<?php echo esc_url( tsdk_utmify( 'https://themeisle.com/plugins/super-page-cache-pro', 'sidebar' ) ); ?>"
 		   target="_blank" class="button button-primary">
-			<?php _e( 'Starting from $29/year', 'wp-cloudflare-page-cache' ); ?>
+			<?php _e( 'Starting from $39/year', 'wp-cloudflare-page-cache' ); ?>
 		</a>
 	</div>
 

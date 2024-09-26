@@ -4,37 +4,37 @@ namespace SPC;
 
 class Settings_Manager implements Module_Interface {
 	private const BASE_FIELDS = [
-		Constants::SETTING_NATIVE_LAZY_LOADING     => [
+		Constants::SETTING_NATIVE_LAZY_LOADING    => [
 			'type'       => 'bool',
 			'bust_cache' => true,
 			'default'    => 1,
 		],
-		Constants::SETTING_LAZY_LOADING            => [
+		Constants::SETTING_LAZY_LOADING           => [
 			'type'       => 'bool',
 			'bust_cache' => true,
 			'default'    => 0,
 		],
-		Constants::SETTING_LAZY_LOAD_VIDEO_IFRAME  => [
+		Constants::SETTING_LAZY_LOAD_VIDEO_IFRAME => [
 			'type'       => 'bool',
 			'bust_cache' => true,
 			'default'    => 0,
 		],
-		Constants::SETTING_LAZY_LOAD_SKIP_IMAGES   => [
+		Constants::SETTING_LAZY_LOAD_SKIP_IMAGES  => [
 			'type'       => 'int',
 			'bust_cache' => true,
 			'default'    => 0,
 		],
-		Constants::SETTING_LAZY_EXCLUDED           => [
+		Constants::SETTING_LAZY_EXCLUDED          => [
 			'type'       => 'textarea',
 			'bust_cache' => true,
 			'default'    => [],
 		],
-		Constants::SETTING_LAZY_LOAD_BG            => [
+		Constants::SETTING_LAZY_LOAD_BG           => [
 			'type'       => 'bool',
 			'bust_cache' => true,
 			'default'    => 0,
 		],
-		Constants::SETTING_LAZY_LOAD_BG_SELECTORS  => [
+		Constants::SETTING_LAZY_LOAD_BG_SELECTORS => [
 			'type'       => 'textarea',
 			'bust_cache' => true,
 			'default'    => [],
@@ -44,8 +44,8 @@ class Settings_Manager implements Module_Interface {
 	private const ALLOWED_FIELD_TYPES = [ 'type', 'bust_cache', 'default' ];
 
 	public function init() {
-		add_action( 'swcfpc_after_settings_update', array( $this, 'update_additional_settings' ) );
-		add_filter( 'swcfpc_main_config_defaults', array( $this, 'alter_default_config' ) );
+		add_action( 'swcfpc_after_settings_update', [ $this, 'update_additional_settings' ] );
+		add_filter( 'swcfpc_main_config_defaults', [ $this, 'alter_default_config' ] );
 	}
 
 	/**
@@ -62,9 +62,13 @@ class Settings_Manager implements Module_Interface {
 
 		global $sw_cloudflare_pagecache;
 
-		$fields_to_update = array_filter( $this->get_fields(), function ( $args, $key ) use ( $post_data ) {
-			return isset( $post_data[ 'swcfpc_' . $key ] );
-		}, ARRAY_FILTER_USE_BOTH );
+		$fields_to_update = array_filter(
+			$this->get_fields(),
+			function ( $args, $key ) use ( $post_data ) {
+				return isset( $post_data[ 'swcfpc_' . $key ] );
+			},
+			ARRAY_FILTER_USE_BOTH
+		);
 
 		if ( empty( $fields_to_update ) ) {
 			return;
@@ -129,7 +133,7 @@ class Settings_Manager implements Module_Interface {
 		$fields = apply_filters( 'spc_additional_settings_fields', self::BASE_FIELDS );
 
 		// Use WordPress core filter to determine if lazy loading is enabled by default.
-		$fields[ Constants::SETTING_NATIVE_LAZY_LOADING ]['default'] = apply_filters( 'wp_lazy_loading_enabled', true, 'img' );
+		$fields[ Constants::SETTING_NATIVE_LAZY_LOADING ]['default'] = apply_filters( 'wp_lazy_loading_enabled', true, 'img', 'spc_default_native_lazyloading' );
 
 		if ( is_array( $filters ) && ! empty( $filters ) ) {
 			$fields = wp_list_filter( $fields, $filters );
@@ -153,10 +157,10 @@ class Settings_Manager implements Module_Interface {
 	public static function get_default_for_field( $field, $fallback ) {
 		$fields = self::BASE_FIELDS;
 
-		if ( ! isset( $fields[$field], $fields[$field]['default'] ) ) {
+		if ( ! isset( $fields[ $field ], $fields[ $field ]['default'] ) ) {
 			return $fallback;
 		}
 
-		return $fields[$field]['default'];
+		return $fields[ $field ]['default'];
 	}
 }

@@ -81,6 +81,7 @@ return array(
     'AIOSEO\\Plugin\\Common\\Integrations\\Semrush' => $baseDir . '/app/Common/Integrations/Semrush.php',
     'AIOSEO\\Plugin\\Common\\Integrations\\WpCode' => $baseDir . '/app/Common/Integrations/WpCode.php',
     'AIOSEO\\Plugin\\Common\\Main\\Activate' => $baseDir . '/app/Common/Main/Activate.php',
+    'AIOSEO\\Plugin\\Common\\Main\\CategoryBase' => $baseDir . '/app/Common/Main/CategoryBase.php',
     'AIOSEO\\Plugin\\Common\\Main\\Filters' => $baseDir . '/app/Common/Main/Filters.php',
     'AIOSEO\\Plugin\\Common\\Main\\Head' => $baseDir . '/app/Common/Main/Head.php',
     'AIOSEO\\Plugin\\Common\\Main\\Main' => $baseDir . '/app/Common/Main/Main.php',

@@ -119,6 +119,11 @@ class Settings {
 			<h1 id="filebird-setting-heading"><?php esc_html_e( 'FileBird Settings', 'filebird' ); ?></h1>
 			<div id="filebird-setting"/>
 		</div>
+		<style>
+			.notice:not(.filebird-notice) {
+				display: none;
+			}
+		</style>
 		<?php
 	}
 

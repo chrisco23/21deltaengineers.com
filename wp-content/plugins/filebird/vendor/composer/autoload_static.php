@@ -4,32 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdebe889d088b8242a3a503c1dbe0efc2
+class ComposerStaticInit1a882ef483ffe247352bb74be1c0ccf9
 {
-    public static $files = array (
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-    );
-
     public static $prefixLengthsPsr4 = array (
         'e' => 
         array (
             'enshrined\\svgSanitize\\' => 22,
-        ),
-        'Z' => 
-        array (
-            'ZipStream\\' => 10,
-        ),
-        'S' => 
-        array (
-            'Symfony\\Polyfill\\Mbstring\\' => 26,
-        ),
-        'P' => 
-        array (
-            'Psr\\Http\\Message\\' => 17,
-        ),
-        'M' => 
-        array (
-            'MyCLabs\\Enum\\' => 13,
         ),
     );
 
@@ -38,35 +18,18 @@ class ComposerStaticInitdebe889d088b8242a3a503c1dbe0efc2
         array (
             0 => __DIR__ . '/..' . '/enshrined/svg-sanitize/src',
         ),
-        'ZipStream\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
-        ),
-        'Symfony\\Polyfill\\Mbstring\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
-        ),
-        'Psr\\Http\\Message\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
-        'MyCLabs\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
-        ),
     );
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdebe889d088b8242a3a503c1dbe0efc2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdebe889d088b8242a3a503c1dbe0efc2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdebe889d088b8242a3a503c1dbe0efc2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1a882ef483ffe247352bb74be1c0ccf9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1a882ef483ffe247352bb74be1c0ccf9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1a882ef483ffe247352bb74be1c0ccf9::$classMap;
 
         }, null, ClassLoader::class);
     }

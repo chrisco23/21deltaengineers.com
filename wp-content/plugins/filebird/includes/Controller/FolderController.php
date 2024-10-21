@@ -3,7 +3,7 @@
 namespace FileBird\Controller;
 
 use FileBird\Model\Folder as FolderModel;
-use FileBird\Model\SettingModel;
+use FileBird\Model\UserSettingModel;
 use FileBird\Classes\Tree;
 
 defined( 'ABSPATH' ) || exit;
@@ -36,7 +36,7 @@ class FolderController extends Controller {
 		// 	}
         // );
 
-		SettingModel::getInstance()->setFolderCounterType( $type );
+		UserSettingModel::getInstance()->setFolderCounterType( $type );
 
 		return rest_ensure_response( FolderModel::countAttachments( $lang ) );
 	}
@@ -231,11 +231,11 @@ class FolderController extends Controller {
 			}
 		}
 
-		if( ! is_null( $old_node ) && ( $old_node['parent'] != $data['toParentId'] ) ) {
+		if ( ! is_null( $old_node ) && ( $old_node['parent'] != $data['toParentId'] ) ) {
 			do_action( 'fbv_folder_parent_updated', $data['dragNodeId'], $data['toParentId'] );
 		}
-		
-		if ( SettingModel::getInstance()->get( 'FOLDER_COUNTER_TYPE' ) === 'counter_file_in_folder_and_sub' ) {
+
+		if ( UserSettingModel::getInstance()->get( 'FOLDER_COUNTER_TYPE' ) === 'counter_file_in_folder_and_sub' ) {
 			return rest_ensure_response( FolderModel::countAttachments( $lang ) );
 		}
 

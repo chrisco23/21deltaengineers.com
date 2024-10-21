@@ -38,9 +38,11 @@ function activate_plugin() {
 		$activated = \activate_plugin( $plugin_name );
 	}
 
-	if ( empty( $activated ) || is_wp_error( $activated ) ) {
+	if ( is_wp_error( $activated ) ) {
 		wp_send_json_error();
 	}
+
+	Helpers\create_woocommerce_pages();
 
 	wp_send_json_success();
 }

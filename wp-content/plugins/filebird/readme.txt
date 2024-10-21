@@ -3,8 +3,8 @@ Contributors: ninjateam
 Donate link: https://ninjateam.org/wordpress-media-library-folders/ 
 Tags: wordpress media library folders, folders, media, media folders, category, file manager
 Requires at least: 3.0
-Tested up to: 6.5
-Stable tag: 6.3.2
+Tested up to: 6.6
+Stable tag: 6.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -208,6 +208,23 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Oct 17, 2024 - Version 6.4.2 =
+- Added: Auto Select Previous Folder in Upload New Media Page
+- Added: Change some user settings to global settings, not belong to each user anymore (Folder counter, Theme, Breadcrumb)
+- Updated: Polish pl_PL language
+- Added: Some new filter hooks
+- Fixed: Laggy text selection when using with Divi Builder
+- Fixed: Sort folders (display wrong order) in custom post types
+- Fixed: An issue where the script sometimes doesn't load
+
+= Aug 23, 2024 - Version 6.3.4 =
+- Fixed: CSV Export Vulnerability
+- Fixed: Change to use Translations files from wp.org (https://wordpress.org/support/topic/translation-conflict-with-filebird-plugin/)
+- Fixed: Exclude trashed posts out of folder count
+
+= Jun 25, 2024 - Version 6.3.3 =
+- Fixed: Plugin dependencies
 
 = Jun 25, 2024 - Version 6.3.2 =
 - Fixed: Issue with loading media in Add New Media File page

@@ -4,20 +4,20 @@ namespace FileBird\Classes;
 defined( 'ABSPATH' ) || exit;
 
 use FileBird\Model\Folder as FolderModel;
-use FileBird\Model\SettingModel;
+use FileBird\Model\UserSettingModel;
 
 class Tree {
 	private $order    = null;
 	private $order_by = null;
 	private $search   = null;
-	private $settingModel;
+	private $userSettingModel;
 
 	public function __construct( $orderby, $order, $search ) {
-        $this->settingModel = SettingModel::getInstance();
-		$orderSetting       = $this->settingModel->get( 'DEFAULT_SORT_FOLDERS' );
-		$this->search       = $search;
+        $this->userSettingModel = UserSettingModel::getInstance();
+		$orderSetting           = $this->userSettingModel->get( 'DEFAULT_SORT_FOLDERS' );
+		$this->search           = $search;
 		if ( 'reset' === $order ) {
-			$this->settingModel->setSettings(
+			$this->userSettingModel->setSettings(
 				array(
 					'DEFAULT_SORT_FOLDERS' => null,
 				)
@@ -25,7 +25,7 @@ class Tree {
 		} elseif ( $order && $orderby ) {
 			$this->order    = $order;
 			$this->order_by = $orderby;
-			$this->settingModel->setSettings(
+			$this->userSettingModel->setSettings(
 				array(
 					'DEFAULT_SORT_FOLDERS' => array(
 						'orderby' => $orderby,
@@ -110,7 +110,7 @@ class Tree {
 	}
 
 	public static function getFolders( $order_by = null, $order = null, $flat = false ) {
-		$settings             = SettingModel::getInstance()->get( 'THEME' );
+		$settings             = UserSettingModel::getInstance()->get( 'THEME' );
 		$folders_from_db      = FolderModel::allFolders( '*', null, $order_by, $order );
 		$folder_colors        = get_option( 'fbv_folder_colors', array() );
 		$folder_default_color = $settings['colors'];

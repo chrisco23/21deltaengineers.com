@@ -17,7 +17,7 @@ class I18n {
 			$locale = is_admin() ? get_user_locale() : get_locale();
 		}
 		unload_textdomain( 'filebird' );
-		load_textdomain( 'filebird', NJFB_PLUGIN_PATH . '/i18n/languages/filebird-' . $locale . '.mo' );
+		load_textdomain( 'filebird', WP_LANG_DIR . '/plugins/filebird-' . $locale . '.mo' );
 		load_plugin_textdomain( 'filebird', false, NJFB_PLUGIN_PATH . '/i18n/languages/' );
 	}
 

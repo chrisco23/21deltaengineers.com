@@ -683,6 +683,17 @@ class ET_Onboarding {
 	}
 
 	/**
+	 * Remove Onboarding transients.
+	 *
+	 * @since ??
+	 *
+	 * @return void
+	 */
+	public static function remove_transients() {
+		delete_transient( 'et_onboarding_redirect_done' );
+	}
+
+	/**
 	 * Get the number of onboarding notices to show.
 	 *
 	 * @since ??

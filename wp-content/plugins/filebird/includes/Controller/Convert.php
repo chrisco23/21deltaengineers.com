@@ -1,6 +1,8 @@
 <?php
 namespace FileBird\Controller;
 
+use FileBird\Classes\Helpers;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -33,7 +35,7 @@ class Convert {
 				$wpdb->insert(
 					self::getTable( self::$folder_table ),
 					array(
-						'name'       => $folder->name,
+						'name'       => Helpers::sanitize_for_excel( $folder->name ),
 						'parent'     => $parent,
 						'created_by' => $folder->created_by,
 						'type'       => 0,

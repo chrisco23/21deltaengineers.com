@@ -1,6 +1,8 @@
 <?php
 namespace FileBird\Model;
 
+use FileBird\Classes\Helpers;
+
 defined( 'ABSPATH' ) || exit;
 
 class Folder {
@@ -130,7 +132,7 @@ class Folder {
 	private static function getNestedFolder() {
 		global $wpdb;
 
-		$counterType = SettingModel::getInstance()->get( 'FOLDER_COUNTER_TYPE' );
+		$counterType = UserSettingModel::getInstance()->get( 'FOLDER_COUNTER_TYPE' );
 		$isUsed      = apply_filters( 'fbv_counter_type', $counterType ) === 'counter_file_in_folder_and_sub';
 
 		if ( ! $isUsed ) {
@@ -185,7 +187,8 @@ class Folder {
                 FROM {$wpdb->prefix}posts AS `posts`
                 INNER JOIN {$wpdb->prefix}fbv_attachment_folder AS `fbva` ON (fbva.attachment_id = posts.ID AND posts.post_type = 'attachment')
 				INNER JOIN {$wpdb->prefix}fbv AS `fbv` ON (fbva.folder_id = fbv.id AND fbv.created_by = %d)
-                GROUP BY folder_id",
+				WHERE posts.post_status != 'trash'
+				GROUP BY folder_id",
                 apply_filters( 'fbv_folder_created_by', 0 )
             );
 
@@ -314,6 +317,7 @@ class Folder {
 	public static function updateFolderName( $new_name, $parent, $folder_id ) {
 		global $wpdb;
 		$new_name   = sanitize_text_field( wp_unslash( wp_kses_post( $new_name ) ) );
+		$new_name   = Helpers::sanitize_for_excel( $new_name );
 		$exist_name = $wpdb->get_row(
             $wpdb->prepare(
 			"SELECT * FROM {$wpdb->prefix}fbv WHERE id != %d AND name = %s AND parent = %d",
@@ -377,8 +381,10 @@ class Folder {
 
 		$ord = $wpdb->get_var( $wpdb->prepare( "SELECT MAX(ord) FROM {$wpdb->prefix}fbv WHERE parent = %d AND created_by = %d", $parent, apply_filters( 'fbv_folder_created_by', 0 ) ) );
 
+		$name = sanitize_text_field( wp_kses_post( Helpers::sanitize_for_excel( $name ) ) );
+
 		$data = array(
-			'name'       => sanitize_text_field( wp_kses_post( $name ) ),
+			'name'       => $name,
 			'parent'     => $parent,
 			'type'       => 0,
 			'created_by' => apply_filters( 'fbv_folder_created_by', 0 ),
@@ -509,7 +515,7 @@ class Folder {
 		$attachmentIds = $wpdb->get_results( "SELECT folder_id, GROUP_CONCAT(attachment_id SEPARATOR '|') as attachment_ids FROM {$wpdb->prefix}fbv_attachment_folder GROUP BY (folder_id)", OBJECT_K );
 
 		foreach ( $folders as $key => $folder ) {
-			$folders[ $key ]['name'] = '"' . $folder['name'] . '"';
+			$folders[ $key ]['name'] = '"' . Helpers::sanitize_for_excel( $folder['name'] ) . '"';
 			if ( isset( $folders[ $key ] ) && isset( $attachmentIds[ $folder['id'] ] ) ) {
 				$folders[ $key ]['attachment_ids'] = $attachmentIds[ $folder['id'] ]->attachment_ids ? $attachmentIds[ $folder['id'] ]->attachment_ids : '';
 			} else {

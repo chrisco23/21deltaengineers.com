@@ -1,3 +1,41 @@
+version 4.27.2 ( updated 10-01-2024 )
+- Updated Magnific Popup library to v1.2.0.
+- Fixed a bug where image IDs were not replace correctly during import in some cases with the Gallery module.
+- Fixed incorrect payload sent when using Divi AI Image Editor particularly w/ the Enhance endpoint.
+- Fixed the issue where the image was not appearing on the AI Preview modal when using the Generate Content With AI option in the Blurb and Person Module.
+- Added link option group in heading module.
+- Fixed an issue where the color picker did not open automatically after selecting the "custom" color option in the dropdown menu.
+- Fixed the problem of the page getting refreshed to the previous state after clicking on Generate a new site.
+- Fixed the issue where cart, checkout, and my account pages were not being included in the WooCommerce package during website setup.
+- Fixed the issue where image credits were getting cut off in Divi AI Sections.
+- Fixed issue with updating section classes when AI Section is inserted.
+- Fixed an issue where AI defaults were not saved, were not used for current session.
+- Fixed redirection to Divi Dashboard page when Divi theme is updated.
+- Fixes compatibility issue with the Backend Builder in Safari 18 on macOS Sequoia.
+	* ai-app/build/et-ai-app.bundle.css
+	* ai-app/build/et-ai-app.bundle.js
+	* core/admin/js/support-center.js
+	* core/components/PageResource.php
+	* core/components/Portability.php
+	* core/components/SupportCenter.php
+	* core/components/Updates.php
+	* core/components/api/email/_MailPoet3.php
+	* core/components/cache/init.php
+	* core/components/data/init.php
+	* core/functions.php
+	* core/init.php
+	* includes/builder/autoload.php
+	* includes/builder/class-et-builder-module-shortcode-manager.php
+	* includes/builder/feature/dynamic-assets/assets/js/magnific-popup.js
+	* includes/builder/frontend-builder/bundle.js
+	* includes/builder/functions.php
+	* includes/builder/module/Heading.php
+	* includes/builder/scripts/src/builder.js
+	* onboarding/ajax.php
+	* onboarding/functions.php
+	* onboarding/helpers.php
+	* onboarding/onboarding.php
+
 version 4.27.1 ( updated 08-12-2024 )
 - Fixed Elegant Themes product updates showing up in the WordPress admin for a short time after updating to the latest version.
 - Fixed global color issue for scroll down icon in fullwidth modules.

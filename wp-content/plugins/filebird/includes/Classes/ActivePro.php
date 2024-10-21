@@ -1,7 +1,6 @@
 <?php
 namespace FileBird\Classes;
 
-use FileBird\Admin\Settings;
 use FileBird\Classes\Helpers;
 
 defined( 'ABSPATH' ) || exit;

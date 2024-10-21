@@ -22,6 +22,16 @@ class Helpers {
         }
     }
 
+    public static function sanitize_for_excel( $input ) {
+        $dangerousCharacters = array( '=', '+', '-', '@', '|' );
+
+        while ( in_array( $input[0], $dangerousCharacters ) ) {
+            $input = substr( $input, 1 );
+        }
+
+        return $input;
+    }
+
     public static function sanitize_intval_array( $var ) {
         if ( is_array( $var ) ) {
             return array_map( 'intval', $var );

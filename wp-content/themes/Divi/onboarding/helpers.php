@@ -36,6 +36,7 @@ function create_menu_with_pages( $page_titles ) {
 
 		if ( $primary_menu ) {
 			$menu_id = $primary_menu->term_id;
+
 			update_term_meta( $onboarding_menu_id, '_et_old_primary_menu', $menu_id );
 		}
 	}
@@ -303,4 +304,52 @@ function restore_homepage_settings() {
 
 	update_option( 'page_on_front', $current_page_on_front );
 	update_option( 'show_on_front', $current_show_on_front );
+}
+
+/**
+ * Function to create WooCommerce pages if they do not exist.
+ */
+function create_woocommerce_pages() {
+	$pages = [
+		'shop'      => [
+			'title'   => 'Shop',
+			'content' => '[woocommerce_shop]',
+		],
+		'cart'      => [
+			'title'   => 'Cart',
+			'content' => '[woocommerce_cart]',
+		],
+		'checkout'  => [
+			'title'   => 'Checkout',
+			'content' => '[woocommerce_checkout]',
+		],
+		'myaccount' => [
+			'title'   => 'My Account',
+			'content' => '[woocommerce_my_account]',
+		],
+		'terms'     => [
+			'title'   => 'Terms and Conditions',
+			'content' => 'Your terms and conditions content here.',
+		],
+	];
+
+	foreach ( $pages as $page_slug => $page_info ) {
+		$page_id = \wc_get_page_id( $page_slug );
+
+		if ( ! $page_id || 'publish' !== get_post_status( $page_id ) ) {
+			$page_id = wp_insert_post(
+				[
+					'post_title'   => $page_info['title'],
+					'post_content' => $page_info['content'],
+					'post_status'  => 'publish',
+					'post_type'    => 'page',
+				]
+			);
+
+			update_post_meta( $page_id, '_et_pb_built_for_post_type', 'page' );
+			update_post_meta( $page_id, '_et_pb_page_layout', 'et_full_width_page' );
+			update_post_meta( $page_id, '_et_onboarding_created', '1' );
+			update_option( 'woocommerce_' . $page_slug . '_page_id', $page_id );
+		}
+	}
 }

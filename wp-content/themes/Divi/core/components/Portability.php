@@ -2295,7 +2295,7 @@ class ET_Core_Portability {
 		if ( isset( $image['replacement_id'] ) && isset( $image['id'] ) ) {
 			$search      = $image['id'];
 			$replacement = $image['replacement_id'];
-			$subject     = preg_replace( "/(gallery_ids=.*){$search}(.*\")/", "\${1}{$replacement}\${2}", $subject );
+			$subject     = preg_replace( "/(gallery_ids=.*?){$search}(.*?)/", "\${1}{$replacement}\${2}", $subject );
 		}
 
 		if ( isset( $image['url'] ) && isset( $image['replacement_url'] ) && $image['url'] !== $image['replacement_url'] ) {

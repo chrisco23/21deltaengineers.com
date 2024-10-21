@@ -28,6 +28,7 @@ class ET_Builder_Module_Heading extends ET_Builder_Module {
 			'general'    => array(
 				'toggles' => array(
 					'main_content' => et_builder_i18n( 'Text' ),
+					'link'         => et_builder_i18n( 'Link' ),
 				),
 			),
 			'custom_css' => array(
@@ -149,6 +150,28 @@ class ET_Builder_Module_Heading extends ET_Builder_Module {
 				'mobile_options'  => true,
 				'hover'           => 'tabs',
 			),
+			'url'            => array(
+				'label'           => esc_html__( 'Heading Link URL', 'et_builder' ),
+				'type'            => 'text',
+				'option_category' => 'basic_option',
+				'depends_show_if' => 'off',
+				'description'     => esc_html__( 'If you would like your heading to be a link, input your destination URL here. No link will be created if this field is left blank.', 'et_builder' ),
+				'toggle_slug'     => 'link',
+				'dynamic_content' => 'url',
+			),
+			'url_new_window' => array(
+				'label'            => esc_html__( 'Heading Link Target', 'et_builder' ),
+				'type'             => 'select',
+				'option_category'  => 'configuration',
+				'options'          => array(
+					'off' => esc_html__( 'In The Same Window', 'et_builder' ),
+					'on'  => esc_html__( 'In The New Tab', 'et_builder' ),
+				),
+				'default_on_front' => 'off',
+				'depends_show_if'  => 'off',
+				'toggle_slug'      => 'link',
+				'description'      => esc_html__( 'Here you can choose whether or not your link opens in a new window', 'et_builder' ),
+			),
 		);
 
 		return $fields;
@@ -168,6 +191,8 @@ class ET_Builder_Module_Heading extends ET_Builder_Module {
 		// Allowing full html for backwards compatibility.
 		$title            = $this->_esc_attr( 'title', 'full' );
 		$header_level     = $this->props['title_level'];
+		$url              = $this->props['url'];
+		$url_new_window   = $this->props['url_new_window'];
 		$video_background = $this->video_background();
 
 		$title = $multi_view->render_element(
@@ -179,6 +204,15 @@ class ET_Builder_Module_Heading extends ET_Builder_Module {
 				),
 			)
 		);
+
+		if ( '' !== $url ) {
+			$title = sprintf(
+				'<a href="%1$s"%3$s>%2$s</a>',
+				esc_url( $url ),
+				$title,
+				( 'on' === $url_new_window ? ' target="_blank"' : '' )
+			);
+		}
 
 		// Background layout class names.
 		$background_layout_class_names = et_pb_background_layout_options()->get_background_layout_class( $this->props );

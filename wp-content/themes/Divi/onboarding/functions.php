@@ -18,10 +18,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function et_onboarding_trigger_redirect() {
+	// Do not redirect if WP-CLI is active.
+	if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		return;
+	}
+
 	if ( ! class_exists( 'ET_Onboarding' ) ) {
-		// ET_BUILDER_PLUGIN_DIR is defined in DBP.
-		$path = defined( 'ET_BUILDER_PLUGIN_ACTIVE' ) ? ET_BUILDER_PLUGIN_DIR : get_template_directory();
-		require_once $path . '/onboarding/onboarding.php';
+		// get_template_directory() does not output a trailing slash.
+		// {@see https://developer.wordpress.org/reference/functions/get_template_directory/}.
+		require_once get_template_directory() . '/onboarding/onboarding.php';
 	}
 
 	ET_Onboarding::redirect_to_onboarding_page();
@@ -30,4 +35,24 @@ function et_onboarding_trigger_redirect() {
 add_action(
 	'after_switch_theme',
 	'et_onboarding_trigger_redirect'
+);
+
+/**
+ * Trigger remove transients when theme is changed.
+ *
+ * @return void
+ */
+function et_onboarding_remove_transients() {
+	if ( ! class_exists( 'ET_Onboarding' ) ) {
+		// get_template_directory() does not output a trailing slash.
+		// {@see https://developer.wordpress.org/reference/functions/get_template_directory/}.
+		require_once get_template_directory() . '/onboarding/onboarding.php';
+	}
+
+	ET_Onboarding::remove_transients();
+}
+
+add_action(
+	'switch_theme',
+	'et_onboarding_remove_transients'
 );

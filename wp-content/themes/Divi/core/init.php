@@ -37,6 +37,11 @@ function _et_core_find_latest( $return = 'path' ) {
 	$this_core_path = _et_core_normalize_path( dirname( __FILE__ ) );
 	$content_dir    = _et_core_normalize_path( WP_CONTENT_DIR );
 
+	// If this constant is enabled, the core path from this product will be used instead of the latest core from all installed products.
+	if ( defined( 'ET_USE_PRODUCT_CORE_PATHS' ) && ET_USE_PRODUCT_CORE_PATHS ) {
+		return $this_core_path;
+	}
+
 	include $this_core_path . '/_et_core_version.php';
 
 	$latest_core_path    = $this_core_path;

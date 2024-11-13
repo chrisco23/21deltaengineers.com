@@ -3,20 +3,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+global $wp_version;
+
 /**
  * Enqueue styles for block editor
  *
  * @since ??
  */
 function et_divi_block_editor_styles() {
-	wp_enqueue_style(
-		'divi-block-editor-style',
-		get_theme_file_uri( '/css/editor-blocks.css' ),
-		array(),
-		et_get_theme_version()
-	);
+	if ( is_admin() ) {
+		wp_enqueue_style(
+			'divi-block-editor-style',
+			get_theme_file_uri( '/css/editor-blocks.css' ),
+			array(),
+			et_get_theme_version()
+		);
+	}
 }
-add_action( 'enqueue_block_editor_assets', 'et_divi_block_editor_styles' );
+
+/**
+ * Register and enqueue stylesheet for the editor only.
+ */
+if ( version_compare( $wp_version, '6.3', '>=' ) ) {
+	// For WP version equal or greater than 6.3.
+	add_action( 'enqueue_block_assets', 'et_divi_block_editor_styles' );
+} else {
+	// For WP version less than 6.3.
+	add_action( 'enqueue_block_editor_assets', 'et_divi_block_editor_styles' );
+}
 
 /**
  * Setup page layout content width options for block editor

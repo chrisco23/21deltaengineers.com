@@ -631,6 +631,7 @@ class ET_Onboarding {
 			'react',
 			'react-dom',
 			'es6-promise',
+			'wp-color-picker',
 		];
 
 		if ( $DEBUG || $enqueue_prod_scripts || file_exists( $asset_path ) ) {

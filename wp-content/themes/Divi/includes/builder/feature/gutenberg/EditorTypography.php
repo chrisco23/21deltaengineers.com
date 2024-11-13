@@ -156,6 +156,9 @@ class ET_GB_Editor_Typography {
 	 * Print GB typography style.
 	 */
 	public function enqueue_block_typography_styles() {
+		if ( ! get_current_screen() ) {
+			return;
+		}
 
 		if ( ! ( method_exists( get_current_screen(), 'is_block_editor' ) && get_current_screen()->is_block_editor() ) ) {
 			return;

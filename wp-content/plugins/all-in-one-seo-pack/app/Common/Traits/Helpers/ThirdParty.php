@@ -289,12 +289,12 @@ trait ThirdParty {
 		$url = apply_filters( 'wpml_home_url', home_url( '/' ) );
 
 		// Remove URL parameters.
-		preg_match_all( '/\?[\s\S]+/', $url, $matches );
+		preg_match_all( '/\?[\s\S]+/', (string) $url, $matches );
 
 		// Get the base URL.
-		$url  = preg_replace( '/\?[\s\S]+/', '', $url );
+		$url  = preg_replace( '/\?[\s\S]+/', '', (string) $url );
 		$url  = trailingslashit( $url );
-		$url .= preg_replace( '/\//', '', $path, 1 );
+		$url .= preg_replace( '/\//', '', (string) $path, 1 );
 
 		// Readd URL parameters.
 		if ( $matches && $matches[0] ) {
@@ -682,7 +682,6 @@ trait ThirdParty {
 		}
 
 		// AMP plugin requires the `wp` action to be called to function properly, otherwise, it will throw warnings.
-		// https://github.com/awesomemotive/aioseo/issues/6056
 		if ( did_action( 'wp' ) ) {
 			// Check for the "AMP" plugin.
 			if ( function_exists( 'amp_is_request' ) ) {
@@ -716,10 +715,12 @@ trait ThirdParty {
 	 * @return int|false
 	 */
 	public function getLearnPressLesson() {
+		// phpcs:disable Squiz.NamingConventions.ValidVariableName
 		global $lp_course_item;
 		if ( $lp_course_item && method_exists( $lp_course_item, 'get_id' ) ) {
 			return $lp_course_item->get_id();
 		}
+		// phpcs:enable Squiz.NamingConventions.ValidVariableName
 
 		return false;
 	}
@@ -736,11 +737,12 @@ trait ThirdParty {
 		if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
 			return null;
 		}
-
+		// phpcs:disable Squiz.NamingConventions.ValidVariableName
 		global $et_pb_rendering_column_content;
 
 		$originalValue                  = $et_pb_rendering_column_content;
 		$et_pb_rendering_column_content = $flag;
+		// phpcs:enable Squiz.NamingConventions.ValidVariableName
 
 		return $originalValue;
 	}
@@ -757,6 +759,6 @@ trait ThirdParty {
 			return false;
 		}
 
-		return preg_match( '#.*Yandex.*#', sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) );
+		return preg_match( '#.*Yandex.*#', (string) sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) );
 	}
 }

@@ -75,7 +75,7 @@ TEMPLATE
 			],
 			'uninstall'        => [ 'type' => 'boolean', 'default' => false ],
 			'emailSummary'     => [
-				'enable'     => [ 'type' => 'boolean', 'default' => true ],
+				'enable'     => [ 'type' => 'boolean', 'default' => false ],
 				'recipients' => [ 'type' => 'array', 'default' => [] ]
 			]
 		],
@@ -488,7 +488,7 @@ TEMPLATE
 	 */
 	public function init() {
 		$this->setInitialDefaults();
-		$this->translateDefaults();
+		add_action( 'init', [ $this, 'translateDefaults' ] );
 
 		$this->setDbOptions();
 
@@ -637,7 +637,7 @@ TEMPLATE
 		);
 
 		if ( isset( $options['social']['profiles']['additionalUrls'] ) ) {
-			$dbOptions['social']['profiles']['additionalUrls'] = preg_replace( '/\h/', "\n", $options['social']['profiles']['additionalUrls'] );
+			$dbOptions['social']['profiles']['additionalUrls'] = preg_replace( '/\h/', "\n", (string) $options['social']['profiles']['additionalUrls'] );
 		}
 
 		$newOptions = ! empty( $options['sitemap']['html'] ) ? $options['sitemap']['html'] : null;
@@ -731,11 +731,17 @@ TEMPLATE
 				continue;
 			}
 
-			// Remove duplicate emails.
-			$emails = array_column( $options['advanced']['emailSummary']['recipients'], 'email' );
-			$emails = array_count_values( $emails );
-			if ( $emails[ $recipient['email'] ] > 1 ) {
-				unset( $options['advanced']['emailSummary']['recipients'][ $k ] );
+			// Remove duplicate emails with the same frequency.
+			foreach ( $options['advanced']['emailSummary']['recipients'] as $k2 => $recipient2 ) {
+				if (
+					$k !== $k2 &&
+					$recipient['email'] === $recipient2['email'] &&
+					$recipient['frequency'] === $recipient2['frequency']
+				) {
+					unset( $options['advanced']['emailSummary']['recipients'][ $k ] );
+
+					break;
+				}
 			}
 		}
 	}

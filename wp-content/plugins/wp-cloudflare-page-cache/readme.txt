@@ -167,6 +167,13 @@ First check the questions mentioned in the FAQ tab inside the plugin settings pa
 
 == Changelog ==
 
+#####   Version 5.0.9 (2024-11-20)
+
+- Fixes issue where auto-purge was not working when posts were updated
+
+
+
+
 #####   Version 5.0.8 (2024-11-08)
 
 - Fixed issue where Automatically preload purged pages option cannot be changed

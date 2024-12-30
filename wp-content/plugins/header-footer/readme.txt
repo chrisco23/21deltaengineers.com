@@ -1,12 +1,13 @@
 === Head, Footer and Post Injections ===
-Tags: header, footer, ads, analytics, facebook pixel, amp
-Tested up to: 6.5.2
-Stable tag: 3.2.8
+Tags: header, footer, ads, analytics, amp
+Tested up to: 6.7.1
+Stable tag: 3.3.0
 Donate link: https://www.satollo.net/donations
 Contributors: satollo
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-
-Header and Footer plugin let you to add html code to the head and footer sections of your blog page, inside posts... and more!
+Head and Footer plugin lets you to add HTML code to the head and footer sections of your site pages, inside posts... and more!
 
 == Description ==
 
@@ -83,9 +84,17 @@ FAQs are answered on [Header and Footer](http://www.satollo.net/plugins/header-f
 
 == Changelog ==
 
+= 3.3.0 =
+
+* Fixed readme
+
+= 3.2.9 =
+
+* WP 6.7.1 check
+
 = 3.2.8 =
 
-* WP 6.5.2
+* WP 6.5.2 check
 
 = 3.2.7 =
 

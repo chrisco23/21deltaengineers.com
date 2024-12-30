@@ -68,7 +68,10 @@ class Summary {
 	 */
 	public function cronTrigger( $frequency ) {
 		// Keep going only if the feature is enabled.
-		if ( ! aioseo()->options->advanced->emailSummary->enable ) {
+		if (
+			! aioseo()->options->advanced->emailSummary->enable ||
+			! apply_filters( 'aioseo_report_summary_enable', true, $frequency )
+		) {
 			return;
 		}
 
@@ -244,7 +247,7 @@ class Summary {
 			],
 		];
 		$links     = [
-			'disable'        => admin_url( 'admin.php?page=aioseo-settings&aioseo-scroll=aioseo-email-summary-row&aioseo-highlight=aioseo-email-summary-row#/advanced' ),
+			'disable'        => admin_url( 'admin.php?page=aioseo-settings&aioseo-scroll=aioseo-email-summary-row&aioseo-highlight=aioseo-email-summary-row&aioseo-tab=advanced' ),
 			'update'         => admin_url( 'update-core.php' ),
 			'marketing-site' => aioseo()->helpers->utmUrl( $mktUrl, $medium ),
 			'facebook'       => aioseo()->helpers->utmUrl( $mktUrl . 'plugin/facebook', $medium ),

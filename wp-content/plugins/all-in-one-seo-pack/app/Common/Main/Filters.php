@@ -1,12 +1,13 @@
 <?php
 namespace AIOSEO\Plugin\Common\Main;
 
-use AIOSEO\Plugin\Common\Models;
-
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use AIOSEO\Plugin\Common\Models;
+use AIOSEO\Plugin\Common\Integrations\BuddyPress as BuddyPressIntegration;
 
 /**
  * Abstract class that Pro and Lite both extend.
@@ -54,11 +55,11 @@ abstract class Filters {
 		add_filter( 'genesis_detect_seo_plugins', [ $this, 'genesisTheme' ] );
 
 		// WeGlot compatibility.
-		if ( isset( $_SERVER['REQUEST_URI'] ) && preg_match( '#(/default-sitemap\.xsl)$#i', sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) {
+		if ( isset( $_SERVER['REQUEST_URI'] ) && preg_match( '#(/default-sitemap\.xsl)$#i', (string) sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) {
 			add_filter( 'weglot_active_translation_before_treat_page', '__return_false' );
 		}
 
-		if ( isset( $_SERVER['REQUEST_URI'] ) && preg_match( '#(\.xml)$#i', sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) {
+		if ( isset( $_SERVER['REQUEST_URI'] ) && preg_match( '#(\.xml)$#i', (string) sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) {
 			add_filter( 'jetpack_boost_should_defer_js', '__return_false' );
 		}
 
@@ -125,8 +126,8 @@ abstract class Filters {
 	 * @return void
 	 */
 	public function removeEmojiDetectionScripts() {
-		global $wp_version;
-		if ( version_compare( $wp_version, '6.2', '>=' ) ) {
+		global $wp_version; // phpcs:ignore Squiz.NamingConventions.ValidVariableName
+		if ( version_compare( $wp_version, '6.2', '>=' ) ) { // phpcs:ignore Squiz.NamingConventions.ValidVariableName
 			remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 		}
 	}
@@ -142,8 +143,8 @@ abstract class Filters {
 	 */
 	public function resetUserBBPress() {
 		if ( function_exists( 'bbpress' ) ) {
-			global $current_user;
-			$current_user = null;
+			global $current_user; // phpcs:ignore Squiz.NamingConventions.ValidVariableName
+			$current_user = null; // phpcs:ignore Squiz.NamingConventions.ValidVariableName
 		}
 	}
 
@@ -401,7 +402,8 @@ abstract class Filters {
 			'elementor_library',
 			'redirect_rule', // Safe Redirect Manager
 			'seedprod',
-			'tcb_lightbox'
+			'tcb_lightbox',
+			BuddyPressIntegration::getEmailCptSlug()
 		];
 
 		foreach ( $postTypes as $index => $postType ) {

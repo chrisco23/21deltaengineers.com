@@ -1,12 +1,12 @@
 <?php
 namespace AIOSEO\Plugin\Common\Main;
 
-use AIOSEO\Plugin\Common\Models;
-
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use AIOSEO\Plugin\Common\Models;
 
 /**
  * Updater class.
@@ -221,6 +221,14 @@ class Updates {
 		if ( version_compare( $lastActiveVersion, '4.7.4', '<' ) ) {
 			$this->addWritingAssistantTables();
 			aioseo()->access->addCapabilities();
+		}
+
+		if ( version_compare( $lastActiveVersion, '4.7.5', '<' ) ) {
+			$this->cancelScheduledSitemapPings();
+		}
+
+		if ( version_compare( $lastActiveVersion, '4.7.7', '<' ) ) {
+			$this->disableEmailReports();
 		}
 
 		do_action( 'aioseo_run_updates', $lastActiveVersion );
@@ -1186,11 +1194,11 @@ class Updates {
 
 				$identifierType = ! empty( $schemaTypeOptions->product->identifierType ) ? $schemaTypeOptions->product->identifierType : '';
 				$identifier     = ! empty( $schemaTypeOptions->product->identifier ) ? $schemaTypeOptions->product->identifier : '';
-				if ( preg_match( '/gtin/i', $identifierType ) ) {
+				if ( preg_match( '/gtin/i', (string) $identifierType ) ) {
 					$graph['properties']['identifiers']['gtin'] = $identifier;
 				}
 
-				if ( preg_match( '/mpn/i', $identifierType ) ) {
+				if ( preg_match( '/mpn/i', (string) $identifierType ) ) {
 					$graph['properties']['identifiers']['mpn'] = $identifier;
 				}
 
@@ -1761,5 +1769,32 @@ class Updates {
 				) {$charsetCollate};"
 			);
 		}
+	}
+
+	/**
+	 * Cancels all outstanding sitemap ping actions.
+	 * This is needed because we've removed the Ping class.
+	 *
+	 * @since 4.7.5
+	 *
+	 * @return void
+	 */
+	private function cancelScheduledSitemapPings() {
+		as_unschedule_all_actions( 'aioseo_sitemap_ping' );
+		as_unschedule_all_actions( 'aioseo_sitemap_ping_recurring' );
+	}
+
+	/**
+	 * Disable email reports.
+	 *
+	 * @since 4.7.7
+	 *
+	 * @return void
+	 */
+	private function disableEmailReports() {
+		aioseo()->options->advanced->emailSummary->enable = false;
+
+		// Schedule a notification to remind the user to enable email reports in 2 weeks.
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_email_reports_enable_reminder', 2 * WEEK_IN_SECONDS );
 	}
 }

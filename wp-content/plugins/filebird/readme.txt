@@ -3,8 +3,8 @@ Contributors: ninjateam
 Donate link: https://ninjateam.org/wordpress-media-library-folders/ 
 Tags: wordpress media library folders, folders, media, media folders, category, file manager
 Requires at least: 3.0
-Tested up to: 6.6
-Stable tag: 6.4.2
+Tested up to: 6.7.1
+Stable tag: 6.4.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -208,6 +208,10 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Dec 11, 2024 - Version 6.4.2.1 =
+- Fixed: Zoom out feature in Gutenberg edior is disabled
+- Updated: Block uses Tree instead of Select
 
 = Oct 17, 2024 - Version 6.4.2 =
 - Added: Auto Select Previous Folder in Upload New Media Page

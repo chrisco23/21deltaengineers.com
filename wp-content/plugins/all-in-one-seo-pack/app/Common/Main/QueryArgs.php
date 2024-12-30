@@ -1,13 +1,13 @@
 <?php
 namespace AIOSEO\Plugin\Common\Main;
 
-use AIOSEO\Plugin\Common\Models\CrawlCleanupLog;
-use AIOSEO\Plugin\Common\Models\CrawlCleanupBlockedArg;
-
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use AIOSEO\Plugin\Common\Models\CrawlCleanupLog;
+use AIOSEO\Plugin\Common\Models\CrawlCleanupBlockedArg;
 
 /**
  * Query arguments class.
@@ -165,7 +165,7 @@ class QueryArgs {
 	 * @return string       The modified link.
 	 */
 	public function removeReplyToComLink( $link ) {
-		return preg_replace( '`href=(["\'])(?:.*(?:\?|&|&#038;)replytocom=(\d+)#respond)`', 'href=$1#comment-$2', $link );
+		return preg_replace( '`href=(["\'])(?:.*(?:\?|&|&#038;)replytocom=(\d+)#respond)`', 'href=$1#comment-$2', (string) $link );
 	}
 
 	/**

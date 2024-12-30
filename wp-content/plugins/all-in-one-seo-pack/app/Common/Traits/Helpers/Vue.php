@@ -355,8 +355,8 @@ trait Vue {
 		if ( ! $post->exists() ) {
 			$oldPostMeta = aioseo()->migration->meta->getMigratedPostMeta( $postId );
 			foreach ( $oldPostMeta as $k => $v ) {
-				if ( preg_match( '#robots_.*#', $k ) ) {
-					$oldPostMeta[ preg_replace( '#robots_#', '', $k ) ] = $v;
+				if ( preg_match( '#robots_.*#', (string) $k ) ) {
+					$oldPostMeta[ preg_replace( '#robots_#', '', (string) $k ) ] = $v;
 					continue;
 				}
 				if ( 'canonical_url' === $k ) {
@@ -618,7 +618,7 @@ trait Vue {
 
 			foreach ( $entry->translations as $translation ) {
 				// If any of the translated strings contains an HTML line break, we need to ignore it. Otherwise, logging into the admin breaks.
-				if ( preg_match( '/<br[\s\/\\\\]*>/', $translation ) ) {
+				if ( preg_match( '/<br[\s\/\\\\]*>/', (string) $translation ) ) {
 					continue 2;
 				}
 			}

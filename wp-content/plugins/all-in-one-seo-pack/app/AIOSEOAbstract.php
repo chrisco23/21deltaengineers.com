@@ -582,11 +582,20 @@ abstract class AIOSEOAbstract {
 	public $emailReports = null;
 
 	/**
+	 * ThirdParty class instance.
+	 *
+	 * @since 4.7.6
+	 *
+	 * @var \AIOSEO\Plugin\Common\ThirdParty\ThirdParty
+	 */
+	public $thirdParty = null;
+
+	/**
 	 * WritingAssistant class instance.
 	 *
 	 * @since 4.7.4
 	 *
-	 * @var null|\AIOSEO\Plugin\Common\WritingAssistant\WritingAssistant
+	 * @var \AIOSEO\Plugin\Common\WritingAssistant\WritingAssistant
 	 */
 	public $writingAssistant = null;
 }

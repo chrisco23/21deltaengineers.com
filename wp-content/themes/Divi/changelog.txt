@@ -1,3 +1,7 @@
+### version 4.27.4 ( updated 11-25-2024 )
+- Fixed issue where image with lazy loading enabled are distorted on WordPress 6.7.
+	* includes/builder/core.php
+
 version 4.27.3 ( updated 11-08-2024 )
 - Fixed broken "Use The Divi Builder" button in Block Editor header.
 - Upgraded jQuery Mobile from v1.4.5 to v1.5.0 alpha and removed unused code.

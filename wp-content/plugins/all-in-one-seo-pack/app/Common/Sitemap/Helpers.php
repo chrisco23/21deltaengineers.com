@@ -201,7 +201,6 @@ class Helpers {
 	 * @return array   $postTypes       The included post types.
 	 */
 	public function includedPostTypes( $hasArchivesOnly = false ) {
-		$postTypes = [];
 		if ( aioseo()->options->sitemap->{aioseo()->sitemap->type}->postTypes->all ) {
 			$postTypes = aioseo()->helpers->getPublicPostTypes( true, $hasArchivesOnly );
 		} else {
@@ -237,7 +236,6 @@ class Helpers {
 			) {
 				if ( ! $this->checkForIndexedPost( $postType ) ) {
 					$postTypes = aioseo()->helpers->unsetValue( $postTypes, $postType );
-					continue;
 				}
 			}
 		}
@@ -596,6 +594,11 @@ class Helpers {
 	 */
 	public function decodeSitemapEntries( $data ) {
 		$result = [];
+
+		if ( empty( $data ) ) {
+			return $result;
+		}
+
 		// Decode Url to properly show Unicode Characters.
 		foreach ( $data as $item ) {
 			if ( isset( $item['loc'] ) ) {

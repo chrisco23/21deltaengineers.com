@@ -7461,3 +7461,19 @@ function et_builder_get_all_global_colors( $include_customizer = false ) {
 
 	return et_get_option( 'et_global_colors' );
 }
+
+/**
+ * Filters the auto-sizes for lazy loaded images to be disabled.
+ *
+ * This filter callback is introduced initially to remove additional "auto" value in `sizes` image attribute added by
+ * `wp_img_tag_add_auto_sizes` function.
+ *
+ * We have tried the CSS solution by overriding the `contain-intrinsic-size` value like WP 6.7 does to remove default
+ * behavior of auto-sizes for lazy loaded images, but it doesn't work as expected for all cases we have tested. So, we
+ * decided to disable the auto-sizes for lazy loaded images by filtering the `wp_img_tag_add_auto_sizes` hook.
+ *
+ * @since 4.27.4
+ *
+ * @param boolean $enabled Whether auto-sizes for lazy loaded images is enabled.
+ */
+add_filter( 'wp_img_tag_add_auto_sizes', '__return_false' );

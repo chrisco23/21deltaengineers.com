@@ -39,12 +39,8 @@ var filebirdGallery = {
     </div>
     </div>`,
   createGallery: function (gallerySelector) {
-    const photoSwipeTemplate = new DOMParser().parseFromString(
-      filebirdGallery.template,
-      "text/html"
-    );
-    if (!document.getElementsByClassName('pswp').length) {
-      document.body.appendChild(photoSwipeTemplate.documentElement);
+    if (!document.getElementsByClassName("pswp").length) {
+      document.body.insertAdjacentHTML('beforeend', filebirdGallery.template);
     }
     filebirdGallery.initPhotoSwipeFromDOM(gallerySelector);
   },
@@ -85,7 +81,7 @@ var filebirdGallery = {
     options = {
       galleryUID: galleryElement.getAttribute("data-pswp-uid"),
       getThumbBoundsFn: function (index) {
-        var thumbnail = items[index].el.getElementsByTagName("img")[0], 
+        var thumbnail = items[index].el.getElementsByTagName("img")[0],
           pageYScroll =
             window.pageYOffset || document.documentElement.scrollTop,
           rect = thumbnail.getBoundingClientRect();

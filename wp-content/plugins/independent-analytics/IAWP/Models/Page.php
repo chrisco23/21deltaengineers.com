@@ -5,6 +5,7 @@ namespace IAWP\Models;
 use IAWP\Illuminate_Builder;
 use IAWP\Query;
 use IAWP\Utils\Request;
+use IAWPSCOPED\Illuminate\Support\Str;
 /** @internal */
 abstract class Page
 {
@@ -96,7 +97,8 @@ abstract class Page
         $resources_table = Query::get_table_name(Query::RESOURCES);
         $resource_key = $this->resource_key();
         $resource_value = $this->resource_value();
-        Illuminate_Builder::new()->from($resources_table)->where($resource_key, '=', $resource_value)->update(['cached_title' => $this->calculate_title(), 'cached_url' => $this->calculate_url(), 'cached_type' => $this->calculate_type(), 'cached_type_label' => $this->calculate_type_label(), 'cached_author_id' => $this->calculate_author_id(), 'cached_author' => $this->calculate_author(), 'cached_date' => $this->calculate_date(), 'cached_category' => !empty($this->calculate_category()) ? \implode(', ', $this->calculate_category()) : null]);
+        $url = $this->calculate_url();
+        Illuminate_Builder::new()->from($resources_table)->where($resource_key, '=', $resource_value)->update(['cached_title' => $this->calculate_title(), 'cached_url' => \is_string($url) ? Str::limit($url, 2083) : $url, 'cached_type' => $this->calculate_type(), 'cached_type_label' => $this->calculate_type_label(), 'cached_author_id' => $this->calculate_author_id(), 'cached_author' => $this->calculate_author(), 'cached_date' => $this->calculate_date(), 'cached_category' => !empty($this->calculate_category()) ? \implode(', ', $this->calculate_category()) : null]);
     }
     public final function id()
     {
@@ -217,12 +219,6 @@ abstract class Page
     public function most_popular_subtitle() : ?string
     {
         return null;
-    }
-    // The goal here is to generate a unique resource key that is *not* the url. This is for internal comparison
-    // purpose only. So a 404 page with be something like not_found_/test/abc and a term archive would be term_12.
-    protected final function unique_resource_id()
-    {
-        return $this->resource . '_' . $this->resource_value();
     }
     private function use_cache() : bool
     {

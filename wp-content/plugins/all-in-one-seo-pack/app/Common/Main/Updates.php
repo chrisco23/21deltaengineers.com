@@ -234,6 +234,7 @@ class Updates {
 		do_action( 'aioseo_run_updates', $lastActiveVersion );
 
 		// Always clear the cache if the last active version is different from our current.
+		// https://github.com/awesomemotive/aioseo/issues/2920
 		if ( version_compare( $lastActiveVersion, AIOSEO_VERSION, '<' ) ) {
 			aioseo()->core->cache->clear();
 		}
@@ -1740,7 +1741,7 @@ class Updates {
 					`content_analysis_hash` VARCHAR(40) DEFAULT NULL,
 					`content_analysis` text DEFAULT NULL,
 					`created` datetime NOT NULL,
-					`updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+					`updated` datetime NOT NULL,
 					PRIMARY KEY (id),
 					UNIQUE KEY ndx_aioseo_writing_assistant_posts_post_id (post_id),
 					KEY ndx_aioseo_writing_assistant_posts_keyword_id (keyword_id)
@@ -1762,7 +1763,7 @@ class Updates {
 					`keywords` mediumtext NULL,
 					`competitors` mediumtext NULL,
 					`created` datetime NOT NULL,
-					`updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+					`updated` datetime NOT NULL,
 					PRIMARY KEY (id),
 					UNIQUE KEY ndx_aioseo_writing_assistant_keywords_uuid (uuid),
 					KEY ndx_aioseo_writing_assistant_keywords_keyword (keyword)

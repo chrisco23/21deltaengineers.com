@@ -215,6 +215,7 @@ trait WpContext {
 		$postId = apply_filters( 'aioseo_get_post_id', $postId );
 
 		// We need to check these conditions and cannot always return get_post() because we'll return the first post on archive pages (dynamic homepage, term pages, etc.).
+		// https://github.com/awesomemotive/aioseo/issues/2419
 		if (
 			$this->isScreenBase( 'post' ) ||
 			$postId ||
@@ -224,6 +225,33 @@ trait WpContext {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns the term object for the given ID or the one from the main query.
+	 *
+	 * @since 4.7.8
+	 *
+	 * @param  int    $termId   The term ID.
+	 * @param  string $taxonomy The taxonomy.
+	 * @return \WP_Term         The term object.
+	 */
+	public function getTerm( $termId = 0, $taxonomy = '' ) {
+		$term = null;
+		if ( $termId ) {
+			$term = get_term( $termId, $taxonomy );
+		} else {
+			$term = get_queried_object();
+		}
+
+		// If the term is a Product Attribute, set its parent taxonomy to our fake
+		// "product_attributes" taxonomy so we can use the default settings.
+		if ( is_a( $term, 'WP_Term' ) && $this->isWooCommerceProductAttribute( $term->taxonomy ) ) {
+			$term           = clone $term;
+			$term->taxonomy = 'product_attributes';
+		}
+
+		return $term;
 	}
 
 	/**

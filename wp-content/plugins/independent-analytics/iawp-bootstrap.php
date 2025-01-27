@@ -24,11 +24,10 @@ use IAWP\Public_API\Analytics;
 use IAWP\Public_API\Singular_Analytics;
 use IAWP\Utils\BladeOne;
 use IAWP\WP_Option_Cache_Bust;
-use IAWPSCOPED\Illuminate\Support\Carbon;
 \define( 'IAWP_DIRECTORY', \rtrim( \plugin_dir_path( __FILE__ ), \DIRECTORY_SEPARATOR ) );
 \define( 'IAWP_URL', \rtrim( \plugin_dir_url( __FILE__ ), '/' ) );
-\define( 'IAWP_VERSION', '2.9.5' );
-\define( 'IAWP_DATABASE_VERSION', '38' );
+\define( 'IAWP_VERSION', '2.9.7' );
+\define( 'IAWP_DATABASE_VERSION', '39' );
 \define( 'IAWP_LANGUAGES_DIRECTORY', \dirname( \plugin_basename( __FILE__ ) ) . '/languages' );
 \define( 'IAWP_PLUGIN_FILE', __DIR__ . '/iawp.php' );
 if ( \file_exists( \IAWPSCOPED\iawp_path_to( 'vendor/scoper-autoload.php' ) ) ) {
@@ -36,11 +35,6 @@ if ( \file_exists( \IAWPSCOPED\iawp_path_to( 'vendor/scoper-autoload.php' ) ) ) 
 } else {
     require_once \IAWPSCOPED\iawp_path_to( 'vendor/autoload.php' );
 }
-// This is needed because something with age gate is preventing my own helpers from loading
-// The problem is that in autoload_static.php, there's some sort of caching going on where it's trying
-// to not load a file twice. I'm guessing that's normally a good thing, but in our case we've made changes (scoped)
-// so we do indeed want to load our version even though age gate has alreawdy learned
-require_once \IAWPSCOPED\iawp_path_to( 'vendor/illuminate/collections/helpers.php' );
 /**
  * @param $log
  *
@@ -317,7 +311,6 @@ function iawp() {
     }
 } );
 \add_action( 'admin_init', function () {
-    Carbon::setLocale( \get_locale() );
     Migrations\Migrations::handle_migration_18_error();
     Migrations\Migrations::handle_migration_22_error();
     Migrations\Migrations::handle_migration_29_error();

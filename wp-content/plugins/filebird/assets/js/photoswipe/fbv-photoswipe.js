@@ -49,6 +49,7 @@ var filebirdGallery = {
       numNodes = thumbElements.length,
       items = [],
       figureEl,
+      figcaptionEl,
       liEl,
       linkEl,
       imgEl,
@@ -59,11 +60,12 @@ var filebirdGallery = {
       // linkEl = figureEl.children[0]; // <a> element
       imgEl = liEl.querySelector("img");
       figureEl = liEl.querySelector("figure");
+      figcaptionEl = figureEl.querySelector("figcaption") || document.createElement("figcaption");
       item = {
         src: imgEl.getAttribute("src"),
         w: parseInt(imgEl.getAttribute("width"), 10),
         h: parseInt(imgEl.getAttribute("height"), 10),
-        title: imgEl.getAttribute("alt"),
+        title: imgEl.getAttribute("alt") + ' <div class="fbv-gallery-caption">' + figcaptionEl.innerHTML + '</div>',
         msrc: imgEl.getAttribute("src"),
         el: figureEl,
       };

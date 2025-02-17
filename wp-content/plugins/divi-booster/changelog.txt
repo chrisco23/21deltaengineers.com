@@ -1,3 +1,23 @@
+= 4.8 (11 Feb 2025) =
+* Added option to Divi video module to mute YouTube videos initially
+* Added option to Divi video module to autoplay YouTube videos
+* Added option to Divi video module to hide controls on YouTube videos
+* Added option to Divi video module to loop YouTube videos
+
+= 4.7.1 (4 Feb 2025) =
+* Fixed main menu links not working when single page navigation link color option applied.
+* Fixed array to string conversion warning in custom icons feature
+
+= 4.7 (27 Jan 2025) =
+* Improved fix menu link colors on single page navigation option to also fix top-level links
+* Added apple podcasts to added icons
+* Added phone icon option to person module
+* Fixed passing null error deprecated in CSS manager mobile detection
+* Fixed image above header gap in Divi 5
+* Added custom icon support for toggle open / close icon
+* Added slider touchscreen swiping option
+* Fixed Save as global incorrectly hidden by option to hide Divi Cloud
+
 = 4.6.2 (23 Aug 2024) =
 * Added options to hide gallery module navigation arrows and dots
 * Fixed division by zero in gallery images per row feature

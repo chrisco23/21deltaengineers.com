@@ -198,6 +198,46 @@ function db014_shared_css() { ?>
         .et_button_no_icon .et_pb_module:not(.dbdb-has-custom-padding) .db-custom-extended-icon.et_pb_button:hover {
             padding: .3em 2em .3em .7em !important;
         }
+
+        /* === Custom toggle icons === */
+        .et_pb_toggle .db014_custom_toggle_icon,
+        .et_pb_toggle .db014_custom_toggle_icon_open {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: auto;
+        }
+
+        .et_pb_toggle.et_pb_toggle_close .db014_custom_toggle_icon_open {
+            display: none;
+        }
+
+        .et_pb_toggle.et_pb_toggle_open .db014_custom_toggle_icon {
+            display: none;
+        }
+
+        /* === Custom toggle icons height === */
+        .et_pb_toggle .et_pb_toggle_title.db-custom-icon {
+            display: flex;
+            align-items: center;
+        }
+
+        .et_pb_toggle .et_pb_toggle_title.db-custom-icon::before {
+            position: relative !important;
+            /* Make the title get its height from the icon */
+            margin-top: 0 !important;
+            right: 0 !important;
+            order: 2;
+            /* Place after the titie text */
+            visibility: hidden;
+        }
+
+        .et_pb_toggle img.db014_custom_toggle_icon,
+        .et_pb_toggle img.db014_custom_toggle_icon_open {
+            height: 100%;
+            /* Make the icon take up the full height of the title */
+        }
     </style>
 <?php
 }
@@ -216,6 +256,13 @@ function db014_sharedUserJs() {
     }, $custom_inline_icon_classes);
     $custom_inline_icon_classes = implode(',', $custom_inline_icon_classes);
 
+
+    $custom_toggle_icon_classes = apply_filters('dbdb_custom_toggle_icon_classes', array('et_pb_toggle_title'));
+    $custom_toggle_icon_classes = array_map(function ($class) {
+        return '.' . esc_html($class);
+    }, $custom_toggle_icon_classes);
+    $custom_toggle_icon_classes = implode(',', $custom_toggle_icon_classes);
+
 ?>
     function db014_update_icon(icon_id, icon_url) {
     db014_update_icons(jQuery(document), icon_id, icon_url);
@@ -228,6 +275,8 @@ function db014_sharedUserJs() {
     function db014_update_icons(doc, icon_id, icon_url) {
     db014_update_custom_icons(doc, icon_id, icon_url);
     db014_update_custom_inline_icons(doc, icon_id, icon_url);
+    db014_update_custom_toggle_icons(doc, icon_id, icon_url);
+    db014_update_custom_toggle_icons_open(doc, icon_id, icon_url);
     }
 
     function db014_update_custom_icons(doc, icon_id, icon_url) {
@@ -255,6 +304,38 @@ function db014_sharedUserJs() {
     }
     }
     $this.children('.db014_custom_hover_icon').attr('src', icon_url);
+    });
+    $icons_inline.toggle(icon_visible);
+    }
+
+    function db014_update_custom_toggle_icons(doc, icon_id, icon_url) {
+    var $custom_toggle_icons = doc.find(<?php echo json_encode($custom_toggle_icon_classes); ?>).filter('[data-icon="'+icon_id+'"]');
+    var icon_visible = (icon_url !== '');
+    var $icons_inline = $custom_toggle_icons.filter(function(){ return jQuery(this).attr('data-icon') == icon_id; });
+
+    $icons_inline.addClass('db-custom-icon');
+    $icons_inline.each(function(){
+    $this = jQuery(this);
+    if ($this.children('.db014_custom_toggle_icon').length === 0) {
+    $this.append('<img class="db014_custom_toggle_icon" />');
+    }
+    $this.children('.db014_custom_toggle_icon').attr('src', icon_url);
+    });
+    $icons_inline.toggle(icon_visible);
+    }
+
+    function db014_update_custom_toggle_icons_open(doc, icon_id, icon_url) {
+    var $custom_toggle_icons = doc.find(<?php echo json_encode($custom_toggle_icon_classes); ?>).filter('[data-icon-open="'+icon_id+'"]');
+    var icon_visible = (icon_url !== '');
+    var $icons_inline = $custom_toggle_icons.filter(function(){ return jQuery(this).attr('data-icon-open') == icon_id; });
+
+    $icons_inline.addClass('db-custom-icon');
+    $icons_inline.each(function(){
+    $this = jQuery(this);
+    if ($this.children('.db014_custom_toggle_icon_open').length === 0) {
+    $this.append('<img class="db014_custom_toggle_icon_open" />');
+    }
+    $this.children('.db014_custom_toggle_icon_open').attr('src', icon_url);
     });
     $icons_inline.toggle(icon_visible);
     }
@@ -381,3 +462,46 @@ function db014_getMutationObserverJs() {
     }
 <?php
 }
+
+
+/* === Add support for the toggle module === */
+
+// Add the data-icon and data-icon-open attributes to the toggle module title using the shortcode output filter provided by divi
+add_filter('et_pb_toggle_shortcode_output', 'db014_add_data_icon_to_toggle_title', 10, 3);
+
+function db014_add_data_icon_to_toggle_title($output, $render_slug, $module) {
+    if (!is_string($output)) return $output;
+    if ($render_slug === 'et_pb_toggle') {
+
+        $output = preg_replace_callback('/class="et_pb_toggle_title"/', function ($matches) use ($module) {
+
+            $output = $matches[0];
+
+            $icon = isset($module->props['toggle_icon']) ? $module->props['toggle_icon'] : '';
+            $icon_open = isset($module->props['open_toggle_icon']) ? $module->props['open_toggle_icon'] : '';
+
+            if (preg_match('/^(&#x[0-9a-f]+;)\|\|divi\|\|400$/', $icon, $icon_matches)) {
+                $output = str_replace('class="et_pb_toggle_title"', 'class="et_pb_toggle_title" data-icon="' . esc_attr($icon_matches[1]) . '"', $output);
+            }
+
+            if (preg_match('/^(&#x[0-9a-f]+;)\|\|divi\|\|400$/', $icon_open, $icon_open_matches)) {
+                $output = str_replace('class="et_pb_toggle_title"', 'class="et_pb_toggle_title" data-icon-open="' . esc_attr($icon_open_matches[1]) . '"', $output);
+            }
+
+            return $output;
+        }, $output);
+    }
+    return $output;
+}
+
+/*
+// Register the toggle module icon classes
+add_filter('dbdb_custom_inline_icon_classes', 'db014_toggle_add_icon_classes');
+
+function db014_toggle_add_icon_classes($classes) {
+    if (is_array($classes)) {
+        $classes[] = 'et_pb_toggle_title'; 
+    }
+    return $classes;
+};
+*/

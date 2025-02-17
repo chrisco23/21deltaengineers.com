@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'divi-booster-icons';
-  src:  url('fonts/divi-booster-icons.eot?qmxm39');
-  src:  url('fonts/divi-booster-icons.eot?qmxm39#iefix') format('embedded-opentype'),
-    url('fonts/divi-booster-icons.ttf?qmxm39') format('truetype'),
-    url('fonts/divi-booster-icons.woff?qmxm39') format('woff'),
-    url('fonts/divi-booster-icons.svg?qmxm39#divi-booster-icons') format('svg');
+  src:  url('fonts/divi-booster-icons.eot?6zrbe7');
+  src:  url('fonts/divi-booster-icons.eot?6zrbe7#iefix') format('embedded-opentype'),
+    url('fonts/divi-booster-icons.ttf?6zrbe7') format('truetype'),
+    url('fonts/divi-booster-icons.woff?6zrbe7') format('woff'),
+    url('fonts/divi-booster-icons.svg?6zrbe7#divi-booster-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.divi-booster-icons-apple-podcasts:before {
+  content: "\e912";
+}
 .divi-booster-icons-gab:before {
   content: "\e911";
 }

@@ -52,7 +52,7 @@ include_once($MODULE_OPTIONS_DIR . 'et_pb_post_slider.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_fullwidth_post_slider.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_countdown_timer.php');
 include_once($MODULE_OPTIONS_DIR . 'et_pb_map_pin.php');
-include_once($MODULE_OPTIONS_DIR . 'et_pb_video.php');
+include_once($MODULE_OPTIONS_DIR . 'et_pb_video/et_pb_video.php');
 
 
 // === Fix missing props when cached ===

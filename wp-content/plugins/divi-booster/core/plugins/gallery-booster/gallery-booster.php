@@ -6,6 +6,7 @@ namespace DiviBooster\GalleryBooster;
 
 if (version_compare(phpversion(), '5.3', '>=')) {
     include_once(dirname(__FILE__) . '/cursor-arrows/cursor-arrows.php');
+    include_once(dirname(__FILE__) . '/slider-swipe-mode/slider-swipe-mode.php');
     include_once(dirname(__FILE__) . '/order/order.php');
     include_once(dirname(__FILE__) . '/grid-image-sizes/grid-image-sizes.php');
 

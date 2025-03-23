@@ -4,7 +4,7 @@ Tags: SEO, Google Search Console, XML Sitemap, meta description, schema
 Tested up to: 6.7.1
 Requires at least: 5.3
 Requires PHP: 7.0
-Stable tag: 4.7.8
+Stable tag: 4.8.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -75,9 +75,6 @@ Improve your SEO ranking with our comprehensive SEO audit checklist.
 
 * **Knowledge Graph Support**
 Improve your website's search appearance with SEO Knowledge panel.
-
-* **Google Site Links and Search Box**
-Our SEO markup can help you get sitelinks and search box for your brand.
 
 * **Table of Contents**
 Automatically generate a table of content, customize headings, anchors, and you can also hide or reorder the headings.
@@ -225,6 +222,72 @@ AIOSEO&reg; is a registered trademark of Semper Plugins LLC. When writing about 
 * AISEO (incorrect)
 
 == Changelog ==
+
+**New in Version 4.8.1**
+
+* Updated: DiscussionForumPosting schema is now output for bbPress forum topics and replies as well.
+* Updated: Improved the SEO Email Report header layout for dates in different languages.
+* Updated: Expiration date format in AIOSEO General Settings now reflects WordPress date format setting.
+* Updated: Various Keyword Rank Tracker UI/UX improvements.
+* Updated: The LinkedIn field in the Setup Wizard is now shown by default.
+* Updated: "Show post type archive link" setting for products has been removed from their breadcrumb template.
+* Updated: AIOSEO no longer loads its page builder integration for non-public Thrive Architect post types.
+* Fixed: Removed support for sitelinks schema as it is no longer supported by Google.
+* Fixed: YouTube embedded videos with additional parameters in the URL not being detected by the Video Sitemap addon.
+* Fixed: Uninstalling AIOSEO did not remove user role entries from the database as intended.
+* Fixed: Limit Modified Date feature sometimes not working for WooCommerce Products.
+* Fixed: Load admin bar assets on the frontend when logged in only if the admin bar is enabled for that user.
+* Fixed: Prevent unneeded popup warning on the user profile edit page when leaving without making edits.
+* Fixed: Restoring SEO revisions now updates meta keys to ensure localization.
+* Fixed: WPML translation to support admin pages in addition to Author/Reviewer Blocks.
+* Fixed: Additional keyphrases tooltip cutting off in page builders.
+* Fixed: Category in the permalink and breadcrumb did not match when the primary category is removed.
+* Fixed: "See Full Bio" link not correctly displaying for reviewers without posts, even when a custom author bio URL is set.
+* Fixed: Keyphrase in URL analysis didn't update correctly for auto-draft posts.
+* Fixed: Search Statistics now disconnects automatically if there's an authentication error.
+* Fixed: Phrase text missing from the Link Assistant's Link Suggestions table.
+* Fixed: SERP Preview update when changing primary term for a WooCommerce product.
+* Fixed: Updated SERP title to reflect selected primary term for the category when changed.
+* Fixed: SiteOrigin integration style conflict to prevent overlap with other modals.
+* Fixed: Images using the Post SEO Title smart tag were sometimes not parsed correctly.
+* Fixed: URL count for the root sitemap sometimes not entirely accurate.
+* Fixed: Robots.txt settings not correctly synced between multisite network and main site.
+
+**New in Version 4.8.0**
+
+* New: Crawl Optimization Improvements - We've added even more features to Crawl Cleanup to help you block unwanted bots from indexing your site and prevent spammers from abusing your internal site search results.
+* Fixed: TruSEO Highlighter not always working correctly when post content contains an empty or reusable block.
+
+**New in Version 4.7.9.1**
+
+* Updated: Removed the Search Statistics menu item under Dashboard menu.
+
+**New in Version 4.7.9**
+
+* Updated: Schema product suggestedMinAge/suggestedMaxAge properties to conform with Google's structured data merchant listing requirements.
+* Updated: Added a button to apply new headlines directly to the post title inside the Headline Analyzer.
+* Updated: TruSEO now supports additional ACF Custom Field types.
+* Updated: Exported JSON/CSV files now include the post title and term name columns.
+* Updated: Improved handling of Focus Keyphrase errors from Semrush API.
+* Updated: Turned off autoloading by default for a number of AIOSEO options to improve performance.
+* Fixed: Access control role check to properly verify if the role has edit_post permissions.
+* Fixed: Existing additional sitemap pages with different priority, frequency, or last modified values were not getting updated when importing a CSV file.
+* Fixed: Tabs were not displaying active status correctly when using RTL due to CSS conflicts.
+* Fixed: Image title sometimes duplicated when using Elementor page builder.
+* Fixed: Alt text settings were not applied to images when showing latest posts on the homepage.
+* Fixed: Excluded posts/terms would sometimes not be correctly excluded from sitemaps.
+* Fixed: SERP Preview disappearing when using numeric custom fields in ACF.
+* Fixed: Filenames duplicated in rare cases when Strip Punctuation is enabled in Image SEO.
+* Fixed: Adding links to WordPress Gallery Block would sometimes not work when Strip Punctuation is enabled in Image SEO.
+* Fixed: Trailing slash added to a redirect's target URL even if the URL is external.
+* Fixed: Orphaned Posts filter not working correctly in the Link Assistant.
+* Fixed: Table of Content block's heading could sometimes break when adding a link from Link Assistant.
+* Fixed: "Don't update the modified date" checkbox now works properly in post's quick edit screen.
+* Fixed: Missing tooltip for the AI Title/Description Generator modal.
+* Fixed: Headlines that couldn't be analyzed would sometimes break the Headline Analyzer UI.
+* Fixed: Automatic 404 redirects no longer affecting the dedicated HTML sitemap page.
+* Fixed: Canonical URL sometimes missing a slash for paged taxonomy terms.
+* Fixed: Canonical URL for a term could sometimes fail if the global query changed.
 
 **New in Version 4.7.8**
 
@@ -392,6 +455,6 @@ Additionally, AIOSEO can also provide you with data on the most frequently used 
 
 == Upgrade Notice ==
 
-= 4.7.8 =
+= 4.8.1 =
 
 This update adds major improvements and bug fixes.

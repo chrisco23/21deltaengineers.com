@@ -348,6 +348,14 @@ class Root {
 			}, $excludedPostIds );
 		}
 
+		if ( 'page' === $postType ) {
+			$isStaticHomepage = 'page' === get_option( 'show_on_front' );
+			if ( $isStaticHomepage ) {
+				$blogPageId = (int) get_option( 'page_for_posts' );
+				$excludedPostIds[] = $blogPageId;
+			}
+		}
+
 		$whereClause         = '';
 		$excludedPostsString = aioseo()->sitemap->helpers->excludedPosts();
 		if ( ! empty( $excludedPostsString ) ) {
@@ -371,6 +379,16 @@ class Root {
 				JOIN {$termsTable} AS t ON tt.term_id = t.term_id
 				WHERE t.name = 'exclude-from-catalog'
 			)";
+		}
+
+		// Include the blog page in the posts post type unless manually excluded.
+		$blogPageId = (int) get_option( 'page_for_posts' );
+		if (
+			$blogPageId &&
+			! in_array( $blogPageId, $excludedPostIds, true ) &&
+			'post' === $postType
+		) {
+			$whereClause .= " OR `p`.`ID` = $blogPageId ";
 		}
 
 		$posts = aioseo()->core->db->execute(

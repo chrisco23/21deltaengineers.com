@@ -58,7 +58,7 @@ class Click_Processing_Job extends Cron_Job
     private function get_click_data_file() : ?string
     {
         $text_file = Str::finish(\sys_get_temp_dir(), \DIRECTORY_SEPARATOR) . "iawp-click-data.txt";
-        if (\is_file($text_file)) {
+        if (\is_file($text_file) && \is_readable($text_file) && \is_writable($text_file)) {
             return $text_file;
         }
         $php_file = \IAWPSCOPED\iawp_path_to('iawp-click-data.php');
@@ -69,14 +69,14 @@ class Click_Processing_Job extends Cron_Job
     }
     private function create_job_file(string $file) : ?string
     {
-        if (!\is_file($file)) {
+        if (!\is_readable($file) || !\is_writable($file)) {
             return null;
         }
         $job_id = \rand();
         $extension = \pathinfo($file, \PATHINFO_EXTENSION);
         $job_file = Str::finish(\dirname($file), \DIRECTORY_SEPARATOR) . "iawp-click-data-{$job_id}.{$extension}";
-        \rename($file, $job_file);
-        if (!\is_file($job_file)) {
+        $was_renamed = \rename($file, $job_file);
+        if (!$was_renamed || !\is_file($job_file)) {
             return null;
         }
         return $job_file;

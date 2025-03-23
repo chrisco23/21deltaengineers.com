@@ -50,7 +50,7 @@ class PostSettings {
 		// Add metabox.
 		add_action( 'add_meta_boxes', [ $this, 'addPostSettingsMetabox' ] );
 
-		// Add metabox to terms on init hook.
+		// Add metabox (upsell) to terms on init hook.
 		add_action( 'init', [ $this, 'init' ], 1000 );
 
 		// Save metabox.
@@ -239,6 +239,7 @@ class PostSettings {
 
 		// If there is no data, there likely was an error, e.g. if the hidden field wasn't populated on load and the user saved the post without making changes in the metabox.
 		// In that case we should return to prevent a complete reset of the data.
+		// https://github.com/awesomemotive/aioseo/issues/2254
 		if ( empty( $currentPost ) ) {
 			return;
 		}

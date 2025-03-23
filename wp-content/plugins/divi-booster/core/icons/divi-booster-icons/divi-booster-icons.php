@@ -113,6 +113,11 @@ function icon_data($icons = array()) {
             'color' => '#21cf7a',
             'code' => '\e911'
         ),
+        'apple-podcasts' => array(
+            'name' => 'Apple Podcasts',
+            'color' => '#b150e2',
+            'code' => '\e912'
+        ),
     );
 }
 

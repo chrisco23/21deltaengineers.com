@@ -42,12 +42,17 @@ function get_cache(): ?Cache
 {
     $file = __DIR__ . "/iawp-click-config.php";
 
-    if (!is_file($file)) {
+    if (!is_readable($file)) {
         return null;
     }
 
     $contents = file_get_contents($file);
-    $lines    = explode("\n", $contents);
+
+    if (false === $contents) {
+        return null;
+    }
+
+    $lines = explode("\n", $contents);
 
     if (count($lines) !== 2) {
         return null;
@@ -116,7 +121,7 @@ function get_click_data_file(): string
 {
     $text_file = trailing_slash(sys_get_temp_dir()) . "iawp-click-data.txt";
 
-    if (is_file($text_file)) {
+    if (is_file($text_file) && is_readable($text_file) && is_writable($text_file)) {
         return $text_file;
     }
 
@@ -165,6 +170,15 @@ $data            = [
     'created_at'    => time(),
 ];
 
+if (!is_readable($click_data_file) || !is_writable($click_data_file)) {
+    exit;
+}
+
 $file_resource = fopen($click_data_file, 'a');
+
+if (false === $file_resource) {
+    exit;
+}
+
 fwrite($file_resource, json_encode($data) . "\n");
 fclose($file_resource);

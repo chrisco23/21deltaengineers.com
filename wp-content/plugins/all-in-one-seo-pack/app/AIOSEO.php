@@ -60,6 +60,15 @@ namespace AIOSEO\Plugin {
 		public $isDev = false;
 
 		/**
+		 * Uninstall class instance.
+		 *
+		 * @since 4.8.1
+		 *
+		 * @var Common\Main\Uninstall
+		 */
+		public $uninstall = null;
+
+		/**
 		 * Main AIOSEO Instance.
 		 *
 		 * Insures that only one instance of AIOSEO exists in memory at any one
@@ -219,6 +228,7 @@ namespace AIOSEO\Plugin {
 			$this->helpers                = $this->pro ? new Pro\Utils\Helpers() : new Lite\Utils\Helpers();
 			$this->internalNetworkOptions = ( $this->pro && $this->helpers->isPluginNetworkActivated() ) ? new Pro\Options\InternalNetworkOptions() : new Common\Options\InternalNetworkOptions();
 			$this->internalOptions        = $this->pro ? new Pro\Options\InternalOptions() : new Lite\Options\InternalOptions();
+			$this->uninstall              = new Common\Main\Uninstall();
 
 			// Run pre-updates.
 			$this->preUpdates = $this->pro ? new Pro\Main\PreUpdates() : new Common\Main\PreUpdates();
@@ -322,6 +332,7 @@ namespace AIOSEO\Plugin {
 			$this->ai                 = $this->pro ? new Pro\Ai\Ai() : null;
 			$this->filters            = $this->pro ? new Pro\Main\Filters() : new Lite\Main\Filters();
 			$this->crawlCleanup       = new Common\QueryArgs\CrawlCleanup();
+			$this->searchCleanup      = new Common\SearchCleanup\SearchCleanup();
 			$this->emailReports       = new Common\EmailReports\EmailReports();
 			$this->thirdParty         = new Common\ThirdParty\ThirdParty();
 			$this->writingAssistant   = new Common\WritingAssistant\WritingAssistant();

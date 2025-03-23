@@ -3,8 +3,8 @@ Contributors: ninjateam
 Donate link: https://ninjateam.org/wordpress-media-library-folders/ 
 Tags: wordpress media library folders, folders, media, media folders, category, file manager
 Requires at least: 3.0
-Tested up to: 6.7.1
-Stable tag: 6.4.2.1
+Tested up to: 6.7.2
+Stable tag: 6.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -208,6 +208,14 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Mar 19, 2025 – Version 6.4.7 =
+- Improved: Code for Performance and maintainability
+
+= Feb 12, 2025 – Version 6.4.6 =
+- Added: Display caption for lightbox 
+- Improved: Request handling (conflict with JobBoardWP plugin) 
+- Fixed: Security (reported by researcher Revan Arifio)
 
 = Dec 11, 2024 - Version 6.4.2.1 =
 - Fixed: Zoom out feature in Gutenberg edior is disabled

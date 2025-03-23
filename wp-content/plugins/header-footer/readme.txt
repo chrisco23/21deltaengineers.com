@@ -1,7 +1,7 @@
 === Head, Footer and Post Injections ===
 Tags: header, footer, ads, analytics, amp
-Tested up to: 6.7.1
-Stable tag: 3.3.0
+Tested up to: 6.7.2
+Stable tag: 3.3.2
 Donate link: https://www.satollo.net/donations
 Contributors: satollo
 License: GPLv2 or later
@@ -83,6 +83,14 @@ FAQs are answered on [Header and Footer](http://www.satollo.net/plugins/header-f
 
 
 == Changelog ==
+
+= 3.3.1, 3.3.2 =
+
+Breaking changes (see below)
+
+* Disabled by default PHP on multisite installations
+* Added constant HEADER_FOOTER_MULTISITE_ALLOW_PHP to be used on wp-config.php to enable PHP on multisite installations
+* Added constant HEADER_FOOTER_ALLOW_PHP to be used on wp-config.php to enable PHP (true by default for compatibility)
 
 = 3.3.0 =
 

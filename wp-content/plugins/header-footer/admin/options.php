@@ -50,6 +50,14 @@ if (isset($_POST['save'])) {
 }
 ?>
 
+<style>
+    .notice {
+        font-size: 1rem;
+        padding: 1rem;
+        line-height: 140%;
+    }
+</style>
+
 <script>
     jQuery(function () {
 
@@ -66,16 +74,15 @@ if (isset($_POST['save'])) {
     <h2>Head, Footer and Post Injections</h2>
 
     <?php if (!isset($dismissed['rate'])) { ?>
-        <div class="notice notice-success"><p>
+        <div class="notice notice-success">
                 I never asked before and I'm curious: <a href="http://wordpress.org/extend/plugins/header-footer/" target="_blank"><strong>would you rate this plugin</strong></a>?
                 (takes only few seconds required - account on WordPress.org, every blog owner should have one...). <strong>Really appreciated, Stefano</strong>.
                 <a class="hefo-dismiss" href="<?php echo wp_nonce_url($_SERVER['REQUEST_URI'] . '&dismiss=rate&noheader=1', 'dismiss') ?>">&times;</a>
-            </p>
         </div>
     <?php } ?>
 
     <?php if (!isset($dismissed['newsletter'])) { ?>
-        <div class="notice notice-success"><p>
+        <div class="notice notice-success">
                 If you want to be informed of important updated of this plugin, you may want to subscribe to my (rare) newsletter<br>
             <form action="http://www.satollo.net/?na=s" target="_blank" method="post">
                 <input type="hidden" value="header-footer" name="nr">
@@ -84,21 +91,27 @@ if (isset($_POST['save'])) {
                 <input type="submit" value="Subscribe">
             </form>
             <a class="hefo-dismiss" href="<?php echo wp_nonce_url($_SERVER['REQUEST_URI'] . '&dismiss=newsletter&noheader=1', 'dismiss') ?>">&times;</a>
-            </p>
-        </div>
-    <?php } ?>
-
-    <?php if (!isset($dismissed['automation'])) { ?>
-        <div class="notice notice-success"><p>
-                I'm developing a new plugin:
-                <a href="https://automation.webagile.net" target="_blank">Welcome Email for Contact Form 7</a> (and more).
-                Available for direct donwload until I wait the approvation to publish on WP.org.
-            <a class="hefo-dismiss" href="<?php echo wp_nonce_url($_SERVER['REQUEST_URI'] . '&dismiss=automation&noheader=1', 'dismiss') ?>">&times;</a>
 
         </div>
     <?php } ?>
 
-    <div style="padding: 15px; background-color: #fff; border: 1px solid #eee; font-size: 16px; line-height: 22px; margin-bottom: 10px;">
+    <?php if (!HEADER_FOOTER_ALLOW_PHP) { ?>
+        <div class="notice notice-warning">
+            PHP is disbaled by the constant <code>HEADER_FOOTER_ALLOW_PHP</code> in the
+            <code>wp-config.php</code> file.
+        </div>
+    <?php } ?>
+
+    <?php if (is_multisite() && !HEADER_FOOTER_MULTISITE_ALLOW_PHP) { ?>
+        <div class="notice notice-warning">
+            PHP is not allowed on multisite installations since a site admin can escalate to super-admin. If you're the only
+            administrator of all the sites, you can enable PHP setting the constant
+            <code>HEADER_FOOTER_MULTISITE_ALLOW_PHP</code> to <code>true</code> in the
+            <code>wp-config.php</code> file.
+        </div>
+    <?php } ?>
+
+    <div class="notice notice-success">
         Did this plugin save you lot of time and troubles?
         <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5PHGDGNHAYLJ8" target="_blank"><img style="vertical-align: bottom" src="<?php echo plugins_url('header-footer') ?>/images/donate.png"></a>
         To help children. Even <b>2$</b> help. <a href="http://www.satollo.net/donations" target="_blank">Please read more</a>. Thank you.
@@ -262,9 +275,11 @@ if (isset($_POST['save'])) {
                     ?>
                     <h3><?php echo esc_html($post_type->label) ?></h3>
                     <p>
-                    <?php hefo_field_select($post_type->name . '_mode', [''=>__('Use the post configuration', 'header-footer'),
-                        'enabled'=>__('Enable injections below', 'header-footer'),
-                        'disabled'=>__('Do not inject', 'header-footer')]); ?>
+                        <?php
+                        hefo_field_select($post_type->name . '_mode', ['' => __('Use the post configuration', 'header-footer'),
+                            'enabled' => __('Enable injections below', 'header-footer'),
+                            'disabled' => __('Do not inject', 'header-footer')]);
+                        ?>
                     </p>
                     <div class="row">
 

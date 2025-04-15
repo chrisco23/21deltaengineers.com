@@ -1,3 +1,8 @@
+= 4.8.1 (25 Mar 2025) =
+* Divi 5 compatibility updates
+* Fixed undefined array key 'HTTP_USER_AGENT' in Custom CSS manager
+* Added dynamic content support to the blog module author id field
+
 = 4.8 (11 Feb 2025) =
 * Added option to Divi video module to mute YouTube videos initially
 * Added option to Divi video module to autoplay YouTube videos

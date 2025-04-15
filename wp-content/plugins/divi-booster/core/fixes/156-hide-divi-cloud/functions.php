@@ -44,6 +44,19 @@ function dbdb156_remove_divi_cloud_css() {
                 display: none !important;
             }
 
+            /* === Divi 5 Builder === */
+            /* Hide "Save to Divi Cloud" in right-click menu */
+            .et-vb-right-click-option[value="save-to-cloud"],
+            /* Save to Divi Cloud option in Save to Module Library modal */
+            .et-vb-field:has(+ .et-vb-field-upsell-card),
+            /* Upsell in Save to Module Library Modal */
+            .et-vb-field-upsell-card,
+            /* Cloud icon in Add From Library item hover icons */
+            .et-common-icon--cloud {
+                display: none !important;
+            }
+
+
             /* === End: Hide Divi Cloud === */
         </style>
 <?php

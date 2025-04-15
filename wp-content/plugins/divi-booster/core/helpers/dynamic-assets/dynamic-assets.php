@@ -76,6 +76,13 @@ class DBDB_Divi_Dynamic_Asset_Group {
                 wp_enqueue_script($handle);
             }
         }
+
+
+        // If Divi 5, enqueue the Magnific Popup script using the Divi 5 call and dequeue the default one
+        if ($this->group === 'magnific-popup' && is_callable(array('ET\Builder\FrontEnd\Assets\DynamicAssetsUtils', 'enqueue_magnific_popup_script'))) {
+            ET\Builder\FrontEnd\Assets\DynamicAssetsUtils::enqueue_magnific_popup_script();
+            wp_dequeue_script($handle);
+        }
     }
 
     public function register_assets() {

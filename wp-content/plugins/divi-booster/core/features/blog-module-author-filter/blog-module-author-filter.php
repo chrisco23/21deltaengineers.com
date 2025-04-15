@@ -50,6 +50,7 @@ class BlogModuleAuthorFilterFeature {
             'toggle_slug' => 'main_content',
             'tab_slug' => 'general',
             'default' => '',
+            'dynamic_content' => 'text'
         );
 
         return $fields;

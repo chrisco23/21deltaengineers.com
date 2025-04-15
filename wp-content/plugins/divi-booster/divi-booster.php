@@ -4,13 +4,13 @@ Plugin Name: Divi Booster
 Plugin URI: 
 Description: Bug fixes and enhancements for Elegant Themes' Divi Theme.
 Author: Dan Mossop
-Version: 4.8
+Version: 4.8.1
 Requires PHP: 5.3
 Author URI: https://divibooster.com
 */
 
 if (!defined('BOOSTER_VERSION')) {
-    define('BOOSTER_VERSION', '4.8');
+    define('BOOSTER_VERSION', '4.8.1');
 }
 
 if (!function_exists('dbdb_file')) {
@@ -145,11 +145,12 @@ if (version_compare(phpversion(), '5.3', '>=')) {
                     'pagebuilder' => 'Divi Builder',
                     'pagebuilder-divi' => 'General',
                     'pagebuilder-classic' => 'Classic Builder',
-                    'pagebuilder-visual' => 'Visual Builder',
+                    'pagebuilder-visual' => 'Visual Builder (Divi 4 and Earlier)',
                     'modules' => 'Modules',
                     'modules-accordion' => 'Accordion',
                     //'modules-blurb'=>'Blurb',
                     'modules-countdown' => 'Countdown',
+                    'modules-subscribe' => 'Email Optin',
                     'modules-gallery' => 'Gallery',
                     'modules-headerfullwidth' => 'Header (Full Width)',
                     'modules-map' => 'Map',
@@ -159,7 +160,6 @@ if (version_compare(phpversion(), '5.3', '>=')) {
                     'modules-postnav' => 'Post Navigation',
                     'modules-postslider' => 'Post Slider',
                     'modules-pricing' => 'Pricing Table',
-                    'modules-subscribe' => 'Signup',
                     'modules-slider' => 'Slider',
                     'modules-text' => 'Text',
                     'plugins' => 'Plugins',

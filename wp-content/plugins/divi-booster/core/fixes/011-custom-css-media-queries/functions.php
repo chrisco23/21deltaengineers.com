@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 
 // Add body classes indicating device type
 function wtfdivi011_add_body_classes($classes) {
-    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+    $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 
     if (empty($user_agent)) {
         return $classes;

@@ -1,0 +1,769 @@
+====================================================
+open log file: 2025-04-15 23:24:46
+[2025-04-15 23:24:46][notice]Scanning images: 29 found 
+[2025-04-15 23:24:47][notice]Start optimizing images: id:6
+[2025-04-15 23:24:47][notice]Start WebP conversion 21dlogo.jpg
+[2025-04-15 23:24:47][notice]Converting 21dlogo.jpg to WebP succeeded.
+[2025-04-15 23:24:47][notice]Start AVIF conversion:21dlogo.jpg
+[2025-04-15 23:24:47][notice]test imagick 21dlogo.jpg
+[2025-04-15 23:24:47][notice]Converting 21dlogo.jpg to AVIF succeeded.
+[2025-04-15 23:24:47][notice]Optimizing image id:6 succeeded.
+[2025-04-15 23:24:47][notice]Start optimizing images: id:7
+[2025-04-15 23:24:47][notice]Start WebP conversion 21dlogo1.jpg
+[2025-04-15 23:24:47][notice]Converting 21dlogo1.jpg to WebP succeeded.
+[2025-04-15 23:24:47][notice]Start AVIF conversion:21dlogo1.jpg
+[2025-04-15 23:24:47][notice]test imagick 21dlogo1.jpg
+[2025-04-15 23:24:47][notice]Converting 21dlogo1.jpg to AVIF succeeded.
+[2025-04-15 23:24:47][notice]Optimizing image id:7 succeeded.
+[2025-04-15 23:24:47][notice]Start optimizing images: id:8
+[2025-04-15 23:24:47][notice]Start WebP conversion 21dlogo2.jpg
+[2025-04-15 23:24:47][notice]Converting 21dlogo2.jpg to WebP succeeded.
+[2025-04-15 23:24:47][notice]Start AVIF conversion:21dlogo2.jpg
+[2025-04-15 23:24:47][notice]test imagick 21dlogo2.jpg
+[2025-04-15 23:24:47][notice]Converting 21dlogo2.jpg to AVIF succeeded.
+[2025-04-15 23:24:47][notice]Optimizing image id:8 succeeded.
+[2025-04-15 23:24:47][notice]Start optimizing images: id:9
+[2025-04-15 23:24:47][notice]Start WebP conversion header.jpg
+[2025-04-15 23:24:47][notice]Converting header.jpg to WebP succeeded.
+[2025-04-15 23:24:47][notice]Start AVIF conversion:header.jpg
+[2025-04-15 23:24:47][notice]test imagick header.jpg
+[2025-04-15 23:24:48][notice]Converting header.jpg to AVIF succeeded.
+[2025-04-15 23:24:48][notice]Optimizing image id:9 succeeded.
+[2025-04-15 23:24:48][notice]Start optimizing images: id:171
+[2025-04-15 23:24:48][notice]Start WebP conversion cropped-21delta_hdr_text_overlay1.jpg
+[2025-04-15 23:24:48][notice]Converting cropped-21delta_hdr_text_overlay1.jpg to WebP succeeded.
+[2025-04-15 23:24:48][notice]Start WebP conversion cropped-21delta_hdr_text_overlay1-150x150.jpg
+[2025-04-15 23:24:48][notice]Converting cropped-21delta_hdr_text_overlay1-150x150.jpg to WebP succeeded.
+[2025-04-15 23:24:48][notice]Start WebP conversion cropped-21delta_hdr_text_overlay1-300x102.jpg
+[2025-04-15 23:24:48][notice]Converting cropped-21delta_hdr_text_overlay1-300x102.jpg to WebP succeeded.
+[2025-04-15 23:24:48][notice]Start WebP conversion cropped-21delta_hdr_text_overlay1-1000x288.jpg
+[2025-04-15 23:24:48][notice]Converting cropped-21delta_hdr_text_overlay1-1000x288.jpg to WebP succeeded.
+[2025-04-15 23:24:48][notice]Start WebP conversion cropped-21delta_hdr_text_overlay1-1000x288.jpg
+[2025-04-15 23:24:48][notice]Converting cropped-21delta_hdr_text_overlay1-1000x288.jpg to WebP succeeded.
+[2025-04-15 23:24:48][notice]Start WebP conversion cropped-21delta_hdr_text_overlay1-500x170.jpg
+[2025-04-15 23:24:48][notice]Converting cropped-21delta_hdr_text_overlay1-500x170.jpg to WebP succeeded.
+[2025-04-15 23:24:48][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay1.jpg
+[2025-04-15 23:24:48][notice]test imagick cropped-21delta_hdr_text_overlay1.jpg
+[2025-04-15 23:24:48][notice]Converting cropped-21delta_hdr_text_overlay1.jpg to AVIF succeeded.
+[2025-04-15 23:24:48][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay1-150x150.jpg
+[2025-04-15 23:24:48][notice]test imagick cropped-21delta_hdr_text_overlay1-150x150.jpg
+[2025-04-15 23:24:48][notice]Converting cropped-21delta_hdr_text_overlay1-150x150.jpg to AVIF succeeded.
+[2025-04-15 23:24:48][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay1-300x102.jpg
+[2025-04-15 23:24:48][notice]test imagick cropped-21delta_hdr_text_overlay1-300x102.jpg
+[2025-04-15 23:24:48][notice]Converting cropped-21delta_hdr_text_overlay1-300x102.jpg to AVIF succeeded.
+[2025-04-15 23:24:48][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay1-1000x288.jpg
+[2025-04-15 23:24:48][notice]test imagick cropped-21delta_hdr_text_overlay1-1000x288.jpg
+[2025-04-15 23:24:49][notice]Converting cropped-21delta_hdr_text_overlay1-1000x288.jpg to AVIF succeeded.
+[2025-04-15 23:24:49][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay1-1000x288.jpg
+[2025-04-15 23:24:49][notice]test imagick cropped-21delta_hdr_text_overlay1-1000x288.jpg
+[2025-04-15 23:24:49][notice]Converting cropped-21delta_hdr_text_overlay1-1000x288.jpg to AVIF succeeded.
+[2025-04-15 23:24:49][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay1-500x170.jpg
+[2025-04-15 23:24:49][notice]test imagick cropped-21delta_hdr_text_overlay1-500x170.jpg
+[2025-04-15 23:24:49][notice]Converting cropped-21delta_hdr_text_overlay1-500x170.jpg to AVIF succeeded.
+[2025-04-15 23:24:49][notice]Optimizing image id:171 succeeded.
+[2025-04-15 23:24:49][notice]End request cost time:2.
+[2025-04-15 23:24:51][notice]Start optimizing images: id:172
+[2025-04-15 23:24:51][notice]Start WebP conversion cropped-21delta_hdr_text_overlay2.jpg
+[2025-04-15 23:24:52][notice]Converting cropped-21delta_hdr_text_overlay2.jpg to WebP succeeded.
+[2025-04-15 23:24:52][notice]Start WebP conversion cropped-21delta_hdr_text_overlay2-150x150.jpg
+[2025-04-15 23:24:52][notice]Converting cropped-21delta_hdr_text_overlay2-150x150.jpg to WebP succeeded.
+[2025-04-15 23:24:52][notice]Start WebP conversion cropped-21delta_hdr_text_overlay2-300x102.jpg
+[2025-04-15 23:24:52][notice]Converting cropped-21delta_hdr_text_overlay2-300x102.jpg to WebP succeeded.
+[2025-04-15 23:24:52][notice]Start WebP conversion cropped-21delta_hdr_text_overlay2-1000x288.jpg
+[2025-04-15 23:24:52][notice]Converting cropped-21delta_hdr_text_overlay2-1000x288.jpg to WebP succeeded.
+[2025-04-15 23:24:52][notice]Start WebP conversion cropped-21delta_hdr_text_overlay2-1000x288.jpg
+[2025-04-15 23:24:52][notice]Converting cropped-21delta_hdr_text_overlay2-1000x288.jpg to WebP succeeded.
+[2025-04-15 23:24:52][notice]Start WebP conversion cropped-21delta_hdr_text_overlay2-500x170.jpg
+[2025-04-15 23:24:52][notice]Converting cropped-21delta_hdr_text_overlay2-500x170.jpg to WebP succeeded.
+[2025-04-15 23:24:52][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay2.jpg
+[2025-04-15 23:24:52][notice]test imagick cropped-21delta_hdr_text_overlay2.jpg
+[2025-04-15 23:24:52][notice]Converting cropped-21delta_hdr_text_overlay2.jpg to AVIF succeeded.
+[2025-04-15 23:24:52][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay2-150x150.jpg
+[2025-04-15 23:24:52][notice]test imagick cropped-21delta_hdr_text_overlay2-150x150.jpg
+[2025-04-15 23:24:52][notice]Converting cropped-21delta_hdr_text_overlay2-150x150.jpg to AVIF succeeded.
+[2025-04-15 23:24:52][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay2-300x102.jpg
+[2025-04-15 23:24:52][notice]test imagick cropped-21delta_hdr_text_overlay2-300x102.jpg
+[2025-04-15 23:24:52][notice]Converting cropped-21delta_hdr_text_overlay2-300x102.jpg to AVIF succeeded.
+[2025-04-15 23:24:52][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay2-1000x288.jpg
+[2025-04-15 23:24:52][notice]test imagick cropped-21delta_hdr_text_overlay2-1000x288.jpg
+[2025-04-15 23:24:52][notice]Converting cropped-21delta_hdr_text_overlay2-1000x288.jpg to AVIF succeeded.
+[2025-04-15 23:24:52][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay2-1000x288.jpg
+[2025-04-15 23:24:52][notice]test imagick cropped-21delta_hdr_text_overlay2-1000x288.jpg
+[2025-04-15 23:24:52][notice]Converting cropped-21delta_hdr_text_overlay2-1000x288.jpg to AVIF succeeded.
+[2025-04-15 23:24:52][notice]Start AVIF conversion:cropped-21delta_hdr_text_overlay2-500x170.jpg
+[2025-04-15 23:24:52][notice]test imagick cropped-21delta_hdr_text_overlay2-500x170.jpg
+[2025-04-15 23:24:53][notice]Converting cropped-21delta_hdr_text_overlay2-500x170.jpg to AVIF succeeded.
+[2025-04-15 23:24:53][notice]Optimizing image id:172 succeeded.
+[2025-04-15 23:24:53][notice]Start optimizing images: id:175
+[2025-04-15 23:24:53][notice]Start WebP conversion cropped-header_newfax1.png
+[2025-04-15 23:24:53][notice]Converting cropped-header_newfax1.png to WebP succeeded.
+[2025-04-15 23:24:53][notice]Start WebP conversion cropped-header_newfax1-150x150.png
+[2025-04-15 23:24:53][notice]Converting cropped-header_newfax1-150x150.png to WebP succeeded.
+[2025-04-15 23:24:53][notice]Start WebP conversion cropped-header_newfax1-300x101.png
+[2025-04-15 23:24:53][notice]Converting cropped-header_newfax1-300x101.png to WebP succeeded.
+[2025-04-15 23:24:53][notice]Start WebP conversion cropped-header_newfax1-1000x288.png
+[2025-04-15 23:24:53][notice]Converting cropped-header_newfax1-1000x288.png to WebP succeeded.
+[2025-04-15 23:24:53][notice]Start WebP conversion cropped-header_newfax1-1000x288.png
+[2025-04-15 23:24:53][notice]Converting cropped-header_newfax1-1000x288.png to WebP succeeded.
+[2025-04-15 23:24:53][notice]Start WebP conversion cropped-header_newfax1-500x169.png
+[2025-04-15 23:24:53][notice]Converting cropped-header_newfax1-500x169.png to WebP succeeded.
+[2025-04-15 23:24:53][notice]Start AVIF conversion:cropped-header_newfax1.png
+[2025-04-15 23:24:53][notice]test imagick cropped-header_newfax1.png
+[2025-04-15 23:24:54][notice]Converting cropped-header_newfax1.png to AVIF succeeded.
+[2025-04-15 23:24:54][notice]Start AVIF conversion:cropped-header_newfax1-150x150.png
+[2025-04-15 23:24:54][notice]test imagick cropped-header_newfax1-150x150.png
+[2025-04-15 23:24:54][notice]Converting cropped-header_newfax1-150x150.png to AVIF succeeded.
+[2025-04-15 23:24:54][notice]Start AVIF conversion:cropped-header_newfax1-300x101.png
+[2025-04-15 23:24:54][notice]test imagick cropped-header_newfax1-300x101.png
+[2025-04-15 23:24:54][notice]Converting cropped-header_newfax1-300x101.png to AVIF succeeded.
+[2025-04-15 23:24:54][notice]Start AVIF conversion:cropped-header_newfax1-1000x288.png
+[2025-04-15 23:24:54][notice]test imagick cropped-header_newfax1-1000x288.png
+[2025-04-15 23:24:54][notice]Converting cropped-header_newfax1-1000x288.png to AVIF succeeded.
+[2025-04-15 23:24:54][notice]Start AVIF conversion:cropped-header_newfax1-1000x288.png
+[2025-04-15 23:24:54][notice]test imagick cropped-header_newfax1-1000x288.png
+[2025-04-15 23:24:54][notice]Converting cropped-header_newfax1-1000x288.png to AVIF succeeded.
+[2025-04-15 23:24:54][notice]Start AVIF conversion:cropped-header_newfax1-500x169.png
+[2025-04-15 23:24:54][notice]test imagick cropped-header_newfax1-500x169.png
+[2025-04-15 23:24:54][notice]Converting cropped-header_newfax1-500x169.png to AVIF succeeded.
+[2025-04-15 23:24:54][notice]Optimizing image id:175 succeeded.
+[2025-04-15 23:24:54][notice]Start optimizing images: id:200
+[2025-04-15 23:24:54][notice]Start WebP conversion Service-Disabled-Vet-Logo.jpg
+[2025-04-15 23:24:55][notice]Converting Service-Disabled-Vet-Logo.jpg to WebP succeeded.
+[2025-04-15 23:24:55][notice]Start WebP conversion Service-Disabled-Vet-Logo-150x150.jpg
+[2025-04-15 23:24:55][notice]Converting Service-Disabled-Vet-Logo-150x150.jpg to WebP succeeded.
+[2025-04-15 23:24:55][notice]Start WebP conversion Service-Disabled-Vet-Logo-300x300.jpg
+[2025-04-15 23:24:55][notice]Converting Service-Disabled-Vet-Logo-300x300.jpg to WebP succeeded.
+[2025-04-15 23:24:55][notice]Start WebP conversion Service-Disabled-Vet-Logo-900x288.jpg
+[2025-04-15 23:24:55][notice]Converting Service-Disabled-Vet-Logo-900x288.jpg to WebP succeeded.
+[2025-04-15 23:24:55][notice]Start WebP conversion Service-Disabled-Vet-Logo-900x288.jpg
+[2025-04-15 23:24:55][notice]Converting Service-Disabled-Vet-Logo-900x288.jpg to WebP succeeded.
+[2025-04-15 23:24:55][notice]Start WebP conversion Service-Disabled-Vet-Logo-300x300.jpg
+[2025-04-15 23:24:55][notice]Converting Service-Disabled-Vet-Logo-300x300.jpg to WebP succeeded.
+[2025-04-15 23:24:55][notice]Start AVIF conversion:Service-Disabled-Vet-Logo.jpg
+[2025-04-15 23:24:55][notice]test imagick Service-Disabled-Vet-Logo.jpg
+[2025-04-15 23:24:56][notice]Converting Service-Disabled-Vet-Logo.jpg to AVIF succeeded.
+[2025-04-15 23:24:56][notice]Start AVIF conversion:Service-Disabled-Vet-Logo-150x150.jpg
+[2025-04-15 23:24:56][notice]test imagick Service-Disabled-Vet-Logo-150x150.jpg
+[2025-04-15 23:24:56][notice]Converting Service-Disabled-Vet-Logo-150x150.jpg to AVIF succeeded.
+[2025-04-15 23:24:56][notice]Start AVIF conversion:Service-Disabled-Vet-Logo-300x300.jpg
+[2025-04-15 23:24:56][notice]test imagick Service-Disabled-Vet-Logo-300x300.jpg
+[2025-04-15 23:24:56][notice]Converting Service-Disabled-Vet-Logo-300x300.jpg to AVIF succeeded.
+[2025-04-15 23:24:56][notice]Start AVIF conversion:Service-Disabled-Vet-Logo-900x288.jpg
+[2025-04-15 23:24:56][notice]test imagick Service-Disabled-Vet-Logo-900x288.jpg
+[2025-04-15 23:24:56][notice]Converting Service-Disabled-Vet-Logo-900x288.jpg to AVIF succeeded.
+[2025-04-15 23:24:56][notice]Start AVIF conversion:Service-Disabled-Vet-Logo-900x288.jpg
+[2025-04-15 23:24:56][notice]test imagick Service-Disabled-Vet-Logo-900x288.jpg
+[2025-04-15 23:24:57][notice]Converting Service-Disabled-Vet-Logo-900x288.jpg to AVIF succeeded.
+[2025-04-15 23:24:57][notice]Start AVIF conversion:Service-Disabled-Vet-Logo-300x300.jpg
+[2025-04-15 23:24:57][notice]test imagick Service-Disabled-Vet-Logo-300x300.jpg
+[2025-04-15 23:24:57][notice]Converting Service-Disabled-Vet-Logo-300x300.jpg to AVIF succeeded.
+[2025-04-15 23:24:57][notice]Optimizing image id:200 succeeded.
+[2025-04-15 23:24:57][notice]Start optimizing images: id:284
+[2025-04-15 23:24:57][notice]Start WebP conversion 21D-Logo-.5-Inch.jpg
+[2025-04-15 23:24:57][notice]Converting 21D-Logo-.5-Inch.jpg to WebP succeeded.
+[2025-04-15 23:24:57][notice]Start AVIF conversion:21D-Logo-.5-Inch.jpg
+[2025-04-15 23:24:57][notice]test imagick 21D-Logo-.5-Inch.jpg
+[2025-04-15 23:24:57][notice]Converting 21D-Logo-.5-Inch.jpg to AVIF succeeded.
+[2025-04-15 23:24:57][notice]Optimizing image id:284 succeeded.
+[2025-04-15 23:24:57][notice]Start optimizing images: id:287
+[2025-04-15 23:24:57][notice]Start WebP conversion dawn-twilight-dusk-electricity.jpg
+[2025-04-15 23:24:57][notice]Converting dawn-twilight-dusk-electricity.jpg to WebP succeeded.
+[2025-04-15 23:24:57][notice]Start AVIF conversion:dawn-twilight-dusk-electricity.jpg
+[2025-04-15 23:24:57][notice]test imagick dawn-twilight-dusk-electricity.jpg
+[2025-04-15 23:24:57][notice]Converting dawn-twilight-dusk-electricity.jpg to AVIF succeeded.
+[2025-04-15 23:24:57][notice]Optimizing image id:287 succeeded.
+[2025-04-15 23:24:57][notice]End request cost time:6.
+[2025-04-15 23:24:58][notice]Start optimizing images: id:288
+[2025-04-15 23:24:58][notice]Start WebP conversion pexels-photo-157827.jpeg
+[2025-04-15 23:24:58][notice]Converting pexels-photo-157827.jpeg to WebP succeeded.
+[2025-04-15 23:24:58][notice]Start AVIF conversion:pexels-photo-157827.jpeg
+[2025-04-15 23:24:58][notice]test imagick pexels-photo-157827.jpeg
+[2025-04-15 23:24:59][notice]Converting pexels-photo-157827.jpeg to AVIF succeeded.
+[2025-04-15 23:24:59][notice]Optimizing image id:288 succeeded.
+[2025-04-15 23:24:59][notice]Start optimizing images: id:289
+[2025-04-15 23:24:59][notice]Start WebP conversion pexels-photo-171428.jpeg
+[2025-04-15 23:24:59][notice]Converting pexels-photo-171428.jpeg to WebP succeeded.
+[2025-04-15 23:24:59][notice]Start AVIF conversion:pexels-photo-171428.jpeg
+[2025-04-15 23:24:59][notice]test imagick pexels-photo-171428.jpeg
+[2025-04-15 23:25:08][notice]Converting pexels-photo-171428.jpeg to AVIF succeeded.
+[2025-04-15 23:25:08][notice]Optimizing image id:289 succeeded.
+[2025-04-15 23:25:08][notice]Start optimizing images: id:290
+[2025-04-15 23:25:08][notice]Start WebP conversion pexels-photo-323133.jpeg
+[2025-04-15 23:25:08][notice]Converting pexels-photo-323133.jpeg to WebP succeeded.
+[2025-04-15 23:25:08][notice]Start AVIF conversion:pexels-photo-323133.jpeg
+[2025-04-15 23:25:08][notice]test imagick pexels-photo-323133.jpeg
+[2025-04-15 23:25:08][notice]Converting pexels-photo-323133.jpeg to AVIF succeeded.
+[2025-04-15 23:25:08][notice]Optimizing image id:290 succeeded.
+[2025-04-15 23:25:08][notice]Start optimizing images: id:291
+[2025-04-15 23:25:08][notice]Start WebP conversion pexels-photo-415033.jpeg
+[2025-04-15 23:25:09][notice]Converting pexels-photo-415033.jpeg to WebP succeeded.
+[2025-04-15 23:25:09][notice]Start AVIF conversion:pexels-photo-415033.jpeg
+[2025-04-15 23:25:09][notice]test imagick pexels-photo-415033.jpeg
+[2025-04-15 23:25:10][notice]Converting pexels-photo-415033.jpeg to AVIF succeeded.
+[2025-04-15 23:25:10][notice]Optimizing image id:291 succeeded.
+[2025-04-15 23:25:10][notice]Start optimizing images: id:292
+[2025-04-15 23:25:10][notice]Start WebP conversion pexels-photo-415033_900x600.jpg
+[2025-04-15 23:25:10][notice]Converting pexels-photo-415033_900x600.jpg to WebP succeeded.
+[2025-04-15 23:25:10][notice]Start AVIF conversion:pexels-photo-415033_900x600.jpg
+[2025-04-15 23:25:10][notice]test imagick pexels-photo-415033_900x600.jpg
+[2025-04-15 23:25:10][notice]Converting pexels-photo-415033_900x600.jpg to AVIF succeeded.
+[2025-04-15 23:25:10][notice]Optimizing image id:292 succeeded.
+[2025-04-15 23:25:10][notice]End request cost time:12.
+[2025-04-15 23:25:11][notice]Start optimizing images: id:451
+[2025-04-15 23:25:11][notice]Start WebP conversion extend_chilled_water_loop_schematic.png
+[2025-04-15 23:25:11][notice]Converting extend_chilled_water_loop_schematic.png to WebP succeeded.
+[2025-04-15 23:25:11][notice]Start WebP conversion extend_chilled_water_loop_schematic-300x217.png
+[2025-04-15 23:25:11][notice]Converting extend_chilled_water_loop_schematic-300x217.png to WebP succeeded.
+[2025-04-15 23:25:11][notice]Start WebP conversion extend_chilled_water_loop_schematic-150x150.png
+[2025-04-15 23:25:11][notice]Converting extend_chilled_water_loop_schematic-150x150.png to WebP succeeded.
+[2025-04-15 23:25:11][notice]Start WebP conversion extend_chilled_water_loop_schematic-400x250.png
+[2025-04-15 23:25:11][notice]Converting extend_chilled_water_loop_schematic-400x250.png to WebP succeeded.
+[2025-04-15 23:25:11][notice]Start WebP conversion extend_chilled_water_loop_schematic-400x284.png
+[2025-04-15 23:25:11][notice]Converting extend_chilled_water_loop_schematic-400x284.png to WebP succeeded.
+[2025-04-15 23:25:11][notice]Start WebP conversion extend_chilled_water_loop_schematic-510x382.png
+[2025-04-15 23:25:11][notice]Converting extend_chilled_water_loop_schematic-510x382.png to WebP succeeded.
+[2025-04-15 23:25:11][notice]Start WebP conversion extend_chilled_water_loop_schematic-400x516.png
+[2025-04-15 23:25:11][notice]Converting extend_chilled_water_loop_schematic-400x516.png to WebP succeeded.
+[2025-04-15 23:25:11][notice]Start WebP conversion extend_chilled_water_loop_schematic-480x347.png
+[2025-04-15 23:25:11][notice]Converting extend_chilled_water_loop_schematic-480x347.png to WebP succeeded.
+[2025-04-15 23:25:11][notice]Start AVIF conversion:extend_chilled_water_loop_schematic.png
+[2025-04-15 23:25:11][notice]test imagick extend_chilled_water_loop_schematic.png
+[2025-04-15 23:25:12][notice]Converting extend_chilled_water_loop_schematic.png to AVIF succeeded.
+[2025-04-15 23:25:12][notice]Start AVIF conversion:extend_chilled_water_loop_schematic-300x217.png
+[2025-04-15 23:25:12][notice]test imagick extend_chilled_water_loop_schematic-300x217.png
+[2025-04-15 23:25:12][notice]Converting extend_chilled_water_loop_schematic-300x217.png to AVIF succeeded.
+[2025-04-15 23:25:12][notice]Start AVIF conversion:extend_chilled_water_loop_schematic-150x150.png
+[2025-04-15 23:25:12][notice]test imagick extend_chilled_water_loop_schematic-150x150.png
+[2025-04-15 23:25:12][notice]Converting extend_chilled_water_loop_schematic-150x150.png to AVIF succeeded.
+[2025-04-15 23:25:12][notice]Start AVIF conversion:extend_chilled_water_loop_schematic-400x250.png
+[2025-04-15 23:25:12][notice]test imagick extend_chilled_water_loop_schematic-400x250.png
+[2025-04-15 23:25:12][notice]Converting extend_chilled_water_loop_schematic-400x250.png to AVIF succeeded.
+[2025-04-15 23:25:12][notice]Start AVIF conversion:extend_chilled_water_loop_schematic-400x284.png
+[2025-04-15 23:25:12][notice]test imagick extend_chilled_water_loop_schematic-400x284.png
+[2025-04-15 23:25:12][notice]Converting extend_chilled_water_loop_schematic-400x284.png to AVIF succeeded.
+[2025-04-15 23:25:12][notice]Start AVIF conversion:extend_chilled_water_loop_schematic-510x382.png
+[2025-04-15 23:25:12][notice]test imagick extend_chilled_water_loop_schematic-510x382.png
+[2025-04-15 23:25:12][notice]Converting extend_chilled_water_loop_schematic-510x382.png to AVIF succeeded.
+[2025-04-15 23:25:12][notice]Start AVIF conversion:extend_chilled_water_loop_schematic-400x516.png
+[2025-04-15 23:25:12][notice]test imagick extend_chilled_water_loop_schematic-400x516.png
+[2025-04-15 23:25:12][notice]Converting extend_chilled_water_loop_schematic-400x516.png to AVIF succeeded.
+[2025-04-15 23:25:12][notice]Start AVIF conversion:extend_chilled_water_loop_schematic-480x347.png
+[2025-04-15 23:25:12][notice]test imagick extend_chilled_water_loop_schematic-480x347.png
+[2025-04-15 23:25:13][notice]Converting extend_chilled_water_loop_schematic-480x347.png to AVIF succeeded.
+[2025-04-15 23:25:13][notice]Optimizing image id:451 succeeded.
+[2025-04-15 23:25:13][notice]Start optimizing images: id:454
+[2025-04-15 23:25:13][notice]Start WebP conversion replace_steam_2.png
+[2025-04-15 23:25:13][notice]Converting replace_steam_2.png to WebP succeeded.
+[2025-04-15 23:25:13][notice]Start WebP conversion replace_steam_2-300x296.png
+[2025-04-15 23:25:13][notice]Converting replace_steam_2-300x296.png to WebP succeeded.
+[2025-04-15 23:25:13][notice]Start WebP conversion replace_steam_2-150x150.png
+[2025-04-15 23:25:13][notice]Converting replace_steam_2-150x150.png to WebP succeeded.
+[2025-04-15 23:25:13][notice]Start WebP conversion replace_steam_2-400x250.png
+[2025-04-15 23:25:13][notice]Converting replace_steam_2-400x250.png to WebP succeeded.
+[2025-04-15 23:25:13][notice]Start WebP conversion replace_steam_2-400x284.png
+[2025-04-15 23:25:13][notice]Converting replace_steam_2-400x284.png to WebP succeeded.
+[2025-04-15 23:25:13][notice]Start WebP conversion replace_steam_2-441x382.png
+[2025-04-15 23:25:13][notice]Converting replace_steam_2-441x382.png to WebP succeeded.
+[2025-04-15 23:25:13][notice]Start WebP conversion replace_steam_2-400x435.png
+[2025-04-15 23:25:13][notice]Converting replace_steam_2-400x435.png to WebP succeeded.
+[2025-04-15 23:25:13][notice]Start AVIF conversion:replace_steam_2.png
+[2025-04-15 23:25:13][notice]test imagick replace_steam_2.png
+[2025-04-15 23:25:14][notice]Converting replace_steam_2.png to AVIF succeeded.
+[2025-04-15 23:25:14][notice]Start AVIF conversion:replace_steam_2-300x296.png
+[2025-04-15 23:25:14][notice]test imagick replace_steam_2-300x296.png
+[2025-04-15 23:25:14][notice]Converting replace_steam_2-300x296.png to AVIF succeeded.
+[2025-04-15 23:25:14][notice]Start AVIF conversion:replace_steam_2-150x150.png
+[2025-04-15 23:25:14][notice]test imagick replace_steam_2-150x150.png
+[2025-04-15 23:25:14][notice]Converting replace_steam_2-150x150.png to AVIF succeeded.
+[2025-04-15 23:25:14][notice]Start AVIF conversion:replace_steam_2-400x250.png
+[2025-04-15 23:25:14][notice]test imagick replace_steam_2-400x250.png
+[2025-04-15 23:25:14][notice]Converting replace_steam_2-400x250.png to AVIF succeeded.
+[2025-04-15 23:25:14][notice]Start AVIF conversion:replace_steam_2-400x284.png
+[2025-04-15 23:25:14][notice]test imagick replace_steam_2-400x284.png
+[2025-04-15 23:25:14][notice]Converting replace_steam_2-400x284.png to AVIF succeeded.
+[2025-04-15 23:25:14][notice]Start AVIF conversion:replace_steam_2-441x382.png
+[2025-04-15 23:25:14][notice]test imagick replace_steam_2-441x382.png
+[2025-04-15 23:25:15][notice]Converting replace_steam_2-441x382.png to AVIF succeeded.
+[2025-04-15 23:25:15][notice]Start AVIF conversion:replace_steam_2-400x435.png
+[2025-04-15 23:25:15][notice]test imagick replace_steam_2-400x435.png
+[2025-04-15 23:25:16][notice]Converting replace_steam_2-400x435.png to AVIF succeeded.
+[2025-04-15 23:25:16][notice]Optimizing image id:454 succeeded.
+[2025-04-15 23:25:16][notice]Start optimizing images: id:455
+[2025-04-15 23:25:16][notice]Start WebP conversion resign_and_resurface.jpg
+[2025-04-15 23:25:16][notice]Converting resign_and_resurface.jpg to WebP succeeded.
+[2025-04-15 23:25:16][notice]WebP size larger than original size, deleting file resign_and_resurface.jpg.webp.
+[2025-04-15 23:25:16][notice]Start WebP conversion resign_and_resurface-300x188.jpg
+[2025-04-15 23:25:16][notice]Converting resign_and_resurface-300x188.jpg to WebP succeeded.
+[2025-04-15 23:25:16][notice]Start WebP conversion resign_and_resurface-150x150.jpg
+[2025-04-15 23:25:16][notice]Converting resign_and_resurface-150x150.jpg to WebP succeeded.
+[2025-04-15 23:25:16][notice]Start WebP conversion resign_and_resurface-400x250.jpg
+[2025-04-15 23:25:16][notice]Converting resign_and_resurface-400x250.jpg to WebP succeeded.
+[2025-04-15 23:25:16][notice]Start WebP conversion resign_and_resurface-400x284.jpg
+[2025-04-15 23:25:16][notice]Converting resign_and_resurface-400x284.jpg to WebP succeeded.
+[2025-04-15 23:25:16][notice]Start WebP conversion resign_and_resurface-510x382.jpg
+[2025-04-15 23:25:16][notice]Converting resign_and_resurface-510x382.jpg to WebP succeeded.
+[2025-04-15 23:25:16][notice]Start WebP conversion resign_and_resurface-400x388.jpg
+[2025-04-15 23:25:16][notice]Converting resign_and_resurface-400x388.jpg to WebP succeeded.
+[2025-04-15 23:25:16][notice]Start WebP conversion resign_and_resurface-480x300.jpg
+[2025-04-15 23:25:16][notice]Converting resign_and_resurface-480x300.jpg to WebP succeeded.
+[2025-04-15 23:25:16][notice]Start AVIF conversion:resign_and_resurface.jpg
+[2025-04-15 23:25:16][notice]test imagick resign_and_resurface.jpg
+[2025-04-15 23:25:17][notice]Converting resign_and_resurface.jpg to AVIF succeeded.
+[2025-04-15 23:25:17][notice]Start AVIF conversion:resign_and_resurface-300x188.jpg
+[2025-04-15 23:25:17][notice]test imagick resign_and_resurface-300x188.jpg
+[2025-04-15 23:25:17][notice]Converting resign_and_resurface-300x188.jpg to AVIF succeeded.
+[2025-04-15 23:25:17][notice]Start AVIF conversion:resign_and_resurface-150x150.jpg
+[2025-04-15 23:25:17][notice]test imagick resign_and_resurface-150x150.jpg
+[2025-04-15 23:25:17][notice]Converting resign_and_resurface-150x150.jpg to AVIF succeeded.
+[2025-04-15 23:25:17][notice]Start AVIF conversion:resign_and_resurface-400x250.jpg
+[2025-04-15 23:25:17][notice]test imagick resign_and_resurface-400x250.jpg
+[2025-04-15 23:25:17][notice]Converting resign_and_resurface-400x250.jpg to AVIF succeeded.
+[2025-04-15 23:25:17][notice]Start AVIF conversion:resign_and_resurface-400x284.jpg
+[2025-04-15 23:25:17][notice]test imagick resign_and_resurface-400x284.jpg
+[2025-04-15 23:25:17][notice]Converting resign_and_resurface-400x284.jpg to AVIF succeeded.
+[2025-04-15 23:25:17][notice]Start AVIF conversion:resign_and_resurface-510x382.jpg
+[2025-04-15 23:25:17][notice]test imagick resign_and_resurface-510x382.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface-510x382.jpg to AVIF succeeded.
+[2025-04-15 23:25:18][notice]Start AVIF conversion:resign_and_resurface-400x388.jpg
+[2025-04-15 23:25:18][notice]test imagick resign_and_resurface-400x388.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface-400x388.jpg to AVIF succeeded.
+[2025-04-15 23:25:18][notice]Start AVIF conversion:resign_and_resurface-480x300.jpg
+[2025-04-15 23:25:18][notice]test imagick resign_and_resurface-480x300.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface-480x300.jpg to AVIF succeeded.
+[2025-04-15 23:25:18][notice]Optimizing image id:455 succeeded.
+[2025-04-15 23:25:18][notice]Start optimizing images: id:456
+[2025-04-15 23:25:18][notice]Start WebP conversion resign_and_resurface_2.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2.jpg to WebP succeeded.
+[2025-04-15 23:25:18][notice]Start WebP conversion resign_and_resurface_2-300x179.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2-300x179.jpg to WebP succeeded.
+[2025-04-15 23:25:18][notice]Start WebP conversion resign_and_resurface_2-150x150.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2-150x150.jpg to WebP succeeded.
+[2025-04-15 23:25:18][notice]Start WebP conversion resign_and_resurface_2-400x250.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2-400x250.jpg to WebP succeeded.
+[2025-04-15 23:25:18][notice]Start WebP conversion resign_and_resurface_2-400x284.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2-400x284.jpg to WebP succeeded.
+[2025-04-15 23:25:18][notice]Start WebP conversion resign_and_resurface_2-510x382.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2-510x382.jpg to WebP succeeded.
+[2025-04-15 23:25:18][notice]Start WebP conversion resign_and_resurface_2-400x419.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2-400x419.jpg to WebP succeeded.
+[2025-04-15 23:25:18][notice]Start WebP conversion resign_and_resurface_2-480x286.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2-480x286.jpg to WebP succeeded.
+[2025-04-15 23:25:18][notice]Start AVIF conversion:resign_and_resurface_2.jpg
+[2025-04-15 23:25:18][notice]test imagick resign_and_resurface_2.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2.jpg to AVIF succeeded.
+[2025-04-15 23:25:18][notice]Start AVIF conversion:resign_and_resurface_2-300x179.jpg
+[2025-04-15 23:25:18][notice]test imagick resign_and_resurface_2-300x179.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2-300x179.jpg to AVIF succeeded.
+[2025-04-15 23:25:18][notice]Start AVIF conversion:resign_and_resurface_2-150x150.jpg
+[2025-04-15 23:25:18][notice]test imagick resign_and_resurface_2-150x150.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2-150x150.jpg to AVIF succeeded.
+[2025-04-15 23:25:18][notice]Start AVIF conversion:resign_and_resurface_2-400x250.jpg
+[2025-04-15 23:25:18][notice]test imagick resign_and_resurface_2-400x250.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2-400x250.jpg to AVIF succeeded.
+[2025-04-15 23:25:18][notice]Start AVIF conversion:resign_and_resurface_2-400x284.jpg
+[2025-04-15 23:25:18][notice]test imagick resign_and_resurface_2-400x284.jpg
+[2025-04-15 23:25:18][notice]Converting resign_and_resurface_2-400x284.jpg to AVIF succeeded.
+[2025-04-15 23:25:18][notice]Start AVIF conversion:resign_and_resurface_2-510x382.jpg
+[2025-04-15 23:25:18][notice]test imagick resign_and_resurface_2-510x382.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_2-510x382.jpg to AVIF succeeded.
+[2025-04-15 23:25:19][notice]Start AVIF conversion:resign_and_resurface_2-400x419.jpg
+[2025-04-15 23:25:19][notice]test imagick resign_and_resurface_2-400x419.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_2-400x419.jpg to AVIF succeeded.
+[2025-04-15 23:25:19][notice]Start AVIF conversion:resign_and_resurface_2-480x286.jpg
+[2025-04-15 23:25:19][notice]test imagick resign_and_resurface_2-480x286.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_2-480x286.jpg to AVIF succeeded.
+[2025-04-15 23:25:19][notice]Optimizing image id:456 succeeded.
+[2025-04-15 23:25:19][notice]Start optimizing images: id:457
+[2025-04-15 23:25:19][notice]Start WebP conversion resign_and_resurface_3.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_3.jpg to WebP succeeded.
+[2025-04-15 23:25:19][notice]Start WebP conversion resign_and_resurface_3-300x225.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_3-300x225.jpg to WebP succeeded.
+[2025-04-15 23:25:19][notice]Start WebP conversion resign_and_resurface_3-150x150.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_3-150x150.jpg to WebP succeeded.
+[2025-04-15 23:25:19][notice]Start WebP conversion resign_and_resurface_3-768x576.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_3-768x576.jpg to WebP succeeded.
+[2025-04-15 23:25:19][notice]Start WebP conversion resign_and_resurface_3-400x250.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_3-400x250.jpg to WebP succeeded.
+[2025-04-15 23:25:19][notice]Start WebP conversion resign_and_resurface_3-400x284.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_3-400x284.jpg to WebP succeeded.
+[2025-04-15 23:25:19][notice]Start WebP conversion resign_and_resurface_3-510x382.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_3-510x382.jpg to WebP succeeded.
+[2025-04-15 23:25:19][notice]Start WebP conversion resign_and_resurface_3-400x516.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_3-400x516.jpg to WebP succeeded.
+[2025-04-15 23:25:19][notice]Start WebP conversion resign_and_resurface_3-480x360.jpg
+[2025-04-15 23:25:19][notice]Converting resign_and_resurface_3-480x360.jpg to WebP succeeded.
+[2025-04-15 23:25:19][notice]Start AVIF conversion:resign_and_resurface_3.jpg
+[2025-04-15 23:25:19][notice]test imagick resign_and_resurface_3.jpg
+[2025-04-15 23:25:20][notice]Converting resign_and_resurface_3.jpg to AVIF succeeded.
+[2025-04-15 23:25:20][notice]Start AVIF conversion:resign_and_resurface_3-300x225.jpg
+[2025-04-15 23:25:20][notice]test imagick resign_and_resurface_3-300x225.jpg
+[2025-04-15 23:25:20][notice]Converting resign_and_resurface_3-300x225.jpg to AVIF succeeded.
+[2025-04-15 23:25:20][notice]Start AVIF conversion:resign_and_resurface_3-150x150.jpg
+[2025-04-15 23:25:20][notice]test imagick resign_and_resurface_3-150x150.jpg
+[2025-04-15 23:25:20][notice]Converting resign_and_resurface_3-150x150.jpg to AVIF succeeded.
+[2025-04-15 23:25:20][notice]Start AVIF conversion:resign_and_resurface_3-768x576.jpg
+[2025-04-15 23:25:20][notice]test imagick resign_and_resurface_3-768x576.jpg
+[2025-04-15 23:25:20][notice]Converting resign_and_resurface_3-768x576.jpg to AVIF succeeded.
+[2025-04-15 23:25:20][notice]Start AVIF conversion:resign_and_resurface_3-400x250.jpg
+[2025-04-15 23:25:20][notice]test imagick resign_and_resurface_3-400x250.jpg
+[2025-04-15 23:25:20][notice]Converting resign_and_resurface_3-400x250.jpg to AVIF succeeded.
+[2025-04-15 23:25:20][notice]Start AVIF conversion:resign_and_resurface_3-400x284.jpg
+[2025-04-15 23:25:20][notice]test imagick resign_and_resurface_3-400x284.jpg
+[2025-04-15 23:25:20][notice]Converting resign_and_resurface_3-400x284.jpg to AVIF succeeded.
+[2025-04-15 23:25:20][notice]Start AVIF conversion:resign_and_resurface_3-510x382.jpg
+[2025-04-15 23:25:20][notice]test imagick resign_and_resurface_3-510x382.jpg
+[2025-04-15 23:25:20][notice]Converting resign_and_resurface_3-510x382.jpg to AVIF succeeded.
+[2025-04-15 23:25:20][notice]Start AVIF conversion:resign_and_resurface_3-400x516.jpg
+[2025-04-15 23:25:20][notice]test imagick resign_and_resurface_3-400x516.jpg
+[2025-04-15 23:25:21][notice]Converting resign_and_resurface_3-400x516.jpg to AVIF succeeded.
+[2025-04-15 23:25:21][notice]Start AVIF conversion:resign_and_resurface_3-480x360.jpg
+[2025-04-15 23:25:21][notice]test imagick resign_and_resurface_3-480x360.jpg
+[2025-04-15 23:25:21][notice]Converting resign_and_resurface_3-480x360.jpg to AVIF succeeded.
+[2025-04-15 23:25:21][notice]Optimizing image id:457 succeeded.
+[2025-04-15 23:25:21][notice]End request cost time:10.
+[2025-04-15 23:25:22][notice]Start optimizing images: id:458
+[2025-04-15 23:25:22][notice]Start WebP conversion wichita.png
+[2025-04-15 23:25:22][notice]Converting wichita.png to WebP succeeded.
+[2025-04-15 23:25:22][notice]Start WebP conversion wichita-300x177.png
+[2025-04-15 23:25:22][notice]Converting wichita-300x177.png to WebP succeeded.
+[2025-04-15 23:25:22][notice]Start WebP conversion wichita-150x150.png
+[2025-04-15 23:25:22][notice]Converting wichita-150x150.png to WebP succeeded.
+[2025-04-15 23:25:22][notice]Start WebP conversion wichita-400x250.png
+[2025-04-15 23:25:22][notice]Converting wichita-400x250.png to WebP succeeded.
+[2025-04-15 23:25:22][notice]Start WebP conversion wichita-400x284.png
+[2025-04-15 23:25:22][notice]Converting wichita-400x284.png to WebP succeeded.
+[2025-04-15 23:25:22][notice]Start WebP conversion wichita-510x308.png
+[2025-04-15 23:25:22][notice]Converting wichita-510x308.png to WebP succeeded.
+[2025-04-15 23:25:22][notice]Start WebP conversion wichita-400x308.png
+[2025-04-15 23:25:22][notice]Converting wichita-400x308.png to WebP succeeded.
+[2025-04-15 23:25:22][notice]Start WebP conversion wichita-480x283.png
+[2025-04-15 23:25:22][notice]Converting wichita-480x283.png to WebP succeeded.
+[2025-04-15 23:25:22][notice]Start AVIF conversion:wichita.png
+[2025-04-15 23:25:22][notice]test imagick wichita.png
+[2025-04-15 23:25:22][notice]Converting wichita.png to AVIF succeeded.
+[2025-04-15 23:25:22][notice]Start AVIF conversion:wichita-300x177.png
+[2025-04-15 23:25:22][notice]test imagick wichita-300x177.png
+[2025-04-15 23:25:22][notice]Converting wichita-300x177.png to AVIF succeeded.
+[2025-04-15 23:25:22][notice]Start AVIF conversion:wichita-150x150.png
+[2025-04-15 23:25:22][notice]test imagick wichita-150x150.png
+[2025-04-15 23:25:22][notice]Converting wichita-150x150.png to AVIF succeeded.
+[2025-04-15 23:25:22][notice]Start AVIF conversion:wichita-400x250.png
+[2025-04-15 23:25:22][notice]test imagick wichita-400x250.png
+[2025-04-15 23:25:22][notice]Converting wichita-400x250.png to AVIF succeeded.
+[2025-04-15 23:25:22][notice]Start AVIF conversion:wichita-400x284.png
+[2025-04-15 23:25:22][notice]test imagick wichita-400x284.png
+[2025-04-15 23:25:22][notice]Converting wichita-400x284.png to AVIF succeeded.
+[2025-04-15 23:25:22][notice]Start AVIF conversion:wichita-510x308.png
+[2025-04-15 23:25:22][notice]test imagick wichita-510x308.png
+[2025-04-15 23:25:23][notice]Converting wichita-510x308.png to AVIF succeeded.
+[2025-04-15 23:25:23][notice]Start AVIF conversion:wichita-400x308.png
+[2025-04-15 23:25:23][notice]test imagick wichita-400x308.png
+[2025-04-15 23:25:23][notice]Converting wichita-400x308.png to AVIF succeeded.
+[2025-04-15 23:25:23][notice]Start AVIF conversion:wichita-480x283.png
+[2025-04-15 23:25:23][notice]test imagick wichita-480x283.png
+[2025-04-15 23:25:23][notice]Converting wichita-480x283.png to AVIF succeeded.
+[2025-04-15 23:25:23][notice]Optimizing image id:458 succeeded.
+[2025-04-15 23:25:23][notice]Start optimizing images: id:459
+[2025-04-15 23:25:23][notice]Start WebP conversion wichita_photo.png
+[2025-04-15 23:25:23][notice]Converting wichita_photo.png to WebP succeeded.
+[2025-04-15 23:25:23][notice]Start WebP conversion wichita_photo-150x150.png
+[2025-04-15 23:25:23][notice]Converting wichita_photo-150x150.png to WebP succeeded.
+[2025-04-15 23:25:23][notice]Start AVIF conversion:wichita_photo.png
+[2025-04-15 23:25:23][notice]test imagick wichita_photo.png
+[2025-04-15 23:25:23][notice]Converting wichita_photo.png to AVIF succeeded.
+[2025-04-15 23:25:23][notice]Start AVIF conversion:wichita_photo-150x150.png
+[2025-04-15 23:25:23][notice]test imagick wichita_photo-150x150.png
+[2025-04-15 23:25:24][notice]Converting wichita_photo-150x150.png to AVIF succeeded.
+[2025-04-15 23:25:24][notice]Optimizing image id:459 succeeded.
+[2025-04-15 23:25:24][notice]Start optimizing images: id:481
+[2025-04-15 23:25:24][notice]Start WebP conversion resign_and_resurface_schematic.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic.jpg to WebP succeeded.
+[2025-04-15 23:25:24][notice]WebP size larger than original size, deleting file resign_and_resurface_schematic.jpg.webp.
+[2025-04-15 23:25:24][notice]Start WebP conversion resign_and_resurface_schematic-300x165.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic-300x165.jpg to WebP succeeded.
+[2025-04-15 23:25:24][notice]Start WebP conversion resign_and_resurface_schematic-150x150.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic-150x150.jpg to WebP succeeded.
+[2025-04-15 23:25:24][notice]Start WebP conversion resign_and_resurface_schematic-768x423.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic-768x423.jpg to WebP succeeded.
+[2025-04-15 23:25:24][notice]Start WebP conversion resign_and_resurface_schematic-400x250.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic-400x250.jpg to WebP succeeded.
+[2025-04-15 23:25:24][notice]Start WebP conversion resign_and_resurface_schematic-400x284.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic-400x284.jpg to WebP succeeded.
+[2025-04-15 23:25:24][notice]Start WebP conversion resign_and_resurface_schematic-510x382.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic-510x382.jpg to WebP succeeded.
+[2025-04-15 23:25:24][notice]Start WebP conversion resign_and_resurface_schematic-400x430.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic-400x430.jpg to WebP succeeded.
+[2025-04-15 23:25:24][notice]Start WebP conversion resign_and_resurface_schematic-480x264.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic-480x264.jpg to WebP succeeded.
+[2025-04-15 23:25:24][notice]Start AVIF conversion:resign_and_resurface_schematic.jpg
+[2025-04-15 23:25:24][notice]test imagick resign_and_resurface_schematic.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic.jpg to AVIF succeeded.
+[2025-04-15 23:25:24][notice]AVIF size larger than original size, deleting file resign_and_resurface_schematic.jpg.avif.
+[2025-04-15 23:25:24][notice]Start AVIF conversion:resign_and_resurface_schematic-300x165.jpg
+[2025-04-15 23:25:24][notice]test imagick resign_and_resurface_schematic-300x165.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic-300x165.jpg to AVIF succeeded.
+[2025-04-15 23:25:24][notice]Start AVIF conversion:resign_and_resurface_schematic-150x150.jpg
+[2025-04-15 23:25:24][notice]test imagick resign_and_resurface_schematic-150x150.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic-150x150.jpg to AVIF succeeded.
+[2025-04-15 23:25:24][notice]Start AVIF conversion:resign_and_resurface_schematic-768x423.jpg
+[2025-04-15 23:25:24][notice]test imagick resign_and_resurface_schematic-768x423.jpg
+[2025-04-15 23:25:24][notice]Converting resign_and_resurface_schematic-768x423.jpg to AVIF succeeded.
+[2025-04-15 23:25:24][notice]Start AVIF conversion:resign_and_resurface_schematic-400x250.jpg
+[2025-04-15 23:25:24][notice]test imagick resign_and_resurface_schematic-400x250.jpg
+[2025-04-15 23:25:25][notice]Converting resign_and_resurface_schematic-400x250.jpg to AVIF succeeded.
+[2025-04-15 23:25:25][notice]Start AVIF conversion:resign_and_resurface_schematic-400x284.jpg
+[2025-04-15 23:25:25][notice]test imagick resign_and_resurface_schematic-400x284.jpg
+[2025-04-15 23:25:25][notice]Converting resign_and_resurface_schematic-400x284.jpg to AVIF succeeded.
+[2025-04-15 23:25:25][notice]Start AVIF conversion:resign_and_resurface_schematic-510x382.jpg
+[2025-04-15 23:25:25][notice]test imagick resign_and_resurface_schematic-510x382.jpg
+[2025-04-15 23:25:25][notice]Converting resign_and_resurface_schematic-510x382.jpg to AVIF succeeded.
+[2025-04-15 23:25:25][notice]Start AVIF conversion:resign_and_resurface_schematic-400x430.jpg
+[2025-04-15 23:25:25][notice]test imagick resign_and_resurface_schematic-400x430.jpg
+[2025-04-15 23:25:25][notice]Converting resign_and_resurface_schematic-400x430.jpg to AVIF succeeded.
+[2025-04-15 23:25:25][notice]Start AVIF conversion:resign_and_resurface_schematic-480x264.jpg
+[2025-04-15 23:25:25][notice]test imagick resign_and_resurface_schematic-480x264.jpg
+[2025-04-15 23:25:25][notice]Converting resign_and_resurface_schematic-480x264.jpg to AVIF succeeded.
+[2025-04-15 23:25:25][notice]Optimizing image id:481 succeeded.
+[2025-04-15 23:25:25][notice]Start optimizing images: id:503
+[2025-04-15 23:25:25][notice]Start WebP conversion hvac_corrections_800_364.png
+[2025-04-15 23:25:25][notice]Converting hvac_corrections_800_364.png to WebP succeeded.
+[2025-04-15 23:25:25][notice]Start WebP conversion hvac_corrections_800_364-300x137.png
+[2025-04-15 23:25:25][notice]Converting hvac_corrections_800_364-300x137.png to WebP succeeded.
+[2025-04-15 23:25:25][notice]Start WebP conversion hvac_corrections_800_364-150x150.png
+[2025-04-15 23:25:25][notice]Converting hvac_corrections_800_364-150x150.png to WebP succeeded.
+[2025-04-15 23:25:25][notice]Start WebP conversion hvac_corrections_800_364-768x349.png
+[2025-04-15 23:25:25][notice]Converting hvac_corrections_800_364-768x349.png to WebP succeeded.
+[2025-04-15 23:25:25][notice]Start WebP conversion hvac_corrections_800_364-400x250.png
+[2025-04-15 23:25:25][notice]Converting hvac_corrections_800_364-400x250.png to WebP succeeded.
+[2025-04-15 23:25:25][notice]Start WebP conversion hvac_corrections_800_364-400x284.png
+[2025-04-15 23:25:25][notice]Converting hvac_corrections_800_364-400x284.png to WebP succeeded.
+[2025-04-15 23:25:25][notice]Start WebP conversion hvac_corrections_800_364-510x364.png
+[2025-04-15 23:25:25][notice]Converting hvac_corrections_800_364-510x364.png to WebP succeeded.
+[2025-04-15 23:25:25][notice]Start WebP conversion hvac_corrections_800_364-400x364.png
+[2025-04-15 23:25:26][notice]Converting hvac_corrections_800_364-400x364.png to WebP succeeded.
+[2025-04-15 23:25:26][notice]Start WebP conversion hvac_corrections_800_364-480x218.png
+[2025-04-15 23:25:26][notice]Converting hvac_corrections_800_364-480x218.png to WebP succeeded.
+[2025-04-15 23:25:26][notice]Start AVIF conversion:hvac_corrections_800_364.png
+[2025-04-15 23:25:26][notice]test imagick hvac_corrections_800_364.png
+[2025-04-15 23:25:26][notice]Converting hvac_corrections_800_364.png to AVIF succeeded.
+[2025-04-15 23:25:26][notice]Start AVIF conversion:hvac_corrections_800_364-300x137.png
+[2025-04-15 23:25:26][notice]test imagick hvac_corrections_800_364-300x137.png
+[2025-04-15 23:25:26][notice]Converting hvac_corrections_800_364-300x137.png to AVIF succeeded.
+[2025-04-15 23:25:26][notice]Start AVIF conversion:hvac_corrections_800_364-150x150.png
+[2025-04-15 23:25:26][notice]test imagick hvac_corrections_800_364-150x150.png
+[2025-04-15 23:25:26][notice]Converting hvac_corrections_800_364-150x150.png to AVIF succeeded.
+[2025-04-15 23:25:26][notice]Start AVIF conversion:hvac_corrections_800_364-768x349.png
+[2025-04-15 23:25:26][notice]test imagick hvac_corrections_800_364-768x349.png
+[2025-04-15 23:25:26][notice]Converting hvac_corrections_800_364-768x349.png to AVIF succeeded.
+[2025-04-15 23:25:26][notice]Start AVIF conversion:hvac_corrections_800_364-400x250.png
+[2025-04-15 23:25:26][notice]test imagick hvac_corrections_800_364-400x250.png
+[2025-04-15 23:25:26][notice]Converting hvac_corrections_800_364-400x250.png to AVIF succeeded.
+[2025-04-15 23:25:26][notice]Start AVIF conversion:hvac_corrections_800_364-400x284.png
+[2025-04-15 23:25:26][notice]test imagick hvac_corrections_800_364-400x284.png
+[2025-04-15 23:25:26][notice]Converting hvac_corrections_800_364-400x284.png to AVIF succeeded.
+[2025-04-15 23:25:26][notice]Start AVIF conversion:hvac_corrections_800_364-510x364.png
+[2025-04-15 23:25:26][notice]test imagick hvac_corrections_800_364-510x364.png
+[2025-04-15 23:25:27][notice]Converting hvac_corrections_800_364-510x364.png to AVIF succeeded.
+[2025-04-15 23:25:27][notice]Start AVIF conversion:hvac_corrections_800_364-400x364.png
+[2025-04-15 23:25:27][notice]test imagick hvac_corrections_800_364-400x364.png
+[2025-04-15 23:25:27][notice]Converting hvac_corrections_800_364-400x364.png to AVIF succeeded.
+[2025-04-15 23:25:27][notice]Start AVIF conversion:hvac_corrections_800_364-480x218.png
+[2025-04-15 23:25:27][notice]test imagick hvac_corrections_800_364-480x218.png
+[2025-04-15 23:25:27][notice]Converting hvac_corrections_800_364-480x218.png to AVIF succeeded.
+[2025-04-15 23:25:27][notice]Optimizing image id:503 succeeded.
+[2025-04-15 23:25:27][notice]Start optimizing images: id:504
+[2025-04-15 23:25:27][notice]Start WebP conversion replace_steam_800x600.jpg
+[2025-04-15 23:25:27][notice]Converting replace_steam_800x600.jpg to WebP succeeded.
+[2025-04-15 23:25:27][notice]Start WebP conversion replace_steam_800x600-300x225.jpg
+[2025-04-15 23:25:27][notice]Converting replace_steam_800x600-300x225.jpg to WebP succeeded.
+[2025-04-15 23:25:27][notice]Start WebP conversion replace_steam_800x600-150x150.jpg
+[2025-04-15 23:25:27][notice]Converting replace_steam_800x600-150x150.jpg to WebP succeeded.
+[2025-04-15 23:25:27][notice]Start WebP conversion replace_steam_800x600-768x576.jpg
+[2025-04-15 23:25:27][notice]Converting replace_steam_800x600-768x576.jpg to WebP succeeded.
+[2025-04-15 23:25:27][notice]Start WebP conversion replace_steam_800x600-400x250.jpg
+[2025-04-15 23:25:27][notice]Converting replace_steam_800x600-400x250.jpg to WebP succeeded.
+[2025-04-15 23:25:27][notice]Start WebP conversion replace_steam_800x600-400x284.jpg
+[2025-04-15 23:25:27][notice]Converting replace_steam_800x600-400x284.jpg to WebP succeeded.
+[2025-04-15 23:25:27][notice]Start WebP conversion replace_steam_800x600-510x382.jpg
+[2025-04-15 23:25:27][notice]Converting replace_steam_800x600-510x382.jpg to WebP succeeded.
+[2025-04-15 23:25:27][notice]Start WebP conversion replace_steam_800x600-400x516.jpg
+[2025-04-15 23:25:27][notice]Converting replace_steam_800x600-400x516.jpg to WebP succeeded.
+[2025-04-15 23:25:27][notice]Start WebP conversion replace_steam_800x600-480x360.jpg
+[2025-04-15 23:25:27][notice]Converting replace_steam_800x600-480x360.jpg to WebP succeeded.
+[2025-04-15 23:25:27][notice]Start AVIF conversion:replace_steam_800x600.jpg
+[2025-04-15 23:25:27][notice]test imagick replace_steam_800x600.jpg
+[2025-04-15 23:25:28][notice]Converting replace_steam_800x600.jpg to AVIF succeeded.
+[2025-04-15 23:25:28][notice]Start AVIF conversion:replace_steam_800x600-300x225.jpg
+[2025-04-15 23:25:28][notice]test imagick replace_steam_800x600-300x225.jpg
+[2025-04-15 23:25:28][notice]Converting replace_steam_800x600-300x225.jpg to AVIF succeeded.
+[2025-04-15 23:25:28][notice]Start AVIF conversion:replace_steam_800x600-150x150.jpg
+[2025-04-15 23:25:28][notice]test imagick replace_steam_800x600-150x150.jpg
+[2025-04-15 23:25:28][notice]Converting replace_steam_800x600-150x150.jpg to AVIF succeeded.
+[2025-04-15 23:25:28][notice]Start AVIF conversion:replace_steam_800x600-768x576.jpg
+[2025-04-15 23:25:28][notice]test imagick replace_steam_800x600-768x576.jpg
+[2025-04-15 23:25:28][notice]Converting replace_steam_800x600-768x576.jpg to AVIF succeeded.
+[2025-04-15 23:25:28][notice]Start AVIF conversion:replace_steam_800x600-400x250.jpg
+[2025-04-15 23:25:28][notice]test imagick replace_steam_800x600-400x250.jpg
+[2025-04-15 23:25:28][notice]Converting replace_steam_800x600-400x250.jpg to AVIF succeeded.
+[2025-04-15 23:25:28][notice]Start AVIF conversion:replace_steam_800x600-400x284.jpg
+[2025-04-15 23:25:28][notice]test imagick replace_steam_800x600-400x284.jpg
+[2025-04-15 23:25:28][notice]Converting replace_steam_800x600-400x284.jpg to AVIF succeeded.
+[2025-04-15 23:25:28][notice]Start AVIF conversion:replace_steam_800x600-510x382.jpg
+[2025-04-15 23:25:28][notice]test imagick replace_steam_800x600-510x382.jpg
+[2025-04-15 23:25:28][notice]Converting replace_steam_800x600-510x382.jpg to AVIF succeeded.
+[2025-04-15 23:25:28][notice]Start AVIF conversion:replace_steam_800x600-400x516.jpg
+[2025-04-15 23:25:28][notice]test imagick replace_steam_800x600-400x516.jpg
+[2025-04-15 23:25:28][notice]Converting replace_steam_800x600-400x516.jpg to AVIF succeeded.
+[2025-04-15 23:25:28][notice]Start AVIF conversion:replace_steam_800x600-480x360.jpg
+[2025-04-15 23:25:28][notice]test imagick replace_steam_800x600-480x360.jpg
+[2025-04-15 23:25:28][notice]Converting replace_steam_800x600-480x360.jpg to AVIF succeeded.
+[2025-04-15 23:25:28][notice]Optimizing image id:504 succeeded.
+[2025-04-15 23:25:28][notice]End request cost time:6.
+[2025-04-15 23:25:30][notice]Start optimizing images: id:509
+[2025-04-15 23:25:30][notice]Start WebP conversion banner_cropped_to_logo_sdvosb.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb.png to WebP succeeded.
+[2025-04-15 23:25:30][notice]Start WebP conversion banner_cropped_to_logo_sdvosb-300x115.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-300x115.png to WebP succeeded.
+[2025-04-15 23:25:30][notice]Start WebP conversion banner_cropped_to_logo_sdvosb-150x150.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-150x150.png to WebP succeeded.
+[2025-04-15 23:25:30][notice]Start WebP conversion banner_cropped_to_logo_sdvosb-400x246.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-400x246.png to WebP succeeded.
+[2025-04-15 23:25:30][notice]Start WebP conversion banner_cropped_to_logo_sdvosb-400x246.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-400x246.png to WebP succeeded.
+[2025-04-15 23:25:30][notice]Start WebP conversion banner_cropped_to_logo_sdvosb-510x246.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-510x246.png to WebP succeeded.
+[2025-04-15 23:25:30][notice]Start WebP conversion banner_cropped_to_logo_sdvosb-400x246.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-400x246.png to WebP succeeded.
+[2025-04-15 23:25:30][notice]Start WebP conversion banner_cropped_to_logo_sdvosb-480x184.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-480x184.png to WebP succeeded.
+[2025-04-15 23:25:30][notice]Start AVIF conversion:banner_cropped_to_logo_sdvosb.png
+[2025-04-15 23:25:30][notice]test imagick banner_cropped_to_logo_sdvosb.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb.png to AVIF succeeded.
+[2025-04-15 23:25:30][notice]Start AVIF conversion:banner_cropped_to_logo_sdvosb-300x115.png
+[2025-04-15 23:25:30][notice]test imagick banner_cropped_to_logo_sdvosb-300x115.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-300x115.png to AVIF succeeded.
+[2025-04-15 23:25:30][notice]Start AVIF conversion:banner_cropped_to_logo_sdvosb-150x150.png
+[2025-04-15 23:25:30][notice]test imagick banner_cropped_to_logo_sdvosb-150x150.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-150x150.png to AVIF succeeded.
+[2025-04-15 23:25:30][notice]Start AVIF conversion:banner_cropped_to_logo_sdvosb-400x246.png
+[2025-04-15 23:25:30][notice]test imagick banner_cropped_to_logo_sdvosb-400x246.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-400x246.png to AVIF succeeded.
+[2025-04-15 23:25:30][notice]Start AVIF conversion:banner_cropped_to_logo_sdvosb-400x246.png
+[2025-04-15 23:25:30][notice]test imagick banner_cropped_to_logo_sdvosb-400x246.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-400x246.png to AVIF succeeded.
+[2025-04-15 23:25:30][notice]Start AVIF conversion:banner_cropped_to_logo_sdvosb-510x246.png
+[2025-04-15 23:25:30][notice]test imagick banner_cropped_to_logo_sdvosb-510x246.png
+[2025-04-15 23:25:30][notice]Converting banner_cropped_to_logo_sdvosb-510x246.png to AVIF succeeded.
+[2025-04-15 23:25:30][notice]Start AVIF conversion:banner_cropped_to_logo_sdvosb-400x246.png
+[2025-04-15 23:25:30][notice]test imagick banner_cropped_to_logo_sdvosb-400x246.png
+[2025-04-15 23:25:31][notice]Converting banner_cropped_to_logo_sdvosb-400x246.png to AVIF succeeded.
+[2025-04-15 23:25:31][notice]Start AVIF conversion:banner_cropped_to_logo_sdvosb-480x184.png
+[2025-04-15 23:25:31][notice]test imagick banner_cropped_to_logo_sdvosb-480x184.png
+[2025-04-15 23:25:31][notice]Converting banner_cropped_to_logo_sdvosb-480x184.png to AVIF succeeded.
+[2025-04-15 23:25:31][notice]Optimizing image id:509 succeeded.
+[2025-04-15 23:25:31][notice]Start optimizing images: id:547
+[2025-04-15 23:25:31][notice]Start WebP conversion extend_chilled_water_loop-1.png
+[2025-04-15 23:25:31][notice]Converting extend_chilled_water_loop-1.png to WebP succeeded.
+[2025-04-15 23:25:31][notice]Start WebP conversion extend_chilled_water_loop-1-300x153.png
+[2025-04-15 23:25:31][notice]Converting extend_chilled_water_loop-1-300x153.png to WebP succeeded.
+[2025-04-15 23:25:31][notice]Start WebP conversion extend_chilled_water_loop-1-150x150.png
+[2025-04-15 23:25:31][notice]Converting extend_chilled_water_loop-1-150x150.png to WebP succeeded.
+[2025-04-15 23:25:31][notice]Start WebP conversion extend_chilled_water_loop-1-768x392.png
+[2025-04-15 23:25:31][notice]Converting extend_chilled_water_loop-1-768x392.png to WebP succeeded.
+[2025-04-15 23:25:31][notice]Start WebP conversion extend_chilled_water_loop-1-400x250.png
+[2025-04-15 23:25:31][notice]Converting extend_chilled_water_loop-1-400x250.png to WebP succeeded.
+[2025-04-15 23:25:31][notice]Start WebP conversion extend_chilled_water_loop-1-400x284.png
+[2025-04-15 23:25:31][notice]Converting extend_chilled_water_loop-1-400x284.png to WebP succeeded.
+[2025-04-15 23:25:31][notice]Start WebP conversion extend_chilled_water_loop-1-510x382.png
+[2025-04-15 23:25:31][notice]Converting extend_chilled_water_loop-1-510x382.png to WebP succeeded.
+[2025-04-15 23:25:31][notice]Start WebP conversion extend_chilled_water_loop-1-400x516.png
+[2025-04-15 23:25:31][notice]Converting extend_chilled_water_loop-1-400x516.png to WebP succeeded.
+[2025-04-15 23:25:31][notice]Start WebP conversion extend_chilled_water_loop-1-980x500.png
+[2025-04-15 23:25:31][notice]Converting extend_chilled_water_loop-1-980x500.png to WebP succeeded.
+[2025-04-15 23:25:31][notice]Start WebP conversion extend_chilled_water_loop-1-480x245.png
+[2025-04-15 23:25:31][notice]Converting extend_chilled_water_loop-1-480x245.png to WebP succeeded.
+[2025-04-15 23:25:31][notice]Start AVIF conversion:extend_chilled_water_loop-1.png
+[2025-04-15 23:25:31][notice]test imagick extend_chilled_water_loop-1.png
+[2025-04-15 23:25:32][notice]Converting extend_chilled_water_loop-1.png to AVIF succeeded.
+[2025-04-15 23:25:32][notice]Start AVIF conversion:extend_chilled_water_loop-1-300x153.png
+[2025-04-15 23:25:32][notice]test imagick extend_chilled_water_loop-1-300x153.png
+[2025-04-15 23:25:32][notice]Converting extend_chilled_water_loop-1-300x153.png to AVIF succeeded.
+[2025-04-15 23:25:32][notice]Start AVIF conversion:extend_chilled_water_loop-1-150x150.png
+[2025-04-15 23:25:32][notice]test imagick extend_chilled_water_loop-1-150x150.png
+[2025-04-15 23:25:32][notice]Converting extend_chilled_water_loop-1-150x150.png to AVIF succeeded.
+[2025-04-15 23:25:32][notice]Start AVIF conversion:extend_chilled_water_loop-1-768x392.png
+[2025-04-15 23:25:32][notice]test imagick extend_chilled_water_loop-1-768x392.png
+[2025-04-15 23:25:32][notice]Converting extend_chilled_water_loop-1-768x392.png to AVIF succeeded.
+[2025-04-15 23:25:32][notice]Start AVIF conversion:extend_chilled_water_loop-1-400x250.png
+[2025-04-15 23:25:32][notice]test imagick extend_chilled_water_loop-1-400x250.png
+[2025-04-15 23:25:32][notice]Converting extend_chilled_water_loop-1-400x250.png to AVIF succeeded.
+[2025-04-15 23:25:32][notice]Start AVIF conversion:extend_chilled_water_loop-1-400x284.png
+[2025-04-15 23:25:32][notice]test imagick extend_chilled_water_loop-1-400x284.png
+[2025-04-15 23:25:32][notice]Converting extend_chilled_water_loop-1-400x284.png to AVIF succeeded.
+[2025-04-15 23:25:32][notice]Start AVIF conversion:extend_chilled_water_loop-1-510x382.png
+[2025-04-15 23:25:32][notice]test imagick extend_chilled_water_loop-1-510x382.png
+[2025-04-15 23:25:32][notice]Converting extend_chilled_water_loop-1-510x382.png to AVIF succeeded.
+[2025-04-15 23:25:32][notice]Start AVIF conversion:extend_chilled_water_loop-1-400x516.png
+[2025-04-15 23:25:32][notice]test imagick extend_chilled_water_loop-1-400x516.png
+[2025-04-15 23:25:32][notice]Converting extend_chilled_water_loop-1-400x516.png to AVIF succeeded.
+[2025-04-15 23:25:32][notice]Start AVIF conversion:extend_chilled_water_loop-1-980x500.png
+[2025-04-15 23:25:32][notice]test imagick extend_chilled_water_loop-1-980x500.png
+[2025-04-15 23:25:33][notice]Converting extend_chilled_water_loop-1-980x500.png to AVIF succeeded.
+[2025-04-15 23:25:33][notice]Start AVIF conversion:extend_chilled_water_loop-1-480x245.png
+[2025-04-15 23:25:33][notice]test imagick extend_chilled_water_loop-1-480x245.png
+[2025-04-15 23:25:33][notice]Converting extend_chilled_water_loop-1-480x245.png to AVIF succeeded.
+[2025-04-15 23:25:33][notice]Optimizing image id:547 succeeded.
+[2025-04-15 23:25:33][notice]Start optimizing images: id:561
+[2025-04-15 23:25:33][notice]Start WebP conversion boiler_control_station.png
+[2025-04-15 23:25:33][notice]Converting boiler_control_station.png to WebP succeeded.
+[2025-04-15 23:25:33][notice]Start WebP conversion boiler_control_station-300x205.png
+[2025-04-15 23:25:33][notice]Converting boiler_control_station-300x205.png to WebP succeeded.
+[2025-04-15 23:25:33][notice]Start WebP conversion boiler_control_station-150x150.png
+[2025-04-15 23:25:33][notice]Converting boiler_control_station-150x150.png to WebP succeeded.
+[2025-04-15 23:25:33][notice]Start WebP conversion boiler_control_station-400x250.png
+[2025-04-15 23:25:33][notice]Converting boiler_control_station-400x250.png to WebP succeeded.
+[2025-04-15 23:25:33][notice]Start WebP conversion boiler_control_station-400x284.png
+[2025-04-15 23:25:33][notice]Converting boiler_control_station-400x284.png to WebP succeeded.
+[2025-04-15 23:25:33][notice]Start WebP conversion boiler_control_station-510x382.png
+[2025-04-15 23:25:33][notice]Converting boiler_control_station-510x382.png to WebP succeeded.
+[2025-04-15 23:25:33][notice]Start WebP conversion boiler_control_station-400x450.png
+[2025-04-15 23:25:33][notice]Converting boiler_control_station-400x450.png to WebP succeeded.
+[2025-04-15 23:25:33][notice]Start WebP conversion boiler_control_station-480x329.png
+[2025-04-15 23:25:33][notice]Converting boiler_control_station-480x329.png to WebP succeeded.
+[2025-04-15 23:25:33][notice]Start AVIF conversion:boiler_control_station.png
+[2025-04-15 23:25:33][notice]test imagick boiler_control_station.png
+[2025-04-15 23:25:34][notice]Converting boiler_control_station.png to AVIF succeeded.
+[2025-04-15 23:25:34][notice]Start AVIF conversion:boiler_control_station-300x205.png
+[2025-04-15 23:25:34][notice]test imagick boiler_control_station-300x205.png
+[2025-04-15 23:25:35][notice]Converting boiler_control_station-300x205.png to AVIF succeeded.
+[2025-04-15 23:25:35][notice]Start AVIF conversion:boiler_control_station-150x150.png
+[2025-04-15 23:25:35][notice]test imagick boiler_control_station-150x150.png
+[2025-04-15 23:25:35][notice]Converting boiler_control_station-150x150.png to AVIF succeeded.
+[2025-04-15 23:25:35][notice]Start AVIF conversion:boiler_control_station-400x250.png
+[2025-04-15 23:25:35][notice]test imagick boiler_control_station-400x250.png
+[2025-04-15 23:25:35][notice]Converting boiler_control_station-400x250.png to AVIF succeeded.
+[2025-04-15 23:25:35][notice]Start AVIF conversion:boiler_control_station-400x284.png
+[2025-04-15 23:25:35][notice]test imagick boiler_control_station-400x284.png
+[2025-04-15 23:25:35][notice]Converting boiler_control_station-400x284.png to AVIF succeeded.
+[2025-04-15 23:25:35][notice]Start AVIF conversion:boiler_control_station-510x382.png
+[2025-04-15 23:25:35][notice]test imagick boiler_control_station-510x382.png
+[2025-04-15 23:25:35][notice]Converting boiler_control_station-510x382.png to AVIF succeeded.
+[2025-04-15 23:25:35][notice]Start AVIF conversion:boiler_control_station-400x450.png
+[2025-04-15 23:25:35][notice]test imagick boiler_control_station-400x450.png
+[2025-04-15 23:25:36][notice]Converting boiler_control_station-400x450.png to AVIF succeeded.
+[2025-04-15 23:25:36][notice]Start AVIF conversion:boiler_control_station-480x329.png
+[2025-04-15 23:25:36][notice]test imagick boiler_control_station-480x329.png
+[2025-04-15 23:25:37][notice]Converting boiler_control_station-480x329.png to AVIF succeeded.
+[2025-04-15 23:25:37][notice]Optimizing image id:561 succeeded.
+[2025-04-15 23:25:37][notice]Start optimizing images: id:567
+[2025-04-15 23:25:37][notice]Start WebP conversion boiler_control_station-300x205-1.png
+[2025-04-15 23:25:37][notice]Converting boiler_control_station-300x205-1.png to WebP succeeded.
+[2025-04-15 23:25:37][notice]Start WebP conversion boiler_control_station-300x205-1-150x150.png
+[2025-04-15 23:25:37][notice]Converting boiler_control_station-300x205-1-150x150.png to WebP succeeded.
+[2025-04-15 23:25:37][notice]Start AVIF conversion:boiler_control_station-300x205-1.png
+[2025-04-15 23:25:37][notice]test imagick boiler_control_station-300x205-1.png
+[2025-04-15 23:25:37][notice]Converting boiler_control_station-300x205-1.png to AVIF succeeded.
+[2025-04-15 23:25:37][notice]Start AVIF conversion:boiler_control_station-300x205-1-150x150.png
+[2025-04-15 23:25:37][notice]test imagick boiler_control_station-300x205-1-150x150.png
+[2025-04-15 23:25:37][notice]Converting boiler_control_station-300x205-1-150x150.png to AVIF succeeded.
+[2025-04-15 23:25:37][notice]Optimizing image id:567 succeeded.

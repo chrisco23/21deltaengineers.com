@@ -47,3 +47,10 @@
 </IfModule>
 # ! --- DO NOT EDIT NEXT LINE --- !
 # END Converter for Media
+
+# BEGIN CompressX
+# The directives (lines) between "BEGIN CompressX" and "END CompressX" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+
+# END CompressX
